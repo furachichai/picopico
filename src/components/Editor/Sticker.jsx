@@ -31,6 +31,10 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
      */
     const handleStart = (e, type) => {
         e.stopPropagation();
+
+        // Prevent dragging for quiz elements
+        if (type === 'move' && element.type === 'quiz') return;
+
         // Only select if not already selected to avoid re-triggering selection logic unnecessarily
         if (!isSelected) {
             onSelect(element.id);
@@ -55,6 +59,9 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
+        // Calculate initial distance from center for resize
+        const startDist = Math.sqrt(Math.pow(startX - centerX, 2) + Math.pow(startY - centerY, 2));
+
         const handleMove = (moveEvent) => {
             moveEvent.preventDefault(); // Prevent scrolling/selection while dragging
             const moveCoords = getClientCoords(moveEvent);
@@ -71,8 +78,15 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 const newY = startTop + (dy / parentHeight) * 100;
                 onChange(element.id, { x: newX, y: newY });
             } else if (type === 'resize') {
-                // Simple resize logic: adjust scale based on horizontal drag distance
-                const newScale = startScale + (dx / 100);
+                // Distance-based resize logic:
+                // Calculate current distance from center
+                const currentDist = Math.sqrt(Math.pow(moveCoords.x - centerX, 2) + Math.pow(moveCoords.y - centerY, 2));
+
+                // Scale factor is the ratio of current distance to start distance
+                // We multiply the startScale by this ratio
+                const scaleFactor = currentDist / startDist;
+                const newScale = startScale * scaleFactor;
+
                 onChange(element.id, { scale: Math.max(0.1, newScale) });
             } else if (type === 'rotate') {
                 // Calculate angle relative to center

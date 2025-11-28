@@ -120,9 +120,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
-                        ❐
-                    </button>
+                    {element.type !== 'quiz' && (
+                        <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
+                            ❐
+                        </button>
+                    )}
                     <button className="btn-delete" onClick={onDelete} title="Delete Element">
                         🗑️
                     </button>
