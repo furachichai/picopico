@@ -1,0 +1,130 @@
+.asset-library {
+    position: absolute;
+    bottom: 100px;
+    /* Above toolbar */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 450px;
+    height: 400px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    border: 1px solid #eee;
+    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+.library-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.library-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+}
+
+.close-btn {
+    background: #f9f9f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #999;
+    transition: background 0.2s;
+}
+
+.close-btn:hover {
+    background: #eee;
+    color: #666;
+}
+
+.library-tabs {
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+    background: #fffaf0;
+}
+
+.library-tabs button {
+    flex: 1;
+    padding: 0.5rem;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    color: #777;
+    font-weight: 700;
+    font-size: 0.9rem;
+    height: 40px;
+    box-shadow: 0 2px 0 #eee;
+}
+
+.library-tabs button.active {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 2px 0 var(--color-primary-dark);
+}
+
+.library-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.assets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 1rem;
+}
+
+.asset-item {
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.1s;
+    border: 1px solid #eee;
+    background: white;
+}
+
+.asset-item:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.asset-item.character {
+    font-size: 3rem;
+}
+
+.asset-item.background {
+    border: none;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
