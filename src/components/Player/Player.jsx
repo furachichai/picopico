@@ -110,21 +110,17 @@ const Player = () => {
         return () => observer.disconnect();
     }, []);
 
+    const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
+
     return (
         <div className="player-container">
-            <div className="progress-bar-container">
-                {slides.map((_, index) => (
-                    <div
-                        key={index}
-                        className={`progress-segment ${index <= currentSlideIndex ? 'completed' : ''}`}
-                    />
-                ))}
-            </div>
 
             <div className="player-header">
                 <button onClick={() => setView('menu')}>Menu</button>
                 <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>Close</button>
             </div>
+
+
 
             <div
                 className="player-viewport"
@@ -142,8 +138,9 @@ const Player = () => {
                 <div
                     className="player-slide"
                     style={{
-                        background: currentSlide.background,
-                        backgroundSize: 'cover',
+                        backgroundColor: (currentSlide.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient')) ? currentSlide.background : 'transparent',
+                        backgroundImage: (currentSlide.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient'))) ? currentSlide.background : 'none',
+                        backgroundSize: 'contain', // Ensure whole image is visible
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
                         transform: `scale(${scale})`,
@@ -157,6 +154,15 @@ const Player = () => {
                         marginLeft: '-180px' /* Half of width */
                     }}
                 >
+                    <div className="player-progress-bar">
+                        {slides.map((_, index) => (
+                            <div
+                                key={index}
+                                className={`progress-segment ${index <= currentSlideIndex ? 'active' : ''}`}
+                            />
+                        ))}
+                    </div>
+
                     {currentSlide.elements.map(element => (
                         <div
                             key={element.id}

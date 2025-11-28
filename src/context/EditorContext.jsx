@@ -73,8 +73,8 @@ const editorReducer = (state, action) => {
                 content: action.payload.content,
                 x: 50, // Center
                 y: action.payload.type === 'quiz' ? 75 : 50, // Lower for quiz, center for others
-                width: 20,
-                height: 10,
+                width: action.payload.metadata?.width || 20,
+                height: action.payload.metadata?.height || 10,
                 rotation: 0,
                 scale: 1,
                 ...action.payload.metadata,
@@ -179,6 +179,34 @@ const editorReducer = (state, action) => {
                 },
                 selectedElementId: null,
             };
+
+        case 'DUPLICATE_ELEMENT': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const elementToDuplicate = currentSlide.elements.find(el => el.id === action.payload);
+            if (!elementToDuplicate) return state;
+
+            const newElement = {
+                ...elementToDuplicate,
+                id: `el-${Date.now()}`,
+                x: elementToDuplicate.x + 5,
+                y: elementToDuplicate.y + 5,
+            };
+
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: [...slide.elements, newElement] }
+                            : slide
+                    ),
+                },
+                selectedElementId: newElement.id,
+            };
+        }
 
         default:
             return state;

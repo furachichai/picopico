@@ -12,7 +12,7 @@ const COLORS = [
     '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
 ];
 
-const ContextualMenu = ({ element, onChange, onDelete }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -119,9 +119,14 @@ const ContextualMenu = ({ element, onChange, onDelete }) => {
 
             <div className="menu-group">
                 <label>Actions</label>
-                <button className="btn-delete" onClick={onDelete} title="Delete Element">
-                    🗑️
-                </button>
+                <div style={{ display: 'flex', gap: '5px' }}>
+                    <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
+                        ❐
+                    </button>
+                    <button className="btn-delete" onClick={onDelete} title="Delete Element">
+                        🗑️
+                    </button>
+                </div>
             </div>
         </div>
     );

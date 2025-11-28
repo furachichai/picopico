@@ -56,29 +56,92 @@
 
 .handle {
     position: absolute;
-    width: 32px;
-    height: 32px;
-    background-color: white;
-    border: 2px solid var(--color-secondary);
-    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    /* background-color: white; */
+    /* Removed by new handle styles */
+    /* border: 2px solid var(--color-secondary); */
+    /* Removed by new handle styles */
+    /* border-radius: 50%; */
+    /* Removed by new handle styles */
     pointer-events: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
+    font-size: 14px;
+    /* Changed from 1rem */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Modified from existing */
     cursor: pointer;
     z-index: 10;
 }
 
 .resize-handle {
-    bottom: -20px;
-    right: -20px;
+    /* bottom: -20px; */
+    /* Removed by new resize-handle styles */
+    /* right: -20px; */
+    /* Removed by new resize-handle styles */
+    background-color: #4285F4;
+    border: 2px solid white;
+    border-radius: 4px;
+}
+
+.resize-handle.nw {
+    top: -12px;
+    left: -12px;
+    cursor: nwse-resize;
+}
+
+.resize-handle.ne {
+    top: -12px;
+    right: -12px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.sw {
+    bottom: -12px;
+    left: -12px;
+    cursor: nesw-resize;
+}
+
+.resize-handle.se {
+    bottom: -12px;
+    right: -12px;
+    cursor: nwse-resize;
 }
 
 .rotate-handle {
-    top: -20px;
-    left: -20px;
+    top: -40px;
+    /* Changed from -20px */
+    left: 50%;
+    /* Changed from -20px */
+    transform: translateX(-50%);
+    background-color: #FBBC05;
+    border: 2px solid white;
+    border-radius: 50%;
+    color: black;
+    font-weight: bold;
+}
+
+/* Connect rotate handle to box */
+.rotate-handle::after {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 18px;
+    background-color: #4285F4;
+    z-index: -1;
+}
+
+.tail-handle {
+    background-color: #34A853;
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    font-size: 10px;
 }
 
 .sticker-quiz-wysiwyg {

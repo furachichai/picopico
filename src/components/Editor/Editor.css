@@ -1,33 +1,63 @@
 .editor-layout {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100dvh;
+    /* Dynamic viewport height for mobile */
+    overflow: hidden;
+    /* Prevent scrolling on body */
     background-color: #fffaf0;
     font-family: 'Nunito', sans-serif;
 }
 
-.editor-header {
-    padding: 0.75rem 1.5rem;
-    background-color: white;
-    border-bottom: 2px solid #ffe4b5;
-    /* Moccasin */
+.editor-floating-actions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.editor-floating-actions>button {
+    pointer-events: auto;
+    position: absolute;
+}
+
+.btn-floating {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    z-index: 10;
-}
-
-.editor-header h2 {
-    color: var(--color-primary);
-    font-weight: 900;
     font-size: 1.5rem;
-    margin: 0;
+    cursor: pointer;
+    transition: transform 0.1s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.editor-actions {
-    display: flex;
-    gap: 1rem;
+.btn-floating:active {
+    transform: scale(0.95);
+}
+
+.btn-preview {
+    background-color: white;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    top: 10px;
+    right: 10px;
+}
+
+
+
+.btn-save {
+    background-color: var(--color-secondary);
+    border: 2px solid #e67e00;
+    /* Darker orange border */
+    color: white;
+    top: 10px;
+    left: 10px;
 }
 
 .editor-workspace {
@@ -36,10 +66,20 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #fff8e7;
     background-image: radial-gradient(#ffdab9 1px, transparent 1px);
     background-size: 20px 20px;
+}
+
+@media (max-width: 480px) {
+    .editor-workspace {
+        padding: 0.5rem;
+    }
+
+    .editor-header {
+        padding: 0.25rem 0.5rem;
+    }
 }
 
 .canvas-container {
@@ -61,6 +101,12 @@
     border-radius: 4px;
     flex-shrink: 0;
     /* Prevent flex shrinking */
+}
+
+.disabled-ui {
+    opacity: 0.3;
+    pointer-events: none;
+    filter: grayscale(100%);
 }
 
 .editor-container {
@@ -136,4 +182,87 @@ input[type="color"] {
         transform: scale(1);
         opacity: 1;
     }
+}
+
+/* Navigation Buttons */
+.editor-navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    /* Don't block clicks in the middle */
+    z-index: 90;
+    pointer-events: none;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 3rem;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: none;
+    transition: all 0.2s;
+    color: var(--color-primary);
+    opacity: 0.6;
+}
+
+.nav-btn:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.nav-btn:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+.nav-prev {
+    left: 2px;
+}
+
+.nav-next {
+    right: 2px;
+}
+
+.nav-add {
+    right: 2px;
+    color: var(--color-secondary);
+}
+
+/* Editor Progress Bar */
+.editor-progress-bar {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 8px;
+    z-index: 1000;
+    display: flex;
+    gap: 4px;
+}
+
+.progress-segment {
+    flex: 1;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.progress-segment.active {
+    background-color: #8A2BE2;
+    /* Violet */
+    box-shadow: 0 2px 0 rgba(138, 43, 226, 0.4) inset;
 }

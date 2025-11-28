@@ -55,6 +55,8 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   overflow: hidden;
+  overscroll-behavior: none;
+  /* Prevent pull-to-refresh/bounce on mobile */
 }
 
 #root {

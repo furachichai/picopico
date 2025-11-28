@@ -35,26 +35,56 @@ const ASSETS = {
 const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customCharacterList = Object.values(customCharacters).map(mod => mod.default);
 
+// Load custom backgrounds from src/assets/backgrounds
+const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
+const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.default);
+
 const AssetLibrary = ({ onClose }) => {
     const { dispatch } = useEditor();
     const [activeTab, setActiveTab] = useState('custom');
 
     const handleSelect = (item) => {
-        if (activeTab === 'backgrounds') {
-            dispatch({ type: 'UPDATE_SLIDE_BACKGROUND', payload: item });
+        if (activeTab === 'backgrounds' || activeTab === 'custom-bg') {
+            // Check if it's a URL (custom bg) or a color/gradient
+            const payload = item.startsWith('http') || item.startsWith('data:') || item.startsWith('/') ? `url("${item}")` : item;
+            // If it's already a url() string (from ASSETS.backgrounds), use it as is
+            const finalPayload = item.includes('url(') || item.startsWith('#') || item.startsWith('linear-gradient') ? item : `url("${item}")`;
+
+            dispatch({ type: 'UPDATE_SLIDE_BACKGROUND', payload: finalPayload });
+            onClose();
         } else if (activeTab === 'gifs' || activeTab === 'custom') {
-            dispatch({
-                type: 'ADD_ELEMENT',
-                payload: { type: ELEMENT_TYPES.IMAGE, content: item }
-            });
+            // Pre-load image to get dimensions
+            const img = new Image();
+            img.onload = () => {
+                const aspectRatio = img.naturalWidth / img.naturalHeight;
+                // Target width: 40% of screen width (360px)
+                const targetWidthPercent = 40;
+                const targetWidthPx = 360 * (targetWidthPercent / 100);
+                const targetHeightPx = targetWidthPx / aspectRatio;
+                const targetHeightPercent = (targetHeightPx / 640) * 100;
+
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        type: ELEMENT_TYPES.IMAGE,
+                        content: item,
+                        metadata: {
+                            width: targetWidthPercent,
+                            height: targetHeightPercent
+                        }
+                    }
+                });
+                onClose();
+            };
+            img.src = item;
         } else {
             // Emojis
             dispatch({
                 type: 'ADD_ELEMENT',
                 payload: { type: ELEMENT_TYPES.TEXT, content: item, metadata: { fontSize: '4rem' } }
             });
+            onClose();
         }
-        onClose();
     };
 
     return (
@@ -69,25 +99,31 @@ const AssetLibrary = ({ onClose }) => {
                     className={activeTab === 'custom' ? 'active' : ''}
                     onClick={() => setActiveTab('custom')}
                 >
-                    My Characters
+                    IMGs
+                </button>
+                <button
+                    className={activeTab === 'custom-bg' ? 'active' : ''}
+                    onClick={() => setActiveTab('custom-bg')}
+                >
+                    BKGs
                 </button>
                 <button
                     className={activeTab === 'emojis' ? 'active' : ''}
                     onClick={() => setActiveTab('emojis')}
                 >
-                    Emojis
+                    EMOJIS
                 </button>
                 <button
                     className={activeTab === 'backgrounds' ? 'active' : ''}
                     onClick={() => setActiveTab('backgrounds')}
                 >
-                    Backgrounds
+                    COLORS
                 </button>
                 <button
                     className={activeTab === 'gifs' ? 'active' : ''}
                     onClick={() => setActiveTab('gifs')}
                 >
-                    GIFs
+                    GIFS
                 </button>
             </div>
 
@@ -108,6 +144,25 @@ const AssetLibrary = ({ onClose }) => {
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
                                 No characters found. <br />
                                 Add images to <code>src/assets/characters</code>
+                            </div>
+                        )
+                    )}
+
+                    {activeTab === 'custom-bg' && (
+                        customBackgroundList.length > 0 ? (
+                            customBackgroundList.map((src, index) => (
+                                <div
+                                    key={index}
+                                    className="asset-item custom-bg"
+                                    onClick={() => handleSelect(src)}
+                                >
+                                    <img src={src} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
+                                No backgrounds found. <br />
+                                Add images to <code>src/assets/backgrounds</code>
                             </div>
                         )
                     )}

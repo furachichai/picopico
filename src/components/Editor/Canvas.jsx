@@ -87,8 +87,9 @@ const Canvas = (props) => {
       <div
         className="slide-canvas"
         style={{
-          background: currentSlide.background,
-          backgroundSize: 'cover',
+          backgroundColor: (currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient')) ? currentSlide.background : 'transparent',
+          backgroundImage: (currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient'))) ? currentSlide.background : 'none',
+          backgroundSize: 'contain', // Ensure whole image is visible
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           transform: `scale(${scale})`,
@@ -98,6 +99,16 @@ const Canvas = (props) => {
         }}
         onClick={handleCanvasClick}
       >
+        {/* Progress Bar */}
+        <div className="editor-progress-bar">
+          {Array.from({ length: props.totalSlides }).map((_, index) => (
+            <div
+              key={index}
+              className={`progress-segment ${index <= props.currentSlideIndex ? 'active' : ''}`}
+            />
+          ))}
+        </div>
+
         {currentSlide.elements.map(element => (
           <Sticker
             key={element.id}

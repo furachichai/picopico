@@ -87,7 +87,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 const dy = (moveCoords.y - startY) / element.scale;
 
                 const currentTailX = element.metadata?.tailPos?.x || 0;
-                const currentTailY = element.metadata?.tailPos?.y || 20;
+                const currentTailY = element.metadata?.tailPos?.y || 60;
 
                 onChange(element.id, {
                     metadata: {
@@ -148,6 +148,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         }}
                         style={{
                             fontFamily: element.metadata?.fontFamily || 'Nunito',
+                            fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                             color: element.metadata?.color || 'black',
                             backgroundColor: element.metadata?.backgroundColor || 'transparent',
                             padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
@@ -177,12 +178,12 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                                     position: 'absolute',
                                     left: '50%',
                                     top: '50%',
-                                    transform: `translate(${element.metadata?.tailPos?.x || 20}px, ${element.metadata?.tailPos?.y || 50}px) scale(${1 / element.scale})`,
+                                    transform: `translate(${element.metadata?.tailPos?.x || 0}px, ${element.metadata?.tailPos?.y || 60}px) scale(${1 / element.scale})`,
                                 }}
                                 onMouseDown={(e) => handleStart(e, 'tail')}
                                 onTouchStart={(e) => handleStart(e, 'tail')}
                             >
-                                📍
+                                ⚪
                             </div>
                         )}
                     </>
@@ -216,28 +217,48 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 )}
             </div>
 
-            {
-                isSelected && element.type !== 'quiz' && (
-                    <div className="sticker-controls">
-                        <div
-                            className="handle resize-handle"
-                            style={{ transform: `scale(${1 / element.scale})` }}
-                            onMouseDown={(e) => handleStart(e, 'resize')}
-                            onTouchStart={(e) => handleStart(e, 'resize')}
-                        >
-                            ↔️
-                        </div>
-                        <div
-                            className="handle rotate-handle"
-                            style={{ transform: `scale(${1 / element.scale})` }}
-                            onMouseDown={(e) => handleStart(e, 'rotate')}
-                            onTouchStart={(e) => handleStart(e, 'rotate')}
-                        >
-                            🔄
-                        </div>
+            {isSelected && element.type !== 'quiz' && (
+                <div className="sticker-controls">
+                    {/* Top Left Resize */}
+                    <div
+                        className="handle resize-handle nw"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'resize')}
+                        onTouchStart={(e) => handleStart(e, 'resize')}
+                    />
+                    {/* Top Right Resize */}
+                    <div
+                        className="handle resize-handle ne"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'resize')}
+                        onTouchStart={(e) => handleStart(e, 'resize')}
+                    />
+                    {/* Bottom Left Resize */}
+                    <div
+                        className="handle resize-handle sw"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'resize')}
+                        onTouchStart={(e) => handleStart(e, 'resize')}
+                    />
+                    {/* Bottom Right Resize */}
+                    <div
+                        className="handle resize-handle se"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'resize')}
+                        onTouchStart={(e) => handleStart(e, 'resize')}
+                    />
+
+                    {/* Rotate Handle */}
+                    <div
+                        className="handle rotate-handle"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'rotate')}
+                        onTouchStart={(e) => handleStart(e, 'rotate')}
+                    >
+                        ↻
                     </div>
-                )
-            }
+                </div>
+            )}
         </div >
     );
 });

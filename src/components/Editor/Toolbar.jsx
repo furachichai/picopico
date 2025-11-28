@@ -3,8 +3,15 @@ import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import AssetLibrary from './AssetLibrary';
 const Toolbar = () => {
-    const { dispatch } = useEditor();
+    const { state, dispatch } = useEditor();
     const [showLibrary, setShowLibrary] = useState(false);
+
+    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+    const currentBackground = currentSlide?.background || '#ffffff';
+    // Ensure it's a hex code for the color input. If it's a gradient or url, we can't show it in type="color".
+    // We'll fallback to black or white if it's not a hex.
+    const isHex = currentBackground.startsWith('#');
+    const colorValue = isHex ? currentBackground : '#000000';
 
     const handleAddText = () => {
         dispatch({
@@ -36,22 +43,19 @@ const Toolbar = () => {
             {showLibrary && <AssetLibrary onClose={() => setShowLibrary(false)} />}
             <div className="editor-toolbar">
                 <div className="toolbar-section">
-                    <button className="btn-secondary" onClick={handleAddText}>Text</button>
+                    <button className="btn-secondary" onClick={handleAddText} title="Add Text" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>T</button>
                     <button className="btn-secondary" onClick={() => dispatch({
                         type: 'ADD_ELEMENT',
                         payload: { type: ELEMENT_TYPES.BALLOON, content: 'Hello!' }
-                    })}>Balloon</button>
+                    })} title="Add Balloon" style={{ fontSize: '1.2rem' }}>💬</button>
                     <button className="btn-secondary" onClick={handleAddQuiz}>Quiz</button>
-                    <button className="btn-secondary" onClick={() => dispatch({
-                        type: 'ADD_ELEMENT',
-                        payload: { type: ELEMENT_TYPES.GAME, content: 'Game', metadata: { gameId: 'target' } }
-                    })}>Game</button>
-                    <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)}>Library</button>
+                    <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title="Open Library" style={{ fontSize: '1.2rem' }}>📚</button>
                     <div className="color-picker-wrapper">
                         <label htmlFor="bg-color">Bg</label>
                         <input
                             type="color"
                             id="bg-color"
+                            value={colorValue}
                             onChange={handleBackgroundChange}
                             title="Change Background"
                         />
