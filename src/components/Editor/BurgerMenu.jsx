@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css'; // Reusing contextual menu styles for simplicity or create new ones
 
-const BurgerMenu = ({ onSave }) => {
+const BurgerMenu = ({ onSave, onInfo }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -43,6 +43,9 @@ const BurgerMenu = ({ onSave }) => {
                 }}>
                     <button className="btn-secondary" onClick={handleSave} style={{ width: '100%', textAlign: 'left' }}>
                         💾 {t('editor.save')}
+                    </button>
+                    <button className="btn-secondary" onClick={() => { onInfo(); setIsOpen(false); }} style={{ width: '100%', textAlign: 'left' }}>
+                        ℹ️ {t('editor.info')}
                     </button>
 
                     <div className="language-selector" style={{ width: '100%' }}>

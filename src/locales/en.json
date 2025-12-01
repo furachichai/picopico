@@ -9,7 +9,13 @@
         "openLibrary": "Open Library",
         "background": "Bg",
         "language": "Language",
-        "slides": "Slides"
+        "slides": "Slides",
+        "info": "INFO",
+        "lessonName": "Lesson Name",
+        "lessonInfo": "INFO",
+        "saveLesson": "Save Lesson",
+        "created": "Created",
+        "lastSaved": "Last Saved"
     },
     "slides": {
         "title": "Slides",
@@ -36,5 +42,8 @@
         "menu": "Menu",
         "close": "Close",
         "hint": "Swipe or use Arrow Keys"
+    },
+    "common": {
+        "close": "CLOSE"
     }
 }

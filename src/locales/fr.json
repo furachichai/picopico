@@ -9,7 +9,13 @@
         "openLibrary": "Ouvrir Bibliothèque",
         "background": "Fond",
         "language": "Langue",
-        "slides": "Diapositives"
+        "slides": "Diapositives",
+        "info": "INFO",
+        "lessonName": "Nom de la Leçon",
+        "lessonInfo": "INFO",
+        "saveLesson": "Sauvegarder Leçon",
+        "created": "Créé",
+        "lastSaved": "Dernière Sauvegarde"
     },
     "slides": {
         "title": "Diapositives",
@@ -36,5 +42,8 @@
         "menu": "Menu",
         "close": "Fermer",
         "hint": "Glissez ou utilisez les Flèches"
+    },
+    "common": {
+        "close": "FERMER"
     }
 }

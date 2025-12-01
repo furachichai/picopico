@@ -6,6 +6,8 @@ import { useEditor } from '../../context/EditorContext';
 
 import ContextualMenu from './ContextualMenu';
 import BurgerMenu from './BurgerMenu';
+import SaveLessonModal from './SaveLessonModal';
+import LessonInfoModal from './LessonInfoModal';
 import { useTranslation } from 'react-i18next';
 
 const Editor = () => {
@@ -13,6 +15,8 @@ const Editor = () => {
     const { t } = useTranslation();
     const [editingElementId, setEditingElementId] = useState(null);
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [showInfoModal, setShowInfoModal] = useState(false);
 
     const handleEdit = (id) => {
         setEditingElementId(id);
@@ -28,10 +32,39 @@ const Editor = () => {
         }
     };
 
-    const handleSaveProject = () => {
-        // Mock save
+    const performSave = () => {
+        dispatch({
+            type: 'UPDATE_LESSON_METADATA',
+            payload: { updatedAt: new Date() }
+        });
         setShowSaveFeedback(true);
         setTimeout(() => setShowSaveFeedback(false), 2000);
+    };
+
+    const handleSaveProject = () => {
+        if (state.lesson.title === 'Untitled Lesson') {
+            // First save or still default name
+            setShowSaveModal(true);
+        } else {
+            performSave();
+        }
+    };
+
+    const handleFirstSave = (name) => {
+        dispatch({
+            type: 'UPDATE_LESSON_METADATA',
+            payload: { title: name, updatedAt: new Date() }
+        });
+        setShowSaveModal(false);
+        setShowSaveFeedback(true);
+        setTimeout(() => setShowSaveFeedback(false), 2000);
+    };
+
+    const handleUpdateInfo = (updates) => {
+        dispatch({
+            type: 'UPDATE_LESSON_METADATA',
+            payload: updates
+        });
     };
 
 
@@ -101,8 +134,21 @@ const Editor = () => {
             )}
 
             <div className="editor-container">
+                <SaveLessonModal
+                    isOpen={showSaveModal}
+                    onSave={handleFirstSave}
+                    onClose={() => setShowSaveModal(false)}
+                    initialName={state.lesson.title}
+                />
+                <LessonInfoModal
+                    isOpen={showInfoModal}
+                    lesson={state.lesson}
+                    onUpdate={handleUpdateInfo}
+                    onClose={() => setShowInfoModal(false)}
+                />
+
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
-                    <BurgerMenu onSave={handleSaveProject} />
+                    <BurgerMenu onSave={handleSaveProject} onInfo={() => setShowInfoModal(true)} />
                     <button
                         className="btn-floating btn-preview"
                         onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}

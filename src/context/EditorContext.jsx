@@ -17,6 +17,7 @@ const initialState = {
         ],
         author: 'User',
         createdAt: new Date(),
+        updatedAt: null,
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
@@ -212,6 +213,15 @@ const editorReducer = (state, action) => {
                 selectedElementId: newElement.id,
             };
         }
+
+        case 'UPDATE_LESSON_METADATA':
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    ...action.payload,
+                },
+            };
 
         default:
             return state;
