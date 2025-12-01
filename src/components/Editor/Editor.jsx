@@ -8,11 +8,19 @@ import ContextualMenu from './ContextualMenu';
 import BurgerMenu from './BurgerMenu';
 import { useTranslation } from 'react-i18next';
 
-const Editor = () => {
+const Editor = ({ onDelete, onBack }) => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [editingElementId, setEditingElementId] = useState(null);
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
+    const [showAboutModal, setShowAboutModal] = useState(false);
+    const [showTitlePrompt, setShowTitlePrompt] = useState(false);
+    const [lessonTitle, setLessonTitle] = useState(state.lesson.title);
+
+    // Update local title state when lesson title changes
+    React.useEffect(() => {
+        setLessonTitle(state.lesson.title);
+    }, [state.lesson.title]);
 
     const handleEdit = (id) => {
         setEditingElementId(id);
@@ -29,12 +37,29 @@ const Editor = () => {
     };
 
     const handleSaveProject = () => {
-        // Mock save
+        if (state.lesson.title === 'New Lesson') {
+            setShowTitlePrompt(true);
+            return;
+        }
+        // Mock save feedback
         setShowSaveFeedback(true);
         setTimeout(() => setShowSaveFeedback(false), 2000);
     };
 
+    const handleUpdateTitle = () => {
+        dispatch({
+            type: 'UPDATE_LESSON_META',
+            payload: { title: lessonTitle }
+        });
+        setShowTitlePrompt(false);
+        setShowAboutModal(false);
 
+        // Show feedback if it was a save action
+        if (showTitlePrompt) {
+            setShowSaveFeedback(true);
+            setTimeout(() => setShowSaveFeedback(false), 2000);
+        }
+    };
 
     const editingElement = state.lesson.slides
         .find(s => s.id === state.currentSlideId)
@@ -45,21 +70,10 @@ const Editor = () => {
         ?.elements.find(e => e.id === state.selectedElementId);
 
     const handleGlobalClick = (e) => {
-        // If clicking on the workspace background (not on a sticker or menu), deselect
-        // We check if the click target is strictly the editor-workspace or editor-layout
-        // But we also need to allow clicking on the canvas background to deselect (which is handled in Canvas usually)
-        // Here we want to catch clicks "somewhere else on the whole screen"
-
-        // If we are clicking inside the contextual menu, do nothing
         if (e.target.closest('.contextual-menu')) return;
-
-        // If we are clicking inside a sticker, do nothing (handled by Sticker)
         if (e.target.closest('.sticker')) return;
+        if (e.target.closest('.modal-overlay')) return; // Don't deselect if clicking in modal
 
-        // If we are clicking on the toolbar or slidestrip while they are disabled, we might want to deselect?
-        // Or if we click anywhere else.
-
-        // If an element is selected, any click outside it (and outside the menu) should deselect
         if (state.selectedElementId) {
             dispatch({ type: 'SELECT_ELEMENT', payload: null });
         }
@@ -69,7 +83,6 @@ const Editor = () => {
     const currentSlideIndex = slides.findIndex(s => s.id === state.currentSlideId);
     const isFirstSlide = currentSlideIndex === 0;
     const isLastSlide = currentSlideIndex === slides.length - 1;
-    const progress = ((currentSlideIndex + 1) / slides.length) * 100;
 
     const handlePrevSlide = () => {
         if (!isFirstSlide) {
@@ -85,11 +98,6 @@ const Editor = () => {
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
-        // The reducer should handle selecting the new slide, or we might need to do it here if it doesn't auto-select
-        // Assuming ADD_SLIDE adds to the end. We might want to switch to it.
-        // For now, let's assume the user manually navigates or the reducer handles it.
-        // Actually, usually we want to jump to the new slide.
-        // Let's trust the reducer or the user flow for now, but ideally the reducer sets currentSlideId to the new one.
     };
 
     return (
@@ -100,9 +108,59 @@ const Editor = () => {
                 </div>
             )}
 
+            {(showTitlePrompt || showAboutModal) && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 modal-overlay">
+                    <div className="bg-white p-6 rounded-xl shadow-xl w-80">
+                        <h2 className="text-xl font-bold mb-4">
+                            {showTitlePrompt ? 'Name your Lesson' : 'About this Lesson'}
+                        </h2>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input
+                                type="text"
+                                value={lessonTitle}
+                                onChange={(e) => setLessonTitle(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                autoFocus
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={handleUpdateTitle}
+                                className="w-full bg-blue-500 text-white py-2 rounded-lg font-bold hover:bg-blue-600"
+                            >
+                                Save
+                            </button>
+
+                            {showAboutModal && (
+                                <button
+                                    onClick={() => {
+                                        if (onDelete) onDelete();
+                                    }}
+                                    className="w-full bg-red-100 text-red-600 py-2 rounded-lg font-bold hover:bg-red-200"
+                                >
+                                    Delete Lesson
+                                </button>
+                            )}
+
+                            {!showTitlePrompt && (
+                                <button
+                                    onClick={() => setShowAboutModal(false)}
+                                    className="w-full text-gray-500 py-2 hover:text-gray-700"
+                                >
+                                    Cancel
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="editor-container">
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
-                    <BurgerMenu onSave={handleSaveProject} />
+                    <BurgerMenu onSave={handleSaveProject} onAbout={() => setShowAboutModal(true)} onBack={onBack} />
                     <button
                         className="btn-floating btn-preview"
                         onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}

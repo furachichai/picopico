@@ -6,12 +6,13 @@ import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import './Player.css';
 
-const Player = () => {
-    const { state, dispatch } = useEditor();
+const Player = ({ onFinish }) => {
+    const { state } = useEditor();
     const { t } = useTranslation();
     const { lesson } = state;
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [view, setView] = useState('lesson'); // 'lesson' or 'menu'
+    const [lessonComplete, setLessonComplete] = useState(false);
     const touchStartRef = useRef(null);
 
     const slides = lesson.slides;
@@ -19,24 +20,26 @@ const Player = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (view !== 'lesson') return;
+            if (view !== 'lesson' || lessonComplete) return;
 
             if (e.key === 'ArrowRight') {
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
                 prevSlide();
             } else if (e.key === 'Escape') {
-                dispatch({ type: 'TOGGLE_PREVIEW' });
+                if (onFinish) onFinish();
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentSlideIndex, view]);
+    }, [currentSlideIndex, view, lessonComplete, onFinish]);
 
     const nextSlide = () => {
         if (currentSlideIndex < slides.length - 1) {
             setCurrentSlideIndex(prev => prev + 1);
+        } else {
+            setLessonComplete(true);
         }
     };
 
@@ -62,18 +65,6 @@ const Player = () => {
         }
         touchStartRef.current = null;
     };
-
-    if (view === 'menu') {
-        return (
-            <LessonMenu
-                onSelectLesson={(id) => {
-                    // Logic to load lesson would go here. For now just go back to draft.
-                    setView('lesson');
-                }}
-                onBack={() => setView('lesson')}
-            />
-        );
-    }
 
     const [banner, setBanner] = useState(null); // { type: 'correct' | 'fail', text: string }
     const [scale, setScale] = useState(1);
@@ -112,18 +103,24 @@ const Player = () => {
         return () => observer.disconnect();
     }, []);
 
-    const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
+    if (lessonComplete) {
+        return (
+            <div className="player-container flex items-center justify-center bg-green-500 text-white">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold mb-4">Lesson Complete!</h1>
+                    <button
+                        onClick={onFinish}
+                        className="bg-white text-green-500 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-gray-100 transition-colors"
+                    >
+                        Continue
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="player-container">
-
-            <div className="player-header">
-                <button onClick={() => setView('menu')}>{t('player.menu')}</button>
-                <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>{t('player.close')}</button>
-            </div>
-
-
-
             <div
                 className="player-viewport"
                 ref={viewportRef}
@@ -156,13 +153,31 @@ const Player = () => {
                         marginLeft: '-180px' /* Half of width */
                     }}
                 >
-                    <div className="player-progress-bar">
-                        {slides.map((_, index) => (
-                            <div
-                                key={index}
-                                className={`progress-segment ${index <= currentSlideIndex ? 'active' : ''}`}
-                            />
-                        ))}
+                    <div className="player-header-row" style={{
+                        position: 'absolute',
+                        top: '20px',
+                        left: '20px',
+                        right: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        zIndex: 100
+                    }}>
+                        <button
+                            onClick={onFinish}
+                            className="text-gray-400 hover:text-gray-600 font-bold text-xl leading-none"
+                            style={{ background: 'none', border: 'none', padding: '5px', cursor: 'pointer' }}
+                        >
+                            ✕
+                        </button>
+                        <div className="player-progress-bar" style={{ flex: 1 }}>
+                            {slides.map((_, index) => (
+                                <div
+                                    key={index}
+                                    className={`progress-segment ${index <= currentSlideIndex ? 'active' : ''}`}
+                                />
+                            ))}
+                        </div>
                     </div>
 
                     {currentSlide.elements.map(element => (

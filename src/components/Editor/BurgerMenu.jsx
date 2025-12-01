@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css'; // Reusing contextual menu styles for simplicity or create new ones
 
-const BurgerMenu = ({ onSave }) => {
+const BurgerMenu = ({ onSave, onAbout, onBack }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-        setIsOpen(false);
-    };
+
 
     const handleSave = () => {
         onSave();
@@ -45,18 +42,13 @@ const BurgerMenu = ({ onSave }) => {
                         💾 {t('editor.save')}
                     </button>
 
-                    <div className="language-selector" style={{ width: '100%' }}>
-                        <div style={{ fontSize: '0.8rem', marginBottom: '5px', color: '#666' }}>{t('editor.language')}</div>
-                        <button className="btn-secondary" onClick={() => changeLanguage('en')} style={{ display: 'block', width: '100%', textAlign: 'left', marginBottom: '5px' }}>
-                            🇬🇧 English
-                        </button>
-                        <button className="btn-secondary" onClick={() => changeLanguage('es')} style={{ display: 'block', width: '100%', textAlign: 'left', marginBottom: '5px' }}>
-                            🇪🇸 Español
-                        </button>
-                        <button className="btn-secondary" onClick={() => changeLanguage('fr')} style={{ display: 'block', width: '100%', textAlign: 'left' }}>
-                            🇫🇷 Français
-                        </button>
-                    </div>
+                    <button className="btn-secondary" onClick={onAbout} style={{ width: '100%', textAlign: 'left' }}>
+                        ℹ️ {t('editor.about')}
+                    </button>
+
+                    <button className="btn-secondary" onClick={onBack} style={{ width: '100%', textAlign: 'left' }}>
+                        ⬅️ {t('editor.back')}
+                    </button>
                 </div>
             )}
             {/* Overlay to close menu when clicking outside */}

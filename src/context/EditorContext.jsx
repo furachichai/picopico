@@ -10,16 +10,14 @@ const initialState = {
         slides: [
             {
                 id: 'slide-1',
-                background: '#E1F5FE',
+                background: '#ffffff',
                 elements: [],
                 order: 0,
-            },
+            }
         ],
         author: 'User',
         createdAt: new Date(),
     },
-    currentSlideId: 'slide-1',
-    selectedElementId: null,
     currentSlideId: 'slide-1',
     selectedElementId: null,
     view: 'editor', // 'editor', 'player', 'slides'
@@ -38,7 +36,6 @@ const editorReducer = (state, action) => {
 
         case 'ADD_SLIDE': {
             const newSlide = {
-                id: `slide-${Date.now()}`,
                 id: `slide-${Date.now()}`,
                 background: '#E1F5FE',
                 elements: [],
@@ -185,6 +182,16 @@ const editorReducer = (state, action) => {
                 selectedElementId: null,
             };
 
+        case 'UPDATE_LESSON_META': {
+            return {
+                ...state,
+                lesson: {
+                    ...state.lesson,
+                    ...action.payload
+                }
+            };
+        }
+
         case 'DUPLICATE_ELEMENT': {
             const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
             if (!currentSlide) return state;
@@ -218,8 +225,34 @@ const editorReducer = (state, action) => {
     }
 };
 
-export const EditorProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(editorReducer, initialState);
+export const EditorProvider = ({ children, initialLesson }) => {
+    // Ensure lesson has at least one slide
+    const lessonToLoad = initialLesson || initialState.lesson;
+    if (!lessonToLoad.slides || lessonToLoad.slides.length === 0) {
+        lessonToLoad.slides = [{
+            id: `slide-${Date.now()}`,
+            background: '#FFFFFF',
+            elements: [],
+            order: 0,
+        }];
+    }
+
+    const [state, dispatch] = useReducer(editorReducer, {
+        ...initialState,
+        lesson: lessonToLoad,
+        currentSlideId: lessonToLoad.slides[0].id, // Initialize with the first slide of the loaded lesson
+        view: 'editor'
+    });
+
+    // Update state if initialLesson changes (e.g. when navigating between lessons)
+    // This might be needed if the provider is not unmounted
+    /* 
+    useEffect(() => {
+        if (initialLesson) {
+             dispatch({ type: 'LOAD_LESSON', payload: initialLesson });
+        }
+    }, [initialLesson]);
+    */
 
     return (
         <EditorContext.Provider value={{ state, dispatch }}>
