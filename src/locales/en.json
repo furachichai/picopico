@@ -1,0 +1,40 @@
+{
+    "editor": {
+        "save": "Save",
+        "saved": "Saved! ✅",
+        "preview": "Preview",
+        "addText": "Add Text",
+        "addBalloon": "Add Balloon",
+        "addQuiz": "Add Quiz",
+        "openLibrary": "Open Library",
+        "background": "Bg",
+        "language": "Language",
+        "slides": "Slides"
+    },
+    "slides": {
+        "title": "Slides",
+        "create": "Create Slide",
+        "back": "Back",
+        "confirmDelete": "Are you sure you want to delete this slide?",
+        "moveLeft": "Move Left",
+        "moveRight": "Move Right",
+        "delete": "Delete Slide"
+    },
+    "library": {
+        "title": "Library",
+        "imgs": "IMGs",
+        "bkgs": "BKGs",
+        "emojis": "EMOJIS",
+        "colors": "COLORS",
+        "gifs": "GIFS",
+        "noCharacters": "No characters found.",
+        "addCharacters": "Add images to",
+        "noBackgrounds": "No backgrounds found.",
+        "addBackgrounds": "Add images to"
+    },
+    "player": {
+        "menu": "Menu",
+        "close": "Close",
+        "hint": "Swipe or use Arrow Keys"
+    }
+}

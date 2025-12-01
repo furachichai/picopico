@@ -20,13 +20,18 @@ const initialState = {
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
-    isPlaying: false,
+    currentSlideId: 'slide-1',
+    selectedElementId: null,
+    view: 'editor', // 'editor', 'player', 'slides'
 };
 
 const editorReducer = (state, action) => {
     switch (action.type) {
+        case 'SET_VIEW':
+            return { ...state, view: action.payload };
+
         case 'TOGGLE_PREVIEW':
-            return { ...state, isPlaying: !state.isPlaying };
+            return { ...state, view: state.view === 'editor' ? 'player' : 'editor' };
 
         case 'SET_CURRENT_SLIDE':
             return { ...state, currentSlideId: action.payload };

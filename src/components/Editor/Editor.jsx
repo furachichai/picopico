@@ -5,9 +5,12 @@ import './Editor.css';
 import { useEditor } from '../../context/EditorContext';
 
 import ContextualMenu from './ContextualMenu';
+import BurgerMenu from './BurgerMenu';
+import { useTranslation } from 'react-i18next';
 
 const Editor = () => {
     const { state, dispatch } = useEditor();
+    const { t } = useTranslation();
     const [editingElementId, setEditingElementId] = useState(null);
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
 
@@ -93,23 +96,17 @@ const Editor = () => {
         <div className="editor-layout" onClickCapture={handleGlobalClick}>
             {showSaveFeedback && (
                 <div className="save-feedback">
-                    Saved! ✅
+                    {t('editor.saved')}
                 </div>
             )}
 
             <div className="editor-container">
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
-                    <button
-                        className="btn-floating btn-save"
-                        onClick={handleSaveProject}
-                        title="Save"
-                    >
-                        💾
-                    </button>
+                    <BurgerMenu onSave={handleSaveProject} />
                     <button
                         className="btn-floating btn-preview"
                         onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}
-                        title="Preview"
+                        title={t('editor.preview')}
                     >
                         ▶
                     </button>

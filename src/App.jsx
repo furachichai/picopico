@@ -1,15 +1,16 @@
 import { EditorProvider, useEditor } from './context/EditorContext'
-import Editor from './components/Editor/Editor'
-import Player from './components/Player/Player'
+import Editor from './components/Editor/Editor';
+import Player from './components/Player/Player';
+import SlidesPage from './components/Editor/SlidesPage';
 import './index.css'
 
 const AppContent = () => {
   const { state } = useEditor();
-  return (
-    <div className="app-container">
-      {state.isPlaying ? <Player /> : <Editor />}
-    </div>
-  );
+
+  if (state.view === 'slides') return <SlidesPage />;
+  if (state.view === 'player') return <Player />;
+
+  return <Editor />;
 };
 
 function App() {

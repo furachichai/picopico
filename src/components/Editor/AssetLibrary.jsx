@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './AssetLibrary.css';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
@@ -41,6 +42,7 @@ const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.def
 
 const AssetLibrary = ({ onClose }) => {
     const { dispatch } = useEditor();
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('custom');
 
     const handleSelect = (item) => {
@@ -90,7 +92,7 @@ const AssetLibrary = ({ onClose }) => {
     return (
         <div className="asset-library">
             <div className="library-header">
-                <h3>Library</h3>
+                <h3>{t('library.title')}</h3>
                 <button className="close-btn" onClick={onClose}>×</button>
             </div>
 
@@ -99,31 +101,31 @@ const AssetLibrary = ({ onClose }) => {
                     className={activeTab === 'custom' ? 'active' : ''}
                     onClick={() => setActiveTab('custom')}
                 >
-                    IMGs
+                    {t('library.imgs')}
                 </button>
                 <button
                     className={activeTab === 'custom-bg' ? 'active' : ''}
                     onClick={() => setActiveTab('custom-bg')}
                 >
-                    BKGs
+                    {t('library.bkgs')}
                 </button>
                 <button
                     className={activeTab === 'emojis' ? 'active' : ''}
                     onClick={() => setActiveTab('emojis')}
                 >
-                    EMOJIS
+                    {t('library.emojis')}
                 </button>
                 <button
                     className={activeTab === 'backgrounds' ? 'active' : ''}
                     onClick={() => setActiveTab('backgrounds')}
                 >
-                    COLORS
+                    {t('library.colors')}
                 </button>
                 <button
                     className={activeTab === 'gifs' ? 'active' : ''}
                     onClick={() => setActiveTab('gifs')}
                 >
-                    GIFS
+                    {t('library.gifs')}
                 </button>
             </div>
 
@@ -142,8 +144,8 @@ const AssetLibrary = ({ onClose }) => {
                             ))
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
-                                No characters found. <br />
-                                Add images to <code>src/assets/characters</code>
+                                {t('library.noCharacters')} <br />
+                                {t('library.addCharacters')} <code>src/assets/characters</code>
                             </div>
                         )
                     )}
@@ -161,8 +163,8 @@ const AssetLibrary = ({ onClose }) => {
                             ))
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
-                                No backgrounds found. <br />
-                                Add images to <code>src/assets/backgrounds</code>
+                                {t('library.noBackgrounds')} <br />
+                                {t('library.addBackgrounds')} <code>src/assets/backgrounds</code>
                             </div>
                         )
                     )}

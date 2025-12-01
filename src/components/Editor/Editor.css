@@ -19,7 +19,8 @@
     z-index: 100;
 }
 
-.editor-floating-actions>button {
+.editor-floating-actions>button,
+.editor-floating-actions>.burger-menu-container {
     pointer-events: auto;
     position: absolute;
 }
@@ -58,6 +59,17 @@
     color: white;
     top: 10px;
     left: 10px;
+}
+
+.burger-menu-container {
+    top: 10px;
+    left: 10px;
+}
+
+.btn-burger {
+    background-color: var(--color-secondary);
+    border: 2px solid #e67e00;
+    color: white;
 }
 
 .editor-workspace {

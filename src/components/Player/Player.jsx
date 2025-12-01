@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import LessonMenu from './LessonMenu';
 import QuizPlayer from './QuizPlayer';
@@ -7,6 +8,7 @@ import './Player.css';
 
 const Player = () => {
     const { state, dispatch } = useEditor();
+    const { t } = useTranslation();
     const { lesson } = state;
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [view, setView] = useState('lesson'); // 'lesson' or 'menu'
@@ -116,8 +118,8 @@ const Player = () => {
         <div className="player-container">
 
             <div className="player-header">
-                <button onClick={() => setView('menu')}>Menu</button>
-                <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>Close</button>
+                <button onClick={() => setView('menu')}>{t('player.menu')}</button>
+                <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>{t('player.close')}</button>
             </div>
 
 
@@ -205,7 +207,7 @@ const Player = () => {
             </div>
 
             <div className="player-controls-hint">
-                Swipe or use Arrow Keys
+                {t('player.hint')}
             </div>
         </div>
     );

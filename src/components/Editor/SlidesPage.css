@@ -1,0 +1,129 @@
+.slides-page {
+    height: 100dvh;
+    background-color: #f0f4f8;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Nunito', sans-serif;
+}
+
+.slides-header {
+    padding: 1rem 2rem;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.slides-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #666;
+    font-weight: bold;
+}
+
+.btn-create {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+}
+
+.slides-grid {
+    flex: 1;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
+    overflow-y: auto;
+    align-content: flex-start;
+}
+
+.slide-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.slide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.slide-preview {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background-color: #eee;
+    position: relative;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.slide-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.slide-info {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: #666;
+    display: none;
+    /* Hide element count as we render elements now */
+}
+
+.slide-actions {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+    background: #fafafa;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.btn-icon:hover {
+    opacity: 1;
+}
+
+.btn-icon:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.btn-delete:hover {
+    transform: scale(1.1);
+}

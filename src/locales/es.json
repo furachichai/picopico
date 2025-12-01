@@ -1,0 +1,40 @@
+{
+    "editor": {
+        "save": "Guardar",
+        "saved": "¡Guardado! ✅",
+        "preview": "Vista Previa",
+        "addText": "Añadir Texto",
+        "addBalloon": "Añadir Globo",
+        "addQuiz": "Añadir Cuestionario",
+        "openLibrary": "Abrir Biblioteca",
+        "background": "Fondo",
+        "language": "Idioma",
+        "slides": "Diapositivas"
+    },
+    "slides": {
+        "title": "Diapositivas",
+        "create": "Crear Diapositiva",
+        "back": "Volver",
+        "confirmDelete": "¿Estás seguro de que quieres eliminar esta diapositiva?",
+        "moveLeft": "Mover Izquierda",
+        "moveRight": "Mover Derecha",
+        "delete": "Eliminar Diapositiva"
+    },
+    "library": {
+        "title": "Biblioteca",
+        "imgs": "IMGs",
+        "bkgs": "FONDOS",
+        "emojis": "EMOJIS",
+        "colors": "COLORES",
+        "gifs": "GIFS",
+        "noCharacters": "No se encontraron personajes.",
+        "addCharacters": "Añade imágenes a",
+        "noBackgrounds": "No se encontraron fondos.",
+        "addBackgrounds": "Añade imágenes a"
+    },
+    "player": {
+        "menu": "Menú",
+        "close": "Cerrar",
+        "hint": "Desliza o usa las Flechas"
+    }
+}
