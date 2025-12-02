@@ -1,0 +1,108 @@
+.lessons-page {
+    height: 100dvh;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Nunito', sans-serif;
+}
+
+.lessons-header {
+    padding: 1rem 2rem;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.lessons-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.lessons-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+.file-tree-item-container {
+    margin-bottom: 0.5rem;
+}
+
+.file-tree-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.file-tree-item:hover {
+    background-color: #e2e8f0;
+}
+
+.file-tree-item.directory {
+    font-weight: bold;
+    color: #475569;
+}
+
+.file-tree-item.file {
+    color: #334155;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+
+.folder-icon,
+.file-icon {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.item-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    /* Show on hover */
+    transition: opacity 0.2s;
+}
+
+.file-tree-item:hover .item-actions {
+    opacity: 1;
+}
+
+.move-actions {
+    display: flex;
+    gap: 0.2rem;
+    margin-left: 0.5rem;
+    border-left: 1px solid #cbd5e1;
+    padding-left: 0.5rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.2rem;
+    border-radius: 4px;
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.file-tree-children {
+    margin-left: 1rem;
+    border-left: 1px solid #e2e8f0;
+}

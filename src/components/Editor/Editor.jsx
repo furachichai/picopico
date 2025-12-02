@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Disc } from 'lucide-react';
 import Canvas from './Canvas';
 import Toolbar from './Toolbar';
 import './Editor.css';
@@ -6,7 +7,6 @@ import { useEditor } from '../../context/EditorContext';
 
 import ContextualMenu from './ContextualMenu';
 import BurgerMenu from './BurgerMenu';
-import SaveLessonModal from './SaveLessonModal';
 import LessonInfoModal from './LessonInfoModal';
 import ConfirmationModal from './ConfirmationModal';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,6 @@ const Editor = () => {
     const { t } = useTranslation();
     const [editingElementId, setEditingElementId] = useState(null);
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
-    const [showSaveModal, setShowSaveModal] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [showNewLessonConfirmation, setShowNewLessonConfirmation] = useState(false);
 
@@ -34,39 +33,107 @@ const Editor = () => {
         }
     };
 
-    const performSave = () => {
-        dispatch({
-            type: 'UPDATE_LESSON_METADATA',
-            payload: { updatedAt: new Date() }
-        });
-        setShowSaveFeedback(true);
-        setTimeout(() => setShowSaveFeedback(false), 2000);
+    const saveToDisk = async (lessonData, path) => {
+        try {
+            const response = await fetch('/api/save-lesson', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    path: path,
+                    content: lessonData
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save lesson');
+            }
+
+            const result = await response.json();
+            console.log('Lesson saved to:', result.path);
+            return true;
+        } catch (error) {
+            console.error('Error saving lesson:', error);
+            alert('Error saving lesson to disk');
+            return false;
+        }
+    };
+
+    const performSave = async (pathOverride = null) => {
+        const path = pathOverride || state.lesson.path;
+
+        if (!path) {
+            // Should not happen if logic is correct, but fallback
+            setShowInfoModal(true);
+            return;
+        }
+
+        // Update timestamp
+        const updatedLesson = {
+            ...state.lesson,
+            updatedAt: new Date(),
+            path: path // Ensure path is in the lesson object
+        };
+
+        // Save to disk
+        const success = await saveToDisk(updatedLesson, path);
+
+        if (success) {
+            dispatch({
+                type: 'UPDATE_LESSON_METADATA',
+                payload: { updatedAt: new Date(), path: path }
+            });
+            setShowSaveFeedback(true);
+            setTimeout(() => setShowSaveFeedback(false), 2000);
+        }
     };
 
     const handleSaveProject = () => {
-        if (state.lesson.title === 'Untitled Lesson') {
-            // First save or still default name
-            setShowSaveModal(true);
+        if (!state.lesson.path) {
+            // First save (no path yet) -> Open Info Modal to set path
+            setShowInfoModal(true);
         } else {
             performSave();
         }
     };
 
-    const handleFirstSave = (name) => {
-        dispatch({
-            type: 'UPDATE_LESSON_METADATA',
-            payload: { title: name, updatedAt: new Date() }
-        });
-        setShowSaveModal(false);
-        setShowSaveFeedback(true);
-        setTimeout(() => setShowSaveFeedback(false), 2000);
-    };
+    const handleUpdateInfo = async (data) => {
+        // data contains { path, title, subject, topic, ... } from LessonInfoModal
 
-    const handleUpdateInfo = (updates) => {
         dispatch({
             type: 'UPDATE_LESSON_METADATA',
-            payload: updates
+            payload: {
+                title: data.title,
+                path: data.path,
+                subject: data.subject,
+                topic: data.topic,
+                chapterId: data.chapterId,
+                chapterName: data.chapterName,
+                lessonId: data.lessonId
+            }
         });
+
+        // Construct the lesson object with the new data
+        const lessonToSave = {
+            ...state.lesson,
+            title: data.title,
+            path: data.path,
+            subject: data.subject,
+            topic: data.topic,
+            chapterId: data.chapterId,
+            chapterName: data.chapterName,
+            lessonId: data.lessonId,
+            updatedAt: new Date()
+        };
+
+        const success = await saveToDisk(lessonToSave, data.path);
+
+        if (success) {
+            setShowInfoModal(false);
+            setShowSaveFeedback(true);
+            setTimeout(() => setShowSaveFeedback(false), 2000);
+        }
     };
 
     const handleNewLesson = () => {
@@ -150,12 +217,6 @@ const Editor = () => {
             )}
 
             <div className="editor-container">
-                <SaveLessonModal
-                    isOpen={showSaveModal}
-                    onSave={handleFirstSave}
-                    onClose={() => setShowSaveModal(false)}
-                    initialName={state.lesson.title}
-                />
                 <LessonInfoModal
                     isOpen={showInfoModal}
                     lesson={state.lesson}
@@ -182,6 +243,7 @@ const Editor = () => {
                         onInfo={() => setShowInfoModal(true)}
                         onNew={handleNewLesson}
                         onMenu={handleGoToMenu}
+                        onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
                     />
                     <div className="top-right-actions">
                         <button

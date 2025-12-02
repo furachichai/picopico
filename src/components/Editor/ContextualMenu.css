@@ -2,18 +2,113 @@
     width: 100%;
     background: var(--white);
     border-top: none;
-    padding: 12px 20px;
+    padding: 16px;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    flex-direction: column;
+    /* Changed to column for burger menu layout */
     gap: 1rem;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    overflow-x: auto;
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
+    border-radius: 16px;
+    min-width: 220px;
 }
 
+/* Burger Menu Content */
+.burger-menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.menu-item:hover {
+    background-color: #F1F5F9;
+    transform: translateX(4px);
+}
+
+.menu-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* Language Section */
+.language-section {
+    width: 100%;
+    padding-top: 12px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.language-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+.language-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.lang-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-btn:hover {
+    background: #F1F5F9;
+    border-color: #CBD5E1;
+    transform: translateY(-2px);
+}
+
+.lang-btn.active {
+    background: #F0F9FF;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.lang-flag {
+    font-size: 1.2rem;
+}
+
+.lang-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* Existing styles preserved/adapted */
 .menu-group {
     display: flex;
     flex-direction: column;

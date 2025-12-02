@@ -1,0 +1,33 @@
+{
+  "id": "draft-1764641017780",
+  "title": "la segunda",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764641036386",
+          "type": "image",
+          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 3.4626869383838
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-02T02:03:37.780Z",
+  "updatedAt": "2025-12-02T02:03:59.357Z",
+  "path": "lessons/Math/Fractiones/01-Intro/02-la segunda/lesson.json",
+  "subject": "Math",
+  "topic": "Fractiones",
+  "chapterId": "01",
+  "chapterName": "Intro",
+  "lessonId": "02"
+}

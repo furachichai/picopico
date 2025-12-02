@@ -1,0 +1,51 @@
+{
+  "id": "draft-1",
+  "title": "test lesson",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764639900623",
+          "type": "image",
+          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "x": 16.944444444444443,
+          "y": 87.1875,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 0.5414491171180973
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1764639909506",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764639911637",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 4.498531180455349
+        }
+      ],
+      "order": 1
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-02T01:44:56.755Z",
+  "updatedAt": "2025-12-02T01:46:01.623Z",
+  "path": "lessons/Math/Test topic 01/003-test chapter/004-test lesson/lesson.json",
+  "subject": "Math",
+  "topic": "Test topic 01",
+  "chapterId": "003",
+  "chapterName": "test chapter",
+  "lessonId": "004"
+}

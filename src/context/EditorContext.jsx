@@ -18,6 +18,7 @@ const initialState = {
         author: 'User',
         createdAt: new Date(),
         updatedAt: null,
+        path: null, // Local file path
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
@@ -236,14 +237,24 @@ const editorReducer = (state, action) => {
                 },
             };
 
+        case 'LOAD_LESSON':
+            return {
+                ...state,
+                lesson: action.payload,
+                currentSlideId: action.payload.slides[0]?.id || 'slide-1',
+                selectedElementId: null,
+                isDirty: false,
+            };
+
         case 'NEW_LESSON':
             return {
                 ...initialState,
-                view: state.view, // Keep current view
+                view: 'editor', // Switch to editor view
                 lesson: {
                     ...initialState.lesson,
                     id: `draft-${Date.now()}`,
                     createdAt: new Date(),
+                    ...action.payload, // Merge any initial data (subject, topic, etc.)
                 },
                 isDirty: false,
             };

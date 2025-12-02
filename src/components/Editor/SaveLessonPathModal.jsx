@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css';
 
-const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
+const SaveLessonPathModal = ({ isOpen, onSave, onClose, initialPath, initialTitle }) => {
     const { t } = useTranslation();
 
     // State for path components
@@ -11,19 +11,14 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
     const [chapterId, setChapterId] = useState('');
     const [chapterName, setChapterName] = useState('');
     const [lessonId, setLessonId] = useState('');
-    const [lessonName, setLessonName] = useState('');
+    const [lessonName, setLessonName] = useState(initialTitle || '');
 
+    // Parse initial path if provided to populate fields (optional, for "Save As")
     useEffect(() => {
-        if (isOpen && lesson) {
-            // Initialize fields from lesson metadata or defaults
-            setSubject(lesson.subject || 'Math');
-            setTopic(lesson.topic || '');
-            setChapterId(lesson.chapterId || '');
-            setChapterName(lesson.chapterName || '');
-            setLessonId(lesson.lessonId || '');
-            setLessonName(lesson.title || '');
+        if (isOpen && initialTitle) {
+            setLessonName(initialTitle);
         }
-    }, [isOpen, lesson]);
+    }, [isOpen, initialTitle]);
 
     if (!isOpen) return null;
 
@@ -31,6 +26,8 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
         e.preventDefault();
 
         // Construct path
+        // Format: lessons/[Subject]/[Topic]/[ChapterID]-[ChapterName]/[LessonID]-[LessonName]/lesson.json
+
         const safeSubject = subject.trim() || 'Uncategorized';
         const safeTopic = topic.trim() || 'General';
 
@@ -44,72 +41,60 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
 
         const fullPath = `lessons/${safeSubject}/${safeTopic}/${chapterDir}/${lessonDir}/lesson.json`;
 
-        onUpdate({
+        onSave({
             path: fullPath,
             title: lName,
-            subject: safeSubject,
-            topic: safeTopic,
-            chapterId: cId,
-            chapterName: cName,
-            lessonId: lId
+            metadata: {
+                subject: safeSubject,
+                topic: safeTopic,
+                chapterId: cId,
+                chapterName: cName,
+                lessonId: lId
+            }
         });
-
-        onClose();
-    };
-
-    const formatDate = (date) => {
-        if (!date) return '-';
-        return new Date(date).toLocaleString();
     };
 
     const inputStyle = {
         width: '100%',
         padding: '8px',
-        borderRadius: '8px',
-        border: '1px solid #ddd',
-        marginBottom: '10px',
-        fontSize: '0.9rem'
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        marginBottom: '10px'
     };
 
     const labelStyle = {
         display: 'block',
         marginBottom: '4px',
-        fontWeight: '600',
-        fontSize: '0.85rem',
-        color: '#555'
+        fontWeight: 'bold',
+        fontSize: '0.9rem',
+        color: '#333'
     };
 
     return (
         <div className="modal-overlay" style={{
             position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 2000,
-            fontFamily: "'Inter', sans-serif"
+            zIndex: 2000
         }}>
             <div className="modal-content" style={{
                 backgroundColor: 'white',
                 padding: '24px',
-                borderRadius: '16px',
+                borderRadius: '12px',
                 width: '400px',
                 boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
                 maxHeight: '90vh',
-                overflowY: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px'
+                overflowY: 'auto'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '700', color: '#333' }}>{t('editor.info')}</h3>
-                    <button onClick={onClose} style={{
-                        background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999'
-                    }}>×</button>
-                </div>
-
+                <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#8B5CF6' }}>{t('editor.saveLesson')}</h3>
                 <form onSubmit={handleSubmit}>
+
                     {/* Subject */}
                     <div>
                         <label style={labelStyle}>Subject</label>
@@ -135,6 +120,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                             onChange={(e) => setTopic(e.target.value)}
                             placeholder="e.g. Fractions"
                             style={inputStyle}
+                            required
                         />
                     </div>
 
@@ -148,9 +134,10 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                                 onChange={(e) => setChapterId(e.target.value)}
                                 placeholder="01"
                                 style={inputStyle}
+                                required
                             />
                         </div>
-                        <div style={{ flex: 2 }}>
+                        <div style={{ flex: 3 }}>
                             <label style={labelStyle}>Chapter Name</label>
                             <input
                                 type="text"
@@ -158,6 +145,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                                 onChange={(e) => setChapterName(e.target.value)}
                                 placeholder="Introduction"
                                 style={inputStyle}
+                                required
                             />
                         </div>
                     </div>
@@ -172,9 +160,10 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                                 onChange={(e) => setLessonId(e.target.value)}
                                 placeholder="01"
                                 style={inputStyle}
+                                required
                             />
                         </div>
-                        <div style={{ flex: 2 }}>
+                        <div style={{ flex: 3 }}>
                             <label style={labelStyle}>Lesson Name</label>
                             <input
                                 type="text"
@@ -182,33 +171,23 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                                 onChange={(e) => setLessonName(e.target.value)}
                                 placeholder="Adding Fractions"
                                 style={inputStyle}
+                                required
                             />
                         </div>
                     </div>
 
-                    {/* Metadata Display */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '10px', padding: '10px', background: '#f9f9f9', borderRadius: '8px' }}>
-                        <div style={{ fontSize: '0.85rem', color: '#333' }}>
-                            <strong>{t('editor.lastSaved')}:</strong> {formatDate(lesson.updatedAt)}
-                        </div>
-                        <div style={{ fontSize: '0.85rem', color: '#999' }}>
-                            <strong>{t('editor.created')}:</strong> {formatDate(lesson.createdAt)}
-                        </div>
-                        {lesson.path && (
-                            <div style={{ fontSize: '0.75rem', color: '#999', wordBreak: 'break-all' }}>
-                                <strong>Path:</strong> {lesson.path}
-                            </div>
-                        )}
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                        <button type="button" onClick={onClose} style={{
-                            flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd', background: 'white', cursor: 'pointer'
-                        }}>
-                            {t('common.close')}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+                        <button type="button" onClick={onClose} className="btn-secondary">
+                            {t('common.cancel')}
                         </button>
-                        <button type="submit" style={{
-                            flex: 1, padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: '#8B5CF6', color: 'white', fontWeight: 'bold', cursor: 'pointer'
+                        <button type="submit" className="btn-primary" style={{
+                            backgroundColor: '#8B5CF6',
+                            color: 'white',
+                            border: 'none',
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold'
                         }}>
                             {t('editor.save')}
                         </button>
@@ -219,4 +198,4 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
     );
 };
 
-export default LessonInfoModal;
+export default SaveLessonPathModal;

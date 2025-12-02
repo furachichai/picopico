@@ -51,7 +51,7 @@ const Toolbar = () => {
                         payload: { type: ELEMENT_TYPES.BALLOON, content: 'Hello!' }
                     })} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
                     <button className="btn-secondary" onClick={handleAddQuiz} title={t('editor.addQuiz')}>Quiz</button>
-                    <button className="btn-secondary" onClick={() => dispatch({ type: 'SET_VIEW', payload: 'slides' })} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
+                    <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <div className="color-picker-wrapper">
                         <label htmlFor="bg-color">{t('editor.background')}</label>

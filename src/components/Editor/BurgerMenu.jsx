@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css'; // Reusing contextual menu styles for simplicity or create new ones
 
-const BurgerMenu = ({ onInfo, onNew, onMenu }) => {
+const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -41,27 +41,41 @@ const BurgerMenu = ({ onInfo, onNew, onMenu }) => {
                     zIndex: 1000,
                     minWidth: '150px'
                 }}>
-                    <button className="btn-secondary" onClick={() => { onMenu(); setIsOpen(false); }} style={{ width: '100%', textAlign: 'left' }}>
-                        🏠 {t('editor.menu')}
-                    </button>
-                    <button className="btn-secondary" onClick={() => { onNew(); setIsOpen(false); }} style={{ width: '100%', textAlign: 'left' }}>
-                        ➕ {t('editor.newLesson')}
-                    </button>
-                    <button className="btn-secondary" onClick={() => { onInfo(); setIsOpen(false); }} style={{ width: '100%', textAlign: 'left' }}>
-                        ℹ️ {t('editor.info')}
-                    </button>
+                    <div className="burger-menu-content">
+                        <button className="menu-item" onClick={() => { onNew(); setIsOpen(false); }}>
+                            <span className="menu-icon">📄</span>
+                            <span className="menu-text">{t('editor.newLesson')}</span>
+                        </button>
+                        <button className="menu-item" onClick={() => { onLessons(); setIsOpen(false); }}>
+                            <span className="menu-icon">📂</span>
+                            <span className="menu-text">{t('editor.lessons')}</span>
+                        </button>
+                        <button className="menu-item" onClick={() => { onInfo(); setIsOpen(false); }}>
+                            <span className="menu-icon">ℹ️</span>
+                            <span className="menu-text">{t('editor.info')}</span>
+                        </button>
+                        <button className="menu-item" onClick={() => { onMenu(); setIsOpen(false); }}>
+                            <span className="menu-icon">🏠</span>
+                            <span className="menu-text">{t('editor.menu')}</span>
+                        </button>
+                    </div>
 
-                    <div className="language-selector" style={{ width: '100%' }}>
-                        <div style={{ fontSize: '0.8rem', marginBottom: '5px', color: '#666' }}>{t('editor.language')}</div>
-                        <button className="btn-secondary" onClick={() => changeLanguage('en')} style={{ display: 'block', width: '100%', textAlign: 'left', marginBottom: '5px' }}>
-                            🇬🇧 English
-                        </button>
-                        <button className="btn-secondary" onClick={() => changeLanguage('es')} style={{ display: 'block', width: '100%', textAlign: 'left', marginBottom: '5px' }}>
-                            🇪🇸 Español
-                        </button>
-                        <button className="btn-secondary" onClick={() => changeLanguage('fr')} style={{ display: 'block', width: '100%', textAlign: 'left' }}>
-                            🇫🇷 Français
-                        </button>
+                    <div className="language-section">
+                        <div className="language-label">{t('editor.language')}</div>
+                        <div className="language-buttons">
+                            <button className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`} onClick={() => changeLanguage('en')}>
+                                <span className="lang-flag">🇬🇧</span>
+                                <span className="lang-text">EN</span>
+                            </button>
+                            <button className={`lang-btn ${i18n.language === 'es' ? 'active' : ''}`} onClick={() => changeLanguage('es')}>
+                                <span className="lang-flag">🇪🇸</span>
+                                <span className="lang-text">ES</span>
+                            </button>
+                            <button className={`lang-btn ${i18n.language === 'fr' ? 'active' : ''}`} onClick={() => changeLanguage('fr')}>
+                                <span className="lang-flag">🇫🇷</span>
+                                <span className="lang-text">FR</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

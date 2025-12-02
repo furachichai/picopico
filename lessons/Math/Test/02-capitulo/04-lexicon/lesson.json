@@ -1,0 +1,57 @@
+{
+  "id": "draft-1",
+  "title": "lexicon",
+  "slides": [
+    {
+      "id": "slide-1764638993145",
+      "background": "url(\"/src/assets/backgrounds/counter%202.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764638913868",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 46.388888888888886,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 4.572049167184603
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1764639004966",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764639007465",
+          "type": "image",
+          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "x": 86.38888888888889,
+          "y": 78.28125,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 0.1953241439358406
+        }
+      ],
+      "order": 2
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-02T01:28:03.998Z",
+  "updatedAt": "2025-12-02T01:31:49.649Z",
+  "path": "lessons/Math/Test/02-capitulo/04-lexicon/lesson.json",
+  "subject": "Math",
+  "topic": "Test",
+  "chapterId": "02",
+  "chapterName": "capitulo",
+  "lessonId": "04"
+}

@@ -1,12 +1,15 @@
 import React from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
+import SlideThumbnail from './SlideThumbnail';
 import './SlidesPage.css';
 
 const SlidesPage = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const { lesson } = state;
+
+    console.log('SlidesPage rendered', lesson);
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
@@ -46,51 +49,8 @@ const SlidesPage = () => {
                         <div
                             className="slide-preview"
                             onClick={() => handleEditSlide(slide.id)}
-                            style={{
-                                background: slide.background.includes('url') || slide.background.includes('gradient') ? slide.background : slide.background,
-                                backgroundColor: !slide.background.includes('url') && !slide.background.includes('gradient') ? slide.background : 'white',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center'
-                            }}
                         >
-                            {slide.elements.map(element => (
-                                <div
-                                    key={element.id}
-                                    style={{
-                                        position: 'absolute',
-                                        left: `${element.x}%`,
-                                        top: `${element.y}%`,
-                                        width: `${element.width}%`,
-                                        height: `${element.height}%`,
-                                        transform: `translate(-50%, -50%) rotate(${element.rotation}deg)`,
-                                        pointerEvents: 'none',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {element.type === 'image' && (
-                                        <img src={element.content} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                    )}
-                                    {element.type === 'text' && (
-                                        <div style={{
-                                            fontSize: '0.4rem',
-                                            overflow: 'hidden',
-                                            whiteSpace: 'nowrap',
-                                            textOverflow: 'ellipsis',
-                                            color: element.metadata?.color || 'black',
-                                            fontFamily: element.metadata?.fontFamily,
-                                            width: '100%',
-                                            textAlign: 'center'
-                                        }}>
-                                            {element.content}
-                                        </div>
-                                    )}
-                                    {(element.type === 'quiz' || element.type === 'game') && (
-                                        <div style={{ fontSize: '1rem' }}>🧩</div>
-                                    )}
-                                </div>
-                            ))}
+                            <SlideThumbnail slide={slide} />
                             <span className="slide-number">{index + 1}</span>
                         </div>
                         <div className="slide-actions">
