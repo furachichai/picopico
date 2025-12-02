@@ -1,0 +1,33 @@
+{
+  "id": "draft-1764680048396",
+  "title": "la tres",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764680051365",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 1
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-02T12:54:08.396Z",
+  "updatedAt": "2025-12-02T12:54:23.814Z",
+  "path": "lessons/Math/01-Fractiones/01-Intro/03-la tres/lesson.json",
+  "subject": "Math",
+  "topic": "01-Fractiones",
+  "chapterId": "01",
+  "chapterName": "Intro",
+  "lessonId": "03"
+}

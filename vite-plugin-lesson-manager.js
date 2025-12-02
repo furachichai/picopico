@@ -70,7 +70,9 @@ export default function lessonManagerPlugin() {
 
                         const getDirectoryTree = (dir) => {
                             const results = [];
-                            const list = fs.readdirSync(dir);
+                            const list = fs.readdirSync(dir).sort((a, b) => {
+                                return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                            });
 
                             list.forEach(file => {
                                 const filePath = path.join(dir, file);
