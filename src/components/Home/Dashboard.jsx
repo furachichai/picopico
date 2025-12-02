@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Compass, Settings } from 'lucide-react';
 
@@ -38,40 +38,116 @@ const t = (key) => {
 
 const Dashboard = () => {
   const { dispatch } = useEditor();
-  const [activeLessonId, setActiveLessonId] = useState(2);
+  const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('lessons');
+
+  // Helper to parse metadata from path (same as in LessonsPage)
+  const parsePathToMetadata = (path) => {
+    const parts = path.split('/');
+    let subject = 'Math';
+    let topic = '';
+    let chapterId = '';
+    let chapterName = '';
+    let lessonId = '';
+    let lessonName = '';
+
+    if (parts.length > 1) subject = parts[1];
+    if (parts.length > 2) topic = parts[2];
+
+    if (parts.length > 3) {
+      const chapterFolder = parts[3];
+      const match = chapterFolder.match(/^(\d+)-(.*)$/);
+      if (match) {
+        chapterId = match[1];
+        chapterName = match[2];
+      } else {
+        chapterName = chapterFolder;
+      }
+    }
+
+    if (parts.length > 4) {
+      const lessonFolder = parts[4];
+      const match = lessonFolder.match(/^(\d+)-(.*)$/);
+      if (match) {
+        lessonId = match[1];
+        lessonName = match[2];
+      } else {
+        lessonName = lessonFolder;
+      }
+    }
+
+    return {
+      subject,
+      topic,
+      chapterId,
+      chapterName,
+      lessonId,
+      title: lessonName
+    };
+  };
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await fetch('/api/list-lessons');
+        const data = await response.json();
+
+        // Flatten the tree into a list of lessons
+        const flatList = [];
+        const traverse = (items) => {
+          items.forEach(item => {
+            if (item.type === 'directory') {
+              if (item.children) traverse(item.children);
+            } else if (item.name.endsWith('.json')) {
+              const metadata = parsePathToMetadata(item.path);
+              flatList.push({
+                ...item,
+                ...metadata,
+                id: item.path, // Use path as unique ID
+                status: 'active', // Default to active for now
+                icon: <Play size={24} />
+              });
+            }
+          });
+        };
+
+        traverse(data);
+        setLessons(flatList);
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, []);
 
   const handleOpenEditor = () => {
     dispatch({ type: 'SET_VIEW', payload: 'editor' });
   };
 
-  const handleStart = (e) => {
-    // Trigger confetti from the button position
-    const rect = e.target.getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+  const handlePlayLesson = async (lessonItem) => {
+    try {
+      const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
+      if (!response.ok) throw new Error('Failed to load lesson');
+      const lessonData = await response.json();
 
-    confetti({
-      origin: { x, y },
-      particleCount: 100,
-      spread: 70,
-      colors: ['#8B5CF6', '#FACC15', '#ffffff'],
-      zIndex: 2000,
-    });
+      // Merge metadata
+      const fullLesson = {
+        ...lessonData,
+        ...lessonItem, // Contains parsed metadata
+        path: lessonItem.path
+      };
 
-    console.log('Starting lesson...');
+      dispatch({ type: 'LOAD_LESSON', payload: fullLesson });
+      dispatch({ type: 'SET_VIEW', payload: 'player' });
+    } catch (error) {
+      console.error('Error loading lesson:', error);
+      alert('Failed to load lesson');
+    }
   };
-
-  const lessons = [
-    { id: 1, status: 'completed', icon: <Star size={24} /> },
-    { id: 2, status: 'active', icon: <Play size={24} /> },
-    { id: 3, status: 'locked', icon: <Lock size={24} /> },
-    { id: 4, status: 'locked', icon: <Lock size={24} /> },
-    { id: 5, status: 'locked', icon: <Lock size={24} /> },
-    { id: 6, status: 'locked', icon: <Lock size={24} /> },
-    { id: 7, status: 'locked', icon: <Lock size={24} /> },
-    { id: 8, status: 'locked', icon: <Lock size={24} /> },
-  ];
 
   return (
     <div className="dashboard-container">
@@ -425,41 +501,37 @@ const Dashboard = () => {
         {/* Hero Card */}
         <div className="hero-card">
           <div className="mission-label">{t('dashboard.mission')}</div>
-          <div className="mission-title">{t('lesson.2.title')}</div>
+          <div className="mission-title">{lessons.length > 0 ? lessons[0].title : 'Start Learning'}</div>
           <div className="progress-container">
             <div className="progress-bar"></div>
           </div>
-          <div className="progress-text">{t('dashboard.progress')}</div>
+          <div className="progress-text">1/{lessons.length} Lessons</div>
         </div>
 
         {/* Lesson Path */}
         <div className="lesson-path">
-          {lessons.map((lesson) => (
-            <div
-              key={lesson.id}
-              className={`lesson-card status-${lesson.status}`}
-            >
-              <div className="lesson-icon-box">
-                {lesson.icon}
-              </div>
-              <div className="lesson-info">
-                <div className="lesson-title">{t(`lesson.${lesson.id}.title`)}</div>
-                <div className="lesson-desc">{t(`lesson.${lesson.id}.desc`)}</div>
-              </div>
+          {loading ? (
+            <div>Loading lessons...</div>
+          ) : (
+            lessons.map((lesson) => (
+              <div
+                key={lesson.id}
+                className={`lesson-card status-${lesson.status}`}
+              >
+                <div className="lesson-icon-box">
+                  {lesson.icon}
+                </div>
+                <div className="lesson-info">
+                  <div className="lesson-title">{lesson.title}</div>
+                  <div className="lesson-desc">{lesson.chapterName}</div>
+                </div>
 
-              {lesson.status === 'active' && (
-                <button className="start-btn" onClick={handleStart}>
+                <button className="start-btn" onClick={() => handlePlayLesson(lesson)}>
                   {t('dashboard.start')} <ChevronRight size={18} />
                 </button>
-              )}
-
-              {lesson.status === 'completed' && (
-                <div style={{ color: '#16A34A' }}>
-                  <Star size={20} fill="#16A34A" stroke="none" />
-                </div>
-              )}
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </div>
       </div>
 
