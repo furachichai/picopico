@@ -8,6 +8,7 @@ import ContextualMenu from './ContextualMenu';
 import BurgerMenu from './BurgerMenu';
 import SaveLessonModal from './SaveLessonModal';
 import LessonInfoModal from './LessonInfoModal';
+import ConfirmationModal from './ConfirmationModal';
 import { useTranslation } from 'react-i18next';
 
 const Editor = () => {
@@ -17,6 +18,7 @@ const Editor = () => {
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(false);
+    const [showNewLessonConfirmation, setShowNewLessonConfirmation] = useState(false);
 
     const handleEdit = (id) => {
         setEditingElementId(id);
@@ -67,7 +69,21 @@ const Editor = () => {
         });
     };
 
+    const handleNewLesson = () => {
+        // Check if current lesson is "Untitled Lesson" (heuristic for unsaved/new)
+        // Or if we had a dirty flag. For now, using title as proxy or just always confirming.
+        // Let's always confirm to be safe.
+        setShowNewLessonConfirmation(true);
+    };
 
+    const confirmNewLesson = () => {
+        dispatch({ type: 'NEW_LESSON' });
+        setShowNewLessonConfirmation(false);
+    };
+
+    const handleGoToMenu = () => {
+        dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+    };
 
     const editingElement = state.lesson.slides
         .find(s => s.id === state.currentSlideId)
@@ -146,17 +162,44 @@ const Editor = () => {
                     onUpdate={handleUpdateInfo}
                     onClose={() => setShowInfoModal(false)}
                 />
+                <ConfirmationModal
+                    isOpen={showNewLessonConfirmation}
+                    message={t('editor.discardChanges')}
+                    onConfirm={confirmNewLesson}
+                    onCancel={() => setShowNewLessonConfirmation(false)}
+                    confirmText={t('common.yes')}
+                    cancelText={t('common.no')}
+                />
+
+                {/* Lesson Info Header */}
+                <div className="lesson-info-header">
+                    <span className="lesson-title">{state.lesson.title}</span>
+                    <span className="slide-counter">{currentSlideIndex + 1}/{state.lesson.slides.length}</span>
+                </div>
 
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
-                    <BurgerMenu onSave={handleSaveProject} onInfo={() => setShowInfoModal(true)} />
-                    <button
-                        className="btn-floating btn-preview"
-                        onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}
-                        title={t('editor.preview')}
-                    >
-                        ▶
-                    </button>
-
+                    <BurgerMenu
+                        onInfo={() => setShowInfoModal(true)}
+                        onNew={handleNewLesson}
+                        onMenu={handleGoToMenu}
+                    />
+                    <div className="top-right-actions">
+                        <button
+                            className={`btn-floating btn-save ${!state.isDirty ? 'disabled' : ''}`}
+                            onClick={handleSaveProject}
+                            disabled={!state.isDirty}
+                            title={t('editor.save')}
+                        >
+                            <span style={{ fontSize: '24px' }}>💾</span>
+                        </button>
+                        <button
+                            className="btn-floating btn-preview"
+                            onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}
+                            title={t('editor.preview')}
+                        >
+                            ▶
+                        </button>
+                    </div>
                 </div>
 
                 {/* Navigation Buttons */}

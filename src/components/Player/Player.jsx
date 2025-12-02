@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
-import LessonMenu from './LessonMenu';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import './Player.css';
@@ -11,7 +10,6 @@ const Player = () => {
     const { t } = useTranslation();
     const { lesson } = state;
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-    const [view, setView] = useState('lesson'); // 'lesson' or 'menu'
     const touchStartRef = useRef(null);
 
     const slides = lesson.slides;
@@ -19,8 +17,6 @@ const Player = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (view !== 'lesson') return;
-
             if (e.key === 'ArrowRight') {
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
@@ -32,7 +28,7 @@ const Player = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentSlideIndex, view]);
+    }, [currentSlideIndex]);
 
     const nextSlide = () => {
         if (currentSlideIndex < slides.length - 1) {
@@ -62,18 +58,6 @@ const Player = () => {
         }
         touchStartRef.current = null;
     };
-
-    if (view === 'menu') {
-        return (
-            <LessonMenu
-                onSelectLesson={(id) => {
-                    // Logic to load lesson would go here. For now just go back to draft.
-                    setView('lesson');
-                }}
-                onBack={() => setView('lesson')}
-            />
-        );
-    }
 
     const [banner, setBanner] = useState(null); // { type: 'correct' | 'fail', text: string }
     const [scale, setScale] = useState(1);
@@ -114,11 +98,15 @@ const Player = () => {
 
     const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
 
+    const handleMenu = () => {
+        dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+    };
+
     return (
         <div className="player-container">
 
             <div className="player-header">
-                <button onClick={() => setView('menu')}>{t('player.menu')}</button>
+                <button onClick={handleMenu}>{t('player.menu')}</button>
                 <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>{t('player.close')}</button>
             </div>
 

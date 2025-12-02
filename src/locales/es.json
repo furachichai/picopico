@@ -12,10 +12,12 @@
         "slides": "Diapositivas",
         "info": "INFO",
         "lessonName": "Nombre de la Lección",
-        "lessonInfo": "INFO",
+        "newLesson": "Nueva Lección",
+        "menu": "Menú",
         "saveLesson": "Guardar Lección",
         "created": "Creado",
-        "lastSaved": "Último Guardado"
+        "lastSaved": "Último Guardado",
+        "discardChanges": "¿Descartar cambios no guardados?"
     },
     "slides": {
         "title": "Diapositivas",
@@ -44,6 +46,8 @@
         "hint": "Desliza o usa las Flechas"
     },
     "common": {
-        "close": "CERRAR"
+        "close": "CERRAR",
+        "yes": "Sí",
+        "no": "No"
     }
 }

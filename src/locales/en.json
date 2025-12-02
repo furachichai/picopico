@@ -9,13 +9,16 @@
         "openLibrary": "Open Library",
         "background": "Bg",
         "language": "Language",
+        "menu": "Menu",
+        "newLesson": "New Lesson",
         "slides": "Slides",
         "info": "INFO",
         "lessonName": "Lesson Name",
         "lessonInfo": "INFO",
         "saveLesson": "Save Lesson",
         "created": "Created",
-        "lastSaved": "Last Saved"
+        "lastSaved": "Last Saved",
+        "discardChanges": "Discard unsaved changes?"
     },
     "slides": {
         "title": "Slides",
@@ -44,6 +47,8 @@
         "hint": "Swipe or use Arrow Keys"
     },
     "common": {
-        "close": "CLOSE"
+        "close": "CLOSE",
+        "yes": "Yes",
+        "no": "No"
     }
 }

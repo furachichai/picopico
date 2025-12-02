@@ -23,7 +23,8 @@ const initialState = {
     selectedElementId: null,
     currentSlideId: 'slide-1',
     selectedElementId: null,
-    view: 'editor', // 'editor', 'player', 'slides'
+    isDirty: false,
+    view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
 };
 
 const editorReducer = (state, action) => {
@@ -40,13 +41,13 @@ const editorReducer = (state, action) => {
         case 'ADD_SLIDE': {
             const newSlide = {
                 id: `slide-${Date.now()}`,
-                id: `slide-${Date.now()}`,
                 background: '#E1F5FE',
                 elements: [],
                 order: state.lesson.slides.length,
             };
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: [...state.lesson.slides, newSlide],
@@ -58,6 +59,7 @@ const editorReducer = (state, action) => {
         case 'UPDATE_SLIDE_BACKGROUND': {
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -100,6 +102,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -115,6 +118,7 @@ const editorReducer = (state, action) => {
         case 'UPDATE_ELEMENT': {
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -140,6 +144,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                isDirty: true,
                 lesson: { ...state.lesson, slides: newSlides },
                 currentSlideId: newCurrentId,
             };
@@ -162,6 +167,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                isDirty: true,
                 lesson: { ...state.lesson, slides: newSlides },
             };
         }
@@ -172,6 +178,7 @@ const editorReducer = (state, action) => {
         case 'DELETE_ELEMENT':
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -202,6 +209,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -215,12 +223,29 @@ const editorReducer = (state, action) => {
         }
 
         case 'UPDATE_LESSON_METADATA':
+            // If we are updating 'updatedAt', it means we are saving
+            const isSaving = !!action.payload.updatedAt;
             return {
                 ...state,
+                isDirty: isSaving ? false : state.isDirty, // Reset dirty if saving, else keep it (or set true if title changes?)
+                // Actually if title changes, it's a modification. But usually we save immediately after title change in first save.
+                // Let's assume UPDATE_LESSON_METADATA with updatedAt is the "Save" action.
                 lesson: {
                     ...state.lesson,
                     ...action.payload,
                 },
+            };
+
+        case 'NEW_LESSON':
+            return {
+                ...initialState,
+                view: state.view, // Keep current view
+                lesson: {
+                    ...initialState.lesson,
+                    id: `draft-${Date.now()}`,
+                    createdAt: new Date(),
+                },
+                isDirty: false,
             };
 
         default:

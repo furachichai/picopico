@@ -2,6 +2,9 @@
     "editor": {
         "save": "Sauvegarder",
         "saved": "Enregistré! ✅",
+        "newLesson": "Nouvelle Leçon",
+        "menu": "Menu",
+        "discardChanges": "Abandonner les modifications ?",
         "preview": "Aperçu",
         "addText": "Ajouter Texte",
         "addBalloon": "Ajouter Bulle",
@@ -44,6 +47,8 @@
         "hint": "Glissez ou utilisez les Flèches"
     },
     "common": {
-        "close": "FERMER"
+        "close": "FERMER",
+        "yes": "Oui",
+        "no": "Non"
     }
 }
