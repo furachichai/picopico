@@ -128,7 +128,54 @@ const Dashboard = () => {
     dispatch({ type: 'SET_VIEW', payload: 'editor' });
   };
 
+  // Editing State
+  const [editingLessonId, setEditingLessonId] = useState(null);
+  const [editDescriptionValue, setEditDescriptionValue] = useState('');
+
+  const startEditing = (lesson) => {
+    setEditingLessonId(lesson.id);
+    setEditDescriptionValue(lesson.description || '');
+  };
+
+  const cancelEdit = () => {
+    setEditingLessonId(null);
+    setEditDescriptionValue('');
+  };
+
+  const handleSaveDescription = async (lessonItem) => {
+    try {
+      // Load current lesson content first to ensure we don't lose anything
+      // We need to load from disk properly
+      const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
+      if (!response.ok) throw new Error('Failed to load lesson for saving');
+      const currentLessonData = await response.json();
+
+      // Update description
+      const updatedLesson = {
+        ...currentLessonData,
+        description: editDescriptionValue
+      };
+
+      // Save back
+      const saveResponse = await fetch('/api/save-lesson', {
+        method: 'POST',
+        body: JSON.stringify({ path: lessonItem.path, content: updatedLesson })
+      });
+
+      if (!saveResponse.ok) throw new Error('Failed to save description');
+
+      // Update local state to reflect change immediately
+      setLessons(prev => prev.map(l => l.id === lessonItem.id ? { ...l, description: editDescriptionValue } : l));
+
+      setEditingLessonId(null);
+    } catch (error) {
+      console.error('Error saving description:', error);
+      alert('Failed to save description');
+    }
+  };
+
   const handlePlayLesson = async (lessonItem) => {
+    if (editingLessonId) return; // Don't play if editing something
     try {
       const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
       if (!response.ok) throw new Error('Failed to load lesson');
@@ -517,18 +564,100 @@ const Dashboard = () => {
               <div
                 key={lesson.id}
                 className={`lesson-card status-${lesson.status}`}
+                onClick={(e) => {
+                  // Prevent playing if editing or clicking inputs
+                  if (e.target.closest('input') || e.target.closest('button')) return;
+                  handlePlayLesson(lesson)
+                }}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="lesson-icon-box">
                   {lesson.icon}
                 </div>
                 <div className="lesson-info">
                   <div className="lesson-title">{lesson.title}</div>
-                  <div className="lesson-desc">{lesson.chapterName}</div>
+                  {/* Description Editing Logic */}
+                  {editingLessonId === lesson.id ? (
+                    <div className="description-edit-area" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
+                      <input
+                        autoFocus
+                        value={editDescriptionValue}
+                        onChange={(e) => setEditDescriptionValue(e.target.value)}
+                        onClick={(e) => e.stopPropagation()} // Prevent card click
+                        style={{
+                          flex: 1,
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          border: '1px solid #CBD5E1',
+                          fontSize: '0.9rem',
+                          fontFamily: 'inherit'
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSaveDescription(lesson);
+                          if (e.key === 'Escape') cancelEdit();
+                        }}
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSaveDescription(lesson);
+                        }}
+                        style={{
+                          background: 'var(--primary)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          fontSize: '0.8rem',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          cancelEdit();
+                        }}
+                        style={{
+                          background: '#E2E8F0',
+                          color: '#64748B',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          fontSize: '0.8rem'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div className="lesson-desc">{lesson.description || lesson.chapterName}</div>
+                      <button
+                        className="edit-desc-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startEditing(lesson);
+                        }}
+                        title="Edit Description"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          opacity: 0.5,
+                          padding: '2px',
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <Settings size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
-
-                <button className="start-btn" onClick={() => handlePlayLesson(lesson)}>
-                  {t('dashboard.start')} <ChevronRight size={18} />
-                </button>
               </div>
             ))
           )}

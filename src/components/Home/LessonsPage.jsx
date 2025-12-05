@@ -3,8 +3,16 @@ import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import './LessonsPage.css';
 
-const FileTreeItem = ({ item, level = 0, onPlay, onEdit, onDelete, onMove, onRename, onCreate }) => {
+const FileTreeItem = ({ item, level = 0, onPlay, onEdit, onDelete, onMove, onRename, onCreate, onSaveDescription }) => {
     const [isExpanded, setIsExpanded] = useState(true); // Default expanded
+    const [isEditingDescription, setIsEditingDescription] = useState(false);
+    const [description, setDescription] = useState(item.description || '');
+
+    // Reset local state when item changes
+    useEffect(() => {
+        setDescription(item.description || '');
+    }, [item.description]);
+
     const isDirectory = item.type === 'directory';
     const paddingLeft = `${level * 20}px`;
 
@@ -44,6 +52,7 @@ const FileTreeItem = ({ item, level = 0, onPlay, onEdit, onDelete, onMove, onRen
                                 onMove={(childItem, direction, childSiblings) => onMove(childItem, direction, childSiblings || item.children)}
                                 onRename={onRename}
                                 onCreate={onCreate}
+                                onSaveDescription={onSaveDescription}
                             />
                         ))}
                     </div>
@@ -54,13 +63,42 @@ const FileTreeItem = ({ item, level = 0, onPlay, onEdit, onDelete, onMove, onRen
 
     // File Item (Lesson)
     return (
-        <div className="file-tree-item file" style={{ paddingLeft }}>
-            <span className="file-icon">📄</span>
-            <span className="item-name">{item.name.replace('.json', '')}</span>
+        <div
+            className="file-tree-item file"
+            style={{ marginLeft: paddingLeft }} // Use margin for indentation on cards to avoid internal padding issues
+            onClick={(e) => {
+                // Determine if we should play
+                if (isEditingDescription) return;
+                if (e.target.closest('.btn-icon')) return;
+                if (e.target.closest('.description-input')) return;
+                if (e.target.closest('.btn-save') || e.target.closest('.btn-cancel')) return;
+                onPlay(item);
+            }}
+        >
+            <span className="item-name">{item.title || item.name.replace('.json', '')}</span>
+
+            {!isEditingDescription ? (
+                <div className="item-description">{item.description}</div>
+            ) : (
+                <div className="description-edit-container" onClick={(e) => e.stopPropagation()}>
+                    <textarea
+                        className="description-input"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Enter lesson description..."
+                        rows={2}
+                    />
+                    <div className="description-actions">
+                        <button className="btn-cancel" onClick={(e) => { e.stopPropagation(); setIsEditingDescription(false); setDescription(item.description || ''); }}>Cancel</button>
+                        <button className="btn-save" onClick={(e) => { e.stopPropagation(); onSaveDescription(item, description); setIsEditingDescription(false); }}>Save</button>
+                    </div>
+                </div>
+            )}
+
             <div className="item-actions">
-                <button className="btn-icon" onClick={() => onPlay(item)} title="Play">▶️</button>
-                <button className="btn-icon" onClick={() => onEdit(item)} title="Edit">✏️</button>
-                <button className="btn-icon" onClick={() => onDelete(item)} title="Delete">🗑️</button>
+                <button className="btn-icon" onClick={(e) => { e.stopPropagation(); setIsEditingDescription(true); }} title="Edit Description">📝</button>
+                <button className="btn-icon" onClick={(e) => { e.stopPropagation(); onEdit(item); }} title="Edit Lesson Content">✏️</button>
+                <button className="btn-icon" onClick={(e) => { e.stopPropagation(); onDelete(item); }} title="Delete">🗑️</button>
             </div>
         </div>
     );
@@ -114,13 +152,8 @@ const LessonsPage = () => {
         }
 
         if (parts.length > 4) {
-            const lessonFolder = parts[4]; // Assuming lesson.json is inside a folder
-            // If path ends in lesson.json, parts[4] is the folder name
-            // If path is just to the folder, parts[4] is the folder name
-
-            // Check if parts[4] is 'lesson.json' (flat structure?) 
-            // No, our structure is .../LessonFolder/lesson.json
-
+            const lessonFolder = parts[4];
+            // folder name e.g. "00-Untitled Lesson"
             const match = lessonFolder.match(/^(\d+)-(.*)$/);
             if (match) {
                 lessonId = match[1];
@@ -136,7 +169,7 @@ const LessonsPage = () => {
             chapterId,
             chapterName,
             lessonId,
-            title: lessonName // Map lessonName to title
+            title: lessonName
         };
     };
 
@@ -149,10 +182,13 @@ const LessonsPage = () => {
             // Parse metadata from path
             const pathMetadata = parsePathToMetadata(item.path);
 
-            // Ensure path is preserved and metadata is updated from path
             return {
                 ...lessonData,
-                ...pathMetadata, // Override stored metadata with path-derived metadata
+                ...pathMetadata,
+                // Don't overwrite title/description from file if they exist, 
+                // but we might want path metadata to be the source of truth for structural things?
+                // Actually, title in JSON >> folder name derived title usually.
+                title: lessonData.title || pathMetadata.title,
                 path: item.path
             };
         } catch (error) {
@@ -175,6 +211,32 @@ const LessonsPage = () => {
         if (lesson) {
             dispatch({ type: 'LOAD_LESSON', payload: lesson });
             dispatch({ type: 'SET_VIEW', payload: 'editor' });
+        }
+    };
+
+    const handleSaveDescription = async (item, newDescription) => {
+        try {
+            // Load current lesson content first to ensure we don't lose anything
+            const lesson = await loadLesson(item);
+            if (!lesson) return;
+
+            // Update description
+            const updatedLesson = {
+                ...lesson,
+                description: newDescription
+            };
+
+            // Save back
+            await fetch('/api/save-lesson', {
+                method: 'POST',
+                body: JSON.stringify({ path: item.path, content: updatedLesson })
+            });
+
+            // Refresh tree
+            fetchLessons();
+        } catch (error) {
+            console.error('Error saving description:', error);
+            alert('Failed to save description');
         }
     };
 
@@ -260,10 +322,6 @@ const LessonsPage = () => {
                         });
                     }
                 }
-                // Fetch updated list and then perform the swap? 
-                // Actually, if we just normalized, the order is effectively "locked" to the current state.
-                // We should probably stop here and let the user click move again, or try to proceed.
-                // For simplicity, let's refresh and let them click again to avoid race conditions.
                 await fetchLessons();
                 return;
             }
@@ -271,10 +329,6 @@ const LessonsPage = () => {
             // If we are here, everything has a prefix. We just swap the prefixes of item and sibling.
             const itemParsed = parseName(item.name);
             const siblingParsed = parseName(sibling.name);
-
-            // We want to swap their prefixes. 
-            // BUT, simply swapping prefixes might not be enough if the numbers aren't sequential or if there are gaps.
-            // However, if we assume they are sorted by name (which includes prefix), then swapping prefixes *should* swap their order.
 
             // Let's just swap their entire names' prefixes.
             const newItemName = `${siblingParsed.prefix.toString().padStart(2, '0')}-${itemParsed.name}`;
@@ -291,15 +345,6 @@ const LessonsPage = () => {
             siblingParts.push(newSiblingName);
             const newSiblingPath = siblingParts.join('/');
 
-            // We need to do this carefully to avoid name collisions if we are just swapping.
-            // E.g. 01-A -> 02-A and 02-B -> 01-B.
-            // If we rename 01-A to 02-A first, and 02-A already exists (wait, 02-B exists, not 02-A), we are fine.
-            // But if we rename 01-A to 02-A, we are not colliding with 02-B.
-            // So we can do it sequentially.
-
-            // We need to use a temporary name to avoid collisions if the names are identical (e.g. 01-Lesson and 02-Lesson)
-            // or if the target file already exists.
-
             const tempName = `TEMP-${Date.now()}-${itemParsed.name}`;
             const tempPathParts = item.path.split('/');
             tempPathParts.pop();
@@ -313,15 +358,12 @@ const LessonsPage = () => {
             });
 
             // Step 2: Rename sibling to newSiblingName
-            // Note: newSiblingName takes item's prefix.
-            // If sibling was 02-B and becomes 01-B.
             await fetch('/api/move-lesson', {
                 method: 'POST',
                 body: JSON.stringify({ oldPath: sibling.path, newPath: newSiblingPath })
             });
 
             // Step 3: Rename temp to newItemName
-            // item was 01-A, becomes 02-A.
             await fetch('/api/move-lesson', {
                 method: 'POST',
                 body: JSON.stringify({ oldPath: tempPath, newPath: newItemPath })
@@ -336,12 +378,7 @@ const LessonsPage = () => {
     };
 
     const handleCreateInFolder = (item) => {
-        // Parse path to extract metadata
-        // Path format: lessons/Subject/Topic/Chapter/Lesson
-        // We need to be flexible as the user might be clicking on Subject, Topic, or Chapter folder.
-
         const parts = item.path.split('/');
-        // parts[0] is 'lessons' (or whatever the root relative path starts with, usually 'lessons')
 
         let subject = 'Math';
         let topic = '';
@@ -351,7 +388,6 @@ const LessonsPage = () => {
         if (parts.length > 1) subject = parts[1];
         if (parts.length > 2) topic = parts[2];
         if (parts.length > 3) {
-            // Chapter folder: e.g. "01-Introduction"
             const chapterFolder = parts[3];
             const match = chapterFolder.match(/^(\d+)-(.*)$/);
             if (match) {
@@ -395,6 +431,7 @@ const LessonsPage = () => {
                             onMove={(item, direction, siblings) => handleMove(item, direction, siblings || tree)}
                             onRename={handleRename}
                             onCreate={handleCreateInFolder}
+                            onSaveDescription={handleSaveDescription}
                         />
                     ))
                 )}

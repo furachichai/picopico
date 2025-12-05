@@ -1,27 +1,64 @@
 {
-  "id": "draft-1",
+  "id": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
   "title": "Welcome",
   "slides": [
     {
       "id": "slide-1",
-      "background": "#E1F5FE",
-      "elements": [],
+      "background": "url(\"/src/assets/backgrounds/front%20restaurant%201080.png\")",
+      "elements": [
+        {
+          "id": "el-1764972543207",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 2.022396861198785
+        }
+      ],
       "order": 0
     },
     {
       "id": "slide-1764638603307",
-      "background": "#E1F5FE",
-      "elements": [],
+      "background": "url(\"/src/assets/backgrounds/bkg_beach_001.png\")",
+      "elements": [
+        {
+          "id": "el-1764972560273",
+          "type": "image",
+          "content": "/src/assets/characters/chef_pesto_laughing.png",
+          "x": 53.05555555555556,
+          "y": 74.21875,
+          "width": 40,
+          "height": 19.278042959427207,
+          "rotation": 0,
+          "scale": 2.824750597218217
+        }
+      ],
       "order": 1
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T01:23:17.851Z",
-  "updatedAt": "2025-12-02T01:24:27.741Z",
-  "path": "lessons/Math/Fractions/01-Intro/01-Welcome/lesson.json",
+  "updatedAt": "2025-12-05T22:09:27.905Z",
+  "path": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
   "subject": "Math",
-  "topic": "Fractions",
+  "topic": "01-Fractiones",
   "chapterId": "01",
   "chapterName": "Intro",
-  "lessonId": "01"
+  "lessonId": "02",
+  "description": "Garibaldi Giribaldi Rock Rock",
+  "name": "lesson.json",
+  "type": "file",
+  "status": "active",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  }
 }

@@ -24,10 +24,11 @@
   "author": "User",
   "createdAt": "2025-12-02T02:03:37.780Z",
   "updatedAt": "2025-12-02T02:03:59.357Z",
-  "path": "lessons/Math/Fractiones/01-Intro/02-la segunda/lesson.json",
+  "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
   "subject": "Math",
-  "topic": "Fractiones",
+  "topic": "01-Fractiones",
   "chapterId": "01",
   "chapterName": "Intro",
-  "lessonId": "02"
+  "lessonId": "03",
+  "description": "frente al pelotón de fusilamiento el día que su padre lo llevó a conocer el hielo y se recontracagó de frío"
 }

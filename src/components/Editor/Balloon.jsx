@@ -31,25 +31,85 @@ const Balloon = ({ element, onChange, isSelected }) => {
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
             >
-                <path
-                    d={`
-                        M ${r} 0
-                        H ${width - r}
-                        Q ${width} 0 ${width} ${r}
-                        V ${height - r}
-                        Q ${width} ${height} ${width - r} ${height}
-                        H ${tailBaseX + tailBaseWidth / 2}
-                        L ${50 + tailX} ${50 + tailY}
-                        L ${tailBaseX - tailBaseWidth / 2} ${height}
-                        H ${r}
-                        Q 0 ${height} 0 ${height - r}
-                        V ${r}
-                        Q 0 0 ${r} 0
-                        Z
-                    `}
-                    fill={element.metadata?.backgroundColor || 'white'}
-                    stroke="none"
-                />
+                {(() => {
+                    // Calculate angle in degrees
+                    const angle = Math.atan2(tailY, tailX) * (180 / Math.PI);
+
+                    // Normalize angle to 0-360 for easier logic
+                    const normAngle = (angle + 360) % 360;
+
+                    let side = 'bottom';
+                    // 45 to 135 -> Bottom (90 center)
+                    if (normAngle >= 45 && normAngle < 135) side = 'bottom';
+                    // 135 to 225 -> Left (180 center)
+                    else if (normAngle >= 135 && normAngle < 225) side = 'left';
+                    // 225 to 315 -> Top (270 center)
+                    else if (normAngle >= 225 && normAngle < 315) side = 'top';
+                    // 315 to 45 -> Right (0 center)
+                    else side = 'right';
+
+                    const cx = 50;
+                    const cy = 50;
+                    const rx = 48;
+                    const ry = 36; // More oblong
+                    const tipX = cx + tailX;
+                    const tipY = cy + tailY;
+
+                    let d = '';
+
+                    // Ellipse equation calculations for gap points (hw=8)
+                    // Top/Bottom (x offset 8): y_rel = 35.5 -> y = 14.5, 85.5
+                    // Left/Right (y offset 8): x_rel = 46.8 -> x = 3.2, 96.8
+
+                    if (side === 'top') {
+                        // Gap at top. Right: (58, 14.5), Left: (42, 14.5)
+                        d = `
+                            M 58 14.5
+                            A 48 36 0 1 1 42 14.5
+                            Q 46 5 ${tipX} ${tipY}
+                            Q 54 5 58 14.5
+                            Z
+                        `;
+                    } else if (side === 'right') {
+                        // Gap at right. Bottom: (96.8, 58), Top: (96.8, 42)
+                        d = `
+                            M 96.8 58
+                            A 48 36 0 1 1 96.8 42
+                            Q 105 46 ${tipX} ${tipY}
+                            Q 105 54 96.8 58
+                            Z
+                        `;
+                    } else if (side === 'bottom') {
+                        // Gap at bottom. Left: (42, 85.5), Right: (58, 85.5)
+                        d = `
+                            M 42 85.5
+                            A 48 36 0 1 1 58 85.5
+                            Q 54 95 ${tipX} ${tipY}
+                            Q 46 95 42 85.5
+                            Z
+                        `;
+                    } else if (side === 'left') {
+                        // Gap at left. Top: (3.2, 42), Bottom: (3.2, 58)
+                        d = `
+                            M 3.2 42
+                            A 48 36 0 1 1 3.2 58
+                            Q -5 54 ${tipX} ${tipY}
+                            Q -5 46 3.2 42
+                            Z
+                        `;
+                    }
+
+                    return (
+                        <path
+                            d={d}
+                            fill={element.metadata?.backgroundColor || 'white'}
+                            stroke="black"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                        />
+                    );
+                })()}
             </svg>
 
             {/* Text Content */}

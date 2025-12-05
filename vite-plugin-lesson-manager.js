@@ -86,10 +86,24 @@ export default function lessonManagerPlugin() {
                                         children: getDirectoryTree(filePath)
                                     });
                                 } else if (file.endsWith('.json')) {
+                                    // Read the file to get metadata
+                                    let metadata = {};
+                                    try {
+                                        const content = fs.readFileSync(filePath, 'utf-8');
+                                        const json = JSON.parse(content);
+                                        metadata = {
+                                            title: json.title,
+                                            description: json.description
+                                        };
+                                    } catch (e) {
+                                        console.error(`Error reading metadata for ${file}:`, e);
+                                    }
+
                                     results.push({
                                         name: file,
                                         type: 'file',
-                                        path: path.relative(process.cwd(), filePath)
+                                        path: path.relative(process.cwd(), filePath),
+                                        ...metadata
                                     });
                                 }
                             });

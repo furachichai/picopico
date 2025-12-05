@@ -197,7 +197,14 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                                 onMouseDown={(e) => handleStart(e, 'tail')}
                                 onTouchStart={(e) => handleStart(e, 'tail')}
                             >
-                                ⚪
+                                <div style={{
+                                    width: '12px',
+                                    height: '12px',
+                                    backgroundColor: '#3b82f6',
+                                    borderRadius: '50%',
+                                    border: '2px solid white',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                }} />
                             </div>
                         )}
                     </>

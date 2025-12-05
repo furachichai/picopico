@@ -27,24 +27,27 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
         <div className="contextual-menu">
             {isTextType && (
                 <>
-                    <div className="menu-group">
-                        <label>Font</label>
-                        <select
-                            value={metadata.fontFamily}
-                            onChange={(e) => updateMetadata({ fontFamily: e.target.value })}
-                        >
-                            {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
-                        </select>
-                    </div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <div className="menu-group">
+                            <label>Font</label>
+                            <select
+                                value={metadata.fontFamily}
+                                onChange={(e) => updateMetadata({ fontFamily: e.target.value })}
+                            >
+                                {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
+                            </select>
+                        </div>
 
-                    <div className="menu-group">
-                        <label>Size</label>
-                        <input
-                            type="number"
-                            value={metadata.fontSize}
-                            onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
-                            min="10" max="100"
-                        />
+                        <div className="menu-group">
+                            <label>Size</label>
+                            <input
+                                type="number"
+                                value={metadata.fontSize}
+                                onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
+                                min="10" max="100"
+                                style={{ width: '70px' }}
+                            />
+                        </div>
                     </div>
 
                     <div className="menu-group">
