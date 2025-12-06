@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Compass, Settings } from 'lucide-react';
+import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Compass, Settings, Flame } from 'lucide-react';
 
 import { useEditor } from '../../context/EditorContext';
 
@@ -536,6 +536,21 @@ const Dashboard = () => {
           >
             {t('dashboard.editor')}
           </button>
+          <div className="streak-counter" style={{
+            backgroundColor: 'var(--white)',
+            padding: '6px 12px',
+            borderRadius: '999px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontWeight: '700',
+            color: '#F97316', // Orange-500
+            boxShadow: 'var(--shadow)',
+            border: '2px solid #F1F5F9'
+          }}>
+            <Flame size={16} fill="#F97316" stroke="none" />
+            <span>0</span>
+          </div>
           <div className="gem-counter">
             <Trophy size={16} fill="#EAB308" stroke="none" />
             <span>1,240</span>

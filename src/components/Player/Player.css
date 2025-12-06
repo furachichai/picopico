@@ -69,6 +69,54 @@
     transition: background-color 0.3s;
     overflow: hidden;
     /* Ensure content doesn't spill out */
+    /* Transition Styles */
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    /* Ensure only the active one is z-index 10, others lower */
+}
+
+/* 
+   We will manage positioning via classes:
+   .slide-active: translateX(0)
+   .slide-next: translateX(100%)
+   .slide-prev: translateX(-100%)
+   
+   But wait, Player.jsx currently renders only ONE slide (currentSlide).
+   To support transitions, we need to render at least the current, previous, and next slides, 
+   or effectively all of them (if list is small) or a window of them.
+   
+   Given the simple prototype request, rendering all slides with appropriate transforms is easiest.
+*/
+
+.slide-hidden {
+    display: none;
+    /* fallback */
+}
+
+.slide-active {
+    transform: translateX(0) scale(1) !important;
+    /* Scale is handled inline, but translation is key */
+    z-index: 10;
+    opacity: 1;
+}
+
+.slide-next {
+    transform: translateX(100%) scale(1) !important;
+    z-index: 5;
+    opacity: 1;
+}
+
+.slide-prev {
+    transform: translateX(-100%) scale(1) !important;
+    z-index: 5;
+    opacity: 1;
+}
+
+/* Ensure images don't drag */
+.player-slide img {
+    -webkit-user-drag: none;
+    user-select: none;
 }
 
 .player-element {
@@ -172,7 +220,7 @@
 
 .player-progress-bar {
     position: absolute;
-    top: 16px;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;

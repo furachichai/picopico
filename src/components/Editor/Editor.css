@@ -288,7 +288,7 @@ input[type="color"] {
 /* Editor Progress Bar */
 .editor-progress-bar {
     position: absolute;
-    top: 16px;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
     width: 60%;

@@ -125,74 +125,96 @@ const Player = () => {
                         {banner.text}
                     </div>
                 )}
-                <div
-                    className="player-slide"
-                    style={{
-                        backgroundColor: (currentSlide.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient')) ? currentSlide.background : 'transparent',
-                        backgroundImage: (currentSlide.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient'))) ? currentSlide.background : 'none',
-                        backgroundSize: 'contain', // Ensure whole image is visible
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                        transform: `scale(${scale})`,
-                        transformOrigin: 'center center',
-                        width: '360px',
-                        height: '640px',
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        marginTop: '-320px', /* Half of height */
-                        marginLeft: '-180px' /* Half of width */
-                    }}
-                >
-                    <div className="player-progress-bar">
-                        {slides.map((_, index) => (
-                            <div
-                                key={index}
-                                className={`progress-segment ${index <= currentSlideIndex ? 'active' : ''}`}
-                            />
-                        ))}
-                    </div>
 
-                    {currentSlide.elements.map(element => (
+                {/* Render all slides with transition classes */}
+                {slides.map((slide, index) => {
+                    let positionClass = 'slide-hidden';
+                    if (index === currentSlideIndex) positionClass = 'slide-active';
+                    else if (index === currentSlideIndex + 1) positionClass = 'slide-next';
+                    else if (index === currentSlideIndex - 1) positionClass = 'slide-prev';
+
+                    // Only render current, prev, and next to save resources (optional, but good for large decks)
+                    // For now, render all if deck is small, or just neighbors
+                    if (Math.abs(index - currentSlideIndex) > 1) return null;
+
+                    return (
                         <div
-                            key={element.id}
-                            className="player-element"
+                            key={slide.id}
+                            className={`player-slide ${positionClass}`}
                             style={{
-                                left: `${element.x}%`,
-                                top: `${element.y}%`,
-                                width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
-                                height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
-                                transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                                backgroundColor: (slide.background && !slide.background.includes('url') && !slide.background.includes('gradient')) ? slide.background : 'transparent',
+                                backgroundImage: (slide.background && (slide.background.includes('url') || slide.background.includes('gradient'))) ? slide.background : 'none',
+                                backgroundSize: 'contain', // Ensure whole image is visible
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
+                                transformOrigin: 'center center',
+                                width: '360px',
+                                height: '640px',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                marginTop: '-320px', /* Half of height */
+                                marginLeft: '-180px', /* Half of width */
+                                '--scale': scale, // Pass scale as variable if needed or apply directly
+                                transform: positionClass === 'slide-active'
+                                    ? `translateX(0) scale(${scale})`
+                                    : positionClass === 'slide-next'
+                                        ? `translateX(100%) scale(${scale})`
+                                        : `translateX(-100%) scale(${scale})`
                             }}
                         >
-                            {element.type === 'text' && (
+                            <div className="player-progress-bar">
+                                {slides.map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className={`progress-segment ${i <= currentSlideIndex ? 'active' : ''}`}
+                                    />
+                                ))}
+                            </div>
+
+                            {slide.elements.map(element => (
                                 <div
-                                    className="player-text"
+                                    key={element.id}
+                                    className="player-element"
                                     style={{
-                                        fontFamily: element.metadata?.fontFamily || 'Nunito',
-                                        color: element.metadata?.color || 'black',
-                                        backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                                        padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                                        borderRadius: element.metadata?.borderRadius || '8px',
-                                        border: element.metadata?.border || 'none',
+                                        left: `${element.x}%`,
+                                        top: `${element.y}%`,
+                                        width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
+                                        height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
+                                        transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                                     }}
                                 >
-                                    {element.content}
+                                    {element.type === 'text' && (
+                                        <div
+                                            className="player-text"
+                                            style={{
+                                                fontFamily: element.metadata?.fontFamily || 'Nunito',
+                                                color: element.metadata?.color || 'black',
+                                                backgroundColor: element.metadata?.backgroundColor || 'transparent',
+                                                padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
+                                                borderRadius: element.metadata?.borderRadius || '8px',
+                                                border: element.metadata?.border || 'none',
+                                            }}
+                                        >
+                                            {element.content}
+                                        </div>
+                                    )}
+                                    {element.type === 'image' && <img src={element.content} alt="content" />}
+                                    {element.type === 'quiz' && (
+                                        <QuizPlayer
+                                            data={element}
+                                            onNext={nextSlide}
+                                            onBanner={handleBanner}
+                                        />
+                                    )}
+                                    {element.type === 'game' && <MinigamePlayer data={element} />}
                                 </div>
-                            )}
-                            {element.type === 'image' && <img src={element.content} alt="content" />}
-                            {element.type === 'quiz' && (
-                                <QuizPlayer
-                                    data={element}
-                                    onNext={nextSlide}
-                                    onBanner={handleBanner}
-                                />
-                            )}
-                            {element.type === 'game' && <MinigamePlayer data={element} />}
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
+            {/* End of render loop */}
 
             <div className="player-controls-hint">
                 {t('player.hint')}
