@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
+import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import './Player.css';
 
 const Player = () => {
@@ -11,12 +12,24 @@ const Player = () => {
     const { lesson } = state;
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const touchStartRef = useRef(null);
+    const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
 
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
+    // Check if current slide has a cartridge and enable game mode
+    useEffect(() => {
+        if (currentSlide?.cartridge) {
+            setIsGameActive(true);
+        } else {
+            setIsGameActive(false);
+        }
+    }, [currentSlide]);
+
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (isGameActive && currentSlide?.cartridge) return; // Block nav keys
+
             if (e.key === 'ArrowRight') {
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
@@ -28,7 +41,7 @@ const Player = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentSlideIndex]);
+    }, [currentSlideIndex, isGameActive, currentSlide]);
 
     const nextSlide = () => {
         if (currentSlideIndex < slides.length - 1) {
@@ -47,6 +60,8 @@ const Player = () => {
     };
 
     const handleTouchEnd = (e) => {
+        if (isGameActive && currentSlide?.cartridge) return; // Block swipes
+
         if (!touchStartRef.current) return;
         const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
         const diff = touchStartRef.current - clientX;
@@ -172,6 +187,23 @@ const Player = () => {
                                 ))}
                             </div>
 
+                            {/* Cartridge Layer - Below Stickers but above background */}
+                            {slide.cartridge && (
+                                <div className="cartridge-container" style={{
+                                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'auto'
+                                }}>
+                                    {slide.cartridge.type === 'FractionAlpha' && (
+                                        <FractionAlpha
+                                            config={slide.cartridge.config}
+                                            onComplete={() => {
+                                                setIsGameActive(false);
+                                                nextSlide();
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            )}
+
                             {slide.elements.map(element => (
                                 <div
                                     key={element.id}
@@ -182,6 +214,7 @@ const Player = () => {
                                         width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
                                         height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
                                         transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                                        zIndex: 10, // Ensure stickers render above cartridge (zIndex: 1)
                                     }}
                                 >
                                     {element.type === 'text' && (

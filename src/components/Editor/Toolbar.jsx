@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import AssetLibrary from './AssetLibrary';
+import { Gamepad2 } from 'lucide-react';
+
 const Toolbar = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
@@ -51,6 +53,25 @@ const Toolbar = () => {
                         payload: { type: ELEMENT_TYPES.BALLOON, content: 'Hello!' }
                     })} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
                     <button className="btn-secondary" onClick={handleAddQuiz} title={t('editor.addQuiz')}>Quiz</button>
+                    <button className="btn-secondary" onClick={() => {
+                        console.log('Adding FractionAlpha Cartridge');
+                        dispatch({
+                            type: 'UPDATE_SLIDE',
+                            payload: {
+                                cartridge: {
+                                    type: 'FractionAlpha',
+                                    config: {
+                                        mode: 'fracture', // Default mode
+                                        targetDenominator: 3,
+                                        targetNumerator: 1,
+                                        initialDenominator: 1
+                                    }
+                                }
+                            }
+                        });
+                    }} title="Add Fraction Cartridge">
+                        <Gamepad2 size={24} />
+                    </button>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <div className="color-picker-wrapper">

@@ -116,6 +116,21 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'UPDATE_SLIDE': {
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, ...action.payload }
+                            : slide
+                    ),
+                },
+            };
+        }
+
         case 'UPDATE_ELEMENT': {
             return {
                 ...state,

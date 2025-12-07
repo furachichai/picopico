@@ -1,0 +1,39 @@
+{
+  "id": "draft-1",
+  "title": "cATCH m all",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/Trade%20Card.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1764976644706",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1764976646875",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 1
+        }
+      ],
+      "order": 1
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-05T23:16:27.278Z",
+  "updatedAt": "2025-12-05T23:17:44.925Z",
+  "path": "lessons/Math/General/00-Chapter/00-cATCH m all/lesson.json",
+  "subject": "Math",
+  "topic": "General",
+  "chapterId": "00",
+  "chapterName": "Chapter",
+  "lessonId": "00"
+}

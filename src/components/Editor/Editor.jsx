@@ -156,9 +156,22 @@ const Editor = () => {
         .find(s => s.id === state.currentSlideId)
         ?.elements.find(e => e.id === editingElementId);
 
-    const selectedElement = state.lesson.slides
-        .find(s => s.id === state.currentSlideId)
-        ?.elements.find(e => e.id === state.selectedElementId);
+    // Helper to find the current slide
+    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+
+    // Determine selected element (Sticker vs Cartridge)
+    let selectedElement = null;
+    if (state.selectedElementId === 'cartridge' && currentSlide?.cartridge) {
+        // Mock an element structure for the cartridge so ContextualMenu can consume it
+        selectedElement = {
+            id: 'cartridge',
+            type: 'cartridge', // Special type
+            config: currentSlide.cartridge.config, // Pass config directly
+            // Add other props if needed by generic menu parts, but unlikely
+        };
+    } else {
+        selectedElement = currentSlide?.elements.find(e => e.id === state.selectedElementId);
+    }
 
     const handleGlobalClick = (e) => {
         // If clicking on the workspace background (not on a sticker or menu), deselect
@@ -296,9 +309,35 @@ const Editor = () => {
                     {selectedElement ? (
                         <ContextualMenu
                             element={selectedElement}
-                            onChange={(id, updates) => dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } })}
-                            onDelete={() => dispatch({ type: 'DELETE_ELEMENT', payload: selectedElement.id })}
-                            onDuplicate={() => dispatch({ type: 'DUPLICATE_ELEMENT', payload: selectedElement.id })}
+                            onChange={(id, updates) => {
+                                if (id === 'cartridge') {
+                                    // Updates contains { config: ... } here based on our ContextualMenu change
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                ...currentSlide.cartridge, // Keep type
+                                                ...updates // Merge updates (config)
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
+                                }
+                            }}
+                            onDelete={(id) => {
+                                if (id === 'cartridge') {
+                                    dispatch({ type: 'UPDATE_SLIDE', payload: { cartridge: null } });
+                                    dispatch({ type: 'SELECT_ELEMENT', payload: null });
+                                } else {
+                                    dispatch({ type: 'DELETE_ELEMENT', payload: id });
+                                }
+                            }}
+                            onDuplicate={() => {
+                                if (selectedElement.id !== 'cartridge') {
+                                    dispatch({ type: 'DUPLICATE_ELEMENT', payload: selectedElement.id });
+                                }
+                            }}
                         />
                     ) : (
                         <Toolbar />

@@ -312,6 +312,19 @@ input[type="color"] {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* Cartridge Container */
+.cartridge-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    /* Below stickers */
+    pointer-events: none;
+    /* Let clicks pass through if empty, games will enable pointer-events */
+}
+
 /* Lesson Info Header */
 /* Lesson Info Header */
 .lesson-info-header {

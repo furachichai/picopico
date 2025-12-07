@@ -82,6 +82,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                 </>
             )}
 
+
             {isImageType && (
                 <>
                     <div className="menu-group">
@@ -120,15 +121,98 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                 </>
             )}
 
+            {element.type === 'cartridge' && (
+                <>
+                    {/* We need to access the cartridge config from the slide actually, 
+                         since 'element' passed here is usually an element object, but for cartridge we pass 'cartridge' string or object?
+                         Wait, ContextualMenu receives `element`. In Canvas we dispatch SELECT_ELEMENT payload 'cartridge'.
+                         EditorContext needs to handle selecting 'cartridge' and passing the cartridge object as `element` to this menu?
+                         OR we check if selectedElementId === 'cartridge' and read from slide here.
+                         However, `ContextualMenu` props are `element`. 
+                         Let's assume the parent `Editor.jsx` passes the cartridge object if `selectedElementId === 'cartridge'`.
+                         OR we can assume `element` IS the cartridge config object if we hack it upstream.
+                         Let's verify how `ContextualMenu` is used in `Editor.jsx` or similar.
+                         I'll stick to modifying this file assuming `element` *is* the cartridge data or we have a way to handle it.
+                         Actually the user said "contextual editor that allows me to select the game modes".
+                         I'll check `ContextualMenu.jsx` usage first? No I already read it.
+                         I need to check where ContextualMenu is rendered. 
+                         But I can conditionally render based on a new prop or just check if `element.type` or `element` structure matches cartridge.
+                     */}
+                    {/* For now, assuming `element` prop will be the cartridge object when selected. */}
+                    <div className="menu-group">
+                        <label>Shape</label>
+                        <button
+                            className="btn-icon"
+                            title="Toggle Shape (Pie/Rectangle)"
+                            style={{ width: '40px', height: '40px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                            onClick={() => {
+                                const newShape = (element.config?.shape || 'pie') === 'pie' ? 'rect' : 'pie';
+                                onChange('cartridge', { config: { ...element.config, shape: newShape } });
+                            }}
+                        >
+                            {(element.config?.shape || 'pie') === 'pie' ? '🍕' : '🍫'}
+                        </button>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Game Mode</label>
+                        <select
+                            value={element.config?.mode || 'fracture'}
+                            onChange={(e) => onChange('cartridge', { config: { ...element.config, mode: e.target.value } })}
+                        >
+                            <option value="fracture">Fracture</option>
+                            <option value="serve">Serve</option>
+                        </select>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Target Denom</label>
+                        <input
+                            type="number"
+                            min="1" max="10"
+                            value={element.config?.targetDenominator || 3}
+                            onChange={(e) => onChange('cartridge', { config: { ...element.config, targetDenominator: parseInt(e.target.value) } })}
+                            style={{ width: '50px' }}
+                        />
+                    </div>
+
+                    {element.config?.mode === 'serve' && (
+                        <div className="menu-group">
+                            <label>Target Num</label>
+                            <input
+                                type="number"
+                                min="1" max={element.config?.targetDenominator || 10}
+                                value={element.config?.targetNumerator || 1}
+                                onChange={(e) => onChange('cartridge', { config: { ...element.config, targetNumerator: parseInt(e.target.value) } })}
+                                style={{ width: '50px' }}
+                            />
+                        </div>
+                    )}
+
+                    <div className="menu-group">
+                        <label>Start Denom</label>
+                        <input
+                            type="number"
+                            min="1" max="10"
+                            value={element.config?.initialDenominator || 1}
+                            onChange={(e) => onChange('cartridge', { config: { ...element.config, initialDenominator: parseInt(e.target.value) } })}
+                            style={{ width: '50px' }}
+                        />
+                    </div>
+
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    {element.type !== 'quiz' && (
+                    {element.type !== 'cartridge' && element.type !== 'quiz' && (
                         <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
                             ❐
                         </button>
                     )}
-                    <button className="btn-delete" onClick={onDelete} title="Delete Element">
+                    <button className="btn-delete" onClick={() => onDelete(element.type === 'cartridge' ? 'cartridge' : element.id)} title="Delete Element">
                         🗑️
                     </button>
                 </div>

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import Sticker from './Sticker';
+import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 
 /**
  * Canvas Component
@@ -65,10 +66,15 @@ const Canvas = (props) => {
   // Handle background clicks to deselect elements
   const handleCanvasClick = useCallback((e) => {
     // Deselect if clicking on canvas background directly
-    if (e.target === e.currentTarget) {
-      dispatch({ type: 'SELECT_ELEMENT', payload: null });
+    if (e.target === e.currentTarget || e.target.closest('.cartridge-container')) {
+      // If there is a cartridge, select it
+      if (currentSlide?.cartridge) {
+        dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' });
+      } else {
+        dispatch({ type: 'SELECT_ELEMENT', payload: null });
+      }
     }
-  }, [dispatch]);
+  }, [dispatch, currentSlide]);
 
   // Stable callback for deleting an element
   const handleDelete = useCallback((id) => {
@@ -107,6 +113,25 @@ const Canvas = (props) => {
               className={`progress-segment ${index <= props.currentSlideIndex ? 'active' : ''}`}
             />
           ))}
+        </div>
+
+        {/* Cartridge Container - Lower layer */}
+        {/* Cartridge Container - Lower layer */}
+        <div className="cartridge-container">
+          {currentSlide.cartridge && currentSlide.cartridge.type === 'FractionAlpha' && (
+            <div style={{ pointerEvents: 'none', width: '100%', height: '100%' }}>
+              {/* 
+                      We use lazy import or direct import? 
+                      Top level import of FractionAlpha is needed in Canvas.jsx OR passed via map?
+                      Let's assume we import it at the top.
+                    */}
+              <React.Suspense fallback={<div>Loading...</div>}>
+                {/* Dynamic import or just standard import. Let's use standard import if possible, but Canvas.jsx doesn't import it yet. */}
+                {/* Check top of file. I will add import in next step or use a registry. */}
+                <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
+              </React.Suspense>
+            </div>
+          )}
         </div>
 
         {currentSlide.elements.map(element => (
