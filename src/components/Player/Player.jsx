@@ -4,6 +4,7 @@ import { useEditor } from '../../context/EditorContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
+import { X, Pencil } from 'lucide-react';
 import './Player.css';
 
 const Player = () => {
@@ -120,12 +121,7 @@ const Player = () => {
     return (
         <div className="player-container">
 
-            <div className="player-header">
-                <button onClick={handleMenu}>{t('player.menu')}</button>
-                <button onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}>{t('player.close')}</button>
-            </div>
-
-
+            {/* Removed external player-header */}
 
             <div
                 className="player-viewport"
@@ -135,6 +131,69 @@ const Player = () => {
                 onMouseDown={handleTouchStart}
                 onMouseUp={handleTouchEnd}
             >
+                {/* Navigation Buttons - Rebuilt with Inline Styles for reliability */}
+                <div style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px',
+                    zIndex: 2000,
+                    pointerEvents: 'auto' // Ensure clickable
+                }}>
+                    <button
+                        onClick={handleMenu}
+                        title={t('player.menu')}
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            border: '1px solid rgba(0,0,0,0.1)',
+                            borderRadius: '50%',
+                            width: '44px',
+                            height: '44px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            padding: 0,
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                        }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div style={{
+                    position: 'absolute',
+                    top: '16px',
+                    right: '16px',
+                    zIndex: 2000,
+                    pointerEvents: 'auto'
+                }}>
+                    <button
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
+                        title={t('common.edit')}
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            border: '1px solid rgba(0,0,0,0.1)',
+                            borderRadius: '50%',
+                            width: '44px',
+                            height: '44px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            padding: 0,
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                        }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                            <path d="m15 5 4 4" />
+                        </svg>
+                    </button>
+                </div>
+
                 {banner && (
                     <div className={`player-banner ${banner.type}-banner`}>
                         {banner.text}

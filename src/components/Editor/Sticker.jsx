@@ -30,6 +30,13 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
      * Sets up global event listeners for move/end to handle dragging outside the element.
      */
     const handleStart = (e, type) => {
+        // Fix: Allow interaction with contentEditable if selected
+        if (isSelected && (e.target.isContentEditable || e.target.closest('[contenteditable="true"]'))) {
+            // Do not start drag, allow default browser focus/caret
+            e.stopPropagation(); // Prevent bubbling to Editor
+            return;
+        }
+
         e.stopPropagation();
 
         // Prevent dragging for quiz elements

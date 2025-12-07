@@ -185,6 +185,9 @@ const Editor = () => {
         // If we are clicking inside a sticker, do nothing (handled by Sticker)
         if (e.target.closest('.sticker')) return;
 
+        // If clicking inside a contentEditable (text edit), do nothing
+        if (e.target.isContentEditable || e.target.closest('[contenteditable="true"]')) return;
+
         // If we are clicking on the toolbar or slidestrip while they are disabled, we might want to deselect?
         // Or if we click anywhere else.
 
@@ -222,7 +225,7 @@ const Editor = () => {
     };
 
     return (
-        <div className="editor-layout" onClickCapture={handleGlobalClick}>
+        <div className="editor-layout" onClick={handleGlobalClick}>
             {showSaveFeedback && (
                 <div className="save-feedback">
                     {t('editor.saved')}

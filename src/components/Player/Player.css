@@ -11,36 +11,36 @@
     font-family: 'Nunito', sans-serif;
 }
 
-.player-header {
+/* Navigation Buttons Overlay */
+.player-nav-btn {
     position: absolute;
-    top: 1rem;
-    left: 0;
-    width: 100%;
-    padding: 0 1rem;
+    top: 8px;
+    z-index: 1010;
+    /* Above progress bar (1000) */
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
-    justify-content: space-between;
-    z-index: 10;
-    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s, background-color 0.2s;
 }
 
-.player-header button {
-    pointer-events: auto;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(8px);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    height: 36px;
-    box-shadow: none;
-    transition: all 0.2s;
-}
-
-.player-header button:active {
-    background: rgba(255, 255, 255, 0.25);
+.player-nav-btn:active {
     transform: scale(0.95);
+    background: rgba(255, 255, 255, 1);
+}
+
+.close-btn {
+    left: 8px;
+}
+
+.edit-btn {
+    right: 8px;
 }
 
 .player-viewport {
