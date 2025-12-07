@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Minus, ThumbsUp } from 'lucide-react';
 import './FractionAlpha.css';
 import confetti from 'canvas-confetti';
+import pizzaCheese from '../../assets/pizza_flavors/pizza_cheese.png';
+import pizzaPepperoni from '../../assets/pizza_flavors/pizza_pepperoni.png';
+import pizzaVeggie from '../../assets/pizza_flavors/pizza_veggie.png';
+import pizzaMushroom from '../../assets/pizza_flavors/pizza_mushroom.png';
+import pizzaHawaiian from '../../assets/pizza_flavors/pizza_hawaiian.png';
+import pizzaBox from '../../assets/pizza_box.png';
+import kitchenCounter from '../../assets/kitchen_counter.png';
 
 const FractionAlpha = ({ config, onComplete, preview = false }) => {
     // Config mainly sets the "Theme" or "Starting Point" now, but logic handles 5 levels
@@ -33,6 +40,17 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             num: config?.targetNumerator || 1
         });
     }, [config]);
+
+    const [animating, setAnimating] = useState(false);
+
+    // Trigger animation on denominator change (ALL MODES)
+    useEffect(() => {
+        // if (config.mode !== 'serve') { <--- REMOVED check, allow for all modes
+        setAnimating(true);
+        const timer = setTimeout(() => setAnimating(false), 300);
+        return () => clearTimeout(timer);
+        // }
+    }, [denominator, config.mode]);
 
     // Simple Synth for "Chop" sound
     const playChopSound = () => {
@@ -91,6 +109,9 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             newSelected = [...selectedSlices, index];
         }
         setSelectedSlices(newSelected);
+        // Only update logic-related numerator if in Serve mode?
+        // Fracture mode logic relies on DENOMINATOR matching goal. Numerator is irrelevant for win condition in fracture mode.
+        // So safe to update numerator state even if unused.
         setNumerator(newSelected.length);
     };
 
@@ -146,67 +167,132 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
     const renderPie = () => {
         const center = 100;
         const radius = 90;
-        let paths = [];
+        let elements = [];
+
+        const flavor = config?.flavor || 'cheese';
+
+        // Map flavor to image source
+        const flavorImages = {
+            cheese: pizzaCheese,
+            pepperoni: pizzaPepperoni,
+            veggie: pizzaVeggie,
+            mushroom: pizzaMushroom,
+            hawaiian: pizzaHawaiian
+        };
+        const currentImage = flavorImages[flavor];
 
         if (denominator === 1) {
-            return (
+            const isSelected = selectedSlices.includes(0);
+            let transform = 'scale(1)';
+            if (config.mode === 'serve' && isSelected) {
+                transform = 'scale(0.95)';
+            } else if (animating) {
+                transform = 'scale(1.02)';
+            }
+
+            // Opacity Logic
+            let opacity = 1.0;
+            if (config.mode === 'serve' && !isSelected) {
+                opacity = 0.6;
+            }
+
+            const patternId = `pat-${flavor}-0-whole`;
+
+            elements.push(
+                <defs key="defs-0">
+                    <pattern id={patternId} patternUnits="userSpaceOnUse" width="200" height="200" patternTransform={transform}>
+                        <image href={currentImage} x="0" y="0" width="200" height="200" />
+                    </pattern>
+                </defs>
+            );
+
+            elements.push(
                 <circle
+                    key="slice-0"
                     cx={center} cy={center} r={radius}
-                    fill={selectedSlices.includes(0) ? "#FACC15" : "#E2E8F0"}
-                    stroke="#334155" strokeWidth="2"
+                    fill={`url(#${patternId})`}
+                    stroke={isSelected ? "#FACC15" : "#334155"}
+                    strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(0)}
-                    className={config.mode === 'serve' && !preview ? 'slice-interactive' : ''}
+                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' ? 'interactive' : ''}`}
+                    style={{
+                        transform,
+                        transformOrigin: 'center',
+                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s',
+                        opacity: opacity
+                    }}
                 />
             );
+            return elements;
         }
 
         for (let i = 0; i < denominator; i++) {
             const startAngle = (i * 360) / denominator;
             const endAngle = ((i + 1) * 360) / denominator;
 
-            // Convert polar to cartesian
             const x1 = center + radius * Math.cos(Math.PI * startAngle / 180);
             const y1 = center + radius * Math.sin(Math.PI * startAngle / 180);
             const x2 = center + radius * Math.cos(Math.PI * endAngle / 180);
             const y2 = center + radius * Math.sin(Math.PI * endAngle / 180);
 
-            // SVG Path command
             const d = `M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`;
 
             const isSelected = selectedSlices.includes(i);
 
-            // Serve Animation: Move out from center
             let transform = 'scale(1)';
-            if (isSelected) {
-                if (config.mode === 'serve') {
-                    const midAngle = (startAngle + endAngle) / 2;
-                    const rad = Math.PI * midAngle / 180;
-                    const offset = 10; // 10px pop out
-                    const tx = offset * Math.cos(rad);
-                    const ty = offset * Math.sin(rad);
-                    transform = `translate(${tx}px, ${ty}px)`;
-                } else {
-                    transform = 'scale(1.05)'; // Default highlight for fracture or others
-                }
+            if (config.mode === 'serve' && isSelected) {
+                const midAngle = (startAngle + endAngle) / 2;
+                const rad = Math.PI * midAngle / 180;
+                const offset = 10;
+                const tx = offset * Math.cos(rad);
+                const ty = offset * Math.sin(rad);
+                transform = `translate(${tx}px, ${ty}px)`;
+            } else if (animating) {
+                const midAngle = (startAngle + endAngle) / 2;
+                const rad = Math.PI * midAngle / 180;
+                const offset = 4;
+                const tx = offset * Math.cos(rad);
+                const ty = offset * Math.sin(rad);
+                transform = `translate(${tx}px, ${ty}px)`;
             }
 
-            paths.push(
+            // Opacity Logic
+            let opacity = 1.0;
+            if (config.mode === 'serve' && !isSelected) {
+                opacity = 0.6;
+            }
+
+            // Define unique pattern for this slice to lock texture to slice movement
+            const patternId = `pat-${flavor}-${i}`;
+            // NOTE: patternTransform must match the element transform for the texture to "stick"
+
+            elements.push(
+                <defs key={`defs-${i}`}>
+                    <pattern id={patternId} patternUnits="userSpaceOnUse" width="200" height="200" patternTransform={transform}>
+                        <image href={currentImage} x="0" y="0" width="200" height="200" />
+                    </pattern>
+                </defs>
+            );
+
+            elements.push(
                 <path
-                    key={i}
+                    key={`slice-${i}`}
                     d={d}
-                    fill={isSelected ? "#FACC15" : "#E2E8F0"}
-                    stroke="#334155"
-                    strokeWidth="2"
+                    fill={`url(#${patternId})`}
+                    stroke={isSelected ? "#FACC15" : "#334155"}
+                    strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(i)}
-                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' && !preview ? 'interactive' : ''}`}
+                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' ? 'interactive' : ''}`}
                     style={{
                         transformOrigin: `${center}px ${center}px`,
-                        transform: transform
+                        transform: transform,
+                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s',
+                        opacity: opacity
                     }}
                 />
             );
         }
-        return paths;
+        return elements;
     };
 
     const renderRect = () => {
@@ -218,16 +304,20 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
         for (let i = 0; i < denominator; i++) {
             const isSelected = selectedSlices.includes(i);
 
-            // Serve Animation: Move UP
+            // Animation Logic
             let transform = 'translate(0, 0)';
-            if (isSelected) {
-                if (config.mode === 'serve') {
-                    transform = 'translate(0, -10px)';
-                } else {
-                    // Slight scale or just fill color is enough? 
-                    // Let's stick to fill color for fracture, maybe slight scale?
-                    // Rect scale is tricky without affecting layout, so color is safest + maybe shadow?
-                }
+            if (config.mode === 'serve' && isSelected) {
+                // Serve Selection: Move UP 10px
+                transform = 'translate(0, -10px)';
+            } else if (animating) {
+                // Fracture Transient: Move UP 4px
+                transform = 'translate(0, -4px)';
+            }
+
+            // Opacity Logic
+            let opacity = 1.0;
+            if (config.mode === 'serve' && !isSelected) {
+                opacity = 0.6;
             }
 
             rects.push(
@@ -245,7 +335,8 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                     className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' && !preview ? 'interactive' : ''}`}
                     style={{
                         transform: transform,
-                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s',
+                        opacity: opacity
                     }}
                 />
             );
@@ -254,15 +345,54 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
     };
 
     return (
-        <div className={`fraction-alpha-container ${preview ? 'preview-mode' : ''}`}>
+        <div className={`fraction-alpha-container ${preview ? 'preview-mode' : ''}`} style={{ position: 'relative' }}>
+
+            {/* Backgrounds */}
+            {config.mode === 'fracture' && config.shape !== 'rect' && (
+                <img
+                    src={pizzaBox}
+                    alt="Pizza Box"
+                    className="pizza-box-bg"
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '600px',
+                        height: 'auto',
+                        maxWidth: 'none',
+                        maxHeight: 'none',
+                        zIndex: 0,
+                        pointerEvents: 'none'
+                    }}
+                />
+            )}
+            {config.mode === 'serve' && (
+                <img
+                    src={kitchenCounter}
+                    alt="Kitchen Counter"
+                    className="kitchen-bg"
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        zIndex: 0,
+                        pointerEvents: 'none',
+                        opacity: 0.8 // Soft feel
+                    }}
+                />
+            )}
 
             {/* Level Indicator (Optional) */}
-            <div style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 'bold' }}>
+            <div style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 'bold', position: 'relative', zIndex: 1 }}>
                 Level {level}/5
             </div>
 
             {/* Goal Display */}
-            <div className="goal-card">
+            <div className="goal-card" style={{ position: 'relative', zIndex: 1 }}>
                 {config.mode === 'fracture' && (
                     <span className="goal-text">{currentGoal.denom}</span>
                 )}
@@ -276,17 +406,36 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             </div>
 
             {/* Game Area (Pie or Rect) */}
-            <div className="game-visual">
+            <div className={`game-visual ${config.mode === 'fracture' && config.shape !== 'rect' ? 'in-box' : ''}`} style={{ position: 'relative', zIndex: 10, marginTop: '40px' }}>
+                {/* Added zIndex: 10 to ensure it's well above background (zIndex: 0) */}
                 <svg
                     viewBox={config.shape === 'rect' ? "0 0 240 200" : "0 0 200 200"}
                     className={`pie-svg ${config.shape === 'rect' ? 'rect-mode' : ''}`}
+                    style={{ overflow: 'visible', cursor: config.mode === 'serve' ? 'pointer' : 'default' }}
                 >
+                    <defs>
+                        <pattern id="pattern-cheese" patternUnits="objectBoundingBox" width="1" height="1">
+                            <image href={pizzaCheese} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                        <pattern id="pattern-pepperoni" patternUnits="objectBoundingBox" width="1" height="1">
+                            <image href={pizzaPepperoni} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                        <pattern id="pattern-veggie" patternUnits="objectBoundingBox" width="1" height="1">
+                            <image href={pizzaVeggie} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                        <pattern id="pattern-mushroom" patternUnits="objectBoundingBox" width="1" height="1">
+                            <image href={pizzaMushroom} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                        <pattern id="pattern-hawaiian" patternUnits="objectBoundingBox" width="1" height="1">
+                            <image href={pizzaHawaiian} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                    </defs>
                     {config.shape === 'rect' ? renderRect() : renderPie()}
                 </svg>
             </div>
 
             {/* Controls */}
-            <div className="controls-area">
+            <div className="controls-area" style={{ position: 'relative', zIndex: 10 }}>
                 <button
                     className="ctrl-btn"
                     onClick={handleDecrement}
@@ -307,7 +456,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             </div>
 
             {/* Ready Button */}
-            <button className={`ready-btn ${feedback}`} onClick={checkResult} disabled={preview}>
+            <button className={`ready-btn ${feedback}`} onClick={checkResult} disabled={preview} style={{ position: 'relative', zIndex: 1 }}>
                 {feedback === 'correct' ? <ThumbsUp /> : 'READY!'}
             </button>
         </div>

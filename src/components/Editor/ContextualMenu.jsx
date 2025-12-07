@@ -141,17 +141,41 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                     {/* For now, assuming `element` prop will be the cartridge object when selected. */}
                     <div className="menu-group">
                         <label>Shape</label>
-                        <button
-                            className="btn-icon"
-                            title="Toggle Shape (Pie/Rectangle)"
-                            style={{ width: '40px', height: '40px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                            onClick={() => {
-                                const newShape = (element.config?.shape || 'pie') === 'pie' ? 'rect' : 'pie';
-                                onChange('cartridge', { config: { ...element.config, shape: newShape } });
-                            }}
-                        >
-                            {(element.config?.shape || 'pie') === 'pie' ? '🍕' : '🍫'}
-                        </button>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className="btn-icon"
+                                title="Toggle Shape (Pie/Rectangle)"
+                                style={{ width: '40px', height: '40px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                onClick={() => {
+                                    const newShape = (element.config?.shape || 'pie') === 'pie' ? 'rect' : 'pie';
+                                    onChange('cartridge', { config: { ...element.config, shape: newShape } });
+                                }}
+                            >
+                                {(element.config?.shape || 'pie') === 'pie' ? '🍕' : '🍫'}
+                            </button>
+
+                            {/* Pizza Flavor Toggle (Only for Pie) */}
+                            {(!element.config?.shape || element.config.shape === 'pie') && (
+                                <button
+                                    className="btn-icon"
+                                    title="Change Pizza Flavor"
+                                    style={{ width: '40px', height: '40px', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                    onClick={() => {
+                                        const flavors = ['cheese', 'pepperoni', 'veggie', 'mushroom', 'hawaiian'];
+                                        const currentFlavor = element.config?.flavor || 'cheese';
+                                        const nextIndex = (flavors.indexOf(currentFlavor) + 1) % flavors.length;
+                                        onChange('cartridge', { config: { ...element.config, flavor: flavors[nextIndex] } });
+                                    }}
+                                >
+                                    {/* Map flavor to emoji/icon manually or just cycle? Let's use specific emojis for feedback */}
+                                    {(!element.config?.flavor || element.config.flavor === 'cheese') && '🧀'}
+                                    {element.config?.flavor === 'pepperoni' && '🥩'}
+                                    {element.config?.flavor === 'veggie' && '🥦'}
+                                    {element.config?.flavor === 'mushroom' && '🍄'}
+                                    {element.config?.flavor === 'hawaiian' && '🍍'}
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     <div className="menu-group">
