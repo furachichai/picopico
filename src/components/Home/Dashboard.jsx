@@ -690,7 +690,7 @@ const Dashboard = () => {
         </button>
         <button
           className={`nav-item ${activeTab === 'discover' ? 'active' : ''}`}
-          onClick={() => setActiveTab('discover')}
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
         >
           <Compass size={24} />
           <span className="nav-label">{t('dashboard.discover')}</span>

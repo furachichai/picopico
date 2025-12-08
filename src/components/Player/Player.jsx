@@ -11,7 +11,10 @@ const Player = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const { lesson } = state;
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+    // Initialize index based on the currentSlideId in global state (set by DiscoverView)
+    const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex !== -1 ? initialIndex : 0);
     const touchStartRef = useRef(null);
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
 

@@ -4,6 +4,7 @@ import Player from './components/Player/Player';
 import SlidesPage from './components/Editor/SlidesPage';
 import LessonsPage from './components/Home/LessonsPage';
 import Dashboard from './components/Home/Dashboard';
+import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
 const AppContent = () => {
@@ -13,6 +14,7 @@ const AppContent = () => {
   if (state.view === 'slides') return <SlidesPage />;
   if (state.view === 'lessons') return <LessonsPage />;
   if (state.view === 'player') return <Player />;
+  if (state.view === 'discover') return <DiscoverView />;
 
   return <Editor />;
 };
