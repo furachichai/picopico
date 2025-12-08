@@ -4,20 +4,8 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/front%20restaurant%201080.png\")",
-      "elements": [
-        {
-          "id": "el-1764972543207",
-          "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
-          "x": 50,
-          "y": 50,
-          "width": 40,
-          "height": 34.59586466165413,
-          "rotation": 0,
-          "scale": 2.022396861198785
-        }
-      ],
+      "background": "url(\"/src/assets/backgrounds/Pesto%20and%20boxes.png\")",
+      "elements": [],
       "order": 0
     },
     {
@@ -37,11 +25,32 @@
         }
       ],
       "order": 1
+    },
+    {
+      "id": "slide-1765218414866",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1765218420628",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 50,
+          "y": 53.75,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 2.243724179879326,
+          "metadata": {
+            "flipX": true
+          }
+        }
+      ],
+      "order": 2
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T01:23:17.851Z",
-  "updatedAt": "2025-12-05T22:09:27.905Z",
+  "updatedAt": "2025-12-08T18:27:15.910Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

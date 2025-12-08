@@ -4,18 +4,38 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/Pesto%20spring%20out%20of%20box.%20Jeff%20is%20mexican.png\")",
       "elements": [
         {
-          "id": "el-1764680051365",
-          "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
-          "x": 50,
-          "y": 50,
-          "width": 40,
-          "height": 34.59586466165413,
+          "id": "el-1765209381148",
+          "type": "text",
+          "content": "THE  APPRENTICE ROBOT !",
+          "x": 49.72222222222222,
+          "y": 33.75,
+          "width": 20,
+          "height": 10,
+          "rotation": -4.293108184305822,
+          "scale": 1.5274977303999329,
+          "metadata": {
+            "backgroundColor": "#000000",
+            "color": "#ffffff"
+          }
+        },
+        {
+          "id": "el-1765209435848",
+          "type": "text",
+          "content": "PESTO",
+          "x": 49.44444444444444,
+          "y": 20.468750000000004,
+          "width": 20,
+          "height": 10,
           "rotation": 0,
-          "scale": 1
+          "scale": 2.5050839977220702,
+          "metadata": {
+            "backgroundColor": "#58cc02",
+            "color": "#000000",
+            "fontFamily": "Georgia, serif"
+          }
         }
       ],
       "order": 0
@@ -23,13 +43,61 @@
     {
       "id": "slide-1765151326480",
       "background": "#9f6584",
-      "elements": [],
+      "elements": [
+        {
+          "id": "el-1765218376370",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "options": [
+            "Option 1",
+            "Option 2",
+            "Option 3",
+            "Option 4"
+          ],
+          "correctIndex": 0
+        },
+        {
+          "id": "el-1765218380588",
+          "type": "image",
+          "content": "/src/assets/characters/chef_pesto_laughing.png",
+          "x": 50,
+          "y": 28.28125,
+          "width": 40,
+          "height": 19.278042959427207,
+          "rotation": 0,
+          "scale": 1.543566641517249
+        }
+      ],
       "order": 1
+    },
+    {
+      "id": "slide-1765218385090",
+      "background": "#fecb3e",
+      "elements": [
+        {
+          "id": "el-1765218400971",
+          "type": "image",
+          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 2.1574067984293386
+        }
+      ],
+      "order": 2
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T12:54:08.396Z",
-  "updatedAt": "2025-12-07T23:48:55.196Z",
+  "updatedAt": "2025-12-08T18:26:45.136Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

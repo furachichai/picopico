@@ -297,11 +297,13 @@ const Player = () => {
                                             className="player-text"
                                             style={{
                                                 fontFamily: element.metadata?.fontFamily || 'Nunito',
+                                                fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                                                 color: element.metadata?.color || 'black',
                                                 backgroundColor: element.metadata?.backgroundColor || 'transparent',
                                                 padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
                                                 borderRadius: element.metadata?.borderRadius || '8px',
                                                 border: element.metadata?.border || 'none',
+                                                lineHeight: 1,
                                             }}
                                         >
                                             {element.content}

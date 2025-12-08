@@ -4,29 +4,42 @@
   "slides": [
     {
       "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/Pesto%20ninja.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1765210984993",
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1764639636927",
-          "type": "image",
-          "content": "/src/assets/characters/chef_walking%20with%20box.png",
-          "x": 23.055555555555557,
-          "y": 75.625,
-          "width": 40,
-          "height": 34.59586466165413,
+          "id": "el-1765210988575",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
           "rotation": 0,
-          "scale": 1
+          "scale": 1,
+          "options": [
+            "Option 1",
+            "Option 2",
+            "Option 3",
+            "Option 4"
+          ],
+          "correctIndex": 0
         }
       ],
-      "order": 0
+      "order": 1
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T01:40:33.379Z",
-  "updatedAt": "2025-12-02T01:40:42.413Z",
-  "path": "lessons/Math/General/00-Chapter/00-Untitled Lesson/lesson.json",
+  "updatedAt": "2025-12-08T16:23:11.111Z",
+  "path": "lessons/Math/02-General/00-Chapter/00-Untitled Lesson/lesson.json",
   "subject": "Math",
-  "topic": "General",
+  "topic": "02-General",
   "chapterId": "00",
   "chapterName": "Chapter",
   "lessonId": "00"

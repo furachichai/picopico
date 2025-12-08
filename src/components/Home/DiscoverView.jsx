@@ -12,6 +12,9 @@ const DiscoverView = () => {
     const containerRef = useRef(null);
     const touchStartRef = useRef(null);
 
+    const [hasInteracted, setHasInteracted] = useState(false);
+    const [hintOffset, setHintOffset] = useState(0);
+
     // Fetch lessons on mount
     useEffect(() => {
         const fetchLessons = async () => {
@@ -53,6 +56,33 @@ const DiscoverView = () => {
         fetchLessons();
     }, []);
 
+    // Swipe Hint Animation Effect
+    useEffect(() => {
+        if (hasInteracted || currentIndex !== 0 || lessons.length <= 1) {
+            setHintOffset(0);
+            return;
+        }
+
+        let timeoutId;
+        const animate = () => {
+            // Wait 3s then peek
+            timeoutId = setTimeout(() => {
+                setHintOffset(15); // Move up 15% (peek next)
+
+                // Spring back after 500ms
+                setTimeout(() => {
+                    setHintOffset(0);
+                    // Loop again after short pause
+                    setTimeout(animate, 1000);
+                }, 600);
+            }, 3000);
+        };
+
+        animate();
+
+        return () => clearTimeout(timeoutId);
+    }, [hasInteracted, currentIndex, lessons.length]);
+
     // Responsive Scale
     useEffect(() => {
         const updateScale = () => {
@@ -71,19 +101,24 @@ const DiscoverView = () => {
     }, []);
 
     // Navigation Logic
+    const markInteraction = () => setHasInteracted(true);
+
     const nextLesson = () => {
+        markInteraction();
         if (currentIndex < lessons.length - 1) {
             setCurrentIndex(prev => prev + 1);
         }
     };
 
     const prevLesson = () => {
+        markInteraction();
         if (currentIndex > 0) {
             setCurrentIndex(prev => prev - 1);
         }
     };
 
     const enterLesson = () => {
+        markInteraction();
         const lesson = lessons[currentIndex];
         // Merge path if missing in content
         const fullLesson = { ...lesson };
@@ -111,6 +146,7 @@ const DiscoverView = () => {
 
     // Touch/Mouse Handling for "Roll" + "Enter"
     const handleStart = (clientX, clientY) => {
+        markInteraction();
         touchStartRef.current = { x: clientX, y: clientY };
     };
 
@@ -220,15 +256,13 @@ const DiscoverView = () => {
                             <div
                                 style={{
                                     fontFamily: element.metadata?.fontFamily || 'Nunito',
-                                    fontSize: '1.5rem',
-                                    fontWeight: 900,
-                                    textAlign: 'center',
-                                    whiteSpace: 'pre-wrap',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                                     color: element.metadata?.color || 'black',
                                     backgroundColor: element.metadata?.backgroundColor || 'transparent',
                                     padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
                                     borderRadius: element.metadata?.borderRadius || '8px',
                                     border: element.metadata?.border || 'none',
+                                    lineHeight: 1,
                                 }}
                             >
                                 {element.content}
@@ -268,7 +302,7 @@ const DiscoverView = () => {
                 // transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)', // Smooth roll
                 // No, we move the SLIDES.
                 // Usually a feed transforms usage.
-                transform: `translateY(${-currentIndex * 100}%)`,
+                transform: `translateY(calc(${-currentIndex * 100}% - ${hintOffset}%))`,
                 transition: 'transform 0.5s ease-in-out',
                 willChange: 'transform'
             }}>

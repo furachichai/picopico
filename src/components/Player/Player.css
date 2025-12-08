@@ -114,12 +114,8 @@
 }
 
 .player-text {
-    font-size: 1.5rem;
-    font-weight: 900;
-    text-align: center;
     white-space: pre-wrap;
-    color: black;
-    /* Removed text-shadow for cleaner look */
+    /* Styles are now handled inline to match Editor */
 }
 
 .player-element img {
