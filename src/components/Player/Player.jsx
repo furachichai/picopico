@@ -134,67 +134,80 @@ const Player = () => {
                 onMouseDown={handleTouchStart}
                 onMouseUp={handleTouchEnd}
             >
-                {/* Navigation Buttons - Rebuilt with Inline Styles for reliability */}
+                {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
                     position: 'absolute',
-                    top: '16px',
-                    left: '16px',
-                    zIndex: 2000,
-                    pointerEvents: 'auto' // Ensure clickable
+                    top: '50%',
+                    left: '50%',
+                    width: '360px',
+                    height: '640px',
+                    marginTop: '-320px',
+                    marginLeft: '-180px',
+                    transform: `scale(${scale})`,
+                    transformOrigin: 'center center',
+                    pointerEvents: 'none', // Pass clicks through
+                    zIndex: 2000
                 }}>
-                    <button
-                        onClick={handleMenu}
-                        title={t('player.menu')}
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            border: '1px solid rgba(0,0,0,0.1)',
-                            borderRadius: '50%',
-                            width: '44px',
-                            height: '44px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            padding: 0,
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                        }}
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                    </button>
-                </div>
+                    {/* Navigation Buttons */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '16px',
+                        left: '16px',
+                        pointerEvents: 'auto' // Re-enable clicks
+                    }}>
+                        <button
+                            onClick={handleMenu}
+                            title={t('player.menu')}
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.95)',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                borderRadius: '50%',
+                                width: '44px',
+                                height: '44px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0,
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                            }}
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
 
-                <div style={{
-                    position: 'absolute',
-                    top: '16px',
-                    right: '16px',
-                    zIndex: 2000,
-                    pointerEvents: 'auto'
-                }}>
-                    <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
-                        title={t('common.edit')}
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            border: '1px solid rgba(0,0,0,0.1)',
-                            borderRadius: '50%',
-                            width: '44px',
-                            height: '44px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            padding: 0,
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                        }}
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                            <path d="m15 5 4 4" />
-                        </svg>
-                    </button>
+                    <div style={{
+                        position: 'absolute',
+                        top: '16px',
+                        right: '16px',
+                        pointerEvents: 'auto'
+                    }}>
+                        <button
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
+                            title={t('common.edit')}
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.95)',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                borderRadius: '50%',
+                                width: '44px',
+                                height: '44px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0,
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                            }}
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                <path d="m15 5 4 4" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {banner && (
@@ -236,8 +249,8 @@ const Player = () => {
                                 transform: positionClass === 'slide-active'
                                     ? `translateX(0) scale(${scale})`
                                     : positionClass === 'slide-next'
-                                        ? `translateX(100%) scale(${scale})`
-                                        : `translateX(-100%) scale(${scale})`
+                                        ? `translateX(100vw) scale(${scale})`
+                                        : `translateX(-100vw) scale(${scale})`
                             }}
                         >
                             <div className="player-progress-bar">
