@@ -93,11 +93,99 @@
         }
       ],
       "order": 2
+    },
+    {
+      "id": "slide-1765246098286",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1765247250617",
+          "type": "image",
+          "content": "/src/assets/characters/chef_teaching.png",
+          "x": 43.333333333333336,
+          "y": 59.375,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 2.6177851336931286
+        }
+      ],
+      "order": 3,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1765246133785",
+      "background": "#ff6a00",
+      "elements": [
+        {
+          "id": "el-1765246151126",
+          "type": "balloon",
+          "content": "Hello!",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 27,
+              "y": 117
+            }
+          }
+        },
+        {
+          "id": "el-1765246167653",
+          "type": "image",
+          "content": "/src/assets/characters/chef_scrathing.png",
+          "x": 80.55555555555556,
+          "y": 41.875,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1765247194108",
+          "type": "balloon",
+          "content": "Hello!",
+          "x": 38.888888888888886,
+          "y": 72.1875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 20,
+              "y": 50
+            }
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1765246403640",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 5
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T12:54:08.396Z",
-  "updatedAt": "2025-12-08T18:26:45.136Z",
+  "updatedAt": "2025-12-09T02:29:02.274Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

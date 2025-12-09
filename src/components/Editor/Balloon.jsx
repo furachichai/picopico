@@ -1,126 +1,85 @@
 import React, { useRef, useEffect } from 'react';
 
-const Balloon = ({ element, onChange, isSelected }) => {
+const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     const textRef = useRef(null);
 
     // Sync content changes
     const handleInput = (e) => {
+        if (readOnly) return;
         onChange(element.id, { content: e.currentTarget.innerText });
     };
 
-    // Tail position relative to center
-    const tailX = element.metadata?.tailPos?.x || 0;
-    const tailY = element.metadata?.tailPos?.y || 60;
+    // Calculate inverse scale to fix text direction if parent is flipped
+    const flipX = element.metadata?.flipX ? -1 : 1;
+    const flipY = element.metadata?.flipY ? -1 : 1;
 
-    // Balloon dimensions (relative to SVG coordinate system 0-100)
-    const width = 100;
-    const height = 100;
-    const r = 10; // Corner radius
+    // Tail position relative to center (safe defaults)
+    // Center is 100, 50 in 200x100 space?
+    // Let's assume the viewbox is 0 0 200 100
+    const tailX = typeof element.metadata?.tailPos?.x === 'number' ? element.metadata.tailPos.x : 20;
+    const tailY = typeof element.metadata?.tailPos?.y === 'number' ? element.metadata.tailPos.y : 60;
 
-    // Tail base logic
-    const tailBaseWidth = 20;
-    const tailBaseX = 50; // Center
+    // Generate Path
+    // Ellipse approx:
+    // M 40 10 Q 100 10 160 10 Q 190 10 190 50 Q 190 90 160 90 Q 100 90 40 90 Q 10 90 10 50 Q 10 10 40 10
+    // Tail needs to connect.
+    // Let's stick to a simple rect with rounded corners or ellipse.
+    // tailX/Y are offsets from center? Or absolute coords?
+    // In `Sticker.jsx` handleStart 'tail', we calculated dx/dy relative to previous.
+    // Let's assume tailX/Y are relative to the center of the balloon (0,0 in sticker space? No, Sticker is element).
+    // The balloon SVG is inside the sticker div.
+    // If we want the tail to point to `tailPos` in metadata.
+    // We'll draw a path that includes the tail.
+
+    // Better simple balloon:
+    // A rounded rect/ellipse from (10,10) to (190,90).
+    // With a tail pointing to (100 + tailX, 50 + tailY).
+
+    const w = 200;
+    const h = 100;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    // Control point for tail base
+    const tx = cx + tailX;
+    const ty = cy + tailY;
+
+    // Simple path: generic ellipse + line to tail?
+    // Let's make a path that looks like a comic bubble.
+
+    // We can use a simple SVG path.
+    const path = `
+        M 20 ${cy}
+        Q 20 10 ${cx} 10
+        Q 180 10 180 ${cy}
+        Q 180 90 ${cx} 90
+        Q 120 90 110 90
+        L ${tx} ${ty}
+        L 90 90
+        Q 20 90 20 ${cy}
+        Z
+    `;
+
+    const backgroundColor = element.metadata?.backgroundColor || '#ffffff';
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {/* Background Shape */}
             <svg
-                width="100%"
-                height="100%"
-                style={{ position: 'absolute', top: 0, left: 0, overflow: 'visible' }}
-                viewBox="0 0 100 100"
+                viewBox="0 0 200 100"
                 preserveAspectRatio="none"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
             >
-                {(() => {
-                    // Calculate angle in degrees
-                    const angle = Math.atan2(tailY, tailX) * (180 / Math.PI);
-
-                    // Normalize angle to 0-360 for easier logic
-                    const normAngle = (angle + 360) % 360;
-
-                    let side = 'bottom';
-                    // 45 to 135 -> Bottom (90 center)
-                    if (normAngle >= 45 && normAngle < 135) side = 'bottom';
-                    // 135 to 225 -> Left (180 center)
-                    else if (normAngle >= 135 && normAngle < 225) side = 'left';
-                    // 225 to 315 -> Top (270 center)
-                    else if (normAngle >= 225 && normAngle < 315) side = 'top';
-                    // 315 to 45 -> Right (0 center)
-                    else side = 'right';
-
-                    const cx = 50;
-                    const cy = 50;
-                    const rx = 48;
-                    const ry = 36; // More oblong
-                    const tipX = cx + tailX;
-                    const tipY = cy + tailY;
-
-                    let d = '';
-
-                    // Ellipse equation calculations for gap points (hw=8)
-                    // Top/Bottom (x offset 8): y_rel = 35.5 -> y = 14.5, 85.5
-                    // Left/Right (y offset 8): x_rel = 46.8 -> x = 3.2, 96.8
-
-                    if (side === 'top') {
-                        // Gap at top. Right: (58, 14.5), Left: (42, 14.5)
-                        d = `
-                            M 58 14.5
-                            A 48 36 0 1 1 42 14.5
-                            Q 46 5 ${tipX} ${tipY}
-                            Q 54 5 58 14.5
-                            Z
-                        `;
-                    } else if (side === 'right') {
-                        // Gap at right. Bottom: (96.8, 58), Top: (96.8, 42)
-                        d = `
-                            M 96.8 58
-                            A 48 36 0 1 1 96.8 42
-                            Q 105 46 ${tipX} ${tipY}
-                            Q 105 54 96.8 58
-                            Z
-                        `;
-                    } else if (side === 'bottom') {
-                        // Gap at bottom. Left: (42, 85.5), Right: (58, 85.5)
-                        d = `
-                            M 42 85.5
-                            A 48 36 0 1 1 58 85.5
-                            Q 54 95 ${tipX} ${tipY}
-                            Q 46 95 42 85.5
-                            Z
-                        `;
-                    } else if (side === 'left') {
-                        // Gap at left. Top: (3.2, 42), Bottom: (3.2, 58)
-                        d = `
-                            M 3.2 42
-                            A 48 36 0 1 1 3.2 58
-                            Q -5 54 ${tipX} ${tipY}
-                            Q -5 46 3.2 42
-                            Z
-                        `;
-                    }
-
-                    return (
-                        <path
-                            d={d}
-                            fill={element.metadata?.backgroundColor || 'white'}
-                            stroke="black"
-                            strokeWidth="2"
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
-                        />
-                    );
-                })()}
+                <path d={path} fill={backgroundColor} stroke="black" strokeWidth="2" strokeLinejoin="round" />
             </svg>
 
             {/* Text Content */}
             <div
                 ref={textRef}
-                contentEditable
+                contentEditable={!readOnly}
                 suppressContentEditableWarning
                 onInput={handleInput}
                 onBlur={() => {
-                    // Ensure sync on blur
-                    if (textRef.current) {
+                    if (!readOnly && textRef.current) {
                         onChange(element.id, { content: textRef.current.innerText });
                     }
                 }}
@@ -137,14 +96,16 @@ const Balloon = ({ element, onChange, isSelected }) => {
                     fontFamily: element.metadata?.fontFamily || 'monospace',
                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                     color: element.metadata?.color || 'black',
-                    padding: '10px',
+                    padding: '20px',
                     boxSizing: 'border-box',
                     outline: 'none',
-                    cursor: 'text',
-                    userSelect: 'text',
-                    pointerEvents: isSelected ? 'auto' : 'none',
+                    cursor: readOnly ? 'default' : 'text',
+                    userSelect: readOnly ? 'none' : 'text',
+                    pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
                     whiteSpace: 'pre-wrap',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    // Counter-flip the text so it stays readable when the container is flipped
+                    transform: `scale(${flipX}, ${flipY})`
                 }}
             >
                 {element.content}

@@ -10,12 +10,15 @@ import pizzaHawaiian from '../../assets/pizza_flavors/pizza_hawaiian.png';
 import pizzaBox from '../../assets/pizza_box.png';
 import kitchenCounter from '../../assets/kitchen_counter.png';
 
-const FractionAlpha = ({ config, onComplete, preview = false }) => {
+const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
     // Config mainly sets the "Theme" or "Starting Point" now, but logic handles 5 levels
     // We'll trust config for the *first* level if provided, otherwise random.
 
+    // Sanitize config to prevent crashes on null/undefined
+    const cfg = config || {};
+
     const [level, setLevel] = useState(1);
-    const [denominator, setDenominator] = useState(config?.initialDenominator || 1);
+    const [denominator, setDenominator] = useState(cfg.initialDenominator || 1);
     const [numerator, setNumerator] = useState(0);
     const [selectedSlices, setSelectedSlices] = useState([]);
     const [isComplete, setIsComplete] = useState(false);
@@ -23,21 +26,22 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
     // Level State Goals
     const [currentGoal, setCurrentGoal] = useState({
-        denom: config?.targetDenominator || 3,
-        num: config?.targetNumerator || 1
+        denom: cfg.targetDenominator || 3,
+        num: cfg.targetNumerator || 1
     });
 
     // Reset when config changes (new game instance)
     useEffect(() => {
+        const safeCfg = config || {};
         setLevel(1);
-        setDenominator(config?.initialDenominator || 1);
+        setDenominator(safeCfg.initialDenominator || 1);
         setNumerator(0);
         setSelectedSlices([]);
         setIsComplete(false);
         setFeedback(null);
         setCurrentGoal({
-            denom: config?.targetDenominator || 3,
-            num: config?.targetNumerator || 1
+            denom: safeCfg.targetDenominator || 3,
+            num: safeCfg.targetNumerator || 1
         });
     }, [config]);
 
@@ -45,12 +49,12 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
     // Trigger animation on denominator change (ALL MODES)
     useEffect(() => {
-        // if (config.mode !== 'serve') { <--- REMOVED check, allow for all modes
+        // if (cfg.mode !== 'serve') { <--- REMOVED check, allow for all modes
         setAnimating(true);
         const timer = setTimeout(() => setAnimating(false), 300);
         return () => clearTimeout(timer);
         // }
-    }, [denominator, config.mode]);
+    }, [denominator, cfg.mode]);
 
     // Simple Synth for "Chop" sound
     const playChopSound = () => {
@@ -99,7 +103,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
     const handleSliceClick = (index) => {
         if (preview) return;
-        if (config.mode !== 'serve') return;
+        if (cfg.mode !== 'serve') return;
 
         const isSelected = selectedSlices.includes(index);
         let newSelected;
@@ -136,17 +140,19 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
     const checkResult = () => {
         if (preview) return;
 
-        const isCorrect = config.mode === 'fracture'
+        const isCorrect = cfg.mode === 'fracture'
             ? denominator === currentGoal.denom
             : (denominator === currentGoal.denom && numerator === currentGoal.num);
 
         if (isCorrect) {
             setFeedback('correct');
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
 
             setTimeout(() => {
                 if (level < 5) {
@@ -169,7 +175,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
         const radius = 90;
         let elements = [];
 
-        const flavor = config?.flavor || 'cheese';
+        const flavor = cfg.flavor || 'cheese';
 
         // Map flavor to image source
         const flavorImages = {
@@ -179,12 +185,13 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             mushroom: pizzaMushroom,
             hawaiian: pizzaHawaiian
         };
-        const currentImage = flavorImages[flavor];
+        const currentImage = flavorImages[flavor] || pizzaCheese; // Fallback to cheese if flavor invalid
 
         if (denominator === 1) {
+            // ...
             const isSelected = selectedSlices.includes(0);
             let transform = 'scale(1)';
-            if (config.mode === 'serve' && isSelected) {
+            if (cfg.mode === 'serve' && isSelected) {
                 transform = 'scale(0.95)';
             } else if (animating) {
                 transform = 'scale(1.02)';
@@ -192,7 +199,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
             // Opacity Logic
             let opacity = 1.0;
-            if (config.mode === 'serve' && !isSelected) {
+            if (cfg.mode === 'serve' && !isSelected) {
                 opacity = 0.6;
             }
 
@@ -214,7 +221,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                     stroke={isSelected ? "#FACC15" : "#334155"}
                     strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(0)}
-                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' ? 'interactive' : ''}`}
+                    className={`slice ${isSelected ? 'selected' : ''} ${cfg.mode === 'serve' ? 'interactive' : ''}`}
                     style={{
                         transform,
                         transformOrigin: 'center',
@@ -240,7 +247,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             const isSelected = selectedSlices.includes(i);
 
             let transform = 'scale(1)';
-            if (config.mode === 'serve' && isSelected) {
+            if (cfg.mode === 'serve' && isSelected) {
                 const midAngle = (startAngle + endAngle) / 2;
                 const rad = Math.PI * midAngle / 180;
                 const offset = 10;
@@ -258,7 +265,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
             // Opacity Logic
             let opacity = 1.0;
-            if (config.mode === 'serve' && !isSelected) {
+            if (cfg.mode === 'serve' && !isSelected) {
                 opacity = 0.6;
             }
 
@@ -282,7 +289,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                     stroke={isSelected ? "#FACC15" : "#334155"}
                     strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(i)}
-                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' ? 'interactive' : ''}`}
+                    className={`slice ${isSelected ? 'selected' : ''} ${cfg.mode === 'serve' ? 'interactive' : ''}`}
                     style={{
                         transformOrigin: `${center}px ${center}px`,
                         transform: transform,
@@ -306,7 +313,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
             // Animation Logic
             let transform = 'translate(0, 0)';
-            if (config.mode === 'serve' && isSelected) {
+            if (cfg.mode === 'serve' && isSelected) {
                 // Serve Selection: Move UP 10px
                 transform = 'translate(0, -10px)';
             } else if (animating) {
@@ -316,7 +323,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
             // Opacity Logic
             let opacity = 1.0;
-            if (config.mode === 'serve' && !isSelected) {
+            if (cfg.mode === 'serve' && !isSelected) {
                 opacity = 0.6;
             }
 
@@ -332,7 +339,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                     stroke="#334155"
                     strokeWidth="2"
                     onClick={() => handleSliceClick(i)}
-                    className={`slice ${isSelected ? 'selected' : ''} ${config.mode === 'serve' && !preview ? 'interactive' : ''}`}
+                    className={`slice ${isSelected ? 'selected' : ''} ${cfg.mode === 'serve' && !preview ? 'interactive' : ''}`}
                     style={{
                         transform: transform,
                         transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s',
@@ -348,7 +355,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
         <div className={`fraction-alpha-container ${preview ? 'preview-mode' : ''}`} style={{ position: 'relative' }}>
 
             {/* Backgrounds */}
-            {config.mode === 'fracture' && config.shape !== 'rect' && (
+            {cfg.mode === 'fracture' && cfg.shape !== 'rect' && (
                 <img
                     src={pizzaBox}
                     alt="Pizza Box"
@@ -367,7 +374,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                     }}
                 />
             )}
-            {config.mode === 'serve' && (
+            {cfg.mode === 'serve' && (
                 <img
                     src={kitchenCounter}
                     alt="Kitchen Counter"
@@ -393,10 +400,10 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
 
             {/* Goal Display */}
             <div className="goal-card" style={{ position: 'relative', zIndex: 1 }}>
-                {config.mode === 'fracture' && (
+                {cfg.mode === 'fracture' && (
                     <span className="goal-text">{currentGoal.denom}</span>
                 )}
-                {config.mode === 'serve' && (
+                {cfg.mode === 'serve' && (
                     <div className="fraction-goal">
                         <span className="numerator">{currentGoal.num}</span>
                         <span className="divider"></span>
@@ -406,12 +413,12 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
             </div>
 
             {/* Game Area (Pie or Rect) */}
-            <div className={`game-visual ${config.mode === 'fracture' && config.shape !== 'rect' ? 'in-box' : ''}`} style={{ position: 'relative', zIndex: 10, marginTop: '40px' }}>
+            <div className={`game-visual ${cfg.mode === 'fracture' && cfg.shape !== 'rect' ? 'in-box' : ''}`} style={{ position: 'relative', zIndex: 10, marginTop: '40px' }}>
                 {/* Added zIndex: 10 to ensure it's well above background (zIndex: 0) */}
                 <svg
-                    viewBox={config.shape === 'rect' ? "0 0 240 200" : "0 0 200 200"}
-                    className={`pie-svg ${config.shape === 'rect' ? 'rect-mode' : ''}`}
-                    style={{ overflow: 'visible', cursor: config.mode === 'serve' ? 'pointer' : 'default' }}
+                    viewBox={cfg.shape === 'rect' ? "0 0 240 200" : "0 0 200 200"}
+                    className={`pie-svg ${cfg.shape === 'rect' ? 'rect-mode' : ''}`}
+                    style={{ overflow: 'visible', cursor: cfg.mode === 'serve' ? 'pointer' : 'default' }}
                 >
                     <defs>
                         <pattern id="pattern-cheese" patternUnits="objectBoundingBox" width="1" height="1">
@@ -430,7 +437,7 @@ const FractionAlpha = ({ config, onComplete, preview = false }) => {
                             <image href={pizzaHawaiian} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
                         </pattern>
                     </defs>
-                    {config.shape === 'rect' ? renderRect() : renderPie()}
+                    {cfg.shape === 'rect' ? renderRect() : renderPie()}
                 </svg>
             </div>
 

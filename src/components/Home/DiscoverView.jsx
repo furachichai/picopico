@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import { Home } from 'lucide-react';
+import Balloon from '../Editor/Balloon';
 
 const DiscoverView = () => {
     const { dispatch } = useEditor();
@@ -12,8 +13,12 @@ const DiscoverView = () => {
     const containerRef = useRef(null);
     const touchStartRef = useRef(null);
 
-    const [hasInteracted, setHasInteracted] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(false); // Kept for legacy or general "invoked" state if needed, but logic split below
+    const [hasVerticallySwiped, setHasVerticallySwiped] = useState(false);
+    const [interactionToken, setInteractionToken] = useState(0); // Used to reset timers
+
     const [hintOffset, setHintOffset] = useState(0);
+    const [horizontalHintOffset, setHorizontalHintOffset] = useState(0);
 
     // Fetch lessons on mount
     useEffect(() => {
@@ -32,13 +37,7 @@ const DiscoverView = () => {
                     });
                 };
                 traverse(data);
-                // Load full content for the first few lessons to render covers?
-                // Actually list-lessons only gives names/paths. We need to load content.
-                // Optimally we load content on demand, but for prototype we can load all 
-                // or just load the current + neighbors.
-                // Let's load ALL for now (assuming small count) or just load the cover data.
-                // Since we need to render the SLIDE, we need the lesson content.
-                // Let's fetch them in parallel.
+
                 const loadedLessons = await Promise.all(flatList.map(async (l) => {
                     try {
                         const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
@@ -48,6 +47,7 @@ const DiscoverView = () => {
                         return null;
                     }
                 }));
+                // Filter valid lessons
                 setLessons(loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0));
             } catch (error) {
                 console.error('Error loading discover feed:', error);
@@ -56,32 +56,50 @@ const DiscoverView = () => {
         fetchLessons();
     }, []);
 
-    // Swipe Hint Animation Effect
+    // Hint Animation Logic
     useEffect(() => {
-        if (hasInteracted || currentIndex !== 0 || lessons.length <= 1) {
-            setHintOffset(0);
-            return;
+        // Clear any ongoing animations immediately on interaction
+        setHintOffset(0);
+        setHorizontalHintOffset(0);
+
+        if (lessons.length === 0) return;
+
+        const timers = [];
+
+        // 1. Vertical Hint (Onboarding)
+        // Condition: Never vertically swiped AND on first lesson AND multiple lessons exist
+        if (!hasVerticallySwiped && currentIndex === 0 && lessons.length > 1) {
+            const vTimer = setTimeout(() => {
+                setHintOffset(15); // Peek Up
+                timers.push(setTimeout(() => setHintOffset(0), 600)); // Return
+            }, 1500); // 1.5s delay
+            timers.push(vTimer);
         }
 
-        let timeoutId;
-        const animate = () => {
-            // Wait 3s then peek
-            timeoutId = setTimeout(() => {
-                setHintOffset(15); // Move up 15% (peek next)
+        // 2. Horizontal Hint (Idle Persuasion)
+        // Condition: Any lesson that has > 1 slide. Inactivity for 2.5s.
+        const currentLesson = lessons[currentIndex];
+        if (currentLesson && currentLesson.slides && currentLesson.slides.length > 1) {
+            const startHorizontalLoop = () => {
+                // Peek Left (Show next slide)
+                setHorizontalHintOffset(15);
 
-                // Spring back after 500ms
-                setTimeout(() => {
-                    setHintOffset(0);
-                    // Loop again after short pause
-                    setTimeout(animate, 1000);
-                }, 600);
-            }, 3000);
+                // Return
+                timers.push(setTimeout(() => {
+                    setHorizontalHintOffset(0);
+                    // Loop
+                    timers.push(setTimeout(startHorizontalLoop, 4000));
+                }, 600));
+            };
+
+            const hTimer = setTimeout(startHorizontalLoop, 2500); // 2.5s inactivity
+            timers.push(hTimer);
+        }
+
+        return () => {
+            timers.forEach(t => clearTimeout(t));
         };
-
-        animate();
-
-        return () => clearTimeout(timeoutId);
-    }, [hasInteracted, currentIndex, lessons.length]);
+    }, [interactionToken, hasVerticallySwiped, currentIndex, lessons]); // Re-run on interaction or nav
 
     // Responsive Scale
     useEffect(() => {
@@ -101,24 +119,27 @@ const DiscoverView = () => {
     }, []);
 
     // Navigation Logic
-    const markInteraction = () => setHasInteracted(true);
+    const markInteraction = (isVertical = false) => {
+        setInteractionToken(t => t + 1); // Reset timers
+        if (isVertical) setHasVerticallySwiped(true);
+    };
 
     const nextLesson = () => {
-        markInteraction();
+        markInteraction(true); // Is Vertical
         if (currentIndex < lessons.length - 1) {
             setCurrentIndex(prev => prev + 1);
         }
     };
 
     const prevLesson = () => {
-        markInteraction();
+        markInteraction(true); // Is Vertical
         if (currentIndex > 0) {
             setCurrentIndex(prev => prev - 1);
         }
     };
 
     const enterLesson = () => {
-        markInteraction();
+        markInteraction(false);
         const lesson = lessons[currentIndex];
         // Merge path if missing in content
         const fullLesson = { ...lesson };
@@ -146,7 +167,7 @@ const DiscoverView = () => {
 
     // Touch/Mouse Handling for "Roll" + "Enter"
     const handleStart = (clientX, clientY) => {
-        markInteraction();
+        markInteraction(false); // Just touch start, not necessarily a swipe yet, but counts as interaction for idle timer
         touchStartRef.current = { x: clientX, y: clientY };
     };
 
@@ -177,8 +198,8 @@ const DiscoverView = () => {
     const handleMouseDown = (e) => handleStart(e.clientX, e.clientY);
     const handleMouseUp = (e) => handleEnd(e.clientX, e.clientY);
 
-    // Render a single slide (reused logic)
-    const renderSlide = (slide) => {
+    // Render a single slide (simplified for Mask integration)
+    const renderSlide = (slide, additionalStyle = {}) => {
         if (!slide) return null;
         return (
             <div
@@ -189,31 +210,109 @@ const DiscoverView = () => {
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    transformOrigin: 'center center',
                     width: '360px',
                     height: '640px',
                     position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-320px',
-                    marginLeft: '-180px',
-                    transform: `translateX(0) scale(${scale})`,
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.5)', // Add shadow to distinguish cards
-                    overflow: 'hidden', // Ensure button stays within rounded corners if added
-                    userSelect: 'none' // Prevent text selection during drag
+                    top: 0,
+                    ...additionalStyle, // Accept overrides (left, etc.)
+                    overflow: 'hidden',
+                    userSelect: 'none'
                 }}
             >
-                {/* Home Button - Inside the Lesson Card */}
+
+                {/* Elements */}
+                {slide.elements.map(element => (
+                    <div
+                        key={element.id}
+                        style={{
+                            position: 'absolute',
+                            left: `${element.x}%`,
+                            top: `${element.y}%`,
+                            width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
+                            height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
+                            transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
+                            zIndex: 10,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            pointerEvents: 'none' // Preview only
+                        }}
+                    >
+                        {element.type === 'text' && (
+                            <div
+                                style={{
+                                    fontFamily: element.metadata?.fontFamily || 'Nunito',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                    color: element.metadata?.color || 'black',
+                                    backgroundColor: element.metadata?.backgroundColor || 'transparent',
+                                    padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
+                                    borderRadius: element.metadata?.borderRadius || '8px',
+                                    border: element.metadata?.border || 'none',
+                                    lineHeight: 1,
+                                    whiteSpace: 'pre-wrap',
+                                    textAlign: element.metadata?.textAlign || 'left',
+                                    // Ensure text styles match Player/Editor
+                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontStyle: element.metadata?.fontStyle || 'normal',
+                                    textDecoration: element.metadata?.textDecoration || 'none'
+                                }}
+                            >
+                                {element.content}
+                            </div>
+                        )}
+                        {element.type === 'image' && <img src={element.content} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                        {element.type === 'balloon' && (
+                            <Balloon
+                                element={element}
+                                readOnly={true}
+                            />
+                        )}
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'transparent',
+            overflow: 'hidden',
+            touchAction: 'none',
+            cursor: 'grab'
+        }}
+            ref={containerRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+        >
+            {/* Persistent Stage Layer (Overlays Feed, matches Stage Geometry) */}
+            <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '360px',
+                height: '640px',
+                transform: `translate(-50%, -50%) scale(${scale}) translateZ(0)`,
+                transformOrigin: 'center center',
+                pointerEvents: 'none', // Let touches pass through to feed
+                zIndex: 4000
+            }}>
+                {/* Home Button - Anchored to Stage Top Left */}
                 <div style={{
                     position: 'absolute',
                     top: '16px',
                     left: '16px',
-                    zIndex: 3000,
-                    pointerEvents: 'auto'
+                    pointerEvents: 'auto' // Re-enable clicks
                 }}>
                     <button
                         onClick={(e) => {
-                            e.stopPropagation(); // Prevent card clicks
+                            e.stopPropagation();
                             dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
                         }}
                         style={{
@@ -233,78 +332,16 @@ const DiscoverView = () => {
                         <Home size={24} color="#334155" />
                     </button>
                 </div>
-
-                {/* Elements */}
-                {slide.elements.map(element => (
-                    <div
-                        key={element.id}
-                        style={{
-                            position: 'absolute',
-                            left: `${element.x}%`,
-                            top: `${element.y}%`,
-                            width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
-                            height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
-                            transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                            zIndex: 10,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            pointerEvents: 'none' // Preview only
-                        }}
-                    >
-                        {element.type === 'text' && (
-                            <div
-                                style={{
-                                    fontFamily: element.metadata?.fontFamily || 'Nunito',
-                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    color: element.metadata?.color || 'black',
-                                    backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                                    padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                                    borderRadius: element.metadata?.borderRadius || '8px',
-                                    border: element.metadata?.border || 'none',
-                                    lineHeight: 1,
-                                }}
-                            >
-                                {element.content}
-                            </div>
-                        )}
-                        {element.type === 'image' && <img src={element.content} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
-                    </div>
-                ))}
             </div>
-        );
-    };
-
-    return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#1a202c',
-            overflow: 'hidden',
-            touchAction: 'none',
-            cursor: 'grab' // Indicate draggable
-        }}
-            ref={containerRef}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-        >
-            {/* Removed Global Home Button */}
 
             {/* Vertical Feed Container */}
             <div style={{
                 width: '100%',
                 height: '100%',
-                // transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)', // Smooth roll
-                // No, we move the SLIDES.
-                // Usually a feed transforms usage.
-                transform: `translateY(calc(${-currentIndex * 100}% - ${hintOffset}%))`,
+                transform: `translateY(calc(${-currentIndex * 100}% - ${hintOffset}%)) translateZ(0)`, // Hardware Acceleration
                 transition: 'transform 0.5s ease-in-out',
-                willChange: 'transform'
+                willChange: 'transform',
+                backfaceVisibility: 'hidden'
             }}>
                 {lessons.map((lesson, index) => (
                     <div
@@ -315,13 +352,43 @@ const DiscoverView = () => {
                             position: 'absolute',
                             top: `${index * 100}%`,
                             left: 0,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
                         }}
                     >
-                        {/* Render Slide 0 */}
-                        {lesson.slides && lesson.slides.length > 0 ? renderSlide(lesson.slides[0]) : null}
+                        {/* Stage Wrapper (Centers and Scales Content) */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            width: '360px',
+                            height: '640px', // Explicit size for scaling source
+                            transform: `translate(-50%, -50%) scale(${scale}) translateZ(0)`, // Hardware Acceleration
+                            transformOrigin: 'center center',
+
+                            // Mask Styles
+                            boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
+                            overflow: 'hidden',
+                            backgroundColor: 'transparent',
+                            backfaceVisibility: 'hidden',
+                            perspective: '1000px'
+                        }}>
+                            {/* Sliding Track */}
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                // OPTIMIZATION: Only animate the current lesson
+                                transform: `translateX(${index === currentIndex ? -horizontalHintOffset : 0}%) translateZ(0)`,
+                                transition: 'transform 0.5s ease-in-out',
+                                willChange: index === currentIndex ? 'transform' : 'auto',
+                                position: 'relative',
+                                backfaceVisibility: 'hidden'
+                            }}>
+                                {/* Slide 0 */}
+                                {lesson.slides && lesson.slides.length > 0 ? renderSlide(lesson.slides[0], { left: 0 }) : null}
+
+                                {/* Slide 1 */}
+                                {lesson.slides && lesson.slides.length > 1 ? renderSlide(lesson.slides[1], { left: '100%' }) : null}
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>

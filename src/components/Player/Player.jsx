@@ -4,6 +4,7 @@ import { useEditor } from '../../context/EditorContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
+import Balloon from '../Editor/Balloon';
 import { X, Pencil } from 'lucide-react';
 import './Player.css';
 
@@ -279,47 +280,60 @@ const Player = () => {
                                 </div>
                             )}
 
-                            {slide.elements.map(element => (
-                                <div
-                                    key={element.id}
-                                    className="player-element"
-                                    style={{
-                                        left: `${element.x}%`,
-                                        top: `${element.y}%`,
-                                        width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
-                                        height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
-                                        transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                                        zIndex: 10, // Ensure stickers render above cartridge (zIndex: 1)
-                                    }}
-                                >
-                                    {element.type === 'text' && (
+                            {slide.elements.map(element => {
+                                try {
+                                    return (
                                         <div
-                                            className="player-text"
+                                            key={element.id}
+                                            className="player-element"
                                             style={{
-                                                fontFamily: element.metadata?.fontFamily || 'Nunito',
-                                                fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                                color: element.metadata?.color || 'black',
-                                                backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                                                padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                                                borderRadius: element.metadata?.borderRadius || '8px',
-                                                border: element.metadata?.border || 'none',
-                                                lineHeight: 1,
+                                                left: `${element.x}%`,
+                                                top: `${element.y}%`,
+                                                width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
+                                                height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
+                                                transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
+                                                zIndex: 10, // Ensure stickers render above cartridge (zIndex: 1)
                                             }}
                                         >
-                                            {element.content}
+                                            {element.type === 'text' && (
+                                                <div
+                                                    className="player-text"
+                                                    style={{
+                                                        fontFamily: element.metadata?.fontFamily || 'Nunito',
+                                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                                        color: element.metadata?.color || 'black',
+                                                        backgroundColor: element.metadata?.backgroundColor || 'transparent',
+                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
+                                                        borderRadius: element.metadata?.borderRadius || '8px',
+                                                        border: element.metadata?.border || 'none',
+                                                        lineHeight: 1,
+                                                    }}
+                                                >
+                                                    {element.content}
+                                                </div>
+                                            )}
+                                            {element.type === 'image' && <img src={element.content} alt="content" />}
+                                            {element.type === 'quiz' && (
+                                                <QuizPlayer
+                                                    data={element}
+                                                    onNext={nextSlide}
+                                                    onBanner={handleBanner}
+                                                />
+                                            )}
+                                            {element.type === 'game' && <MinigamePlayer data={element} />}
+                                            {element.type === 'balloon' && (
+                                                <Balloon
+                                                    element={element}
+                                                    readOnly={true}
+                                                />
+                                            )}
                                         </div>
-                                    )}
-                                    {element.type === 'image' && <img src={element.content} alt="content" />}
-                                    {element.type === 'quiz' && (
-                                        <QuizPlayer
-                                            data={element}
-                                            onNext={nextSlide}
-                                            onBanner={handleBanner}
-                                        />
-                                    )}
-                                    {element.type === 'game' && <MinigamePlayer data={element} />}
-                                </div>
-                            ))}
+                                    );
+                                } catch (err) {
+                                    console.error('Failed to render element:', element, err);
+                                    return null;
+                                }
+                            })}
                         </div>
                     );
                 })}
