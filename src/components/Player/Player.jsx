@@ -4,6 +4,7 @@ import { useEditor } from '../../context/EditorContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
+import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import Balloon from '../Editor/Balloon';
 import { X, Pencil } from 'lucide-react';
 import './Player.css';
@@ -270,6 +271,15 @@ const Player = () => {
                                 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && (
                                         <FractionAlpha
+                                            config={slide.cartridge.config}
+                                            onComplete={() => {
+                                                setIsGameActive(false);
+                                                nextSlide();
+                                            }}
+                                        />
+                                    )}
+                                    {slide.cartridge.type === 'FractionSlicer' && (
+                                        <FractionSlicer
                                             config={slide.cartridge.config}
                                             onComplete={() => {
                                                 setIsGameActive(false);

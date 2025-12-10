@@ -166,6 +166,7 @@ const Editor = () => {
         selectedElement = {
             id: 'cartridge',
             type: 'cartridge', // Special type
+            cartridgeType: currentSlide.cartridge.type, // Pass specific cartridge type (FractionAlpha, FractionSlicer)
             config: currentSlide.cartridge.config, // Pass config directly
             // Add other props if needed by generic menu parts, but unlikely
         };

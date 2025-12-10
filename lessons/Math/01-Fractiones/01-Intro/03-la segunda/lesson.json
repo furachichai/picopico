@@ -40,6 +40,19 @@
       "order": 0
     },
     {
+      "id": "slide-1765404351101",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 1,
+      "cartridge": {
+        "type": "FractionSlicer",
+        "config": {
+          "levels": 3,
+          "tolerance": 0.15
+        }
+      }
+    },
+    {
       "id": "slide-1765218442501",
       "background": "#E1F5FE",
       "elements": [
@@ -66,12 +79,12 @@
           "scale": 1
         }
       ],
-      "order": 1
+      "order": 2
     }
   ],
   "author": "User",
   "createdAt": "2025-12-02T02:03:37.780Z",
-  "updatedAt": "2025-12-08T18:27:45.122Z",
+  "updatedAt": "2025-12-10T22:06:02.636Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

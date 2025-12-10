@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react'
 import { useEditor } from '../../context/EditorContext';
 import Sticker from './Sticker';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
+import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 
 /**
  * Canvas Component
@@ -118,17 +119,15 @@ const Canvas = (props) => {
         {/* Cartridge Container - Lower layer */}
         {/* Cartridge Container - Lower layer */}
         <div className="cartridge-container">
-          {currentSlide.cartridge && currentSlide.cartridge.type === 'FractionAlpha' && (
+          {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer') && (
             <div style={{ pointerEvents: 'none', width: '100%', height: '100%' }}>
-              {/* 
-                      We use lazy import or direct import? 
-                      Top level import of FractionAlpha is needed in Canvas.jsx OR passed via map?
-                      Let's assume we import it at the top.
-                    */}
               <React.Suspense fallback={<div>Loading...</div>}>
-                {/* Dynamic import or just standard import. Let's use standard import if possible, but Canvas.jsx doesn't import it yet. */}
-                {/* Check top of file. I will add import in next step or use a registry. */}
-                <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
+                {currentSlide.cartridge.type === 'FractionAlpha' && (
+                  <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'FractionSlicer' && (
+                  <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
+                )}
               </React.Suspense>
             </div>
           )}

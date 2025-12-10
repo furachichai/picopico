@@ -54,14 +54,13 @@ const Toolbar = () => {
                     })} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
                     <button className="btn-secondary" onClick={handleAddQuiz} title={t('editor.addQuiz')}>Quiz</button>
                     <button className="btn-secondary" onClick={() => {
-                        console.log('Adding FractionAlpha Cartridge');
                         dispatch({
                             type: 'UPDATE_SLIDE',
                             payload: {
                                 cartridge: {
                                     type: 'FractionAlpha',
                                     config: {
-                                        mode: 'fracture', // Default mode
+                                        mode: 'fracture',
                                         targetDenominator: 3,
                                         targetNumerator: 1,
                                         initialDenominator: 1
@@ -69,8 +68,24 @@ const Toolbar = () => {
                                 }
                             }
                         });
-                    }} title="Add Fraction Cartridge">
+                    }} title="Add Fraction Alpha">
                         <Gamepad2 size={24} />
+                    </button>
+                    <button className="btn-secondary" onClick={() => {
+                        dispatch({
+                            type: 'UPDATE_SLIDE',
+                            payload: {
+                                cartridge: {
+                                    type: 'FractionSlicer',
+                                    config: {
+                                        levels: 3,
+                                        tolerance: 0.15
+                                    }
+                                }
+                            }
+                        });
+                    }} title="Add Fraction Slicer">
+                        <span style={{ fontSize: '1.4rem' }}>⚔️</span>
                     </button>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
