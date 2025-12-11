@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Minus, ThumbsUp } from 'lucide-react';
 import './FractionAlpha.css';
-import confetti from 'canvas-confetti';
-import pizzaCheese from '../../assets/pizza_flavors/pizza_cheese.png';
-import pizzaPepperoni from '../../assets/pizza_flavors/pizza_pepperoni.png';
-import pizzaVeggie from '../../assets/pizza_flavors/pizza_veggie.png';
-import pizzaMushroom from '../../assets/pizza_flavors/pizza_mushroom.png';
-import pizzaHawaiian from '../../assets/pizza_flavors/pizza_hawaiian.png';
+// import confetti from 'canvas-confetti';
 import pizzaBox from '../../assets/pizza_box.png';
 import kitchenCounter from '../../assets/kitchen_counter.png';
 
@@ -146,6 +141,8 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
 
         if (isCorrect) {
             setFeedback('correct');
+            // Confetti removed for debugging/stability
+            /*
             if (typeof confetti === 'function') {
                 confetti({
                     particleCount: 100,
@@ -153,6 +150,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
                     origin: { y: 0.6 }
                 });
             }
+            */
 
             setTimeout(() => {
                 if (level < 5) {
@@ -169,6 +167,93 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
         }
     };
 
+    // Helper to generate SVG content for flavors
+    const getPizzaPatternContent = (flavor) => {
+        // Base Cheese Color
+        const cheeseBase = <rect width="200" height="200" fill="#FDB813" />; // Golden Yellow
+        const cheeseDetail = (
+            <g opacity="0.4">
+                <circle cx="50" cy="80" r="5" fill="#F79F1F" />
+                <circle cx="150" cy="120" r="8" fill="#F79F1F" />
+                <circle cx="100" cy="40" r="4" fill="#F79F1F" />
+                <circle cx="120" cy="160" r="6" fill="#F79F1F" />
+            </g>
+        );
+
+        let toppings = null;
+
+        switch (flavor) {
+            case 'pepperoni':
+                toppings = (
+                    <g fill="#D63031" opacity="0.9">
+                        <circle cx="60" cy="60" r="12" />
+                        <circle cx="140" cy="50" r="12" />
+                        <circle cx="100" cy="100" r="12" />
+                        <circle cx="50" cy="140" r="12" />
+                        <circle cx="150" cy="150" r="12" />
+                    </g>
+                );
+                break;
+            case 'veggie':
+                toppings = (
+                    <g stroke="#009432" strokeWidth="4" fill="none" strokeLinecap="round">
+                        <path d="M 40 60 Q 60 40 80 60" />
+                        <path d="M 120 40 Q 140 60 160 40" />
+                        <path d="M 50 120 Q 70 140 90 120" />
+                        <path d="M 130 140 Q 150 120 170 140" />
+                        {/* Onions (White) */}
+                        <g stroke="#FFF" opacity="0.7">
+                            <path d="M 90 80 Q 100 60 110 80" />
+                            <path d="M 100 130 Q 110 150 120 130" />
+                        </g>
+                    </g>
+                );
+                break;
+            case 'mushroom':
+                toppings = (
+                    <g fill="#A0987D">
+                        <path d="M 60 70 A 10 10 0 0 1 80 70 L 75 70 L 75 80 L 65 80 L 65 70 Z" />
+                        <path d="M 130 50 A 10 10 0 0 1 150 50 L 145 50 L 145 60 L 135 60 L 135 50 Z" />
+                        <path d="M 90 110 A 10 10 0 0 1 110 110 L 105 110 L 105 120 L 95 120 L 95 110 Z" />
+                        <path d="M 50 130 A 10 10 0 0 1 70 130 L 65 130 L 65 140 L 55 140 L 55 130 Z" />
+                        <path d="M 140 130 A 10 10 0 0 1 160 130 L 155 130 L 155 140 L 145 140 L 145 130 Z" />
+                    </g>
+                );
+                break;
+            case 'hawaiian':
+                toppings = (
+                    <g>
+                        {/* Ham (Pink Squares) */}
+                        <g fill="#FAB1A0">
+                            <rect x="50" y="50" width="15" height="15" rx="2" />
+                            <rect x="130" y="80" width="15" height="15" rx="2" />
+                            <rect x="70" y="140" width="15" height="15" rx="2" />
+                        </g>
+                        {/* Pineapple (Yellow Chunks) */}
+                        <g fill="#FFEAA7">
+                            <circle cx="100" cy="100" r="8" />
+                            <circle cx="150" cy="50" r="8" />
+                            <circle cx="50" cy="110" r="8" />
+                            <circle cx="120" cy="150" r="8" />
+                        </g>
+                    </g>
+                );
+                break;
+            default: // Cheese only
+                break;
+        }
+
+        return (
+            <>
+                {cheeseBase}
+                {cheeseDetail}
+                {toppings}
+                {/* Crust Effect (Edge) */}
+                <circle cx="100" cy="100" r="96" fill="none" stroke="#E67E22" strokeWidth="6" opacity="0.6" />
+            </>
+        );
+    };
+
     // Helper to generate SVG paths for slices
     const renderPie = () => {
         const center = 100;
@@ -177,15 +262,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
 
         const flavor = cfg.flavor || 'cheese';
 
-        // Map flavor to image source
-        const flavorImages = {
-            cheese: pizzaCheese,
-            pepperoni: pizzaPepperoni,
-            veggie: pizzaVeggie,
-            mushroom: pizzaMushroom,
-            hawaiian: pizzaHawaiian
-        };
-        const currentImage = flavorImages[flavor] || pizzaCheese; // Fallback to cheese if flavor invalid
+        // NOTE: No longer mapping to images. Using getPizzaPatternContent
 
         if (denominator === 1) {
             // ...
@@ -208,7 +285,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
             elements.push(
                 <defs key="defs-0">
                     <pattern id={patternId} patternUnits="userSpaceOnUse" width="200" height="200" patternTransform={transform}>
-                        <image href={currentImage} x="0" y="0" width="200" height="200" />
+                        {getPizzaPatternContent(flavor)}
                     </pattern>
                 </defs>
             );
@@ -218,7 +295,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
                     key="slice-0"
                     cx={center} cy={center} r={radius}
                     fill={`url(#${patternId})`}
-                    stroke={isSelected ? "#FACC15" : "#334155"}
+                    stroke={isSelected ? "#FACC15" : "#B33939"} // Darker red/brown stroke for vector
                     strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(0)}
                     className={`slice ${isSelected ? 'selected' : ''} ${cfg.mode === 'serve' ? 'interactive' : ''}`}
@@ -276,7 +353,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
             elements.push(
                 <defs key={`defs-${i}`}>
                     <pattern id={patternId} patternUnits="userSpaceOnUse" width="200" height="200" patternTransform={transform}>
-                        <image href={currentImage} x="0" y="0" width="200" height="200" />
+                        {getPizzaPatternContent(flavor)}
                     </pattern>
                 </defs>
             );
@@ -286,7 +363,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
                     key={`slice-${i}`}
                     d={d}
                     fill={`url(#${patternId})`}
-                    stroke={isSelected ? "#FACC15" : "#334155"}
+                    stroke={isSelected ? "#FACC15" : "#B33939"} // Darker red/brown stroke
                     strokeWidth={isSelected ? "4" : "2"}
                     onClick={() => handleSliceClick(i)}
                     className={`slice ${isSelected ? 'selected' : ''} ${cfg.mode === 'serve' ? 'interactive' : ''}`}
@@ -420,23 +497,7 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
                     className={`pie-svg ${cfg.shape === 'rect' ? 'rect-mode' : ''}`}
                     style={{ overflow: 'visible', cursor: cfg.mode === 'serve' ? 'pointer' : 'default' }}
                 >
-                    <defs>
-                        <pattern id="pattern-cheese" patternUnits="objectBoundingBox" width="1" height="1">
-                            <image href={pizzaCheese} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
-                        </pattern>
-                        <pattern id="pattern-pepperoni" patternUnits="objectBoundingBox" width="1" height="1">
-                            <image href={pizzaPepperoni} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
-                        </pattern>
-                        <pattern id="pattern-veggie" patternUnits="objectBoundingBox" width="1" height="1">
-                            <image href={pizzaVeggie} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
-                        </pattern>
-                        <pattern id="pattern-mushroom" patternUnits="objectBoundingBox" width="1" height="1">
-                            <image href={pizzaMushroom} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
-                        </pattern>
-                        <pattern id="pattern-hawaiian" patternUnits="objectBoundingBox" width="1" height="1">
-                            <image href={pizzaHawaiian} x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid slice" />
-                        </pattern>
-                    </defs>
+                    {/* Defs removed - switched to inline vector rendering */}
                     {cfg.shape === 'rect' ? renderRect() : renderPie()}
                 </svg>
             </div>

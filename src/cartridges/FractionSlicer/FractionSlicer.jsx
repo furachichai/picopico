@@ -15,12 +15,12 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     // Config Sanitization
     const cfg = config || {};
     const DIFF_SETTINGS = {
-        easy: 0.15,
-        normal: 0.10,
-        hard: 0.05
+        easy: 0.25,   // Relaxed from 0.15
+        normal: 0.20, // Relaxed from 0.10
+        hard: 0.10    // Relaxed from 0.05
     };
     const difficulty = cfg.difficulty || 'normal';
-    const TOLERANCE = cfg.tolerance || DIFF_SETTINGS[difficulty] || 0.10; // Allow override or use preset
+    const TOLERANCE = cfg.tolerance || DIFF_SETTINGS[difficulty] || 0.20;
     const TOTAL_LEVELS = cfg.levels || 5;
 
     const [level, setLevel] = useState(1);
@@ -40,6 +40,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
     const [trail, setTrail] = useState([]);
     const [isShaking, setIsShaking] = useState(false);
+    const [debugMsg, setDebugMsg] = useState('');
 
     const containerRef = useRef(null);
     const rectRef = useRef(null);
@@ -161,15 +162,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             }
         }
 
-        // Fade trail out visually? 
-        // For now, clear it immediately or keep it briefly?
-        // User said "soon fade away". 
-        // We'll let CSS fade it or clear it after a timeout.
-        // Let's clear logic state but maybe leave a visual echo?
-        // Simplest: Clear immediately on end, but rely on CSS transition? 
-        // Actually, let's keep it for a moment if valid?
-        // For invalid, we might want to keep it to show why?
-        // Let's clear it 200ms later
+        // Fade trail out visually
         setTimeout(() => setTrail([]), 200);
     };
 
@@ -190,7 +183,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         const RECT_W = isVertical ? currentH : currentW; // This is the dimension along which the cut ratio is calculated (e.g., 280px)
         const RECT_H = isVertical ? currentW : currentH; // This is the perpendicular dimension (e.g., 100px)
 
-        const ROTATION_DEG = -2;
+        const ROTATION_DEG = isVertical ? 2 : -2; // Match CSS: vertical is +2deg, horizontal is -2deg
         const ROTATION_RAD = ROTATION_DEG * (Math.PI / 180);
 
         const svgRect = rectRef.current.getBoundingClientRect();
@@ -232,22 +225,11 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         // Angle/Diagonal Clamp
         // If the cut is too diagonal relative to the axis, reject it.
-
-        // Vertical Box (Tall) -> We want Horizontal Cut.
-        // Horizontal Cut means large dx, small dy. 
-        // We check dy (deviation from horizontal).
-
-        // Horizontal Box (Wide) -> We want Vertical Cut.
-        // Vertical Cut means large dy, small dx.
-        // We check dx (deviation from vertical).
-
         const checkDiagonal = isVertical
             ? Math.abs(up1.y - up2.y)
             : Math.abs(up1.x - up2.x);
 
-        // Allow slant.
-        // Relaxation: Increased from 0.3 to 0.5 of height to be more tolerant.
-        // This means for a 100px thick box, you can be off by 50px from start to end.
+        // Allow slant. Relaxed to 0.5
         if (checkDiagonal > RECT_H * 0.5) {
             setFeedback('invalid');
             setIsShaking(true);
@@ -261,9 +243,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         if (isVertical) {
             // VERTICAL RECT -> Horizontal Slice (finding Y intersection)
-            // x = cx (vertical centerline)
-            // y = m(x - x1) + y1
-
             // Check for vertical slice line (invalid for this mode usually)
             if (up2.x === up1.x) { // Safety for divide by zero (vertical line)
                 setFeedback('invalid');
@@ -276,8 +255,11 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             const intersectY = m * (cx - up1.x) + up1.y;
             intersectVal = intersectY;
 
-            // Check bounds (Y axis)
-            if (intersectY < top - 15 || intersectY > bottom + 15) return;
+            // Check bounds (Y axis) - Relaxed to 40px
+            if (intersectY < top - 40 || intersectY > bottom + 40) {
+                setDebugMsg(`Bounds Y: ${Math.round(intersectY)} vs ${Math.round(top)}-${Math.round(bottom)}`);
+                return;
+            }
 
             const clampedY = Math.max(top, Math.min(bottom, intersectY));
             // Top-down ratio. Top is 0 ratio.
@@ -285,8 +267,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         } else {
             // HORIZONTAL RECT -> Vertical Slice (finding X intersection)
-            // y = cy
-            // x = (y - y1)/m + x1
             let intersectX;
             if (up2.x === up1.x) {
                 intersectX = up1.x;
@@ -301,26 +281,40 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             }
             intersectVal = intersectX;
 
-            if (intersectX < left - 15 || intersectX > right + 15) return;
+            if (intersectX < left - 40 || intersectX > right + 40) {
+                setDebugMsg(`Bounds X: ${Math.round(intersectX)} vs ${Math.round(left)}-${Math.round(right)}`);
+                return;
+            }
 
             const clampedX = Math.max(left, Math.min(right, intersectX));
             ratioLeft = (clampedX - left) / RECT_W; // RECT_W is the width of the rect (e.g., 280)
         }
 
         // Strict Left-to-Right Matching
-        // Removed "Right Side" match. User must cut at the specific Target ratio.
+        // Check Left/Top Side
         const target = goal.num / goal.denom;
         const diffLeft = Math.abs(ratioLeft - target);
 
-        // Strict Tolerance Check
+        // Check Right/Bottom Side (Complement)
+        const ratioRight = 1.0 - ratioLeft;
+        const diffRight = Math.abs(ratioRight - target);
+
+        // Strict Tolerance Check with Complement support
         if (diffLeft <= TOLERANCE) {
             setLastRatio(ratioLeft);
-            setVizSide('left'); // Always Left now
+            setVizSide('left'); // User cut from Left/Top
+            handleSuccess(ratioLeft);
+        } else if (diffRight <= TOLERANCE) {
+            setLastRatio(ratioLeft); // We still visualize the actua cut location
+            setVizSide('right'); // Highlight the Right/Bottom piece which matches the goal
             handleSuccess(ratioLeft);
         } else {
+            // Enhanced Feedback Logic
+            const direction = ratioLeft < target ? (isVertical ? "Too High" : "Too Left") : (isVertical ? "Too Low" : "Too Right");
+            setDebugMsg(`${direction} (Diff: ${diffLeft.toFixed(2)})`);
             setLastRatio(ratioLeft);
 
-            if (attempts < 1) {
+            if (attempts < 2) {
                 setAttempts(prev => prev + 1);
                 setFeedback('incorrect');
                 setTimeout(() => {
@@ -340,15 +334,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     const handleSuccess = (cutRatio) => {
         setFeedback('correct');
         setShowVisualization(true);
-
-        // Confetti removed for debugging Brave crash
-        // if (typeof confetti === 'function') {
-        //     confetti({
-        //         particleCount: 100,
-        //         spread: 70,
-        //         origin: { y: 0.6 }
-        //     });
-        // }
 
         // Delay drift to let user see the visualization
         setTimeout(() => {
@@ -438,7 +423,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
             {/* Goal Header */}
             <div className="slicer-header">
-                {/* <div className="level-badge">Level {level}/{TOTAL_LEVELS}</div> -- MOVED UP */}
                 <div className="goal-display">
                     Slice <span className="highlight">{goal.num}/{goal.denom}</span>
                 </div>
@@ -455,6 +439,8 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                     {!driftRatio && (
                         <>
                             <div className="rect-content"></div>
+                            {/* Flash Red on Error */}
+                            {feedback === 'incorrect' && <div className="error-flash" />}
                             {renderVisualization(null)}
                         </>
                     )}
@@ -524,6 +510,11 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 </svg>
             )}
 
+            {/* Debug Overlay */}
+            <div style={{ position: 'absolute', bottom: 10, left: 10, background: 'rgba(255,255,255,0.8)', color: '#000', fontSize: '10px', pointerEvents: 'none', zIndex: 2000, padding: '2px 4px', borderRadius: '4px' }}>
+                {debugMsg}
+            </div>
+
             {/* Feedback Overlay */}
             {feedback === 'correct' && (
                 <div className="feedback-overlay success">
@@ -534,6 +525,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             {feedback === 'incorrect' && (
                 <div className="feedback-overlay error try-again">
                     <div className="feedback-text">Try Again!</div>
+                    <div style={{ fontSize: '1.2rem', color: '#000', marginTop: '10px', fontWeight: 'bold' }}>{debugMsg}</div>
                 </div>
             )}
             {feedback === 'failed' && (
