@@ -1,13 +1,21 @@
 .fraction-slicer-container {
     width: 100%;
     height: 100%;
-    /* Kitchen Tile Background */
-    background-color: #fdfbf7;
+    /* Wood Chopping Board Background */
+    background-color: #deb887;
+    /* BurlyWood base */
     background-image:
-        linear-gradient(#bdc3c7 2px, transparent 2px),
-        linear-gradient(90deg, #bdc3c7 2px, transparent 2px);
-    background-size: 60px 60px;
-    background-position: -1px -1px;
+        repeating-linear-gradient(45deg,
+            rgba(139, 69, 19, 0.1) 0px,
+            rgba(139, 69, 19, 0.1) 2px,
+            transparent 2px,
+            transparent 8px),
+        repeating-linear-gradient(-45deg,
+            rgba(139, 69, 19, 0.05) 0px,
+            rgba(139, 69, 19, 0.05) 1px,
+            transparent 1px,
+            transparent 15px);
+    background-size: 100px 100px, 60px 60px;
 
     position: relative;
     overflow: hidden;
@@ -21,18 +29,35 @@
     touch-action: none;
     font-family: 'Nunito', sans-serif;
     pointer-events: auto;
-    /* Ensure it captures events even if parent disables them */
 }
 
 .slicer-header {
     position: absolute;
-    top: 80px;
-    /* Moved down ~10% more */
-    /* Moved down to avoid overlap with progress bar */
+    top: 15%;
+    /* Relative 15% instead of fixed px to be responsive */
     width: 100%;
     text-align: center;
     pointer-events: none;
     z-index: 10;
+}
+
+/* Background Fruits Layer */
+.bg-fruits-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-fruit {
+    position: absolute;
+    opacity: 0.15;
+    /* Even more subtle for pattern */
+    color: #8b4513;
 }
 
 /* Old Level Badge removed from header */
@@ -72,6 +97,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: 15vh;
+    /* Move down ~15% of screen height */
+    box-sizing: border-box;
 }
 
 .target-rect {
@@ -392,19 +420,18 @@
 .drift-part.left {
     left: 0;
     border-radius: 12px 0 0 12px;
-    transform-origin: bottom left;
-    animation: driftLeft 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: bottom right;
+    /* Pivots near the cut */
+    animation: driftUp 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.left.vertical {
     top: 0;
     left: 0;
     width: 100%;
-    /* Full width */
-    /* height set inline */
     border-radius: 12px 12px 0 0;
-    transform-origin: top center;
-    animation: driftUp 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: bottom center;
+    animation: driftLeft 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.left .rect-content {
@@ -413,50 +440,47 @@
 
 .drift-part.right {
     border-radius: 0 12px 12px 0;
-    transform-origin: bottom right;
-    animation: driftRight 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: bottom left;
+    animation: driftDown 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.right.vertical {
     left: 0;
-    /* top set inline based on ratio */
     width: 100%;
     border-radius: 0 0 12px 12px;
-    transform-origin: bottom center;
-    animation: driftDown 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: top center;
+    animation: driftRight 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.right .rect-content {
-    /* Try to align texture? Simplified: just let it be */
     margin-left: -50%;
-    /* approximate or just ignore */
 }
 
 @keyframes driftLeft {
     to {
-        transform: translate(-30px, 10px) rotate(-3deg);
-        opacity: 1;
+        transform: translate(-40px, 0) rotate(-5deg);
+        opacity: 0;
     }
 }
 
 @keyframes driftRight {
     to {
-        transform: translate(30px, 10px) rotate(3deg);
-        opacity: 1;
+        transform: translate(40px, 0) rotate(5deg);
+        opacity: 0;
     }
 }
 
 @keyframes driftUp {
     to {
-        transform: translate(0px, -30px) rotate(-3deg);
-        opacity: 1;
+        transform: translate(0, -40px) rotate(-5deg);
+        opacity: 0;
     }
 }
 
 @keyframes driftDown {
     to {
-        transform: translate(0px, 30px) rotate(3deg);
-        opacity: 1;
+        transform: translate(0, 40px) rotate(5deg);
+        opacity: 0;
     }
 }
 

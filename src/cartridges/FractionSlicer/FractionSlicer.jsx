@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ThumbsUp } from 'lucide-react';
+import { Apple, Banana, Cherry, Citrus, Grape } from 'lucide-react';
 // import confetti from 'canvas-confetti';
 import './FractionSlicer.css';
 
@@ -9,15 +9,71 @@ const THEMES = [
     { name: 'Water', color: '#0984e3', pattern: 'radial-gradient(circle at 50% 50%, #74b9ff 10%, transparent 10%), radial-gradient(circle at 0% 0%, #74b9ff 10%, transparent 10%)' },
     { name: 'Space', color: '#6c5ce7', pattern: 'radial-gradient(white 1%, transparent 1%)', bgSize: '20px 20px' },
     { name: 'Candy', color: '#fd79a8', pattern: 'repeating-linear-gradient(90deg, #e84393 0, #e84393 20px, #fd79a8 20px, #fd79a8 40px)' },
+    { name: 'Zebra', color: '#34495e', pattern: 'repeating-linear-gradient(45deg, #2c3e50 0, #2c3e50 20px, #34495e 20px, #34495e 40px)' },
+    { name: 'Lime', color: '#badc58', pattern: 'radial-gradient(circle, #6ab04c 20%, transparent 20%)', bgSize: '30px 30px' }
 ];
+
+// Internal Component for Background Ambience - Static Pattern
+const BackgroundFruits = () => {
+    const [fruits, setFruits] = useState([]);
+
+    useEffect(() => {
+        const icons = [Apple, Banana, Cherry, Citrus, Grape];
+        const newFruits = [];
+        const rows = 6;
+        const cols = 6;
+
+        // Grid Layout (Wallpaper)
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const Icon = icons[(r + c) % icons.length]; // Deterministic pattern
+                // Offset every other row
+                const xOffset = (r % 2 === 0) ? 0 : 50;
+                const left = (c * 20) + (xOffset / cols);
+
+                newFruits.push({
+                    id: `${r}-${c}`,
+                    Icon,
+                    left: `${(c * 20) + (r % 2 ? 10 : 0)}%`, // Staggered grid
+                    top: `${r * 20}%`,
+                    size: 48, // Larger icons
+                    rotation: (c + r) * 15, // Fixed pattern rotation
+                    color: '#8b4513'
+                });
+            }
+        }
+        setFruits(newFruits);
+    }, []);
+
+    return (
+        <div className="bg-fruits-container">
+            {fruits.map(f => (
+                <div
+                    key={f.id}
+                    className="floating-fruit"
+                    style={{
+                        left: f.left,
+                        top: f.top,
+                        width: f.size,
+                        height: f.size,
+                        transform: `rotate(${f.rotation}deg)`,
+                        opacity: 0.12 // Slight tweak
+                    }}
+                >
+                    <f.Icon size={f.size} color={f.color} strokeWidth={2} />
+                </div>
+            ))}
+        </div>
+    );
+};
 
 const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     // Config Sanitization
     const cfg = config || {};
     const DIFF_SETTINGS = {
-        easy: 0.25,   // Relaxed from 0.15
-        normal: 0.20, // Relaxed from 0.10
-        hard: 0.10    // Relaxed from 0.05
+        easy: 0.25,
+        normal: 0.20,
+        hard: 0.10
     };
     const difficulty = cfg.difficulty || 'normal';
     const TOLERANCE = cfg.tolerance || DIFF_SETTINGS[difficulty] || 0.20;
@@ -28,15 +84,19 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     const [isSlicing, setIsSlicing] = useState(false);
     const [sliceStart, setSliceStart] = useState(null);
     const [sliceEnd, setSliceEnd] = useState(null);
-    const [feedback, setFeedback] = useState(null); // 'correct', 'incorrect', null
+    const [feedback, setFeedback] = useState(null);
     const [lastRatio, setLastRatio] = useState(null);
     const [isComplete, setIsComplete] = useState(false);
     const [attempts, setAttempts] = useState(0);
     const [showSolution, setShowSolution] = useState(false);
     const [showVisualization, setShowVisualization] = useState(false);
-    const [vizSide, setVizSide] = useState('left'); // 'left' or 'right' (or 'top'/'bottom' for vertical)
+    const [vizSide, setVizSide] = useState('left');
     const [driftRatio, setDriftRatio] = useState(null);
-    const [orientation, setOrientation] = useState('horizontal'); // 'horizontal' | 'vertical'
+    const [orientation, setOrientation] = useState('horizontal');
+
+    // Visual Variety State
+    const [themeIndex, setThemeIndex] = useState(0);
+    const [rectOffset, setRectOffset] = useState({ x: 0, y: 0 });
 
     const [trail, setTrail] = useState([]);
     const [isShaking, setIsShaking] = useState(false);
@@ -73,11 +133,10 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     // Initialize Level
     useEffect(() => {
         generateLevel(1);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cfg.levels, cfg.tolerance, cfg.difficulty]);
 
     const generateLevel = (lvl) => {
-        // Random fraction: 1/2, 1/3, 1/4, 2/3, 3/4
+        // Random fraction
         const options = [
             { num: 1, denom: 2 },
             { num: 1, denom: 3 },
@@ -87,14 +146,13 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             { num: 2, denom: 5 },
             { num: 1, denom: 5 }
         ];
-        // Pick random
         const nextGoal = options[Math.floor(Math.random() * options.length)];
         setGoal(nextGoal);
         setFeedback(null);
         setLastRatio(null);
         setSliceStart(null);
         setSliceEnd(null);
-        setTrail([]); // Reset trail
+        setTrail([]);
         setIsSlicing(false);
         setIsShaking(false);
         setAttempts(0);
@@ -102,20 +160,24 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         setShowVisualization(false);
         setVizSide('left');
         setDriftRatio(null);
-        // Vertical on even levels (2, 4)
+        // Vertical on even levels
         setOrientation(lvl % 2 === 0 ? 'vertical' : 'horizontal');
+
+        // Randomized Visuals
+        setThemeIndex(Math.floor(Math.random() * THEMES.length));
+        // Random offset: +/- 3% (approx 15px) - Subtle shift only
+        setRectOffset({
+            x: -15 + Math.random() * 30,
+            y: -10 + Math.random() * 20
+        });
     };
 
     // Input Handlers
     const getPoint = (e) => {
         if (!containerRef.current) return { x: 0, y: 0 };
         const rect = containerRef.current.getBoundingClientRect();
-
-        // Account for any CSS transform scaling on the container
         const scaleX = rect.width / containerRef.current.offsetWidth;
         const scaleY = rect.height / containerRef.current.offsetHeight;
-
-        // Handle both Touch and Mouse events consistently
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         return {
@@ -125,29 +187,25 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     };
 
     const handleStart = (e) => {
-        // Prevent default to stop scrolling/gestures
-        // e.preventDefault(); // Note: React passive events might complain, but usually fine for game logic
         if (preview || feedback === 'correct' || isComplete) return;
         setIsSlicing(true);
         const p = getPoint(e);
         setSliceStart(p);
         setSliceEnd(p);
-        setTrail([p]); // Start trail
+        setTrail([p]);
     };
 
     const handleMove = (e) => {
         if (!isSlicing) return;
-        // e.preventDefault(); 
         const p = getPoint(e);
         setSliceEnd(p);
-        setTrail(prev => [...prev, p]); // Append to trail
+        setTrail(prev => [...prev, p]);
     };
 
     const handleEnd = () => {
         if (!isSlicing) return;
         setIsSlicing(false);
 
-        // Use Start and End for calculation
         if (sliceStart && sliceEnd) {
             const dx = sliceEnd.x - sliceStart.x;
             const dy = sliceEnd.y - sliceStart.y;
@@ -161,8 +219,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 setTrail([]);
             }
         }
-
-        // Fade trail out visually
         setTimeout(() => setTrail([]), 200);
     };
 
@@ -172,18 +228,13 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         const isVertical = orientation === 'vertical';
 
-        // Dynamic Size Usage (Fixes shrinkage issues)
         const currentW = rectRef.current.offsetWidth;
         const currentH = rectRef.current.offsetHeight;
 
-        // Logical Width/Height for the cut calculation
-        // If vertical (visually), we slice across the Height (longer dim).
-        // If horizontal (visually), we slice across the Width (longer dim).
+        const RECT_W = isVertical ? currentH : currentW;
+        const RECT_H = isVertical ? currentW : currentH;
 
-        const RECT_W = isVertical ? currentH : currentW; // This is the dimension along which the cut ratio is calculated (e.g., 280px)
-        const RECT_H = isVertical ? currentW : currentH; // This is the perpendicular dimension (e.g., 100px)
-
-        const ROTATION_DEG = isVertical ? 2 : -2; // Match CSS: vertical is +2deg, horizontal is -2deg
+        const ROTATION_DEG = isVertical ? 2 : -2;
         const ROTATION_RAD = ROTATION_DEG * (Math.PI / 180);
 
         const svgRect = rectRef.current.getBoundingClientRect();
@@ -208,28 +259,33 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         const up1 = unrotate(p1);
         const up2 = unrotate(p2);
 
-        // Bounds relative to center (Visual Bounding Box)
-        // If Vertical: Width is short (RECT_H), Height is long (RECT_W).
-        // If Horizontal: Width is long (RECT_W), Height is short (RECT_H).
+        const left = cx - (isVertical ? RECT_H : RECT_W) / 2;
+        const top = cy - ((isVertical ? RECT_W : RECT_H) / 2);
 
+        // Correct Top/Bottom/Left/Right needed for bound check logic.
+        // Actually, let's stick to the center-relative logic I used before or reuse cx/cy.
+        // PREVIOUS LOGIC was:
+        // const visualHalfW = (isVertical ? RECT_H : RECT_W) / 2;
+        // const visualHalfH = (isVertical ? RECT_W : RECT_H) / 2;
+        // const left = cx - visualHalfW;
+        // const right = cx + visualHalfW;
+        // const top = cy - visualHalfH;
+        // const bottom = cy + visualHalfH;
+
+        // Let's ensure this matches exactly what I had to avoid regression.
         const visualHalfW = (isVertical ? RECT_H : RECT_W) / 2;
         const visualHalfH = (isVertical ? RECT_W : RECT_H) / 2;
-
-        const left = cx - visualHalfW;
-        const right = cx + visualHalfW;
-        const top = cy - visualHalfH;
-        const bottom = cy + visualHalfH;
+        const bLeft = cx - visualHalfW;
+        const bRight = cx + visualHalfW;
+        const bTop = cy - visualHalfH;
+        const bBottom = cy + visualHalfH;
 
         let ratioLeft = 0;
-        let intersectVal = 0;
 
-        // Angle/Diagonal Clamp
-        // If the cut is too diagonal relative to the axis, reject it.
         const checkDiagonal = isVertical
             ? Math.abs(up1.y - up2.y)
             : Math.abs(up1.x - up2.x);
 
-        // Allow slant. Relaxed to 0.5
         if (checkDiagonal > RECT_H * 0.5) {
             setFeedback('invalid');
             setIsShaking(true);
@@ -242,74 +298,60 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         }
 
         if (isVertical) {
-            // VERTICAL RECT -> Horizontal Slice (finding Y intersection)
-            // Check for vertical slice line (invalid for this mode usually)
-            if (up2.x === up1.x) { // Safety for divide by zero (vertical line)
+            if (up2.x === up1.x) {
                 setFeedback('invalid');
                 setTimeout(() => setFeedback(null), 1000);
                 return;
             }
 
             const m = (up2.y - up1.y) / (up2.x - up1.x);
-            // intersectY at x = cx (centerline)
             const intersectY = m * (cx - up1.x) + up1.y;
-            intersectVal = intersectY;
 
-            // Check bounds (Y axis) - Relaxed to 40px
-            if (intersectY < top - 40 || intersectY > bottom + 40) {
-                setDebugMsg(`Bounds Y: ${Math.round(intersectY)} vs ${Math.round(top)}-${Math.round(bottom)}`);
+            if (intersectY < bTop - 40 || intersectY > bBottom + 40) {
+                setDebugMsg(`Bounds Y: ${Math.round(intersectY)} vs ${Math.round(bTop)}-${Math.round(bBottom)}`);
                 return;
             }
 
-            const clampedY = Math.max(top, Math.min(bottom, intersectY));
-            // Top-down ratio. Top is 0 ratio.
-            ratioLeft = (clampedY - top) / RECT_W; // RECT_W is the height of the rect (e.g., 280)
+            const clampedY = Math.max(bTop, Math.min(bBottom, intersectY));
+            ratioLeft = (clampedY - bTop) / RECT_W;
 
         } else {
-            // HORIZONTAL RECT -> Vertical Slice (finding X intersection)
             let intersectX;
             if (up2.x === up1.x) {
                 intersectX = up1.x;
             } else {
                 const m = (up2.y - up1.y) / (up2.x - up1.x);
-                if (Math.abs(m) < 0.2) { // Too horizontal
+                if (Math.abs(m) < 0.2) {
                     setFeedback('invalid');
                     setTimeout(() => setFeedback(null), 1000);
                     return;
                 }
                 intersectX = (cy - up1.y) / m + up1.x;
             }
-            intersectVal = intersectX;
 
-            if (intersectX < left - 40 || intersectX > right + 40) {
-                setDebugMsg(`Bounds X: ${Math.round(intersectX)} vs ${Math.round(left)}-${Math.round(right)}`);
+            if (intersectX < bLeft - 40 || intersectX > bRight + 40) {
+                setDebugMsg(`Bounds X: ${Math.round(intersectX)} vs ${Math.round(bLeft)}-${Math.round(bRight)}`);
                 return;
             }
 
-            const clampedX = Math.max(left, Math.min(right, intersectX));
-            ratioLeft = (clampedX - left) / RECT_W; // RECT_W is the width of the rect (e.g., 280)
+            const clampedX = Math.max(bLeft, Math.min(bRight, intersectX));
+            ratioLeft = (clampedX - bLeft) / RECT_W;
         }
 
-        // Strict Left-to-Right Matching
-        // Check Left/Top Side
         const target = goal.num / goal.denom;
         const diffLeft = Math.abs(ratioLeft - target);
-
-        // Check Right/Bottom Side (Complement)
         const ratioRight = 1.0 - ratioLeft;
         const diffRight = Math.abs(ratioRight - target);
 
-        // Strict Tolerance Check with Complement support
         if (diffLeft <= TOLERANCE) {
             setLastRatio(ratioLeft);
-            setVizSide('left'); // User cut from Left/Top
+            setVizSide('left');
             handleSuccess(ratioLeft);
         } else if (diffRight <= TOLERANCE) {
-            setLastRatio(ratioLeft); // We still visualize the actua cut location
-            setVizSide('right'); // Highlight the Right/Bottom piece which matches the goal
+            setLastRatio(ratioLeft);
+            setVizSide('right');
             handleSuccess(ratioLeft);
         } else {
-            // Enhanced Feedback Logic
             const direction = ratioLeft < target ? (isVertical ? "Too High" : "Too Left") : (isVertical ? "Too Low" : "Too Right");
             setDebugMsg(`${direction} (Diff: ${diffLeft.toFixed(2)})`);
             setLastRatio(ratioLeft);
@@ -335,7 +377,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         setFeedback('correct');
         setShowVisualization(true);
 
-        // Delay drift to let user see the visualization
         setTimeout(() => {
             setDriftRatio(cutRatio);
         }, 1000);
@@ -348,10 +389,10 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 setIsComplete(true);
                 if (onComplete) onComplete();
             }
-        }, 4000); // 1s wait + 3s drift = 4s total
+        }, 4000);
     };
 
-    const currentTheme = THEMES[(level - 1) % THEMES.length];
+    const currentTheme = THEMES[themeIndex % THEMES.length];
     const rectStyle = {
         background: currentTheme.pattern !== 'none' ? currentTheme.pattern : currentTheme.color,
         backgroundColor: currentTheme.color,
@@ -363,14 +404,12 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         const isVertical = orientation === 'vertical';
 
-        // Override size for drift parts
         const style = offsetPx !== null ? {
             width: isVertical ? '100px' : '280px',
             height: isVertical ? '280px' : '100px',
             [isVertical ? 'top' : 'left']: `${offsetPx}px`
         } : {};
 
-        // Lines
         const lines = [];
         for (let i = 1; i < goal.denom; i++) {
             lines.push(
@@ -386,8 +425,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             [isVertical ? 'height' : 'width']: `${(goal.num / goal.denom) * 100}%`,
         };
 
-        // Handle Side highlight logic
-        if (vizSide === 'right') { // 'right' implies 'second part' (bottom for vertical)
+        if (vizSide === 'right') {
             highlightStyle[isVertical ? 'bottom' : 'right'] = 0;
             highlightStyle[isVertical ? 'top' : 'left'] = 'auto';
             highlightStyle.borderRadius = isVertical ? '0 0 12px 12px' : '0 12px 12px 0';
@@ -404,6 +442,12 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         );
     };
 
+    // Apply Random Position Check Wrapper
+    // We wrap the target-rect in a div that applies the transform translation offset.
+    // This allows the inner target-rect to keep its own rotation/scale transforms.
+    // IMPORTANT: checkSlice relies on rectRef (target-rect) getBoundingClientRect.
+    // This will work correctly even inside a transformed wrapper.
+
     return (
         <div
             className={`fraction-slicer-container ${preview ? 'preview-mode' : ''}`}
@@ -416,91 +460,86 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             onMouseUp={handleEnd}
             onMouseLeave={handleEnd}
         >
-            {/* Level UI - Separate and 'Over' everything */}
+            <BackgroundFruits />
+
             <div className="level-badge-overlay">
                 LEVEL: {level}/{TOTAL_LEVELS}
             </div>
 
-            {/* Goal Header */}
             <div className="slicer-header">
                 <div className="goal-display">
                     Slice <span className="highlight">{goal.num}/{goal.denom}</span>
                 </div>
             </div>
 
-            {/* Game Area */}
             <div className="slicer-stage">
-                <div
-                    className={`target-rect ${orientation} ${driftRatio ? 'drifting' : ''} ${isShaking ? 'shaking' : ''}`}
-                    ref={rectRef}
-                    style={!driftRatio ? rectStyle : {}}
-                >
-                    {/* Visual Reference? No, that spoils it. Just a colorful rect. */}
-                    {!driftRatio && (
-                        <>
-                            <div className="rect-content"></div>
-                            {/* Flash Red on Error */}
-                            {feedback === 'incorrect' && <div className="error-flash" />}
-                            {renderVisualization(null)}
-                        </>
-                    )}
+                {/* Position Wrapper for Random Offsets */}
+                <div style={{ transform: `translate(${rectOffset.x}px, ${rectOffset.y}px)` }}>
+                    <div
+                        className={`target-rect ${orientation} ${driftRatio ? 'drifting' : ''} ${isShaking ? 'shaking' : ''}`}
+                        ref={rectRef}
+                        style={!driftRatio ? rectStyle : {}}
+                    >
+                        {!driftRatio && (
+                            <>
+                                <div className="rect-content"></div>
+                                {feedback === 'incorrect' && <div className="error-flash" />}
+                                {renderVisualization(null)}
+                            </>
+                        )}
 
-                    {/* Drift Parts */}
-                    {driftRatio && (
-                        <>
+                        {driftRatio && (
+                            <>
+                                <div
+                                    className={`drift-part left ${orientation === 'vertical' ? 'vertical' : ''}`}
+                                    style={{
+                                        [orientation === 'vertical' ? 'height' : 'width']: `${driftRatio * 100}%`,
+                                        ...rectStyle
+                                    }}
+                                >
+                                    <div className="rect-content"></div>
+                                    {renderVisualization(0)}
+                                </div>
+                                <div
+                                    className={`drift-part right ${orientation === 'vertical' ? 'vertical' : ''}`}
+                                    style={{
+                                        [orientation === 'vertical' ? 'height' : 'width']: `${(1 - driftRatio) * 100}%`,
+                                        [orientation === 'vertical' ? 'top' : 'left']: `${driftRatio * 100}%`,
+                                        ...rectStyle
+                                    }}
+                                >
+                                    <div className="rect-content"></div>
+                                    {renderVisualization(orientation === 'vertical' ? -driftRatio * 280 : -driftRatio * 280)}
+                                </div>
+                            </>
+                        )}
+
+                        {feedback && lastRatio && !driftRatio && (
                             <div
-                                className={`drift-part left ${orientation === 'vertical' ? 'vertical' : ''}`}
+                                className={`cut-line ${orientation === 'vertical' ? 'vertical' : ''}`}
                                 style={{
-                                    [orientation === 'vertical' ? 'height' : 'width']: `${driftRatio * 100}%`,
-                                    ...rectStyle
+                                    [orientation === 'vertical' ? 'top' : 'left']: `${lastRatio * 100}%`
                                 }}
                             >
-                                <div className="rect-content"></div>
-                                {renderVisualization(0)}
                             </div>
+                        )}
+
+                        {showSolution && (
                             <div
-                                className={`drift-part right ${orientation === 'vertical' ? 'vertical' : ''}`}
+                                className={`solution-line ${orientation === 'vertical' ? 'vertical' : ''}`}
                                 style={{
-                                    [orientation === 'vertical' ? 'height' : 'width']: `${(1 - driftRatio) * 100}%`,
-                                    [orientation === 'vertical' ? 'top' : 'left']: `${driftRatio * 100}%`,
-                                    ...rectStyle
+                                    [orientation === 'vertical' ? 'top' : 'left']: `${(goal.num / goal.denom) * 100}%`
                                 }}
                             >
-                                <div className="rect-content"></div>
-                                {renderVisualization(orientation === 'vertical' ? -driftRatio * 280 : -driftRatio * 280)}
+                                <div className="solution-label">
+                                    {goal.num}/{goal.denom}
+                                </div>
                             </div>
-                        </>
-                    )}
-
-                    {/* Show last cut result (User's cut) */}
-                    {feedback && lastRatio && !driftRatio && (
-                        <div
-                            className={`cut-line ${orientation === 'vertical' ? 'vertical' : ''}`}
-                            style={{
-                                [orientation === 'vertical' ? 'top' : 'left']: `${lastRatio * 100}%`
-                            }}
-                        >
-                            {/* Percentage label removed per request */}
-                        </div>
-                    )}
-
-                    {/* Show Solution Line (Correct target) */}
-                    {showSolution && (
-                        <div
-                            className={`solution-line ${orientation === 'vertical' ? 'vertical' : ''}`}
-                            style={{
-                                [orientation === 'vertical' ? 'top' : 'left']: `${(goal.num / goal.denom) * 100}%`
-                            }}
-                        >
-                            <div className="solution-label">
-                                {goal.num}/{goal.denom}
-                            </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {/* User Slash Trail */}
             {isSlicing && trail.length > 1 && (
                 <svg className="slash-layer">
                     <polyline
@@ -510,15 +549,13 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 </svg>
             )}
 
-            {/* Debug Overlay */}
             <div style={{ position: 'absolute', bottom: 10, left: 10, background: 'rgba(255,255,255,0.8)', color: '#000', fontSize: '10px', pointerEvents: 'none', zIndex: 2000, padding: '2px 4px', borderRadius: '4px' }}>
                 {debugMsg}
             </div>
 
-            {/* Feedback Overlay */}
             {feedback === 'correct' && (
                 <div className="feedback-overlay success">
-                    <ThumbsUp size={64} />
+                    {/* Icon removed */}
                     <div className="feedback-text">Nice Slice!</div>
                 </div>
             )}
@@ -530,7 +567,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             )}
             {feedback === 'failed' && (
                 <div className="feedback-overlay error">
-                    {/* Text removed per request */}
                 </div>
             )}
             {feedback === 'miss' && (
