@@ -6,6 +6,7 @@ import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import Balloon from '../Editor/Balloon';
+import ErrorBoundary from '../ErrorBoundary';
 import { X, Pencil } from 'lucide-react';
 import './Player.css';
 
@@ -119,7 +120,22 @@ const Player = () => {
 
     const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
 
-    const handleMenu = () => {
+    const handleMenu = async () => {
+        // Attempt to keep/restore fullscreen on return
+        try {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    await elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    await elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    await elem.msRequestFullscreen();
+                }
+            }
+        } catch (err) {
+            // Ignore (user might have actively exited or browser denied)
+        }
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
 
@@ -279,13 +295,15 @@ const Player = () => {
                                         />
                                     )}
                                     {slide.cartridge.type === 'FractionSlicer' && (
-                                        <FractionSlicer
-                                            config={slide.cartridge.config}
-                                            onComplete={() => {
-                                                setIsGameActive(false);
-                                                nextSlide();
-                                            }}
-                                        />
+                                        <ErrorBoundary>
+                                            <FractionSlicer
+                                                config={slide.cartridge.config}
+                                                onComplete={() => {
+                                                    setIsGameActive(false);
+                                                    nextSlide();
+                                                }}
+                                            />
+                                        </ErrorBoundary>
                                     )}
                                 </div>
                             )}

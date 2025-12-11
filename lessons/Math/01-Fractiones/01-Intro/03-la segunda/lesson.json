@@ -48,7 +48,7 @@
         "type": "FractionSlicer",
         "config": {
           "levels": 3,
-          "tolerance": 0.15
+          "tolerance": 0.1
         }
       }
     },
@@ -84,7 +84,7 @@
   ],
   "author": "User",
   "createdAt": "2025-12-02T02:03:37.780Z",
-  "updatedAt": "2025-12-10T22:06:02.636Z",
+  "updatedAt": "2025-12-11T03:14:20.086Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

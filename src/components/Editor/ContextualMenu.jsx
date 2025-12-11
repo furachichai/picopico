@@ -221,7 +221,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                 <input
                                     type="number"
                                     min="1" max="10"
-                                    value={element.config?.levels || 3}
+                                    value={element.config?.levels || 5}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, levels: parseInt(e.target.value) } })}
                                     style={{ width: '50px' }}
                                 />
@@ -229,12 +229,12 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                             <div className="menu-group">
                                 <label>Tolerance</label>
                                 <select
-                                    value={element.config?.tolerance || 0.15}
+                                    value={element.config?.tolerance || 0.10}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, tolerance: parseFloat(e.target.value) } })}
                                 >
+                                    <option value={0.15}>Easy (15%)</option>
+                                    <option value={0.10}>Normal (10%)</option>
                                     <option value={0.05}>Hard (5%)</option>
-                                    <option value={0.15}>Normal (15%)</option>
-                                    <option value={0.25}>Easy (25%)</option>
                                 </select>
                             </div>
                         </>

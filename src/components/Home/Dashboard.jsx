@@ -176,6 +176,22 @@ const Dashboard = () => {
 
   const handlePlayLesson = async (lessonItem) => {
     if (editingLessonId) return; // Don't play if editing something
+
+    // Try to enter fullscreen to maximize screen space
+    try {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari/Chrome Mobile might need this */
+        await elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        await elem.msRequestFullscreen();
+      }
+    } catch (err) {
+      console.log("Fullscreen request failed or denied:", err);
+      // Continue anyway
+    }
+
     try {
       const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
       if (!response.ok) throw new Error('Failed to load lesson');

@@ -121,14 +121,12 @@ const Canvas = (props) => {
         <div className="cartridge-container">
           {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer') && (
             <div style={{ pointerEvents: 'none', width: '100%', height: '100%' }}>
-              <React.Suspense fallback={<div>Loading...</div>}>
-                {currentSlide.cartridge.type === 'FractionAlpha' && (
-                  <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
-                )}
-                {currentSlide.cartridge.type === 'FractionSlicer' && (
-                  <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
-                )}
-              </React.Suspense>
+              {currentSlide.cartridge.type === 'FractionAlpha' && (
+                <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
+              )}
+              {currentSlide.cartridge.type === 'FractionSlicer' && (
+                <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
+              )}
             </div>
           )}
         </div>

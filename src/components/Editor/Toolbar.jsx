@@ -78,8 +78,8 @@ const Toolbar = () => {
                                 cartridge: {
                                     type: 'FractionSlicer',
                                     config: {
-                                        levels: 3,
-                                        tolerance: 0.15
+                                        levels: 5,
+                                        tolerance: 0.10
                                     }
                                 }
                             }

@@ -88,12 +88,49 @@
     transition: transform 0.2s ease;
 }
 
+.target-rect.vertical {
+    width: 100px;
+    height: 280px;
+    transform: rotate(2deg);
+    /* Slightly different angle for variety */
+}
+
 .preview-mode .target-rect {
     cursor: default;
 }
 
 .target-rect:active {
     transform: scale(0.98) rotate(-2deg);
+}
+
+.target-rect.shaking {
+    animation: hardShake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+    transform: none;
+    /* override rotate if needed, or include it in keyframes */
+}
+
+@keyframes hardShake {
+
+    10%,
+    90% {
+        transform: translate3d(-2px, 0, 0) rotate(-2deg);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(4px, 0, 0) rotate(-2deg);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-6px, 0, 0) rotate(-2deg);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(6px, 0, 0) rotate(-2deg);
+    }
 }
 
 .rect-content {
@@ -111,16 +148,21 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 20;
+    z-index: 200;
+    /* High z-index to be seen over rects */
 }
 
 .slash-line {
-    stroke: #dfe6e9;
-    /* White-ish slash */
+    stroke: #636e72;
+    /* Darker grey for visibility */
+    fill: none;
+    /* Important for polyline */
     stroke-width: 6;
     stroke-linecap: round;
+    stroke-linejoin: round;
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
-    animation: fadeLine 0.2s forwards;
+    /* Remove animation: fadeLine 0.2s forwards; as we want it immediate */
+    opacity: 0.9;
 }
 
 @keyframes fadeLine {
@@ -280,6 +322,33 @@
     white-space: nowrap;
 }
 
+.cut-line.vertical {
+    top: auto;
+    /* Reset */
+    left: -10px;
+    right: -10px;
+    width: auto;
+    height: 4px;
+    transform: translateY(-50%);
+}
+
+.solution-line.vertical {
+    top: auto;
+    left: -20px;
+    right: -20px;
+    width: auto;
+    height: 4px;
+    transform: translateY(-50%);
+}
+
+.solution-line.vertical .solution-label {
+    top: auto;
+    left: auto;
+    right: -55px;
+    /* Position to the right */
+    transform: translateY(-50%);
+}
+
 @keyframes flashLine {
     from {
         opacity: 0.6;
@@ -327,6 +396,17 @@
     animation: driftLeft 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+.drift-part.left.vertical {
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Full width */
+    /* height set inline */
+    border-radius: 12px 12px 0 0;
+    transform-origin: top center;
+    animation: driftUp 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .drift-part.left .rect-content {
     margin-left: 0;
 }
@@ -335,6 +415,15 @@
     border-radius: 0 12px 12px 0;
     transform-origin: bottom right;
     animation: driftRight 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.drift-part.right.vertical {
+    left: 0;
+    /* top set inline based on ratio */
+    width: 100%;
+    border-radius: 0 0 12px 12px;
+    transform-origin: bottom center;
+    animation: driftDown 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.right .rect-content {
@@ -355,6 +444,31 @@
         transform: translate(30px, 10px) rotate(3deg);
         opacity: 1;
     }
+}
+
+@keyframes driftUp {
+    to {
+        transform: translate(0px, -30px) rotate(-3deg);
+        opacity: 1;
+    }
+}
+
+@keyframes driftDown {
+    to {
+        transform: translate(0px, 30px) rotate(3deg);
+        opacity: 1;
+    }
+}
+
+.viz-line.vertical {
+    top: auto;
+    /* reset */
+    left: 0;
+    right: 0;
+    /* Full Width */
+    width: 100%;
+    height: 2px;
+    transform: translateY(-50%);
 }
 
 /* Specific customization for 'Try Again' which was already modified, merging logic */
