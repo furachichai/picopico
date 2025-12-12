@@ -27,6 +27,14 @@ const Toolbar = () => {
 
     const handleAddQuiz = (type = 'classic') => {
         setShowQuizMenu(false);
+
+        // Check for existing quiz
+        const hasQuiz = currentSlide?.elements?.some(el => el.type === ELEMENT_TYPES.QUIZ);
+        if (hasQuiz) {
+            alert("Only one quiz allowed per slide!");
+            return;
+        }
+
         const isTF = type === 'tf';
 
         dispatch({

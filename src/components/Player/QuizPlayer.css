@@ -258,8 +258,9 @@
 .quiz-ready-btn {
     margin-top: 1rem;
     margin-bottom: 1rem;
-    padding: 0.75rem 3rem;
-    width: auto;
+    padding: 0.75rem 1rem;
+    /* Fixed width to match 2 columns (120+120+16) */
+    width: 256px;
     align-self: center;
     /* Crucial to stop full-width stretch */
     background-color: #333;
