@@ -244,6 +244,25 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                 </>
             )}
 
+            {/* Quiz Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'tf' && (
+                <>
+                    <div className="menu-group">
+                        <label>Visual Answer</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className={`btn-icon ${metadata.visualMode ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ visualMode: !metadata.visualMode })}
+                                title={metadata.visualMode ? 'Switch to Text' : 'Switch to Thumbs'}
+                            >
+                                {metadata.visualMode ? '👍' : 'ABC'}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>

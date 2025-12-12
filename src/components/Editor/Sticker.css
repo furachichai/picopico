@@ -146,7 +146,7 @@
 
 .sticker-quiz-wysiwyg {
     background: rgba(255, 255, 255, 0.5);
-    padding: 2rem;
+    padding: 1rem 1rem 0.25rem 1rem;
     border-radius: 24px;
     /* border: 1px solid #eee; Removed border for cleaner look */
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); Removed shadow */

@@ -39,13 +39,12 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
 
         e.stopPropagation();
 
-        // Prevent dragging for quiz elements
-        if (type === 'move' && element.type === 'quiz') return;
-
         // Only select if not already selected to avoid re-triggering selection logic unnecessarily
         if (!isSelected) {
             onSelect(element.id);
         }
+
+
 
         setInteractionType(type);
         setIsDragging(true);

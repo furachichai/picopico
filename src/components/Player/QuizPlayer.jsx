@@ -83,11 +83,23 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
         }
     };
 
+    const quizType = data.metadata?.quizType || 'classic';
+    const visualMode = data.metadata?.visualMode || false;
+
+    // Helper to get thumb image
+    const getThumbImage = (index) => {
+        return index === 0 ? '/assets/quiz/thumbs_up.png' : '/assets/quiz/thumbs_down.png';
+    };
+
+    const containerClass = quizType === 'tf'
+        ? 'quiz-options-container-tf'
+        : 'quiz-options-container-classic';
+
     return (
-        <div className="quiz-player-2">
-            <div className="quiz-options-2-container">
+        <div className={`quiz-player-2 ${quizType === 'tf' ? 'tf-mode' : ''}`}>
+            <div className={containerClass}>
                 {options.map((option, index) => {
-                    let className = 'quiz-option-2-player';
+                    let className = quizType === 'tf' ? 'quiz-option-tf' : 'quiz-option-2-player';
                     const isWrong = wrongIndices.has(index);
                     const isCorrect = index === correctIndex;
                     const isShaking = index === shakingIndex;
@@ -97,14 +109,7 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
                         else className += ' grayed-out';
                     } else if (isFailed) {
                         if (isCorrect) {
-                            // Pulse and disable interaction on fail
                             className += ' correct pulse';
-                            // Note: 'grayed-out' usually implies disabled, but here we want it visible but non-interactive.
-                            // We'll handle pointer-events via inline style or specific class if needed, 
-                            // but the disabled attribute on button handles clicks. 
-                            // User asked for "nor clickable, nor mouseover". 
-                            // 'correct' class usually has pointer-events: none? No, usually auto.
-                            // We can add a 'non-interactive' class or rely on disabled prop + CSS.
                         } else {
                             className += ' grayed-out';
                         }
@@ -115,7 +120,7 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
                     if (isShaking) className += ' shake';
 
                     return (
-                        <div key={index} className="quiz-option-row-player">
+                        <div key={index} className={quizType === 'tf' ? 'quiz-option-wrapper-tf' : 'quiz-option-row-player'}>
                             <button
                                 className={className}
                                 style={{
@@ -130,7 +135,17 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
                                 onAnimationEnd={() => setShakingIndex(null)}
                                 disabled={isSolved || isFailed || isWrong}
                             >
-                                <span className="quiz-option-text">{option}</span>
+                                {quizType === 'tf' && visualMode ? (
+                                    <div className="visual-answer">
+                                        <img
+                                            src={getThumbImage(index)}
+                                            alt={index === 0 ? 'True' : 'False'}
+                                            className="tf-image"
+                                        />
+                                    </div>
+                                ) : (
+                                    <span className="quiz-option-text">{option}</span>
+                                )}
                             </button>
                         </div>
                     );

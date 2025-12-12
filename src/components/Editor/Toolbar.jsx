@@ -9,6 +9,7 @@ const Toolbar = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [showLibrary, setShowLibrary] = useState(false);
+    const [showQuizMenu, setShowQuizMenu] = useState(false);
 
     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
@@ -24,15 +25,20 @@ const Toolbar = () => {
         });
     };
 
-    const handleAddQuiz = () => {
+    const handleAddQuiz = (type = 'classic') => {
+        setShowQuizMenu(false);
+        const isTF = type === 'tf';
+
         dispatch({
             type: 'ADD_ELEMENT',
             payload: {
                 type: ELEMENT_TYPES.QUIZ,
                 content: 'Quiz',
                 metadata: {
-                    options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
-                    correctIndex: 0
+                    options: isTF ? ['True', 'False'] : ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+                    correctIndex: 0,
+                    quizType: type, // 'classic' or 'tf'
+                    visualMode: false
                 }
             }
         });
@@ -52,7 +58,23 @@ const Toolbar = () => {
                         type: 'ADD_ELEMENT',
                         payload: { type: ELEMENT_TYPES.BALLOON, content: 'Hello!' }
                     })} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
-                    <button className="btn-secondary" onClick={handleAddQuiz} title={t('editor.addQuiz')}>Quiz</button>
+
+                    <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
+                        <button
+                            className={`btn-secondary ${showQuizMenu ? 'active' : ''}`}
+                            onClick={() => setShowQuizMenu(!showQuizMenu)}
+                            title={t('editor.addQuiz')}
+                        >
+                            Quiz
+                        </button>
+                        {showQuizMenu && (
+                            <div className="toolbar-submenu">
+                                <button onClick={() => handleAddQuiz('classic')}>Classic</button>
+                                <button onClick={() => handleAddQuiz('tf')}>True/False</button>
+                            </div>
+                        )}
+                    </div>
+
                     <button className="btn-secondary" onClick={() => {
                         dispatch({
                             type: 'UPDATE_SLIDE',

@@ -76,29 +76,39 @@ const editorReducer = (state, action) => {
             const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
             if (!currentSlide) return state;
 
-            const newElement = {
+            const baseElement = {
                 id: `el-${Date.now()}`,
                 type: action.payload.type,
                 content: action.payload.content,
                 x: 50, // Center
-                y: action.payload.type === 'quiz' ? 75 : 50, // Lower for quiz, center for others
+                y: action.payload.type === 'quiz'
+                    ? (action.payload.metadata?.quizType === 'tf' ? 85 : 75)
+                    : 50,
                 width: action.payload.metadata?.width || 20,
                 height: action.payload.metadata?.height || 10,
                 rotation: 0,
                 scale: 1,
-                ...action.payload.metadata,
-                ...(action.payload.type === 'balloon' ? {
-                    width: 40,
-                    height: 20,
-                    metadata: {
-                        ...action.payload.metadata,
-                        backgroundColor: '#ffffff',
-                        color: '#000000',
-                        fontFamily: 'Comic Sans MS, Comic Sans, cursive',
-                        fontSize: 16,
-                        tailPos: { x: 20, y: 50 } // Relative to center? Or absolute offset? Let's say offset from center.
-                    }
-                } : {})
+            };
+
+            // Build metadata based on element type
+            let elementMetadata = action.payload.metadata || {};
+
+            if (action.payload.type === 'balloon') {
+                elementMetadata = {
+                    ...elementMetadata,
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    fontFamily: 'Comic Sans MS, Comic Sans, cursive',
+                    fontSize: 16,
+                    tailPos: { x: 20, y: 50 }
+                };
+                baseElement.width = 40;
+                baseElement.height = 20;
+            }
+
+            const newElement = {
+                ...baseElement,
+                metadata: elementMetadata
             };
 
             return {
