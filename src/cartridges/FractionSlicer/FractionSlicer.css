@@ -457,7 +457,7 @@
     border-radius: 12px 0 0 12px;
     transform-origin: bottom right;
     /* Pivots near the cut */
-    animation: driftUp 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftUp 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.left.vertical {
@@ -466,14 +466,14 @@
     width: 100%;
     border-radius: 12px 12px 0 0;
     transform-origin: bottom center;
-    animation: driftLeft 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftLeft 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Drift Animations Restored */
 .drift-part.right {
     border-radius: 0 12px 12px 0;
     transform-origin: bottom left;
-    animation: driftDown 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftDown 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.right.vertical {
@@ -481,7 +481,7 @@
     width: 100%;
     border-radius: 0 0 12px 12px;
     transform-origin: top center;
-    animation: driftRight 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftRight 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @keyframes driftLeft {

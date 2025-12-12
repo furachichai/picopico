@@ -97,11 +97,22 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         });
     };
 
+    const hasInitialized = useRef(false);
     useEffect(() => {
+        if (hasInitialized.current) return;
+        hasInitialized.current = true;
         generateLevel(1);
-    }, [cfg.levels, cfg.difficulty]);
+    }, []);
 
+    const isSlicingRef = useRef(false);
+    const failureTimeoutRef = useRef(null);
+    const lastGenTimeRef = useRef(0);
     const generateLevel = (lvl) => {
+        // Debounce: prevent double generation within 1000ms
+        const now = Date.now();
+        if (now - lastGenTimeRef.current < 1000) return;
+        lastGenTimeRef.current = now;
+
         const options = [
             { num: 1, denom: 2 },
             { num: 1, denom: 3 },
@@ -152,6 +163,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     const handleStart = (e) => {
         if (preview || feedback === 'correct' || feedback === 'failed' || isComplete) return;
         setIsSlicing(true);
+        isSlicingRef.current = true;
         setDebugMsg('');
         const p = getPoint(e);
         setSliceStart(p);
@@ -167,7 +179,8 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     };
 
     const handleEnd = () => {
-        if (!isSlicing) return;
+        if (!isSlicingRef.current) return;
+        isSlicingRef.current = false;
         setIsSlicing(false);
         if (sliceStart && sliceEnd) {
             const dx = sliceEnd.x - sliceStart.x;
@@ -317,9 +330,13 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
             } else {
                 setFeedback('failed');
                 setShowVisualization(true);
-                setTimeout(() => {
+
+                // Clear any existing timeout
+                if (failureTimeoutRef.current) clearTimeout(failureTimeoutRef.current);
+
+                failureTimeoutRef.current = setTimeout(() => {
                     generateLevel(level);
-                }, 4000);
+                }, 2000); // reduced from 4000
             }
         }
     };
@@ -350,7 +367,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 setIsComplete(true);
                 if (onComplete) onComplete();
             }
-        }, 3200); // Wait for 3s drift
+        }, 1400); // Wait for 1.2s drift + 0.2s buffer
     };
 
     const currentTheme = THEMES[themeIndex % THEMES.length];
