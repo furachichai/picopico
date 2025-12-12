@@ -47,7 +47,7 @@
       "cartridge": {
         "type": "FractionSlicer",
         "config": {
-          "levels": 3,
+          "levels": 8,
           "tolerance": 0.1
         }
       }
@@ -60,8 +60,8 @@
           "id": "el-1765218453049",
           "type": "image",
           "content": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXp1Z2J6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6/3o7TKSjRrfIPjeiVyM/giphy.gif",
-          "x": 50,
-          "y": 50,
+          "x": 51.111111111111114,
+          "y": 49.6875,
           "width": 40,
           "height": 22.5,
           "rotation": 0,
@@ -71,12 +71,12 @@
           "id": "el-1765218460455",
           "type": "image",
           "content": "/src/assets/characters/chef_scrathing.png",
-          "x": 26.11111111111111,
-          "y": 80.15625,
+          "x": 23.333333333333336,
+          "y": 71.875,
           "width": 40,
           "height": 34.59586466165413,
           "rotation": 0,
-          "scale": 1
+          "scale": 1.6423129754147796
         }
       ],
       "order": 2
@@ -84,7 +84,7 @@
   ],
   "author": "User",
   "createdAt": "2025-12-02T02:03:37.780Z",
-  "updatedAt": "2025-12-11T03:14:20.086Z",
+  "updatedAt": "2025-12-12T00:18:38.170Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

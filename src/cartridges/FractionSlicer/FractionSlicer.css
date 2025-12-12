@@ -140,16 +140,14 @@
     position: relative;
     overflow: hidden;
     /* Contain Flash */
-    transform: rotate(-2deg);
-    /* Jaunty angle */
+    /* Transform moved to Wrapper in JS */
     transition: transform 0.2s ease;
 }
 
 .target-rect.vertical {
     width: 100px;
-    height: 280px;
-    transform: rotate(2deg);
-    /* Slightly different angle for variety */
+    height: 266px;
+    /* Standardized to match horizontal width */
 }
 
 .preview-mode .target-rect {
@@ -433,17 +431,25 @@
     position: absolute;
     top: 0;
     height: 100%;
-    background: #00b894;
-    /* Same as target-rect */
+    background: transparent;
+    /* Transparent to prevent green outline */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
+/* Drift Content - Must match Target Rect Full Size */
 .drift-part .rect-content {
     display: block !important;
-    width: 280px;
-    /* Force original width to maintain texture scale approx */
-    height: 100%;
+    width: 266px;
+    height: 100px;
+    /* Fixed Horizontal Size */
+}
+
+/* Vertical Override */
+.drift-part.vertical .rect-content {
+    width: 100px;
+    height: 266px;
+    /* Fixed Vertical Size */
 }
 
 .drift-part.left {
@@ -451,7 +457,7 @@
     border-radius: 12px 0 0 12px;
     transform-origin: bottom right;
     /* Pivots near the cut */
-    animation: driftUp 1.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftUp 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.left.vertical {
@@ -460,17 +466,14 @@
     width: 100%;
     border-radius: 12px 12px 0 0;
     transform-origin: bottom center;
-    animation: driftLeft 1.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftLeft 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.drift-part.left .rect-content {
-    margin-left: 0;
-}
-
+/* Drift Animations Restored */
 .drift-part.right {
     border-radius: 0 12px 12px 0;
     transform-origin: bottom left;
-    animation: driftDown 1.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: driftDown 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .drift-part.right.vertical {
@@ -478,11 +481,7 @@
     width: 100%;
     border-radius: 0 0 12px 12px;
     transform-origin: top center;
-    animation: driftRight 1.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.drift-part.right .rect-content {
-    margin-left: -50%;
+    animation: driftRight 3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @keyframes driftLeft {

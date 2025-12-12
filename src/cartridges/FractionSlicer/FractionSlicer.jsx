@@ -150,7 +150,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
     };
 
     const handleStart = (e) => {
-        if (preview || feedback === 'correct' || isComplete) return;
+        if (preview || feedback === 'correct' || feedback === 'failed' || isComplete) return;
         setIsSlicing(true);
         setDebugMsg('');
         const p = getPoint(e);
@@ -291,15 +291,17 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
         }
 
         const absDiff = Math.abs(bestDiff);
+        const sign = bestDiff > 0 ? '+' : '';
+        const pct = (bestDiff * 100).toFixed(1);
+        const diffMsg = `${sign}${pct}%`;
 
         if (absDiff <= 0.07) {
             setLastRatio(ratioLeft);
             setVizSide(chosenSide);
+            setDebugMsg(`${diffMsg}`);
             handleSuccess(ratioLeft);
         } else {
-            const sign = bestDiff > 0 ? '+' : '';
-            const pct = (bestDiff * 100).toFixed(1);
-            setDebugMsg(`Diff: ${sign}${pct}%`);
+            setDebugMsg(`Miss: ${diffMsg}`);
             setLastRatio(ratioLeft);
 
             // Play Error Sound
@@ -324,7 +326,6 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
     const handleSuccess = (cutRatio) => {
         setFeedback('correct');
-        setDebugMsg('');
 
         // FREEZE GOAL so animation doesn't jump
         setSnapshotGoal(goal);
@@ -332,8 +333,10 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         playSuccess();
         confetti({
-            particleCount: 100,
-            spread: 70,
+            particleCount: 50,
+            spread: 60,
+            gravity: 2,
+            ticks: 100,
             origin: { y: 0.6 }
         });
         setTimeout(() => {
@@ -347,15 +350,15 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 setIsComplete(true);
                 if (onComplete) onComplete();
             }
-        }, 1800);
+        }, 3200); // Wait for 3s drift
     };
 
     const currentTheme = THEMES[themeIndex % THEMES.length];
     const rectStyle = {
         background: currentTheme.pattern !== 'none' ? currentTheme.pattern : currentTheme.color,
         backgroundSize: currentTheme.bgSize || 'auto',
-        backgroundColor: currentTheme.color,
-        transform: `rotate(${orientation === 'vertical' ? 2 : -2}deg)`
+        backgroundColor: currentTheme.color
+        // Transform removed here, applied to wrapper
     };
 
     const isHorizontal = orientation === 'horizontal';
@@ -366,22 +369,43 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
 
         // USE SNAPSHOT GOAL IF ANIMATING
         const currentGoal = snapshotGoal || goal;
-        const targetRat = currentGoal.num / currentGoal.denom;
+        const goalRat = currentGoal.num / currentGoal.denom;
+
+        // Derive side locally to ensure consistency with current geometry
+        const diffL = Math.abs(validLastRatio - goalRat);
+        const diffR = Math.abs(validLastRatio - (1 - goalRat));
+        const localVizSide = diffL < diffR ? 'left' : 'right';
+
+        // SNAP TO CUT: If success, paint exactly what was cut (prevent bleeding)
+        let targetRat = goalRat;
+        if (feedback === 'correct' && driftRatio) {
+            targetRat = localVizSide === 'left' ? driftRatio : (1 - driftRatio);
+        }
 
         const lines = [];
         for (let i = 1; i < currentGoal.denom; i++) {
             lines.push(i / currentGoal.denom);
         }
 
+        // Determine highlight range to clip lines
+        const highlightStart = localVizSide === 'left' ? 0 : 1 - targetRat;
+        const highlightEnd = localVizSide === 'left' ? targetRat : 1;
+
         return (
-            <div className={`viz-overlay ${orientation}`}>
+            <div className={`viz-overlay ${orientation}`} style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: isHorizontal ? '266px' : '100px',
+                height: isHorizontal ? '100px' : '266px'
+            }}>
                 {/* Grid Lines (Target) */}
                 {showGrid && lines.map((l, i) => (
                     <div key={i} className={`viz-line ${orientation}`} style={isHorizontal ? { left: `${l * 100}%` } : { top: `${l * 100}%` }} />
                 ))}
 
                 {/* User Cut Line - Shows where you sliced */}
-                {lastRatio && (
+                {lastRatio && feedback !== 'correct' && (
                     <div
                         className={`viz-line ${orientation} cut-line`}
                         style={{
@@ -395,7 +419,7 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                     <div
                         className="viz-highlight"
                         style={{
-                            [isHorizontal ? 'left' : 'top']: vizSide === 'left' ? '0%' : `${(1 - targetRat) * 100}%`,
+                            [isHorizontal ? 'left' : 'top']: `${highlightStart * 100}%`,
                             [isHorizontal ? 'width' : 'height']: `${targetRat * 100}%`,
                             [isHorizontal ? 'height' : 'width']: '100%',
                             background: 'rgba(255, 255, 255, 0.3)'
@@ -434,7 +458,10 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                 <div
                     className="position-wrapper"
                     style={{
-                        transform: `translate(${rectOffset.x}px, ${rectOffset.y}px)`
+                        transform: `translate(${rectOffset.x}px, ${rectOffset.y}px) rotate(${orientation === 'vertical' ? 2 : -2}deg)`,
+                        width: isHorizontal ? '266px' : '100px',
+                        height: isHorizontal ? '100px' : '266px',
+                        position: 'relative' // Ensure relative frame for abs children
                     }}
                 >
                     {feedback === 'correct' && driftRatio && (
@@ -443,7 +470,15 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                                 width: isHorizontal ? `${driftRatio * 100}%` : '100%',
                                 height: isHorizontal ? '100%' : `${driftRatio * 100}%`
                             }}>
-                                <div className="rect-content" style={rectStyle}>
+                                <div className="rect-content" style={{
+                                    ...rectStyle,
+                                    width: isHorizontal ? '266px' : '100px',
+                                    height: isHorizontal ? '100px' : '266px',
+                                    minWidth: isHorizontal ? '266px' : '100px',
+                                    minHeight: isHorizontal ? '100px' : '266px',
+                                    maxWidth: 'none',
+                                    boxSizing: 'border-box'
+                                }}>
                                     {renderVisualization()}
                                 </div>
                             </div>
@@ -457,8 +492,15 @@ const FractionSlicer = ({ config = {}, onComplete, preview = false }) => {
                                     className="rect-content"
                                     style={{
                                         ...rectStyle,
-                                        marginLeft: isHorizontal ? `-${driftRatio / (1 - driftRatio) * 100}%` : 0,
-                                        marginTop: isHorizontal ? 0 : `-${driftRatio / (1 - driftRatio) * 100}%`,
+                                        width: isHorizontal ? '266px' : '100px',
+                                        height: isHorizontal ? '100px' : '266px',
+                                        minWidth: isHorizontal ? '266px' : '100px',
+                                        minHeight: isHorizontal ? '100px' : '266px',
+                                        maxWidth: 'none',
+                                        boxSizing: 'border-box',
+                                        position: 'absolute',
+                                        left: isHorizontal ? `-${driftRatio / (1 - driftRatio) * 100}%` : '0',
+                                        top: isHorizontal ? '0' : `-${driftRatio / (1 - driftRatio) * 100}%`,
                                     }}
                                 >
                                     {renderVisualization()}
