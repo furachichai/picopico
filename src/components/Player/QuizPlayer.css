@@ -213,3 +213,106 @@
     word-wrap: break-word;
     width: 100%;
 }
+
+/* 4SQ MODE */
+.quiz-options-container-4sq {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    margin: auto 0;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.quiz-option-4sq {
+    width: 120px;
+    height: 120px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.3s, filter 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    aspect-ratio: 1/1;
+}
+
+.quiz-option-4sq.selected {
+    transform: scale(0.95);
+    box-shadow: inset 0 0 0 4px white, 0 2px 0 rgba(0, 0, 0, 0.1);
+    filter: brightness(1.1);
+}
+
+.quiz-ready-btn {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 3rem;
+    width: auto;
+    align-self: center;
+    /* Crucial to stop full-width stretch */
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s, background-color 0.2s;
+    pointer-events: auto;
+    z-index: 20;
+}
+
+.quiz-ready-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: translateY(2px);
+}
+
+.quiz-ready-btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add hover effects for 4sq */
+.quiz-option-4sq:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    z-index: 10;
+}
+
+.quiz-option-4sq.selected:hover {
+    transform: scale(0.98);
+    /* Less scale needed if selected */
+}
+
+/* Grayed out state sharing */
+.quiz-option-4sq.grayed-out {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.quiz-option-4sq.correct {
+    z-index: 10;
+}
+
+.quiz-option-4sq.wrong {
+    opacity: 0.3;
+}

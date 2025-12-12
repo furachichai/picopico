@@ -37,7 +37,8 @@ const Toolbar = () => {
                 metadata: {
                     options: isTF ? ['True', 'False'] : ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
                     correctIndex: 0,
-                    quizType: type, // 'classic' or 'tf'
+                    correctIndices: [0], // For 4sq multi-select
+                    quizType: type, // 'classic', 'tf', or '4sq'
                     visualMode: false
                 }
             }
@@ -71,6 +72,7 @@ const Toolbar = () => {
                             <div className="toolbar-submenu">
                                 <button onClick={() => handleAddQuiz('classic')}>Classic</button>
                                 <button onClick={() => handleAddQuiz('tf')}>True/False</button>
+                                <button onClick={() => handleAddQuiz('4sq')}>4 Squares</button>
                             </div>
                         )}
                     </div>
