@@ -1,5 +1,6 @@
 import React from 'react';
 import './QuizEditor.css';
+import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 
 /**
  * QuizEditor Component
@@ -35,8 +36,6 @@ const QuizEditor = ({ element, onChange }) => {
                 // Add if not selected
                 newIndices = [...correctIndices, index];
             }
-            // Ensure at least one is selected? Or allow 0? Plan said "if there are many...".
-            // Let's allow empty for now in editor, but maybe warn? Or just let it be.
             onChange(element.id, { correctIndices: newIndices });
         } else {
             // Single-select logic
@@ -78,11 +77,19 @@ const QuizEditor = ({ element, onChange }) => {
         return '';
     };
 
+    // -------------------------------------------------------------------------
+    // NL RENDER LOGIC
+    // -------------------------------------------------------------------------
     if (quizType === 'nl') {
-        const { min = 0, max = 10, stepCount = 10, hideLabels = false, correctValue = 5 } = element.metadata?.nlConfig || {};
+        const { min: rawMin = 0, max: rawMax = 10, stepCount = 10, hideLabels = false, correctValue: rawCorrect = 5, useFractions = false } = element.metadata?.nlConfig || {};
+
+        // Parse values (handles "1/2" strings vs numbers)
+        const min = parseFraction(rawMin);
+        const max = parseFraction(rawMax);
+        const correctValue = parseFraction(rawCorrect);
 
         return (
-            <div className={`quiz-editor-2 nl-mode`} onMouseDown={(e) => e.stopPropagation()}>
+            <div className={`quiz-editor-2 nl-mode ${(useFractions ? 'nl-fractions' : '')}`}>
                 <div className="nl-container">
                     <div className="nl-track"></div>
                     <div className="nl-ticks">
@@ -90,12 +97,6 @@ const QuizEditor = ({ element, onChange }) => {
                             const value = min + (i * ((max - min) / stepCount));
                             const percent = (i / stepCount) * 100;
                             const isEndpoint = i === 0 || i === stepCount;
-
-                            // Simple check: if not endpoint and hiding labels, skip text
-                            // Note: Value calculation might have float issues, display only integers if intended? 
-                            // User didn't specify integer-only, but usually number lines are integers or clean decimals.
-                            // Let's format to locale string or max 1 decimal if needed.
-                            const label = Number.isInteger(value) ? value : value.toFixed(1);
 
                             return (
                                 <div
@@ -105,7 +106,9 @@ const QuizEditor = ({ element, onChange }) => {
                                 >
                                     <div className="nl-tick-mark"></div>
                                     {(!hideLabels || isEndpoint) && (
-                                        <span className="nl-tick-label">{label}</span>
+                                        <div className="nl-tick-label">
+                                            <FractionComponent value={value} useFractions={useFractions} />
+                                        </div>
                                     )}
                                 </div>
                             );
@@ -118,7 +121,9 @@ const QuizEditor = ({ element, onChange }) => {
                             left: `${((correctValue - min) / (max - min)) * 100}%`
                         }}
                     >
-                        <div className="nl-knob-bubble">{correctValue}</div>
+                        <div className="nl-knob-bubble">
+                            <FractionComponent value={correctValue} useFractions={useFractions} />
+                        </div>
                     </div>
                 </div>
                 <button className="nl-ready-btn" disabled>READY</button>
@@ -126,6 +131,9 @@ const QuizEditor = ({ element, onChange }) => {
         );
     }
 
+    // -------------------------------------------------------------------------
+    // STANDARD RENDER LOGIC
+    // -------------------------------------------------------------------------
     return (
         <div className={`quiz-editor-2 ${getContainerClass()}`} onMouseDown={(e) => e.stopPropagation()}>
             {options.map((option, index) => (

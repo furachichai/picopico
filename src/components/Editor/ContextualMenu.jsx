@@ -267,22 +267,52 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
             {element.type === 'quiz' && metadata.quizType === 'nl' && (
                 <>
                     <div className="menu-group">
+                        <label>Mode</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className={`btn-icon ${metadata.nlConfig?.useFractions ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ nlConfig: { ...metadata.nlConfig, useFractions: !metadata.nlConfig?.useFractions } })}
+                                title="Toggle Fractions Mode"
+                                style={{ width: '80px', fontSize: '0.8rem' }}
+                            >
+                                {metadata.nlConfig?.useFractions ? 'Fractions' : 'Numbers'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
                         <label>Range</label>
                         <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                             <input
-                                type="number"
+                                type={metadata.nlConfig?.useFractions ? "text" : "number"}
                                 placeholder="Min"
                                 value={metadata.nlConfig?.min ?? 0}
-                                onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, min: parseInt(e.target.value) } })}
-                                style={{ width: '40px' }}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    updateMetadata({
+                                        nlConfig: {
+                                            ...metadata.nlConfig,
+                                            min: metadata.nlConfig?.useFractions ? val : parseInt(val)
+                                        }
+                                    });
+                                }}
+                                style={{ width: '50px' }}
                             />
                             <span>-</span>
                             <input
-                                type="number"
+                                type={metadata.nlConfig?.useFractions ? "text" : "number"}
                                 placeholder="Max"
                                 value={metadata.nlConfig?.max ?? 10}
-                                onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, max: parseInt(e.target.value) } })}
-                                style={{ width: '40px' }}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    updateMetadata({
+                                        nlConfig: {
+                                            ...metadata.nlConfig,
+                                            max: metadata.nlConfig?.useFractions ? val : parseInt(val)
+                                        }
+                                    });
+                                }}
+                                style={{ width: '50px' }}
                             />
                         </div>
                     </div>
@@ -302,11 +332,17 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                     <div className="menu-group">
                         <label>Target</label>
                         <input
-                            type="number"
-                            min={metadata.nlConfig?.min ?? 0}
-                            max={metadata.nlConfig?.max ?? 10}
+                            type={metadata.nlConfig?.useFractions ? "text" : "number"}
                             value={metadata.nlConfig?.correctValue ?? 5}
-                            onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, correctValue: parseInt(e.target.value) } })}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                updateMetadata({
+                                    nlConfig: {
+                                        ...metadata.nlConfig,
+                                        correctValue: metadata.nlConfig?.useFractions ? val : parseInt(val)
+                                    }
+                                });
+                            }}
                             style={{ width: '50px' }}
                         />
                     </div>

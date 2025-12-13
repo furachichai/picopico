@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
 import './QuizPlayer.css';
+import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 
 /**
  * QuizPlayer Component
@@ -24,7 +25,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     // NL Data
     const nlConfig = data.metadata?.nlConfig || {};
-    const { min = 0, max = 10, stepCount = 10, hideLabels = false, correctValue = 5 } = nlConfig;
+    // Extract raw values first
+    const { min: rawMin = 0, max: rawMax = 10, stepCount = 10, hideLabels = false, correctValue: rawCorrect = 5, useFractions = false } = nlConfig;
+
+    // Parse values to floats
+    const min = parseFraction(rawMin);
+    const max = parseFraction(rawMax);
+    const correctValue = parseFraction(rawCorrect);
 
     // -------------------------------------------------------------------------
     // 2. STATE DEFINITIONS
@@ -73,7 +80,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const newWrongIndices = new Set(wrongIndices).add(index);
         setWrongIndices(newWrongIndices);
         setShakingIndex(index);
-        if (navigator.vibrate) navigator.vibrate(200);
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
         if (newWrongIndices.size >= maxAttempts) {
             setIsFailed(true);
@@ -175,7 +182,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     // -------------------------------------------------------------------------
     if (quizType === 'nl') {
         return (
-            <div className={`quiz-player-2 nl-mode`}>
+            <div className={`quiz-player-2 nl-mode ${useFractions ? 'nl-fractions' : ''}`}>
                 <div className="quiz-options-container-nl" style={{ minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div
                         className="nl-container-player"
@@ -190,18 +197,26 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 const value = min + (i * ((max - min) / stepCount));
                                 const percent = (i / stepCount) * 100;
                                 const isEndpoint = i === 0 || i === stepCount;
-                                const label = Number.isInteger(value) ? value : value.toFixed(1);
+
                                 return (
                                     <div key={i} className="nl-tick-player" style={{ left: `${percent}%` }}>
                                         <div className="nl-tick-mark-player"></div>
-                                        {(!hideLabels || isEndpoint) && <span className="nl-tick-label-player">{label}</span>}
+                                        {(!hideLabels || isEndpoint) && (
+                                            <div className="nl-tick-label-player">
+                                                <FractionComponent value={value} useFractions={useFractions} />
+                                            </div>
+                                        )}
                                     </div>
                                 );
                             })}
                         </div>
-                        <div className={`nl-knob-player ${isDragging ? 'dragging' : ''} ${isSolved ? 'correct' : ''} ${isFailed ? 'failed' : ''}`}
-                            style={{ left: `${((nlValue - min) / (max - min)) * 100}%` }}>
-                            <div className="nl-knob-bubble-player">{Number.isInteger(nlValue) ? nlValue : nlValue.toFixed(1)}</div>
+                        <div className={`nl-knob-player ${isDragging ? 'dragging' : ''} ${isSolved ? 'correct' : ''} ${isFailed ? 'failed' : ''} ${shakingIndex === nlValue ? 'wrong knob-shake' : ''}`}
+                            style={{ left: `${((nlValue - min) / (max - min)) * 100}%` }}
+                            onAnimationEnd={() => setShakingIndex(null)}
+                        >
+                            <div className="nl-knob-bubble-player">
+                                <FractionComponent value={nlValue} useFractions={useFractions} />
+                            </div>
                         </div>
                     </div>
                     <button

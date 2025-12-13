@@ -1,0 +1,54 @@
+{
+  "id": "draft-1765650347421",
+  "title": "Test vibrannl",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1765650350810",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 51.587304009331596,
+          "y": 87.19493865966797,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "nl",
+            "visualMode": false,
+            "nlConfig": {
+              "min": 0,
+              "max": 10,
+              "stepCount": 10,
+              "hideLabels": false,
+              "correctValue": 5
+            }
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-13T18:25:47.421Z",
+  "updatedAt": "2025-12-13T18:26:11.477Z",
+  "path": "lessons/Math/General/00-Chapter/00-Test vibrannl/lesson.json",
+  "subject": "Math",
+  "topic": "General",
+  "chapterId": "00",
+  "chapterName": "Chapter",
+  "lessonId": "00"
+}
