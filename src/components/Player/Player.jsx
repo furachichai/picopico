@@ -125,6 +125,22 @@ const Player = () => {
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
 
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    // Debounced Navigation Handler
+    const handleHotzoneNav = (direction) => {
+        if (isNavigating || (isGameActive && currentSlide?.cartridge)) return;
+
+        setIsNavigating(true);
+        if (direction === 'next') nextSlide();
+        else prevSlide();
+
+        // Lockout: Transition (300ms) + Delay (150ms) = 450ms
+        setTimeout(() => {
+            setIsNavigating(false);
+        }, 450);
+    };
+
     // Hotzone Styles
     const hotzoneStyle = {
         position: 'absolute',
@@ -134,7 +150,7 @@ const Player = () => {
         zIndex: 100, // Above stickers (10), below Buttons
         cursor: 'pointer',
         backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
-        pointerEvents: isGameActive ? 'none' : 'auto',
+        pointerEvents: (isGameActive || isNavigating) ? 'none' : 'auto',
     };
 
     return (
@@ -171,7 +187,7 @@ const Player = () => {
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            prevSlide();
+                            handleHotzoneNav('prev');
                         }}
                         title={debugMode ? "Prev Slide" : ""}
                     />
@@ -185,7 +201,7 @@ const Player = () => {
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            nextSlide();
+                            handleHotzoneNav('next');
                         }}
                         title={debugMode ? "Next Slide" : ""}
                     />
