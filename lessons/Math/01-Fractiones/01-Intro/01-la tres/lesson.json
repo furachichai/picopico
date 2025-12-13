@@ -49,7 +49,7 @@
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 75,
+          "y": 79.21875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -90,6 +90,29 @@
           "height": 34.59586466165413,
           "rotation": 0,
           "scale": 2.1574067984293386
+        },
+        {
+          "id": "el-1765629846298",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "True",
+              "False"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": true
+          }
         }
       ],
       "order": 2
@@ -108,6 +131,32 @@
           "height": 34.59586466165413,
           "rotation": 0,
           "scale": 2.6177851336931286
+        },
+        {
+          "id": "el-1765629851085",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0,
+              1
+            ],
+            "quizType": "4sq",
+            "visualMode": false
+          }
         }
       ],
       "order": 3,
@@ -185,7 +234,7 @@
   ],
   "author": "User",
   "createdAt": "2025-12-02T12:54:08.396Z",
-  "updatedAt": "2025-12-09T02:29:02.274Z",
+  "updatedAt": "2025-12-13T13:12:39.523Z",
   "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
   "subject": "Math",
   "topic": "01-Fractiones",

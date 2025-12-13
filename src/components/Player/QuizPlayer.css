@@ -332,7 +332,8 @@
     width: 280px;
     margin: 0 auto;
     position: relative;
-    z-index: 20;
+    z-index: 200;
+    /* Must be > blocker (150) */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -493,4 +494,35 @@
 
 .nl-knob-player.failed::after {
     background-color: #FF6B6B;
+}
+
+.hotzone-blocker {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    /* Covers bottom 35% of screen */
+    background: transparent;
+    /* Invisible in prod */
+    z-index: 150;
+    /* Above Player Hotzones (100) */
+    pointer-events: auto;
+    /* Catch clicks */
+}
+
+/* Ensure Knob is interactive ON TOP of blocker */
+.nl-knob-player {
+    position: absolute;
+    /* ... existing props ... */
+    z-index: 300;
+    /* Above container (200) and blocker (150) */
+    /* ... rest of knob styles ... */
+}
+
+/* Ensure Ready Button is interactive ON TOP of blocker */
+.quiz-ready-btn {
+    /* ... existing styles ... */
+    position: relative;
+    z-index: 300;
 }

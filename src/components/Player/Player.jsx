@@ -141,11 +141,16 @@ const Player = () => {
         }, 450);
     };
 
+    // Check for NL Quiz in current slide to adjust hotzones
+    const hasNL = currentSlide?.elements?.some(
+        el => el.type === 'quiz' && el.metadata?.quizType === 'nl'
+    );
+
     // Hotzone Styles
     const hotzoneStyle = {
         position: 'absolute',
         top: '80px', // Start below progress bar (approx 72px)
-        bottom: 0,
+        bottom: hasNL ? '25%' : 0, // Shorten hotzones for NL to allow knob interaction
         width: '10%', // 10% of STAGE width (36px of 360px)
         zIndex: 100, // Above stickers (10), below Buttons
         cursor: 'pointer',
@@ -288,7 +293,7 @@ const Player = () => {
                     return (
                         <div
                             key={slide.id}
-                            className={`player-slide ${positionClass}`}
+                            className={`player-slide player-stage-scaled ${positionClass}`}
                             style={{
                                 backgroundColor: (slide.background && !slide.background.includes('url') && !slide.background.includes('gradient')) ? slide.background : 'transparent',
                                 backgroundImage: (slide.background && (slide.background.includes('url') || slide.background.includes('gradient'))) ? slide.background : 'none',
@@ -389,6 +394,7 @@ const Player = () => {
                                                     onNext={nextSlide}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
+                                                    debugMode={debugMode}
                                                 />
                                             )}
                                             {element.type === 'game' && <MinigamePlayer data={element} />}
