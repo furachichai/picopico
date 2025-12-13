@@ -22,6 +22,8 @@
     z-index: 10;
     margin: auto 0;
     /* Center vertically */
+    padding: 1rem 1rem 0.25rem 1rem;
+    /* Asymmetrical padding matches Editor, shifting visual center down */
 }
 
 .quiz-option-wrapper {
@@ -63,7 +65,7 @@
 .quiz-options-container-tf {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: 0.5rem;
     justify-content: center;
     align-items: flex-end;
     width: 100%;
@@ -80,8 +82,8 @@
 }
 
 .quiz-option-tf {
-    width: 140px;
-    height: 140px;
+    width: 135px;
+    height: 135px;
     padding: 1rem;
     border: none;
     border-radius: 20px;

@@ -33,8 +33,19 @@ const Player = () => {
         }
     }, [currentSlide]);
 
+    const [debugMode, setDebugMode] = useState(false);
+
+    // Initial check for cartridge...
+
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Debug toggle (T) - works locally even if game is active?
+            // "Add a debug mode... can be toggled by pressing the letter T"
+            if (e.key === 't' || e.key === 'T') {
+                setDebugMode(prev => !prev);
+                return;
+            }
+
             if (isGameActive && currentSlide?.cartridge) return; // Block nav keys
 
             if (e.key === 'ArrowRight') {
@@ -62,30 +73,7 @@ const Player = () => {
         }
     };
 
-    const handleTouchStart = (e) => {
-        // Skip if the touch originated from a slider handle (let slider handle its own drag)
-        const target = e.target;
-        if (target.closest('.slider-handle') || target.closest('.slider-player-container')) {
-            touchStartRef.current = null; // Clear any previous value
-            return;
-        }
-        touchStartRef.current = e.touches ? e.touches[0].clientX : e.clientX;
-    };
-
-    const handleTouchEnd = (e) => {
-        if (isGameActive && currentSlide?.cartridge) return; // Block swipes
-
-        if (!touchStartRef.current) return;
-        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-        const diff = touchStartRef.current - clientX;
-
-        if (diff > 50) { // Swipe Left -> Next
-            nextSlide();
-        } else if (diff < -50) { // Swipe Right -> Prev
-            prevSlide();
-        }
-        touchStartRef.current = null;
-    };
+    // Removed Swipe Logic (handleTouchStart, handleTouchEnd) as requested
 
     const [banner, setBanner] = useState(null); // { type: 'correct' | 'fail', text: string }
     const [scale, setScale] = useState(1);
@@ -106,11 +94,8 @@ const Player = () => {
             if (!viewportRef.current) return;
             const { width, height } = viewportRef.current.getBoundingClientRect();
             // Target resolution: 360x640
-            // No padding needed for player usually, or minimal
             const scaleX = width / 360;
             const scaleY = height / 640;
-
-            // Use the smaller scale to fit entirely (contain)
             const newScale = Math.min(scaleX, scaleY);
             setScale(newScale);
         };
@@ -127,22 +112,29 @@ const Player = () => {
     const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
 
     const handleMenu = async () => {
-        // Attempt to keep/restore fullscreen on return
         try {
             const elem = document.documentElement;
             if (!document.fullscreenElement) {
-                if (elem.requestFullscreen) {
-                    await elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    await elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    await elem.msRequestFullscreen();
-                }
+                if (elem.requestFullscreen) await elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
             }
         } catch (err) {
-            // Ignore (user might have actively exited or browser denied)
+            // Ignore
         }
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+    };
+
+    // Hotzone Styles
+    const hotzoneStyle = {
+        position: 'absolute',
+        top: '80px', // Start below progress bar (approx 72px)
+        bottom: 0,
+        width: '10%', // 10% of STAGE width (36px of 360px)
+        zIndex: 100, // Above stickers (10), below Buttons
+        cursor: 'pointer',
+        backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
+        pointerEvents: isGameActive ? 'none' : 'auto',
     };
 
     return (
@@ -153,10 +145,7 @@ const Player = () => {
             <div
                 className="player-viewport"
                 ref={viewportRef}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleTouchStart}
-                onMouseUp={handleTouchEnd}
+            // Removed touch handlers
             >
                 {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
@@ -172,6 +161,35 @@ const Player = () => {
                     pointerEvents: 'none', // Pass clicks through
                     zIndex: 2000
                 }}>
+                    {/* Hotzones - Left (Prev) and Right (Next) - INSIDE STAGE */}
+                    <div
+                        className="hotzone-left"
+                        style={{
+                            ...hotzoneStyle,
+                            left: 0,
+                            borderRight: debugMode ? '1px solid red' : 'none'
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            prevSlide();
+                        }}
+                        title={debugMode ? "Prev Slide" : ""}
+                    />
+
+                    <div
+                        className="hotzone-right"
+                        style={{
+                            ...hotzoneStyle,
+                            right: 0,
+                            borderLeft: debugMode ? '1px solid red' : 'none'
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            nextSlide();
+                        }}
+                        title={debugMode ? "Next Slide" : ""}
+                    />
+
                     {/* Navigation Buttons */}
                     <div style={{
                         position: 'absolute',

@@ -42,7 +42,7 @@
 /* TF Mode - Editor */
 .quiz-editor-2.tf-mode {
     flex-direction: row;
-    gap: 1.5rem;
+    gap: 0.5rem;
     width: auto;
     min-width: auto;
     margin-top: auto;
