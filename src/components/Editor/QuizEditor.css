@@ -238,6 +238,139 @@ input:checked+.toggle-slider:before {
     color: #333;
 }
 
+/* NL Mode - Editor */
+.quiz-editor-2.nl-mode {
+    width: 250px;
+    min-width: 250px;
+    padding: 0;
+    /* Reduced padding */
+}
+
+.nl-container {
+    position: relative;
+    width: 100%;
+    height: 70px;
+    /* Reduced height */
+    margin: 0.5rem 0;
+    /* Reduced margin */
+}
+
+.nl-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #ccc;
+    border-radius: 2px;
+    transform: translateY(-50%);
+    top: 25px;
+    /* Align track */
+}
+
+.nl-ticks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.nl-tick {
+    position: absolute;
+    top: 25px;
+    /* Match track */
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nl-tick-mark {
+    width: 2px;
+    height: 10px;
+    background: #999;
+    margin-bottom: 4px;
+}
+
+.nl-tick-label {
+    position: absolute;
+    top: -24px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #333;
+    /* Dark text WYSIWYG */
+    white-space: nowrap;
+}
+
+/* New Knob Design: Square + Triangle pointing UP */
+.nl-knob {
+    position: absolute;
+    top: 25px;
+    /* Match track */
+    width: 32px;
+    height: 40px;
+    /* Taller to accomodate pointer */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    transform: translate(-50%, 0);
+    /* Pivot at top-center horizontally */
+    box-shadow: none;
+    cursor: grab;
+    z-index: 10;
+    margin-top: 5px;
+    /* Push slightly below track */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Triangle Pointing UP */
+.nl-knob::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #4ECDC4;
+    /* Pointing UP */
+    filter: drop-shadow(0 -2px 1px rgba(0, 0, 0, 0.1));
+}
+
+/* Square Body */
+.nl-knob::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background-color: #4ECDC4;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nl-knob-bubble {
+    display: none;
+    /* Removed text inside */
+}
+
+.nl-ready-btn {
+    background: #4ECDC4;
+    color: white;
+    border: none;
+    padding: 0.4rem 1.5rem;
+    /* Slightly smaller padding */
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 4px 0 #3dbbb3;
+    cursor: pointer;
+    margin-top: 0;
+    /* Tight spacing */
+}
+
 .visual-preview {
     display: flex;
     justify-content: center;

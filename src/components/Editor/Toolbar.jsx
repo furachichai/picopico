@@ -46,8 +46,16 @@ const Toolbar = () => {
                     options: isTF ? ['True', 'False'] : ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', or '4sq'
-                    visualMode: false
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl'
+                    visualMode: false,
+                    // NL Defaults
+                    nlConfig: type === 'nl' ? {
+                        min: 0,
+                        max: 10,
+                        stepCount: 10,
+                        hideLabels: false,
+                        correctValue: 5
+                    } : undefined
                 }
             }
         });
@@ -81,6 +89,7 @@ const Toolbar = () => {
                                 <button onClick={() => handleAddQuiz('classic')}>Classic</button>
                                 <button onClick={() => handleAddQuiz('tf')}>True/False</button>
                                 <button onClick={() => handleAddQuiz('4sq')}>4 Squares</button>
+                                <button onClick={() => handleAddQuiz('nl')}>Number Line</button>
                             </div>
                         )}
                     </div>

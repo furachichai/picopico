@@ -74,8 +74,57 @@ const QuizEditor = ({ element, onChange }) => {
     const getContainerClass = () => {
         if (quizType === 'tf') return 'tf-mode';
         if (quizType === '4sq') return 'four-sq-mode';
+        if (quizType === 'nl') return 'nl-mode';
         return '';
     };
+
+    if (quizType === 'nl') {
+        const { min = 0, max = 10, stepCount = 10, hideLabels = false, correctValue = 5 } = element.metadata?.nlConfig || {};
+
+        return (
+            <div className={`quiz-editor-2 nl-mode`} onMouseDown={(e) => e.stopPropagation()}>
+                <div className="nl-container">
+                    <div className="nl-track"></div>
+                    <div className="nl-ticks">
+                        {Array.from({ length: stepCount + 1 }).map((_, i) => {
+                            const value = min + (i * ((max - min) / stepCount));
+                            const percent = (i / stepCount) * 100;
+                            const isEndpoint = i === 0 || i === stepCount;
+
+                            // Simple check: if not endpoint and hiding labels, skip text
+                            // Note: Value calculation might have float issues, display only integers if intended? 
+                            // User didn't specify integer-only, but usually number lines are integers or clean decimals.
+                            // Let's format to locale string or max 1 decimal if needed.
+                            const label = Number.isInteger(value) ? value : value.toFixed(1);
+
+                            return (
+                                <div
+                                    key={i}
+                                    className="nl-tick"
+                                    style={{ left: `${percent}%` }}
+                                >
+                                    <div className="nl-tick-mark"></div>
+                                    {(!hideLabels || isEndpoint) && (
+                                        <span className="nl-tick-label">{label}</span>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {/* Static Knob Preview at Correct Value */}
+                    <div
+                        className="nl-knob"
+                        style={{
+                            left: `${((correctValue - min) / (max - min)) * 100}%`
+                        }}
+                    >
+                        <div className="nl-knob-bubble">{correctValue}</div>
+                    </div>
+                </div>
+                <button className="nl-ready-btn" disabled>READY</button>
+            </div>
+        );
+    }
 
     return (
         <div className={`quiz-editor-2 ${getContainerClass()}`} onMouseDown={(e) => e.stopPropagation()}>

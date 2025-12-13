@@ -263,6 +263,68 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                 </>
             )}
 
+            {/* NL Quiz Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'nl' && (
+                <>
+                    <div className="menu-group">
+                        <label>Range</label>
+                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                            <input
+                                type="number"
+                                placeholder="Min"
+                                value={metadata.nlConfig?.min ?? 0}
+                                onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, min: parseInt(e.target.value) } })}
+                                style={{ width: '40px' }}
+                            />
+                            <span>-</span>
+                            <input
+                                type="number"
+                                placeholder="Max"
+                                value={metadata.nlConfig?.max ?? 10}
+                                onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, max: parseInt(e.target.value) } })}
+                                style={{ width: '40px' }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Steps</label>
+                        <input
+                            type="number"
+                            min="1"
+                            max="20"
+                            value={metadata.nlConfig?.stepCount ?? 10}
+                            onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, stepCount: Math.max(1, parseInt(e.target.value)) } })}
+                            style={{ width: '40px' }}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Target</label>
+                        <input
+                            type="number"
+                            min={metadata.nlConfig?.min ?? 0}
+                            max={metadata.nlConfig?.max ?? 10}
+                            value={metadata.nlConfig?.correctValue ?? 5}
+                            onChange={(e) => updateMetadata({ nlConfig: { ...metadata.nlConfig, correctValue: parseInt(e.target.value) } })}
+                            style={{ width: '50px' }}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Labels</label>
+                        <button
+                            className={`btn-icon ${metadata.nlConfig?.hideLabels ? 'active' : ''}`}
+                            onClick={() => updateMetadata({ nlConfig: { ...metadata.nlConfig, hideLabels: !metadata.nlConfig?.hideLabels } })}
+                            title="Toggle Intermediate Labels"
+                            style={{ width: '40px', fontSize: '1rem' }}
+                        >
+                            {metadata.nlConfig?.hideLabels ? 'Ends' : 'All'}
+                        </button>
+                    </div>
+                </>
+            )}
+
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>

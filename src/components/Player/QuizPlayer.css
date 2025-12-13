@@ -325,3 +325,172 @@
 .quiz-option-4sq.wrong {
     opacity: 0.3;
 }
+
+
+/* NUMBER LINE MODE - PLAYER */
+.quiz-options-container-nl {
+    width: 280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Reduce min-height to tighten layout */
+    min-height: 150px;
+}
+
+.nl-container-player {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    /* Reduced height to match editor more closely */
+    margin: 0.5rem 0;
+    /* Reduced margin */
+    cursor: grab;
+    touch-action: none;
+}
+
+.nl-container-player:active {
+    cursor: grabbing;
+}
+
+.nl-track-player {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #ccc;
+    /* Match Editor gray */
+    border-radius: 3px;
+    transform: translateY(-50%);
+}
+
+/* Ticks Container */
+.nl-ticks-player {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 0;
+    pointer-events: none;
+}
+
+.nl-tick-player {
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nl-tick-mark-player {
+    width: 2px;
+    height: 12px;
+    background: #999;
+    /* Match Editor gray */
+    margin-bottom: 4px;
+    border-radius: 1px;
+}
+
+.nl-tick-label-player {
+    position: absolute;
+    top: -32px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #333;
+    /* WYSIWYG Black Text */
+    white-space: nowrap;
+    text-shadow: none;
+    /* Remove shadow for cleaner look */
+}
+
+/* New Knob Design */
+.nl-knob-player {
+    position: absolute;
+    top: 30px;
+    width: 44px;
+    /* Larger touch area */
+    height: 50px;
+    background: transparent;
+    border: none;
+    /* Remove border */
+    border-radius: 0;
+    /* Remove circle */
+    transform: translate(-50%, 0);
+    /* Pivot from top-center */
+    box-shadow: none;
+    /* Remove box shadow from wrapper */
+    cursor: grab;
+    z-index: 30;
+    margin-top: 6px;
+    /* Push slightly below track */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Animation for snapping (left property) */
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nl-knob-player.dragging {
+    transition: none;
+    /* Instant follow */
+}
+
+/* Triangle Pointing UP */
+.nl-knob-player::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #4ECDC4;
+    filter: drop-shadow(0 -2px 1px rgba(0, 0, 0, 0.1));
+}
+
+/* Square Body */
+.nl-knob-player::after {
+    content: '';
+    width: 32px;
+    height: 32px;
+    background-color: #4ECDC4;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.nl-knob-player.dragging::after {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+    /* Slight pulse on drag */
+}
+
+.nl-knob-player:active {
+    cursor: grabbing;
+}
+
+.nl-knob-bubble-player {
+    display: none;
+    /* Hide number */
+}
+
+/* Validation States */
+.nl-knob-player.correct::before {
+    border-bottom-color: #58cc02;
+}
+
+.nl-knob-player.correct::after {
+    background-color: #58cc02;
+}
+
+.nl-knob-player.failed::before {
+    border-bottom-color: #FF6B6B;
+}
+
+.nl-knob-player.failed::after {
+    background-color: #FF6B6B;
+}
