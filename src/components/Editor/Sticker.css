@@ -151,7 +151,7 @@
     /* border: 1px solid #eee; Removed border for cleaner look */
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); Removed shadow */
     width: auto;
-    min-width: 320px;
+    min-width: 360px;
     /* Fixed width for preview */
     display: flex;
     flex-direction: column;

@@ -63,6 +63,12 @@ const Player = () => {
     };
 
     const handleTouchStart = (e) => {
+        // Skip if the touch originated from a slider handle (let slider handle its own drag)
+        const target = e.target;
+        if (target.closest('.slider-handle') || target.closest('.slider-player-container')) {
+            touchStartRef.current = null; // Clear any previous value
+            return;
+        }
         touchStartRef.current = e.touches ? e.touches[0].clientX : e.clientX;
     };
 
@@ -317,7 +323,9 @@ const Player = () => {
                                             style={{
                                                 left: `${element.x}%`,
                                                 top: `${element.y}%`,
-                                                width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
+                                                left: `${element.x}%`,
+                                                top: `${element.y}%`,
+                                                width: element.type === 'quiz' ? '360px' : `${element.width}%`,
                                                 height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
                                                 transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
                                                 zIndex: 10, // Ensure stickers render above cartridge (zIndex: 1)
