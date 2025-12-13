@@ -58,6 +58,20 @@ const AppContent = () => {
   }, [state.view]);
 
 
+  // Prevent iOS Pinch-to-Zoom
+  React.useEffect(() => {
+    const handleGestureStart = (e) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener('gesturestart', handleGestureStart);
+    // Also prevent touchmove scaling with 2 fingers if possible (though gesturestart usually catches it)
+    return () => {
+      document.removeEventListener('gesturestart', handleGestureStart);
+    };
+  }, []);
+
+
   const renderView = (viewName) => {
     switch (viewName) {
       case 'dashboard': return <Dashboard />;
