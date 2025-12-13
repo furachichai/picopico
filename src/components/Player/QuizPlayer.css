@@ -82,8 +82,8 @@
 }
 
 .quiz-option-tf {
-    width: 135px;
-    height: 135px;
+    width: 122px;
+    height: 122px;
     padding: 1rem;
     border: none;
     border-radius: 20px;
@@ -226,7 +226,7 @@
 .quiz-options-container-4sq {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 1rem;
+    gap: 0.5rem;
     justify-content: center;
     justify-items: center;
     align-items: center;

@@ -388,6 +388,7 @@ const Player = () => {
                                                     data={element}
                                                     onNext={nextSlide}
                                                     onBanner={handleBanner}
+                                                    disabled={isNavigating}
                                                 />
                                             )}
                                             {element.type === 'game' && <MinigamePlayer data={element} />}

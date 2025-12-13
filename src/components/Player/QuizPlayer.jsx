@@ -11,7 +11,7 @@ import './QuizPlayer.css';
  * - Confetti celebration for correct answer
  * - Auto-advance to next slide
  */
-const QuizPlayer = ({ data, onNext, onBanner }) => {
+const QuizPlayer = ({ data, onNext, onBanner, disabled = false }) => {
     // Data from metadata
     const options = data.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = data.metadata?.correctIndex || 0;
@@ -192,7 +192,7 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
                                 className={className}
                                 style={{
                                     backgroundColor: colors[index % colors.length],
-                                    pointerEvents: (isFailed || isSolved) ? 'none' : 'auto'
+                                    pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto'
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -200,7 +200,7 @@ const QuizPlayer = ({ data, onNext, onBanner }) => {
                                     handleSelect(index);
                                 }}
                                 onAnimationEnd={() => setShakingIndex(null)}
-                                disabled={(isSolved || isFailed || (isWrong && !isMultiSelect))}
+                                disabled={(isSolved || isFailed || (isWrong && !isMultiSelect) || disabled)}
                             >
                                 {quizType === 'tf' && visualMode ? (
                                     <div className="visual-answer">
