@@ -19,7 +19,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
     const isTextType = element.type === 'balloon' || element.type === 'text';
     const isImageType = element.type === 'image';
 
-    const [activeCardIndex, setActiveCardIndex] = useState(0);
+    const [activeCardIndex, setActiveCardIndex] = useState(element.config?.previewIndex || 0);
+
+    // Removed crashing useEffect that attempted to force sync. 
+    // Instead, we initialize state above to match the config.
 
     const updateMetadata = (updates) => {
         onChange(element.id, { metadata: { ...metadata, ...updates } });

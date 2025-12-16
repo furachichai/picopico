@@ -75,7 +75,7 @@
 .swipe-banner {
     position: absolute;
     /* Position under progress bar (approx 60px) and above bottom */
-    top: 60px;
+    top: 20%;
     bottom: 60px;
     height: auto;
     writing-mode: vertical-rl;
@@ -101,19 +101,19 @@
 }
 
 .swipe-banner.left {
-    left: 0;
+    left: -5px;
     border-radius: 0 10px 10px 0;
     /* Flat left, round right */
-    background: #ff9f43;
-    /* Orange */
+    background: linear-gradient(to right, #ff9f43, #ffeaa7);
+    /* Orange Gradient */
 }
 
 .swipe-banner.right {
-    right: 0;
+    right: -5px;
     border-radius: 10px 0 0 10px;
     /* Flat right, round left */
-    background: #a55eea;
-    /* Lilac */
+    background: linear-gradient(to left, #a55eea, #d1ccc0);
+    /* Lilac Gradient */
 }
 
 .level-indicator {

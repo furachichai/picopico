@@ -39,9 +39,14 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         ]).map((c, i) => ({ ...c, id: c.id || `card-${i}` }));
 
         setCards(preppedCards);
-        setCurrentIndex(0);
+
+        // Only reset index if NOT in preview mode. 
+        // In preview mode, the previewIndex effect handles the current card.
+        if (!preview) {
+            setCurrentIndex(0);
+        }
         setIsComplete(false);
-    }, [initialCards]);
+    }, [initialCards, preview]);
 
     // Audio Setup
     useEffect(() => {
