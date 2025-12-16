@@ -80,8 +80,8 @@
     height: auto;
     writing-mode: vertical-rl;
     text-orientation: upright;
-    font-size: 2.5rem;
-    /* Large but fits */
+    font-size: 1.75rem;
+    /* Reduced by 30% */
     font-weight: 900;
     text-transform: uppercase;
     pointer-events: none;
@@ -89,7 +89,8 @@
     transition: opacity 0.2s;
     letter-spacing: 5px;
     z-index: 200;
-    padding: 10px 15px;
+    padding: 8px 10px;
+    /* Reduced padding */
     border-radius: 10px 0 0 10px;
     /* Round inner corners, flat against edge */
     display: flex;
@@ -101,7 +102,8 @@
 }
 
 .swipe-banner.left {
-    left: -5px;
+    left: -10px;
+    /* Increased overlap */
     border-radius: 0 10px 10px 0;
     /* Flat left, round right */
     background: linear-gradient(to right, #ff9f43, #ffeaa7);
@@ -109,7 +111,8 @@
 }
 
 .swipe-banner.right {
-    right: -5px;
+    right: -10px;
+    /* Increased overlap */
     border-radius: 10px 0 0 10px;
     /* Flat right, round left */
     background: linear-gradient(to left, #a55eea, #d1ccc0);
