@@ -10,6 +10,7 @@ const Toolbar = () => {
     const { t } = useTranslation();
     const [showLibrary, setShowLibrary] = useState(false);
     const [showQuizMenu, setShowQuizMenu] = useState(false);
+    const [showGameMenu, setShowGameMenu] = useState(false);
 
     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
@@ -94,40 +95,71 @@ const Toolbar = () => {
                         )}
                     </div>
 
-                    <button className="btn-secondary" onClick={() => {
-                        dispatch({
-                            type: 'UPDATE_SLIDE',
-                            payload: {
-                                cartridge: {
-                                    type: 'FractionAlpha',
-                                    config: {
-                                        mode: 'fracture',
-                                        targetDenominator: 3,
-                                        targetNumerator: 1,
-                                        initialDenominator: 1
-                                    }
-                                }
-                            }
-                        });
-                    }} title="Add Fraction Alpha">
-                        <Gamepad2 size={24} />
-                    </button>
-                    <button className="btn-secondary" onClick={() => {
-                        dispatch({
-                            type: 'UPDATE_SLIDE',
-                            payload: {
-                                cartridge: {
-                                    type: 'FractionSlicer',
-                                    config: {
-                                        levels: 5,
-                                        tolerance: 0.10
-                                    }
-                                }
-                            }
-                        });
-                    }} title="Add Fraction Slicer">
-                        <span style={{ fontSize: '1.4rem' }}>⚔️</span>
-                    </button>
+                    <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
+                        <button
+                            className={`btn-secondary ${showGameMenu ? 'active' : ''}`}
+                            onClick={() => setShowGameMenu(!showGameMenu)}
+                            title={t('editor.addGame')}
+                        >
+                            <Gamepad2 size={24} />
+                        </button>
+                        {showGameMenu && (
+                            <div className="toolbar-submenu">
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'FractionAlpha',
+                                                config: {
+                                                    mode: 'fracture',
+                                                    targetDenominator: 3,
+                                                    targetNumerator: 1,
+                                                    initialDenominator: 1
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>Fraction Alpha</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'FractionSlicer',
+                                                config: {
+                                                    levels: 5,
+                                                    tolerance: 0.10
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>Fraction Slicer</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'SwipeSorter',
+                                                config: {
+                                                    leftLabel: 'FALSE',
+                                                    rightLabel: 'CORRECT',
+                                                    cards: [
+                                                        { id: 'c1', text: '2 + 2 = 5', correctSide: 'left' },
+                                                        { id: 'c2', text: 'Water is wet', correctSide: 'right' },
+                                                        { id: 'c3', text: 'The moon is cheese', correctSide: 'left' }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>Swipe Sorter</button>
+                            </div>
+                        )}
+                    </div>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <div className="color-picker-wrapper">

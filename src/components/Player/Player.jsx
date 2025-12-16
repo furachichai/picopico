@@ -5,6 +5,7 @@ import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
+import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
 import { X, Pencil } from 'lucide-react';
@@ -342,6 +343,17 @@ const Player = () => {
                                     {slide.cartridge.type === 'FractionSlicer' && (
                                         <ErrorBoundary>
                                             <FractionSlicer
+                                                config={slide.cartridge.config}
+                                                onComplete={() => {
+                                                    setIsGameActive(false);
+                                                    nextSlide();
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
+                                    {slide.cartridge.type === 'SwipeSorter' && (
+                                        <ErrorBoundary>
+                                            <SwipeSorter
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
                                                     setIsGameActive(false);

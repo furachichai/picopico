@@ -3,6 +3,7 @@ import { useEditor } from '../../context/EditorContext';
 import Sticker from './Sticker';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
+import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 
 /**
  * Canvas Component
@@ -119,13 +120,16 @@ const Canvas = (props) => {
         {/* Cartridge Container - Lower layer */}
         {/* Cartridge Container - Lower layer */}
         <div className="cartridge-container">
-          {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer') && (
+          {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter') && (
             <div style={{ pointerEvents: 'none', width: '100%', height: '100%' }}>
               {currentSlide.cartridge.type === 'FractionAlpha' && (
                 <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
               )}
               {currentSlide.cartridge.type === 'FractionSlicer' && (
                 <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
+              )}
+              {currentSlide.cartridge.type === 'SwipeSorter' && (
+                <SwipeSorter config={currentSlide.cartridge.config} preview={true} />
               )}
             </div>
           )}

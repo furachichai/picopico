@@ -1,0 +1,221 @@
+.swipe-sorter-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: transparent;
+    font-family: 'Nunito', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.swipe-card-stack {
+    position: relative;
+    width: 300px;
+    height: 400px;
+}
+
+.swipe-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity;
+    touch-action: none;
+    cursor: grab;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s;
+}
+
+.swipe-card.dragging {
+    cursor: grabbing;
+    transition: none !important;
+    /* Disable transition during drag for responsiveness */
+}
+
+.swipe-card-content {
+    pointer-events: none;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.swipe-card-image {
+    max-width: 100%;
+    max-height: 70%;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.swipe-card-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    pointer-events: none;
+}
+
+.swipe-banner {
+    position: absolute;
+    /* Position under progress bar (approx 60px) and above bottom */
+    top: 60px;
+    bottom: 60px;
+    height: auto;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 2.5rem;
+    /* Large but fits */
+    font-weight: 900;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    letter-spacing: 5px;
+    z-index: 200;
+    padding: 10px 15px;
+    border-radius: 10px 0 0 10px;
+    /* Round inner corners, flat against edge */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black !important;
+    border: none !important;
+    text-shadow: none !important;
+}
+
+.swipe-banner.left {
+    left: 0;
+    border-radius: 0 10px 10px 0;
+    /* Flat left, round right */
+    background: #ff9f43;
+    /* Orange */
+}
+
+.swipe-banner.right {
+    right: 0;
+    border-radius: 10px 0 0 10px;
+    /* Flat right, round left */
+    background: #a55eea;
+    /* Lilac */
+}
+
+.level-indicator {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.swipe-card.shake {
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.swipe-card.flash-red {
+    animation: flashRed 0.5s;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+@keyframes flashRed {
+
+    0%,
+    100% {
+        background-color: white;
+    }
+
+    50% {
+        background-color: #ffcccc;
+    }
+}
+
+.complete-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.complete-overlay h1 {
+    font-size: 2.5rem;
+    color: #58cc02;
+    margin-bottom: 20px;
+}
+
+.complete-overlay button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    background: #58cc02;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s;
+}
+
+.complete-overlay button:active {
+    transform: scale(0.95);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
