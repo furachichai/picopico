@@ -280,27 +280,30 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                 </div>
                             </div>
 
-                            <div className="menu-group">
-                                <label>Global BG</label>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files[0];
-                                            if (!file) return;
-                                            const reader = new FileReader();
-                                            reader.onload = (ev) => {
-                                                const newConfig = { ...element.config, globalBackground: ev.target.result };
-                                                onChange('cartridge', { config: newConfig });
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }}
-                                        style={{ width: '100%', fontSize: '0.7rem' }}
-                                    />
-                                    {element.config?.globalBackground && (
-                                        <button className="btn-icon" onClick={() => onChange('cartridge', { config: { ...element.config, globalBackground: null } })} title="Clear BG">❌</button>
-                                    )}
+                            <div className="menu-group" style={{ alignItems: 'flex-start' }}>
+                                <label style={{ marginTop: '6px' }}>Global BG</label>
+                                <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '2px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
+                                                const reader = new FileReader();
+                                                reader.onload = (ev) => {
+                                                    const newConfig = { ...element.config, globalBackground: ev.target.result };
+                                                    onChange('cartridge', { config: newConfig });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }}
+                                            style={{ width: '100%', fontSize: '0.7rem' }}
+                                        />
+                                        {element.config?.globalBackground && (
+                                            <button className="btn-icon" onClick={() => onChange('cartridge', { config: { ...element.config, globalBackground: null } })} title="Clear BG">❌</button>
+                                        )}
+                                    </div>
+                                    <small style={{ fontSize: '0.65rem', color: '#888', fontStyle: 'italic' }}>Rec: 1080x1920 (9:16)</small>
                                 </div>
                             </div>
 
@@ -369,15 +372,18 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                             style={{ width: '100%', height: '40px', fontSize: '0.8rem' }}
                                         />
 
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <label style={{ fontSize: '0.7rem' }}>Image:</label>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => handleFileUpload(e, activeCardIndex)}
-                                                style={{ width: '90px', fontSize: '0.7rem' }}
-                                            />
-                                            {element.config.cards[activeCardIndex].image && <span title="Image Set">🖼️</span>}
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <label style={{ fontSize: '0.7rem' }}>Image:</label>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileUpload(e, activeCardIndex)}
+                                                    style={{ width: '90px', fontSize: '0.7rem' }}
+                                                />
+                                                {element.config.cards[activeCardIndex].image && <span title="Image Set">🖼️</span>}
+                                            </div>
+                                            <small style={{ fontSize: '0.65rem', color: '#888', fontStyle: 'italic', textAlign: 'right' }}>Rec: 600x800 (3:4)</small>
                                         </div>
 
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

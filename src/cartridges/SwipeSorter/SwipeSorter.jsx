@@ -80,13 +80,12 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             osc.stop(now + 0.3);
         } else if (type === 'error') {
             osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(100, now);
-            osc.frequency.linearRampToValueAtTime(50, now + 0.2);
-            gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+            gain.gain.setValueAtTime(0.5, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
             osc.start(now);
-            osc.stop(now + 0.2);
+            osc.stop(now + 0.3);
         }
     };
 

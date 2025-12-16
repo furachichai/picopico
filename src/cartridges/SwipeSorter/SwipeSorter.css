@@ -102,7 +102,8 @@
 }
 
 .swipe-banner.left {
-    left: -10px;
+    left: -30px;
+    padding-left: 35px;
     /* Increased overlap */
     border-radius: 0 10px 10px 0;
     /* Flat left, round right */
@@ -111,7 +112,8 @@
 }
 
 .swipe-banner.right {
-    right: -10px;
+    right: -30px;
+    padding-right: 35px;
     /* Increased overlap */
     border-radius: 10px 0 0 10px;
     /* Flat right, round left */
@@ -136,43 +138,38 @@
     animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
 }
 
-.swipe-card.flash-red {
-    animation: flashRed 0.5s;
+.swipe-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 200;
+    /* Above content */
+    border-radius: 20px;
+    transition: opacity 0.1s;
 }
 
-@keyframes shake {
+.swipe-card.flash-red::after {
+    opacity: 1;
+    /* transition handled by class removal timing in JS, or we can animate keyframes if we prefer pulse */
+    animation: redPulse 0.5s ease-out;
+}
 
-    10%,
-    90% {
-        transform: translate3d(-1px, 0, 0);
+@keyframes redPulse {
+
+    0%,
+    100% {
+        opacity: 0;
     }
 
     20%,
     80% {
-        transform: translate3d(2px, 0, 0);
-    }
-
-    30%,
-    50%,
-    70% {
-        transform: translate3d(-4px, 0, 0);
-    }
-
-    40%,
-    60% {
-        transform: translate3d(4px, 0, 0);
-    }
-}
-
-@keyframes flashRed {
-
-    0%,
-    100% {
-        background-color: white;
-    }
-
-    50% {
-        background-color: #ffcccc;
+        opacity: 1;
     }
 }
 
