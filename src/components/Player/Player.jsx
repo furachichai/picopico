@@ -8,6 +8,8 @@ import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
+import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
+import FullscreenToggle from '../FullscreenToggle';
 import { X, Pencil } from 'lucide-react';
 import './Player.css';
 
@@ -17,8 +19,40 @@ const Player = () => {
     const { lesson } = state;
 
     // Initialize index based on the currentSlideId in global state (set by DiscoverView)
-    const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex !== -1 ? initialIndex : 0);
+    // Initialize index based on saved progress OR currentSlideId
+    // If we just navigated from Dashboard, we might want to resume.
+    // If we rely on currentSlideId (from Editor), it's fine for testing.
+    // But for players, let's look up progress if we are at start (approx).
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(() => {
+        // If specific slide requested via state (e.g. from Editor preview), use it.
+        // But if from dashboard (often state.currentSlideId is slide-1 default), check storage.
+
+        // This logic might need refinement: if I click "Play" on a specific lesson, 
+        // I might want to start where I left off.
+        const headerPath = lesson.path;
+        if (headerPath) {
+            const saved = getLessonProgress(headerPath);
+            // Verify the index is valid (lesson might have changed)
+            if (saved && saved.lastSlideIndex < lesson.slides.length) {
+                return saved.lastSlideIndex;
+            }
+        }
+
+        const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
+        return initialIndex !== -1 ? initialIndex : 0;
+    });
+
+    // START: Update storage when slide changes
+    useEffect(() => {
+        if (lesson.path) {
+            saveLessonProgress(lesson.path, {
+                lastSlideIndex: currentSlideIndex,
+                // If this is the last slide, mark complete?
+                // Let's rely on explicit completion logic if needed, or just "reached last slide"
+                completed: currentSlideIndex === lesson.slides.length - 1
+            });
+        }
+    }, [currentSlideIndex, lesson.path, lesson.slides.length]);
     const touchStartRef = useRef(null);
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
 
@@ -217,7 +251,9 @@ const Player = () => {
                         position: 'absolute',
                         top: '16px',
                         left: '16px',
-                        pointerEvents: 'auto' // Re-enable clicks
+                        pointerEvents: 'auto', // Re-enable clicks
+                        display: 'flex',
+                        gap: '10px'
                     }}>
                         <button
                             onClick={handleMenu}
@@ -241,6 +277,17 @@ const Player = () => {
                                 <path d="m6 6 12 12" />
                             </svg>
                         </button>
+
+                        <FullscreenToggle style={{
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            border: '1px solid rgba(0,0,0,0.1)',
+                            borderRadius: '50%',
+                            width: '44px',
+                            height: '44px',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                            color: '#334155',
+                            padding: 0
+                        }} />
                     </div>
 
                     <div style={{
@@ -249,28 +296,30 @@ const Player = () => {
                         right: '16px',
                         pointerEvents: 'auto'
                     }}>
-                        <button
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
-                            title={t('common.edit')}
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.95)',
-                                border: '1px solid rgba(0,0,0,0.1)',
-                                borderRadius: '50%',
-                                width: '44px',
-                                height: '44px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                padding: 0,
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                            }}
-                        >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                                <path d="m15 5 4 4" />
-                            </svg>
-                        </button>
+                        {!state.readOnly && (
+                            <button
+                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
+                                title={t('common.edit')}
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.95)',
+                                    border: '1px solid rgba(0,0,0,0.1)',
+                                    borderRadius: '50%',
+                                    width: '44px',
+                                    height: '44px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                }}
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                    <path d="m15 5 4 4" />
+                                </svg>
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -428,10 +477,6 @@ const Player = () => {
                 })}
             </div>
             {/* End of render loop */}
-
-            <div className="player-controls-hint">
-                {t('player.hint')}
-            </div>
         </div>
     );
 };

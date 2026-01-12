@@ -26,12 +26,16 @@ const initialState = {
     selectedElementId: null,
     isDirty: false,
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
+    readOnly: false, // Default to false, will be set on mount
 };
 
 const editorReducer = (state, action) => {
     switch (action.type) {
         case 'SET_VIEW':
             return { ...state, view: action.payload };
+
+        case 'SET_READ_ONLY':
+            return { ...state, readOnly: action.payload };
 
         case 'TOGGLE_PREVIEW':
             return { ...state, view: state.view === 'editor' ? 'player' : 'editor' };

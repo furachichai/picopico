@@ -3,6 +3,8 @@ import confetti from 'canvas-confetti';
 import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Compass, Settings, Flame } from 'lucide-react';
 
 import { useEditor } from '../../context/EditorContext';
+import { getLessonProgress } from '../../utils/storage';
+import FullscreenToggle from '../FullscreenToggle';
 
 // Mock translation function
 const t = (key) => {
@@ -37,7 +39,7 @@ const t = (key) => {
 };
 
 const Dashboard = () => {
-  const { dispatch } = useEditor();
+  const { state, dispatch } = useEditor();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('lessons');
@@ -101,12 +103,16 @@ const Dashboard = () => {
               if (item.children) traverse(item.children);
             } else if (item.name.endsWith('.json')) {
               const metadata = parsePathToMetadata(item.path);
+              const progress = getLessonProgress(item.path);
+              const isCompleted = progress?.completed;
+
               flatList.push({
                 ...item,
                 ...metadata,
                 id: item.path, // Use path as unique ID
-                status: 'active', // Default to active for now
-                icon: <Play size={24} />
+                status: isCompleted ? 'completed' : 'active',
+                icon: isCompleted ? <Trophy size={24} /> : <Play size={24} />,
+                progress // pass down full progress object
               });
             }
           });
@@ -482,7 +488,9 @@ const Dashboard = () => {
         /* Bottom Nav */
         .bottom-nav {
           background-color: var(--white);
-          padding: 12px 20px;
+          padding: 8px 20px;
+          /* Handle iOS Safe Area - increased padding */
+          padding-bottom: calc(8px + env(safe-area-inset-bottom));
           display: flex;
           justify-content: space-around;
           align-items: center;
@@ -502,12 +510,23 @@ const Dashboard = () => {
           border: none;
           padding: 8px;
           cursor: pointer;
-          transition: color 0.2s;
+          transition: transform 0.1s, color 0.2s;
+          height: auto;
+        }
+        
+        .nav-item:active {
+            transform: scale(0.9);
         }
 
         .nav-item.active {
           color: var(--primary);
         }
+        
+        /* Specific colors for inactive state to be more visible if needed, 
+           but user asked for "in color". 
+           Let's make icons larger and colored by default?
+           Or just larger. User said "icons way too small".
+        */
 
         .nav-label {
           font-size: 0.7rem;
@@ -535,23 +554,34 @@ const Dashboard = () => {
           <span className="greeting">{t('dashboard.greeting')}</span>
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <button
-            onClick={handleOpenEditor}
-            style={{
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              border: 'none',
-              padding: '6px 12px',
-              borderRadius: '12px',
-              fontWeight: '700',
-              fontSize: '0.8rem',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow)',
-              borderBottom: '3px solid var(--primary-dark)'
-            }}
-          >
-            {t('dashboard.editor')}
-          </button>
+          <FullscreenToggle style={{
+            background: 'var(--white)',
+            color: 'var(--text-light)',
+            border: '1px solid #E2E8F0',
+            boxShadow: 'var(--shadow)',
+            width: '36px',
+            height: '36px',
+            padding: 0
+          }} />
+          {!state.readOnly && (
+            <button
+              onClick={handleOpenEditor}
+              style={{
+                backgroundColor: 'var(--primary)',
+                color: 'white',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: '12px',
+                fontWeight: '700',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                boxShadow: 'var(--shadow)',
+                borderBottom: '3px solid var(--primary-dark)'
+              }}
+            >
+              {t('dashboard.editor')}
+            </button>
+          )}
           <div className="streak-counter" style={{
             backgroundColor: 'var(--white)',
             padding: '6px 12px',
@@ -667,25 +697,27 @@ const Dashboard = () => {
                   ) : (
                     <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div className="lesson-desc">{lesson.description || lesson.chapterName}</div>
-                      <button
-                        className="edit-desc-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          startEditing(lesson);
-                        }}
-                        title="Edit Description"
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          opacity: 0.5,
-                          padding: '2px',
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <Settings size={14} />
-                      </button>
+                      {!state.readOnly && (
+                        <button
+                          className="edit-desc-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startEditing(lesson);
+                          }}
+                          title="Edit Description"
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            opacity: 0.5,
+                            padding: '2px',
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <Settings size={14} />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -700,22 +732,25 @@ const Dashboard = () => {
         <button
           className={`nav-item ${activeTab === 'lessons' ? 'active' : ''}`}
           onClick={() => setActiveTab('lessons')}
+          style={{ color: activeTab === 'lessons' ? 'var(--primary)' : '#94A3B8' }}
         >
-          <BookOpen size={24} />
+          <BookOpen size={36} strokeWidth={1.5} />
           <span className="nav-label">{t('dashboard.lessons')}</span>
         </button>
         <button
           className={`nav-item ${activeTab === 'discover' ? 'active' : ''}`}
           onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
+          style={{ color: activeTab === 'discover' ? '#F59E0B' : '#94A3B8' }}
         >
-          <Compass size={24} />
+          <Compass size={36} strokeWidth={1.5} />
           <span className="nav-label">{t('dashboard.discover')}</span>
         </button>
         <button
           className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
           onClick={() => setActiveTab('settings')}
+          style={{ color: activeTab === 'settings' ? '#3B82F6' : '#94A3B8' }}
         >
-          <Settings size={24} />
+          <Settings size={36} strokeWidth={1.5} />
           <span className="nav-label">{t('dashboard.settings')}</span>
         </button>
       </div>

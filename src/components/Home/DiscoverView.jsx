@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
-import { Home } from 'lucide-react';
+import { Home, Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
 import Balloon from '../Editor/Balloon';
 
 const DiscoverView = () => {
@@ -12,6 +12,7 @@ const DiscoverView = () => {
     const [scale, setScale] = useState(1);
     const containerRef = useRef(null);
     const touchStartRef = useRef(null);
+    const dragAxis = useRef(null); // 'horizontal' or 'vertical'
 
     const [hasInteracted, setHasInteracted] = useState(false); // Kept for legacy or general "invoked" state if needed, but logic split below
     const [hasVerticallySwiped, setHasVerticallySwiped] = useState(false);
@@ -19,6 +20,11 @@ const DiscoverView = () => {
 
     const [hintOffset, setHintOffset] = useState(0);
     const [horizontalHintOffset, setHorizontalHintOffset] = useState(0);
+
+    // Swipe Feedback State
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragY, setDragY] = useState(0);
+    const [dragX, setDragX] = useState(0);
 
     // Fetch lessons on mount
     useEffect(() => {
@@ -167,11 +173,43 @@ const DiscoverView = () => {
 
     // Touch/Mouse Handling for "Roll" + "Enter"
     const handleStart = (clientX, clientY) => {
-        markInteraction(false); // Just touch start, not necessarily a swipe yet, but counts as interaction for idle timer
+        markInteraction(false);
         touchStartRef.current = { x: clientX, y: clientY };
+        dragAxis.current = null; // Reset lock
+        setIsDragging(true);
+        setDragY(0);
+        setDragX(0);
+    };
+
+    const handleMove = (clientX, clientY) => {
+        if (!touchStartRef.current || !isDragging) return;
+        const rawDeltaX = clientX - touchStartRef.current.x;
+        const rawDeltaY = clientY - touchStartRef.current.y;
+
+        // Direction Locking Logic
+        if (!dragAxis.current) {
+            // Check threshold to lock
+            if (Math.abs(rawDeltaX) > 10) {
+                dragAxis.current = 'horizontal';
+            } else if (Math.abs(rawDeltaY) > 10) {
+                dragAxis.current = 'vertical';
+            }
+        }
+
+        if (dragAxis.current === 'horizontal') {
+            setDragX(rawDeltaX);
+            setDragY(0);
+        } else if (dragAxis.current === 'vertical') {
+            setDragX(0);
+            setDragY(rawDeltaY);
+        }
     };
 
     const handleEnd = (clientX, clientY) => {
+        setIsDragging(false);
+        setDragX(0); // Reset for snap
+        setDragY(0);
+
         if (!touchStartRef.current) return;
         const deltaX = clientX - touchStartRef.current.x;
         const deltaY = clientY - touchStartRef.current.y;
@@ -180,7 +218,9 @@ const DiscoverView = () => {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // Horizontal
             if (Math.abs(deltaX) > 50) {
-                if (deltaX < -50) enterLesson(); // Swipe Left (Finger moves left) -> Enter
+                // Swipe Right (Finger moves right) -> Previous Slide / Hint
+                // Swipe Left (Finger moves left) -> Enter
+                if (deltaX < -50) enterLesson();
             }
         } else {
             // Vertical
@@ -192,10 +232,12 @@ const DiscoverView = () => {
 
     // Touch Wrappers
     const handleTouchStart = (e) => handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    const handleTouchMove = (e) => handleMove(e.touches[0].clientX, e.touches[0].clientY);
     const handleTouchEnd = (e) => handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 
     // Mouse Wrappers
     const handleMouseDown = (e) => handleStart(e.clientX, e.clientY);
+    const handleMouseMove = (e) => isDragging && handleMove(e.clientX, e.clientY);
     const handleMouseUp = (e) => handleEnd(e.clientX, e.clientY);
 
     // Render a single slide (simplified for Mask integration)
@@ -278,8 +320,8 @@ const DiscoverView = () => {
             position: 'fixed',
             top: 0,
             left: 0,
-            width: '100vw',
-            height: '100vh',
+            width: '100%',
+            height: '100dvh',
             backgroundColor: 'transparent',
             overflow: 'hidden',
             touchAction: 'none',
@@ -287,9 +329,12 @@ const DiscoverView = () => {
         }}
             ref={containerRef}
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
         >
             {/* Persistent Stage Layer (Overlays Feed, matches Stage Geometry) */}
             <div style={{
@@ -338,8 +383,8 @@ const DiscoverView = () => {
             <div style={{
                 width: '100%',
                 height: '100%',
-                transform: `translateY(calc(${-currentIndex * 100}% - ${hintOffset}%)) translateZ(0)`, // Hardware Acceleration
-                transition: 'transform 0.5s ease-in-out',
+                transform: `translateY(calc(${-currentIndex * 100}% - ${hintOffset}% + ${isDragging ? dragY : 0}px)) translateZ(0)`, // Hardware Acceleration
+                transition: isDragging ? 'none' : 'transform 0.5s ease-in-out',
                 willChange: 'transform',
                 backfaceVisibility: 'hidden'
             }}>
@@ -354,6 +399,22 @@ const DiscoverView = () => {
                             left: 0,
                         }}
                     >
+                        {/* Full-Screen Background Fill (Fix for Tall Screens/Letterboxing) */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '-5%',
+                            left: '-5%',
+                            width: '110%',
+                            height: '110%',
+                            zIndex: -1,
+                            backgroundColor: (lesson.slides && lesson.slides[0]?.background && !lesson.slides[0].background.includes('url') && !lesson.slides[0].background.includes('gradient')) ? lesson.slides[0].background : '#1a202c',
+                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? lesson.slides[0].background : 'none',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            filter: 'blur(20px) brightness(0.8)', // Blur to make it distinct from content
+                            transform: 'scale(1.2)' // Slight zoom to avoid edge artifacts
+                        }} />
+
                         {/* Stage Wrapper (Centers and Scales Content) */}
                         <div style={{
                             position: 'absolute',
@@ -376,14 +437,52 @@ const DiscoverView = () => {
                                 width: '100%',
                                 height: '100%',
                                 // OPTIMIZATION: Only animate the current lesson
-                                transform: `translateX(${index === currentIndex ? -horizontalHintOffset : 0}%) translateZ(0)`,
-                                transition: 'transform 0.5s ease-in-out',
+                                transform: `translateX(${index === currentIndex ? (isDragging && Math.abs(dragX) > Math.abs(dragY) ? dragX : -horizontalHintOffset) : 0}px) translateZ(0)`,
+                                transition: isDragging ? 'none' : 'transform 0.5s ease-in-out',
                                 willChange: index === currentIndex ? 'transform' : 'auto',
                                 position: 'relative',
                                 backfaceVisibility: 'hidden'
                             }}>
                                 {/* Slide 0 */}
-                                {lesson.slides && lesson.slides.length > 0 ? renderSlide(lesson.slides[0], { left: 0 }) : null}
+                                {lesson.slides && lesson.slides.length > 0 ? (
+                                    <>
+                                        {renderSlide(lesson.slides[0], { left: 0 })}
+                                        {/* Social Icons Sidebar */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            right: '4px',
+                                            bottom: '100px', // Adjust as needed
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '20px',
+                                            zIndex: 20, // Above slide content
+                                            alignItems: 'center'
+                                        }}>
+                                            {[
+                                                { icon: <Heart size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Like' },
+                                                { icon: <MessageCircle size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Comment' },
+                                                { icon: <Bookmark size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Save' },
+                                                { icon: <Share2 size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Share' }
+                                            ].map((item, idx) => (
+                                                <div key={idx} style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    gap: '4px',
+                                                    cursor: 'pointer',
+                                                    opacity: 0.9
+                                                }}>
+                                                    <div style={{
+                                                        // filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                                                    }}>
+                                                        {item.icon}
+                                                    </div>
+                                                    <span style={{ fontSize: '12px', fontWeight: '600' }}>{/* Label if needed */}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : null}
 
                                 {/* Slide 1 */}
                                 {lesson.slides && lesson.slides.length > 1 ? renderSlide(lesson.slides[1], { left: '100%' }) : null}

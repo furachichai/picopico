@@ -9,7 +9,7 @@ import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
 const AppContent = () => {
-  const { state } = useEditor();
+  const { state, dispatch } = useEditor();
   const [displayView, setDisplayView] = React.useState(state.view);
   const [animating, setAnimating] = React.useState(false);
   const [prevView, setPrevView] = React.useState(null);
@@ -69,6 +69,27 @@ const AppContent = () => {
     return () => {
       document.removeEventListener('gesturestart', handleGestureStart);
     };
+    return () => {
+      document.removeEventListener('gesturestart', handleGestureStart);
+    };
+  }, []);
+
+  // Check for Read-Only Mode (Network IP vs Localhost)
+  React.useEffect(() => {
+    const hostname = window.location.hostname;
+    // Allow localhost and 127.0.0.1 as Creator Mode
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+    // Dispatch readOnly state
+    // We only want to set this once, but since it's driven by window, it's stable.
+    if (!isLocal) {
+      dispatch({ type: 'SET_READ_ONLY', payload: true });
+      console.log('App running in Player Mode (Read-Only)');
+    } else {
+      // Explicitly set false just in case
+      dispatch({ type: 'SET_READ_ONLY', payload: false });
+      console.log('App running in Creator Mode');
+    }
   }, []);
 
 
