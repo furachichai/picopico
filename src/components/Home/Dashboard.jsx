@@ -131,7 +131,18 @@ const Dashboard = () => {
   }, []);
 
   const handleOpenEditor = () => {
-    dispatch({ type: 'SET_VIEW', payload: 'editor' });
+    if (state.readOnly) {
+      const pin = window.prompt("Enter Admin PIN:");
+      if (pin === '2027') {
+        localStorage.setItem('pico_editor_unlocked', 'true');
+        dispatch({ type: 'SET_READ_ONLY', payload: false });
+        dispatch({ type: 'SET_VIEW', payload: 'editor' });
+      } else if (pin !== null) { // If user cancelled, don't alert
+        alert("Incorrect PIN");
+      }
+    } else {
+      dispatch({ type: 'SET_VIEW', payload: 'editor' });
+    }
   };
 
   // Editing State
@@ -563,25 +574,23 @@ const Dashboard = () => {
             height: '36px',
             padding: 0
           }} />
-          {!state.readOnly && (
-            <button
-              onClick={handleOpenEditor}
-              style={{
-                backgroundColor: 'var(--primary)',
-                color: 'white',
-                border: 'none',
-                padding: '6px 12px',
-                borderRadius: '12px',
-                fontWeight: '700',
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow)',
-                borderBottom: '3px solid var(--primary-dark)'
-              }}
-            >
-              {t('dashboard.editor')}
-            </button>
-          )}
+          <button
+            onClick={handleOpenEditor}
+            style={{
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              border: 'none',
+              padding: '6px 12px',
+              borderRadius: '12px',
+              fontWeight: '700',
+              fontSize: '0.8rem',
+              cursor: 'pointer',
+              boxShadow: 'var(--shadow)',
+              borderBottom: '3px solid var(--primary-dark)'
+            }}
+          >
+            {t('dashboard.editor')}
+          </button>
           <div className="streak-counter" style={{
             backgroundColor: 'var(--white)',
             padding: '6px 12px',

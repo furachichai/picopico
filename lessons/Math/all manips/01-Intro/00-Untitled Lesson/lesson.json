@@ -1,0 +1,255 @@
+{
+  "id": "draft-1768251680986",
+  "title": "Untitled Lesson",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768251703751",
+          "type": "text",
+          "content": "New Text",
+          "x": 50,
+          "y": 50,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {}
+        },
+        {
+          "id": "el-1768251706747",
+          "type": "balloon",
+          "content": "Hello!",
+          "x": 34.44444444444444,
+          "y": 30.78125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 20,
+              "y": 50
+            }
+          }
+        },
+        {
+          "id": "el-1768251714162",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 0,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1768251716078",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768251718495",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "True",
+              "False"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1768251720631",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768251722662",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "4sq",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "slide-1768251725330",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768251727495",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Option 1",
+              "Option 2",
+              "Option 3",
+              "Option 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "nl",
+            "visualMode": false,
+            "nlConfig": {
+              "min": 0,
+              "max": 10,
+              "stepCount": 10,
+              "hideLabels": false,
+              "correctValue": 5
+            }
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1768251756680",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 4,
+      "cartridge": {
+        "type": "FractionAlpha",
+        "config": {
+          "mode": "fracture",
+          "targetDenominator": 3,
+          "targetNumerator": 1,
+          "initialDenominator": 1
+        }
+      }
+    },
+    {
+      "id": "slide-1768251763295",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 5,
+      "cartridge": {
+        "type": "FractionAlpha",
+        "config": {
+          "mode": "serve",
+          "targetDenominator": 3,
+          "targetNumerator": 1,
+          "initialDenominator": 1
+        }
+      }
+    },
+    {
+      "id": "slide-1768251773053",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 6,
+      "cartridge": {
+        "type": "FractionSlicer",
+        "config": {
+          "levels": 5,
+          "tolerance": 0.1
+        }
+      }
+    },
+    {
+      "id": "slide-1768251780061",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 7,
+      "cartridge": {
+        "type": "SwipeSorter",
+        "config": {
+          "leftLabel": "FALSE",
+          "rightLabel": "CORRECT",
+          "cards": [
+            {
+              "id": "c1",
+              "text": "2 + 2 = 5",
+              "correctSide": "left"
+            },
+            {
+              "id": "c2",
+              "text": "Water is wet",
+              "correctSide": "right"
+            },
+            {
+              "id": "c3",
+              "text": "The moon is cheese",
+              "correctSide": "left"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-01-12T21:01:20.986Z",
+  "updatedAt": "2026-01-12T21:03:45.746Z",
+  "path": "lessons/Math/all manips/01-Intro/00-Untitled Lesson/lesson.json",
+  "subject": "Math",
+  "topic": "all manips",
+  "chapterId": "01",
+  "chapterName": "Intro",
+  "lessonId": "00"
+}

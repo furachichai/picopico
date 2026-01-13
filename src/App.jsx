@@ -80,15 +80,18 @@ const AppContent = () => {
     // Allow localhost and 127.0.0.1 as Creator Mode
     const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
 
+    // Check if previously unlocked via PIN
+    const isUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true';
+
     // Dispatch readOnly state
     // We only want to set this once, but since it's driven by window, it's stable.
-    if (!isLocal) {
+    if (!isLocal && !isUnlocked) {
       dispatch({ type: 'SET_READ_ONLY', payload: true });
       console.log('App running in Player Mode (Read-Only)');
     } else {
       // Explicitly set false just in case
       dispatch({ type: 'SET_READ_ONLY', payload: false });
-      console.log('App running in Creator Mode');
+      console.log('App running in Creator Mode (Unlocked)');
     }
   }, []);
 
@@ -130,11 +133,105 @@ const AppContent = () => {
   );
 };
 
+// PIN Gate Component
+const PinGate = ({ children }) => {
+  const [isUnlocked, setIsUnlocked] = React.useState(() => {
+    return localStorage.getItem('pico_app_unlocked') === 'true';
+  });
+  const [pinValue, setPinValue] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (pinValue === '2027') {
+      localStorage.setItem('pico_app_unlocked', 'true');
+      setIsUnlocked(true);
+    } else {
+      setError('Incorrect PIN');
+      setPinValue('');
+    }
+  };
+
+  if (isUnlocked) {
+    return children;
+  }
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#1a202c',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      color: 'white'
+    }}>
+      <div style={{
+        background: 'rgba(255,255,255,0.1)',
+        padding: '40px',
+        borderRadius: '20px',
+        textAlign: 'center',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <h1 style={{ marginBottom: '8px', fontSize: '2rem' }}>🔒 PicoPico</h1>
+        <p style={{ opacity: 0.7, marginBottom: '24px' }}>Enter PIN to continue</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={pinValue}
+            onChange={(e) => { setPinValue(e.target.value); setError(''); }}
+            placeholder="Enter PIN"
+            autoFocus
+            style={{
+              padding: '12px 20px',
+              fontSize: '1.2rem',
+              borderRadius: '12px',
+              border: error ? '2px solid #EF4444' : '2px solid rgba(255,255,255,0.2)',
+              background: 'rgba(255,255,255,0.1)',
+              color: 'white',
+              textAlign: 'center',
+              width: '150px',
+              outline: 'none'
+            }}
+          />
+          <br />
+          {error && <p style={{ color: '#EF4444', marginTop: '8px', fontSize: '0.9rem' }}>{error}</p>}
+          <button
+            type="submit"
+            style={{
+              marginTop: '16px',
+              padding: '12px 32px',
+              fontSize: '1rem',
+              fontWeight: '700',
+              borderRadius: '12px',
+              border: 'none',
+              background: '#8B5CF6',
+              color: 'white',
+              cursor: 'pointer'
+            }}
+          >
+            Unlock
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   return (
-    <EditorProvider>
-      <AppContent />
-    </EditorProvider>
+    <PinGate>
+      <EditorProvider>
+        <AppContent />
+      </EditorProvider>
+    </PinGate>
   )
 }
 
