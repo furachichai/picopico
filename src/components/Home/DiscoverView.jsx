@@ -30,8 +30,17 @@ const DiscoverView = () => {
     useEffect(() => {
         const fetchLessons = async () => {
             try {
-                const response = await fetch('/api/list-lessons');
-                const data = await response.json();
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+                let data;
+                if (isLocal) {
+                    const response = await fetch('/api/list-lessons');
+                    data = await response.json();
+                } else {
+                    const response = await fetch('/lessons-data.json');
+                    data = await response.json();
+                }
+
                 const flatList = [];
                 const traverse = (items) => {
                     items.forEach(item => {
@@ -44,15 +53,23 @@ const DiscoverView = () => {
                 };
                 traverse(data);
 
-                const loadedLessons = await Promise.all(flatList.map(async (l) => {
-                    try {
-                        const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
-                        const content = await res.json();
-                        return { ...content, path: l.path };
-                    } catch (e) {
-                        return null;
-                    }
-                }));
+                let loadedLessons;
+                if (isLocal) {
+                    // Fetch each lesson individually on localhost
+                    loadedLessons = await Promise.all(flatList.map(async (l) => {
+                        try {
+                            const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
+                            const content = await res.json();
+                            return { ...content, path: l.path };
+                        } catch (e) {
+                            return null;
+                        }
+                    }));
+                } else {
+                    // Use embedded content from static JSON on Vercel
+                    loadedLessons = flatList.map(l => ({ ...l.content, path: l.path }));
+                }
+
                 // Filter valid lessons
                 setLessons(loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0));
             } catch (error) {

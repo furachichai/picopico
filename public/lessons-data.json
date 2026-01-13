@@ -1,0 +1,1570 @@
+[
+  {
+    "name": "Math",
+    "type": "directory",
+    "path": "lessons/Math",
+    "children": [
+      {
+        "name": "01-Fractiones",
+        "type": "directory",
+        "path": "lessons/Math/01-Fractiones",
+        "children": [
+          {
+            "name": "01-Intro",
+            "type": "directory",
+            "path": "lessons/Math/01-Fractiones/01-Intro",
+            "children": [
+              {
+                "name": "01-la tres",
+                "type": "directory",
+                "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
+                    "title": "la tres",
+                    "description": "Recorre Uruguay con Phillips",
+                    "content": {
+                      "id": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
+                      "title": "la tres",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/Pesto%20spring%20out%20of%20box.%20Jeff%20is%20mexican.png\")",
+                          "elements": [
+                            {
+                              "id": "el-1765209381148",
+                              "type": "text",
+                              "content": "THE  APPRENTICE ROBOT !",
+                              "x": 49.72222222222222,
+                              "y": 33.75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": -4.293108184305822,
+                              "scale": 1.5274977303999329,
+                              "metadata": {
+                                "backgroundColor": "#000000",
+                                "color": "#ffffff"
+                              }
+                            },
+                            {
+                              "id": "el-1765209435848",
+                              "type": "text",
+                              "content": "PESTO",
+                              "x": 49.44444444444444,
+                              "y": 20.468750000000004,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 2.5050839977220702,
+                              "metadata": {
+                                "backgroundColor": "#58cc02",
+                                "color": "#000000",
+                                "fontFamily": "Georgia, serif"
+                              }
+                            }
+                          ],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1765151326480",
+                          "background": "#9f6584",
+                          "elements": [
+                            {
+                              "id": "el-1765218376370",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 79.21875,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "options": [
+                                "Option 1",
+                                "Option 2",
+                                "Option 3",
+                                "Option 4"
+                              ],
+                              "correctIndex": 0
+                            },
+                            {
+                              "id": "el-1765218380588",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_pesto_laughing.png",
+                              "x": 50,
+                              "y": 28.28125,
+                              "width": 40,
+                              "height": 19.278042959427207,
+                              "rotation": 0,
+                              "scale": 1.543566641517249
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1765218385090",
+                          "background": "#fecb3e",
+                          "elements": [
+                            {
+                              "id": "el-1765218400971",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_walking%20with%20box.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 2.1574067984293386
+                            },
+                            {
+                              "id": "el-1765629846298",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 85,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "True",
+                                  "False"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "tf",
+                                "visualMode": true
+                              }
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1765246098286",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765247250617",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 43.333333333333336,
+                              "y": 59.375,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 2.6177851336931286
+                            },
+                            {
+                              "id": "el-1765629851085",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0,
+                                  1
+                                ],
+                                "quizType": "4sq",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 3,
+                          "cartridge": null
+                        },
+                        {
+                          "id": "slide-1765246133785",
+                          "background": "#ff6a00",
+                          "elements": [
+                            {
+                              "id": "el-1765246151126",
+                              "type": "balloon",
+                              "content": "Hello!",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 27,
+                                  "y": 117
+                                }
+                              }
+                            },
+                            {
+                              "id": "el-1765246167653",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_scrathing.png",
+                              "x": 80.55555555555556,
+                              "y": 41.875,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "flipX": true
+                              }
+                            },
+                            {
+                              "id": "el-1765247194108",
+                              "type": "balloon",
+                              "content": "Hello!",
+                              "x": 38.888888888888886,
+                              "y": 72.1875,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 20,
+                                  "y": 50
+                                }
+                              }
+                            }
+                          ],
+                          "order": 4
+                        },
+                        {
+                          "id": "slide-1765246403640",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 5
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T12:54:08.396Z",
+                      "updatedAt": "2025-12-13T13:12:39.523Z",
+                      "path": "lessons/Math/01-Fractiones/01-Intro/01-la tres/lesson.json",
+                      "subject": "Math",
+                      "topic": "01-Fractiones",
+                      "chapterId": "01",
+                      "chapterName": "Intro",
+                      "lessonId": "01",
+                      "description": "Recorre Uruguay con Phillips",
+                      "name": "lesson.json",
+                      "type": "file",
+                      "status": "active",
+                      "icon": {
+                        "type": {},
+                        "key": null,
+                        "props": {
+                          "size": 24
+                        },
+                        "_owner": null,
+                        "_store": {}
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "02-Welcome",
+                "type": "directory",
+                "path": "lessons/Math/01-Fractiones/01-Intro/02-Welcome",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
+                    "title": "Welcome",
+                    "description": "Garibaldi Giribaldi Rock Rock",
+                    "content": {
+                      "id": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
+                      "title": "Welcome",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/Pesto%20and%20boxes.png\")",
+                          "elements": [],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1765247637293",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 1,
+                          "cartridge": {
+                            "type": "FractionAlpha",
+                            "config": {
+                              "mode": "fracture",
+                              "targetDenominator": 3,
+                              "targetNumerator": 1,
+                              "initialDenominator": 1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1764638603307",
+                          "background": "url(\"/src/assets/backgrounds/bkg_beach_001.png\")",
+                          "elements": [
+                            {
+                              "id": "el-1764972560273",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_pesto_laughing.png",
+                              "x": 53.05555555555556,
+                              "y": 74.21875,
+                              "width": 40,
+                              "height": 19.278042959427207,
+                              "rotation": 0,
+                              "scale": 2.824750597218217
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1765218414866",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765218420628",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 50,
+                              "y": 53.75,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 2.243724179879326,
+                              "metadata": {
+                                "flipX": true,
+                                "flipY": true
+                              }
+                            }
+                          ],
+                          "order": 3
+                        },
+                        {
+                          "id": "slide-1765247795801",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765247801040",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_walking%20with%20box.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "flipX": true,
+                                "flipY": true
+                              }
+                            }
+                          ],
+                          "order": 4
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T01:23:17.851Z",
+                      "updatedAt": "2025-12-09T02:36:57.467Z",
+                      "path": "lessons/Math/01-Fractiones/01-Intro/02-Welcome/lesson.json",
+                      "subject": "Math",
+                      "topic": "01-Fractiones",
+                      "chapterId": "01",
+                      "chapterName": "Intro",
+                      "lessonId": "02",
+                      "description": "Garibaldi Giribaldi Rock Rock",
+                      "name": "lesson.json",
+                      "type": "file",
+                      "status": "active",
+                      "icon": {
+                        "type": {},
+                        "key": null,
+                        "props": {
+                          "size": 24
+                        },
+                        "_owner": null,
+                        "_store": {}
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "03-la segunda",
+                "type": "directory",
+                "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
+                    "title": "la segunda",
+                    "description": "frente al pelotón de fusilamiento el día que su padre lo llevó a conocer el hielo y se recontracagó de frío",
+                    "content": {
+                      "id": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
+                      "title": "la segunda",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/Frozen%20Pesto.png\")",
+                          "elements": [
+                            {
+                              "id": "el-1765209307668",
+                              "type": "text",
+                              "content": "FROZEN ASSETS!",
+                              "x": 41.66666666666667,
+                              "y": 81.875,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1.4993233778907102,
+                              "metadata": {
+                                "color": "#ffffff",
+                                "backgroundColor": "#ff4b4b"
+                              }
+                            },
+                            {
+                              "id": "el-1765209338056",
+                              "type": "text",
+                              "content": "Fraction addition",
+                              "x": 35.833333333333336,
+                              "y": 89.53125,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1.2614625957824037,
+                              "metadata": {
+                                "color": "#ffffff",
+                                "backgroundColor": "#000000"
+                              }
+                            }
+                          ],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1765404351101",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 1,
+                          "cartridge": {
+                            "type": "FractionSlicer",
+                            "config": {
+                              "levels": 8,
+                              "tolerance": 0.1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1765218442501",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765218453049",
+                              "type": "image",
+                              "content": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXp1Z2J6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6a3Z6/3o7TKSjRrfIPjeiVyM/giphy.gif",
+                              "x": 51.111111111111114,
+                              "y": 49.6875,
+                              "width": 40,
+                              "height": 22.5,
+                              "rotation": 0,
+                              "scale": 2.5471233191911247
+                            },
+                            {
+                              "id": "el-1765218460455",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_scrathing.png",
+                              "x": 23.333333333333336,
+                              "y": 71.875,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 1.6423129754147796
+                            }
+                          ],
+                          "order": 2
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T02:03:37.780Z",
+                      "updatedAt": "2025-12-12T00:18:38.170Z",
+                      "path": "lessons/Math/01-Fractiones/01-Intro/03-la segunda/lesson.json",
+                      "subject": "Math",
+                      "topic": "01-Fractiones",
+                      "chapterId": "01",
+                      "chapterName": "Intro",
+                      "lessonId": "03",
+                      "description": "frente al pelotón de fusilamiento el día que su padre lo llevó a conocer el hielo y se recontracagó de frío",
+                      "name": "lesson.json",
+                      "type": "file",
+                      "status": "active",
+                      "icon": {
+                        "type": {},
+                        "key": null,
+                        "props": {
+                          "size": 24
+                        },
+                        "_owner": null,
+                        "_store": {}
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "02-General",
+        "type": "directory",
+        "path": "lessons/Math/02-General",
+        "children": [
+          {
+            "name": "00-Chapter",
+            "type": "directory",
+            "path": "lessons/Math/02-General/00-Chapter",
+            "children": [
+              {
+                "name": "00-Untitled Lesson",
+                "type": "directory",
+                "path": "lessons/Math/02-General/00-Chapter/00-Untitled Lesson",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/02-General/00-Chapter/00-Untitled Lesson/lesson.json",
+                    "title": "Untitled Lesson",
+                    "content": {
+                      "id": "draft-1",
+                      "title": "Untitled Lesson",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/Pesto%20ninja.png\")",
+                          "elements": [],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1765210984993",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765210988575",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "options": [
+                                "Option 1",
+                                "Option 2",
+                                "Option 3",
+                                "Option 4"
+                              ],
+                              "correctIndex": 0
+                            }
+                          ],
+                          "order": 1
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T01:40:33.379Z",
+                      "updatedAt": "2025-12-08T16:23:11.111Z",
+                      "path": "lessons/Math/02-General/00-Chapter/00-Untitled Lesson/lesson.json",
+                      "subject": "Math",
+                      "topic": "02-General",
+                      "chapterId": "00",
+                      "chapterName": "Chapter",
+                      "lessonId": "00"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "03-Test",
+        "type": "directory",
+        "path": "lessons/Math/03-Test",
+        "children": [
+          {
+            "name": "02-capitulo",
+            "type": "directory",
+            "path": "lessons/Math/03-Test/02-capitulo",
+            "children": [
+              {
+                "name": "04-lexicon",
+                "type": "directory",
+                "path": "lessons/Math/03-Test/02-capitulo/04-lexicon",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/03-Test/02-capitulo/04-lexicon/lesson.json",
+                    "title": "lexicon",
+                    "content": {
+                      "id": "draft-1",
+                      "title": "lexicon",
+                      "slides": [
+                        {
+                          "id": "slide-1764638993145",
+                          "background": "url(\"/src/assets/backgrounds/counter%202.png\")",
+                          "elements": [],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764638913868",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 46.388888888888886,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 4.572049167184603
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1764639004966",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764639007465",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_walking%20with%20box.png",
+                              "x": 86.38888888888889,
+                              "y": 78.28125,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 0.1953241439358406
+                            }
+                          ],
+                          "order": 2
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T01:28:03.998Z",
+                      "updatedAt": "2025-12-02T01:31:49.649Z",
+                      "path": "lessons/Math/Test/02-capitulo/04-lexicon/lesson.json",
+                      "subject": "Math",
+                      "topic": "Test",
+                      "chapterId": "02",
+                      "chapterName": "capitulo",
+                      "lessonId": "04"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "04-Test topic 01",
+        "type": "directory",
+        "path": "lessons/Math/04-Test topic 01",
+        "children": [
+          {
+            "name": "003-test chapter",
+            "type": "directory",
+            "path": "lessons/Math/04-Test topic 01/003-test chapter",
+            "children": [
+              {
+                "name": "004-test lesson",
+                "type": "directory",
+                "path": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson/lesson.json",
+                    "title": "test lesson",
+                    "content": {
+                      "id": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson/lesson.json",
+                      "title": "test lesson",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/pizza%20dough.png\")",
+                          "elements": [],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1764639909506",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764639911637",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 4.498531180455349
+                            }
+                          ],
+                          "order": 1
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T01:44:56.755Z",
+                      "updatedAt": "2025-12-08T16:40:55.552Z",
+                      "path": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson/lesson.json",
+                      "subject": "Math",
+                      "topic": "04-Test topic 01",
+                      "chapterId": "003",
+                      "chapterName": "test chapter",
+                      "lessonId": "004",
+                      "name": "lesson.json",
+                      "type": "file",
+                      "status": "active",
+                      "icon": {
+                        "type": {},
+                        "key": null,
+                        "props": {
+                          "size": 24
+                        },
+                        "_owner": null,
+                        "_store": {}
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "004-test lesson AAA",
+                "type": "directory",
+                "path": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson AAA",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/04-Test topic 01/003-test chapter/004-test lesson AAA/lesson.json",
+                    "title": "test lesson AAA",
+                    "content": {
+                      "id": "draft-1",
+                      "title": "test lesson AAA",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764639900623",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_walking%20with%20box.png",
+                              "x": 16.944444444444443,
+                              "y": 87.1875,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 0.5414491171180973
+                            }
+                          ],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1764639909506",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764639911637",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 4.498531180455349
+                            }
+                          ],
+                          "order": 1
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-02T01:44:56.755Z",
+                      "updatedAt": "2025-12-02T01:46:32.235Z",
+                      "path": "lessons/Math/Test topic 01/003-test chapter/004-test lesson AAA/lesson.json",
+                      "subject": "Math",
+                      "topic": "Test topic 01",
+                      "chapterId": "003",
+                      "chapterName": "test chapter",
+                      "lessonId": "004"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "all manips",
+        "type": "directory",
+        "path": "lessons/Math/all manips",
+        "children": [
+          {
+            "name": "01-Intro",
+            "type": "directory",
+            "path": "lessons/Math/all manips/01-Intro",
+            "children": [
+              {
+                "name": "00-all manips lessons",
+                "type": "directory",
+                "path": "lessons/Math/all manips/01-Intro/00-all manips lessons",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/all manips/01-Intro/00-all manips lessons/lesson.json",
+                    "title": "all manips lessons",
+                    "content": {
+                      "id": "draft-1768251680986",
+                      "title": "all manips lessons",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251703751",
+                              "type": "text",
+                              "content": "New Text",
+                              "x": 50,
+                              "y": 50,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {}
+                            },
+                            {
+                              "id": "el-1768251706747",
+                              "type": "balloon",
+                              "content": "Hello!",
+                              "x": 34.44444444444444,
+                              "y": 30.78125,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 20,
+                                  "y": 50
+                                }
+                              }
+                            },
+                            {
+                              "id": "el-1768251714162",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "classic",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 0,
+                          "cartridge": null
+                        },
+                        {
+                          "id": "slide-1768251716078",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251718495",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 85,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "True",
+                                  "False"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "tf",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1768251720631",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251722662",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "4sq",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1768251725330",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251727495",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "nl",
+                                "visualMode": false,
+                                "nlConfig": {
+                                  "min": 0,
+                                  "max": 10,
+                                  "stepCount": 10,
+                                  "hideLabels": false,
+                                  "correctValue": 5
+                                }
+                              }
+                            }
+                          ],
+                          "order": 3
+                        },
+                        {
+                          "id": "slide-1768251756680",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 4,
+                          "cartridge": {
+                            "type": "FractionAlpha",
+                            "config": {
+                              "mode": "fracture",
+                              "targetDenominator": 3,
+                              "targetNumerator": 1,
+                              "initialDenominator": 1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251763295",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 5,
+                          "cartridge": {
+                            "type": "FractionAlpha",
+                            "config": {
+                              "mode": "serve",
+                              "targetDenominator": 3,
+                              "targetNumerator": 1,
+                              "initialDenominator": 1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251773053",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 6,
+                          "cartridge": {
+                            "type": "FractionSlicer",
+                            "config": {
+                              "levels": 5,
+                              "tolerance": 0.1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251780061",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 7,
+                          "cartridge": {
+                            "type": "SwipeSorter",
+                            "config": {
+                              "leftLabel": "FALSE",
+                              "rightLabel": "CORRECT",
+                              "cards": [
+                                {
+                                  "id": "c1",
+                                  "text": "2 + 2 = 5",
+                                  "correctSide": "left"
+                                },
+                                {
+                                  "id": "c2",
+                                  "text": "Water is wet",
+                                  "correctSide": "right"
+                                },
+                                {
+                                  "id": "c3",
+                                  "text": "The moon is cheese",
+                                  "correctSide": "left"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2026-01-12T21:01:20.986Z",
+                      "updatedAt": "2026-01-12T21:04:02.309Z",
+                      "path": "lessons/Math/all manips/01-Intro/00-all manips lessons/lesson.json",
+                      "subject": "Math",
+                      "topic": "all manips",
+                      "chapterId": "01",
+                      "chapterName": "Intro",
+                      "lessonId": "00"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "00-Untitled Lesson",
+                "type": "directory",
+                "path": "lessons/Math/all manips/01-Intro/00-Untitled Lesson",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/all manips/01-Intro/00-Untitled Lesson/lesson.json",
+                    "title": "Untitled Lesson",
+                    "content": {
+                      "id": "draft-1768251680986",
+                      "title": "Untitled Lesson",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251703751",
+                              "type": "text",
+                              "content": "New Text",
+                              "x": 50,
+                              "y": 50,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {}
+                            },
+                            {
+                              "id": "el-1768251706747",
+                              "type": "balloon",
+                              "content": "Hello!",
+                              "x": 34.44444444444444,
+                              "y": 30.78125,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 20,
+                                  "y": 50
+                                }
+                              }
+                            },
+                            {
+                              "id": "el-1768251714162",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "classic",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 0,
+                          "cartridge": null
+                        },
+                        {
+                          "id": "slide-1768251716078",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251718495",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 85,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "True",
+                                  "False"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "tf",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1768251720631",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251722662",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "4sq",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1768251725330",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1768251727495",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "nl",
+                                "visualMode": false,
+                                "nlConfig": {
+                                  "min": 0,
+                                  "max": 10,
+                                  "stepCount": 10,
+                                  "hideLabels": false,
+                                  "correctValue": 5
+                                }
+                              }
+                            }
+                          ],
+                          "order": 3
+                        },
+                        {
+                          "id": "slide-1768251756680",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 4,
+                          "cartridge": {
+                            "type": "FractionAlpha",
+                            "config": {
+                              "mode": "fracture",
+                              "targetDenominator": 3,
+                              "targetNumerator": 1,
+                              "initialDenominator": 1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251763295",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 5,
+                          "cartridge": {
+                            "type": "FractionAlpha",
+                            "config": {
+                              "mode": "serve",
+                              "targetDenominator": 3,
+                              "targetNumerator": 1,
+                              "initialDenominator": 1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251773053",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 6,
+                          "cartridge": {
+                            "type": "FractionSlicer",
+                            "config": {
+                              "levels": 5,
+                              "tolerance": 0.1
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1768251780061",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 7,
+                          "cartridge": {
+                            "type": "SwipeSorter",
+                            "config": {
+                              "leftLabel": "FALSE",
+                              "rightLabel": "CORRECT",
+                              "cards": [
+                                {
+                                  "id": "c1",
+                                  "text": "2 + 2 = 5",
+                                  "correctSide": "left"
+                                },
+                                {
+                                  "id": "c2",
+                                  "text": "Water is wet",
+                                  "correctSide": "right"
+                                },
+                                {
+                                  "id": "c3",
+                                  "text": "The moon is cheese",
+                                  "correctSide": "left"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2026-01-12T21:01:20.986Z",
+                      "updatedAt": "2026-01-12T21:03:45.746Z",
+                      "path": "lessons/Math/all manips/01-Intro/00-Untitled Lesson/lesson.json",
+                      "subject": "Math",
+                      "topic": "all manips",
+                      "chapterId": "01",
+                      "chapterName": "Intro",
+                      "lessonId": "00"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "General",
+        "type": "directory",
+        "path": "lessons/Math/General",
+        "children": [
+          {
+            "name": "00-Chapter",
+            "type": "directory",
+            "path": "lessons/Math/General/00-Chapter",
+            "children": [
+              {
+                "name": "00-cATCH m all",
+                "type": "directory",
+                "path": "lessons/Math/General/00-Chapter/00-cATCH m all",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/General/00-Chapter/00-cATCH m all/lesson.json",
+                    "title": "cATCH m all",
+                    "content": {
+                      "id": "lessons/Math/General/00-Chapter/00-cATCH m all/lesson.json",
+                      "title": "cATCH m all",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "url(\"/src/assets/backgrounds/Trade%20Card.png\")",
+                          "elements": [],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1764976644706",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1764976646875",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_teaching.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 1
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1765247307589",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765247314948",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_pesto_laughing.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 19.278042959427207,
+                              "rotation": 0,
+                              "scale": 1
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1765247308306",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765247311217",
+                              "type": "image",
+                              "content": "/src/assets/characters/chef_scrathing.png",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 34.59586466165413,
+                              "rotation": 0,
+                              "scale": 1
+                            }
+                          ],
+                          "order": 3
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-05T23:16:27.278Z",
+                      "updatedAt": "2025-12-09T02:28:37.239Z",
+                      "path": "lessons/Math/General/00-Chapter/00-cATCH m all/lesson.json",
+                      "subject": "Math",
+                      "topic": "General",
+                      "chapterId": "00",
+                      "chapterName": "Chapter",
+                      "lessonId": "00",
+                      "name": "lesson.json",
+                      "type": "file",
+                      "status": "active",
+                      "icon": {
+                        "type": {},
+                        "key": null,
+                        "props": {
+                          "size": 24
+                        },
+                        "_owner": null,
+                        "_store": {}
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "00-Test vibrannl",
+                "type": "directory",
+                "path": "lessons/Math/General/00-Chapter/00-Test vibrannl",
+                "children": [
+                  {
+                    "name": "lesson.json",
+                    "type": "file",
+                    "path": "lessons/Math/General/00-Chapter/00-Test vibrannl/lesson.json",
+                    "title": "Test vibrannl",
+                    "content": {
+                      "id": "draft-1765650347421",
+                      "title": "Test vibrannl",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1765650350810",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 51.587304009331596,
+                              "y": 87.19493865966797,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "nl",
+                                "visualMode": false,
+                                "nlConfig": {
+                                  "min": 0,
+                                  "max": 10,
+                                  "stepCount": 10,
+                                  "hideLabels": false,
+                                  "correctValue": 5
+                                }
+                              }
+                            }
+                          ],
+                          "order": 0
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2025-12-13T18:25:47.421Z",
+                      "updatedAt": "2025-12-13T18:26:11.477Z",
+                      "path": "lessons/Math/General/00-Chapter/00-Test vibrannl/lesson.json",
+                      "subject": "Math",
+                      "topic": "General",
+                      "chapterId": "00",
+                      "chapterName": "Chapter",
+                      "lessonId": "00"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

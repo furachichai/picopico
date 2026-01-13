@@ -92,8 +92,19 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await fetch('/api/list-lessons');
-        const data = await response.json();
+        // Detect if we're on Vercel (not localhost) and use static data
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        let data;
+        if (isLocal) {
+          // Use dynamic API on localhost (Vite plugin)
+          const response = await fetch('/api/list-lessons');
+          data = await response.json();
+        } else {
+          // Use pre-built static data on Vercel
+          const response = await fetch('/lessons-data.json');
+          data = await response.json();
+        }
 
         // Flatten the tree into a list of lessons
         const flatList = [];
