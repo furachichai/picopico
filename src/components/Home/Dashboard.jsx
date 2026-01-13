@@ -221,9 +221,18 @@ const Dashboard = () => {
     }
 
     try {
-      const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
-      if (!response.ok) throw new Error('Failed to load lesson');
-      const lessonData = await response.json();
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+      let lessonData;
+      if (isLocal) {
+        // Use API on localhost
+        const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
+        if (!response.ok) throw new Error('Failed to load lesson');
+        lessonData = await response.json();
+      } else {
+        // On Vercel, use embedded content from the lesson item (already loaded in lessons state)
+        lessonData = lessonItem.content || lessonItem;
+      }
 
       // Merge metadata
       const fullLesson = {

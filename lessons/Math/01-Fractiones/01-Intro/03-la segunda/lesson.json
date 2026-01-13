@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/Frozen%20Pesto.png\")",
+      "background": "url(\"/assets/backgrounds/Frozen%20Pesto.png\")",
       "elements": [
         {
           "id": "el-1765209307668",
@@ -70,7 +70,7 @@
         {
           "id": "el-1765218460455",
           "type": "image",
-          "content": "/src/assets/characters/chef_scrathing.png",
+          "content": "/assets/characters/chef_scrathing.png",
           "x": 23.333333333333336,
           "y": 71.875,
           "width": 40,

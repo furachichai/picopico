@@ -9,7 +9,7 @@
         {
           "id": "el-1764639900623",
           "type": "image",
-          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "content": "/assets/characters/chef_walking%20with%20box.png",
           "x": 16.944444444444443,
           "y": 87.1875,
           "width": 40,
@@ -27,7 +27,7 @@
         {
           "id": "el-1764639911637",
           "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
+          "content": "/assets/characters/chef_teaching.png",
           "x": 50,
           "y": 50,
           "width": 40,

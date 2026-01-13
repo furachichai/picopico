@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1764638993145",
-      "background": "url(\"/src/assets/backgrounds/counter%202.png\")",
+      "background": "url(\"/assets/backgrounds/counter%202.png\")",
       "elements": [],
       "order": 0
     },
@@ -15,7 +15,7 @@
         {
           "id": "el-1764638913868",
           "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
+          "content": "/assets/characters/chef_teaching.png",
           "x": 46.388888888888886,
           "y": 50,
           "width": 40,
@@ -33,7 +33,7 @@
         {
           "id": "el-1764639007465",
           "type": "image",
-          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "content": "/assets/characters/chef_walking%20with%20box.png",
           "x": 86.38888888888889,
           "y": 78.28125,
           "width": 40,

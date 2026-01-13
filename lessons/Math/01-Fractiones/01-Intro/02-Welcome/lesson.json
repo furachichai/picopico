@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/Pesto%20and%20boxes.png\")",
+      "background": "url(\"/assets/backgrounds/Pesto%20and%20boxes.png\")",
       "elements": [],
       "order": 0
     },
@@ -25,12 +25,12 @@
     },
     {
       "id": "slide-1764638603307",
-      "background": "url(\"/src/assets/backgrounds/bkg_beach_001.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_beach_001.png\")",
       "elements": [
         {
           "id": "el-1764972560273",
           "type": "image",
-          "content": "/src/assets/characters/chef_pesto_laughing.png",
+          "content": "/assets/characters/chef_pesto_laughing.png",
           "x": 53.05555555555556,
           "y": 74.21875,
           "width": 40,
@@ -48,7 +48,7 @@
         {
           "id": "el-1765218420628",
           "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
+          "content": "/assets/characters/chef_teaching.png",
           "x": 50,
           "y": 53.75,
           "width": 40,
@@ -70,7 +70,7 @@
         {
           "id": "el-1765247801040",
           "type": "image",
-          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "content": "/assets/characters/chef_walking%20with%20box.png",
           "x": 50,
           "y": 50,
           "width": 40,

@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/Pesto%20spring%20out%20of%20box.%20Jeff%20is%20mexican.png\")",
+      "background": "url(\"/assets/backgrounds/Pesto%20spring%20out%20of%20box.%20Jeff%20is%20mexican.png\")",
       "elements": [
         {
           "id": "el-1765209381148",
@@ -65,7 +65,7 @@
         {
           "id": "el-1765218380588",
           "type": "image",
-          "content": "/src/assets/characters/chef_pesto_laughing.png",
+          "content": "/assets/characters/chef_pesto_laughing.png",
           "x": 50,
           "y": 28.28125,
           "width": 40,
@@ -83,7 +83,7 @@
         {
           "id": "el-1765218400971",
           "type": "image",
-          "content": "/src/assets/characters/chef_walking%20with%20box.png",
+          "content": "/assets/characters/chef_walking%20with%20box.png",
           "x": 50,
           "y": 50,
           "width": 40,
@@ -124,7 +124,7 @@
         {
           "id": "el-1765247250617",
           "type": "image",
-          "content": "/src/assets/characters/chef_teaching.png",
+          "content": "/assets/characters/chef_teaching.png",
           "x": 43.333333333333336,
           "y": 59.375,
           "width": 40,
@@ -190,7 +190,7 @@
         {
           "id": "el-1765246167653",
           "type": "image",
-          "content": "/src/assets/characters/chef_scrathing.png",
+          "content": "/assets/characters/chef_scrathing.png",
           "x": 80.55555555555556,
           "y": 41.875,
           "width": 40,
