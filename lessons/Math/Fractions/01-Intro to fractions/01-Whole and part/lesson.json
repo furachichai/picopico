@@ -1,0 +1,364 @@
+{
+  "id": "lessons/Math/Fractions/01-Intro to fractions/01-Whole and part/lesson.json",
+  "title": "Whole and part",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768416680214",
+          "type": "balloon",
+          "content": "Ready to cook on your own?",
+          "x": 62.5,
+          "y": 20,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 0.9568629063533877,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -40,
+              "y": 62
+            }
+          }
+        },
+        {
+          "id": "el-1768416688936",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20leaning.png",
+          "x": 24.166666666666668,
+          "y": 62.03125,
+          "width": 40,
+          "height": 49.077181208053695,
+          "rotation": 0,
+          "scale": 1.22919801852307,
+          "metadata": {
+            "width": 40,
+            "height": 49.077181208053695
+          }
+        },
+        {
+          "id": "el-1768416738097",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20jumping.png",
+          "x": 73.61111111111111,
+          "y": 75.3125,
+          "width": 40,
+          "height": 26.642384105960264,
+          "rotation": 0,
+          "scale": 1.481777375553454,
+          "metadata": {
+            "width": 40,
+            "height": 26.642384105960264
+          }
+        },
+        {
+          "id": "el-1768416756120",
+          "type": "balloon",
+          "content": "Yeah!",
+          "x": 74.44444444444444,
+          "y": 45,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -12,
+              "y": 58
+            }
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1768417231795",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768417254419",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+          "x": 44.44444444444444,
+          "y": 64.21875,
+          "width": 40,
+          "height": 32.59797724399495,
+          "rotation": 0,
+          "scale": 2.1216162203371325,
+          "metadata": {
+            "width": 40,
+            "height": 32.59797724399495,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1768417263918",
+          "type": "balloon",
+          "content": "Just follow the recipe.",
+          "x": 60.27777777777778,
+          "y": 26.40625,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -35,
+              "y": 64
+            }
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1768416854377",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768416866649",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20cooking.png",
+          "x": 48.333333333333336,
+          "y": 67.5,
+          "width": 40,
+          "height": 19.041044776119403,
+          "rotation": 0,
+          "scale": 2.1696631980305185,
+          "metadata": {
+            "width": 40,
+            "height": 19.041044776119403
+          }
+        },
+        {
+          "id": "el-1768416874179",
+          "type": "balloon",
+          "content": "This is easy!",
+          "x": 48.611111111111114,
+          "y": 32.5,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -2,
+              "y": 61
+            }
+          }
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "slide-1768416888917",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768416892331",
+          "type": "image",
+          "content": "/src/assets/characters/recipe%20egg%20soup.png",
+          "x": 60.83333333333333,
+          "y": 76.25,
+          "width": 40,
+          "height": 12.272727272727273,
+          "rotation": 0,
+          "scale": 3.866168364794271,
+          "metadata": {
+            "width": 40,
+            "height": 12.272727272727273
+          }
+        },
+        {
+          "id": "el-1768416943809",
+          "type": "balloon",
+          "content": "I can't ready how much chili is needed...",
+          "x": 75.27777777777777,
+          "y": 32.1875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 0.9982150568197511,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -36.230718435469214,
+              "y": 63.832566701138724
+            }
+          }
+        },
+        {
+          "id": "el-1768417295575",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20asking%20question.png",
+          "x": 31.11111111111111,
+          "y": 37.65625,
+          "width": 40,
+          "height": 25.981132075471695,
+          "rotation": 0,
+          "scale": 1.0746649649753182,
+          "metadata": {
+            "width": 40,
+            "height": 25.981132075471695
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1768416971649",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768416974487",
+          "type": "image",
+          "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+          "x": 48.05555555555556,
+          "y": 74.21875,
+          "width": 40,
+          "height": 17.12824010914052,
+          "rotation": 0,
+          "scale": 2.381572912317255,
+          "metadata": {
+            "width": 40,
+            "height": 17.12824010914052
+          }
+        },
+        {
+          "id": "el-1768416984196",
+          "type": "balloon",
+          "content": "I'll just use a WHOLE chili.",
+          "x": 50.27777777777778,
+          "y": 32.65625,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1.218261275929287,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -29,
+              "y": 79
+            }
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1768417023627",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768417030814",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20spitting%20fire.png",
+          "x": 49.72222222222222,
+          "y": 63.4375,
+          "width": 40,
+          "height": 8.653846153846153,
+          "rotation": 0,
+          "scale": 8.653331426227465,
+          "metadata": {
+            "width": 40,
+            "height": 8.653846153846153
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "slide-1768417049236",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768417054491",
+          "type": "image",
+          "content": "/src/assets/characters/cut%20chili.png",
+          "x": 49.166666666666664,
+          "y": 32.34375,
+          "width": 40,
+          "height": 22.8515625,
+          "rotation": 0,
+          "scale": 2.2260941993262584,
+          "metadata": {
+            "width": 40,
+            "height": 22.8515625
+          }
+        },
+        {
+          "id": "el-1768417069397",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains.png",
+          "x": 39.44444444444444,
+          "y": 96.25,
+          "width": 40,
+          "height": 30.809659090909093,
+          "rotation": 0,
+          "scale": 2.421413086038295,
+          "metadata": {
+            "width": 40,
+            "height": 30.809659090909093
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1768417383557",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 7
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-01-14T18:51:15.962Z",
+  "updatedAt": "2026-01-14T19:03:09.168Z",
+  "path": "lessons/Math/Fractions/01-Intro to fractions/01-Whole and part/lesson.json",
+  "subject": "Math",
+  "topic": "Fractions",
+  "chapterId": "01",
+  "chapterName": "Intro to fractions",
+  "lessonId": "01",
+  "name": "lesson.json",
+  "type": "file",
+  "status": "completed",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 5,
+    "completed": true,
+    "lastPlayed": 1768417130512
+  }
+}

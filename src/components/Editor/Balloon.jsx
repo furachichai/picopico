@@ -2,6 +2,15 @@ import React, { useRef, useEffect } from 'react';
 
 const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     const textRef = useRef(null);
+    const lastElementId = useRef(null);
+
+    // Only set content when element changes, not on every render
+    useEffect(() => {
+        if (textRef.current && element.id !== lastElementId.current) {
+            textRef.current.innerText = element.content || '';
+            lastElementId.current = element.id;
+        }
+    }, [element.id, element.content]);
 
     // Sync content changes
     const handleInput = (e) => {
@@ -107,9 +116,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                     // Counter-flip the text so it stays readable when the container is flipped
                     transform: `scale(${flipX}, ${flipY})`
                 }}
-            >
-                {element.content}
-            </div>
+            />
         </div>
     );
 };
