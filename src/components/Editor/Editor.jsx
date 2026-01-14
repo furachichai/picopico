@@ -284,20 +284,38 @@ const Editor = () => {
                 {/* Navigation Buttons */}
                 <div className={`editor-navigation ${selectedElement ? 'disabled-ui' : ''}`}>
                     {!isFirstSlide && (
-                        <button className="nav-btn nav-prev" onClick={handlePrevSlide}>
-                            &lt;
-                        </button>
+                        <div className="nav-group nav-group-left">
+                            <button
+                                className="nav-insert"
+                                onClick={() => dispatch({ type: 'INSERT_SLIDE', payload: 'before' })}
+                                title={t('editor.insertBefore') || 'Insert before'}
+                            >
+                                +
+                            </button>
+                            <button className="nav-btn nav-prev" onClick={handlePrevSlide}>
+                                &lt;
+                            </button>
+                        </div>
                     )}
 
-                    {isLastSlide ? (
-                        <button className="nav-btn nav-add" onClick={handleAddSlide}>
+                    <div className="nav-group nav-group-right">
+                        <button
+                            className="nav-insert"
+                            onClick={() => dispatch({ type: 'INSERT_SLIDE', payload: 'after' })}
+                            title={t('editor.insertAfter') || 'Insert after'}
+                        >
                             +
                         </button>
-                    ) : (
-                        <button className="nav-btn nav-next" onClick={handleNextSlide}>
-                            &gt;
-                        </button>
-                    )}
+                        {isLastSlide ? (
+                            <button className="nav-btn nav-add" onClick={handleAddSlide}>
+                                +
+                            </button>
+                        ) : (
+                            <button className="nav-btn nav-next" onClick={handleNextSlide}>
+                                &gt;
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="editor-workspace">

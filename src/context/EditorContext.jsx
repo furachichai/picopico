@@ -61,6 +61,34 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'INSERT_SLIDE': {
+            const currentIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+            if (currentIndex === -1) return state;
+
+            const insertIndex = action.payload === 'before' ? currentIndex : currentIndex + 1;
+            const newSlide = {
+                id: `slide-${Date.now()}`,
+                background: '#E1F5FE',
+                elements: [],
+                order: insertIndex,
+            };
+
+            const newSlides = [...state.lesson.slides];
+            newSlides.splice(insertIndex, 0, newSlide);
+            // Update order for all slides
+            newSlides.forEach((s, i) => s.order = i);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: newSlides,
+                },
+                currentSlideId: newSlide.id,
+            };
+        }
+
         case 'UPDATE_SLIDE_BACKGROUND': {
             return {
                 ...state,
