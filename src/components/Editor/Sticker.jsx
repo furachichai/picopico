@@ -223,6 +223,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         style={{
                             transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
                             opacity: element.metadata?.opacity ?? 1,
+                            filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
                             width: '100%',
                             height: '100%',
                             objectFit: 'contain'

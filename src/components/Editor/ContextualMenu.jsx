@@ -134,6 +134,19 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                         />
                     </div>
 
+                    <div className="menu-group">
+                        <label>Brightness</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            value={metadata.brightness ?? 100}
+                            onChange={(e) => updateMetadata({ brightness: parseInt(e.target.value) })}
+                            style={{ width: '80px' }}
+                            title={metadata.brightness ? `${metadata.brightness}%` : '100%'}
+                        />
+                    </div>
+
                     <div className="menu-divider"></div>
                 </>
             )}
