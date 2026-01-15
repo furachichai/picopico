@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/assets/backgrounds/pizza%20dough.png\")",
+      "background": "url(\"/assets/backgrounds/pizzadough.png\")",
       "elements": [],
       "order": 0
     },

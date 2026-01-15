@@ -23,75 +23,151 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     const flipY = element.metadata?.flipY ? -1 : 1;
 
     // Tail position relative to center (safe defaults)
-    // Center is 100, 50 in 200x100 space?
-    // Let's assume the viewbox is 0 0 200 100
     const tailX = typeof element.metadata?.tailPos?.x === 'number' ? element.metadata.tailPos.x : 20;
     const tailY = typeof element.metadata?.tailPos?.y === 'number' ? element.metadata.tailPos.y : 60;
 
-    // Generate Path
-    // Ellipse approx:
-    // M 40 10 Q 100 10 160 10 Q 190 10 190 50 Q 190 90 160 90 Q 100 90 40 90 Q 10 90 10 50 Q 10 10 40 10
-    // Tail needs to connect.
-    // Let's stick to a simple rect with rounded corners or ellipse.
-    // tailX/Y are offsets from center? Or absolute coords?
-    // In `Sticker.jsx` handleStart 'tail', we calculated dx/dy relative to previous.
-    // Let's assume tailX/Y are relative to the center of the balloon (0,0 in sticker space? No, Sticker is element).
-    // The balloon SVG is inside the sticker div.
-    // If we want the tail to point to `tailPos` in metadata.
-    // We'll draw a path that includes the tail.
+    // Use actual dimensions if available, matching the sticker's sizing logic
+    // We map the percentage width/height to a virtual canvas of 360x640 for internal path calculations
+    // This allows the SVG viewBox to match the sticker's aspect ratio
+    const parentW = 360;
+    const parentH = 640;
 
-    // Better simple balloon:
-    // A rounded rect/ellipse from (10,10) to (190,90).
-    // With a tail pointing to (100 + tailX, 50 + tailY).
+    // Default to ~200x100 if undefined (legacy fallback)
+    const w = element.width ? (element.width / 100) * parentW : 200;
+    const h = element.height ? (element.height / 100) * parentH : 100;
 
-    const w = 200;
-    const h = 100;
     const cx = w / 2;
     const cy = h / 2;
 
-    // Control point for tail base
+    // Tail tip position (absolute in viewBox)
     const tx = cx + tailX;
     const ty = cy + tailY;
 
-    // Simple path: generic ellipse + line to tail?
-    // Let's make a path that looks like a comic bubble.
+    // Determine which edge the tail should originate from based on angle
+    const angle = Math.atan2(tailY, tailX) * (180 / Math.PI);
 
-    // We can use a simple SVG path.
-    const path = `
-        M 20 ${cy}
-        Q 20 10 ${cx} 10
-        Q 180 10 180 ${cy}
-        Q 180 90 ${cx} 90
-        Q 120 90 110 90
-        L ${tx} ${ty}
-        L 90 90
-        Q 20 90 20 ${cy}
-        Z
-    `;
+    // Determine edge: right (-45 to 45), bottom (45 to 135), left (135 to 180 or -180 to -135), top (-135 to -45)
+    let edge;
+    if (angle >= -45 && angle < 45) {
+        edge = 'right';
+    } else if (angle >= 45 && angle < 135) {
+        edge = 'bottom';
+    } else if (angle >= -135 && angle < -45) {
+        edge = 'top';
+    } else {
+        edge = 'left';
+    }
+
+    // Tail base width (half-width of the tail base)
+    const tailBaseHalf = 10;
+
+    // Generate path based on edge
+    let path;
+    const padding = 10; // Less padding to maximize space
+    const r = 20; // Corner radius
+
+    // Safety bounds
+    const left = padding;
+    const right = w - padding;
+    const top = padding;
+    const bottom = h - padding;
+
+    // Clamp tail base position to stay within the edge (taking corners into account)
+    const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+    if (edge === 'bottom') {
+        const tailWidth = 20; // Width of tail at base
+        const baseX = cx; // Fixed at center
+
+        path = `
+            M ${left + r} ${top}
+            L ${right - r} ${top}
+            Q ${right} ${top} ${right} ${top + r}
+            L ${right} ${bottom - r}
+            Q ${right} ${bottom} ${right - r} ${bottom}
+            L ${baseX + tailWidth} ${bottom}
+            Q ${baseX + tailWidth * 0.5} ${bottom + 5} ${tx} ${ty}
+            Q ${baseX - tailWidth * 0.5} ${bottom + 5} ${baseX - tailWidth} ${bottom}
+            L ${left + r} ${bottom}
+            Q ${left} ${bottom} ${left} ${bottom - r}
+            L ${left} ${top + r}
+            Q ${left} ${top} ${left + r} ${top}
+            Z
+        `;
+    } else if (edge === 'top') {
+        const tailWidth = 20;
+        const baseX = cx; // Fixed at center
+
+        path = `
+            M ${left + r} ${top}
+            L ${baseX - tailWidth} ${top}
+            Q ${baseX - tailWidth * 0.5} ${top - 5} ${tx} ${ty}
+            Q ${baseX + tailWidth * 0.5} ${top - 5} ${baseX + tailWidth} ${top}
+            L ${right - r} ${top}
+            Q ${right} ${top} ${right} ${top + r}
+            L ${right} ${bottom - r}
+            Q ${right} ${bottom} ${right - r} ${bottom}
+            L ${left + r} ${bottom}
+            Q ${left} ${bottom} ${left} ${bottom - r}
+            L ${left} ${top + r}
+            Q ${left} ${top} ${left + r} ${top}
+            Z
+        `;
+    } else if (edge === 'right') {
+        const tailWidth = 20;
+        const baseY = cy; // Fixed at center
+
+        path = `
+            M ${left + r} ${top}
+            L ${right - r} ${top}
+            Q ${right} ${top} ${right} ${top + r}
+            L ${right} ${baseY - tailWidth}
+            Q ${right + 5} ${baseY - tailWidth * 0.5} ${tx} ${ty}
+            Q ${right + 5} ${baseY + tailWidth * 0.5} ${right} ${baseY + tailWidth}
+            L ${right} ${bottom - r}
+            Q ${right} ${bottom} ${right - r} ${bottom}
+            L ${left + r} ${bottom}
+            Q ${left} ${bottom} ${left} ${bottom - r}
+            L ${left} ${top + r}
+            Q ${left} ${top} ${left + r} ${top}
+            Z
+        `;
+    } else {
+        // edge === 'left'
+        const tailWidth = 20;
+        const baseY = cy; // Fixed at center
+
+        path = `
+            M ${left + r} ${top}
+            L ${right - r} ${top}
+            Q ${right} ${top} ${right} ${top + r}
+            L ${right} ${bottom - r}
+            Q ${right} ${bottom} ${right - r} ${bottom}
+            L ${left + r} ${bottom}
+            Q ${left} ${bottom} ${left} ${bottom - r}
+            L ${left} ${baseY + tailWidth}
+            Q ${left - 5} ${baseY + tailWidth * 0.5} ${tx} ${ty}
+            Q ${left - 5} ${baseY - tailWidth * 0.5} ${left} ${baseY - tailWidth}
+            L ${left} ${top + r}
+            Q ${left} ${top} ${left + r} ${top}
+            Z
+        `;
+    }
 
     const backgroundColor = element.metadata?.backgroundColor || '#ffffff';
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <svg
-                viewBox="0 0 200 100"
+                viewBox={`0 0 ${w} ${h}`}
                 preserveAspectRatio="none"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.1))' }}
             >
                 <path d={path} fill={backgroundColor} stroke="black" strokeWidth="2" strokeLinejoin="round" />
             </svg>
 
-            {/* Text Content */}
+            {/* Text Container: Handles centering */}
             <div
-                ref={textRef}
-                contentEditable={!readOnly}
-                suppressContentEditableWarning
-                onInput={handleInput}
-                onBlur={() => {
-                    if (!readOnly && textRef.current) {
-                        onChange(element.id, { content: textRef.current.innerText });
-                    }
-                }}
                 style={{
                     position: 'absolute',
                     top: 0,
@@ -101,22 +177,42 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    textAlign: 'center',
-                    fontFamily: element.metadata?.fontFamily || 'monospace',
-                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                    color: element.metadata?.color || 'black',
                     padding: '20px',
                     boxSizing: 'border-box',
-                    outline: 'none',
-                    cursor: readOnly ? 'default' : 'text',
-                    userSelect: readOnly ? 'none' : 'text',
-                    pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
-                    whiteSpace: 'pre-wrap',
-                    overflow: 'hidden',
-                    // Counter-flip the text so it stays readable when the container is flipped
-                    transform: `scale(${flipX}, ${flipY})`
+                    pointerEvents: 'none', // Container shouldn't block, but child will be auto
                 }}
-            />
+            >
+                {/* Editable Element: Handles text content */}
+                <div
+                    ref={textRef}
+                    contentEditable={!readOnly}
+                    suppressContentEditableWarning
+                    onInput={handleInput}
+                    onBlur={() => {
+                        if (!readOnly && textRef.current) {
+                            onChange(element.id, { content: textRef.current.innerText });
+                        }
+                    }}
+                    style={{
+                        fontFamily: element.metadata?.fontFamily || 'monospace',
+                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                        color: element.metadata?.color || 'black',
+                        outline: 'none',
+                        cursor: readOnly ? 'default' : 'text',
+                        userSelect: readOnly ? 'none' : 'text',
+                        pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'auto'), // Allow interaction if selected or generally available? Editor seems to rely on isSelected for interaction.
+                        // Actually, previous code: pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none')
+                        // Let's stick to that logic for the input itself.
+                        pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
+                        whiteSpace: 'pre-wrap',
+                        textAlign: 'center',
+                        width: '100%',
+                        display: 'block', // Important: Layout text as block, not flex items
+                        // Counter-flip the text so it stays readable when the container is flipped
+                        transform: `scale(${flipX}, ${flipY})`
+                    }}
+                />
+            </div>
         </div>
     );
 };

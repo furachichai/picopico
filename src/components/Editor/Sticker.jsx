@@ -12,6 +12,18 @@ import Balloon from './Balloon';
  * Wrapped in React.memo to prevent re-renders when other stickers change,
  * provided its props (element, callbacks) remain stable.
  */
+
+// Helper to rotate point
+const rotatePoint = (x, y, angle) => {
+    const rad = (angle * Math.PI) / 180;
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+    return {
+        x: x * cos - y * sin,
+        y: x * sin + y * cos
+    };
+};
+
 const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, onDelete }) => {
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -114,6 +126,62 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         ...element.metadata,
                         tailPos: { x: currentTailX + dx, y: currentTailY + dy }
                     }
+                });
+            } else if (['resize-n', 'resize-s', 'resize-e', 'resize-w'].includes(type)) {
+                // Convert global delta to local delta (unrotated)
+                // We rotate the global drag vector by -rotation to get local alignement
+                const localDelta = rotatePoint(dx, dy, -startRotation);
+                const localDx = localDelta.x / startScale; // Adjust for scale
+                const localDy = localDelta.y / startScale;
+
+                let dW = 0;
+                let dH = 0;
+                let centerXShift = 0;
+                let centerYShift = 0;
+
+                // Current dimensions in pixels (unscaled)
+                const currentWidthPx = (startWidth / 100) * parentWidth;
+                const currentHeightPx = (startHeight / 100) * parentHeight;
+
+                if (type === 'resize-e') {
+                    dW = localDx;
+                } else if (type === 'resize-w') {
+                    dW = -localDx;
+                } else if (type === 'resize-s') {
+                    dH = localDy;
+                } else if (type === 'resize-n') {
+                    dH = -localDy;
+                }
+
+                // Min dimensions
+                const newWidthPx = Math.max(50, currentWidthPx + dW); // Min 50px
+                const newHeightPx = Math.max(50, currentHeightPx + dH); // Min 50px
+
+                // Actual delta used (in case of min clamping)
+                const actualDw = newWidthPx - currentWidthPx;
+                const actualDh = newHeightPx - currentHeightPx;
+
+                // Recalculate shift based on actual change
+                if (type === 'resize-e') centerXShift = actualDw / 2;
+                else if (type === 'resize-w') centerXShift = -actualDw / 2;
+                else if (type === 'resize-s') centerYShift = actualDh / 2;
+                else if (type === 'resize-n') centerYShift = -actualDh / 2;
+
+                // Rotate shift back to global
+                const globalShift = rotatePoint(centerXShift * startScale, centerYShift * startScale, startRotation);
+
+                // Convert back to %
+                const newWidthPct = (newWidthPx / parentWidth) * 100;
+                const newHeightPct = (newHeightPx / parentHeight) * 100;
+
+                const newXPct = startLeft + (globalShift.x / parentWidth) * 100;
+                const newYPct = startTop + (globalShift.y / parentHeight) * 100;
+
+                onChange(element.id, {
+                    width: newWidthPct,
+                    height: newHeightPct,
+                    x: newXPct,
+                    y: newYPct
                 });
             }
         };
@@ -245,7 +313,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 )}
             </div>
 
-            {isSelected && element.type !== 'quiz' && (
+            {isSelected && element.type !== 'quiz' && element.type !== 'balloon' && (
                 <div className="sticker-controls">
                     {/* Top Left Resize */}
                     <div
@@ -274,6 +342,85 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         style={{ transform: `scale(${1 / element.scale})` }}
                         onMouseDown={(e) => handleStart(e, 'resize')}
                         onTouchStart={(e) => handleStart(e, 'resize')}
+                    />
+
+                    {/* Rotate Handle */}
+                    <div
+                        className="handle rotate-handle"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'rotate')}
+                        onTouchStart={(e) => handleStart(e, 'rotate')}
+                    >
+                        ↻
+                    </div>
+                </div>
+            )}
+
+            {isSelected && element.type === 'balloon' && (
+                <div className="sticker-controls">
+                    {/* North Resize */}
+                    <div
+                        className="handle resize-handle n"
+                        style={{
+                            top: 0, left: '50%', marginLeft: '-6px', marginTop: '-6px',
+                            cursor: 'ns-resize',
+                            position: 'absolute',
+                            width: '12px', height: '12px',
+                            backgroundColor: 'white',
+                            border: '1px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'resize-n')}
+                        onTouchStart={(e) => handleStart(e, 'resize-n')}
+                    />
+                    {/* South Resize */}
+                    <div
+                        className="handle resize-handle s"
+                        style={{
+                            bottom: 0, left: '50%', marginLeft: '-6px', marginBottom: '-6px',
+                            cursor: 'ns-resize',
+                            position: 'absolute',
+                            width: '12px', height: '12px',
+                            backgroundColor: 'white',
+                            border: '1px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'resize-s')}
+                        onTouchStart={(e) => handleStart(e, 'resize-s')}
+                    />
+                    {/* East Resize */}
+                    <div
+                        className="handle resize-handle e"
+                        style={{
+                            right: 0, top: '50%', marginRight: '-6px', marginTop: '-6px',
+                            cursor: 'ew-resize',
+                            position: 'absolute',
+                            width: '12px', height: '12px',
+                            backgroundColor: 'white',
+                            border: '1px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'resize-e')}
+                        onTouchStart={(e) => handleStart(e, 'resize-e')}
+                    />
+                    {/* West Resize */}
+                    <div
+                        className="handle resize-handle w"
+                        style={{
+                            left: 0, top: '50%', marginLeft: '-6px', marginTop: '-6px',
+                            cursor: 'ew-resize',
+                            position: 'absolute',
+                            width: '12px', height: '12px',
+                            backgroundColor: 'white',
+                            border: '1px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'resize-w')}
+                        onTouchStart={(e) => handleStart(e, 'resize-w')}
                     />
 
                     {/* Rotate Handle */}

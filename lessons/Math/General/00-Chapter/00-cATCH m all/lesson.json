@@ -4,7 +4,7 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/assets/backgrounds/Trade%20Card.png\")",
+      "background": "url(\"/assets/backgrounds/TradeCard.png\")",
       "elements": [],
       "order": 0
     },
