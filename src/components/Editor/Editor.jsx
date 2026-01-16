@@ -170,6 +170,19 @@ const Editor = () => {
             config: currentSlide.cartridge.config, // Pass config directly
             // Add other props if needed by generic menu parts, but unlikely
         };
+    } else if (state.selectedElementId === 'background') {
+        const isImageOrGradient = currentSlide.background && (currentSlide.background.startsWith('url') || currentSlide.background.startsWith('gradient'));
+        // Mock element for background settings
+        selectedElement = {
+            id: 'background',
+            type: 'background',
+            background: currentSlide.background,
+            metadata: {
+                ...currentSlide.backgroundSettings, // opacity, brightness, flipX, flipY
+                // Only include backgroundColor if it's NOT an image/gradient, otherwise it overwrites the image on update
+                ...(!isImageOrGradient ? { backgroundColor: currentSlide.background || '#ffffff' } : {})
+            }
+        };
     } else {
         selectedElement = currentSlide?.elements.find(e => e.id === state.selectedElementId);
     }
@@ -340,6 +353,36 @@ const Editor = () => {
                                             cartridge: {
                                                 ...currentSlide.cartridge, // Keep type
                                                 ...updates // Merge updates (config)
+                                            }
+                                        }
+                                    });
+                                } else if (id === 'background') {
+                                    // Handle background updates
+                                    // updates.metadata contains settings like opacity, flip, etc.
+                                    // AND possibly 'backgroundColor' if user picked a solid color.
+                                    // If 'backgroundColor' is present, update the slide background directly.
+
+                                    const newSettings = {};
+                                    let newBackground = undefined;
+
+                                    if (updates.metadata) {
+                                        if (updates.metadata.backgroundColor) {
+                                            newBackground = updates.metadata.backgroundColor;
+                                        }
+                                        // Merge other settings
+                                        if (updates.metadata.opacity !== undefined) newSettings.opacity = updates.metadata.opacity;
+                                        if (updates.metadata.brightness !== undefined) newSettings.brightness = updates.metadata.brightness;
+                                        if (updates.metadata.flipX !== undefined) newSettings.flipX = updates.metadata.flipX;
+                                        if (updates.metadata.flipY !== undefined) newSettings.flipY = updates.metadata.flipY;
+                                    }
+
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            ...(newBackground ? { background: newBackground } : {}),
+                                            backgroundSettings: {
+                                                ...currentSlide.backgroundSettings,
+                                                ...newSettings
                                             }
                                         }
                                     });

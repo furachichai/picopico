@@ -162,16 +162,7 @@ const Toolbar = () => {
                     </div>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
-                    <div className="color-picker-wrapper">
-                        <label htmlFor="bg-color">{t('editor.background')}</label>
-                        <input
-                            type="color"
-                            id="bg-color"
-                            value={colorValue}
-                            onChange={handleBackgroundChange}
-                            title={t('editor.background')}
-                        />
-                    </div>
+                    <button className="btn-secondary" onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'background' })} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
                 </div>
                 <div className="toolbar-section">
                     {/* Add Slide button moved back to SlideStrip */}

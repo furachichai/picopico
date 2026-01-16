@@ -42,44 +42,48 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
 
     return (
         <div className="contextual-menu">
-            {isTextType && (
+            {(isTextType || element.type === 'background') && (
                 <>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        <div className="menu-group">
-                            <label>Font</label>
-                            <select
-                                value={metadata.fontFamily}
-                                onChange={(e) => updateMetadata({ fontFamily: e.target.value })}
-                            >
-                                {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
-                            </select>
-                        </div>
+                    {element.type !== 'background' && (
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                            <div className="menu-group">
+                                <label>Font</label>
+                                <select
+                                    value={metadata.fontFamily}
+                                    onChange={(e) => updateMetadata({ fontFamily: e.target.value })}
+                                >
+                                    {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
+                                </select>
+                            </div>
 
-                        <div className="menu-group">
-                            <label>Size</label>
-                            <input
-                                type="number"
-                                value={metadata.fontSize}
-                                onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
-                                min="10" max="100"
-                                style={{ width: '70px' }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="menu-group">
-                        <label>Text</label>
-                        <div className="color-picker-mini">
-                            {COLORS.map(c => (
-                                <div
-                                    key={c}
-                                    className={`color-swatch ${metadata.color === c ? 'active' : ''}`}
-                                    style={{ backgroundColor: c }}
-                                    onClick={() => updateMetadata({ color: c })}
+                            <div className="menu-group">
+                                <label>Size</label>
+                                <input
+                                    type="number"
+                                    value={metadata.fontSize}
+                                    onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
+                                    min="10" max="100"
+                                    style={{ width: '70px' }}
                                 />
-                            ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {element.type !== 'background' && (
+                        <div className="menu-group">
+                            <label>Text</label>
+                            <div className="color-picker-mini">
+                                {COLORS.map(c => (
+                                    <div
+                                        key={c}
+                                        className={`color-swatch ${metadata.color === c ? 'active' : ''}`}
+                                        style={{ backgroundColor: c }}
+                                        onClick={() => updateMetadata({ color: c })}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="menu-group">
                         <label>{element.type === 'balloon' ? 'Bubble' : 'Background'}</label>
@@ -93,6 +97,64 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                 />
                             ))}
                         </div>
+                    </div>
+
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
+            {element.type === 'background' && element.background && (element.background.startsWith('url') || element.background.startsWith('gradient')) && (
+                <>
+                    <div className="menu-group">
+                        <label>Flip</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className={`btn-icon ${metadata.flipX ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ flipX: !metadata.flipX })}
+                                title="Flip Horizontal"
+                            >
+                                ↔️
+                            </button>
+                            <button
+                                className={`btn-icon ${metadata.flipY ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ flipY: !metadata.flipY })}
+                                title="Flip Vertical"
+                            >
+                                ↕️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Opacity</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={(metadata.opacity ?? 1) * 100}
+                            onChange={(e) => updateMetadata({ opacity: parseInt(e.target.value) / 100 })}
+                            style={{ width: '80px' }}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Brightness</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            value={metadata.brightness ?? 100}
+                            onChange={(e) => updateMetadata({ brightness: parseInt(e.target.value) })}
+                            style={{ width: '80px' }}
+                            title={metadata.brightness ? `${metadata.brightness}%` : '100%'}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Actions</label>
+                        <button className="btn-delete" onClick={() => updateMetadata({ backgroundColor: '#ffffff' })} title="Clear Image">
+                            🗑️ Image
+                        </button>
                     </div>
 
                     <div className="menu-divider"></div>

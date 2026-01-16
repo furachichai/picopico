@@ -230,8 +230,47 @@ const editorReducer = (state, action) => {
             };
         }
 
-        case 'SELECT_ELEMENT':
-            return { ...state, selectedElementId: action.payload };
+        case 'SELECT_ELEMENT': {
+            const selectedId = action.payload;
+
+            // If deselecting or selecting cartridge, just update ID
+            if (!selectedId || selectedId === 'cartridge') {
+                return { ...state, selectedElementId: selectedId };
+            }
+
+            // Find current slide
+            const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+            if (currentSlideIndex === -1) return { ...state, selectedElementId: selectedId };
+
+            const currentSlide = state.lesson.slides[currentSlideIndex];
+            const elementIndex = currentSlide.elements.findIndex(el => el.id === selectedId);
+
+            // If element not found, or already last (visually on top), just select
+            if (elementIndex === -1 || elementIndex === currentSlide.elements.length - 1) {
+                return { ...state, selectedElementId: selectedId };
+            }
+
+            // Move element to end of array (top of stack)
+            const newElements = [...currentSlide.elements];
+            const [movedElement] = newElements.splice(elementIndex, 1);
+            newElements.push(movedElement);
+
+            const newSlides = [...state.lesson.slides];
+            newSlides[currentSlideIndex] = {
+                ...currentSlide,
+                elements: newElements
+            };
+
+            return {
+                ...state,
+                isDirty: true, // Order change is a modification
+                lesson: {
+                    ...state.lesson,
+                    slides: newSlides
+                },
+                selectedElementId: selectedId
+            };
+        }
 
         case 'DELETE_ELEMENT':
             return {

@@ -95,18 +95,47 @@ const Canvas = (props) => {
       <div
         className="slide-canvas"
         style={{
-          backgroundColor: (currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient')) ? currentSlide.background : 'transparent',
-          backgroundImage: (currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient'))) ? currentSlide.background : 'none',
-          backgroundSize: 'contain', // Ensure whole image is visible
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          transform: `scale(${scale})`,
-          transformOrigin: 'center center',
           width: '360px',
-          height: '640px'
+          height: '640px',
+          overflow: 'hidden', // Added to contain background
+          position: 'relative'
         }}
         onClick={handleCanvasClick}
       >
+        {/* Background Layer */}
+        {currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient')) && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: currentSlide.background,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              zIndex: 0, // Behind content
+              opacity: currentSlide.backgroundSettings?.opacity ?? 1,
+              filter: `brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
+              transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`,
+              pointerEvents: 'none' // Click-through
+            }}
+          />
+        )}
+        {currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient') && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: currentSlide.background,
+              zIndex: 0
+            }}
+          />
+        )}
         {/* Progress Bar */}
         <div className="editor-progress-bar">
           {Array.from({ length: props.totalSlides }).map((_, index) => (
