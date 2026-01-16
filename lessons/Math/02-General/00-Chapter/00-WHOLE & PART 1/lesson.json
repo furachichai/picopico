@@ -1,0 +1,618 @@
+{
+  "id": "lessons/Math/02-General/00-Chapter/00-WHOLE & PART 1/lesson.json",
+  "title": "WHOLE & PART 1",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/titlecard_radioactive_chili.png\")",
+      "elements": [],
+      "order": 0,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1768569197966",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "elements": [
+        {
+          "id": "el-1768569233229",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20leaning.png",
+          "x": 26.388888888888886,
+          "y": 63.28125,
+          "width": 40,
+          "height": 49.077181208053695,
+          "rotation": 0,
+          "scale": 1.2664831294629262,
+          "metadata": {
+            "width": 40,
+            "height": 49.077181208053695
+          }
+        },
+        {
+          "id": "el-1768569252817",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20jumping.png",
+          "x": 73.61111111111111,
+          "y": 74.53125,
+          "width": 40,
+          "height": 26.642384105960264,
+          "rotation": 0,
+          "scale": 1.6848083483545704,
+          "metadata": {
+            "width": 40,
+            "height": 26.642384105960264
+          }
+        },
+        {
+          "id": "el-1768569264994",
+          "type": "balloon",
+          "content": "Are you ready to cook on your own?",
+          "x": 34.16666666666667,
+          "y": 24.453125,
+          "width": 52.22222222222223,
+          "height": 15.46875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -2,
+              "y": 62
+            }
+          }
+        },
+        {
+          "id": "el-1768569287862",
+          "type": "balloon",
+          "content": "Yeah!",
+          "x": 83.33333333333333,
+          "y": 42.03125,
+          "width": 27.22222222222222,
+          "height": 11.5625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -22,
+              "y": 47
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.41
+      }
+    },
+    {
+      "id": "slide-1768569367782",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1768569398856",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20cooking.png",
+          "x": 47.5,
+          "y": 70.3125,
+          "width": 40,
+          "height": 19.041044776119403,
+          "rotation": 0,
+          "scale": 2.407861563023941,
+          "metadata": {
+            "width": 40,
+            "height": 19.041044776119403,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1768569407950",
+          "type": "balloon",
+          "content": "It's EASY!\n\nI just follow the recipe!",
+          "x": 62.22222222222223,
+          "y": 29.0625,
+          "width": 53.888888888888886,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -32,
+              "y": 99
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.36
+      }
+    },
+    {
+      "id": "slide-1768569455591",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1768569468126",
+          "type": "image",
+          "content": "/src/assets/characters/recipe%20egg%20soup.png",
+          "x": 63.05555555555556,
+          "y": 35,
+          "width": 40,
+          "height": 12.272727272727273,
+          "rotation": 0,
+          "scale": 4.3994632739052,
+          "metadata": {
+            "width": 40,
+            "height": 12.272727272727273
+          }
+        },
+        {
+          "id": "el-1768569480672",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "x": 75.55555555555554,
+          "y": 101.5625,
+          "width": 40,
+          "height": 26.422018348623855,
+          "rotation": 0,
+          "scale": 4.402024196504822,
+          "metadata": {
+            "width": 40,
+            "height": 26.422018348623855,
+            "flipX": false,
+            "brightness": 66
+          }
+        },
+        {
+          "id": "el-1768569539125",
+          "type": "balloon",
+          "content": "I can't read how much chili I need...",
+          "x": 35,
+          "y": 86.09375,
+          "width": 51.66666666666667,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 21,
+              "y": -77
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {
+        "opacity": 0.38
+      }
+    },
+    {
+      "id": "slide-1768569589332",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1768569601241",
+          "type": "image",
+          "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+          "x": 46.94444444444444,
+          "y": 73.75,
+          "width": 40,
+          "height": 17.12824010914052,
+          "rotation": 0,
+          "scale": 2.2802127514781008,
+          "metadata": {
+            "width": 40,
+            "height": 17.12824010914052
+          }
+        },
+        {
+          "id": "el-1768569607948",
+          "type": "balloon",
+          "content": "I'll just add a WHOLE chili.",
+          "x": 60,
+          "y": 38.75,
+          "width": 49.44444444444444,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -22,
+              "y": 89
+            }
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {
+        "opacity": 0.53
+      }
+    },
+    {
+      "id": "slide-1768569629424",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "elements": [
+        {
+          "id": "el-1768569644328",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_bended_waiter.png",
+          "x": 47.77777777777778,
+          "y": 66.5625,
+          "width": 40,
+          "height": 29.279112754158966,
+          "rotation": 0,
+          "scale": 2.2472476265612085,
+          "metadata": {
+            "width": 40,
+            "height": 29.279112754158966
+          }
+        },
+        {
+          "id": "el-1768569652729",
+          "type": "image",
+          "content": "/src/assets/characters/bowl_soup_sideview_big.png",
+          "x": 70.83333333333334,
+          "y": 50.625,
+          "width": 40,
+          "height": 22.5,
+          "rotation": 0,
+          "scale": 0.692613464414477,
+          "metadata": {
+            "width": 40,
+            "height": 22.5
+          }
+        },
+        {
+          "id": "el-1768569659582",
+          "type": "balloon",
+          "content": "Your soup is ready!",
+          "x": 62.5,
+          "y": 27.96875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -30,
+              "y": 76
+            }
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.51
+      }
+    },
+    {
+      "id": "slide-1768569670265",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "elements": [
+        {
+          "id": "el-1768569695072",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20spitting%20fire.png",
+          "x": 71.38888888888889,
+          "y": 60,
+          "width": 40,
+          "height": 16.82242990654206,
+          "rotation": 0,
+          "scale": 4.694014889257205,
+          "metadata": {
+            "width": 40,
+            "height": 16.82242990654206
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {
+        "opacity": 0.35
+      }
+    },
+    {
+      "id": "slide-1768569716341",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768569730541",
+          "type": "image",
+          "content": "/src/assets/characters/cut%20chili.png",
+          "x": 52.22222222222222,
+          "y": 32.8125,
+          "width": 40,
+          "height": 22.8515625,
+          "rotation": 0,
+          "scale": 2.9291917013276247,
+          "metadata": {
+            "width": 40,
+            "height": 22.8515625
+          }
+        },
+        {
+          "id": "el-1768569754916",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+          "x": 12.222222222222221,
+          "y": 92.34375,
+          "width": 40,
+          "height": 29.456289978678036,
+          "rotation": 0,
+          "scale": 2.391158535469462,
+          "metadata": {
+            "width": 40,
+            "height": 29.456289978678036
+          }
+        },
+        {
+          "id": "el-1768569761823",
+          "type": "balloon",
+          "content": "A WHOLE chili is too much.\n\nWe just need a tiny PART.",
+          "x": 72.5,
+          "y": 67.578125,
+          "width": 52.77777777777778,
+          "height": 27.65625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "Comic Sans MS, Comic Sans, cursive",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -129,
+              "y": 18
+            }
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1768571667842",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768571687792",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "WHOLE",
+              "PART"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1768571752721",
+          "type": "image",
+          "content": "/src/assets/characters/whole_chili.png?t=1768571743265",
+          "x": 52.22222222222222,
+          "y": 42.34375,
+          "width": 40,
+          "height": 39.45205479452055,
+          "rotation": 0,
+          "scale": 1.3909727872745432,
+          "metadata": {
+            "width": 40,
+            "height": 39.45205479452055
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1768571629272",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768571656011",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "WHOLE",
+              "PART"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1768571645655",
+          "type": "image",
+          "content": "/src/assets/characters/part_chili.png",
+          "x": 50.833333333333336,
+          "y": 43.125,
+          "width": 40,
+          "height": 40.75471698113208,
+          "rotation": 0,
+          "scale": 1.4211920931391484,
+          "metadata": {
+            "width": 40,
+            "height": 40.75471698113208
+          }
+        }
+      ],
+      "order": 9
+    },
+    {
+      "id": "slide-1768573440738",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 10,
+      "cartridge": {
+        "type": "SwipeSorter",
+        "config": {
+          "leftLabel": "PART",
+          "rightLabel": "WHOLE",
+          "cards": [
+            {
+              "id": "c1",
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/bowl_soup_sideview_big.png"
+            },
+            {
+              "id": "c2",
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_egg.png?t=1768572195885"
+            },
+            {
+              "id": "c3",
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_avocado.png?t=1768572232531"
+            },
+            {
+              "id": 1768573887030,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_banana.png?t=1768571871915"
+            },
+            {
+              "id": 1768573902707,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_avocado.png?t=1768572213795"
+            },
+            {
+              "id": 1768573914124,
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_banana.png?t=1768571901102"
+            },
+            {
+              "id": 1768573943774,
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_egg_dozen.png"
+            },
+            {
+              "id": 1768573970519,
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_watermelon.png?t=1768571975952"
+            },
+            {
+              "id": 1768573986135,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_egg.png?t=1768572181030"
+            },
+            {
+              "id": 1768573999726,
+              "text": "",
+              "correctSide": "left",
+              "image": "/src/assets/characters/part_orange.png?t=1768572024237"
+            },
+            {
+              "id": 1768574023380,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_egg_dozen.png?t=1768572878328"
+            },
+            {
+              "id": 1768574062610,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_watermelon.png?t=1768571954544"
+            },
+            {
+              "id": 1768574084242,
+              "text": "",
+              "correctSide": "right",
+              "image": "/src/assets/characters/whole_orange.png?t=1768571997103"
+            }
+          ],
+          "previewIndex": 12
+        }
+      }
+    },
+    {
+      "id": "slide-1768574199420",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 11
+    },
+    {
+      "id": "slide-1768574200688",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 12
+    }
+  ],
+  "author": "User",
+  "createdAt": "2025-12-02T01:40:33.379Z",
+  "updatedAt": "2026-01-16T14:36:48.570Z",
+  "path": "lessons/Math/02-General/00-Chapter/00-WHOLE & PART 1/lesson.json",
+  "subject": "Math",
+  "topic": "02-General",
+  "chapterId": "00",
+  "chapterName": "Chapter",
+  "lessonId": "00",
+  "description": "PART & WHOLE",
+  "name": "lesson.json",
+  "type": "file",
+  "status": "completed",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 11,
+    "completed": true,
+    "lastPlayed": 1768574175494
+  }
+}

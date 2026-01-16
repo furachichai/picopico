@@ -58,6 +58,8 @@
     position: relative;
     transition: background-color 0.3s;
     overflow: hidden;
+    background-color: white;
+    /* Ensure consistent base for transparent images */
     /* Ensure content doesn't spill out */
     /* Transition Styles */
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);

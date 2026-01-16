@@ -69,6 +69,9 @@ const Canvas = (props) => {
   const handleCanvasClick = useCallback((e) => {
     // Deselect if clicking on canvas background directly
     if (e.target === e.currentTarget || e.target.closest('.cartridge-container')) {
+      // Prevent Editor.jsx's global click handler from firing and deselecting
+      e.stopPropagation();
+
       // If there is a cartridge, select it
       if (currentSlide?.cartridge) {
         dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' });
@@ -150,7 +153,7 @@ const Canvas = (props) => {
         {/* Cartridge Container - Lower layer */}
         <div className="cartridge-container">
           {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter') && (
-            <div style={{ pointerEvents: 'none', width: '100%', height: '100%' }}>
+            <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
               {currentSlide.cartridge.type === 'FractionAlpha' && (
                 <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
               )}

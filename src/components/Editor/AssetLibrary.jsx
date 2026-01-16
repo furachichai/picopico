@@ -40,12 +40,26 @@ const customCharacterList = Object.values(customCharacters).map(mod => mod.defau
 const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.default);
 
-const AssetLibrary = ({ onClose }) => {
+const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSelect = null }) => {
     const { dispatch } = useEditor();
     const { t } = useTranslation();
-    const [activeTab, setActiveTab] = useState('custom');
+    const [activeTab, setActiveTab] = useState(initialTab);
+
+    // If allowedTabs is provided, filter the available tabs
+    // otherwise show all
+    const showTab = (tabName) => {
+        if (!allowedTabs) return true;
+        return allowedTabs.includes(tabName);
+    };
 
     const handleSelect = (item) => {
+        // If external handler provided, use it and close
+        if (onSelect) {
+            onSelect(item);
+            onClose();
+            return;
+        }
+
         if (activeTab === 'backgrounds' || activeTab === 'custom-bg') {
             // Check if it's a URL (custom bg) or a color/gradient
             const payload = item.startsWith('http') || item.startsWith('data:') || item.startsWith('/') ? `url("${item}")` : item;
@@ -97,36 +111,46 @@ const AssetLibrary = ({ onClose }) => {
             </div>
 
             <div className="library-tabs">
-                <button
-                    className={activeTab === 'custom' ? 'active' : ''}
-                    onClick={() => setActiveTab('custom')}
-                >
-                    {t('library.imgs')}
-                </button>
-                <button
-                    className={activeTab === 'custom-bg' ? 'active' : ''}
-                    onClick={() => setActiveTab('custom-bg')}
-                >
-                    {t('library.bkgs')}
-                </button>
-                <button
-                    className={activeTab === 'emojis' ? 'active' : ''}
-                    onClick={() => setActiveTab('emojis')}
-                >
-                    {t('library.emojis')}
-                </button>
-                <button
-                    className={activeTab === 'backgrounds' ? 'active' : ''}
-                    onClick={() => setActiveTab('backgrounds')}
-                >
-                    {t('library.colors')}
-                </button>
-                <button
-                    className={activeTab === 'gifs' ? 'active' : ''}
-                    onClick={() => setActiveTab('gifs')}
-                >
-                    {t('library.gifs')}
-                </button>
+                {showTab('custom') && (
+                    <button
+                        className={activeTab === 'custom' ? 'active' : ''}
+                        onClick={() => setActiveTab('custom')}
+                    >
+                        {t('library.imgs')}
+                    </button>
+                )}
+                {showTab('custom-bg') && (
+                    <button
+                        className={activeTab === 'custom-bg' ? 'active' : ''}
+                        onClick={() => setActiveTab('custom-bg')}
+                    >
+                        {t('library.bkgs')}
+                    </button>
+                )}
+                {showTab('emojis') && (
+                    <button
+                        className={activeTab === 'emojis' ? 'active' : ''}
+                        onClick={() => setActiveTab('emojis')}
+                    >
+                        {t('library.emojis')}
+                    </button>
+                )}
+                {showTab('backgrounds') && (
+                    <button
+                        className={activeTab === 'backgrounds' ? 'active' : ''}
+                        onClick={() => setActiveTab('backgrounds')}
+                    >
+                        {t('library.colors')}
+                    </button>
+                )}
+                {showTab('gifs') && (
+                    <button
+                        className={activeTab === 'gifs' ? 'active' : ''}
+                        onClick={() => setActiveTab('gifs')}
+                    >
+                        {t('library.gifs')}
+                    </button>
+                )}
             </div>
 
             <div className="library-content">

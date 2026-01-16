@@ -230,6 +230,41 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'DUPLICATE_SLIDE': {
+            const slideToDuplicate = state.lesson.slides.find(s => s.id === action.payload);
+            if (!slideToDuplicate) return state;
+
+            const newSlide = {
+                ...slideToDuplicate,
+                id: `slide-${Date.now()}`,
+                elements: slideToDuplicate.elements.map(el => ({
+                    ...el,
+                    id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                })),
+                cartridge: slideToDuplicate.cartridge ? { ...slideToDuplicate.cartridge } : null,
+                order: state.lesson.slides.map(s => s.order).length, // Append to end or insert after?
+                // Let's insert after the original
+            };
+
+            const index = state.lesson.slides.findIndex(s => s.id === action.payload);
+            const newSlides = [...state.lesson.slides];
+            newSlides.splice(index + 1, 0, newSlide);
+
+            // Re-index order
+            newSlides.forEach((s, i) => s.order = i);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: newSlides
+                },
+                // Optionally switch to the new slide
+                // currentSlideId: newSlide.id 
+            };
+        }
+
         case 'SELECT_ELEMENT': {
             const selectedId = action.payload;
 

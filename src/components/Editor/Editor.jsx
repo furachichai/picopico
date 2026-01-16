@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Disc } from 'lucide-react';
 import Canvas from './Canvas';
 import Toolbar from './Toolbar';
+import AssetLibrary from './AssetLibrary';
 import './Editor.css';
 import { useEditor } from '../../context/EditorContext';
 
@@ -18,6 +19,10 @@ const Editor = () => {
     const [showSaveFeedback, setShowSaveFeedback] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [showNewLessonConfirmation, setShowNewLessonConfirmation] = useState(false);
+    const [showLibrary, setShowLibrary] = useState(false);
+    const [libraryTab, setLibraryTab] = useState('custom');
+    const [libraryAllowedTabs, setLibraryAllowedTabs] = useState(null);
+    const [libraryCallback, setLibraryCallback] = useState(null);
 
     const handleEdit = (id) => {
         setEditingElementId(id);
@@ -199,6 +204,9 @@ const Editor = () => {
         // If we are clicking inside a sticker, do nothing (handled by Sticker)
         if (e.target.closest('.sticker')) return;
 
+        // If we are clicking inside the cartridge container, do nothing (handled by Canvas)
+        if (e.target.closest('.cartridge-container')) return;
+
         // If clicking inside a contentEditable (text edit), do nothing
         if (e.target.isContentEditable || e.target.closest('[contenteditable="true"]')) return;
 
@@ -253,6 +261,19 @@ const Editor = () => {
                     onUpdate={handleUpdateInfo}
                     onClose={() => setShowInfoModal(false)}
                 />
+
+                {showLibrary && (
+                    <AssetLibrary
+                        onClose={() => {
+                            setShowLibrary(false);
+                            setLibraryCallback(null);
+                        }}
+                        initialTab={libraryTab}
+                        allowedTabs={libraryAllowedTabs}
+                        onSelect={libraryCallback}
+                    />
+                )}
+
                 <ConfirmationModal
                     isOpen={showNewLessonConfirmation}
                     message={t('editor.discardChanges')}
@@ -403,9 +424,31 @@ const Editor = () => {
                                     dispatch({ type: 'DUPLICATE_ELEMENT', payload: selectedElement.id });
                                 }
                             }}
+                            onOpenLibrary={(tab, callback) => {
+                                if (callback) {
+                                    setLibraryCallback(() => callback);
+                                } else {
+                                    setLibraryCallback(null);
+                                }
+
+                                if (selectedElement.type === 'background') {
+                                    setLibraryTab(tab || 'custom-bg');
+                                    setLibraryAllowedTabs(['custom-bg', 'backgrounds']); // Background Mode
+                                } else {
+                                    setLibraryTab(tab || 'custom');
+                                    setLibraryAllowedTabs(['custom', 'emojis', 'gifs']); // Sticker Mode
+                                }
+                                setShowLibrary(true);
+                            }}
                         />
                     ) : (
-                        <Toolbar />
+                        <Toolbar
+                            onOpenLibrary={(tab) => {
+                                setLibraryTab(tab || 'custom');
+                                setLibraryAllowedTabs(['custom', 'emojis', 'gifs']); // Sticker Mode
+                                setShowLibrary(true);
+                            }}
+                        />
                     )}
                 </div>
             </div>

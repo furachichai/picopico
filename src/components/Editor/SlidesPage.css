@@ -46,7 +46,12 @@
     padding: 2rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
+    grid-auto-rows: max-content;
+    /* Ensure rows take necessary height */
+    gap: 2rem;
+    /* Increased gap */
+    padding-bottom: 4rem;
+    /* Extra space at bottom */
     overflow-y: auto;
     align-content: flex-start;
 }

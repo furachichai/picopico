@@ -50,14 +50,43 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                     height: `${BASE_HEIGHT}px`,
                     transform: `translate(-50%, -50%) scale(${scale})`,
                     transformOrigin: 'center center',
-                    backgroundColor: (slide.background && !slide.background.includes('url') && !slide.background.includes('gradient')) ? slide.background : 'white',
-                    backgroundImage: (slide.background && (slide.background.includes('url') || slide.background.includes('gradient'))) ? slide.background : 'none',
-                    backgroundSize: 'contain',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: 'white', // Base layer is always white
                     pointerEvents: 'none' // Disable interactions
                 }}
             >
+                {/* Background Layer */}
+                {slide.background && (slide.background.includes('url') || slide.background.includes('gradient')) && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundImage: slide.background,
+                            backgroundSize: 'contain',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                            zIndex: 0,
+                            opacity: slide.backgroundSettings?.opacity ?? 1,
+                            filter: `brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
+                            transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                        }}
+                    />
+                )}
+                {slide.background && !slide.background.includes('url') && !slide.background.includes('gradient') && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: slide.background,
+                            zIndex: 0
+                        }}
+                    />
+                )}
                 {slide.elements.map(element => (
                     <Sticker
                         key={element.id}

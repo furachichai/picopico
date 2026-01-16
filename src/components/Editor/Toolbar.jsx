@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
-import AssetLibrary from './AssetLibrary';
 import { Gamepad2 } from 'lucide-react';
 
-const Toolbar = () => {
+const Toolbar = ({ onOpenLibrary }) => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
-    const [showLibrary, setShowLibrary] = useState(false);
     const [showQuizMenu, setShowQuizMenu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
 
@@ -68,7 +66,6 @@ const Toolbar = () => {
 
     return (
         <>
-            {showLibrary && <AssetLibrary onClose={() => setShowLibrary(false)} />}
             <div className="editor-toolbar">
                 <div className="toolbar-section">
                     <button className="btn-secondary" onClick={handleAddText} title={t('editor.addText')} style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>T</button>
@@ -161,7 +158,7 @@ const Toolbar = () => {
                         )}
                     </div>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
-                    <button className="btn-primary" onClick={() => setShowLibrary(!showLibrary)} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
+                    <button className="btn-primary" onClick={() => onOpenLibrary('custom')} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <button className="btn-secondary" onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'background' })} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
                 </div>
                 <div className="toolbar-section">

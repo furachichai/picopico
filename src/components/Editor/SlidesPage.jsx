@@ -72,6 +72,13 @@ const SlidesPage = () => {
                             </button>
                             <button
                                 className="btn-icon"
+                                onClick={() => dispatch({ type: 'DUPLICATE_SLIDE', payload: slide.id })}
+                                title={t('slides.duplicate') || "Duplicate"}
+                            >
+                                📄
+                            </button>
+                            <button
+                                className="btn-icon"
                                 onClick={() => handleMoveSlide(slide.id, 'right')}
                                 disabled={index === lesson.slides.length - 1}
                                 title={t('slides.moveRight')}

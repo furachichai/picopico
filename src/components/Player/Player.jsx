@@ -345,11 +345,6 @@ const Player = () => {
                             key={slide.id}
                             className={`player-slide player-stage-scaled ${positionClass}`}
                             style={{
-                                backgroundColor: (slide.background && !slide.background.includes('url') && !slide.background.includes('gradient')) ? slide.background : 'transparent',
-                                backgroundImage: (slide.background && (slide.background.includes('url') || slide.background.includes('gradient'))) ? slide.background : 'none',
-                                backgroundSize: 'contain', // Ensure whole image is visible
-                                backgroundPosition: 'center',
-                                backgroundRepeat: 'no-repeat',
                                 transformOrigin: 'center center',
                                 width: '360px',
                                 height: '640px',
@@ -366,6 +361,39 @@ const Player = () => {
                                         : `translateX(-100vw) scale(${scale})`
                             }}
                         >
+                            {/* Background Layer */}
+                            {slide.background && (slide.background.includes('url') || slide.background.includes('gradient')) && (
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundImage: slide.background,
+                                        backgroundSize: 'contain',
+                                        backgroundPosition: 'center',
+                                        backgroundRepeat: 'no-repeat',
+                                        zIndex: 0,
+                                        opacity: slide.backgroundSettings?.opacity ?? 1,
+                                        filter: `brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
+                                        transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                                    }}
+                                />
+                            )}
+                            {slide.background && !slide.background.includes('url') && !slide.background.includes('gradient') && (
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundColor: slide.background,
+                                        zIndex: 0
+                                    }}
+                                />
+                            )}
                             <div className="player-progress-bar">
                                 {slides.map((_, i) => (
                                     <div

@@ -12,7 +12,7 @@ const COLORS = [
     '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
 ];
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -97,6 +97,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                 />
                             ))}
                         </div>
+                        {element.type === 'background' && (
+                            <button
+                                className="btn-secondary"
+                                onClick={() => onOpenLibrary('custom-bg')}
+                                title="Open Background Library"
+                                style={{ marginLeft: '10px', fontSize: '0.8rem', padding: '4px 8px' }}
+                            >
+                                LIBRARY
+                            </button>
+                        )}
                     </div>
 
                     <div className="menu-divider"></div>
@@ -450,12 +460,35 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate }) => {
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <label style={{ fontSize: '0.7rem' }}>Image:</label>
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => handleFileUpload(e, activeCardIndex)}
-                                                    style={{ width: '90px', fontSize: '0.7rem' }}
-                                                />
+                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                                                    <button
+                                                        className="btn-secondary"
+                                                        onClick={() => {
+                                                            onOpenLibrary('custom', (selectedImage) => {
+                                                                const newCards = [...element.config.cards];
+                                                                newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: selectedImage };
+                                                                onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                            });
+                                                        }}
+                                                        style={{ fontSize: '0.7rem', padding: '4px 8px' }}
+                                                    >
+                                                        LIBRARY
+                                                    </button>
+                                                    {element.config.cards[activeCardIndex].image && (
+                                                        <button
+                                                            className="btn-icon"
+                                                            style={{ fontSize: '0.8rem', padding: '2px 5px' }}
+                                                            onClick={() => {
+                                                                const newCards = [...element.config.cards];
+                                                                newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: null };
+                                                                onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                            }}
+                                                            title="Clear Image"
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    )}
+                                                </div>
                                                 {element.config.cards[activeCardIndex].image && <span title="Image Set">🖼️</span>}
                                             </div>
                                             <small style={{ fontSize: '0.65rem', color: '#888', fontStyle: 'italic', textAlign: 'right' }}>Rec: 600x800 (3:4)</small>

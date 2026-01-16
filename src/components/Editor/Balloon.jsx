@@ -200,8 +200,6 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         outline: 'none',
                         cursor: readOnly ? 'default' : 'text',
                         userSelect: readOnly ? 'none' : 'text',
-                        pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'auto'), // Allow interaction if selected or generally available? Editor seems to rely on isSelected for interaction.
-                        // Actually, previous code: pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none')
                         // Let's stick to that logic for the input itself.
                         pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
                         whiteSpace: 'pre-wrap',
