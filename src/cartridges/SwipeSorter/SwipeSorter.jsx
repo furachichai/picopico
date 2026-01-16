@@ -15,144 +15,18 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     const [cards, setCards] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Logic Refs (Mutable state for events)
-    const dragStartRef = useRef(null);
-    const dragDeltaRef = useRef({ x: 0, y: 0 });
+    // State Refs to prevent stale closures in timeouts
+    const cardsRef = useRef(cards);
+    const currentIndexRef = useRef(currentIndex);
 
-    // Render State (For visual feedback)
-    const [dragDelta, setDragDelta] = useState({ x: 0, y: 0 });
-    const [isDragging, setIsDragging] = useState(false);
-    const [feedback, setFeedback] = useState(null); // 'correct', 'incorrect', null
-    const [isShake, setIsShake] = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
-
-    const audioCtxRef = useRef(null);
-
-    // Initialize Cards
     useEffect(() => {
-        // Deep copy to avoid mutating prop
-        // Add random ID if not present for keys
-        const preppedCards = (initialCards.length > 0 ? initialCards : [
-            { id: 1, text: '2 + 2 = 4', correctSide: 'right' },
-            { id: 2, text: 'The sky is green', correctSide: 'left' },
-            { id: 3, text: 'Cats are mammals', correctSide: 'right' }
-        ]).map((c, i) => ({ ...c, id: c.id || `card-${i}` }));
+        cardsRef.current = cards;
+        currentIndexRef.current = currentIndex;
+    }, [cards, currentIndex]);
 
-        setCards(preppedCards);
+    // ... existing refs ...
 
-        // Only reset index if NOT in preview mode. 
-        // In preview mode, the previewIndex effect handles the current card.
-        if (!preview) {
-            setCurrentIndex(0);
-        }
-        setIsComplete(false);
-    }, [initialCards, preview]);
-
-    // Audio Setup
-    useEffect(() => {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) {
-                audioCtxRef.current = new AudioContext();
-            }
-        } catch (e) {
-            console.error('AudioContext creation failed:', e);
-        }
-        return () => {
-            if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-                try {
-                    audioCtxRef.current.close();
-                } catch (e) {
-                    // Ignore close errors
-                }
-            }
-        };
-    }, []);
-
-    const playSound = (type) => {
-        if (!audioCtxRef.current) return;
-        if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
-
-        const ctx = audioCtxRef.current;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        const now = ctx.currentTime;
-
-        if (type === 'success') {
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, now);
-            osc.frequency.linearRampToValueAtTime(1046.50, now + 0.1);
-            gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.start(now);
-            osc.stop(now + 0.3);
-        } else if (type === 'error') {
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.linearRampToValueAtTime(100, now + 0.3);
-            gain.gain.setValueAtTime(0.5, now);
-            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.start(now);
-            osc.stop(now + 0.3);
-        }
-    };
-
-    // Sync with editor preview selection
-    useEffect(() => {
-        if (preview && typeof config.previewIndex === 'number') {
-            setCurrentIndex(config.previewIndex);
-        }
-    }, [config.previewIndex, preview]);
-
-    // Helper to get client coordinates safely
-    const getClientCoordinates = (e) => {
-        if (e.touches && e.touches.length > 0) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }
-        return { x: e.clientX, y: e.clientY };
-    };
-
-    // Handle user interaction (mouse/touch)
-    const handleStart = (e) => {
-        if (isComplete) return; // Prevent interaction if complete
-
-        console.log('SwipeSorter: handleStart', e.type);
-
-        // Prevent default behavior for touch to avoid scrolling
-        if (e.type === 'touchstart') {
-            // e.preventDefault(); // Note: React synthetic events might warn if passive. 
-            // We'll handle this via CSS touch-action: none.
-        }
-
-        const { x, y } = getClientCoordinates(e);
-
-        setIsDragging(true);
-        dragStartRef.current = { x, y };
-        dragDeltaRef.current = { x: 0, y: 0 };
-        setDragDelta({ x: 0, y: 0 }); // Reset visual delta
-        setFeedback(null); // Reset feedback on new drag
-    };
-
-    const handleMove = (e) => {
-        if (!isDragging || !dragStartRef.current) return;
-
-        // Prevent scrolling on touch move
-        if (e.type === 'touchmove') {
-            // e.preventDefault(); // Handled by CSS
-        }
-
-        const { x, y } = getClientCoordinates(e);
-
-        const dx = x - dragStartRef.current.x;
-        const dy = 0; // Lock vertical movement
-
-        dragDeltaRef.current = { x: dx, y: dy };
-        setDragDelta({ x: dx, y: dy }); // Update visual state
-    };
+    // ... handleStart, handleMove ...
 
     const handleEnd = () => {
         if (!isDragging) return;
@@ -174,7 +48,11 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     };
 
     const checkAnswer = (side, finalY = 0) => {
-        const currentCard = cards[currentIndex];
+        // Use Refs to get latest state inside async/callbacks
+        const currentCards = cardsRef.current;
+        const currIndex = currentIndexRef.current;
+        const currentCard = currentCards[currIndex];
+
         console.log('SwipeSorter: checkAnswer', side, currentCard);
 
         if (currentCard.correctSide === side) {
@@ -193,8 +71,8 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             setDragDelta({ x: offScreenX, y: finalY });
 
             setTimeout(() => {
-                const nextIndex = currentIndex + 1;
-                if (nextIndex >= cards.length) {
+                const nextIndex = currIndex + 1;
+                if (nextIndex >= currentCards.length) {
                     setIsComplete(true);
                     if (onComplete) onComplete();
                 } else {
@@ -212,6 +90,10 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
             setTimeout(() => {
                 setIsShake(false);
+
+                // Use latest refs again inside timeout in case of fast updates (though unlikely here)
+                const latestCards = cardsRef.current;
+                // Note: currentCard is fixed for this interaction turn
 
                 // Check if card has already been recycled
                 const retryCount = currentCard.retryCount || 0;
@@ -232,8 +114,8 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
                 } else {
                     // Card discarded (no recycle)
                     // Check if this was the last card
-                    const nextIndex = currentIndex + 1;
-                    if (nextIndex >= cards.length) {
+                    const nextIndex = currIndex + 1;
+                    if (nextIndex >= latestCards.length) {
                         setIsComplete(true);
                         if (onComplete) onComplete();
                     } else {
