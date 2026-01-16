@@ -213,10 +213,19 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             setTimeout(() => {
                 setIsShake(false);
 
-                // Add copy of current card to end of deck
-                setCards(prev => [...prev, { ...currentCard, id: `${currentCard.id}-retry-${Date.now()}` }]);
+                // Check if card has already been recycled
+                const retryCount = currentCard.retryCount || 0;
 
-                // Advance to next card (game cannot be complete since we just added a card)
+                if (retryCount < 1) {
+                    // Recycle card: Add copy to end of deck
+                    setCards(prev => [...prev, {
+                        ...currentCard,
+                        id: `${currentCard.id}-retry-${Date.now()}`,
+                        retryCount: retryCount + 1
+                    }]);
+                }
+
+                // Advance to next card
                 setCurrentIndex(prev => prev + 1);
                 setDragDelta({ x: 0, y: 0 });
                 dragDeltaRef.current = { x: 0, y: 0 };
