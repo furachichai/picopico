@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Sticker from './Sticker';
+import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 
 const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
     const containerRef = useRef(null);
@@ -86,6 +87,21 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                             zIndex: 0
                         }}
                     />
+                )}
+                {slide.cartridge && slide.cartridge.type === 'SwipeSorter' && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            zIndex: 0,
+                            pointerEvents: 'none'
+                        }}
+                    >
+                        <SwipeSorter config={slide.cartridge.config} preview={true} />
+                    </div>
                 )}
                 {slide.elements.map(element => (
                     <Sticker

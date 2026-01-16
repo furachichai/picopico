@@ -3,6 +3,9 @@ import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import { Home, Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
 import Balloon from '../Editor/Balloon';
+import QuizPlayer from '../Player/QuizPlayer';
+import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
+import { saveLessonProgress } from '../../utils/storage';
 
 const DiscoverView = () => {
     const { dispatch } = useEditor();
@@ -30,10 +33,11 @@ const DiscoverView = () => {
     useEffect(() => {
         const fetchLessons = async () => {
             try {
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                // Use API in development (localhost or network IP), static JSON in production
+                const isDev = import.meta.env.DEV;
 
                 let data;
-                if (isLocal) {
+                if (isDev) {
                     const response = await fetch('/api/list-lessons');
                     data = await response.json();
                 } else {
@@ -54,8 +58,8 @@ const DiscoverView = () => {
                 traverse(data);
 
                 let loadedLessons;
-                if (isLocal) {
-                    // Fetch each lesson individually on localhost
+                if (isDev) {
+                    // Fetch each lesson individually on dev server
                     loadedLessons = await Promise.all(flatList.map(async (l) => {
                         try {
                             const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
@@ -161,11 +165,21 @@ const DiscoverView = () => {
         }
     };
 
+
+
+    // ... (keep existing imports)
+
     const enterLesson = () => {
         markInteraction(false);
         const lesson = lessons[currentIndex];
         // Merge path if missing in content
         const fullLesson = { ...lesson };
+
+        // RESET PROGRESS: Force start from beginning (Slide 1 usually)
+        if (fullLesson.path) {
+            const startIndex = fullLesson.slides.length > 1 ? 1 : 0;
+            saveLessonProgress(fullLesson.path, { lastSlideIndex: startIndex, completed: false });
+        }
 
         dispatch({ type: 'LOAD_LESSON', payload: fullLesson });
 
@@ -252,6 +266,8 @@ const DiscoverView = () => {
     const handleTouchMove = (e) => handleMove(e.touches[0].clientX, e.touches[0].clientY);
     const handleTouchEnd = (e) => handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 
+
+
     // Mouse Wrappers
     const handleMouseDown = (e) => handleStart(e.clientX, e.clientY);
     const handleMouseMove = (e) => isDragging && handleMove(e.clientX, e.clientY);
@@ -278,6 +294,20 @@ const DiscoverView = () => {
                     userSelect: 'none'
                 }}
             >
+                {/* Cartridge Layer */}
+                {slide.cartridge && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none'
+                    }}>
+                        {slide.cartridge.type === 'SwipeSorter' && (
+                            <SwipeSorter
+                                config={slide.cartridge.config}
+                                preview={true}
+                            />
+                        )}
+                        {/* Add other cartridges here as needed */}
+                    </div>
+                )}
 
                 {/* Elements */}
                 {slide.elements.map(element => (
@@ -287,7 +317,7 @@ const DiscoverView = () => {
                             position: 'absolute',
                             left: `${element.x}%`,
                             top: `${element.y}%`,
-                            width: element.type === 'quiz' ? 'auto' : `${element.width}%`,
+                            width: element.type === 'quiz' ? '360px' : `${element.width}%`, // Full width for quiz
                             height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
                             transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
                             zIndex: 10,
@@ -300,7 +330,9 @@ const DiscoverView = () => {
                         {element.type === 'text' && (
                             <div
                                 style={{
-                                    fontFamily: element.metadata?.fontFamily || 'Nunito',
+                                    fontFamily: element.metadata?.fontFamily && element.metadata.fontFamily.includes('Comic')
+                                        ? '"Comic Neue", "Chalkboard SE", "Comic Sans MS", "Comic Sans", cursive, sans-serif'
+                                        : (element.metadata?.fontFamily || '"Comic Neue", "Chalkboard SE", "Comic Sans MS", sans-serif'),
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                                     color: element.metadata?.color || 'black',
                                     backgroundColor: element.metadata?.backgroundColor || 'transparent',
@@ -310,7 +342,6 @@ const DiscoverView = () => {
                                     lineHeight: 1,
                                     whiteSpace: 'pre-wrap',
                                     textAlign: element.metadata?.textAlign || 'left',
-                                    // Ensure text styles match Player/Editor
                                     fontWeight: element.metadata?.fontWeight || 'normal',
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none'
@@ -325,6 +356,14 @@ const DiscoverView = () => {
                                 element={element}
                                 readOnly={true}
                             />
+                        )}
+                        {element.type === 'quiz' && (
+                            <div style={{ pointerEvents: 'none' }}>
+                                <QuizPlayer
+                                    data={element}
+                                    disabled={true}
+                                />
+                            </div>
                         )}
                     </div>
                 ))}

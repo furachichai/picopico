@@ -194,7 +194,9 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         }
                     }}
                     style={{
-                        fontFamily: element.metadata?.fontFamily || 'monospace',
+                        fontFamily: element.metadata?.fontFamily && element.metadata.fontFamily.includes('Comic')
+                            ? '"Comic Neue", "Chalkboard SE", "Comic Sans MS", "Comic Sans", cursive, sans-serif'
+                            : (element.metadata?.fontFamily || '"Comic Neue", "Chalkboard SE", "Comic Sans MS", sans-serif'),
                         fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                         color: element.metadata?.color || 'black',
                         outline: 'none',

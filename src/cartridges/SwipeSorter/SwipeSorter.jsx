@@ -50,10 +50,22 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
     // Audio Setup
     useEffect(() => {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtxRef.current = new AudioContext();
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                audioCtxRef.current = new AudioContext();
+            }
+        } catch (e) {
+            console.error('AudioContext creation failed:', e);
+        }
         return () => {
-            if (audioCtxRef.current) audioCtxRef.current.close();
+            if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+                try {
+                    audioCtxRef.current.close();
+                } catch (e) {
+                    // Ignore close errors
+                }
+            }
         };
     }, []);
 
@@ -136,7 +148,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         const { x, y } = getClientCoordinates(e);
 
         const dx = x - dragStartRef.current.x;
-        const dy = y - dragStartRef.current.y;
+        const dy = 0; // Lock vertical movement
 
         dragDeltaRef.current = { x: dx, y: dy };
         setDragDelta({ x: dx, y: dy }); // Update visual state
@@ -248,11 +260,11 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         }
         // Stack effect
         const offset = index - currentIndex;
-        if (offset > 0 && offset < 3) {
+        if (offset > 0 && offset < 2) {
             return {
                 transform: `scale(${1 - offset * 0.05}) translateY(${offset * 10}px)`,
                 zIndex: 100 - offset,
-                opacity: 1 - offset * 0.2
+                opacity: 1
             };
         }
         return { opacity: 0, pointerEvents: 'none' };
@@ -282,6 +294,48 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         return style;
     }
 
+    // Start Screen state
+    const [hasStarted, setHasStarted] = useState(preview);
+
+    useEffect(() => {
+        if (preview) {
+            setHasStarted(true);
+        }
+    }, [preview]);
+
+    if (!hasStarted) {
+        return (
+            <div className="swipe-sorter-container" style={{ flexDirection: 'column', gap: '20px' }}>
+                <button
+                    onClick={() => setHasStarted(true)}
+                    style={{
+                        padding: '15px 40px',
+                        fontSize: '1.5rem',
+                        fontWeight: 'bold',
+                        backgroundColor: '#2ed573',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50px',
+                        boxShadow: '0 5px 15px rgba(46, 213, 115, 0.4)',
+                        cursor: 'pointer',
+                        animation: 'pulse 1.5s infinite'
+                    }}
+                >
+                    CHALLENGE
+                </button>
+                <style>
+                    {`
+                        @keyframes pulse {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.05); }
+                            100% { transform: scale(1); }
+                        }
+                    `}
+                </style>
+            </div>
+        );
+    }
+
     if (isComplete && !preview) {
         return null;
     }
@@ -292,10 +346,10 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         // Container handlers removed - using Window listeners
         >
             {/* Banner Overlays */}
-            <div className={`swipe-banner left`} style={{ opacity: isDragging && dragDelta.x < -50 ? Math.min(Math.abs(dragDelta.x) / 100, 1) : 0 }}>
+            <div className={`swipe-banner left`} style={{ opacity: isDragging && dragDelta.x < -5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0 }}>
                 {leftLabel}
             </div>
-            <div className={`swipe-banner right`} style={{ opacity: isDragging && dragDelta.x > 50 ? Math.min(Math.abs(dragDelta.x) / 100, 1) : 0 }}>
+            <div className={`swipe-banner right`} style={{ opacity: isDragging && dragDelta.x > 5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0 }}>
                 {rightLabel}
             </div>
 

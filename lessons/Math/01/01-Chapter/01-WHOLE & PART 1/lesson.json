@@ -1,5 +1,5 @@
 {
-  "id": "lessons/Math/02-General/00-Chapter/00-WHOLE & PART 1/lesson.json",
+  "id": "lessons/Math/01/01-Chapter/01-WHOLE & PART 1/lesson.json",
   "title": "WHOLE & PART 1",
   "slides": [
     {
@@ -202,6 +202,96 @@
       }
     },
     {
+      "id": "slide-1768571629272",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768571656011",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "WHOLE",
+              "PART"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1768571645655",
+          "type": "image",
+          "content": "/src/assets/characters/part_chili.png",
+          "x": 50.833333333333336,
+          "y": 43.125,
+          "width": 40,
+          "height": 40.75471698113208,
+          "rotation": 0,
+          "scale": 1.4211920931391484,
+          "metadata": {
+            "width": 40,
+            "height": 40.75471698113208
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1768571667842",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1768571687792",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "WHOLE",
+              "PART"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1768571752721",
+          "type": "image",
+          "content": "/src/assets/characters/whole_chili.png?t=1768571743265",
+          "x": 51.388888888888886,
+          "y": 42.34375,
+          "width": 40,
+          "height": 39.45205479452055,
+          "rotation": 0,
+          "scale": 1.3909727872745432,
+          "metadata": {
+            "width": 40,
+            "height": 39.45205479452055
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
       "id": "slide-1768569589332",
       "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
@@ -242,7 +332,7 @@
           }
         }
       ],
-      "order": 4,
+      "order": 6,
       "backgroundSettings": {
         "opacity": 0.53
       }
@@ -303,7 +393,7 @@
           }
         }
       ],
-      "order": 5,
+      "order": 7,
       "backgroundSettings": {
         "opacity": 0.51
       }
@@ -328,7 +418,7 @@
           }
         }
       ],
-      "order": 6,
+      "order": 8,
       "backgroundSettings": {
         "opacity": 0.35
       }
@@ -389,101 +479,11 @@
           }
         }
       ],
-      "order": 7
-    },
-    {
-      "id": "slide-1768571667842",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1768571687792",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 85,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "options": [
-              "WHOLE",
-              "PART"
-            ],
-            "correctIndex": 0,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "tf",
-            "visualMode": false
-          }
-        },
-        {
-          "id": "el-1768571752721",
-          "type": "image",
-          "content": "/src/assets/characters/whole_chili.png?t=1768571743265",
-          "x": 51.388888888888886,
-          "y": 42.34375,
-          "width": 40,
-          "height": 39.45205479452055,
-          "rotation": 0,
-          "scale": 1.3909727872745432,
-          "metadata": {
-            "width": 40,
-            "height": 39.45205479452055
-          }
-        }
-      ],
-      "order": 8
-    },
-    {
-      "id": "slide-1768571629272",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1768571656011",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 85,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "options": [
-              "WHOLE",
-              "PART"
-            ],
-            "correctIndex": 1,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "tf",
-            "visualMode": false
-          }
-        },
-        {
-          "id": "el-1768571645655",
-          "type": "image",
-          "content": "/src/assets/characters/part_chili.png",
-          "x": 50.833333333333336,
-          "y": 43.125,
-          "width": 40,
-          "height": 40.75471698113208,
-          "rotation": 0,
-          "scale": 1.4211920931391484,
-          "metadata": {
-            "width": 40,
-            "height": 40.75471698113208
-          }
-        }
-      ],
       "order": 9
     },
     {
       "id": "slide-1768573440738",
-      "background": "#E1F5FE",
+      "background": "#58cc02",
       "elements": [],
       "order": 10,
       "cartridge": {
@@ -573,7 +573,8 @@
           ],
           "previewIndex": 12
         }
-      }
+      },
+      "backgroundSettings": {}
     },
     {
       "id": "slide-1768574199420",
@@ -621,13 +622,13 @@
   ],
   "author": "User",
   "createdAt": "2025-12-02T01:40:33.379Z",
-  "updatedAt": "2026-01-16T14:52:48.469Z",
-  "path": "lessons/Math/02-General/00-Chapter/00-WHOLE & PART 1/lesson.json",
+  "updatedAt": "2026-01-16T18:26:59.653Z",
+  "path": "lessons/Math/01/01-Chapter/01-WHOLE & PART 1/lesson.json",
   "subject": "Math",
-  "topic": "02-General",
-  "chapterId": "00",
+  "topic": "01",
+  "chapterId": "01",
   "chapterName": "Chapter",
-  "lessonId": "00",
+  "lessonId": "01",
   "description": "PART & WHOLE",
   "name": "lesson.json",
   "type": "file",
@@ -644,6 +645,6 @@
   "progress": {
     "lastSlideIndex": 11,
     "completed": true,
-    "lastPlayed": 1768574181141
+    "lastPlayed": 1768587806921
   }
 }

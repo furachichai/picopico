@@ -22,8 +22,7 @@ const initialState = {
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
-    currentSlideId: 'slide-1',
-    selectedElementId: null,
+
     isDirty: false,
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
     readOnly: false, // Default to false, will be set on mount
