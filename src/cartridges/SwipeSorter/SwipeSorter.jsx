@@ -37,6 +37,26 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
     const audioCtxRef = useRef(null);
 
+    // Initialize Cards
+    useEffect(() => {
+        // Deep copy to avoid mutating prop
+        // Add random ID if not present for keys
+        const preppedCards = (initialCards.length > 0 ? initialCards : [
+            { id: 1, text: '2 + 2 = 4', correctSide: 'right' },
+            { id: 2, text: 'The sky is green', correctSide: 'left' },
+            { id: 3, text: 'Cats are mammals', correctSide: 'right' }
+        ]).map((c, i) => ({ ...c, id: c.id || `card-${i}` }));
+
+        setCards(preppedCards);
+
+        // Only reset index if NOT in preview mode. 
+        // In preview mode, the previewIndex effect handles the current card.
+        if (!preview) {
+            setCurrentIndex(0);
+        }
+        setIsComplete(false);
+    }, [initialCards, preview]);
+
     // Audio Setup
     useEffect(() => {
         try {
