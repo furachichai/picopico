@@ -223,13 +223,26 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
                         id: `${currentCard.id}-retry-${Date.now()}`,
                         retryCount: retryCount + 1
                     }]);
-                }
 
-                // Advance to next card
-                setCurrentIndex(prev => prev + 1);
-                setDragDelta({ x: 0, y: 0 });
-                dragDeltaRef.current = { x: 0, y: 0 };
-                setFeedback(null);
+                    // Advance to next card (game continues)
+                    setCurrentIndex(prev => prev + 1);
+                    setDragDelta({ x: 0, y: 0 });
+                    dragDeltaRef.current = { x: 0, y: 0 };
+                    setFeedback(null);
+                } else {
+                    // Card discarded (no recycle)
+                    // Check if this was the last card
+                    const nextIndex = currentIndex + 1;
+                    if (nextIndex >= cards.length) {
+                        setIsComplete(true);
+                        if (onComplete) onComplete();
+                    } else {
+                        setCurrentIndex(nextIndex);
+                        setDragDelta({ x: 0, y: 0 });
+                        dragDeltaRef.current = { x: 0, y: 0 };
+                        setFeedback(null);
+                    }
+                }
             }, 500);
         }
     };
