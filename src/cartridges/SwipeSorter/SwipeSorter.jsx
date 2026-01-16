@@ -205,24 +205,22 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
                 }
             }, 300);
         } else {
-            // Incorrect - Vanish and move to next
+            // Incorrect - Recycle card to bottom of deck
             playSound('error');
             setIsShake(true);
             setFeedback('incorrect');
 
             setTimeout(() => {
                 setIsShake(false);
-                // Advance
-                const nextIndex = currentIndex + 1;
-                if (nextIndex >= cards.length) {
-                    setIsComplete(true);
-                    if (onComplete) onComplete();
-                } else {
-                    setCurrentIndex(nextIndex);
-                    setDragDelta({ x: 0, y: 0 });
-                    dragDeltaRef.current = { x: 0, y: 0 };
-                    setFeedback(null);
-                }
+
+                // Add copy of current card to end of deck
+                setCards(prev => [...prev, { ...currentCard, id: `${currentCard.id}-retry-${Date.now()}` }]);
+
+                // Advance to next card (game cannot be complete since we just added a card)
+                setCurrentIndex(prev => prev + 1);
+                setDragDelta({ x: 0, y: 0 });
+                dragDeltaRef.current = { x: 0, y: 0 };
+                setFeedback(null);
             }, 500);
         }
     };

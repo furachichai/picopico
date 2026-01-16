@@ -30,7 +30,7 @@
         {
           "id": "el-1768416688936",
           "type": "image",
-          "content": "/src/assets/characters/chef%20leaning.png",
+          "content": "/assets/characters/chef%20leaning.png",
           "x": 24.166666666666668,
           "y": 62.03125,
           "width": 40,
@@ -45,7 +45,7 @@
         {
           "id": "el-1768416738097",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20jumping.png",
+          "content": "/assets/characters/pesto%20jumping.png",
           "x": 73.61111111111111,
           "y": 75.3125,
           "width": 40,
@@ -88,7 +88,7 @@
         {
           "id": "el-1768417254419",
           "type": "image",
-          "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+          "content": "/assets/characters/chef%20approves%20without%20excitement.png",
           "x": 44.44444444444444,
           "y": 64.21875,
           "width": 40,
@@ -132,7 +132,7 @@
         {
           "id": "el-1768416866649",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20cooking.png",
+          "content": "/assets/characters/pesto%20cooking.png",
           "x": 48.333333333333336,
           "y": 67.5,
           "width": 40,
@@ -175,7 +175,7 @@
         {
           "id": "el-1768416892331",
           "type": "image",
-          "content": "/src/assets/characters/recipe%20egg%20soup.png",
+          "content": "/assets/characters/recipe%20egg%20soup.png",
           "x": 60.83333333333333,
           "y": 76.25,
           "width": 40,
@@ -211,7 +211,7 @@
         {
           "id": "el-1768417295575",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20asking%20question.png",
+          "content": "/assets/characters/pesto%20asking%20question.png",
           "x": 31.11111111111111,
           "y": 37.65625,
           "width": 40,
@@ -233,7 +233,7 @@
         {
           "id": "el-1768416974487",
           "type": "image",
-          "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+          "content": "/assets/characters/Pesto%20dropping%20chili.png",
           "x": 48.05555555555556,
           "y": 74.21875,
           "width": 40,
@@ -276,7 +276,7 @@
         {
           "id": "el-1768417030814",
           "type": "image",
-          "content": "/src/assets/characters/chef%20spitting%20fire.png",
+          "content": "/assets/characters/chef%20spitting%20fire.png",
           "x": 49.72222222222222,
           "y": 63.4375,
           "width": 40,
@@ -298,7 +298,7 @@
         {
           "id": "el-1768417054491",
           "type": "image",
-          "content": "/src/assets/characters/cut%20chili.png",
+          "content": "/assets/characters/cut%20chili.png",
           "x": 49.166666666666664,
           "y": 32.34375,
           "width": 40,
@@ -313,7 +313,7 @@
         {
           "id": "el-1768417069397",
           "type": "image",
-          "content": "/src/assets/characters/chef%20explains.png",
+          "content": "/assets/characters/chef%20explains.png",
           "x": 39.44444444444444,
           "y": 96.25,
           "width": 40,

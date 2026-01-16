@@ -4,19 +4,19 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/titlecard_radioactive_chili.png\")",
+      "background": "url(\"/assets/backgrounds/titlecard_radioactive_chili.png\")",
       "elements": [],
       "order": 0,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1768569197966",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001d.png\")",
       "elements": [
         {
           "id": "el-1768569233229",
           "type": "image",
-          "content": "/src/assets/characters/chef%20leaning.png",
+          "content": "/assets/characters/chef%20leaning.png",
           "x": 26.388888888888886,
           "y": 63.28125,
           "width": 40,
@@ -31,7 +31,7 @@
         {
           "id": "el-1768569252817",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20jumping.png",
+          "content": "/assets/characters/pesto%20jumping.png",
           "x": 73.61111111111111,
           "y": 74.53125,
           "width": 40,
@@ -93,12 +93,12 @@
     },
     {
       "id": "slide-1768569367782",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569398856",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20cooking.png",
+          "content": "/assets/characters/pesto%20cooking.png",
           "x": 47.5,
           "y": 70.3125,
           "width": 40,
@@ -140,12 +140,12 @@
     },
     {
       "id": "slide-1768569455591",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569468126",
           "type": "image",
-          "content": "/src/assets/characters/recipe%20egg%20soup.png",
+          "content": "/assets/characters/recipe%20egg%20soup.png",
           "x": 63.05555555555556,
           "y": 35,
           "width": 40,
@@ -160,7 +160,7 @@
         {
           "id": "el-1768569480672",
           "type": "image",
-          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "content": "/assets/characters/pest_scratches%20head_back.png",
           "x": 75.55555555555554,
           "y": 101.5625,
           "width": 40,
@@ -203,12 +203,12 @@
     },
     {
       "id": "slide-1768569589332",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569601241",
           "type": "image",
-          "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+          "content": "/assets/characters/Pesto%20dropping%20chili.png",
           "x": 46.94444444444444,
           "y": 73.75,
           "width": 40,
@@ -249,12 +249,12 @@
     },
     {
       "id": "slide-1768569629424",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001b.png\")",
       "elements": [
         {
           "id": "el-1768569644328",
           "type": "image",
-          "content": "/src/assets/characters/pesto_bended_waiter.png",
+          "content": "/assets/characters/pesto_bended_waiter.png",
           "x": 47.77777777777778,
           "y": 66.5625,
           "width": 40,
@@ -269,7 +269,7 @@
         {
           "id": "el-1768569652729",
           "type": "image",
-          "content": "/src/assets/characters/bowl_soup_sideview_big.png",
+          "content": "/assets/characters/bowl_soup_sideview_big.png",
           "x": 70.83333333333334,
           "y": 50.625,
           "width": 40,
@@ -310,12 +310,12 @@
     },
     {
       "id": "slide-1768569670265",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001b.png\")",
       "elements": [
         {
           "id": "el-1768569695072",
           "type": "image",
-          "content": "/src/assets/characters/chef%20spitting%20fire.png",
+          "content": "/assets/characters/chef%20spitting%20fire.png",
           "x": 71.38888888888889,
           "y": 60,
           "width": 40,
@@ -340,7 +340,7 @@
         {
           "id": "el-1768569730541",
           "type": "image",
-          "content": "/src/assets/characters/cut%20chili.png",
+          "content": "/assets/characters/cut%20chili.png",
           "x": 52.22222222222222,
           "y": 32.8125,
           "width": 40,
@@ -355,7 +355,7 @@
         {
           "id": "el-1768569754916",
           "type": "image",
-          "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+          "content": "/assets/characters/chef%20sitting%20on%20mushroom.png",
           "x": 12.222222222222221,
           "y": 92.34375,
           "width": 40,
@@ -421,7 +421,7 @@
         {
           "id": "el-1768571752721",
           "type": "image",
-          "content": "/src/assets/characters/whole_chili.png?t=1768571743265",
+          "content": "/assets/characters/whole_chili.png?t=1768571743265",
           "x": 51.388888888888886,
           "y": 42.34375,
           "width": 40,
@@ -466,7 +466,7 @@
         {
           "id": "el-1768571645655",
           "type": "image",
-          "content": "/src/assets/characters/part_chili.png",
+          "content": "/assets/characters/part_chili.png",
           "x": 50.833333333333336,
           "y": 43.125,
           "width": 40,
@@ -496,79 +496,79 @@
               "id": "c1",
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/bowl_soup_sideview_big.png"
+              "image": "/assets/characters/bowl_soup_sideview_big.png"
             },
             {
               "id": "c2",
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_egg.png?t=1768572195885"
+              "image": "/assets/characters/part_egg.png?t=1768572195885"
             },
             {
               "id": "c3",
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_avocado.png?t=1768572232531"
+              "image": "/assets/characters/part_avocado.png?t=1768572232531"
             },
             {
               "id": 1768573887030,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_banana.png?t=1768571871915"
+              "image": "/assets/characters/whole_banana.png?t=1768571871915"
             },
             {
               "id": 1768573902707,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_avocado.png?t=1768572213795"
+              "image": "/assets/characters/whole_avocado.png?t=1768572213795"
             },
             {
               "id": 1768573914124,
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_banana.png?t=1768571901102"
+              "image": "/assets/characters/part_banana.png?t=1768571901102"
             },
             {
               "id": 1768573943774,
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_egg_dozen.png"
+              "image": "/assets/characters/part_egg_dozen.png"
             },
             {
               "id": 1768573970519,
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_watermelon.png?t=1768571975952"
+              "image": "/assets/characters/part_watermelon.png?t=1768571975952"
             },
             {
               "id": 1768573986135,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_egg.png?t=1768572181030"
+              "image": "/assets/characters/whole_egg.png?t=1768572181030"
             },
             {
               "id": 1768573999726,
               "text": "",
               "correctSide": "left",
-              "image": "/src/assets/characters/part_orange.png?t=1768572024237"
+              "image": "/assets/characters/part_orange.png?t=1768572024237"
             },
             {
               "id": 1768574023380,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_egg_dozen.png?t=1768572878328"
+              "image": "/assets/characters/whole_egg_dozen.png?t=1768572878328"
             },
             {
               "id": 1768574062610,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_watermelon.png?t=1768571954544"
+              "image": "/assets/characters/whole_watermelon.png?t=1768571954544"
             },
             {
               "id": 1768574084242,
               "text": "",
               "correctSide": "right",
-              "image": "/src/assets/characters/whole_orange.png?t=1768571997103"
+              "image": "/assets/characters/whole_orange.png?t=1768571997103"
             }
           ],
           "previewIndex": 12
@@ -582,7 +582,7 @@
         {
           "id": "el-1768574354108",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20jumping.png",
+          "content": "/assets/characters/pesto%20jumping.png",
           "x": 46.388888888888886,
           "y": 64.21875,
           "width": 40,

@@ -4,19 +4,19 @@
   "slides": [
     {
       "id": "slide-1",
-      "background": "url(\"/src/assets/backgrounds/titlecard_radioactive_chili.png\")",
+      "background": "url(\"/assets/backgrounds/titlecard_radioactive_chili.png\")",
       "elements": [],
       "order": 0,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1768569197966",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001d.png\")",
       "elements": [
         {
           "id": "el-1768569233229",
           "type": "image",
-          "content": "/src/assets/characters/chef%20leaning.png",
+          "content": "/assets/characters/chef%20leaning.png",
           "x": 26.388888888888886,
           "y": 63.28125,
           "width": 40,
@@ -31,7 +31,7 @@
         {
           "id": "el-1768569252817",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20jumping.png",
+          "content": "/assets/characters/pesto%20jumping.png",
           "x": 73.61111111111111,
           "y": 74.53125,
           "width": 40,
@@ -93,7 +93,7 @@
     },
     {
       "id": "slide-1768569313972",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001d.png\")",
       "elements": [
         {
           "id": "el-1768569353212",
@@ -119,7 +119,7 @@
         {
           "id": "el-1768569346326",
           "type": "image",
-          "content": "/src/assets/characters/chef%20explains.png",
+          "content": "/assets/characters/chef%20explains.png",
           "x": 45.833333333333336,
           "y": 61.25,
           "width": 40,
@@ -139,12 +139,12 @@
     },
     {
       "id": "slide-1768569367782",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569398856",
           "type": "image",
-          "content": "/src/assets/characters/pesto%20cooking.png",
+          "content": "/assets/characters/pesto%20cooking.png",
           "x": 47.5,
           "y": 70.3125,
           "width": 40,
@@ -186,12 +186,12 @@
     },
     {
       "id": "slide-1768569455591",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569468126",
           "type": "image",
-          "content": "/src/assets/characters/recipe%20egg%20soup.png",
+          "content": "/assets/characters/recipe%20egg%20soup.png",
           "x": 63.05555555555556,
           "y": 35,
           "width": 40,
@@ -206,7 +206,7 @@
         {
           "id": "el-1768569480672",
           "type": "image",
-          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "content": "/assets/characters/pest_scratches%20head_back.png",
           "x": 75.55555555555554,
           "y": 101.5625,
           "width": 40,
@@ -249,12 +249,12 @@
     },
     {
       "id": "slide-1768569589332",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
           "id": "el-1768569601241",
           "type": "image",
-          "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+          "content": "/assets/characters/Pesto%20dropping%20chili.png",
           "x": 46.94444444444444,
           "y": 73.75,
           "width": 40,
@@ -295,12 +295,12 @@
     },
     {
       "id": "slide-1768569629424",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001b.png\")",
       "elements": [
         {
           "id": "el-1768569644328",
           "type": "image",
-          "content": "/src/assets/characters/pesto_bended_waiter.png",
+          "content": "/assets/characters/pesto_bended_waiter.png",
           "x": 47.77777777777778,
           "y": 66.5625,
           "width": 40,
@@ -315,7 +315,7 @@
         {
           "id": "el-1768569652729",
           "type": "image",
-          "content": "/src/assets/characters/bowl_soup_sideview_big.png",
+          "content": "/assets/characters/bowl_soup_sideview_big.png",
           "x": 70.83333333333334,
           "y": 50.625,
           "width": 40,
@@ -356,12 +356,12 @@
     },
     {
       "id": "slide-1768569670265",
-      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "background": "url(\"/assets/backgrounds/bkg_abstrat_001b.png\")",
       "elements": [
         {
           "id": "el-1768569695072",
           "type": "image",
-          "content": "/src/assets/characters/chef%20spitting%20fire.png",
+          "content": "/assets/characters/chef%20spitting%20fire.png",
           "x": 71.38888888888889,
           "y": 60,
           "width": 40,
@@ -386,7 +386,7 @@
         {
           "id": "el-1768569730541",
           "type": "image",
-          "content": "/src/assets/characters/cut%20chili.png",
+          "content": "/assets/characters/cut%20chili.png",
           "x": 52.22222222222222,
           "y": 32.8125,
           "width": 40,
@@ -401,7 +401,7 @@
         {
           "id": "el-1768569754916",
           "type": "image",
-          "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+          "content": "/assets/characters/chef%20sitting%20on%20mushroom.png",
           "x": 12.222222222222221,
           "y": 92.34375,
           "width": 40,
