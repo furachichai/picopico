@@ -39,6 +39,20 @@ const Editor = () => {
     };
 
     const saveToDisk = async (lessonData, path) => {
+        // If it's already a local lesson, save directly to local storage
+        if (path && path.startsWith('local://')) {
+            try {
+                const { saveLocalLesson } = await import('../../utils/lessonStorage');
+                const saved = saveLocalLesson(lessonData);
+                console.log('Lesson saved locally:', saved.path);
+                return { success: true, path: saved.path };
+            } catch (error) {
+                console.error('Error saving local lesson:', error);
+                alert('Error saving lesson locally');
+                return { success: false };
+            }
+        }
+
         try {
             const response = await fetch('/api/save-lesson', {
                 method: 'POST',
@@ -52,16 +66,29 @@ const Editor = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to save lesson');
+                throw new Error('Failed to save lesson to server');
             }
 
             const result = await response.json();
             console.log('Lesson saved to:', result.path);
-            return true;
+            return { success: true, path: result.path };
         } catch (error) {
-            console.error('Error saving lesson:', error);
-            alert('Error saving lesson to disk');
-            return false;
+            console.warn('Server save failed, attempting local fallback:', error);
+
+            // Fallback to Local Storage
+            if (confirm(t('editor.saveLocalConfirm') || "Server unreachable. Save to this device instead?")) {
+                try {
+                    const { saveLocalLesson } = await import('../../utils/lessonStorage');
+                    const saved = saveLocalLesson(lessonData);
+                    return { success: true, path: saved.path };
+                } catch (e) {
+                    console.error('Local fallback failed:', e);
+                    alert('Failed to save locally');
+                    return { success: false };
+                }
+            }
+
+            return { success: false };
         }
     };
 
@@ -82,12 +109,12 @@ const Editor = () => {
         };
 
         // Save to disk
-        const success = await saveToDisk(updatedLesson, path);
+        const { success, path: savedPath } = await saveToDisk(updatedLesson, path);
 
         if (success) {
             dispatch({
                 type: 'UPDATE_LESSON_METADATA',
-                payload: { updatedAt: new Date(), path: path }
+                payload: { updatedAt: new Date(), path: savedPath }
             });
             setShowSaveFeedback(true);
             setTimeout(() => setShowSaveFeedback(false), 2000);
@@ -132,9 +159,15 @@ const Editor = () => {
             updatedAt: new Date()
         };
 
-        const success = await saveToDisk(lessonToSave, data.path);
+        const { success, path: savedPath } = await saveToDisk(lessonToSave, data.path);
 
         if (success) {
+            // Update metadata with the actual saved path (in case it fell back to local)
+            dispatch({
+                type: 'UPDATE_LESSON_METADATA',
+                payload: { path: savedPath }
+            });
+
             setShowInfoModal(false);
             setShowSaveFeedback(true);
             setTimeout(() => setShowSaveFeedback(false), 2000);

@@ -74,6 +74,18 @@ const DiscoverView = () => {
                     loadedLessons = flatList.map(l => ({ ...l.content, path: l.path }));
                 }
 
+                // Load Local Lessons (Mobile/Offline support)
+                try {
+                    const { getLocalLessons } = await import('../../utils/lessonStorage');
+                    const localLessons = getLocalLessons();
+                    if (localLessons && localLessons.length > 0) {
+                        // Prepend local lessons so they show up first (newly created)
+                        loadedLessons = [...localLessons, ...loadedLessons];
+                    }
+                } catch (e) {
+                    console.error('Failed to load local lessons:', e);
+                }
+
                 // Filter valid lessons
                 setLessons(loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0));
             } catch (error) {
