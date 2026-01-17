@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import './SwipeSorter.css';
 
-const SWIPE_THRESHOLD = 50; // Pixels to trigger a swipe
+const SWIPE_THRESHOLD = 25; // Pixels to trigger a swipe
 
 const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     // Config Extraction
