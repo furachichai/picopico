@@ -186,7 +186,7 @@ const Player = () => {
         position: 'absolute',
         top: '80px', // Start below progress bar (approx 72px)
         bottom: hasNL ? '25%' : 0, // Shorten hotzones for NL to allow knob interaction
-        width: '10%', // 10% of STAGE width (36px of 360px)
+        width: '15%', // 15% of STAGE width (54px of 360px)
         zIndex: 100, // Above stickers (10), below Buttons
         cursor: 'pointer',
         backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
