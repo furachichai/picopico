@@ -1,0 +1,19 @@
+on prepareFrame me
+  [  0] pushint8 2 .............................. <2>
+  [  2] pusharglist 1 ........................... <2>
+  [  4] extcall 7 ............................... <sprite(2)>
+  [  6] pushint32 50000 ......................... <50000>
+  [ 11] setobjprop 11 ........................... sprite(2).locZ = 50000
+  [ 13] ret
+end
+
+on exitFrame me
+  [  0] pusharglistnoret 0 ...................... <>
+  [  2] extcall 30 .............................. BeginGame()
+  [  4] pushcons 0 .............................. <"MWait">
+  [  6] pusharglist 1 ........................... <"MWait">
+  [  8] extcall 165 ............................. <marker("MWait")>
+  [ 10] pusharglistnoret 1 ...................... <marker("MWait")>
+  [ 12] extcall 185 ............................. go(marker("MWait"))
+  [ 14] ret
+end

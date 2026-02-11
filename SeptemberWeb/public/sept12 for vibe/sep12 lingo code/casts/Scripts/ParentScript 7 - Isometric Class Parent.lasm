@@ -1,0 +1,172 @@
+property pTheta, pAlpha, pSinTheta, pSinAlpha, pCosTheta, pCosAlpha
+global oG
+
+on new me
+  [  0] getparam 0 .............................. <me>
+  [  2] pushint8 30 ............................. <30>
+  [  4] pusharglist 0 ........................... <>
+  [  6] extcall 327 ............................. <PI>
+  [  9] pushint16 180 ........................... <180>
+  [ 12] div ..................................... <PI / 180>
+  [ 13] mul ..................................... <30 * (PI / 180)>
+  [ 14] setobjprop 328 .......................... me.pTheta = 30 * (PI / 180)
+  [ 17] getparam 0 .............................. <me>
+  [ 19] pushint8 45 ............................. <45>
+  [ 21] pusharglist 0 ........................... <>
+  [ 23] extcall 327 ............................. <PI>
+  [ 26] pushint16 180 ........................... <180>
+  [ 29] div ..................................... <PI / 180>
+  [ 30] mul ..................................... <45 * (PI / 180)>
+  [ 31] setobjprop 329 .......................... me.pAlpha = 45 * (PI / 180)
+  [ 34] getparam 0 .............................. <me>
+  [ 36] getparam 0 .............................. <me>
+  [ 38] getobjprop 328 .......................... <me.pTheta>
+  [ 41] pusharglist 1 ........................... <me.pTheta>
+  [ 43] extcall 330 ............................. <sin(me.pTheta)>
+  [ 46] setobjprop 331 .......................... me.pSinTheta = sin(me.pTheta)
+  [ 49] getparam 0 .............................. <me>
+  [ 51] getparam 0 .............................. <me>
+  [ 53] getobjprop 328 .......................... <me.pTheta>
+  [ 56] pusharglist 1 ........................... <me.pTheta>
+  [ 58] extcall 332 ............................. <cos(me.pTheta)>
+  [ 61] setobjprop 333 .......................... me.pCosTheta = cos(me.pTheta)
+  [ 64] getparam 0 .............................. <me>
+  [ 66] getparam 0 .............................. <me>
+  [ 68] getobjprop 329 .......................... <me.pAlpha>
+  [ 71] pusharglist 1 ........................... <me.pAlpha>
+  [ 73] extcall 330 ............................. <sin(me.pAlpha)>
+  [ 76] setobjprop 334 .......................... me.pSinAlpha = sin(me.pAlpha)
+  [ 79] getparam 0 .............................. <me>
+  [ 81] getparam 0 .............................. <me>
+  [ 83] getobjprop 329 .......................... <me.pAlpha>
+  [ 86] pusharglist 1 ........................... <me.pAlpha>
+  [ 88] extcall 332 ............................. <cos(me.pAlpha)>
+  [ 91] setobjprop 335 .......................... me.pCosAlpha = cos(me.pAlpha)
+  [ 94] getparam 0 .............................. <me>
+  [ 96] pusharglistnoret 1 ...................... <me>
+  [ 98] extcall 22 .............................. return me
+  [100] ret
+end
+
+on mMapToScreen me, xpp, ypp, zpp
+  [  0] getparam 2 .............................. <ypp>
+  [  2] setlocal 0 .............................. yp = ypp
+  [  4] getparam 1 .............................. <xpp>
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 11] mul ..................................... <xpp * me.pCosAlpha>
+  [ 12] getparam 3 .............................. <zpp>
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 19] mul ..................................... <zpp * me.pSinAlpha>
+  [ 20] add ..................................... <(xpp * me.pCosAlpha) + (zpp * me.pSinAlpha)>
+  [ 21] setlocal 1 .............................. xp = (xpp * me.pCosAlpha) + (zpp * me.pSinAlpha)
+  [ 23] getparam 3 .............................. <zpp>
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 30] mul ..................................... <zpp * me.pCosAlpha>
+  [ 31] getparam 1 .............................. <xpp>
+  [ 33] getparam 0 .............................. <me>
+  [ 35] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 38] mul ..................................... <xpp * me.pSinAlpha>
+  [ 39] sub ..................................... <(zpp * me.pCosAlpha) - (xpp * me.pSinAlpha)>
+  [ 40] setlocal 2 .............................. zp = (zpp * me.pCosAlpha) - (xpp * me.pSinAlpha)
+  [ 42] getlocal 1 .............................. <xp>
+  [ 44] setlocal 3 .............................. thex = xp
+  [ 46] getlocal 0 .............................. <yp>
+  [ 48] getparam 0 .............................. <me>
+  [ 50] getobjprop 333 .......................... <me.pCosTheta>
+  [ 53] mul ..................................... <yp * me.pCosTheta>
+  [ 54] getlocal 2 .............................. <zp>
+  [ 56] getparam 0 .............................. <me>
+  [ 58] getobjprop 331 .......................... <me.pSinTheta>
+  [ 61] mul ..................................... <zp * me.pSinTheta>
+  [ 62] sub ..................................... <(yp * me.pCosTheta) - (zp * me.pSinTheta)>
+  [ 63] setlocal 4 .............................. they = (yp * me.pCosTheta) - (zp * me.pSinTheta)
+  [ 65] pushsymb 21 ............................. <#thex>
+  [ 67] getglobal 9 ............................. <oG>
+  [ 69] getobjprop 80 ........................... <oG.ISOSTARTX>
+  [ 71] getlocal 3 .............................. <thex>
+  [ 73] add ..................................... <oG.ISOSTARTX + thex>
+  [ 74] pushsymb 20 ............................. <#they>
+  [ 76] getglobal 9 ............................. <oG>
+  [ 78] getobjprop 81 ........................... <oG.ISOSTARTY>
+  [ 80] getlocal 4 .............................. <they>
+  [ 82] add ..................................... <oG.ISOSTARTY + they>
+  [ 83] pusharglist 4 ........................... <[#thex: oG.ISOSTARTX + thex, #they: oG.ISOSTARTY + they]>
+  [ 85] pushproplist ............................ <[#thex: oG.ISOSTARTX + thex, #they: oG.ISOSTARTY + they]>
+  [ 86] pusharglistnoret 1 ...................... <[#thex: oG.ISOSTARTX + thex, #they: oG.ISOSTARTY + they]>
+  [ 88] extcall 22 .............................. return [#thex: oG.ISOSTARTX + thex, #they: oG.ISOSTARTY + they]
+  [ 90] ret
+end
+
+on mMapToIsoWorld me, screenx, screeny
+  [  0] getparam 1 .............................. <screenx>
+  [  2] getglobal 9 ............................. <oG>
+  [  4] getobjprop 80 ........................... <oG.ISOSTARTX>
+  [  6] sub ..................................... <screenx - oG.ISOSTARTX>
+  [  7] setparam 1 .............................. screenx = screenx - oG.ISOSTARTX
+  [  9] getparam 2 .............................. <screeny>
+  [ 11] getglobal 9 ............................. <oG>
+  [ 13] getobjprop 81 ........................... <oG.ISOSTARTY>
+  [ 15] sub ..................................... <screeny - oG.ISOSTARTY>
+  [ 16] setparam 2 .............................. screeny = screeny - oG.ISOSTARTY
+  [ 18] getparam 1 .............................. <screenx>
+  [ 20] getparam 0 .............................. <me>
+  [ 22] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 25] div ..................................... <screenx / me.pCosAlpha>
+  [ 26] getparam 2 .............................. <screeny>
+  [ 28] getparam 0 .............................. <me>
+  [ 30] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 33] getparam 0 .............................. <me>
+  [ 35] getobjprop 331 .......................... <me.pSinTheta>
+  [ 38] mul ..................................... <me.pSinAlpha * me.pSinTheta>
+  [ 39] div ..................................... <screeny / (me.pSinAlpha * me.pSinTheta)>
+  [ 40] sub ..................................... <(screenx / me.pCosAlpha) - (screeny / (me.pSinAlpha * me.pSinTheta))>
+  [ 41] pushint8 1 .............................. <1>
+  [ 43] getparam 0 .............................. <me>
+  [ 45] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 48] getparam 0 .............................. <me>
+  [ 50] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 53] div ..................................... <me.pCosAlpha / me.pSinAlpha>
+  [ 54] getparam 0 .............................. <me>
+  [ 56] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 59] getparam 0 .............................. <me>
+  [ 61] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 64] div ..................................... <me.pSinAlpha / me.pCosAlpha>
+  [ 65] add ..................................... <(me.pCosAlpha / me.pSinAlpha) + (me.pSinAlpha / me.pCosAlpha)>
+  [ 66] div ..................................... <1 / ((me.pCosAlpha / me.pSinAlpha) + (me.pSinAlpha / me.pCosAlpha))>
+  [ 67] mul ..................................... <((screenx / me.pCosAlpha) - (screeny / (me.pSinAlpha * me.pSinTheta))) * (1 / ((me.pCosAlpha / me.pSinAlpha) + (me.pSinAlpha / me.pCosAlpha)))>
+  [ 68] setlocal 0 .............................. thez = ((screenx / me.pCosAlpha) - (screeny / (me.pSinAlpha * me.pSinTheta))) * (1 / ((me.pCosAlpha / me.pSinAlpha) + (me.pSinAlpha / me.pCosAlpha)))
+  [ 70] pushint8 1 .............................. <1>
+  [ 72] getparam 0 .............................. <me>
+  [ 74] getobjprop 335 .......................... <me.pCosAlpha>
+  [ 77] div ..................................... <1 / me.pCosAlpha>
+  [ 78] getparam 1 .............................. <screenx>
+  [ 80] getlocal 0 .............................. <thez>
+  [ 82] getparam 0 .............................. <me>
+  [ 84] getobjprop 334 .......................... <me.pSinAlpha>
+  [ 87] mul ..................................... <thez * me.pSinAlpha>
+  [ 88] sub ..................................... <screenx - (thez * me.pSinAlpha)>
+  [ 89] mul ..................................... <1 / me.pCosAlpha * (screenx - (thez * me.pSinAlpha))>
+  [ 90] setlocal 1 .............................. thex = 1 / me.pCosAlpha * (screenx - (thez * me.pSinAlpha))
+  [ 92] pushsymb 21 ............................. <#thex>
+  [ 94] getlocal 1 .............................. <thex>
+  [ 96] getglobal 9 ............................. <oG>
+  [ 98] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [100] pushint8 2 .............................. <2>
+  [102] div ..................................... <oG.ISOTILEWIDTH / 2>
+  [103] sub ..................................... <thex - (oG.ISOTILEWIDTH / 2)>
+  [104] pushsymb 155 ............................ <#thez>
+  [106] getlocal 0 .............................. <thez>
+  [108] getglobal 9 ............................. <oG>
+  [110] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [112] pushint8 2 .............................. <2>
+  [114] div ..................................... <oG.ISOTILEHEIGHT / 2>
+  [115] add ..................................... <thez + (oG.ISOTILEHEIGHT / 2)>
+  [116] pusharglist 4 ........................... <[#thex: thex - (oG.ISOTILEWIDTH / 2), #thez: thez + (oG.ISOTILEHEIGHT / 2)]>
+  [118] pushproplist ............................ <[#thex: thex - (oG.ISOTILEWIDTH / 2), #thez: thez + (oG.ISOTILEHEIGHT / 2)]>
+  [119] pusharglistnoret 1 ...................... <[#thex: thex - (oG.ISOTILEWIDTH / 2), #thez: thez + (oG.ISOTILEHEIGHT / 2)]>
+  [121] extcall 22 .............................. return [#thex: thex - (oG.ISOTILEWIDTH / 2), #thez: thez + (oG.ISOTILEHEIGHT / 2)]
+  [123] ret
+end

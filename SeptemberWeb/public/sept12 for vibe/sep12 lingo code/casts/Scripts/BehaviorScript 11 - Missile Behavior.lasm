@@ -1,0 +1,374 @@
+property pBlastArray, pBlastArrayWidth, pLaunched, pTileX, pTileY, pExplotionDepth, pGround, EXPLOTIONFRAME, DESTROYFRAME
+global oG, oSound
+
+on beginSprite me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 8 ............................ <me.spriteNum>
+  [  4] pusharglist 1 ........................... <me.spriteNum>
+  [  6] extcall 7 ............................... <sprite(me.spriteNum)>
+  [  8] pushint8 36 ............................. <36>
+  [ 10] setobjprop 304 .......................... sprite(me.spriteNum).ink = 36
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 8 ............................ <me.spriteNum>
+  [ 17] pusharglist 1 ........................... <me.spriteNum>
+  [ 19] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 21] pushint8 100 ............................ <100>
+  [ 23] setobjprop 305 .......................... sprite(me.spriteNum).blend = 100
+  [ 26] getparam 0 .............................. <me>
+  [ 28] getobjprop 8 ............................ <me.spriteNum>
+  [ 30] pusharglist 1 ........................... <me.spriteNum>
+  [ 32] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 34] pushzero ................................ <0>
+  [ 35] setobjprop 307 .......................... sprite(me.spriteNum).visible = 0
+  [ 38] getparam 0 .............................. <me>
+  [ 40] pushint8 16 ............................. <16>
+  [ 42] setobjprop 394 .......................... me.EXPLOTIONFRAME = 16
+  [ 45] getparam 0 .............................. <me>
+  [ 47] pushint8 23 ............................. <23>
+  [ 49] setobjprop 395 .......................... me.DESTROYFRAME = 23
+  [ 52] getparam 0 .............................. <me>
+  [ 54] pushzero ................................ <0>
+  [ 55] setobjprop 396 .......................... me.pLaunched = 0
+  [ 58] getparam 0 .............................. <me>
+  [ 60] pusharglistnoret 1 ...................... <me>
+  [ 62] objcall 393 ............................. me.mCreateBlastArray()
+  [ 65] ret
+end
+
+on exitFrame me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 396 .......................... <me.pLaunched>
+  [  5] jmpifz [142] ............................ if me.pLaunched then
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 8 ............................ <me.spriteNum>
+  [ 12] pusharglist 1 ........................... <me.spriteNum>
+  [ 14] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 16] getobjprop 25 ........................... <sprite(me.spriteNum).frame>
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getobjprop 394 .......................... <me.EXPLOTIONFRAME>
+  [ 23] eq ...................................... <sprite(me.spriteNum).frame = me.EXPLOTIONFRAME>
+  [ 24] jmpifz [ 68] ............................ if sprite(me.spriteNum).frame = me.EXPLOTIONFRAME then / else
+  [ 27] getglobal 28 ............................ <oSound>
+  [ 29] getglobal 28 ............................ <oSound>
+  [ 31] getobjprop 376 .......................... <oSound.SMISSILE>
+  [ 34] pusharglistnoret 2 ...................... <oSound, oSound.SMISSILE>
+  [ 36] objcall 375 ............................. oSound.mStop(oSound.SMISSILE)
+  [ 39] getglobal 28 ............................ <oSound>
+  [ 41] getglobal 28 ............................ <oSound>
+  [ 43] getobjprop 377 .......................... <oSound.SEXPLOTION>
+  [ 46] pusharglistnoret 2 ...................... <oSound, oSound.SEXPLOTION>
+  [ 48] objcall 118 ............................. oSound.mPlay(oSound.SEXPLOTION)
+  [ 50] getparam 0 .............................. <me>
+  [ 52] getobjprop 8 ............................ <me.spriteNum>
+  [ 54] pusharglist 1 ........................... <me.spriteNum>
+  [ 56] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 58] getparam 0 .............................. <me>
+  [ 60] getobjprop 397 .......................... <me.pExplotionDepth>
+  [ 63] setobjprop 11 ........................... sprite(me.spriteNum).locZ = me.pExplotionDepth
+  [ 65] jmp [142]
+  [ 68] getparam 0 .............................. <me>
+  [ 70] getobjprop 8 ............................ <me.spriteNum>
+  [ 72] pusharglist 1 ........................... <me.spriteNum>
+  [ 74] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 76] getobjprop 25 ........................... <sprite(me.spriteNum).frame>
+  [ 78] getparam 0 .............................. <me>
+  [ 80] getobjprop 395 .......................... <me.DESTROYFRAME>
+  [ 83] eq ...................................... <sprite(me.spriteNum).frame = me.DESTROYFRAME>
+  [ 84] jmpifz [109] ............................ if sprite(me.spriteNum).frame = me.DESTROYFRAME then / else
+  [ 87] getparam 0 .............................. <me>
+  [ 89] getobjprop 398 .......................... <me.pGround>
+  [ 92] getparam 0 .............................. <me>
+  [ 94] getobjprop 399 .......................... <me.pTileX>
+  [ 97] getparam 0 .............................. <me>
+  [ 99] getobjprop 400 .......................... <me.pTileY>
+  [102] pusharglistnoret 3 ...................... <me.pGround, me.pTileX, me.pTileY>
+  [104] extcall 56 .............................. Explotion(me.pGround, me.pTileX, me.pTileY)
+  [106] jmp [142]
+  [109] getparam 0 .............................. <me>
+  [111] getobjprop 8 ............................ <me.spriteNum>
+  [113] pusharglist 1 ........................... <me.spriteNum>
+  [115] extcall 7 ............................... <sprite(me.spriteNum)>
+  [117] getobjprop 401 .......................... <sprite(me.spriteNum).playing>
+  [120] not ..................................... <not sprite(me.spriteNum).playing>
+  [121] jmpifz [142] ............................ if not sprite(me.spriteNum).playing then
+  [124] getparam 0 .............................. <me>
+  [126] pushzero ................................ <0>
+  [127] setobjprop 396 .......................... me.pLaunched = 0
+  [130] getparam 0 .............................. <me>
+  [132] getobjprop 8 ............................ <me.spriteNum>
+  [134] pusharglist 1 ........................... <me.spriteNum>
+  [136] extcall 7 ............................... <sprite(me.spriteNum)>
+  [138] pushzero ................................ <0>
+  [139] setobjprop 307 .......................... sprite(me.spriteNum).visible = 0
+  [142] ret
+end
+
+on mCreateBlastArray me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglist 0 ........................... <[]>
+  [  4] pushlist ................................ <[]>
+  [  5] setobjprop 402 .......................... me.pBlastArray = []
+  [  8] getparam 0 .............................. <me>
+  [ 10] getglobal 9 ............................. <oG>
+  [ 12] getobjprop 76 ........................... <oG.BLASTX>
+  [ 14] pushint8 2 .............................. <2>
+  [ 16] mul ..................................... <oG.BLASTX * 2>
+  [ 17] pushint8 1 .............................. <1>
+  [ 19] add ..................................... <(oG.BLASTX * 2) + 1>
+  [ 20] setobjprop 403 .......................... me.pBlastArrayWidth = (oG.BLASTX * 2) + 1
+  [ 23] pushzero ................................ <0>
+  [ 24] setlocal 0 .............................. xstart = 0
+  [ 26] getglobal 9 ............................. <oG>
+  [ 28] getobjprop 76 ........................... <oG.BLASTX>
+  [ 30] pushint8 2 .............................. <2>
+  [ 32] mul ..................................... <oG.BLASTX * 2>
+  [ 33] setlocal 1 .............................. xfinish = oG.BLASTX * 2
+  [ 35] pushzero ................................ <0>
+  [ 36] setlocal 2 .............................. ystart = 0
+  [ 38] getglobal 9 ............................. <oG>
+  [ 40] getobjprop 77 ........................... <oG.BLASTY>
+  [ 42] pushint8 2 .............................. <2>
+  [ 44] mul ..................................... <oG.BLASTY * 2>
+  [ 45] setlocal 3 .............................. yfinish = oG.BLASTY * 2
+  [ 47] getglobal 9 ............................. <oG>
+  [ 49] getobjprop 78 ........................... <oG.BLASTDAMAGE>
+  [ 51] getglobal 9 ............................. <oG>
+  [ 53] getobjprop 76 ........................... <oG.BLASTX>
+  [ 55] getglobal 9 ............................. <oG>
+  [ 57] getobjprop 79 ........................... <oG.BLASTDECREMENT>
+  [ 59] mul ..................................... <oG.BLASTX * oG.BLASTDECREMENT>
+  [ 60] sub ..................................... <oG.BLASTDAMAGE - (oG.BLASTX * oG.BLASTDECREMENT)>
+  [ 61] setlocal 4 .............................. val = oG.BLASTDAMAGE - (oG.BLASTX * oG.BLASTDECREMENT)
+  [ 63] getlocal 4 .............................. <val>
+  [ 65] pushint8 1 .............................. <1>
+  [ 67] lt ...................................... <val < 1>
+  [ 68] jmpifz [ 78] ............................ if val < 1 then / else
+  [ 71] pushint8 1 .............................. <1>
+  [ 73] setlocal 5 .............................. tempval = 1
+  [ 75] jmp [ 82]
+  [ 78] getlocal 4 .............................. <val>
+  [ 80] setlocal 5 .............................. tempval = val
+  [ 82] getlocal 0 .............................. <xstart>
+  [ 84] setlocal 6
+  [ 86] getlocal 6
+  [ 88] getlocal 1 .............................. <xfinish>
+  [ 90] lteq
+  [ 91] jmpifz [134] ............................ repeat with i = xstart to xfinish
+  [ 94] getlocal 2 .............................. <ystart>
+  [ 96] setlocal 7
+  [ 98] getlocal 7
+  [100] getlocal 3 .............................. <yfinish>
+  [102] lteq
+  [103] jmpifz [125] ............................ repeat with j = ystart to yfinish
+  [106] getparam 0 .............................. <me>
+  [108] getchainedprop 402 ...................... <me.pBlastArray>
+  [111] pushzero ................................ <0>
+  [112] pusharglistnoret 2 ...................... <me.pBlastArray, 0>
+  [114] objcall 161 ............................. me.pBlastArray.append(0)
+  [116] pushint8 1
+  [118] getlocal 7
+  [120] add
+  [121] setlocal 7
+  [123] endrepeat [ 98]
+  [125] pushint8 1
+  [127] getlocal 6
+  [129] add
+  [130] setlocal 6
+  [132] endrepeat [ 86]
+  [134] pushzero ................................ <0>
+  [135] setlocal 6
+  [137] getlocal 6
+  [139] getglobal 9 ............................. <oG>
+  [141] getobjprop 76 ........................... <oG.BLASTX>
+  [143] lteq
+  [144] jmpifz [275] ............................ repeat with i = 0 to oG.BLASTX
+  [147] getlocal 2 .............................. <ystart>
+  [149] setlocal 8
+  [151] getlocal 8
+  [153] getlocal 3 .............................. <yfinish>
+  [155] lteq
+  [156] jmpifz [210] ............................ repeat with k = ystart to yfinish
+  [159] getlocal 0 .............................. <xstart>
+  [161] setlocal 7
+  [163] getlocal 7
+  [165] getlocal 1 .............................. <xfinish>
+  [167] lteq
+  [168] jmpifz [201] ............................ repeat with j = xstart to xfinish
+  [171] getparam 0 .............................. <me>
+  [173] pushsymb 402 ............................ <#pBlastArray>
+  [176] getparam 0 .............................. <me>
+  [178] getlocal 7 .............................. <j>
+  [180] getlocal 8 .............................. <k>
+  [182] pusharglist 3 ........................... <me, j, k>
+  [184] objcall 191 ............................. <me.mGetIndex(j, k)>
+  [186] getlocal 5 .............................. <tempval>
+  [188] pusharglistnoret 4 ...................... <me, #pBlastArray, me.mGetIndex(j, k), tempval>
+  [190] objcall 206 ............................. me.pBlastArray[me.mGetIndex(j, k)] = tempval
+  [192] pushint8 1
+  [194] getlocal 7
+  [196] add
+  [197] setlocal 7
+  [199] endrepeat [163]
+  [201] pushint8 1
+  [203] getlocal 8
+  [205] add
+  [206] setlocal 8
+  [208] endrepeat [151]
+  [210] getlocal 0 .............................. <xstart>
+  [212] pushint8 1 .............................. <1>
+  [214] add ..................................... <xstart + 1>
+  [215] setlocal 0 .............................. xstart = xstart + 1
+  [217] getlocal 2 .............................. <ystart>
+  [219] pushint8 1 .............................. <1>
+  [221] add ..................................... <ystart + 1>
+  [222] setlocal 2 .............................. ystart = ystart + 1
+  [224] getlocal 1 .............................. <xfinish>
+  [226] pushint8 1 .............................. <1>
+  [228] sub ..................................... <xfinish - 1>
+  [229] setlocal 1 .............................. xfinish = xfinish - 1
+  [231] getlocal 3 .............................. <yfinish>
+  [233] pushint8 1 .............................. <1>
+  [235] sub ..................................... <yfinish - 1>
+  [236] setlocal 3 .............................. yfinish = yfinish - 1
+  [238] getlocal 4 .............................. <val>
+  [240] getglobal 9 ............................. <oG>
+  [242] getobjprop 79 ........................... <oG.BLASTDECREMENT>
+  [244] add ..................................... <val + oG.BLASTDECREMENT>
+  [245] setlocal 4 .............................. val = val + oG.BLASTDECREMENT
+  [247] getlocal 4 .............................. <val>
+  [249] pushint8 1 .............................. <1>
+  [251] lt ...................................... <val < 1>
+  [252] jmpifz [262] ............................ if val < 1 then
+  [255] pushint8 1 .............................. <1>
+  [257] setlocal 5 .............................. tempval = 1
+  [259] jmp [266] ............................... next repeat
+  [262] getlocal 4 .............................. <val>
+  [264] setlocal 5 .............................. tempval = val
+  [266] pushint8 1
+  [268] getlocal 6
+  [270] add
+  [271] setlocal 6
+  [273] endrepeat [137]
+  [275] ret
+end
+
+on mGetIndex me, thex, they
+  [  0] getparam 1 .............................. <thex>
+  [  2] getparam 2 .............................. <they>
+  [  4] getparam 0 .............................. <me>
+  [  6] getobjprop 403 .......................... <me.pBlastArrayWidth>
+  [  9] mul ..................................... <they * me.pBlastArrayWidth>
+  [ 10] add ..................................... <thex + (they * me.pBlastArrayWidth)>
+  [ 11] pushint8 1 .............................. <1>
+  [ 13] add ..................................... <thex + (they * me.pBlastArrayWidth) + 1>
+  [ 14] pusharglistnoret 1 ...................... <thex + (they * me.pBlastArrayWidth) + 1>
+  [ 16] extcall 22 .............................. return thex + (they * me.pBlastArrayWidth) + 1
+  [ 18] ret
+end
+
+on mGetDamage me, thex, they
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 402 ............................ <#pBlastArray>
+  [  5] getparam 0 .............................. <me>
+  [  7] getparam 1 .............................. <thex>
+  [  9] getparam 2 .............................. <they>
+  [ 11] pusharglist 3 ........................... <me, thex, they>
+  [ 13] objcall 191 ............................. <me.mGetIndex(thex, they)>
+  [ 15] pusharglist 3 ........................... <me, #pBlastArray, me.mGetIndex(thex, they)>
+  [ 17] objcall 140 ............................. <me.pBlastArray[me.mGetIndex(thex, they)]>
+  [ 19] pusharglistnoret 1 ...................... <me.pBlastArray[me.mGetIndex(thex, they)]>
+  [ 21] extcall 22 .............................. return me.pBlastArray[me.mGetIndex(thex, they)]
+  [ 23] ret
+end
+
+on mLaunch me, thebottom, tilex, tiley, thex, they, thedepth
+  [  0] getparam 0 .............................. <me>
+  [  2] pushint8 1 .............................. <1>
+  [  4] setobjprop 396 .......................... me.pLaunched = 1
+  [  7] getparam 0 .............................. <me>
+  [  9] getparam 2 .............................. <tilex>
+  [ 11] setobjprop 399 .......................... me.pTileX = tilex
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getparam 3 .............................. <tiley>
+  [ 18] setobjprop 400 .......................... me.pTileY = tiley
+  [ 21] getparam 0 .............................. <me>
+  [ 23] getparam 6 .............................. <thedepth>
+  [ 25] setobjprop 397 .......................... me.pExplotionDepth = thedepth
+  [ 28] getparam 0 .............................. <me>
+  [ 30] getparam 1 .............................. <thebottom>
+  [ 32] setobjprop 398 .......................... me.pGround = thebottom
+  [ 35] getparam 0 .............................. <me>
+  [ 37] getobjprop 8 ............................ <me.spriteNum>
+  [ 39] pusharglist 1 ........................... <me.spriteNum>
+  [ 41] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 43] getparam 4 .............................. <thex>
+  [ 45] setobjprop 16 ........................... sprite(me.spriteNum).locH = thex
+  [ 47] getparam 0 .............................. <me>
+  [ 49] getobjprop 8 ............................ <me.spriteNum>
+  [ 51] pusharglist 1 ........................... <me.spriteNum>
+  [ 53] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 55] getparam 5 .............................. <they>
+  [ 57] setobjprop 19 ........................... sprite(me.spriteNum).locV = they
+  [ 59] getparam 0 .............................. <me>
+  [ 61] getobjprop 8 ............................ <me.spriteNum>
+  [ 63] pusharglist 1 ........................... <me.spriteNum>
+  [ 65] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 67] getglobal 9 ............................. <oG>
+  [ 69] getobjprop 10 ........................... <oG.TARGETDEPTH>
+  [ 71] pushint8 1 .............................. <1>
+  [ 73] sub ..................................... <oG.TARGETDEPTH - 1>
+  [ 74] setobjprop 11 ........................... sprite(me.spriteNum).locZ = oG.TARGETDEPTH - 1
+  [ 76] getparam 4 .............................. <thex>
+  [ 78] getglobal 9 ............................. <oG>
+  [ 80] getobjprop 15 ........................... <oG.screenx>
+  [ 82] pushint8 2 .............................. <2>
+  [ 84] div ..................................... <oG.screenx / 2>
+  [ 85] gt ...................................... <thex > (oG.screenx / 2)>
+  [ 86] jmpifz [105] ............................ if thex > (oG.screenx / 2) then / else
+  [ 89] getparam 0 .............................. <me>
+  [ 91] getobjprop 8 ............................ <me.spriteNum>
+  [ 93] pusharglist 1 ........................... <me.spriteNum>
+  [ 95] extcall 7 ............................... <sprite(me.spriteNum)>
+  [ 97] pushint8 1 .............................. <1>
+  [ 99] setobjprop 406 .......................... sprite(me.spriteNum).flipH = 1
+  [102] jmp [117]
+  [105] getparam 0 .............................. <me>
+  [107] getobjprop 8 ............................ <me.spriteNum>
+  [109] pusharglist 1 ........................... <me.spriteNum>
+  [111] extcall 7 ............................... <sprite(me.spriteNum)>
+  [113] pushzero ................................ <0>
+  [114] setobjprop 406 .......................... sprite(me.spriteNum).flipH = 0
+  [117] getparam 0 .............................. <me>
+  [119] getobjprop 8 ............................ <me.spriteNum>
+  [121] pusharglist 1 ........................... <me.spriteNum>
+  [123] extcall 7 ............................... <sprite(me.spriteNum)>
+  [125] pushint8 1 .............................. <1>
+  [127] pusharglistnoret 2 ...................... <sprite(me.spriteNum), 1>
+  [129] objcall 23 .............................. sprite(me.spriteNum).goToFrame(1)
+  [131] getparam 0 .............................. <me>
+  [133] getobjprop 8 ............................ <me.spriteNum>
+  [135] pusharglist 1 ........................... <me.spriteNum>
+  [137] extcall 7 ............................... <sprite(me.spriteNum)>
+  [139] pushint8 1 .............................. <1>
+  [141] setobjprop 307 .......................... sprite(me.spriteNum).visible = 1
+  [144] getparam 0 .............................. <me>
+  [146] getobjprop 8 ............................ <me.spriteNum>
+  [148] pusharglist 1 ........................... <me.spriteNum>
+  [150] extcall 7 ............................... <sprite(me.spriteNum)>
+  [152] pusharglistnoret 1 ...................... <sprite(me.spriteNum)>
+  [154] objcall 24 .............................. sprite(me.spriteNum).play()
+  [156] getglobal 28 ............................ <oSound>
+  [158] getglobal 28 ............................ <oSound>
+  [160] getobjprop 376 .......................... <oSound.SMISSILE>
+  [163] pusharglistnoret 2 ...................... <oSound, oSound.SMISSILE>
+  [165] objcall 118 ............................. oSound.mPlay(oSound.SMISSILE)
+  [167] ret
+end
+
+on mWasLaunched me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 396 .......................... <me.pLaunched>
+  [  5] pusharglistnoret 1 ...................... <me.pLaunched>
+  [  7] extcall 22 .............................. return me.pLaunched
+  [  9] ret
+end

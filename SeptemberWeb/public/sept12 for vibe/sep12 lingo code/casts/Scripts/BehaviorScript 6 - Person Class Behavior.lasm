@@ -1,0 +1,1585 @@
+property const, pState, pStateAnim, pDestX, pDestY, pFutDestX, pFutDestY, pX, pY, pIsoX, pIsoZ, pDir, pS, pStateGoto, pWait, pParts, pDepthNotYet, pFrameStart, pGoToMourn, pFrameStop, pAnimInfo, pMournFacing, pChangeDest, pPrevMedia, pUndoEvil, pKludge, pKludge2
+global oG, oSound
+
+on new me, thenum, animinfo, themedia, prevmedia, themode
+  [  0] pushsymb 269 ............................ <#BSTOP>
+  [  3] pushzero ................................ <0>
+  [  4] pushsymb 270 ............................ <#BGOTO>
+  [  7] pushint8 1 .............................. <1>
+  [  9] pushsymb 271 ............................ <#BAVOIDHORIZ>
+  [ 12] pushint8 2 .............................. <2>
+  [ 14] pushsymb 272 ............................ <#BAVOIDVERT>
+  [ 17] pushint8 3 .............................. <3>
+  [ 19] pushsymb 273 ............................ <#BMOURN>
+  [ 22] pushint8 4 .............................. <4>
+  [ 24] pushsymb 274 ............................ <#BDEAD>
+  [ 27] pushint8 5 .............................. <5>
+  [ 29] pushsymb 275 ............................ <#BTURN>
+  [ 32] pushint8 6 .............................. <6>
+  [ 34] pushsymb 276 ............................ <#GNORTH>
+  [ 37] pushzero ................................ <0>
+  [ 38] pushsymb 277 ............................ <#GSOUTH>
+  [ 41] pushint8 1 .............................. <1>
+  [ 43] pushsymb 278 ............................ <#GWEST>
+  [ 46] pushint8 2 .............................. <2>
+  [ 48] pushsymb 279 ............................ <#GEAST>
+  [ 51] pushint8 3 .............................. <3>
+  [ 53] pushsymb 280 ............................ <#GCRYNORTH>
+  [ 56] pushint8 4 .............................. <4>
+  [ 58] pushsymb 281 ............................ <#GCRYSOUTH>
+  [ 61] pushint8 5 .............................. <5>
+  [ 63] pushsymb 282 ............................ <#GCRYWEST>
+  [ 66] pushint8 6 .............................. <6>
+  [ 68] pushsymb 283 ............................ <#GCRYEAST>
+  [ 71] pushint8 7 .............................. <7>
+  [ 73] pushsymb 284 ............................ <#GTURNNORTH>
+  [ 76] pushint8 8 .............................. <8>
+  [ 78] pushsymb 285 ............................ <#GTURNSOUTH>
+  [ 81] pushint8 9 .............................. <9>
+  [ 83] pushsymb 286 ............................ <#GTURNWEST>
+  [ 86] pushint8 10 ............................. <10>
+  [ 88] pushsymb 287 ............................ <#GTURNEAST>
+  [ 91] pushint8 11 ............................. <11>
+  [ 93] pushsymb 288 ............................ <#GDEAD>
+  [ 96] pushint8 12 ............................. <12>
+  [ 98] pusharglist 40 .......................... <[#BSTOP: 0, #BGOTO: 1, #BAVOIDHORIZ: 2, #BAVOIDVERT: 3, #BMOURN: 4, #BDEAD: 5, #BTURN: 6, #GNORTH: 0, #GSOUTH: 1, #GWEST: 2, #GEAST: 3, #GCRYNORTH: 4, #GCRYSOUTH: 5, #GCRYWEST: 6, #GCRYEAST: 7, #GTURNNORTH: 8, #GTURNSOUTH: 9, #GTURNWEST: 10, #GTURNEAST: 11, #GDEAD: 12]>
+  [100] pushproplist ............................ <[#BSTOP: 0, #BGOTO: 1, #BAVOIDHORIZ: 2, #BAVOIDVERT: 3, #BMOURN: 4, #BDEAD: 5, #BTURN: 6, #GNORTH: 0, #GSOUTH: 1, #GWEST: 2, #GEAST: 3, #GCRYNORTH: 4, #GCRYSOUTH: 5, #GCRYWEST: 6, #GCRYEAST: 7, #GTURNNORTH: 8, #GTURNSOUTH: 9, #GTURNWEST: 10, #GTURNEAST: 11, #GDEAD: 12]>
+  [101] setprop 268 ............................. const = [#BSTOP: 0, #BGOTO: 1, #BAVOIDHORIZ: 2, #BAVOIDVERT: 3, #BMOURN: 4, #BDEAD: 5, #BTURN: 6, #GNORTH: 0, #GSOUTH: 1, #GWEST: 2, #GEAST: 3, #GCRYNORTH: 4, #GCRYSOUTH: 5, #GCRYWEST: 6, #GCRYEAST: 7, #GTURNNORTH: 8, #GTURNSOUTH: 9, #GTURNWEST: 10, #GTURNEAST: 11, #GDEAD: 12]
+  [104] getparam 0 .............................. <me>
+  [106] getparam 2 .............................. <animinfo>
+  [108] setobjprop 125 .......................... me.pAnimInfo = animinfo
+  [110] getparam 0 .............................. <me>
+  [112] getparam 0 .............................. <me>
+  [114] getchainedprop 268 ...................... <me.const>
+  [117] getobjprop 269 .......................... <me.const.BSTOP>
+  [120] setobjprop 289 .......................... me.pState = me.const.BSTOP
+  [123] getparam 0 .............................. <me>
+  [125] pushzero ................................ <0>
+  [126] setobjprop 225 .......................... me.pWait = 0
+  [128] getparam 0 .............................. <me>
+  [130] pushint8 6 .............................. <6>
+  [132] setobjprop 290 .......................... me.pParts = 6
+  [135] getparam 0 .............................. <me>
+  [137] pushzero ................................ <0>
+  [138] setobjprop 291 .......................... me.pDepthNotYet = 0
+  [141] getparam 0 .............................. <me>
+  [143] pushzero ................................ <0>
+  [144] setobjprop 292 .......................... me.pGoToMourn = 0
+  [147] getparam 0 .............................. <me>
+  [149] pushzero ................................ <0>
+  [150] setobjprop 293 .......................... me.pChangeDest = 0
+  [153] getparam 0 .............................. <me>
+  [155] pushzero ................................ <0>
+  [156] setobjprop 294 .......................... me.pUndoEvil = 0
+  [159] getparam 0 .............................. <me>
+  [161] getparam 4 .............................. <prevmedia>
+  [163] setobjprop 123 .......................... me.pPrevMedia = prevmedia
+  [165] getparam 0 .............................. <me>
+  [167] pushzero ................................ <0>
+  [168] setobjprop 295 .......................... me.pKludge = 0
+  [171] getparam 0 .............................. <me>
+  [173] pushzero ................................ <0>
+  [174] setobjprop 296 .......................... me.pKludge2 = 0
+  [177] getparam 0 .............................. <me>
+  [179] getglobal 9 ............................. <oG>
+  [181] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [183] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [185] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [187] pushint8 1 .............................. <1>
+  [189] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [190] setobjprop 297 .......................... me.pX = random(oG.MAPWIDTH) - 1
+  [193] getparam 0 .............................. <me>
+  [195] getglobal 9 ............................. <oG>
+  [197] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [199] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [201] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [203] pushint8 1 .............................. <1>
+  [205] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [206] setobjprop 298 .......................... me.pY = random(oG.MAPHEIGHT) - 1
+  [209] getparam 5 .............................. <themode>
+  [211] getglobal 9 ............................. <oG>
+  [213] getobjprop 94 ........................... <oG.ONOFFSCREEN>
+  [215] eq ...................................... <themode = oG.ONOFFSCREEN>
+  [216] jmpifz [289] ............................ if themode = oG.ONOFFSCREEN then / else
+  [219] getparam 0 .............................. <me>
+  [221] getobjprop 297 .......................... <me.pX>
+  [224] getparam 0 .............................. <me>
+  [226] getobjprop 298 .......................... <me.pY>
+  [229] pusharglist 2 ........................... <me.pX, me.pY>
+  [231] extcall 45 .............................. <TileOnMap(me.pX, me.pY)>
+  [233] not ..................................... <not TileOnMap(me.pX, me.pY)>
+  [234] getparam 0 .............................. <me>
+  [236] getobjprop 297 .......................... <me.pX>
+  [239] getparam 0 .............................. <me>
+  [241] getobjprop 298 .......................... <me.pY>
+  [244] pusharglist 2 ........................... <me.pX, me.pY>
+  [246] extcall 36 .............................. <PosNotEmpty(me.pX, me.pY)>
+  [248] or ...................................... <not TileOnMap(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)>
+  [249] jmpifz [286] ............................ repeat while not TileOnMap(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)
+  [252] getparam 0 .............................. <me>
+  [254] getglobal 9 ............................. <oG>
+  [256] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [258] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [260] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [262] pushint8 1 .............................. <1>
+  [264] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [265] setobjprop 297 .......................... me.pX = random(oG.MAPWIDTH) - 1
+  [268] getparam 0 .............................. <me>
+  [270] getglobal 9 ............................. <oG>
+  [272] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [274] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [276] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [278] pushint8 1 .............................. <1>
+  [280] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [281] setobjprop 298 .......................... me.pY = random(oG.MAPHEIGHT) - 1
+  [284] endrepeat [219]
+  [286] jmp [461]
+  [289] getparam 5 .............................. <themode>
+  [291] getglobal 9 ............................. <oG>
+  [293] getobjprop 92 ........................... <oG.OnScreen>
+  [295] eq ...................................... <themode = oG.OnScreen>
+  [296] jmpifz [369] ............................ if themode = oG.OnScreen then / else
+  [299] getparam 0 .............................. <me>
+  [301] getobjprop 297 .......................... <me.pX>
+  [304] getparam 0 .............................. <me>
+  [306] getobjprop 298 .......................... <me.pY>
+  [309] pusharglist 2 ........................... <me.pX, me.pY>
+  [311] extcall 44 .............................. <TileOnScreen(me.pX, me.pY)>
+  [313] not ..................................... <not TileOnScreen(me.pX, me.pY)>
+  [314] getparam 0 .............................. <me>
+  [316] getobjprop 297 .......................... <me.pX>
+  [319] getparam 0 .............................. <me>
+  [321] getobjprop 298 .......................... <me.pY>
+  [324] pusharglist 2 ........................... <me.pX, me.pY>
+  [326] extcall 36 .............................. <PosNotEmpty(me.pX, me.pY)>
+  [328] or ...................................... <not TileOnScreen(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)>
+  [329] jmpifz [366] ............................ repeat while not TileOnScreen(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)
+  [332] getparam 0 .............................. <me>
+  [334] getglobal 9 ............................. <oG>
+  [336] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [338] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [340] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [342] pushint8 1 .............................. <1>
+  [344] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [345] setobjprop 297 .......................... me.pX = random(oG.MAPWIDTH) - 1
+  [348] getparam 0 .............................. <me>
+  [350] getglobal 9 ............................. <oG>
+  [352] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [354] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [356] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [358] pushint8 1 .............................. <1>
+  [360] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [361] setobjprop 298 .......................... me.pY = random(oG.MAPHEIGHT) - 1
+  [364] endrepeat [299]
+  [366] jmp [461]
+  [369] getparam 5 .............................. <themode>
+  [371] getglobal 9 ............................. <oG>
+  [373] getobjprop 93 ........................... <oG.OFFSCREEN>
+  [375] eq ...................................... <themode = oG.OFFSCREEN>
+  [376] jmpifz [461] ............................ if themode = oG.OFFSCREEN then
+  [379] getparam 0 .............................. <me>
+  [381] getobjprop 297 .......................... <me.pX>
+  [384] getparam 0 .............................. <me>
+  [386] getobjprop 298 .......................... <me.pY>
+  [389] pusharglist 2 ........................... <me.pX, me.pY>
+  [391] extcall 45 .............................. <TileOnMap(me.pX, me.pY)>
+  [393] not ..................................... <not TileOnMap(me.pX, me.pY)>
+  [394] getparam 0 .............................. <me>
+  [396] getobjprop 297 .......................... <me.pX>
+  [399] getparam 0 .............................. <me>
+  [401] getobjprop 298 .......................... <me.pY>
+  [404] pusharglist 2 ........................... <me.pX, me.pY>
+  [406] extcall 44 .............................. <TileOnScreen(me.pX, me.pY)>
+  [408] or ...................................... <not TileOnMap(me.pX, me.pY) or TileOnScreen(me.pX, me.pY)>
+  [409] getparam 0 .............................. <me>
+  [411] getobjprop 297 .......................... <me.pX>
+  [414] getparam 0 .............................. <me>
+  [416] getobjprop 298 .......................... <me.pY>
+  [419] pusharglist 2 ........................... <me.pX, me.pY>
+  [421] extcall 36 .............................. <PosNotEmpty(me.pX, me.pY)>
+  [423] or ...................................... <not TileOnMap(me.pX, me.pY) or TileOnScreen(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)>
+  [424] jmpifz [461] ............................ repeat while not TileOnMap(me.pX, me.pY) or TileOnScreen(me.pX, me.pY) or PosNotEmpty(me.pX, me.pY)
+  [427] getparam 0 .............................. <me>
+  [429] getglobal 9 ............................. <oG>
+  [431] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [433] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [435] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [437] pushint8 1 .............................. <1>
+  [439] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [440] setobjprop 297 .......................... me.pX = random(oG.MAPWIDTH) - 1
+  [443] getparam 0 .............................. <me>
+  [445] getglobal 9 ............................. <oG>
+  [447] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [449] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [451] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [453] pushint8 1 .............................. <1>
+  [455] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [456] setobjprop 298 .......................... me.pY = random(oG.MAPHEIGHT) - 1
+  [459] endrepeat [379]
+  [461] getparam 0 .............................. <me>
+  [463] getparam 0 .............................. <me>
+  [465] getobjprop 297 .......................... <me.pX>
+  [468] getglobal 9 ............................. <oG>
+  [470] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [472] mul ..................................... <me.pX * oG.ISOTILEWIDTH>
+  [473] setobjprop 299 .......................... me.pIsoX = me.pX * oG.ISOTILEWIDTH
+  [476] getparam 0 .............................. <me>
+  [478] getparam 0 .............................. <me>
+  [480] getobjprop 298 .......................... <me.pY>
+  [483] getglobal 9 ............................. <oG>
+  [485] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [487] mul ..................................... <me.pY * oG.ISOTILEHEIGHT>
+  [488] pushint8 1 .............................. <1>
+  [490] inv ..................................... <-1>
+  [491] mul ..................................... <me.pY * oG.ISOTILEHEIGHT * -1>
+  [492] setobjprop 300 .......................... me.pIsoZ = me.pY * oG.ISOTILEHEIGHT * -1
+  [495] getparam 0 .............................. <me>
+  [497] pushint8 1 .............................. <1>
+  [499] setobjprop 301 .......................... me.pFrameStart = 1
+  [502] getparam 0 .............................. <me>
+  [504] pushint8 8 .............................. <8>
+  [506] setobjprop 302 .......................... me.pFrameStop = 8
+  [509] getparam 0 .............................. <me>
+  [511] getparam 1 .............................. <thenum>
+  [513] pusharglist 1 ........................... <thenum>
+  [515] extcall 7 ............................... <sprite(thenum)>
+  [517] setobjprop 197 .......................... me.pS = sprite(thenum)
+  [519] getparam 0 .............................. <me>
+  [521] getchainedprop 197 ...................... <me.pS>
+  [523] getparam 3 .............................. <themedia>
+  [525] setobjprop 26 ........................... me.pS.member = themedia
+  [527] getparam 0 .............................. <me>
+  [529] getchainedprop 197 ...................... <me.pS>
+  [531] pushint8 1 .............................. <1>
+  [533] setobjprop 303 .......................... me.pS.puppet = 1
+  [536] getparam 0 .............................. <me>
+  [538] getchainedprop 197 ...................... <me.pS>
+  [540] pushint8 36 ............................. <36>
+  [542] setobjprop 304 .......................... me.pS.ink = 36
+  [545] getparam 0 .............................. <me>
+  [547] getchainedprop 197 ...................... <me.pS>
+  [549] pushint8 100 ............................ <100>
+  [551] setobjprop 305 .......................... me.pS.blend = 100
+  [554] getparam 0 .............................. <me>
+  [556] getchainedprop 197 ...................... <me.pS>
+  [558] pushzero ................................ <0>
+  [559] setobjprop 306 .......................... me.pS.rotation = 0
+  [562] getparam 0 .............................. <me>
+  [564] getobjprop 197 .......................... <me.pS>
+  [566] getparam 0 .............................. <me>
+  [568] getobjprop 299 .......................... <me.pIsoX>
+  [571] pushzero ................................ <0>
+  [572] getparam 0 .............................. <me>
+  [574] getobjprop 300 .......................... <me.pIsoZ>
+  [577] pusharglistnoret 4 ...................... <me.pS, me.pIsoX, 0, me.pIsoZ>
+  [579] extcall 49 .............................. PutFilmLoopOnScreen(me.pS, me.pIsoX, 0, me.pIsoZ)
+  [581] getparam 0 .............................. <me>
+  [583] getchainedprop 197 ...................... <me.pS>
+  [585] pushint8 1 .............................. <1>
+  [587] setobjprop 307 .......................... me.pS.visible = 1
+  [590] getparam 0 .............................. <me>
+  [592] pusharglistnoret 1 ...................... <me>
+  [594] objcall 193 ............................. me.mSetDepth()
+  [596] getparam 0 .............................. <me>
+  [598] pusharglistnoret 1 ...................... <me>
+  [600] extcall 22 .............................. return me
+  [602] ret
+end
+
+on mGetX me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 297 .......................... <me.pX>
+  [  5] pusharglistnoret 1 ...................... <me.pX>
+  [  7] extcall 22 .............................. return me.pX
+  [  9] ret
+end
+
+on mGetY me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 298 .......................... <me.pY>
+  [  5] pusharglistnoret 1 ...................... <me.pY>
+  [  7] extcall 22 .............................. return me.pY
+  [  9] ret
+end
+
+on mGoTo me, destx, DestY
+  [  0] getparam 0 .............................. <me>
+  [  2] getparam 0 .............................. <me>
+  [  4] getchainedprop 268 ...................... <me.const>
+  [  7] getobjprop 270 .......................... <me.const.BGOTO>
+  [ 10] setobjprop 289 .......................... me.pState = me.const.BGOTO
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getparam 1 .............................. <destx>
+  [ 17] setobjprop 310 .......................... me.pDestX = destx
+  [ 20] getparam 0 .............................. <me>
+  [ 22] getparam 2 .............................. <DestY>
+  [ 24] setobjprop 311 .......................... me.pDestY = DestY
+  [ 27] getparam 0 .............................. <me>
+  [ 29] getparam 0 .............................. <me>
+  [ 31] getobjprop 290 .......................... <me.pParts>
+  [ 34] setobjprop 225 .......................... me.pWait = me.pParts
+  [ 36] getparam 0 .............................. <me>
+  [ 38] pusharglistnoret 1 ...................... <me>
+  [ 40] objcall 264 ............................. me.mProcessGrid()
+  [ 43] ret
+end
+
+on mGoToMourn me, destx, DestY, facing
+  [  0] getparam 0 .............................. <me>
+  [  2] pushint8 1 .............................. <1>
+  [  4] setobjprop 292 .......................... me.pGoToMourn = 1
+  [  7] getparam 0 .............................. <me>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] setobjprop 293 .......................... me.pChangeDest = 1
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getparam 1 .............................. <destx>
+  [ 18] setobjprop 312 .......................... me.pFutDestX = destx
+  [ 21] getparam 0 .............................. <me>
+  [ 23] getparam 2 .............................. <DestY>
+  [ 25] setobjprop 313 .......................... me.pFutDestY = DestY
+  [ 28] getparam 0 .............................. <me>
+  [ 30] getparam 3 .............................. <facing>
+  [ 32] setobjprop 314 .......................... me.pMournFacing = facing
+  [ 35] ret
+end
+
+on mUndoEvil me
+  [  0] getparam 0 .............................. <me>
+  [  2] pushint8 1 .............................. <1>
+  [  4] setobjprop 294 .......................... me.pUndoEvil = 1
+  [  7] getparam 0 .............................. <me>
+  [  9] pushint8 1 .............................. <1>
+  [ 11] setobjprop 293 .......................... me.pChangeDest = 1
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getparam 0 .............................. <me>
+  [ 18] getobjprop 297 .......................... <me.pX>
+  [ 21] setobjprop 312 .......................... me.pFutDestX = me.pX
+  [ 24] getparam 0 .............................. <me>
+  [ 26] getparam 0 .............................. <me>
+  [ 28] getobjprop 298 .......................... <me.pY>
+  [ 31] setobjprop 313 .......................... me.pFutDestY = me.pY
+  [ 34] ret
+end
+
+on mMoveHoriz me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 297 .......................... <me.pX>
+  [  5] getparam 0 .............................. <me>
+  [  7] getobjprop 310 .......................... <me.pDestX>
+  [ 10] gt ...................................... <me.pX > me.pDestX>
+  [ 11] jmpifz [ 89] ............................ if me.pX > me.pDestX then
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getobjprop 297 .......................... <me.pX>
+  [ 19] pushint8 1 .............................. <1>
+  [ 21] sub ..................................... <me.pX - 1>
+  [ 22] getparam 0 .............................. <me>
+  [ 24] getobjprop 298 .......................... <me.pY>
+  [ 27] pusharglist 2 ........................... <me.pX - 1, me.pY>
+  [ 29] extcall 36 .............................. <PosNotEmpty(me.pX - 1, me.pY)>
+  [ 31] jmpifz [ 42] ............................ if PosNotEmpty(me.pX - 1, me.pY) then / else
+  [ 34] pushzero ................................ <0>
+  [ 35] pusharglistnoret 1 ...................... <0>
+  [ 37] extcall 22 .............................. return 0
+  [ 39] jmp [ 89]
+  [ 42] getparam 0 .............................. <me>
+  [ 44] getparam 0 .............................. <me>
+  [ 46] getobjprop 297 .......................... <me.pX>
+  [ 49] pushint8 1 .............................. <1>
+  [ 51] sub ..................................... <me.pX - 1>
+  [ 52] setobjprop 297 .......................... me.pX = me.pX - 1
+  [ 55] getparam 0 .............................. <me>
+  [ 57] getparam 0 .............................. <me>
+  [ 59] getchainedprop 268 ...................... <me.const>
+  [ 62] getobjprop 278 .......................... <me.const.GWEST>
+  [ 65] setobjprop 315 .......................... me.pStateGoto = me.const.GWEST
+  [ 68] getparam 0 .............................. <me>
+  [ 70] getparam 0 .............................. <me>
+  [ 72] getchainedprop 268 ...................... <me.const>
+  [ 75] getobjprop 278 .......................... <me.const.GWEST>
+  [ 78] pusharglistnoret 2 ...................... <me, me.const.GWEST>
+  [ 80] objcall 267 ............................. me.mSetAnim(me.const.GWEST)
+  [ 83] pushint8 1 .............................. <1>
+  [ 85] pusharglistnoret 1 ...................... <1>
+  [ 87] extcall 22 .............................. return 1
+  [ 89] getparam 0 .............................. <me>
+  [ 91] getobjprop 297 .......................... <me.pX>
+  [ 94] getparam 0 .............................. <me>
+  [ 96] getobjprop 310 .......................... <me.pDestX>
+  [ 99] lt ...................................... <me.pX < me.pDestX>
+  [100] jmpifz [178] ............................ if me.pX < me.pDestX then
+  [103] getparam 0 .............................. <me>
+  [105] getobjprop 297 .......................... <me.pX>
+  [108] pushint8 1 .............................. <1>
+  [110] add ..................................... <me.pX + 1>
+  [111] getparam 0 .............................. <me>
+  [113] getobjprop 298 .......................... <me.pY>
+  [116] pusharglist 2 ........................... <me.pX + 1, me.pY>
+  [118] extcall 36 .............................. <PosNotEmpty(me.pX + 1, me.pY)>
+  [120] jmpifz [131] ............................ if PosNotEmpty(me.pX + 1, me.pY) then / else
+  [123] pushzero ................................ <0>
+  [124] pusharglistnoret 1 ...................... <0>
+  [126] extcall 22 .............................. return 0
+  [128] jmp [178]
+  [131] getparam 0 .............................. <me>
+  [133] getparam 0 .............................. <me>
+  [135] getobjprop 297 .......................... <me.pX>
+  [138] pushint8 1 .............................. <1>
+  [140] add ..................................... <me.pX + 1>
+  [141] setobjprop 297 .......................... me.pX = me.pX + 1
+  [144] getparam 0 .............................. <me>
+  [146] getparam 0 .............................. <me>
+  [148] getchainedprop 268 ...................... <me.const>
+  [151] getobjprop 279 .......................... <me.const.GEAST>
+  [154] setobjprop 315 .......................... me.pStateGoto = me.const.GEAST
+  [157] getparam 0 .............................. <me>
+  [159] getparam 0 .............................. <me>
+  [161] getchainedprop 268 ...................... <me.const>
+  [164] getobjprop 279 .......................... <me.const.GEAST>
+  [167] pusharglistnoret 2 ...................... <me, me.const.GEAST>
+  [169] objcall 267 ............................. me.mSetAnim(me.const.GEAST)
+  [172] pushint8 1 .............................. <1>
+  [174] pusharglistnoret 1 ...................... <1>
+  [176] extcall 22 .............................. return 1
+  [178] ret
+end
+
+on mMoveVert me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 298 .......................... <me.pY>
+  [  5] getparam 0 .............................. <me>
+  [  7] getobjprop 311 .......................... <me.pDestY>
+  [ 10] gt ...................................... <me.pY > me.pDestY>
+  [ 11] jmpifz [ 89] ............................ if me.pY > me.pDestY then
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getobjprop 297 .......................... <me.pX>
+  [ 19] getparam 0 .............................. <me>
+  [ 21] getobjprop 298 .......................... <me.pY>
+  [ 24] pushint8 1 .............................. <1>
+  [ 26] sub ..................................... <me.pY - 1>
+  [ 27] pusharglist 2 ........................... <me.pX, me.pY - 1>
+  [ 29] extcall 36 .............................. <PosNotEmpty(me.pX, me.pY - 1)>
+  [ 31] jmpifz [ 42] ............................ if PosNotEmpty(me.pX, me.pY - 1) then / else
+  [ 34] pushzero ................................ <0>
+  [ 35] pusharglistnoret 1 ...................... <0>
+  [ 37] extcall 22 .............................. return 0
+  [ 39] jmp [ 89]
+  [ 42] getparam 0 .............................. <me>
+  [ 44] getparam 0 .............................. <me>
+  [ 46] getobjprop 298 .......................... <me.pY>
+  [ 49] pushint8 1 .............................. <1>
+  [ 51] sub ..................................... <me.pY - 1>
+  [ 52] setobjprop 298 .......................... me.pY = me.pY - 1
+  [ 55] getparam 0 .............................. <me>
+  [ 57] getparam 0 .............................. <me>
+  [ 59] getchainedprop 268 ...................... <me.const>
+  [ 62] getobjprop 276 .......................... <me.const.GNORTH>
+  [ 65] setobjprop 315 .......................... me.pStateGoto = me.const.GNORTH
+  [ 68] getparam 0 .............................. <me>
+  [ 70] getparam 0 .............................. <me>
+  [ 72] getchainedprop 268 ...................... <me.const>
+  [ 75] getobjprop 276 .......................... <me.const.GNORTH>
+  [ 78] pusharglistnoret 2 ...................... <me, me.const.GNORTH>
+  [ 80] objcall 267 ............................. me.mSetAnim(me.const.GNORTH)
+  [ 83] pushint8 1 .............................. <1>
+  [ 85] pusharglistnoret 1 ...................... <1>
+  [ 87] extcall 22 .............................. return 1
+  [ 89] getparam 0 .............................. <me>
+  [ 91] getobjprop 298 .......................... <me.pY>
+  [ 94] getparam 0 .............................. <me>
+  [ 96] getobjprop 311 .......................... <me.pDestY>
+  [ 99] lt ...................................... <me.pY < me.pDestY>
+  [100] jmpifz [178] ............................ if me.pY < me.pDestY then
+  [103] getparam 0 .............................. <me>
+  [105] getobjprop 297 .......................... <me.pX>
+  [108] getparam 0 .............................. <me>
+  [110] getobjprop 298 .......................... <me.pY>
+  [113] pushint8 1 .............................. <1>
+  [115] add ..................................... <me.pY + 1>
+  [116] pusharglist 2 ........................... <me.pX, me.pY + 1>
+  [118] extcall 36 .............................. <PosNotEmpty(me.pX, me.pY + 1)>
+  [120] jmpifz [131] ............................ if PosNotEmpty(me.pX, me.pY + 1) then / else
+  [123] pushzero ................................ <0>
+  [124] pusharglistnoret 1 ...................... <0>
+  [126] extcall 22 .............................. return 0
+  [128] jmp [178]
+  [131] getparam 0 .............................. <me>
+  [133] getparam 0 .............................. <me>
+  [135] getobjprop 298 .......................... <me.pY>
+  [138] pushint8 1 .............................. <1>
+  [140] add ..................................... <me.pY + 1>
+  [141] setobjprop 298 .......................... me.pY = me.pY + 1
+  [144] getparam 0 .............................. <me>
+  [146] getparam 0 .............................. <me>
+  [148] getchainedprop 268 ...................... <me.const>
+  [151] getobjprop 277 .......................... <me.const.GSOUTH>
+  [154] setobjprop 315 .......................... me.pStateGoto = me.const.GSOUTH
+  [157] getparam 0 .............................. <me>
+  [159] getparam 0 .............................. <me>
+  [161] getchainedprop 268 ...................... <me.const>
+  [164] getobjprop 277 .......................... <me.const.GSOUTH>
+  [167] pusharglistnoret 2 ...................... <me, me.const.GSOUTH>
+  [169] objcall 267 ............................. me.mSetAnim(me.const.GSOUTH)
+  [172] pushint8 1 .............................. <1>
+  [174] pusharglistnoret 1 ...................... <1>
+  [176] extcall 22 .............................. return 1
+  [178] ret
+end
+
+on mAvoidHoriz me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglist 1 ........................... <me>
+  [  4] objcall 261 ............................. <me.mMoveVert()>
+  [  7] not ..................................... <not me.mMoveVert()>
+  [  8] jmpifz [100] ............................ if not me.mMoveVert() then / else
+  [ 11] getparam 0 .............................. <me>
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 297 .......................... <me.pX>
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getobjprop 316 .......................... <me.pDir>
+  [ 23] add ..................................... <me.pX + me.pDir>
+  [ 24] setobjprop 297 .......................... me.pX = me.pX + me.pDir
+  [ 27] getparam 0 .............................. <me>
+  [ 29] getobjprop 316 .......................... <me.pDir>
+  [ 32] pushint8 1 .............................. <1>
+  [ 34] eq ...................................... <me.pDir = 1>
+  [ 35] jmpifz [ 69] ............................ if me.pDir = 1 then / else
+  [ 38] getparam 0 .............................. <me>
+  [ 40] getparam 0 .............................. <me>
+  [ 42] getchainedprop 268 ...................... <me.const>
+  [ 45] getobjprop 279 .......................... <me.const.GEAST>
+  [ 48] setobjprop 315 .......................... me.pStateGoto = me.const.GEAST
+  [ 51] getparam 0 .............................. <me>
+  [ 53] getparam 0 .............................. <me>
+  [ 55] getchainedprop 268 ...................... <me.const>
+  [ 58] getobjprop 279 .......................... <me.const.GEAST>
+  [ 61] pusharglistnoret 2 ...................... <me, me.const.GEAST>
+  [ 63] objcall 267 ............................. me.mSetAnim(me.const.GEAST)
+  [ 66] jmp [ 97]
+  [ 69] getparam 0 .............................. <me>
+  [ 71] getparam 0 .............................. <me>
+  [ 73] getchainedprop 268 ...................... <me.const>
+  [ 76] getobjprop 278 .......................... <me.const.GWEST>
+  [ 79] setobjprop 315 .......................... me.pStateGoto = me.const.GWEST
+  [ 82] getparam 0 .............................. <me>
+  [ 84] getparam 0 .............................. <me>
+  [ 86] getchainedprop 268 ...................... <me.const>
+  [ 89] getobjprop 278 .......................... <me.const.GWEST>
+  [ 92] pusharglistnoret 2 ...................... <me, me.const.GWEST>
+  [ 94] objcall 267 ............................. me.mSetAnim(me.const.GWEST)
+  [ 97] jmp [113]
+  [100] getparam 0 .............................. <me>
+  [102] getparam 0 .............................. <me>
+  [104] getchainedprop 268 ...................... <me.const>
+  [107] getobjprop 270 .......................... <me.const.BGOTO>
+  [110] setobjprop 289 .......................... me.pState = me.const.BGOTO
+  [113] ret
+end
+
+on mAvoidVert me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglist 1 ........................... <me>
+  [  4] objcall 260 ............................. <me.mMoveHoriz()>
+  [  7] not ..................................... <not me.mMoveHoriz()>
+  [  8] jmpifz [100] ............................ if not me.mMoveHoriz() then / else
+  [ 11] getparam 0 .............................. <me>
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 298 .......................... <me.pY>
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getobjprop 316 .......................... <me.pDir>
+  [ 23] add ..................................... <me.pY + me.pDir>
+  [ 24] setobjprop 298 .......................... me.pY = me.pY + me.pDir
+  [ 27] getparam 0 .............................. <me>
+  [ 29] getobjprop 316 .......................... <me.pDir>
+  [ 32] pushint8 1 .............................. <1>
+  [ 34] eq ...................................... <me.pDir = 1>
+  [ 35] jmpifz [ 69] ............................ if me.pDir = 1 then / else
+  [ 38] getparam 0 .............................. <me>
+  [ 40] getparam 0 .............................. <me>
+  [ 42] getchainedprop 268 ...................... <me.const>
+  [ 45] getobjprop 277 .......................... <me.const.GSOUTH>
+  [ 48] setobjprop 315 .......................... me.pStateGoto = me.const.GSOUTH
+  [ 51] getparam 0 .............................. <me>
+  [ 53] getparam 0 .............................. <me>
+  [ 55] getchainedprop 268 ...................... <me.const>
+  [ 58] getobjprop 277 .......................... <me.const.GSOUTH>
+  [ 61] pusharglistnoret 2 ...................... <me, me.const.GSOUTH>
+  [ 63] objcall 267 ............................. me.mSetAnim(me.const.GSOUTH)
+  [ 66] jmp [ 97]
+  [ 69] getparam 0 .............................. <me>
+  [ 71] getparam 0 .............................. <me>
+  [ 73] getchainedprop 268 ...................... <me.const>
+  [ 76] getobjprop 276 .......................... <me.const.GNORTH>
+  [ 79] setobjprop 315 .......................... me.pStateGoto = me.const.GNORTH
+  [ 82] getparam 0 .............................. <me>
+  [ 84] getparam 0 .............................. <me>
+  [ 86] getchainedprop 268 ...................... <me.const>
+  [ 89] getobjprop 276 .......................... <me.const.GNORTH>
+  [ 92] pusharglistnoret 2 ...................... <me, me.const.GNORTH>
+  [ 94] objcall 267 ............................. me.mSetAnim(me.const.GNORTH)
+  [ 97] jmp [113]
+  [100] getparam 0 .............................. <me>
+  [102] getparam 0 .............................. <me>
+  [104] getchainedprop 268 ...................... <me.const>
+  [107] getobjprop 270 .......................... <me.const.BGOTO>
+  [110] setobjprop 289 .......................... me.pState = me.const.BGOTO
+  [113] ret
+end
+
+on mProcessGrid me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 289 .......................... <me.pState>
+  [  5] peek 0 .................................. case me.pState of
+  [  7] pushzero ................................ <0>
+  [  8] eq
+  [  9] jmpifz [101] ............................ (case) 0:
+  [ 12] getglobal 9 ............................. <oG>
+  [ 14] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [ 16] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [ 18] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [ 20] pushint8 1 .............................. <1>
+  [ 22] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [ 23] setlocal 0 .............................. tempx = random(oG.MAPWIDTH) - 1
+  [ 25] getglobal 9 ............................. <oG>
+  [ 27] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [ 29] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [ 31] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [ 33] pushint8 1 .............................. <1>
+  [ 35] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [ 36] setlocal 1 .............................. tempy = random(oG.MAPHEIGHT) - 1
+  [ 38] getlocal 0 .............................. <tempx>
+  [ 40] getlocal 1 .............................. <tempy>
+  [ 42] pusharglist 2 ........................... <tempx, tempy>
+  [ 44] extcall 45 .............................. <TileOnMap(tempx, tempy)>
+  [ 46] not ..................................... <not TileOnMap(tempx, tempy)>
+  [ 47] getlocal 0 .............................. <tempx>
+  [ 49] getlocal 1 .............................. <tempy>
+  [ 51] pusharglist 2 ........................... <tempx, tempy>
+  [ 53] extcall 36 .............................. <PosNotEmpty(tempx, tempy)>
+  [ 55] or ...................................... <not TileOnMap(tempx, tempy) or PosNotEmpty(tempx, tempy)>
+  [ 56] jmpifz [ 87] ............................ repeat while not TileOnMap(tempx, tempy) or PosNotEmpty(tempx, tempy)
+  [ 59] getglobal 9 ............................. <oG>
+  [ 61] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [ 63] pusharglist 1 ........................... <oG.MAPWIDTH>
+  [ 65] extcall 152 ............................. <random(oG.MAPWIDTH)>
+  [ 67] pushint8 1 .............................. <1>
+  [ 69] sub ..................................... <random(oG.MAPWIDTH) - 1>
+  [ 70] setlocal 0 .............................. tempx = random(oG.MAPWIDTH) - 1
+  [ 72] getglobal 9 ............................. <oG>
+  [ 74] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [ 76] pusharglist 1 ........................... <oG.MAPHEIGHT>
+  [ 78] extcall 152 ............................. <random(oG.MAPHEIGHT)>
+  [ 80] pushint8 1 .............................. <1>
+  [ 82] sub ..................................... <random(oG.MAPHEIGHT) - 1>
+  [ 83] setlocal 1 .............................. tempy = random(oG.MAPHEIGHT) - 1
+  [ 85] endrepeat [ 38]
+  [ 87] getparam 0 .............................. <me>
+  [ 89] getlocal 0 .............................. <tempx>
+  [ 91] getlocal 1 .............................. <tempy>
+  [ 93] pusharglistnoret 3 ...................... <me, tempx, tempy>
+  [ 95] objcall 259 ............................. me.mGoTo(tempx, tempy)
+  [ 98] jmp [152]
+  [101] peek 0
+  [103] pushint8 1 .............................. <1>
+  [105] eq
+  [106] jmpifz [119] ............................ (case) 1:
+  [109] getparam 0 .............................. <me>
+  [111] pusharglistnoret 1 ...................... <me>
+  [113] objcall 265 ............................. me.mChangeTile()
+  [116] jmp [152]
+  [119] peek 0
+  [121] pushint8 2 .............................. <2>
+  [123] eq
+  [124] jmpifz [137] ............................ (case) 2:
+  [127] getparam 0 .............................. <me>
+  [129] pusharglistnoret 1 ...................... <me>
+  [131] objcall 262 ............................. me.mAvoidHoriz()
+  [134] jmp [152]
+  [137] peek 0
+  [139] pushint8 3 .............................. <3>
+  [141] eq
+  [142] jmpifz [152] ............................ (case) 3:
+  [145] getparam 0 .............................. <me>
+  [147] pusharglistnoret 1 ...................... <me>
+  [149] objcall 263 ............................. me.mAvoidVert()
+  [152] pop 1 ................................... end case
+  [154] ret
+end
+
+on mChangeTile me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 293 .......................... <me.pChangeDest>
+  [  5] jmpifz [ 56] ............................ if me.pChangeDest then
+  [  8] getparam 0 .............................. <me>
+  [ 10] pushzero ................................ <0>
+  [ 11] setobjprop 293 .......................... me.pChangeDest = 0
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getparam 0 .............................. <me>
+  [ 18] getobjprop 312 .......................... <me.pFutDestX>
+  [ 21] setobjprop 310 .......................... me.pDestX = me.pFutDestX
+  [ 24] getparam 0 .............................. <me>
+  [ 26] getparam 0 .............................. <me>
+  [ 28] getobjprop 313 .......................... <me.pFutDestY>
+  [ 31] setobjprop 311 .......................... me.pDestY = me.pFutDestY
+  [ 34] getparam 0 .............................. <me>
+  [ 36] getobjprop 294 .......................... <me.pUndoEvil>
+  [ 39] not ..................................... <not me.pUndoEvil>
+  [ 40] jmpifz [ 56] ............................ if not me.pUndoEvil then
+  [ 43] getparam 0 .............................. <me>
+  [ 45] getparam 0 .............................. <me>
+  [ 47] getobjprop 290 .......................... <me.pParts>
+  [ 50] pushint8 2 .............................. <2>
+  [ 52] div ..................................... <me.pParts / 2>
+  [ 53] setobjprop 290 .......................... me.pParts = me.pParts / 2
+  [ 56] getparam 0 .............................. <me>
+  [ 58] getobjprop 297 .......................... <me.pX>
+  [ 61] getparam 0 .............................. <me>
+  [ 63] getobjprop 310 .......................... <me.pDestX>
+  [ 66] eq ...................................... <me.pX = me.pDestX>
+  [ 67] getparam 0 .............................. <me>
+  [ 69] getobjprop 298 .......................... <me.pY>
+  [ 72] getparam 0 .............................. <me>
+  [ 74] getobjprop 311 .......................... <me.pDestY>
+  [ 77] eq ...................................... <me.pY = me.pDestY>
+  [ 78] and ..................................... <(me.pX = me.pDestX) and (me.pY = me.pDestY)>
+  [ 79] jmpifz [214] ............................ if (me.pX = me.pDestX) and (me.pY = me.pDestY) then / else
+  [ 82] getparam 0 .............................. <me>
+  [ 84] getobjprop 292 .......................... <me.pGoToMourn>
+  [ 87] jmpifz [160] ............................ if me.pGoToMourn then / else
+  [ 90] getparam 0 .............................. <me>
+  [ 92] getparam 0 .............................. <me>
+  [ 94] getchainedprop 268 ...................... <me.const>
+  [ 97] getobjprop 273 .......................... <me.const.BMOURN>
+  [100] setobjprop 289 .......................... me.pState = me.const.BMOURN
+  [103] getparam 0 .............................. <me>
+  [105] getparam 0 .............................. <me>
+  [107] getobjprop 290 .......................... <me.pParts>
+  [110] pushint8 2 .............................. <2>
+  [112] mul ..................................... <me.pParts * 2>
+  [113] setobjprop 290 .......................... me.pParts = me.pParts * 2
+  [116] getglobal 28 ............................ <oSound>
+  [118] pusharglistnoret 1 ...................... <oSound>
+  [120] objcall 319 ............................. oSound.mPlayCry()
+  [123] getparam 0 .............................. <me>
+  [125] getparam 0 .............................. <me>
+  [127] getchainedprop 268 ...................... <me.const>
+  [130] getobjprop 280 .......................... <me.const.GCRYNORTH>
+  [133] getparam 0 .............................. <me>
+  [135] getobjprop 314 .......................... <me.pMournFacing>
+  [138] add ..................................... <me.const.GCRYNORTH + me.pMournFacing>
+  [139] pusharglistnoret 2 ...................... <me, me.const.GCRYNORTH + me.pMournFacing>
+  [141] objcall 267 ............................. me.mSetAnim(me.const.GCRYNORTH + me.pMournFacing)
+  [144] getparam 0 .............................. <me>
+  [146] getglobal 9 ............................. <oG>
+  [148] getobjprop 99 ........................... <oG.WAITMOURN>
+  [150] getglobal 9 ............................. <oG>
+  [152] getobjprop 60 ........................... <oG.fps>
+  [154] mul ..................................... <oG.WAITMOURN * oG.fps>
+  [155] setobjprop 225 .......................... me.pWait = oG.WAITMOURN * oG.fps
+  [157] jmp [211]
+  [160] getparam 0 .............................. <me>
+  [162] getobjprop 294 .......................... <me.pUndoEvil>
+  [165] jmpifz [191] ............................ if me.pUndoEvil then / else
+  [168] getparam 0 .............................. <me>
+  [170] getparam 0 .............................. <me>
+  [172] getchainedprop 268 ...................... <me.const>
+  [175] getobjprop 275 .......................... <me.const.BTURN>
+  [178] setobjprop 289 .......................... me.pState = me.const.BTURN
+  [181] getparam 0 .............................. <me>
+  [183] pushint8 1 .............................. <1>
+  [185] setobjprop 295 .......................... me.pKludge = 1
+  [188] jmp [211]
+  [191] getparam 0 .............................. <me>
+  [193] getparam 0 .............................. <me>
+  [195] getchainedprop 268 ...................... <me.const>
+  [198] getobjprop 269 .......................... <me.const.BSTOP>
+  [201] setobjprop 289 .......................... me.pState = me.const.BSTOP
+  [204] getparam 0 .............................. <me>
+  [206] pusharglistnoret 1 ...................... <me>
+  [208] objcall 264 ............................. me.mProcessGrid()
+  [211] jmp [495]
+  [214] getparam 0 .............................. <me>
+  [216] getobjprop 297 .......................... <me.pX>
+  [219] getparam 0 .............................. <me>
+  [221] getobjprop 310 .......................... <me.pDestX>
+  [224] eq ...................................... <me.pX = me.pDestX>
+  [225] jmpifz [288] ............................ if me.pX = me.pDestX then / else
+  [228] getparam 0 .............................. <me>
+  [230] pusharglist 1 ........................... <me>
+  [232] objcall 261 ............................. <me.mMoveVert()>
+  [235] not ..................................... <not me.mMoveVert()>
+  [236] jmpifz [285] ............................ if not me.mMoveVert() then
+  [239] getparam 0 .............................. <me>
+  [241] getparam 0 .............................. <me>
+  [243] getchainedprop 268 ...................... <me.const>
+  [246] getobjprop 271 .......................... <me.const.BAVOIDHORIZ>
+  [249] setobjprop 289 .......................... me.pState = me.const.BAVOIDHORIZ
+  [252] pushint8 2 .............................. <2>
+  [254] pusharglist 1 ........................... <2>
+  [256] extcall 152 ............................. <random(2)>
+  [258] pushint8 1 .............................. <1>
+  [260] eq ...................................... <random(2) = 1>
+  [261] jmpifz [272] ............................ if random(2) = 1 then / else
+  [264] pushint8 1 .............................. <1>
+  [266] setprop 316 ............................. pDir = 1
+  [269] jmp [278]
+  [272] pushint8 1 .............................. <1>
+  [274] inv ..................................... <-1>
+  [275] setprop 316 ............................. pDir = -1
+  [278] getparam 0 .............................. <me>
+  [280] pusharglistnoret 1 ...................... <me>
+  [282] objcall 262 ............................. me.mAvoidHoriz()
+  [285] jmp [495]
+  [288] getparam 0 .............................. <me>
+  [290] getobjprop 298 .......................... <me.pY>
+  [293] getparam 0 .............................. <me>
+  [295] getobjprop 311 .......................... <me.pDestY>
+  [298] eq ...................................... <me.pY = me.pDestY>
+  [299] jmpifz [364] ............................ if me.pY = me.pDestY then / else
+  [302] getparam 0 .............................. <me>
+  [304] pusharglist 1 ........................... <me>
+  [306] objcall 260 ............................. <me.mMoveHoriz()>
+  [309] not ..................................... <not me.mMoveHoriz()>
+  [310] jmpifz [361] ............................ if not me.mMoveHoriz() then
+  [313] getparam 0 .............................. <me>
+  [315] getparam 0 .............................. <me>
+  [317] getchainedprop 268 ...................... <me.const>
+  [320] getobjprop 272 .......................... <me.const.BAVOIDVERT>
+  [323] setobjprop 289 .......................... me.pState = me.const.BAVOIDVERT
+  [326] getparam 0 .............................. <me>
+  [328] getobjprop 298 .......................... <me.pY>
+  [331] getparam 0 .............................. <me>
+  [333] getobjprop 311 .......................... <me.pDestY>
+  [336] lt ...................................... <me.pY < me.pDestY>
+  [337] jmpifz [348] ............................ if me.pY < me.pDestY then / else
+  [340] pushint8 1 .............................. <1>
+  [342] setprop 316 ............................. pDir = 1
+  [345] jmp [354]
+  [348] pushint8 1 .............................. <1>
+  [350] inv ..................................... <-1>
+  [351] setprop 316 ............................. pDir = -1
+  [354] getparam 0 .............................. <me>
+  [356] pusharglistnoret 1 ...................... <me>
+  [358] objcall 263 ............................. me.mAvoidVert()
+  [361] jmp [495]
+  [364] pushint8 2 .............................. <2>
+  [366] pusharglist 1 ........................... <2>
+  [368] extcall 152 ............................. <random(2)>
+  [370] pushint8 1 .............................. <1>
+  [372] eq ...................................... <random(2) = 1>
+  [373] jmpifz [438] ............................ if random(2) = 1 then / else
+  [376] getparam 0 .............................. <me>
+  [378] pusharglist 1 ........................... <me>
+  [380] objcall 261 ............................. <me.mMoveVert()>
+  [383] not ..................................... <not me.mMoveVert()>
+  [384] jmpifz [435] ............................ if not me.mMoveVert() then
+  [387] getparam 0 .............................. <me>
+  [389] getparam 0 .............................. <me>
+  [391] getchainedprop 268 ...................... <me.const>
+  [394] getobjprop 271 .......................... <me.const.BAVOIDHORIZ>
+  [397] setobjprop 289 .......................... me.pState = me.const.BAVOIDHORIZ
+  [400] getparam 0 .............................. <me>
+  [402] getobjprop 297 .......................... <me.pX>
+  [405] getparam 0 .............................. <me>
+  [407] getobjprop 310 .......................... <me.pDestX>
+  [410] lt ...................................... <me.pX < me.pDestX>
+  [411] jmpifz [422] ............................ if me.pX < me.pDestX then / else
+  [414] pushint8 1 .............................. <1>
+  [416] setprop 316 ............................. pDir = 1
+  [419] jmp [428]
+  [422] pushint8 1 .............................. <1>
+  [424] inv ..................................... <-1>
+  [425] setprop 316 ............................. pDir = -1
+  [428] getparam 0 .............................. <me>
+  [430] pusharglistnoret 1 ...................... <me>
+  [432] objcall 262 ............................. me.mAvoidHoriz()
+  [435] jmp [495]
+  [438] getparam 0 .............................. <me>
+  [440] pusharglist 1 ........................... <me>
+  [442] objcall 260 ............................. <me.mMoveHoriz()>
+  [445] not ..................................... <not me.mMoveHoriz()>
+  [446] jmpifz [495] ............................ if not me.mMoveHoriz() then
+  [449] getparam 0 .............................. <me>
+  [451] getparam 0 .............................. <me>
+  [453] getchainedprop 268 ...................... <me.const>
+  [456] getobjprop 272 .......................... <me.const.BAVOIDVERT>
+  [459] setobjprop 289 .......................... me.pState = me.const.BAVOIDVERT
+  [462] pushint8 2 .............................. <2>
+  [464] pusharglist 1 ........................... <2>
+  [466] extcall 152 ............................. <random(2)>
+  [468] pushint8 1 .............................. <1>
+  [470] eq ...................................... <random(2) = 1>
+  [471] jmpifz [482] ............................ if random(2) = 1 then / else
+  [474] pushint8 1 .............................. <1>
+  [476] setprop 316 ............................. pDir = 1
+  [479] jmp [488]
+  [482] pushint8 1 .............................. <1>
+  [484] inv ..................................... <-1>
+  [485] setprop 316 ............................. pDir = -1
+  [488] getparam 0 .............................. <me>
+  [490] pusharglistnoret 1 ...................... <me>
+  [492] objcall 263 ............................. me.mAvoidVert()
+  [495] ret
+end
+
+on mMove me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 291 .......................... <me.pDepthNotYet>
+  [  5] not ..................................... <not me.pDepthNotYet>
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 225 .......................... <me.pWait>
+  [ 10] getparam 0 .............................. <me>
+  [ 12] getobjprop 290 .......................... <me.pParts>
+  [ 15] pushint8 2 .............................. <2>
+  [ 17] div ..................................... <me.pParts / 2>
+  [ 18] lteq .................................... <me.pWait <= (me.pParts / 2)>
+  [ 19] and ..................................... <not me.pDepthNotYet and (me.pWait <= (me.pParts / 2))>
+  [ 20] jmpifz [ 36] ............................ if not me.pDepthNotYet and (me.pWait <= (me.pParts / 2)) then
+  [ 23] getparam 0 .............................. <me>
+  [ 25] pushint8 1 .............................. <1>
+  [ 27] setobjprop 291 .......................... me.pDepthNotYet = 1
+  [ 30] getparam 0 .............................. <me>
+  [ 32] pusharglistnoret 1 ...................... <me>
+  [ 34] objcall 193 ............................. me.mSetDepth()
+  [ 36] getparam 0 .............................. <me>
+  [ 38] getobjprop 225 .......................... <me.pWait>
+  [ 40] pushint8 1 .............................. <1>
+  [ 42] sub ..................................... <me.pWait - 1>
+  [ 43] pushzero ................................ <0>
+  [ 44] eq ...................................... <(me.pWait - 1) = 0>
+  [ 45] jmpifz [ 91] ............................ if (me.pWait - 1) = 0 then / else
+  [ 48] getparam 0 .............................. <me>
+  [ 50] getparam 0 .............................. <me>
+  [ 52] getobjprop 297 .......................... <me.pX>
+  [ 55] getglobal 9 ............................. <oG>
+  [ 57] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [ 59] mul ..................................... <me.pX * oG.ISOTILEWIDTH>
+  [ 60] setobjprop 299 .......................... me.pIsoX = me.pX * oG.ISOTILEWIDTH
+  [ 63] getparam 0 .............................. <me>
+  [ 65] getparam 0 .............................. <me>
+  [ 67] getobjprop 298 .......................... <me.pY>
+  [ 70] getglobal 9 ............................. <oG>
+  [ 72] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [ 74] mul ..................................... <me.pY * oG.ISOTILEHEIGHT>
+  [ 75] pushint8 1 .............................. <1>
+  [ 77] inv ..................................... <-1>
+  [ 78] mul ..................................... <me.pY * oG.ISOTILEHEIGHT * -1>
+  [ 79] setobjprop 300 .......................... me.pIsoZ = me.pY * oG.ISOTILEHEIGHT * -1
+  [ 82] getparam 0 .............................. <me>
+  [ 84] pushzero ................................ <0>
+  [ 85] setobjprop 291 .......................... me.pDepthNotYet = 0
+  [ 88] jmp [222]
+  [ 91] getparam 0 .............................. <me>
+  [ 93] getobjprop 315 .......................... <me.pStateGoto>
+  [ 96] peek 0 .................................. case me.pStateGoto of
+  [ 98] pushzero ................................ <0>
+  [ 99] eq
+  [100] jmpifz [127] ............................ (case) 0:
+  [103] getparam 0 .............................. <me>
+  [105] getparam 0 .............................. <me>
+  [107] getobjprop 300 .......................... <me.pIsoZ>
+  [110] getglobal 9 ............................. <oG>
+  [112] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [114] getparam 0 .............................. <me>
+  [116] getobjprop 290 .......................... <me.pParts>
+  [119] div ..................................... <oG.ISOTILEHEIGHT / me.pParts>
+  [120] add ..................................... <me.pIsoZ + (oG.ISOTILEHEIGHT / me.pParts)>
+  [121] setobjprop 300 .......................... me.pIsoZ = me.pIsoZ + (oG.ISOTILEHEIGHT / me.pParts)
+  [124] jmp [220]
+  [127] peek 0
+  [129] pushint8 1 .............................. <1>
+  [131] eq
+  [132] jmpifz [159] ............................ (case) 1:
+  [135] getparam 0 .............................. <me>
+  [137] getparam 0 .............................. <me>
+  [139] getobjprop 300 .......................... <me.pIsoZ>
+  [142] getglobal 9 ............................. <oG>
+  [144] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [146] getparam 0 .............................. <me>
+  [148] getobjprop 290 .......................... <me.pParts>
+  [151] div ..................................... <oG.ISOTILEHEIGHT / me.pParts>
+  [152] sub ..................................... <me.pIsoZ - (oG.ISOTILEHEIGHT / me.pParts)>
+  [153] setobjprop 300 .......................... me.pIsoZ = me.pIsoZ - (oG.ISOTILEHEIGHT / me.pParts)
+  [156] jmp [220]
+  [159] peek 0
+  [161] pushint8 2 .............................. <2>
+  [163] eq
+  [164] jmpifz [191] ............................ (case) 2:
+  [167] getparam 0 .............................. <me>
+  [169] getparam 0 .............................. <me>
+  [171] getobjprop 299 .......................... <me.pIsoX>
+  [174] getglobal 9 ............................. <oG>
+  [176] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [178] getparam 0 .............................. <me>
+  [180] getobjprop 290 .......................... <me.pParts>
+  [183] div ..................................... <oG.ISOTILEWIDTH / me.pParts>
+  [184] sub ..................................... <me.pIsoX - (oG.ISOTILEWIDTH / me.pParts)>
+  [185] setobjprop 299 .......................... me.pIsoX = me.pIsoX - (oG.ISOTILEWIDTH / me.pParts)
+  [188] jmp [220]
+  [191] peek 0
+  [193] pushint8 3 .............................. <3>
+  [195] eq
+  [196] jmpifz [220] ............................ (case) 3:
+  [199] getparam 0 .............................. <me>
+  [201] getparam 0 .............................. <me>
+  [203] getobjprop 299 .......................... <me.pIsoX>
+  [206] getglobal 9 ............................. <oG>
+  [208] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [210] getparam 0 .............................. <me>
+  [212] getobjprop 290 .......................... <me.pParts>
+  [215] div ..................................... <oG.ISOTILEWIDTH / me.pParts>
+  [216] add ..................................... <me.pIsoX + (oG.ISOTILEWIDTH / me.pParts)>
+  [217] setobjprop 299 .......................... me.pIsoX = me.pIsoX + (oG.ISOTILEWIDTH / me.pParts)
+  [220] pop 1 ................................... end case
+  [222] getparam 0 .............................. <me>
+  [224] getobjprop 197 .......................... <me.pS>
+  [226] getparam 0 .............................. <me>
+  [228] getobjprop 299 .......................... <me.pIsoX>
+  [231] pushzero ................................ <0>
+  [232] getparam 0 .............................. <me>
+  [234] getobjprop 300 .......................... <me.pIsoZ>
+  [237] pusharglistnoret 4 ...................... <me.pS, me.pIsoX, 0, me.pIsoZ>
+  [239] extcall 49 .............................. PutFilmLoopOnScreen(me.pS, me.pIsoX, 0, me.pIsoZ)
+  [241] getparam 0 .............................. <me>
+  [243] getparam 0 .............................. <me>
+  [245] getobjprop 225 .......................... <me.pWait>
+  [247] pushint8 1 .............................. <1>
+  [249] sub ..................................... <me.pWait - 1>
+  [250] setobjprop 225 .......................... me.pWait = me.pWait - 1
+  [252] ret
+end
+
+on mSetDepth me
+  [  0] getparam 0 .............................. <me>
+  [  2] getchainedprop 197 ...................... <me.pS>
+  [  4] getglobal 9 ............................. <oG>
+  [  6] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 297 .......................... <me.pX>
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 298 .......................... <me.pY>
+  [ 18] pusharglist 2 ........................... <me.pX, me.pY>
+  [ 20] extcall 38 .............................. <GetTileDepth(me.pX, me.pY)>
+  [ 22] add ..................................... <oG.PERSON1STSPRITE + GetTileDepth(me.pX, me.pY)>
+  [ 23] setobjprop 11 ........................... me.pS.locZ = oG.PERSON1STSPRITE + GetTileDepth(me.pX, me.pY)
+  [ 25] ret
+end
+
+on mSetAnim me, dir
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 320 .......................... <me.pStateAnim>
+  [  5] getparam 1 .............................. <dir>
+  [  7] nteq .................................... <me.pStateAnim <> dir>
+  [  8] jmpifz [341] ............................ if me.pStateAnim <> dir then
+  [ 11] getparam 0 .............................. <me>
+  [ 13] getparam 1 .............................. <dir>
+  [ 15] setobjprop 320 .......................... me.pStateAnim = dir
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getobjprop 320 .......................... <me.pStateAnim>
+  [ 23] getparam 0 .............................. <me>
+  [ 25] getchainedprop 268 ...................... <me.const>
+  [ 28] getobjprop 280 .......................... <me.const.GCRYNORTH>
+  [ 31] lt ...................................... <me.pStateAnim < me.const.GCRYNORTH>
+  [ 32] jmpifz [ 92] ............................ if me.pStateAnim < me.const.GCRYNORTH then / else
+  [ 35] getparam 0 .............................. <me>
+  [ 37] getparam 0 .............................. <me>
+  [ 39] getobjprop 320 .......................... <me.pStateAnim>
+  [ 42] pushint8 8 .............................. <8>
+  [ 44] mul ..................................... <me.pStateAnim * 8>
+  [ 45] pushint8 1 .............................. <1>
+  [ 47] add ..................................... <(me.pStateAnim * 8) + 1>
+  [ 48] setobjprop 301 .......................... me.pFrameStart = (me.pStateAnim * 8) + 1
+  [ 51] getparam 0 .............................. <me>
+  [ 53] getparam 0 .............................. <me>
+  [ 55] getobjprop 301 .......................... <me.pFrameStart>
+  [ 58] pushint8 7 .............................. <7>
+  [ 60] add ..................................... <me.pFrameStart + 7>
+  [ 61] setobjprop 302 .......................... me.pFrameStop = me.pFrameStart + 7
+  [ 64] getparam 0 .............................. <me>
+  [ 66] getobjprop 197 .......................... <me.pS>
+  [ 68] starttell ............................... tell me.pS
+  [ 69] getparam 0 .............................. <me>
+  [ 71] getobjprop 301 .......................... <me.pFrameStart>
+  [ 74] pushint8 8 .............................. <8>
+  [ 76] pusharglist 1 ........................... <8>
+  [ 78] tellcall 152 ............................ <random(8)>
+  [ 80] add ..................................... <me.pFrameStart + random(8)>
+  [ 81] pushint8 1 .............................. <1>
+  [ 83] sub ..................................... <me.pFrameStart + random(8) - 1>
+  [ 84] pusharglistnoret 1 ...................... <me.pFrameStart + random(8) - 1>
+  [ 86] tellcall 185 ............................ go(me.pFrameStart + random(8) - 1)
+  [ 88] endtell
+  [ 89] jmp [341]
+  [ 92] getparam 0 .............................. <me>
+  [ 94] getobjprop 320 .......................... <me.pStateAnim>
+  [ 97] getparam 0 .............................. <me>
+  [ 99] getchainedprop 268 ...................... <me.const>
+  [102] getobjprop 284 .......................... <me.const.GTURNNORTH>
+  [105] lt ...................................... <me.pStateAnim < me.const.GTURNNORTH>
+  [106] jmpifz [180] ............................ if me.pStateAnim < me.const.GTURNNORTH then / else
+  [109] getparam 0 .............................. <me>
+  [111] getparam 0 .............................. <me>
+  [113] getchainedprop 125 ...................... <me.pAnimInfo>
+  [115] getobjprop 232 .......................... <me.pAnimInfo.crystart>
+  [117] getparam 0 .............................. <me>
+  [119] getobjprop 320 .......................... <me.pStateAnim>
+  [122] getparam 0 .............................. <me>
+  [124] getchainedprop 268 ...................... <me.const>
+  [127] getobjprop 280 .......................... <me.const.GCRYNORTH>
+  [130] sub ..................................... <me.pStateAnim - me.const.GCRYNORTH>
+  [131] getparam 0 .............................. <me>
+  [133] getchainedprop 125 ...................... <me.pAnimInfo>
+  [135] getobjprop 233 .......................... <me.pAnimInfo.crylength>
+  [137] mul ..................................... <(me.pStateAnim - me.const.GCRYNORTH) * me.pAnimInfo.crylength>
+  [138] add ..................................... <me.pAnimInfo.crystart + ((me.pStateAnim - me.const.GCRYNORTH) * me.pAnimInfo.crylength)>
+  [139] setobjprop 301 .......................... me.pFrameStart = me.pAnimInfo.crystart + ((me.pStateAnim - me.const.GCRYNORTH) * me.pAnimInfo.crylength)
+  [142] getparam 0 .............................. <me>
+  [144] getparam 0 .............................. <me>
+  [146] getobjprop 301 .......................... <me.pFrameStart>
+  [149] getparam 0 .............................. <me>
+  [151] getchainedprop 125 ...................... <me.pAnimInfo>
+  [153] getobjprop 233 .......................... <me.pAnimInfo.crylength>
+  [155] add ..................................... <me.pFrameStart + me.pAnimInfo.crylength>
+  [156] pushint8 1 .............................. <1>
+  [158] sub ..................................... <me.pFrameStart + me.pAnimInfo.crylength - 1>
+  [159] setobjprop 302 .......................... me.pFrameStop = me.pFrameStart + me.pAnimInfo.crylength - 1
+  [162] getparam 0 .............................. <me>
+  [164] getobjprop 197 .......................... <me.pS>
+  [166] starttell ............................... tell me.pS
+  [167] getparam 0 .............................. <me>
+  [169] getobjprop 301 .......................... <me.pFrameStart>
+  [172] pusharglistnoret 1 ...................... <me.pFrameStart>
+  [174] tellcall 185 ............................ go(me.pFrameStart)
+  [176] endtell
+  [177] jmp [341]
+  [180] getparam 0 .............................. <me>
+  [182] getobjprop 320 .......................... <me.pStateAnim>
+  [185] getparam 0 .............................. <me>
+  [187] getchainedprop 268 ...................... <me.const>
+  [190] getobjprop 288 .......................... <me.const.GDEAD>
+  [193] lt ...................................... <me.pStateAnim < me.const.GDEAD>
+  [194] jmpifz [268] ............................ if me.pStateAnim < me.const.GDEAD then / else
+  [197] getparam 0 .............................. <me>
+  [199] getparam 0 .............................. <me>
+  [201] getchainedprop 125 ...................... <me.pAnimInfo>
+  [203] getobjprop 234 .......................... <me.pAnimInfo.turnstart>
+  [205] getparam 0 .............................. <me>
+  [207] getobjprop 320 .......................... <me.pStateAnim>
+  [210] getparam 0 .............................. <me>
+  [212] getchainedprop 268 ...................... <me.const>
+  [215] getobjprop 284 .......................... <me.const.GTURNNORTH>
+  [218] sub ..................................... <me.pStateAnim - me.const.GTURNNORTH>
+  [219] getparam 0 .............................. <me>
+  [221] getchainedprop 125 ...................... <me.pAnimInfo>
+  [223] getobjprop 235 .......................... <me.pAnimInfo.turnlength>
+  [225] mul ..................................... <(me.pStateAnim - me.const.GTURNNORTH) * me.pAnimInfo.turnlength>
+  [226] add ..................................... <me.pAnimInfo.turnstart + ((me.pStateAnim - me.const.GTURNNORTH) * me.pAnimInfo.turnlength)>
+  [227] setobjprop 301 .......................... me.pFrameStart = me.pAnimInfo.turnstart + ((me.pStateAnim - me.const.GTURNNORTH) * me.pAnimInfo.turnlength)
+  [230] getparam 0 .............................. <me>
+  [232] getparam 0 .............................. <me>
+  [234] getobjprop 301 .......................... <me.pFrameStart>
+  [237] getparam 0 .............................. <me>
+  [239] getchainedprop 125 ...................... <me.pAnimInfo>
+  [241] getobjprop 235 .......................... <me.pAnimInfo.turnlength>
+  [243] add ..................................... <me.pFrameStart + me.pAnimInfo.turnlength>
+  [244] pushint8 1 .............................. <1>
+  [246] sub ..................................... <me.pFrameStart + me.pAnimInfo.turnlength - 1>
+  [247] setobjprop 302 .......................... me.pFrameStop = me.pFrameStart + me.pAnimInfo.turnlength - 1
+  [250] getparam 0 .............................. <me>
+  [252] getobjprop 197 .......................... <me.pS>
+  [254] starttell ............................... tell me.pS
+  [255] getparam 0 .............................. <me>
+  [257] getobjprop 301 .......................... <me.pFrameStart>
+  [260] pusharglistnoret 1 ...................... <me.pFrameStart>
+  [262] tellcall 185 ............................ go(me.pFrameStart)
+  [264] endtell
+  [265] jmp [341]
+  [268] getparam 0 .............................. <me>
+  [270] getobjprop 320 .......................... <me.pStateAnim>
+  [273] getparam 0 .............................. <me>
+  [275] getchainedprop 268 ...................... <me.const>
+  [278] getobjprop 288 .......................... <me.const.GDEAD>
+  [281] eq ...................................... <me.pStateAnim = me.const.GDEAD>
+  [282] jmpifz [341] ............................ if me.pStateAnim = me.const.GDEAD then
+  [285] getparam 0 .............................. <me>
+  [287] pushint8 4 .............................. <4>
+  [289] pusharglist 1 ........................... <4>
+  [291] extcall 152 ............................. <random(4)>
+  [293] pushint8 1 .............................. <1>
+  [295] sub ..................................... <random(4) - 1>
+  [296] getparam 0 .............................. <me>
+  [298] getchainedprop 125 ...................... <me.pAnimInfo>
+  [300] getobjprop 236 .......................... <me.pAnimInfo.deathstart>
+  [302] add ..................................... <random(4) - 1 + me.pAnimInfo.deathstart>
+  [303] setobjprop 301 .......................... me.pFrameStart = random(4) - 1 + me.pAnimInfo.deathstart
+  [306] getparam 0 .............................. <me>
+  [308] getparam 0 .............................. <me>
+  [310] getobjprop 301 .......................... <me.pFrameStart>
+  [313] setobjprop 302 .......................... me.pFrameStop = me.pFrameStart
+  [316] getparam 0 .............................. <me>
+  [318] getobjprop 301 .......................... <me.pFrameStart>
+  [321] setlocal 0 .............................. kludge = me.pFrameStart
+  [323] getparam 0 .............................. <me>
+  [325] getobjprop 197 .......................... <me.pS>
+  [327] starttell ............................... tell me.pS
+  [328] getlocal 0 .............................. <kludge>
+  [330] pusharglistnoret 1 ...................... <kludge>
+  [332] tellcall 185 ............................ go(kludge)
+  [334] endtell
+  [335] pushint8 1 .............................. <1>
+  [337] pusharglistnoret 1 ...................... <1>
+  [339] extcall 22 .............................. return 1
+  [341] ret
+end
+
+on mCantMourn me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 289 .......................... <me.pState>
+  [  5] getparam 0 .............................. <me>
+  [  7] getchainedprop 268 ...................... <me.const>
+  [ 10] getobjprop 274 .......................... <me.const.BDEAD>
+  [ 13] eq ...................................... <me.pState = me.const.BDEAD>
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getobjprop 292 .......................... <me.pGoToMourn>
+  [ 19] or ...................................... <(me.pState = me.const.BDEAD) or me.pGoToMourn>
+  [ 20] getparam 0 .............................. <me>
+  [ 22] getobjprop 289 .......................... <me.pState>
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getchainedprop 268 ...................... <me.const>
+  [ 30] getobjprop 273 .......................... <me.const.BMOURN>
+  [ 33] eq ...................................... <me.pState = me.const.BMOURN>
+  [ 34] or ...................................... <(me.pState = me.const.BDEAD) or me.pGoToMourn or (me.pState = me.const.BMOURN)>
+  [ 35] getparam 0 .............................. <me>
+  [ 37] getobjprop 289 .......................... <me.pState>
+  [ 40] getparam 0 .............................. <me>
+  [ 42] getchainedprop 268 ...................... <me.const>
+  [ 45] getobjprop 275 .......................... <me.const.BTURN>
+  [ 48] eq ...................................... <me.pState = me.const.BTURN>
+  [ 49] or ...................................... <(me.pState = me.const.BDEAD) or me.pGoToMourn or (me.pState = me.const.BMOURN) or (me.pState = me.const.BTURN)>
+  [ 50] getparam 0 .............................. <me>
+  [ 52] getobjprop 294 .......................... <me.pUndoEvil>
+  [ 55] or ...................................... <(me.pState = me.const.BDEAD) or me.pGoToMourn or (me.pState = me.const.BMOURN) or (me.pState = me.const.BTURN) or me.pUndoEvil>
+  [ 56] jmpifz [ 68] ............................ if (me.pState = me.const.BDEAD) or me.pGoToMourn or (me.pState = me.const.BMOURN) or (me.pState = me.const.BTURN) or me.pUndoEvil then / else
+  [ 59] pushint8 1 .............................. <1>
+  [ 61] pusharglistnoret 1 ...................... <1>
+  [ 63] extcall 22 .............................. return 1
+  [ 65] jmp [ 73]
+  [ 68] pushzero ................................ <0>
+  [ 69] pusharglistnoret 1 ...................... <0>
+  [ 71] extcall 22 .............................. return 0
+  [ 73] ret
+end
+
+on mDie me, tilex, tiley
+  [  0] getparam 0 .............................. <me>
+  [  2] getparam 1 .............................. <tilex>
+  [  4] setobjprop 297 .......................... me.pX = tilex
+  [  7] getparam 0 .............................. <me>
+  [  9] getparam 2 .............................. <tiley>
+  [ 11] setobjprop 298 .......................... me.pY = tiley
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getparam 0 .............................. <me>
+  [ 18] getchainedprop 268 ...................... <me.const>
+  [ 21] getobjprop 274 .......................... <me.const.BDEAD>
+  [ 24] setobjprop 289 .......................... me.pState = me.const.BDEAD
+  [ 27] getparam 0 .............................. <me>
+  [ 29] getglobal 9 ............................. <oG>
+  [ 31] getobjprop 97 ........................... <oG.WAITDEAD>
+  [ 33] getglobal 9 ............................. <oG>
+  [ 35] getobjprop 60 ........................... <oG.fps>
+  [ 37] mul ..................................... <oG.WAITDEAD * oG.fps>
+  [ 38] getglobal 9 ............................. <oG>
+  [ 40] getobjprop 98 ........................... <oG.WAITRANDOMDEAD>
+  [ 42] getglobal 9 ............................. <oG>
+  [ 44] getobjprop 60 ........................... <oG.fps>
+  [ 46] mul ..................................... <oG.WAITRANDOMDEAD * oG.fps>
+  [ 47] pusharglist 1 ........................... <oG.WAITRANDOMDEAD * oG.fps>
+  [ 49] extcall 152 ............................. <random(oG.WAITRANDOMDEAD * oG.fps)>
+  [ 51] add ..................................... <(oG.WAITDEAD * oG.fps) + random(oG.WAITRANDOMDEAD * oG.fps)>
+  [ 52] pushint8 1 .............................. <1>
+  [ 54] sub ..................................... <(oG.WAITDEAD * oG.fps) + random(oG.WAITRANDOMDEAD * oG.fps) - 1>
+  [ 55] setobjprop 225 .......................... me.pWait = (oG.WAITDEAD * oG.fps) + random(oG.WAITRANDOMDEAD * oG.fps) - 1
+  [ 57] getparam 0 .............................. <me>
+  [ 59] getparam 0 .............................. <me>
+  [ 61] getobjprop 297 .......................... <me.pX>
+  [ 64] getglobal 9 ............................. <oG>
+  [ 66] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [ 68] mul ..................................... <me.pX * oG.ISOTILEWIDTH>
+  [ 69] setobjprop 299 .......................... me.pIsoX = me.pX * oG.ISOTILEWIDTH
+  [ 72] getparam 0 .............................. <me>
+  [ 74] getparam 0 .............................. <me>
+  [ 76] getobjprop 298 .......................... <me.pY>
+  [ 79] getglobal 9 ............................. <oG>
+  [ 81] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [ 83] mul ..................................... <me.pY * oG.ISOTILEHEIGHT>
+  [ 84] pushint8 1 .............................. <1>
+  [ 86] inv ..................................... <-1>
+  [ 87] mul ..................................... <me.pY * oG.ISOTILEHEIGHT * -1>
+  [ 88] setobjprop 300 .......................... me.pIsoZ = me.pY * oG.ISOTILEHEIGHT * -1
+  [ 91] getparam 0 .............................. <me>
+  [ 93] getparam 0 .............................. <me>
+  [ 95] getchainedprop 268 ...................... <me.const>
+  [ 98] getobjprop 288 .......................... <me.const.GDEAD>
+  [101] pusharglistnoret 2 ...................... <me, me.const.GDEAD>
+  [103] objcall 267 ............................. me.mSetAnim(me.const.GDEAD)
+  [106] getparam 0 .............................. <me>
+  [108] getchainedprop 197 ...................... <me.pS>
+  [110] getglobal 9 ............................. <oG>
+  [112] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [114] pushint8 1 .............................. <1>
+  [116] sub ..................................... <oG.PERSON1STSPRITE - 1>
+  [117] setobjprop 11 ........................... me.pS.locZ = oG.PERSON1STSPRITE - 1
+  [119] getparam 0 .............................. <me>
+  [121] getobjprop 197 .......................... <me.pS>
+  [123] getparam 0 .............................. <me>
+  [125] getobjprop 299 .......................... <me.pIsoX>
+  [128] pushzero ................................ <0>
+  [129] getparam 0 .............................. <me>
+  [131] getobjprop 300 .......................... <me.pIsoZ>
+  [134] pusharglistnoret 4 ...................... <me.pS, me.pIsoX, 0, me.pIsoZ>
+  [136] extcall 50 .............................. PutDeadOnScreen(me.pS, me.pIsoX, 0, me.pIsoZ)
+  [138] ret
+end
+
+on mIsAlive me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 289 .......................... <me.pState>
+  [  5] getparam 0 .............................. <me>
+  [  7] getchainedprop 268 ...................... <me.const>
+  [ 10] getobjprop 274 .......................... <me.const.BDEAD>
+  [ 13] eq ...................................... <me.pState = me.const.BDEAD>
+  [ 14] jmpifz [ 25] ............................ if me.pState = me.const.BDEAD then / else
+  [ 17] pushzero ................................ <0>
+  [ 18] pusharglistnoret 1 ...................... <0>
+  [ 20] extcall 22 .............................. return 0
+  [ 22] jmp [ 31]
+  [ 25] pushint8 1 .............................. <1>
+  [ 27] pusharglistnoret 1 ...................... <1>
+  [ 29] extcall 22 .............................. return 1
+  [ 31] ret
+end
+
+on mDestroy me
+  [  0] getparam 0 .............................. <me>
+  [  2] getchainedprop 197 ...................... <me.pS>
+  [  4] pushzero ................................ <0>
+  [  5] setobjprop 303 .......................... me.pS.puppet = 0
+  [  8] getparam 0 .............................. <me>
+  [ 10] getchainedprop 197 ...................... <me.pS>
+  [ 12] pusharglist 0 ........................... <>
+  [ 14] extcall 128 ............................. <VOID>
+  [ 16] setobjprop 26 ........................... me.pS.member = VOID
+  [ 18] getparam 0 .............................. <me>
+  [ 20] getchainedprop 197 ...................... <me.pS>
+  [ 22] pusharglist 0 ........................... <[]>
+  [ 24] pushlist ................................ <[]>
+  [ 25] setobjprop 227 .......................... me.pS.scriptInstanceList = []
+  [ 27] ret
+end
+
+on exitFrame me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 289 .......................... <me.pState>
+  [  5] getparam 0 .............................. <me>
+  [  7] getchainedprop 268 ...................... <me.const>
+  [ 10] getobjprop 274 .......................... <me.const.BDEAD>
+  [ 13] eq ...................................... <me.pState = me.const.BDEAD>
+  [ 14] jmpifz [ 45] ............................ if me.pState = me.const.BDEAD then / else
+  [ 17] getprop 225 ............................. <pWait>
+  [ 19] pushzero ................................ <0>
+  [ 20] eq ...................................... <pWait = 0>
+  [ 21] jmpifz [ 35] ............................ if pWait = 0 then / else
+  [ 24] getparam 0 .............................. <me>
+  [ 26] getobjprop 197 .......................... <me.pS>
+  [ 28] pusharglistnoret 1 ...................... <me.pS>
+  [ 30] extcall 53 .............................. DestroyPerson(me.pS)
+  [ 32] jmp [ 42]
+  [ 35] getprop 225 ............................. <pWait>
+  [ 37] pushint8 1 .............................. <1>
+  [ 39] sub ..................................... <pWait - 1>
+  [ 40] setprop 225 ............................. pWait = pWait - 1
+  [ 42] jmp [201]
+  [ 45] getparam 0 .............................. <me>
+  [ 47] getobjprop 289 .......................... <me.pState>
+  [ 50] getparam 0 .............................. <me>
+  [ 52] getchainedprop 268 ...................... <me.const>
+  [ 55] getobjprop 273 .......................... <me.const.BMOURN>
+  [ 58] eq ...................................... <me.pState = me.const.BMOURN>
+  [ 59] jmpifz [135] ............................ if me.pState = me.const.BMOURN then / else
+  [ 62] getprop 225 ............................. <pWait>
+  [ 64] pushzero ................................ <0>
+  [ 65] eq ...................................... <pWait = 0>
+  [ 66] jmpifz [125] ............................ if pWait = 0 then / else
+  [ 69] getglobal 28 ............................ <oSound>
+  [ 71] pusharglistnoret 1 ...................... <oSound>
+  [ 73] objcall 323 ............................. oSound.mStopCry()
+  [ 76] getparam 0 .............................. <me>
+  [ 78] pushzero ................................ <0>
+  [ 79] setobjprop 292 .......................... me.pGoToMourn = 0
+  [ 82] getparam 0 .............................. <me>
+  [ 84] getparam 0 .............................. <me>
+  [ 86] getchainedprop 268 ...................... <me.const>
+  [ 89] getobjprop 275 .......................... <me.const.BTURN>
+  [ 92] setobjprop 289 .......................... me.pState = me.const.BTURN
+  [ 95] getparam 0 .............................. <me>
+  [ 97] getparam 0 .............................. <me>
+  [ 99] getobjprop 320 .......................... <me.pStateAnim>
+  [102] pushint8 4 .............................. <4>
+  [104] add ..................................... <me.pStateAnim + 4>
+  [105] pusharglistnoret 2 ...................... <me, me.pStateAnim + 4>
+  [107] objcall 267 ............................. me.mSetAnim(me.pStateAnim + 4)
+  [110] getglobal 28 ............................ <oSound>
+  [112] getglobal 28 ............................ <oSound>
+  [114] getobjprop 324 .......................... <oSound.STURN>
+  [117] pusharglistnoret 2 ...................... <oSound, oSound.STURN>
+  [119] objcall 325 ............................. oSound.mPlayPeople(oSound.STURN)
+  [122] jmp [132]
+  [125] getprop 225 ............................. <pWait>
+  [127] pushint8 1 .............................. <1>
+  [129] sub ..................................... <pWait - 1>
+  [130] setprop 225 ............................. pWait = pWait - 1
+  [132] jmp [201]
+  [135] getparam 0 .............................. <me>
+  [137] getobjprop 289 .......................... <me.pState>
+  [140] getparam 0 .............................. <me>
+  [142] getchainedprop 268 ...................... <me.const>
+  [145] getobjprop 275 .......................... <me.const.BTURN>
+  [148] nteq .................................... <me.pState <> me.const.BTURN>
+  [149] jmpifz [201] ............................ if me.pState <> me.const.BTURN then
+  [152] getparam 0 .............................. <me>
+  [154] getobjprop 289 .......................... <me.pState>
+  [157] getparam 0 .............................. <me>
+  [159] getchainedprop 268 ...................... <me.const>
+  [162] getobjprop 269 .......................... <me.const.BSTOP>
+  [165] nteq .................................... <me.pState <> me.const.BSTOP>
+  [166] jmpifz [176] ............................ if me.pState <> me.const.BSTOP then
+  [169] getparam 0 .............................. <me>
+  [171] pusharglistnoret 1 ...................... <me>
+  [173] objcall 266 ............................. me.mMove()
+  [176] getparam 0 .............................. <me>
+  [178] getobjprop 225 .......................... <me.pWait>
+  [180] pushzero ................................ <0>
+  [181] eq ...................................... <me.pWait = 0>
+  [182] jmpifz [201] ............................ if me.pWait = 0 then
+  [185] getparam 0 .............................. <me>
+  [187] getparam 0 .............................. <me>
+  [189] getobjprop 290 .......................... <me.pParts>
+  [192] setobjprop 225 .......................... me.pWait = me.pParts
+  [194] getparam 0 .............................. <me>
+  [196] pusharglistnoret 1 ...................... <me>
+  [198] objcall 264 ............................. me.mProcessGrid()
+  [201] getparam 0 .............................. <me>
+  [203] getobjprop 296 .......................... <me.pKludge2>
+  [206] jmpifz [245] ............................ if me.pKludge2 then / else
+  [209] getparam 0 .............................. <me>
+  [211] pushzero ................................ <0>
+  [212] setobjprop 296 .......................... me.pKludge2 = 0
+  [215] getparam 0 .............................. <me>
+  [217] getparam 0 .............................. <me>
+  [219] getobjprop 320 .......................... <me.pStateAnim>
+  [222] pushint8 8 .............................. <8>
+  [224] add ..................................... <me.pStateAnim + 8>
+  [225] pusharglistnoret 2 ...................... <me, me.pStateAnim + 8>
+  [227] objcall 267 ............................. me.mSetAnim(me.pStateAnim + 8)
+  [230] getglobal 28 ............................ <oSound>
+  [232] getglobal 28 ............................ <oSound>
+  [234] getobjprop 324 .......................... <oSound.STURN>
+  [237] pusharglistnoret 2 ...................... <oSound, oSound.STURN>
+  [239] objcall 325 ............................. oSound.mPlayPeople(oSound.STURN)
+  [242] jmp [444]
+  [245] getparam 0 .............................. <me>
+  [247] getobjprop 295 .......................... <me.pKludge>
+  [250] jmpifz [308] ............................ if me.pKludge then / else
+  [253] getparam 0 .............................. <me>
+  [255] pushzero ................................ <0>
+  [256] setobjprop 295 .......................... me.pKludge = 0
+  [259] getparam 0 .............................. <me>
+  [261] pushint8 1 .............................. <1>
+  [263] setobjprop 296 .......................... me.pKludge2 = 1
+  [266] getparam 0 .............................. <me>
+  [268] getobjprop 197 .......................... <me.pS>
+  [270] starttell ............................... tell me.pS
+  [271] pusharglist 0 ........................... <>
+  [273] thebuiltin 25 ........................... <the frame>
+  [275] getparam 0 .............................. <me>
+  [277] getobjprop 302 .......................... <me.pFrameStop>
+  [280] eq ...................................... <the frame = me.pFrameStop>
+  [281] jmpifz [296] ............................ if the frame = me.pFrameStop then
+  [284] getparam 0 .............................. <me>
+  [286] getobjprop 301 .......................... <me.pFrameStart>
+  [289] pushint8 1 .............................. <1>
+  [291] sub ..................................... <me.pFrameStart - 1>
+  [292] pusharglistnoret 1 ...................... <me.pFrameStart - 1>
+  [294] tellcall 185 ............................ go(me.pFrameStart - 1)
+  [296] endtell
+  [297] getparam 0 .............................. <me>
+  [299] getobjprop 197 .......................... <me.pS>
+  [301] pusharglistnoret 1 ...................... <me.pS>
+  [303] extcall 35 .............................. UndoEvil(me.pS)
+  [305] jmp [444]
+  [308] getparam 0 .............................. <me>
+  [310] getobjprop 289 .......................... <me.pState>
+  [313] getparam 0 .............................. <me>
+  [315] getchainedprop 268 ...................... <me.const>
+  [318] getobjprop 275 .......................... <me.const.BTURN>
+  [321] nteq .................................... <me.pState <> me.const.BTURN>
+  [322] jmpifz [359] ............................ if me.pState <> me.const.BTURN then / else
+  [325] getparam 0 .............................. <me>
+  [327] getobjprop 197 .......................... <me.pS>
+  [329] starttell ............................... tell me.pS
+  [330] pusharglist 0 ........................... <>
+  [332] thebuiltin 25 ........................... <the frame>
+  [334] getparam 0 .............................. <me>
+  [336] getobjprop 302 .......................... <me.pFrameStop>
+  [339] eq ...................................... <the frame = me.pFrameStop>
+  [340] jmpifz [355] ............................ if the frame = me.pFrameStop then
+  [343] getparam 0 .............................. <me>
+  [345] getobjprop 301 .......................... <me.pFrameStart>
+  [348] pushint8 1 .............................. <1>
+  [350] sub ..................................... <me.pFrameStart - 1>
+  [351] pusharglistnoret 1 ...................... <me.pFrameStart - 1>
+  [353] tellcall 185 ............................ go(me.pFrameStart - 1)
+  [355] endtell
+  [356] jmp [444]
+  [359] pushzero ................................ <0>
+  [360] setlocal 0 .............................. isdone = 0
+  [362] getparam 0 .............................. <me>
+  [364] getobjprop 197 .......................... <me.pS>
+  [366] starttell ............................... tell me.pS
+  [367] pusharglist 0 ........................... <>
+  [369] thebuiltin 25 ........................... <the frame>
+  [371] getparam 0 .............................. <me>
+  [373] getobjprop 302 .......................... <me.pFrameStop>
+  [376] eq ...................................... <the frame = me.pFrameStop>
+  [377] jmpifz [384] ............................ if the frame = me.pFrameStop then
+  [380] pushint8 1 .............................. <1>
+  [382] setlocal 0 .............................. isdone = 1
+  [384] endtell
+  [385] getlocal 0 .............................. <isdone>
+  [387] jmpifz [444] ............................ if isdone then
+  [390] getparam 0 .............................. <me>
+  [392] getparam 0 .............................. <me>
+  [394] getchainedprop 268 ...................... <me.const>
+  [397] getobjprop 269 .......................... <me.const.BSTOP>
+  [400] setobjprop 289 .......................... me.pState = me.const.BSTOP
+  [403] getparam 0 .............................. <me>
+  [405] getobjprop 294 .......................... <me.pUndoEvil>
+  [408] jmpifz [425] ............................ if me.pUndoEvil then / else
+  [411] getparam 0 .............................. <me>
+  [413] pushzero ................................ <0>
+  [414] setobjprop 225 .......................... me.pWait = 0
+  [416] getparam 0 .............................. <me>
+  [418] pushzero ................................ <0>
+  [419] setobjprop 294 .......................... me.pUndoEvil = 0
+  [422] jmp [444]
+  [425] getparam 0 .............................. <me>
+  [427] pushsymb 236 ............................ <#deathstart>
+  [429] pushint8 33 ............................. <33>
+  [431] pusharglist 2 ........................... <[#deathstart: 33]>
+  [433] pushproplist ............................ <[#deathstart: 33]>
+  [434] setobjprop 125 .......................... me.pAnimInfo = [#deathstart: 33]
+  [436] getparam 0 .............................. <me>
+  [438] getobjprop 197 .......................... <me.pS>
+  [440] pusharglistnoret 1 ...................... <me.pS>
+  [442] extcall 52 .............................. TurnEvil(me.pS)
+  [444] ret
+end

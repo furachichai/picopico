@@ -1,0 +1,1203 @@
+global waitstreaming, oG, oMap, oPeople, oIso, oBuilding, oSound
+
+on CreateGlobalVar
+  [  0] pushsymb 15 ............................. <#screenx>
+  [  2] pushint16 640 ........................... <640>
+  [  5] pushsymb 18 ............................. <#screeny>
+  [  7] pushint16 480 ........................... <480>
+  [ 10] pushsymb 60 ............................. <#fps>
+  [ 12] pushint8 16 ............................. <16>
+  [ 14] pushsymb 61 ............................. <#MAPWIDTH>
+  [ 16] pushint8 120 ............................ <120>
+  [ 18] pushsymb 62 ............................. <#MAPHEIGHT>
+  [ 20] pushint8 120 ............................ <120>
+  [ 22] pushsymb 63 ............................. <#MAPSIZEX>
+  [ 24] pushint16 1280 .......................... <1280>
+  [ 27] pushsymb 64 ............................. <#MAPSIZEY>
+  [ 29] pushint16 640 ........................... <640>
+  [ 32] pushsymb 65 ............................. <#tilewidth>
+  [ 34] pushint8 20 ............................. <20>
+  [ 36] pushsymb 66 ............................. <#tileheight>
+  [ 38] pushint8 10 ............................. <10>
+  [ 40] pushsymb 67 ............................. <#ISOTILEWIDTH>
+  [ 42] pushint8 14 ............................. <14>
+  [ 44] pushsymb 68 ............................. <#ISOTILEHEIGHT>
+  [ 46] pushint8 14 ............................. <14>
+  [ 48] pushsymb 69 ............................. <#MAXPEOPLE>
+  [ 50] pushint8 100 ............................ <100>
+  [ 52] pushsymb 70 ............................. <#STARTPEOPLE>
+  [ 54] pushint8 100 ............................ <100>
+  [ 56] pushsymb 71 ............................. <#EVILMIN>
+  [ 58] pushint8 10 ............................. <10>
+  [ 60] pushsymb 72 ............................. <#EVILPERDEATH>
+  [ 62] pushint8 4 .............................. <4>
+  [ 64] pushsymb 73 ............................. <#EVILREGENERATION>
+  [ 66] pushint8 40 ............................. <40>
+  [ 68] pushsymb 74 ............................. <#GENERATIONRATIO>
+  [ 70] pushint8 1 .............................. <1>
+  [ 72] pushsymb 75 ............................. <#RANDGENERATIONRATIO>
+  [ 74] pushint8 1 .............................. <1>
+  [ 76] pushsymb 76 ............................. <#BLASTX>
+  [ 78] pushint8 5 .............................. <5>
+  [ 80] pushsymb 77 ............................. <#BLASTY>
+  [ 82] pushint8 5 .............................. <5>
+  [ 84] pushsymb 78 ............................. <#BLASTDAMAGE>
+  [ 86] pushint8 5 .............................. <5>
+  [ 88] pushsymb 79 ............................. <#BLASTDECREMENT>
+  [ 90] pushint8 1 .............................. <1>
+  [ 92] pushsymb 80 ............................. <#ISOSTARTX>
+  [ 94] pushint16 640 ........................... <640>
+  [ 97] pushint8 2 .............................. <2>
+  [ 99] div ..................................... <640 / 2>
+  [100] pushint8 14 ............................. <14>
+  [102] pushint8 2 .............................. <2>
+  [104] div ..................................... <14 / 2>
+  [105] sub ..................................... <(640 / 2) - (14 / 2)>
+  [106] pushsymb 81 ............................. <#ISOSTARTY>
+  [108] pushint16 325 ........................... <325>
+  [111] inv ..................................... <-325>
+  [112] pushsymb 82 ............................. <#SCROLLHORIZ>
+  [114] pushint8 100 ............................ <100>
+  [116] pushsymb 83 ............................. <#SCROLLSTEP>
+  [118] pushint8 10 ............................. <10>
+  [120] pushsymb 84 ............................. <#SPRITEMAP>
+  [122] pushint8 1 .............................. <1>
+  [124] pushsymb 85 ............................. <#SPRITELOADING>
+  [126] pushint8 2 .............................. <2>
+  [128] pushsymb 86 ............................. <#SPRITEMENU>
+  [130] pushint8 3 .............................. <3>
+  [132] pushsymb 87 ............................. <#SPRITETARGET>
+  [134] pushint8 4 .............................. <4>
+  [136] pushsymb 88 ............................. <#SPRITEMISSILE>
+  [138] pushint8 7 .............................. <7>
+  [140] pushsymb 89 ............................. <#BUILDING1STSPRITE>
+  [142] pushint8 8 .............................. <8>
+  [144] pushsymb 90 ............................. <#PERSON1STSPRITE>
+  [146] pushint16 200 ........................... <200>
+  [149] pushsymb 10 ............................. <#TARGETDEPTH>
+  [151] pushint32 50000 ......................... <50000>
+  [156] pushsymb 91 ............................. <#PEOPLEANIMLENGTH>
+  [158] pushint8 8 .............................. <8>
+  [160] pushint8 1 .............................. <1>
+  [162] sub ..................................... <8 - 1>
+  [163] pushsymb 92 ............................. <#OnScreen>
+  [165] pushzero ................................ <0>
+  [166] pushsymb 93 ............................. <#OFFSCREEN>
+  [168] pushint8 1 .............................. <1>
+  [170] pushsymb 94 ............................. <#ONOFFSCREEN>
+  [172] pushint8 2 .............................. <2>
+  [174] pushsymb 95 ............................. <#MOURNDISTANCE>
+  [176] pushint8 25 ............................. <25>
+  [178] pushsymb 96 ............................. <#DISTANCEFROMDEAD>
+  [180] pushint8 2 .............................. <2>
+  [182] pushsymb 97 ............................. <#WAITDEAD>
+  [184] pushint8 30 ............................. <30>
+  [186] pushsymb 98 ............................. <#WAITRANDOMDEAD>
+  [188] pushint8 2 .............................. <2>
+  [190] pushsymb 99 ............................. <#WAITMOURN>
+  [192] pushint8 3 .............................. <3>
+  [194] pushsymb 100 ............................ <#WAITUNDOEVIL>
+  [196] pushint8 90 ............................. <90>
+  [198] pushsymb 101 ............................ <#UNDOEVILPEOPLE>
+  [200] pushint8 3 .............................. <3>
+  [202] pushsymb 102 ............................ <#BUILDINGHEALTHRECOVERY>
+  [204] pushint8 10 ............................. <10>
+  [206] pushsymb 103 ............................ <#BUILDINGHEALTHRECOVERYTIME>
+  [208] pushint8 30 ............................. <30>
+  [210] pushsymb 104 ............................ <#MEDIACASTNUMBER>
+  [212] pushint8 3 .............................. <3>
+  [214] pushsymb 105 ............................ <#pUndoEvilWait>
+  [216] pushzero ................................ <0>
+  [217] pushsymb 106 ............................ <#pUndoEvilCount>
+  [219] pushzero ................................ <0>
+  [220] pusharglist 100 ......................... <[#screenx: 640, #screeny: 480, #fps: 16, #MAPWIDTH: 120, #MAPHEIGHT: 120, #MAPSIZEX: 1280, #MAPSIZEY: 640, #tilewidth: 20, #tileheight: 10, #ISOTILEWIDTH: 14, #ISOTILEHEIGHT: 14, #MAXPEOPLE: 100, #STARTPEOPLE: 100, #EVILMIN: 10, #EVILPERDEATH: 4, #EVILREGENERATION: 40, #GENERATIONRATIO: 1, #RANDGENERATIONRATIO: 1, #BLASTX: 5, #BLASTY: 5, #BLASTDAMAGE: 5, #BLASTDECREMENT: 1, #ISOSTARTX: (640 / 2) - (14 / 2), #ISOSTARTY: -325, #SCROLLHORIZ: 100, #SCROLLSTEP: 10, #SPRITEMAP: 1, #SPRITELOADING: 2, #SPRITEMENU: 3, #SPRITETARGET: 4, #SPRITEMISSILE: 7, #BUILDING1STSPRITE: 8, #PERSON1STSPRITE: 200, #TARGETDEPTH: 50000, #PEOPLEANIMLENGTH: 8 - 1, #OnScreen: 0, #OFFSCREEN: 1, #ONOFFSCREEN: 2, #MOURNDISTANCE: 25, #DISTANCEFROMDEAD: 2, #WAITDEAD: 30, #WAITRANDOMDEAD: 2, #WAITMOURN: 3, #WAITUNDOEVIL: 90, #UNDOEVILPEOPLE: 3, #BUILDINGHEALTHRECOVERY: 10, #BUILDINGHEALTHRECOVERYTIME: 30, #MEDIACASTNUMBER: 3, #pUndoEvilWait: 0, #pUndoEvilCount: 0]>
+  [222] pushproplist ............................ <[#screenx: 640, #screeny: 480, #fps: 16, #MAPWIDTH: 120, #MAPHEIGHT: 120, #MAPSIZEX: 1280, #MAPSIZEY: 640, #tilewidth: 20, #tileheight: 10, #ISOTILEWIDTH: 14, #ISOTILEHEIGHT: 14, #MAXPEOPLE: 100, #STARTPEOPLE: 100, #EVILMIN: 10, #EVILPERDEATH: 4, #EVILREGENERATION: 40, #GENERATIONRATIO: 1, #RANDGENERATIONRATIO: 1, #BLASTX: 5, #BLASTY: 5, #BLASTDAMAGE: 5, #BLASTDECREMENT: 1, #ISOSTARTX: (640 / 2) - (14 / 2), #ISOSTARTY: -325, #SCROLLHORIZ: 100, #SCROLLSTEP: 10, #SPRITEMAP: 1, #SPRITELOADING: 2, #SPRITEMENU: 3, #SPRITETARGET: 4, #SPRITEMISSILE: 7, #BUILDING1STSPRITE: 8, #PERSON1STSPRITE: 200, #TARGETDEPTH: 50000, #PEOPLEANIMLENGTH: 8 - 1, #OnScreen: 0, #OFFSCREEN: 1, #ONOFFSCREEN: 2, #MOURNDISTANCE: 25, #DISTANCEFROMDEAD: 2, #WAITDEAD: 30, #WAITRANDOMDEAD: 2, #WAITMOURN: 3, #WAITUNDOEVIL: 90, #UNDOEVILPEOPLE: 3, #BUILDINGHEALTHRECOVERY: 10, #BUILDINGHEALTHRECOVERYTIME: 30, #MEDIACASTNUMBER: 3, #pUndoEvilWait: 0, #pUndoEvilCount: 0]>
+  [223] pusharglistnoret 1 ...................... <[#screenx: 640, #screeny: 480, #fps: 16, #MAPWIDTH: 120, #MAPHEIGHT: 120, #MAPSIZEX: 1280, #MAPSIZEY: 640, #tilewidth: 20, #tileheight: 10, #ISOTILEWIDTH: 14, #ISOTILEHEIGHT: 14, #MAXPEOPLE: 100, #STARTPEOPLE: 100, #EVILMIN: 10, #EVILPERDEATH: 4, #EVILREGENERATION: 40, #GENERATIONRATIO: 1, #RANDGENERATIONRATIO: 1, #BLASTX: 5, #BLASTY: 5, #BLASTDAMAGE: 5, #BLASTDECREMENT: 1, #ISOSTARTX: (640 / 2) - (14 / 2), #ISOSTARTY: -325, #SCROLLHORIZ: 100, #SCROLLSTEP: 10, #SPRITEMAP: 1, #SPRITELOADING: 2, #SPRITEMENU: 3, #SPRITETARGET: 4, #SPRITEMISSILE: 7, #BUILDING1STSPRITE: 8, #PERSON1STSPRITE: 200, #TARGETDEPTH: 50000, #PEOPLEANIMLENGTH: 8 - 1, #OnScreen: 0, #OFFSCREEN: 1, #ONOFFSCREEN: 2, #MOURNDISTANCE: 25, #DISTANCEFROMDEAD: 2, #WAITDEAD: 30, #WAITRANDOMDEAD: 2, #WAITMOURN: 3, #WAITUNDOEVIL: 90, #UNDOEVILPEOPLE: 3, #BUILDINGHEALTHRECOVERY: 10, #BUILDINGHEALTHRECOVERYTIME: 30, #MEDIACASTNUMBER: 3, #pUndoEvilWait: 0, #pUndoEvilCount: 0]>
+  [225] extcall 22 .............................. return [#screenx: 640, #screeny: 480, #fps: 16, #MAPWIDTH: 120, #MAPHEIGHT: 120, #MAPSIZEX: 1280, #MAPSIZEY: 640, #tilewidth: 20, #tileheight: 10, #ISOTILEWIDTH: 14, #ISOTILEHEIGHT: 14, #MAXPEOPLE: 100, #STARTPEOPLE: 100, #EVILMIN: 10, #EVILPERDEATH: 4, #EVILREGENERATION: 40, #GENERATIONRATIO: 1, #RANDGENERATIONRATIO: 1, #BLASTX: 5, #BLASTY: 5, #BLASTDAMAGE: 5, #BLASTDECREMENT: 1, #ISOSTARTX: (640 / 2) - (14 / 2), #ISOSTARTY: -325, #SCROLLHORIZ: 100, #SCROLLSTEP: 10, #SPRITEMAP: 1, #SPRITELOADING: 2, #SPRITEMENU: 3, #SPRITETARGET: 4, #SPRITEMISSILE: 7, #BUILDING1STSPRITE: 8, #PERSON1STSPRITE: 200, #TARGETDEPTH: 50000, #PEOPLEANIMLENGTH: 8 - 1, #OnScreen: 0, #OFFSCREEN: 1, #ONOFFSCREEN: 2, #MOURNDISTANCE: 25, #DISTANCEFROMDEAD: 2, #WAITDEAD: 30, #WAITRANDOMDEAD: 2, #WAITMOURN: 3, #WAITUNDOEVIL: 90, #UNDOEVILPEOPLE: 3, #BUILDINGHEALTHRECOVERY: 10, #BUILDINGHEALTHRECOVERYTIME: 30, #MEDIACASTNUMBER: 3, #pUndoEvilWait: 0, #pUndoEvilCount: 0]
+  [227] ret
+end
+
+on BeginGame
+  [  0] pushcons 0 .............................. <"----------------------">
+  [  2] pusharglistnoret 1 ...................... <"----------------------">
+  [  4] extcall 107 ............................. put "----------------------"
+  [  6] pushcons 0 .............................. <"----------------------">
+  [  8] pusharglistnoret 1 ...................... <"----------------------">
+  [ 10] extcall 107 ............................. put "----------------------"
+  [ 12] pushcons 1 .............................. <"-------NEW GAME-------">
+  [ 14] pusharglistnoret 1 ...................... <"-------NEW GAME-------">
+  [ 16] extcall 107 ............................. put "-------NEW GAME-------"
+  [ 18] pushcons 0 .............................. <"----------------------">
+  [ 20] pusharglistnoret 1 ...................... <"----------------------">
+  [ 22] extcall 107 ............................. put "----------------------"
+  [ 24] pushcons 0 .............................. <"----------------------">
+  [ 26] pusharglistnoret 1 ...................... <"----------------------">
+  [ 28] extcall 107 ............................. put "----------------------"
+  [ 30] pusharglist 0 ........................... <>
+  [ 32] localcall 0 ............................. <CreateGlobalVar()>
+  [ 34] setglobal 9 ............................. oG = CreateGlobalVar()
+  [ 36] pushcons 2 .............................. <"Isometric Class Parent">
+  [ 38] pusharglist 1 ........................... <"Isometric Class Parent">
+  [ 40] extcall 109 ............................. <script("Isometric Class Parent")>
+  [ 42] pusharglist 1 ........................... <script("Isometric Class Parent")>
+  [ 44] objcall 110 ............................. <script("Isometric Class Parent").new()>
+  [ 46] setglobal 108 ........................... oIso = script("Isometric Class Parent").new()
+  [ 48] pushcons 3 .............................. <"Map Class Parent">
+  [ 50] pusharglist 1 ........................... <"Map Class Parent">
+  [ 52] extcall 109 ............................. <script("Map Class Parent")>
+  [ 54] pusharglist 1 ........................... <script("Map Class Parent")>
+  [ 56] objcall 110 ............................. <script("Map Class Parent").new()>
+  [ 58] setglobal 111 ........................... oMap = script("Map Class Parent").new()
+  [ 60] pushcons 4 .............................. <"Building Class Parent">
+  [ 62] pusharglist 1 ........................... <"Building Class Parent">
+  [ 64] extcall 109 ............................. <script("Building Class Parent")>
+  [ 66] pusharglist 1 ........................... <script("Building Class Parent")>
+  [ 68] objcall 110 ............................. <script("Building Class Parent").new()>
+  [ 70] setglobal 112 ........................... oBuilding = script("Building Class Parent").new()
+  [ 72] getglobal 112 ........................... <oBuilding>
+  [ 74] pusharglistnoret 1 ...................... <oBuilding>
+  [ 76] objcall 113 ............................. oBuilding.mLoad()
+  [ 78] getglobal 111 ........................... <oMap>
+  [ 80] pusharglistnoret 1 ...................... <oMap>
+  [ 82] objcall 114 ............................. oMap.mDraw()
+  [ 84] pushcons 5 .............................. <"People Class Parent">
+  [ 86] pusharglist 1 ........................... <"People Class Parent">
+  [ 88] extcall 109 ............................. <script("People Class Parent")>
+  [ 90] pusharglist 1 ........................... <script("People Class Parent")>
+  [ 92] objcall 110 ............................. <script("People Class Parent").new()>
+  [ 94] setglobal 115 ........................... oPeople = script("People Class Parent").new()
+  [ 96] getglobal 115 ........................... <oPeople>
+  [ 98] pusharglistnoret 1 ...................... <oPeople>
+  [100] objcall 116 ............................. oPeople.mPopulate()
+  [102] pushcons 6 .............................. <"Sound Class Parent">
+  [104] pusharglist 1 ........................... <"Sound Class Parent">
+  [106] extcall 109 ............................. <script("Sound Class Parent")>
+  [108] pusharglist 1 ........................... <script("Sound Class Parent")>
+  [110] objcall 110 ............................. <script("Sound Class Parent").new()>
+  [112] setglobal 28 ............................ oSound = script("Sound Class Parent").new()
+  [114] getglobal 28 ............................ <oSound>
+  [116] getglobal 28 ............................ <oSound>
+  [118] getobjprop 117 .......................... <oSound.SAMBIENT>
+  [120] pusharglistnoret 2 ...................... <oSound, oSound.SAMBIENT>
+  [122] objcall 118 ............................. oSound.mPlay(oSound.SAMBIENT)
+  [124] pusharglistnoret 0 ...................... <>
+  [126] localcall 10 ............................ MissileInit()
+  [128] pusharglistnoret 0 ...................... <>
+  [130] localcall 11 ............................ TargetInit()
+  [132] pusharglistnoret 0 ...................... <>
+  [134] localcall 3 ............................. UndoEvilInit()
+  [136] ret
+end
+
+on PlayGame
+  [  0] getglobal 115 ........................... <oPeople>
+  [  2] pusharglistnoret 1 ...................... <oPeople>
+  [  4] objcall 119 ............................. oPeople.mGenerate()
+  [  6] getglobal 112 ........................... <oBuilding>
+  [  8] pusharglistnoret 1 ...................... <oBuilding>
+  [ 10] objcall 120 ............................. oBuilding.mUpdate()
+  [ 12] pusharglistnoret 0 ...................... <>
+  [ 14] localcall 5 ............................. UndoEvilUpdate()
+  [ 16] pusharglistnoret 0 ...................... <>
+  [ 18] localcall 12 ............................ ScrollScreen()
+  [ 20] ret
+end
+
+on UndoEvilInit
+  [  0] getglobal 9 ............................. <oG>
+  [  2] pushzero ................................ <0>
+  [  3] setobjprop 106 .......................... oG.pUndoEvilCount = 0
+  [  5] pusharglistnoret 0 ...................... <>
+  [  7] localcall 4 ............................. UndoEvilWaitReset()
+  [  9] ret
+end
+
+on UndoEvilWaitReset
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 106 .......................... <oG.pUndoEvilCount>
+  [  4] pushzero ................................ <0>
+  [  5] eq ...................................... <oG.pUndoEvilCount = 0>
+  [  6] jmpifz [ 25] ............................ if oG.pUndoEvilCount = 0 then / else
+  [  9] getglobal 9 ............................. <oG>
+  [ 11] getglobal 9 ............................. <oG>
+  [ 13] getobjprop 100 .......................... <oG.WAITUNDOEVIL>
+  [ 15] getglobal 9 ............................. <oG>
+  [ 17] getobjprop 60 ........................... <oG.fps>
+  [ 19] mul ..................................... <oG.WAITUNDOEVIL * oG.fps>
+  [ 20] setobjprop 105 .......................... oG.pUndoEvilWait = oG.WAITUNDOEVIL * oG.fps
+  [ 22] jmp [ 41]
+  [ 25] getglobal 9 ............................. <oG>
+  [ 27] getglobal 9 ............................. <oG>
+  [ 29] getobjprop 100 .......................... <oG.WAITUNDOEVIL>
+  [ 31] getglobal 9 ............................. <oG>
+  [ 33] getobjprop 60 ........................... <oG.fps>
+  [ 35] mul ..................................... <oG.WAITUNDOEVIL * oG.fps>
+  [ 36] pushint8 2 .............................. <2>
+  [ 38] div ..................................... <oG.WAITUNDOEVIL * oG.fps / 2>
+  [ 39] setobjprop 105 .......................... oG.pUndoEvilWait = oG.WAITUNDOEVIL * oG.fps / 2
+  [ 41] ret
+end
+
+on UndoEvilUpdate
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 105 .......................... <oG.pUndoEvilWait>
+  [  4] pushzero ................................ <0>
+  [  5] eq ...................................... <oG.pUndoEvilWait = 0>
+  [  6] jmpifz [ 42] ............................ if oG.pUndoEvilWait = 0 then / else
+  [  9] getglobal 9 ............................. <oG>
+  [ 11] getglobal 9 ............................. <oG>
+  [ 13] getobjprop 106 .......................... <oG.pUndoEvilCount>
+  [ 15] pushint8 1 .............................. <1>
+  [ 17] add ..................................... <oG.pUndoEvilCount + 1>
+  [ 18] setobjprop 106 .......................... oG.pUndoEvilCount = oG.pUndoEvilCount + 1
+  [ 20] pusharglistnoret 0 ...................... <>
+  [ 22] localcall 4 ............................. UndoEvilWaitReset()
+  [ 24] getglobal 115 ........................... <oPeople>
+  [ 26] getglobal 9 ............................. <oG>
+  [ 28] getobjprop 106 .......................... <oG.pUndoEvilCount>
+  [ 30] getglobal 9 ............................. <oG>
+  [ 32] getobjprop 101 .......................... <oG.UNDOEVILPEOPLE>
+  [ 34] mul ..................................... <oG.pUndoEvilCount * oG.UNDOEVILPEOPLE>
+  [ 35] pusharglistnoret 2 ...................... <oPeople, oG.pUndoEvilCount * oG.UNDOEVILPEOPLE>
+  [ 37] objcall 121 ............................. oPeople.mUndoEvil(oG.pUndoEvilCount * oG.UNDOEVILPEOPLE)
+  [ 39] jmp [ 53]
+  [ 42] getglobal 9 ............................. <oG>
+  [ 44] getglobal 9 ............................. <oG>
+  [ 46] getobjprop 105 .......................... <oG.pUndoEvilWait>
+  [ 48] pushint8 1 .............................. <1>
+  [ 50] sub ..................................... <oG.pUndoEvilWait - 1>
+  [ 51] setobjprop 105 .......................... oG.pUndoEvilWait = oG.pUndoEvilWait - 1
+  [ 53] ret
+end
+
+on UndoEvil thesprite
+  [  0] getglobal 115 ........................... <oPeople>
+  [  2] getglobal 115 ........................... <oPeople>
+  [  4] getobjprop 122 .......................... <oPeople.pEvilCount>
+  [  6] pushint8 1 .............................. <1>
+  [  8] sub ..................................... <oPeople.pEvilCount - 1>
+  [  9] setobjprop 122 .......................... oPeople.pEvilCount = oPeople.pEvilCount - 1
+  [ 11] getparam 0 .............................. <thesprite>
+  [ 13] getparam 0 .............................. <thesprite>
+  [ 15] getobjprop 123 .......................... <thesprite.pPrevMedia>
+  [ 17] setobjprop 26 ........................... thesprite.member = thesprite.pPrevMedia
+  [ 19] getparam 0 .............................. <thesprite>
+  [ 21] getglobal 115 ........................... <oPeople>
+  [ 23] getparam 0 .............................. <thesprite>
+  [ 25] getobjprop 123 .......................... <thesprite.pPrevMedia>
+  [ 27] pusharglist 2 ........................... <oPeople, thesprite.pPrevMedia>
+  [ 29] objcall 124 ............................. <oPeople.mCreateFrames2(thesprite.pPrevMedia)>
+  [ 31] setobjprop 125 .......................... thesprite.pAnimInfo = oPeople.mCreateFrames2(thesprite.pPrevMedia)
+  [ 33] ret
+end
+
+on PosNotEmpty thex, they
+  [  0] getglobal 111 ........................... <oMap>
+  [  2] getparam 0 .............................. <thex>
+  [  4] getparam 1 .............................. <they>
+  [  6] pusharglist 3 ........................... <oMap, thex, they>
+  [  8] objcall 127 ............................. <oMap.mGetTileBuilding(thex, they)>
+  [ 10] pusharglist 0 ........................... <>
+  [ 12] extcall 128 ............................. <VOID>
+  [ 14] eq ...................................... <oMap.mGetTileBuilding(thex, they) = VOID>
+  [ 15] jmpifz [ 26] ............................ if oMap.mGetTileBuilding(thex, they) = VOID then / else
+  [ 18] pushzero ................................ <0>
+  [ 19] pusharglistnoret 1 ...................... <0>
+  [ 21] extcall 22 .............................. return 0
+  [ 23] jmp [ 32]
+  [ 26] pushint8 1 .............................. <1>
+  [ 28] pusharglistnoret 1 ...................... <1>
+  [ 30] extcall 22 .............................. return 1
+  [ 32] ret
+end
+
+on PosEmpty thex, they
+  [  0] getglobal 111 ........................... <oMap>
+  [  2] getparam 0 .............................. <thex>
+  [  4] getparam 1 .............................. <they>
+  [  6] pusharglist 3 ........................... <oMap, thex, they>
+  [  8] objcall 127 ............................. <oMap.mGetTileBuilding(thex, they)>
+  [ 10] pusharglist 0 ........................... <>
+  [ 12] extcall 128 ............................. <VOID>
+  [ 14] eq ...................................... <oMap.mGetTileBuilding(thex, they) = VOID>
+  [ 15] jmpifz [ 27] ............................ if oMap.mGetTileBuilding(thex, they) = VOID then / else
+  [ 18] pushint8 1 .............................. <1>
+  [ 20] pusharglistnoret 1 ...................... <1>
+  [ 22] extcall 22 .............................. return 1
+  [ 24] jmp [ 32]
+  [ 27] pushzero ................................ <0>
+  [ 28] pusharglistnoret 1 ...................... <0>
+  [ 30] extcall 22 .............................. return 0
+  [ 32] ret
+end
+
+on GetTileDepth thex, they
+  [  0] getglobal 111 ........................... <oMap>
+  [  2] getparam 0 .............................. <thex>
+  [  4] getparam 1 .............................. <they>
+  [  6] pusharglist 3 ........................... <oMap, thex, they>
+  [  8] objcall 129 ............................. <oMap.mGetTileDepth(thex, they)>
+  [ 10] pusharglistnoret 1 ...................... <oMap.mGetTileDepth(thex, they)>
+  [ 12] extcall 22 .............................. return oMap.mGetTileDepth(thex, they)
+  [ 14] ret
+end
+
+on MissileInit
+  [  0] pushcons 7 .............................. <"Missile">
+  [  2] pusharglist 1 ........................... <"Missile">
+  [  4] extcall 26 .............................. <member("Missile")>
+  [  6] pushint8 1 .............................. <1>
+  [  8] setobjprop 130 .......................... member("Missile").pausedAtStart = 1
+  [ 10] pushcons 7 .............................. <"Missile">
+  [ 12] pusharglist 1 ........................... <"Missile">
+  [ 14] extcall 26 .............................. <member("Missile")>
+  [ 16] pushint8 121 ............................ <121>
+  [ 18] pushint16 249 ........................... <249>
+  [ 21] pusharglist 2 ........................... <121, 249>
+  [ 23] extcall 131 ............................. <point(121, 249)>
+  [ 25] setobjprop 132 .......................... member("Missile").regPoint = point(121, 249)
+  [ 27] ret
+end
+
+on TargetInit
+  [  0] pushcons 8 .............................. <"Target">
+  [  2] pusharglist 1 ........................... <"Target">
+  [  4] extcall 26 .............................. <member("Target")>
+  [  6] pushint8 1 .............................. <1>
+  [  8] setobjprop 130 .......................... member("Target").pausedAtStart = 1
+  [ 10] ret
+end
+
+on ScrollScreen
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 87 ........................... <oG.SPRITETARGET>
+  [  4] pusharglist 1 ........................... <oG.SPRITETARGET>
+  [  6] extcall 7 ............................... <sprite(oG.SPRITETARGET)>
+  [  8] getobjprop 16 ........................... <sprite(oG.SPRITETARGET).locH>
+  [ 10] setlocal 0 .............................. thex = sprite(oG.SPRITETARGET).locH
+  [ 12] getlocal 0 .............................. <thex>
+  [ 14] getglobal 9 ............................. <oG>
+  [ 16] getobjprop 82 ........................... <oG.SCROLLHORIZ>
+  [ 18] lt ...................................... <thex < oG.SCROLLHORIZ>
+  [ 19] getglobal 9 ............................. <oG>
+  [ 21] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 23] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 25] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 27] getobjprop 133 .......................... <sprite(oG.SPRITEMAP).left>
+  [ 29] pushzero ................................ <0>
+  [ 30] lt ...................................... <sprite(oG.SPRITEMAP).left < 0>
+  [ 31] and ..................................... <(thex < oG.SCROLLHORIZ) and (sprite(oG.SPRITEMAP).left < 0)>
+  [ 32] jmpifz [ 84] ............................ if (thex < oG.SCROLLHORIZ) and (sprite(oG.SPRITEMAP).left < 0) then / else
+  [ 35] getglobal 9 ............................. <oG>
+  [ 37] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 39] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 41] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 43] getobjprop 133 .......................... <sprite(oG.SPRITEMAP).left>
+  [ 45] getglobal 9 ............................. <oG>
+  [ 47] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [ 49] add ..................................... <sprite(oG.SPRITEMAP).left + oG.SCROLLSTEP>
+  [ 50] setlocal 1 .............................. diff = sprite(oG.SPRITEMAP).left + oG.SCROLLSTEP
+  [ 52] getlocal 1 .............................. <diff>
+  [ 54] pushzero ................................ <0>
+  [ 55] gt ...................................... <diff > 0>
+  [ 56] jmpifz [ 73] ............................ if diff > 0 then / else
+  [ 59] getglobal 9 ............................. <oG>
+  [ 61] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [ 63] getlocal 1 .............................. <diff>
+  [ 65] sub ..................................... <oG.SCROLLSTEP - diff>
+  [ 66] pusharglistnoret 1 ...................... <oG.SCROLLSTEP - diff>
+  [ 68] localcall 13 ............................ MoveEverythingHoriz(oG.SCROLLSTEP - diff)
+  [ 70] jmp [ 81]
+  [ 73] getglobal 9 ............................. <oG>
+  [ 75] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [ 77] pusharglistnoret 1 ...................... <oG.SCROLLSTEP>
+  [ 79] localcall 13 ............................ MoveEverythingHoriz(oG.SCROLLSTEP)
+  [ 81] jmp [168]
+  [ 84] getlocal 0 .............................. <thex>
+  [ 86] getglobal 9 ............................. <oG>
+  [ 88] getobjprop 15 ........................... <oG.screenx>
+  [ 90] getglobal 9 ............................. <oG>
+  [ 92] getobjprop 82 ........................... <oG.SCROLLHORIZ>
+  [ 94] sub ..................................... <oG.screenx - oG.SCROLLHORIZ>
+  [ 95] gt ...................................... <thex > (oG.screenx - oG.SCROLLHORIZ)>
+  [ 96] getglobal 9 ............................. <oG>
+  [ 98] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [100] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [102] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [104] getobjprop 134 .......................... <sprite(oG.SPRITEMAP).right>
+  [106] getglobal 9 ............................. <oG>
+  [108] getobjprop 15 ........................... <oG.screenx>
+  [110] gt ...................................... <sprite(oG.SPRITEMAP).right > oG.screenx>
+  [111] and ..................................... <(thex > (oG.screenx - oG.SCROLLHORIZ)) and (sprite(oG.SPRITEMAP).right > oG.screenx)>
+  [112] jmpifz [168] ............................ if (thex > (oG.screenx - oG.SCROLLHORIZ)) and (sprite(oG.SPRITEMAP).right > oG.screenx) then
+  [115] getglobal 9 ............................. <oG>
+  [117] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [119] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [121] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [123] getobjprop 134 .......................... <sprite(oG.SPRITEMAP).right>
+  [125] getglobal 9 ............................. <oG>
+  [127] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [129] sub ..................................... <sprite(oG.SPRITEMAP).right - oG.SCROLLSTEP>
+  [130] getglobal 9 ............................. <oG>
+  [132] getobjprop 15 ........................... <oG.screenx>
+  [134] sub ..................................... <sprite(oG.SPRITEMAP).right - oG.SCROLLSTEP - oG.screenx>
+  [135] setlocal 1 .............................. diff = sprite(oG.SPRITEMAP).right - oG.SCROLLSTEP - oG.screenx
+  [137] getlocal 1 .............................. <diff>
+  [139] pushzero ................................ <0>
+  [140] lt ...................................... <diff < 0>
+  [141] jmpifz [159] ............................ if diff < 0 then / else
+  [144] getglobal 9 ............................. <oG>
+  [146] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [148] inv ..................................... <-oG.SCROLLSTEP>
+  [149] getlocal 1 .............................. <diff>
+  [151] sub ..................................... <-oG.SCROLLSTEP - diff>
+  [152] pusharglistnoret 1 ...................... <-oG.SCROLLSTEP - diff>
+  [154] localcall 13 ............................ MoveEverythingHoriz(-oG.SCROLLSTEP - diff)
+  [156] jmp [168]
+  [159] getglobal 9 ............................. <oG>
+  [161] getobjprop 83 ........................... <oG.SCROLLSTEP>
+  [163] inv ..................................... <-oG.SCROLLSTEP>
+  [164] pusharglistnoret 1 ...................... <-oG.SCROLLSTEP>
+  [166] localcall 13 ............................ MoveEverythingHoriz(-oG.SCROLLSTEP)
+  [168] ret
+end
+
+on MoveEverythingHoriz val
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [  4] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [  6] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [  8] getglobal 9 ............................. <oG>
+  [ 10] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 12] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 14] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 16] getobjprop 16 ........................... <sprite(oG.SPRITEMAP).locH>
+  [ 18] getparam 0 .............................. <val>
+  [ 20] add ..................................... <sprite(oG.SPRITEMAP).locH + val>
+  [ 21] setobjprop 16 ........................... sprite(oG.SPRITEMAP).locH = sprite(oG.SPRITEMAP).locH + val
+  [ 23] pushint8 1 .............................. <1>
+  [ 25] setlocal 0
+  [ 27] getlocal 0
+  [ 29] getglobal 112 ........................... <oBuilding>
+  [ 31] pushsymb 136 ............................ <#pActualBuildingArray>
+  [ 33] pusharglist 2 ........................... <oBuilding, #pActualBuildingArray>
+  [ 35] objcall 137 ............................. <oBuilding.pActualBuildingArray.count>
+  [ 37] lteq
+  [ 38] jmpifz [ 75] ............................ repeat with i = 1 to oBuilding.pActualBuildingArray.count
+  [ 41] getglobal 112 ........................... <oBuilding>
+  [ 43] pushsymb 136 ............................ <#pActualBuildingArray>
+  [ 45] getlocal 0 .............................. <i>
+  [ 47] pusharglist 3 ........................... <oBuilding, #pActualBuildingArray, i>
+  [ 49] objcall 138 ............................. <oBuilding.pActualBuildingArray[i]>
+  [ 51] getobjprop 126 .......................... <oBuilding.pActualBuildingArray[i].thesprite>
+  [ 53] setlocal 1 .............................. thesprite = oBuilding.pActualBuildingArray[i].thesprite
+  [ 55] getlocal 1 .............................. <thesprite>
+  [ 57] getlocal 1 .............................. <thesprite>
+  [ 59] getobjprop 16 ........................... <thesprite.locH>
+  [ 61] getparam 0 .............................. <val>
+  [ 63] add ..................................... <thesprite.locH + val>
+  [ 64] setobjprop 16 ........................... thesprite.locH = thesprite.locH + val
+  [ 66] pushint8 1
+  [ 68] getlocal 0
+  [ 70] add
+  [ 71] setlocal 0
+  [ 73] endrepeat [ 27]
+  [ 75] pushint8 1 .............................. <1>
+  [ 77] setlocal 0
+  [ 79] getlocal 0
+  [ 81] getglobal 115 ........................... <oPeople>
+  [ 83] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 85] pusharglist 2 ........................... <oPeople, #pUsedSpriteArray>
+  [ 87] objcall 137 ............................. <oPeople.pUsedSpriteArray.count>
+  [ 89] lteq
+  [ 90] jmpifz [125] ............................ repeat with i = 1 to oPeople.pUsedSpriteArray.count
+  [ 93] getglobal 115 ........................... <oPeople>
+  [ 95] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 97] getlocal 0 .............................. <i>
+  [ 99] pusharglist 3 ........................... <oPeople, #pUsedSpriteArray, i>
+  [101] objcall 140 ............................. <oPeople.pUsedSpriteArray[i]>
+  [103] setlocal 1 .............................. thesprite = oPeople.pUsedSpriteArray[i]
+  [105] getlocal 1 .............................. <thesprite>
+  [107] getlocal 1 .............................. <thesprite>
+  [109] getobjprop 16 ........................... <thesprite.locH>
+  [111] getparam 0 .............................. <val>
+  [113] add ..................................... <thesprite.locH + val>
+  [114] setobjprop 16 ........................... thesprite.locH = thesprite.locH + val
+  [116] pushint8 1
+  [118] getlocal 0
+  [120] add
+  [121] setlocal 0
+  [123] endrepeat [ 79]
+  [125] getglobal 9 ............................. <oG>
+  [127] getobjprop 88 ........................... <oG.SPRITEMISSILE>
+  [129] pusharglist 1 ........................... <oG.SPRITEMISSILE>
+  [131] extcall 7 ............................... <sprite(oG.SPRITEMISSILE)>
+  [133] pusharglist 1 ........................... <sprite(oG.SPRITEMISSILE)>
+  [135] objcall 141 ............................. <sprite(oG.SPRITEMISSILE).mWasLaunched()>
+  [137] jmpifz [161] ............................ if sprite(oG.SPRITEMISSILE).mWasLaunched() then
+  [140] getglobal 9 ............................. <oG>
+  [142] getobjprop 88 ........................... <oG.SPRITEMISSILE>
+  [144] pusharglist 1 ........................... <oG.SPRITEMISSILE>
+  [146] extcall 7 ............................... <sprite(oG.SPRITEMISSILE)>
+  [148] setlocal 1 .............................. thesprite = sprite(oG.SPRITEMISSILE)
+  [150] getlocal 1 .............................. <thesprite>
+  [152] getlocal 1 .............................. <thesprite>
+  [154] getobjprop 16 ........................... <thesprite.locH>
+  [156] getparam 0 .............................. <val>
+  [158] add ..................................... <thesprite.locH + val>
+  [159] setobjprop 16 ........................... thesprite.locH = thesprite.locH + val
+  [161] getglobal 9 ............................. <oG>
+  [163] getglobal 9 ............................. <oG>
+  [165] getobjprop 80 ........................... <oG.ISOSTARTX>
+  [167] getparam 0 .............................. <val>
+  [169] add ..................................... <oG.ISOSTARTX + val>
+  [170] setobjprop 80 ........................... oG.ISOSTARTX = oG.ISOSTARTX + val
+  [172] ret
+end
+
+on floor val
+  [  0] getparam 0 .............................. <val>
+  [  2] pushzero ................................ <0>
+  [  3] pusharglist 2 ........................... <val, 0>
+  [  5] extcall 144 ............................. <bitOr(val, 0)>
+  [  7] setlocal 0 .............................. intX = bitOr(val, 0)
+  [  9] getparam 0 .............................. <val>
+  [ 11] getlocal 0 .............................. <intX>
+  [ 13] eq ...................................... <val = intX>
+  [ 14] jmpifz [ 26] ............................ if val = intX then / else
+  [ 17] getlocal 0 .............................. <intX>
+  [ 19] pusharglistnoret 1 ...................... <intX>
+  [ 21] extcall 22 .............................. return intX
+  [ 23] jmp [ 51]
+  [ 26] getparam 0 .............................. <val>
+  [ 28] pushzero ................................ <0>
+  [ 29] gt ...................................... <val > 0>
+  [ 30] jmpifz [ 42] ............................ if val > 0 then / else
+  [ 33] getlocal 0 .............................. <intX>
+  [ 35] pusharglistnoret 1 ...................... <intX>
+  [ 37] extcall 22 .............................. return intX
+  [ 39] jmp [ 51]
+  [ 42] getlocal 0 .............................. <intX>
+  [ 44] pushint8 1 .............................. <1>
+  [ 46] sub ..................................... <intX - 1>
+  [ 47] pusharglistnoret 1 ...................... <intX - 1>
+  [ 49] extcall 22 .............................. return intX - 1
+  [ 51] ret
+end
+
+on TileOnScreen tilex, tiley
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 0 .............................. <tilex>
+  [  4] getglobal 9 ............................. <oG>
+  [  6] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [  8] mul ..................................... <tilex * oG.ISOTILEWIDTH>
+  [  9] pushzero ................................ <0>
+  [ 10] getparam 1 .............................. <tiley>
+  [ 12] getglobal 9 ............................. <oG>
+  [ 14] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [ 16] mul ..................................... <tiley * oG.ISOTILEHEIGHT>
+  [ 17] pushint8 1 .............................. <1>
+  [ 19] inv ..................................... <-1>
+  [ 20] mul ..................................... <tiley * oG.ISOTILEHEIGHT * -1>
+  [ 21] pusharglist 4 ........................... <oIso, tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1>
+  [ 23] objcall 146 ............................. <oIso.mMapToScreen(tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1)>
+  [ 25] setlocal 0 .............................. obj = oIso.mMapToScreen(tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1)
+  [ 27] getlocal 0 .............................. <obj>
+  [ 29] getobjprop 21 ........................... <obj.thex>
+  [ 31] pushint8 20 ............................. <20>
+  [ 33] inv ..................................... <-20>
+  [ 34] lt ...................................... <obj.thex < -20>
+  [ 35] getlocal 0 .............................. <obj>
+  [ 37] getobjprop 21 ........................... <obj.thex>
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 15 ........................... <oG.screenx>
+  [ 43] gteq .................................... <obj.thex >= oG.screenx>
+  [ 44] or ...................................... <(obj.thex < -20) or (obj.thex >= oG.screenx)>
+  [ 45] getlocal 0 .............................. <obj>
+  [ 47] getobjprop 20 ........................... <obj.they>
+  [ 49] pushint8 10 ............................. <10>
+  [ 51] inv ..................................... <-10>
+  [ 52] lt ...................................... <obj.they < -10>
+  [ 53] or ...................................... <(obj.thex < -20) or (obj.thex >= oG.screenx) or (obj.they < -10)>
+  [ 54] getlocal 0 .............................. <obj>
+  [ 56] getobjprop 20 ........................... <obj.they>
+  [ 58] getglobal 9 ............................. <oG>
+  [ 60] getobjprop 18 ........................... <oG.screeny>
+  [ 62] gteq .................................... <obj.they >= oG.screeny>
+  [ 63] or ...................................... <(obj.thex < -20) or (obj.thex >= oG.screenx) or (obj.they < -10) or (obj.they >= oG.screeny)>
+  [ 64] jmpifz [ 75] ............................ if (obj.thex < -20) or (obj.thex >= oG.screenx) or (obj.they < -10) or (obj.they >= oG.screeny) then / else
+  [ 67] pushzero ................................ <0>
+  [ 68] pusharglistnoret 1 ...................... <0>
+  [ 70] extcall 22 .............................. return 0
+  [ 72] jmp [ 81]
+  [ 75] pushint8 1 .............................. <1>
+  [ 77] pusharglistnoret 1 ...................... <1>
+  [ 79] extcall 22 .............................. return 1
+  [ 81] ret
+end
+
+on TileOnMap tilex, tiley
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 0 .............................. <tilex>
+  [  4] getglobal 9 ............................. <oG>
+  [  6] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [  8] mul ..................................... <tilex * oG.ISOTILEWIDTH>
+  [  9] pushzero ................................ <0>
+  [ 10] getparam 1 .............................. <tiley>
+  [ 12] getglobal 9 ............................. <oG>
+  [ 14] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [ 16] mul ..................................... <tiley * oG.ISOTILEHEIGHT>
+  [ 17] pushint8 1 .............................. <1>
+  [ 19] inv ..................................... <-1>
+  [ 20] mul ..................................... <tiley * oG.ISOTILEHEIGHT * -1>
+  [ 21] pusharglist 4 ........................... <oIso, tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1>
+  [ 23] objcall 146 ............................. <oIso.mMapToScreen(tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1)>
+  [ 25] setlocal 0 .............................. obj = oIso.mMapToScreen(tilex * oG.ISOTILEWIDTH, 0, tiley * oG.ISOTILEHEIGHT * -1)
+  [ 27] getlocal 0 .............................. <obj>
+  [ 29] getobjprop 21 ........................... <obj.thex>
+  [ 31] getglobal 9 ............................. <oG>
+  [ 33] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 35] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 37] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 39] getobjprop 133 .......................... <sprite(oG.SPRITEMAP).left>
+  [ 41] gt ...................................... <obj.thex > sprite(oG.SPRITEMAP).left>
+  [ 42] getlocal 0 .............................. <obj>
+  [ 44] getobjprop 21 ........................... <obj.thex>
+  [ 46] getglobal 9 ............................. <oG>
+  [ 48] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 50] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 52] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 54] getobjprop 134 .......................... <sprite(oG.SPRITEMAP).right>
+  [ 56] lt ...................................... <obj.thex < sprite(oG.SPRITEMAP).right>
+  [ 57] and ..................................... <(obj.thex > sprite(oG.SPRITEMAP).left) and (obj.thex < sprite(oG.SPRITEMAP).right)>
+  [ 58] getlocal 0 .............................. <obj>
+  [ 60] getobjprop 20 ........................... <obj.they>
+  [ 62] getglobal 9 ............................. <oG>
+  [ 64] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 66] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 68] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 70] getobjprop 150 .......................... <sprite(oG.SPRITEMAP).top>
+  [ 72] gt ...................................... <obj.they > sprite(oG.SPRITEMAP).top>
+  [ 73] and ..................................... <(obj.thex > sprite(oG.SPRITEMAP).left) and (obj.thex < sprite(oG.SPRITEMAP).right) and (obj.they > sprite(oG.SPRITEMAP).top)>
+  [ 74] getlocal 0 .............................. <obj>
+  [ 76] getobjprop 20 ........................... <obj.they>
+  [ 78] getglobal 9 ............................. <oG>
+  [ 80] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 82] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 84] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 86] getobjprop 151 .......................... <sprite(oG.SPRITEMAP).bottom>
+  [ 88] lt ...................................... <obj.they < sprite(oG.SPRITEMAP).bottom>
+  [ 89] and ..................................... <(obj.thex > sprite(oG.SPRITEMAP).left) and (obj.thex < sprite(oG.SPRITEMAP).right) and (obj.they > sprite(oG.SPRITEMAP).top) and (obj.they < sprite(oG.SPRITEMAP).bottom)>
+  [ 90] jmpifz [102] ............................ if (obj.thex > sprite(oG.SPRITEMAP).left) and (obj.thex < sprite(oG.SPRITEMAP).right) and (obj.they > sprite(oG.SPRITEMAP).top) and (obj.they < sprite(oG.SPRITEMAP).bottom) then / else
+  [ 93] pushint8 1 .............................. <1>
+  [ 95] pusharglistnoret 1 ...................... <1>
+  [ 97] extcall 22 .............................. return 1
+  [ 99] jmp [107]
+  [102] pushzero ................................ <0>
+  [103] pusharglistnoret 1 ...................... <0>
+  [105] extcall 22 .............................. return 0
+  [107] ret
+end
+
+on RandTileOnMap
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 63 ........................... <oG.MAPSIZEX>
+  [  4] pusharglist 1 ........................... <oG.MAPSIZEX>
+  [  6] extcall 152 ............................. <random(oG.MAPSIZEX)>
+  [  8] getglobal 9 ............................. <oG>
+  [ 10] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 12] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 14] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 16] getobjprop 133 .......................... <sprite(oG.SPRITEMAP).left>
+  [ 18] add ..................................... <random(oG.MAPSIZEX) + sprite(oG.SPRITEMAP).left>
+  [ 19] pushint8 1 .............................. <1>
+  [ 21] sub ..................................... <random(oG.MAPSIZEX) + sprite(oG.SPRITEMAP).left - 1>
+  [ 22] setlocal 0 .............................. randx = random(oG.MAPSIZEX) + sprite(oG.SPRITEMAP).left - 1
+  [ 24] getglobal 9 ............................. <oG>
+  [ 26] getobjprop 64 ........................... <oG.MAPSIZEY>
+  [ 28] pusharglist 1 ........................... <oG.MAPSIZEY>
+  [ 30] extcall 152 ............................. <random(oG.MAPSIZEY)>
+  [ 32] pushint8 1 .............................. <1>
+  [ 34] sub ..................................... <random(oG.MAPSIZEY) - 1>
+  [ 35] setlocal 1 .............................. randy = random(oG.MAPSIZEY) - 1
+  [ 37] getlocal 0 .............................. <randx>
+  [ 39] getlocal 1 .............................. <randy>
+  [ 41] pusharglist 2 ........................... <randx, randy>
+  [ 43] localcall 22 ............................ <GetTileFromMap(randx, randy)>
+  [ 45] setlocal 2 .............................. obj = GetTileFromMap(randx, randy)
+  [ 47] getlocal 2 .............................. <obj>
+  [ 49] pusharglistnoret 1 ...................... <obj>
+  [ 51] extcall 22 .............................. return obj
+  [ 53] ret
+end
+
+on RandTileOnScreen
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 15 ........................... <oG.screenx>
+  [  4] pusharglist 1 ........................... <oG.screenx>
+  [  6] extcall 152 ............................. <random(oG.screenx)>
+  [  8] pushint8 1 .............................. <1>
+  [ 10] sub ..................................... <random(oG.screenx) - 1>
+  [ 11] setlocal 0 .............................. randx = random(oG.screenx) - 1
+  [ 13] getglobal 9 ............................. <oG>
+  [ 15] getobjprop 18 ........................... <oG.screeny>
+  [ 17] pusharglist 1 ........................... <oG.screeny>
+  [ 19] extcall 152 ............................. <random(oG.screeny)>
+  [ 21] pushint8 1 .............................. <1>
+  [ 23] sub ..................................... <random(oG.screeny) - 1>
+  [ 24] setlocal 1 .............................. randy = random(oG.screeny) - 1
+  [ 26] getlocal 0 .............................. <randx>
+  [ 28] getlocal 1 .............................. <randy>
+  [ 30] pusharglist 2 ........................... <randx, randy>
+  [ 32] localcall 22 ............................ <GetTileFromMap(randx, randy)>
+  [ 34] setlocal 2 .............................. obj = GetTileFromMap(randx, randy)
+  [ 36] getlocal 2 .............................. <obj>
+  [ 38] pusharglistnoret 1 ...................... <obj>
+  [ 40] extcall 22 .............................. return obj
+  [ 42] ret
+end
+
+on PutSpriteOnScreen thesprite, thex, they, thez
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 1 .............................. <thex>
+  [  4] getparam 2 .............................. <they>
+  [  6] getparam 3 .............................. <thez>
+  [  8] pusharglist 4 ........................... <oIso, thex, they, thez>
+  [ 10] objcall 146 ............................. <oIso.mMapToScreen(thex, they, thez)>
+  [ 12] setlocal 0 .............................. obj = oIso.mMapToScreen(thex, they, thez)
+  [ 14] getparam 0 .............................. <thesprite>
+  [ 16] getlocal 0 .............................. <obj>
+  [ 18] getobjprop 21 ........................... <obj.thex>
+  [ 20] setobjprop 16 ........................... thesprite.locH = obj.thex
+  [ 22] getparam 0 .............................. <thesprite>
+  [ 24] getlocal 0 .............................. <obj>
+  [ 26] getobjprop 20 ........................... <obj.they>
+  [ 28] setobjprop 19 ........................... thesprite.locV = obj.they
+  [ 30] ret
+end
+
+on PutFilmLoopOnScreen thesprite, thex, they, thez
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 1 .............................. <thex>
+  [  4] getparam 2 .............................. <they>
+  [  6] getparam 3 .............................. <thez>
+  [  8] pusharglist 4 ........................... <oIso, thex, they, thez>
+  [ 10] objcall 146 ............................. <oIso.mMapToScreen(thex, they, thez)>
+  [ 12] setlocal 0 .............................. obj = oIso.mMapToScreen(thex, they, thez)
+  [ 14] getparam 0 .............................. <thesprite>
+  [ 16] getlocal 0 .............................. <obj>
+  [ 18] getobjprop 21 ........................... <obj.thex>
+  [ 20] getglobal 9 ............................. <oG>
+  [ 22] getobjprop 65 ........................... <oG.tilewidth>
+  [ 24] pushint8 2 .............................. <2>
+  [ 26] div ..................................... <oG.tilewidth / 2>
+  [ 27] add ..................................... <obj.thex + (oG.tilewidth / 2)>
+  [ 28] pushint8 1 .............................. <1>
+  [ 30] add ..................................... <obj.thex + (oG.tilewidth / 2) + 1>
+  [ 31] setobjprop 16 ........................... thesprite.locH = obj.thex + (oG.tilewidth / 2) + 1
+  [ 33] getparam 0 .............................. <thesprite>
+  [ 35] getlocal 0 .............................. <obj>
+  [ 37] getobjprop 20 ........................... <obj.they>
+  [ 39] getparam 0 .............................. <thesprite>
+  [ 41] getobjprop 156 .......................... <thesprite.height>
+  [ 43] pushint8 2 .............................. <2>
+  [ 45] div ..................................... <thesprite.height / 2>
+  [ 46] sub ..................................... <obj.they - (thesprite.height / 2)>
+  [ 47] getglobal 9 ............................. <oG>
+  [ 49] getobjprop 66 ........................... <oG.tileheight>
+  [ 51] add ..................................... <obj.they - (thesprite.height / 2) + oG.tileheight>
+  [ 52] setobjprop 19 ........................... thesprite.locV = obj.they - (thesprite.height / 2) + oG.tileheight
+  [ 54] ret
+end
+
+on PutDeadOnScreen thesprite, thex, they, thez
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 1 .............................. <thex>
+  [  4] getparam 2 .............................. <they>
+  [  6] getparam 3 .............................. <thez>
+  [  8] pusharglist 4 ........................... <oIso, thex, they, thez>
+  [ 10] objcall 146 ............................. <oIso.mMapToScreen(thex, they, thez)>
+  [ 12] setlocal 0 .............................. obj = oIso.mMapToScreen(thex, they, thez)
+  [ 14] getparam 0 .............................. <thesprite>
+  [ 16] getlocal 0 .............................. <obj>
+  [ 18] getobjprop 21 ........................... <obj.thex>
+  [ 20] getglobal 9 ............................. <oG>
+  [ 22] getobjprop 65 ........................... <oG.tilewidth>
+  [ 24] pushint8 2 .............................. <2>
+  [ 26] div ..................................... <oG.tilewidth / 2>
+  [ 27] add ..................................... <obj.thex + (oG.tilewidth / 2)>
+  [ 28] pushint8 1 .............................. <1>
+  [ 30] add ..................................... <obj.thex + (oG.tilewidth / 2) + 1>
+  [ 31] setobjprop 16 ........................... thesprite.locH = obj.thex + (oG.tilewidth / 2) + 1
+  [ 33] getparam 0 .............................. <thesprite>
+  [ 35] getlocal 0 .............................. <obj>
+  [ 37] getobjprop 20 ........................... <obj.they>
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 66 ........................... <oG.tileheight>
+  [ 43] pushint8 2 .............................. <2>
+  [ 45] div ..................................... <oG.tileheight / 2>
+  [ 46] add ..................................... <obj.they + (oG.tileheight / 2)>
+  [ 47] setobjprop 19 ........................... thesprite.locV = obj.they + (oG.tileheight / 2)
+  [ 49] ret
+end
+
+on GetTileFromMap screenx, screeny
+  [  0] getglobal 108 ........................... <oIso>
+  [  2] getparam 0 .............................. <screenx>
+  [  4] getparam 1 .............................. <screeny>
+  [  6] pusharglist 3 ........................... <oIso, screenx, screeny>
+  [  8] objcall 157 ............................. <oIso.mMapToIsoWorld(screenx, screeny)>
+  [ 10] setlocal 0 .............................. obj = oIso.mMapToIsoWorld(screenx, screeny)
+  [ 12] pushsymb 148 ............................ <#tilex>
+  [ 14] getlocal 0 .............................. <obj>
+  [ 16] getobjprop 21 ........................... <obj.thex>
+  [ 18] getglobal 9 ............................. <oG>
+  [ 20] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [ 22] div ..................................... <obj.thex / oG.ISOTILEWIDTH>
+  [ 23] pusharglist 1 ........................... <obj.thex / oG.ISOTILEWIDTH>
+  [ 25] localcall 14 ............................ <floor(obj.thex / oG.ISOTILEWIDTH)>
+  [ 27] pushsymb 147 ............................ <#tiley>
+  [ 29] getlocal 0 .............................. <obj>
+  [ 31] getobjprop 155 .......................... <obj.thez>
+  [ 33] getglobal 9 ............................. <oG>
+  [ 35] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [ 37] div ..................................... <obj.thez / oG.ISOTILEHEIGHT>
+  [ 38] pusharglist 1 ........................... <obj.thez / oG.ISOTILEHEIGHT>
+  [ 40] localcall 14 ............................ <floor(obj.thez / oG.ISOTILEHEIGHT)>
+  [ 42] pushint8 1 .............................. <1>
+  [ 44] inv ..................................... <-1>
+  [ 45] mul ..................................... <floor(obj.thez / oG.ISOTILEHEIGHT) * -1>
+  [ 46] pusharglist 4 ........................... <[#tilex: floor(obj.thex / oG.ISOTILEWIDTH), #tiley: floor(obj.thez / oG.ISOTILEHEIGHT) * -1]>
+  [ 48] pushproplist ............................ <[#tilex: floor(obj.thex / oG.ISOTILEWIDTH), #tiley: floor(obj.thez / oG.ISOTILEHEIGHT) * -1]>
+  [ 49] pusharglistnoret 1 ...................... <[#tilex: floor(obj.thex / oG.ISOTILEWIDTH), #tiley: floor(obj.thez / oG.ISOTILEHEIGHT) * -1]>
+  [ 51] extcall 22 .............................. return [#tilex: floor(obj.thex / oG.ISOTILEWIDTH), #tiley: floor(obj.thez / oG.ISOTILEHEIGHT) * -1]
+  [ 53] ret
+end
+
+on TurnEvil thesprite
+  [  0] getglobal 115 ........................... <oPeople>
+  [  2] getglobal 115 ........................... <oPeople>
+  [  4] getobjprop 122 .......................... <oPeople.pEvilCount>
+  [  6] pushint8 1 .............................. <1>
+  [  8] add ..................................... <oPeople.pEvilCount + 1>
+  [  9] setobjprop 122 .......................... oPeople.pEvilCount = oPeople.pEvilCount + 1
+  [ 11] getparam 0 .............................. <thesprite>
+  [ 13] getglobal 115 ........................... <oPeople>
+  [ 15] pushsymb 158 ............................ <#pMediaArray>
+  [ 17] getglobal 115 ........................... <oPeople>
+  [ 19] getobjprop 159 .......................... <oPeople.TEVIL>
+  [ 21] pusharglist 3 ........................... <oPeople, #pMediaArray, oPeople.TEVIL>
+  [ 23] objcall 140 ............................. <oPeople.pMediaArray[oPeople.TEVIL]>
+  [ 25] setobjprop 26 ........................... thesprite.member = oPeople.pMediaArray[oPeople.TEVIL]
+  [ 27] ret
+end
+
+on DestroyPerson thesprite
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getglobal 115 ........................... <oPeople>
+  [  8] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 10] pusharglist 2 ........................... <oPeople, #pUsedSpriteArray>
+  [ 12] objcall 137 ............................. <oPeople.pUsedSpriteArray.count>
+  [ 14] lteq
+  [ 15] jmpifz [140] ............................ repeat with i = 1 to oPeople.pUsedSpriteArray.count
+  [ 18] getglobal 115 ........................... <oPeople>
+  [ 20] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 22] getlocal 0 .............................. <i>
+  [ 24] pusharglist 3 ........................... <oPeople, #pUsedSpriteArray, i>
+  [ 26] objcall 140 ............................. <oPeople.pUsedSpriteArray[i]>
+  [ 28] getparam 0 .............................. <thesprite>
+  [ 30] eq ...................................... <oPeople.pUsedSpriteArray[i] = thesprite>
+  [ 31] jmpifz [131] ............................ if oPeople.pUsedSpriteArray[i] = thesprite then
+  [ 34] getglobal 115 ........................... <oPeople>
+  [ 36] getchainedprop 160 ...................... <oPeople.pEmptySpriteArray>
+  [ 38] getparam 0 .............................. <thesprite>
+  [ 40] pusharglistnoret 2 ...................... <oPeople.pEmptySpriteArray, thesprite>
+  [ 42] objcall 161 ............................. oPeople.pEmptySpriteArray.append(thesprite)
+  [ 44] getglobal 115 ........................... <oPeople>
+  [ 46] getchainedprop 139 ...................... <oPeople.pUsedSpriteArray>
+  [ 48] getlocal 0 .............................. <i>
+  [ 50] pusharglistnoret 2 ...................... <oPeople.pUsedSpriteArray, i>
+  [ 52] objcall 162 ............................. oPeople.pUsedSpriteArray.deleteAt(i)
+  [ 54] getparam 0 .............................. <thesprite>
+  [ 56] getobjprop 26 ........................... <thesprite.member>
+  [ 58] getglobal 115 ........................... <oPeople>
+  [ 60] pushsymb 158 ............................ <#pMediaArray>
+  [ 62] getglobal 115 ........................... <oPeople>
+  [ 64] getobjprop 159 .......................... <oPeople.TEVIL>
+  [ 66] pusharglist 3 ........................... <oPeople, #pMediaArray, oPeople.TEVIL>
+  [ 68] objcall 140 ............................. <oPeople.pMediaArray[oPeople.TEVIL]>
+  [ 70] eq ...................................... <thesprite.member = oPeople.pMediaArray[oPeople.TEVIL]>
+  [ 71] jmpifz [122] ............................ if thesprite.member = oPeople.pMediaArray[oPeople.TEVIL] then
+  [ 74] getglobal 115 ........................... <oPeople>
+  [ 76] getglobal 115 ........................... <oPeople>
+  [ 78] getobjprop 122 .......................... <oPeople.pEvilCount>
+  [ 80] pushint8 1 .............................. <1>
+  [ 82] sub ..................................... <oPeople.pEvilCount - 1>
+  [ 83] setobjprop 122 .......................... oPeople.pEvilCount = oPeople.pEvilCount - 1
+  [ 85] getglobal 115 ........................... <oPeople>
+  [ 87] getobjprop 122 .......................... <oPeople.pEvilCount>
+  [ 89] getglobal 9 ............................. <oG>
+  [ 91] getobjprop 71 ........................... <oG.EVILMIN>
+  [ 93] gt ...................................... <oPeople.pEvilCount > oG.EVILMIN>
+  [ 94] jmpifz [122] ............................ if oPeople.pEvilCount > oG.EVILMIN then
+  [ 97] pushint8 100 ............................ <100>
+  [ 99] pusharglist 1 ........................... <100>
+  [101] extcall 152 ............................. <random(100)>
+  [103] getglobal 9 ............................. <oG>
+  [105] getobjprop 73 ........................... <oG.EVILREGENERATION>
+  [107] lteq .................................... <random(100) <= oG.EVILREGENERATION>
+  [108] jmpifz [122] ............................ if random(100) <= oG.EVILREGENERATION then
+  [111] getglobal 115 ........................... <oPeople>
+  [113] getglobal 115 ........................... <oPeople>
+  [115] getobjprop 163 .......................... <oPeople.pEvilToRegenerate>
+  [117] pushint8 1 .............................. <1>
+  [119] add ..................................... <oPeople.pEvilToRegenerate + 1>
+  [120] setobjprop 163 .......................... oPeople.pEvilToRegenerate = oPeople.pEvilToRegenerate + 1
+  [122] getparam 0 .............................. <thesprite>
+  [124] pusharglistnoret 1 ...................... <thesprite>
+  [126] objcall 164 ............................. thesprite.mDestroy()
+  [128] jmp [140] ............................... exit repeat
+  [131] pushint8 1
+  [133] getlocal 0
+  [135] add
+  [136] setlocal 0
+  [138] endrepeat [  4]
+  [140] ret
+end
+
+on mouseUp
+  [  0] pusharglist 0 ........................... <>
+  [  2] thebuiltin 25 ........................... <the frame>
+  [  4] pushcons 9 .............................. <"MPlay">
+  [  6] pusharglist 1 ........................... <"MPlay">
+  [  8] extcall 165 ............................. <marker("MPlay")>
+  [ 10] eq ...................................... <the frame = marker("MPlay")>
+  [ 11] jmpifz [253] ............................ if the frame = marker("MPlay") then
+  [ 14] getglobal 9 ............................. <oG>
+  [ 16] getobjprop 87 ........................... <oG.SPRITETARGET>
+  [ 18] pusharglist 1 ........................... <oG.SPRITETARGET>
+  [ 20] extcall 7 ............................... <sprite(oG.SPRITETARGET)>
+  [ 22] pusharglist 1 ........................... <sprite(oG.SPRITETARGET)>
+  [ 24] objcall 2 ............................... <sprite(oG.SPRITETARGET).mIsEnabled()>
+  [ 26] jmpifz [253] ............................ if sprite(oG.SPRITETARGET).mIsEnabled() then
+  [ 29] getglobal 28 ............................ <oSound>
+  [ 31] getglobal 28 ............................ <oSound>
+  [ 33] getobjprop 166 .......................... <oSound.SCLICK>
+  [ 35] pusharglistnoret 2 ...................... <oSound, oSound.SCLICK>
+  [ 37] objcall 118 ............................. oSound.mPlay(oSound.SCLICK)
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 87 ........................... <oG.SPRITETARGET>
+  [ 43] pusharglist 1 ........................... <oG.SPRITETARGET>
+  [ 45] extcall 7 ............................... <sprite(oG.SPRITETARGET)>
+  [ 47] pusharglistnoret 1 ...................... <sprite(oG.SPRITETARGET)>
+  [ 49] objcall 3 ............................... sprite(oG.SPRITETARGET).mDisable()
+  [ 51] pusharglistnoret 0 ...................... <>
+  [ 53] localcall 3 ............................. UndoEvilInit()
+  [ 55] getglobal 9 ............................. <oG>
+  [ 57] getobjprop 87 ........................... <oG.SPRITETARGET>
+  [ 59] pusharglist 1 ........................... <oG.SPRITETARGET>
+  [ 61] extcall 7 ............................... <sprite(oG.SPRITETARGET)>
+  [ 63] getobjprop 16 ........................... <sprite(oG.SPRITETARGET).locH>
+  [ 65] setlocal 0 .............................. thex = sprite(oG.SPRITETARGET).locH
+  [ 67] getglobal 9 ............................. <oG>
+  [ 69] getobjprop 87 ........................... <oG.SPRITETARGET>
+  [ 71] pusharglist 1 ........................... <oG.SPRITETARGET>
+  [ 73] extcall 7 ............................... <sprite(oG.SPRITETARGET)>
+  [ 75] getobjprop 19 ........................... <sprite(oG.SPRITETARGET).locV>
+  [ 77] setlocal 1 .............................. they = sprite(oG.SPRITETARGET).locV
+  [ 79] getlocal 0 .............................. <thex>
+  [ 81] pushzero ................................ <0>
+  [ 82] gteq .................................... <thex >= 0>
+  [ 83] getlocal 0 .............................. <thex>
+  [ 85] getglobal 9 ............................. <oG>
+  [ 87] getobjprop 15 ........................... <oG.screenx>
+  [ 89] lt ...................................... <thex < oG.screenx>
+  [ 90] and ..................................... <(thex >= 0) and (thex < oG.screenx)>
+  [ 91] getlocal 1 .............................. <they>
+  [ 93] pushzero ................................ <0>
+  [ 94] gteq .................................... <they >= 0>
+  [ 95] and ..................................... <(thex >= 0) and (thex < oG.screenx) and (they >= 0)>
+  [ 96] getlocal 1 .............................. <they>
+  [ 98] getglobal 9 ............................. <oG>
+  [100] getobjprop 18 ........................... <oG.screeny>
+  [102] lt ...................................... <they < oG.screeny>
+  [103] and ..................................... <(thex >= 0) and (thex < oG.screenx) and (they >= 0) and (they < oG.screeny)>
+  [104] jmpifz [253] ............................ if (thex >= 0) and (thex < oG.screenx) and (they >= 0) and (they < oG.screeny) then
+  [107] getglobal 112 ........................... <oBuilding>
+  [109] getlocal 0 .............................. <thex>
+  [111] getlocal 1 .............................. <they>
+  [113] pusharglist 3 ........................... <oBuilding, thex, they>
+  [115] objcall 167 ............................. <oBuilding.mHit(thex, they)>
+  [117] setlocal 2 .............................. obj = oBuilding.mHit(thex, they)
+  [119] getlocal 2 .............................. <obj>
+  [121] getobjprop 168 .......................... <obj.hitted>
+  [123] jmpifz [175] ............................ if obj.hitted then / else
+  [126] getlocal 2 .............................. <obj>
+  [128] getobjprop 169 .......................... <obj.thebottom>
+  [130] setlocal 3 .............................. thebottom = obj.thebottom
+  [132] getlocal 2 .............................. <obj>
+  [134] getchainedprop 170 ...................... <obj.building>
+  [136] getobjprop 21 ........................... <obj.building.thex>
+  [138] getlocal 2 .............................. <obj>
+  [140] getchainedprop 170 ...................... <obj.building>
+  [142] getchainedprop 171 ...................... <obj.building.thetype>
+  [144] getobjprop 172 .......................... <obj.building.thetype.thewidth>
+  [146] pushint8 2 .............................. <2>
+  [148] div ..................................... <obj.building.thetype.thewidth / 2>
+  [149] sub ..................................... <obj.building.thex - (obj.building.thetype.thewidth / 2)>
+  [150] setlocal 4 .............................. tilex = obj.building.thex - (obj.building.thetype.thewidth / 2)
+  [152] getlocal 2 .............................. <obj>
+  [154] getchainedprop 170 ...................... <obj.building>
+  [156] getobjprop 20 ........................... <obj.building.they>
+  [158] getlocal 2 .............................. <obj>
+  [160] getchainedprop 170 ...................... <obj.building>
+  [162] getchainedprop 171 ...................... <obj.building.thetype>
+  [164] getobjprop 173 .......................... <obj.building.thetype.theheight>
+  [166] pushint8 2 .............................. <2>
+  [168] div ..................................... <obj.building.thetype.theheight / 2>
+  [169] sub ..................................... <obj.building.they - (obj.building.thetype.theheight / 2)>
+  [170] setlocal 5 .............................. tiley = obj.building.they - (obj.building.thetype.theheight / 2)
+  [172] jmp [201]
+  [175] pushint8 1 .............................. <1>
+  [177] setlocal 3 .............................. thebottom = 1
+  [179] getlocal 0 .............................. <thex>
+  [181] getlocal 1 .............................. <they>
+  [183] pusharglist 2 ........................... <thex, they>
+  [185] localcall 22 ............................ <GetTileFromMap(thex, they)>
+  [187] setlocal 2 .............................. obj = GetTileFromMap(thex, they)
+  [189] getlocal 2 .............................. <obj>
+  [191] getobjprop 148 .......................... <obj.tilex>
+  [193] setlocal 4 .............................. tilex = obj.tilex
+  [195] getlocal 2 .............................. <obj>
+  [197] getobjprop 147 .......................... <obj.tiley>
+  [199] setlocal 5 .............................. tiley = obj.tiley
+  [201] getglobal 9 ............................. <oG>
+  [203] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [205] getlocal 4 .............................. <tilex>
+  [207] getglobal 9 ............................. <oG>
+  [209] getobjprop 76 ........................... <oG.BLASTX>
+  [211] add ..................................... <tilex + oG.BLASTX>
+  [212] getlocal 5 .............................. <tiley>
+  [214] getglobal 9 ............................. <oG>
+  [216] getobjprop 77 ........................... <oG.BLASTY>
+  [218] add ..................................... <tiley + oG.BLASTY>
+  [219] pusharglist 2 ........................... <tilex + oG.BLASTX, tiley + oG.BLASTY>
+  [221] localcall 9 ............................. <GetTileDepth(tilex + oG.BLASTX, tiley + oG.BLASTY)>
+  [223] add ..................................... <oG.PERSON1STSPRITE + GetTileDepth(tilex + oG.BLASTX, tiley + oG.BLASTY)>
+  [224] pushint8 1 .............................. <1>
+  [226] add ..................................... <oG.PERSON1STSPRITE + GetTileDepth(tilex + oG.BLASTX, tiley + oG.BLASTY) + 1>
+  [227] setlocal 6 .............................. thedepth = oG.PERSON1STSPRITE + GetTileDepth(tilex + oG.BLASTX, tiley + oG.BLASTY) + 1
+  [229] getglobal 9 ............................. <oG>
+  [231] getobjprop 88 ........................... <oG.SPRITEMISSILE>
+  [233] pusharglist 1 ........................... <oG.SPRITEMISSILE>
+  [235] extcall 7 ............................... <sprite(oG.SPRITEMISSILE)>
+  [237] getlocal 3 .............................. <thebottom>
+  [239] getlocal 4 .............................. <tilex>
+  [241] getlocal 5 .............................. <tiley>
+  [243] getlocal 0 .............................. <thex>
+  [245] getlocal 1 .............................. <they>
+  [247] getlocal 6 .............................. <thedepth>
+  [249] pusharglistnoret 7 ...................... <sprite(oG.SPRITEMISSILE), thebottom, tilex, tiley, thex, they, thedepth>
+  [251] objcall 174 ............................. sprite(oG.SPRITEMISSILE).mLaunch(thebottom, tilex, tiley, thex, they, thedepth)
+  [253] ret
+end
+
+on mouseDown
+  [  0] pusharglist 0 ........................... <>
+  [  2] thebuiltin 25 ........................... <the frame>
+  [  4] pushcons 9 .............................. <"MPlay">
+  [  6] pusharglist 1 ........................... <"MPlay">
+  [  8] extcall 165 ............................. <marker("MPlay")>
+  [ 10] eq ...................................... <the frame = marker("MPlay")>
+  [ 11] jmpifz [ 26] ............................ if the frame = marker("MPlay") then
+  [ 14] pushzero ................................ <0>
+  [ 15] pusharglistnoret 1 ...................... <0>
+  [ 17] extcall 6 ............................... cursor(0)
+  [ 19] pushint16 200 ........................... <200>
+  [ 22] pusharglistnoret 1 ...................... <200>
+  [ 24] extcall 6 ............................... cursor(200)
+  [ 26] ret
+end
+
+on Explotion groundlevel, tilex, tiley
+  [  0] getparam 0 .............................. <groundlevel>
+  [  2] jmpifz [ 28] ............................ if groundlevel then / else
+  [  5] getglobal 112 ........................... <oBuilding>
+  [  7] getparam 1 .............................. <tilex>
+  [  9] getparam 2 .............................. <tiley>
+  [ 11] pusharglistnoret 3 ...................... <oBuilding, tilex, tiley>
+  [ 13] objcall 176 ............................. oBuilding.mExplode(tilex, tiley)
+  [ 15] getglobal 115 ........................... <oPeople>
+  [ 17] getparam 1 .............................. <tilex>
+  [ 19] getparam 2 .............................. <tiley>
+  [ 21] pusharglistnoret 3 ...................... <oPeople, tilex, tiley>
+  [ 23] objcall 177 ............................. oPeople.mKill(tilex, tiley)
+  [ 25] jmp [ 38]
+  [ 28] getglobal 112 ........................... <oBuilding>
+  [ 30] getparam 1 .............................. <tilex>
+  [ 32] getparam 2 .............................. <tiley>
+  [ 34] pusharglistnoret 3 ...................... <oBuilding, tilex, tiley>
+  [ 36] objcall 178 ............................. oBuilding.mExplodeTall(tilex, tiley)
+  [ 38] ret
+end
+
+on GetBlastDamage thex, they
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 88 ........................... <oG.SPRITEMISSILE>
+  [  4] pusharglist 1 ........................... <oG.SPRITEMISSILE>
+  [  6] extcall 7 ............................... <sprite(oG.SPRITEMISSILE)>
+  [  8] getparam 0 .............................. <thex>
+  [ 10] getparam 1 .............................. <they>
+  [ 12] pusharglist 3 ........................... <sprite(oG.SPRITEMISSILE), thex, they>
+  [ 14] objcall 180 ............................. <sprite(oG.SPRITEMISSILE).mGetDamage(thex, they)>
+  [ 16] pusharglistnoret 1 ...................... <sprite(oG.SPRITEMISSILE).mGetDamage(thex, they)>
+  [ 18] extcall 22 .............................. return sprite(oG.SPRITEMISSILE).mGetDamage(thex, they)
+  [ 20] ret
+end
+
+on prepareMovie
+  [  0] pushzero ................................ <0>
+  [  1] setglobal 181 ........................... waitstreaming = 0
+  [  3] pushint8 1 .............................. <1>
+  [  5] pusharglistnoret 1 ...................... <1>
+  [  7] extcall 182 ............................. tellStreamStatus(1)
+  [  9] ret
+end
+
+on streamStatus url, state, bytesSoFar, bytesTotal, error
+  [  0] pushint8 1 .............................. <1>
+  [  2] setglobal 181 ........................... waitstreaming = 1
+  [  4] pushint16 499 ........................... <499>
+  [  7] pusharglist 1 ........................... <499>
+  [  9] extcall 7 ............................... <sprite(499)>
+  [ 11] pushcons 10 ............................. <"tempbytesloaded">
+  [ 13] getparam 2 .............................. <bytesSoFar>
+  [ 15] pusharglist 1 ........................... <bytesSoFar>
+  [ 17] extcall 184 ............................. <string(bytesSoFar)>
+  [ 19] pusharglistnoret 3 ...................... <sprite(499), "tempbytesloaded", string(bytesSoFar)>
+  [ 21] extcall 183 ............................. setVariable(sprite(499), "tempbytesloaded", string(bytesSoFar))
+  [ 23] pushint16 499 ........................... <499>
+  [ 26] pusharglist 1 ........................... <499>
+  [ 28] extcall 7 ............................... <sprite(499)>
+  [ 30] pushcons 11 ............................. <"tempbytestotal">
+  [ 32] getparam 3 .............................. <bytesTotal>
+  [ 34] pusharglist 1 ........................... <bytesTotal>
+  [ 36] extcall 184 ............................. <string(bytesTotal)>
+  [ 38] pusharglistnoret 3 ...................... <sprite(499), "tempbytestotal", string(bytesTotal)>
+  [ 40] extcall 183 ............................. setVariable(sprite(499), "tempbytestotal", string(bytesTotal))
+  [ 42] getparam 1 .............................. <state>
+  [ 44] pushcons 12 ............................. <"Complete">
+  [ 46] eq ...................................... <state = "Complete">
+  [ 47] jmpifz [ 65] ............................ if state = "Complete" then
+  [ 50] pushzero ................................ <0>
+  [ 51] pusharglistnoret 1 ...................... <0>
+  [ 53] extcall 182 ............................. tellStreamStatus(0)
+  [ 55] pushcons 13 ............................. <"MInit">
+  [ 57] pusharglist 1 ........................... <"MInit">
+  [ 59] extcall 165 ............................. <marker("MInit")>
+  [ 61] pusharglistnoret 1 ...................... <marker("MInit")>
+  [ 63] extcall 185 ............................. go(marker("MInit"))
+  [ 65] ret
+end

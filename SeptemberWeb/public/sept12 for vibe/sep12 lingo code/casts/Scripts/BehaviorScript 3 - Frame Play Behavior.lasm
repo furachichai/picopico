@@ -1,0 +1,9 @@
+on exitFrame me
+  [  0] pusharglistnoret 0 ...................... <>
+  [  2] extcall 31 .............................. PlayGame()
+  [  4] pusharglist 0 ........................... <>
+  [  6] thebuiltin 25 ........................... <the frame>
+  [  8] pusharglistnoret 1 ...................... <the frame>
+  [ 10] extcall 185 ............................. go(the frame)
+  [ 12] ret
+end

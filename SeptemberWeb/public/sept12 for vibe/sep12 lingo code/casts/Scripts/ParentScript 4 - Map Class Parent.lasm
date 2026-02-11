@@ -1,0 +1,602 @@
+property MAPMEDIANAME, pArray, pWidth, pHeight, pISOTILEWIDTH, pISOTILEHEIGHT, pTileOnMapWidth, pTileOnMapHeight, pS
+global oG, oIso, oBuilding
+
+on new me
+  [  0] getparam 0 .............................. <me>
+  [  2] pushcons 0 .............................. <"Map">
+  [  4] setobjprop 196 .......................... me.MAPMEDIANAME = "Map"
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 196 .......................... <me.MAPMEDIANAME>
+  [ 10] pusharglist 1 ........................... <me.MAPMEDIANAME>
+  [ 12] extcall 26 .............................. <member(me.MAPMEDIANAME)>
+  [ 14] getglobal 9 ............................. <oG>
+  [ 16] getobjprop 15 ........................... <oG.screenx>
+  [ 18] getglobal 9 ............................. <oG>
+  [ 20] getobjprop 18 ........................... <oG.screeny>
+  [ 22] pushint8 2 .............................. <2>
+  [ 24] div ..................................... <oG.screeny / 2>
+  [ 25] pusharglist 2 ........................... <oG.screenx, oG.screeny / 2>
+  [ 27] extcall 131 ............................. <point(oG.screenx, oG.screeny / 2)>
+  [ 29] setobjprop 132 .......................... member(me.MAPMEDIANAME).regPoint = point(oG.screenx, oG.screeny / 2)
+  [ 31] getglobal 9 ............................. <oG>
+  [ 33] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 35] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 37] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 15 ........................... <oG.screenx>
+  [ 43] pushint8 2 .............................. <2>
+  [ 45] div ..................................... <oG.screenx / 2>
+  [ 46] setobjprop 16 ........................... sprite(oG.SPRITEMAP).locH = oG.screenx / 2
+  [ 48] getglobal 9 ............................. <oG>
+  [ 50] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 52] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 54] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 56] getglobal 9 ............................. <oG>
+  [ 58] getobjprop 18 ........................... <oG.screeny>
+  [ 60] pushint8 2 .............................. <2>
+  [ 62] div ..................................... <oG.screeny / 2>
+  [ 63] setobjprop 19 ........................... sprite(oG.SPRITEMAP).locV = oG.screeny / 2
+  [ 65] getparam 0 .............................. <me>
+  [ 67] getglobal 9 ............................. <oG>
+  [ 69] getobjprop 84 ........................... <oG.SPRITEMAP>
+  [ 71] pusharglist 1 ........................... <oG.SPRITEMAP>
+  [ 73] extcall 7 ............................... <sprite(oG.SPRITEMAP)>
+  [ 75] setobjprop 197 .......................... me.pS = sprite(oG.SPRITEMAP)
+  [ 77] getparam 0 .............................. <me>
+  [ 79] getglobal 9 ............................. <oG>
+  [ 81] getobjprop 61 ........................... <oG.MAPWIDTH>
+  [ 83] setobjprop 198 .......................... me.pWidth = oG.MAPWIDTH
+  [ 85] getparam 0 .............................. <me>
+  [ 87] getglobal 9 ............................. <oG>
+  [ 89] getobjprop 62 ........................... <oG.MAPHEIGHT>
+  [ 91] setobjprop 199 .......................... me.pHeight = oG.MAPHEIGHT
+  [ 93] getparam 0 .............................. <me>
+  [ 95] getglobal 9 ............................. <oG>
+  [ 97] getobjprop 67 ........................... <oG.ISOTILEWIDTH>
+  [ 99] setobjprop 200 .......................... me.pISOTILEWIDTH = oG.ISOTILEWIDTH
+  [101] getparam 0 .............................. <me>
+  [103] getglobal 9 ............................. <oG>
+  [105] getobjprop 68 ........................... <oG.ISOTILEHEIGHT>
+  [107] setobjprop 201 .......................... me.pISOTILEHEIGHT = oG.ISOTILEHEIGHT
+  [109] getparam 0 .............................. <me>
+  [111] pushcons 1 .............................. <"Square">
+  [113] getglobal 9 ............................. <oG>
+  [115] getobjprop 104 .......................... <oG.MEDIACASTNUMBER>
+  [117] pusharglist 2 ........................... <"Square", oG.MEDIACASTNUMBER>
+  [119] extcall 26 .............................. <member("Square", oG.MEDIACASTNUMBER)>
+  [121] getobjprop 202 .......................... <member("Square", oG.MEDIACASTNUMBER).width>
+  [123] setobjprop 203 .......................... me.pTileOnMapWidth = member("Square", oG.MEDIACASTNUMBER).width
+  [125] getparam 0 .............................. <me>
+  [127] pushcons 1 .............................. <"Square">
+  [129] getglobal 9 ............................. <oG>
+  [131] getobjprop 104 .......................... <oG.MEDIACASTNUMBER>
+  [133] pusharglist 2 ........................... <"Square", oG.MEDIACASTNUMBER>
+  [135] extcall 26 .............................. <member("Square", oG.MEDIACASTNUMBER)>
+  [137] getobjprop 156 .......................... <member("Square", oG.MEDIACASTNUMBER).height>
+  [139] setobjprop 204 .......................... me.pTileOnMapHeight = member("Square", oG.MEDIACASTNUMBER).height
+  [141] getparam 0 .............................. <me>
+  [143] pusharglistnoret 1 ...................... <me>
+  [145] objcall 192 ............................. me.mCreateEmptyArray()
+  [147] getparam 0 .............................. <me>
+  [149] pusharglistnoret 1 ...................... <me>
+  [151] extcall 22 .............................. return me
+  [153] ret
+end
+
+on mGetIndex me, thex, they
+  [  0] getparam 1 .............................. <thex>
+  [  2] getparam 2 .............................. <they>
+  [  4] getparam 0 .............................. <me>
+  [  6] getobjprop 198 .......................... <me.pWidth>
+  [  8] mul ..................................... <they * me.pWidth>
+  [  9] add ..................................... <thex + (they * me.pWidth)>
+  [ 10] pushint8 1 .............................. <1>
+  [ 12] add ..................................... <thex + (they * me.pWidth) + 1>
+  [ 13] pusharglistnoret 1 ...................... <thex + (they * me.pWidth) + 1>
+  [ 15] extcall 22 .............................. return thex + (they * me.pWidth) + 1
+  [ 17] ret
+end
+
+on mCreateEmptyArray me
+  [  0] getparam 0 .............................. <me>
+  [  2] pusharglist 0 ........................... <[]>
+  [  4] pushlist ................................ <[]>
+  [  5] setobjprop 205 .......................... me.pArray = []
+  [  7] pushint8 1 .............................. <1>
+  [  9] inv ..................................... <-1>
+  [ 10] setlocal 0 .............................. thecount = -1
+  [ 12] pushzero ................................ <0>
+  [ 13] setlocal 1
+  [ 15] getlocal 1
+  [ 17] getparam 0 .............................. <me>
+  [ 19] getobjprop 199 .......................... <me.pHeight>
+  [ 21] pushint8 1 .............................. <1>
+  [ 23] sub ..................................... <me.pHeight - 1>
+  [ 24] lteq
+  [ 25] jmpifz [ 97] ............................ repeat with tiley = 0 to me.pHeight - 1
+  [ 28] pushzero ................................ <0>
+  [ 29] setlocal 2
+  [ 31] getlocal 2
+  [ 33] getparam 0 .............................. <me>
+  [ 35] getobjprop 198 .......................... <me.pWidth>
+  [ 37] pushint8 1 .............................. <1>
+  [ 39] sub ..................................... <me.pWidth - 1>
+  [ 40] lteq
+  [ 41] jmpifz [ 88] ............................ repeat with tilex = 0 to me.pWidth - 1
+  [ 44] pushsymb 175 ............................ <#thedepth>
+  [ 46] getlocal 0 .............................. <thecount>
+  [ 48] pushsymb 170 ............................ <#building>
+  [ 50] pusharglist 0 ........................... <>
+  [ 52] extcall 128 ............................. <VOID>
+  [ 54] pusharglist 4 ........................... <[#thedepth: thecount, #building: VOID]>
+  [ 56] pushproplist ............................ <[#thedepth: thecount, #building: VOID]>
+  [ 57] setlocal 3 .............................. obj = [#thedepth: thecount, #building: VOID]
+  [ 59] getparam 0 .............................. <me>
+  [ 61] pushsymb 205 ............................ <#pArray>
+  [ 63] getparam 0 .............................. <me>
+  [ 65] getlocal 2 .............................. <tilex>
+  [ 67] getlocal 1 .............................. <tiley>
+  [ 69] pusharglist 3 ........................... <me, tilex, tiley>
+  [ 71] objcall 191 ............................. <me.mGetIndex(tilex, tiley)>
+  [ 73] getlocal 3 .............................. <obj>
+  [ 75] pusharglistnoret 4 ...................... <me, #pArray, me.mGetIndex(tilex, tiley), obj>
+  [ 77] objcall 206 ............................. me.pArray[me.mGetIndex(tilex, tiley)] = obj
+  [ 79] pushint8 1
+  [ 81] getlocal 2
+  [ 83] add
+  [ 84] setlocal 2
+  [ 86] endrepeat [ 31]
+  [ 88] pushint8 1
+  [ 90] getlocal 1
+  [ 92] add
+  [ 93] setlocal 1
+  [ 95] endrepeat [ 15]
+  [ 97] ret
+end
+
+on mSetDepth me
+  [  0] pushzero ................................ <0>
+  [  1] setlocal 0 .............................. thecount = 0
+  [  3] pusharglist 0 ........................... <[]>
+  [  5] pushlist ................................ <[]>
+  [  6] setlocal 1 .............................. array = []
+  [  8] pushzero ................................ <0>
+  [  9] setlocal 2 .............................. thestate = 0
+  [ 11] pushzero ................................ <0>
+  [ 12] setlocal 3 .............................. tiley = 0
+  [ 14] getlocal 3 .............................. <tiley>
+  [ 16] getparam 0 .............................. <me>
+  [ 18] getobjprop 199 .......................... <me.pHeight>
+  [ 20] lt ...................................... <tiley < me.pHeight>
+  [ 21] jmpifz [616] ............................ repeat while tiley < me.pHeight
+  [ 24] pushzero ................................ <0>
+  [ 25] setlocal 4 .............................. tilex = 0
+  [ 27] getlocal 2 .............................. <thestate>
+  [ 29] peek 0 .................................. case thestate of
+  [ 31] pushzero ................................ <0>
+  [ 32] eq
+  [ 33] jmpifz [217] ............................ (case) 0:
+  [ 36] getlocal 4 .............................. <tilex>
+  [ 38] getparam 0 .............................. <me>
+  [ 40] getobjprop 198 .......................... <me.pWidth>
+  [ 42] lt ...................................... <tilex < me.pWidth>
+  [ 43] jmpifz [207] ............................ repeat while tilex < me.pWidth
+  [ 46] getparam 0 .............................. <me>
+  [ 48] getlocal 4 .............................. <tilex>
+  [ 50] getlocal 3 .............................. <tiley>
+  [ 52] pusharglist 3 ........................... <me, tilex, tiley>
+  [ 54] objcall 129 ............................. <me.mGetTileDepth(tilex, tiley)>
+  [ 56] pushint8 1 .............................. <1>
+  [ 58] inv ..................................... <-1>
+  [ 59] eq ...................................... <me.mGetTileDepth(tilex, tiley) = -1>
+  [ 60] jmpifz [198] ............................ if me.mGetTileDepth(tilex, tiley) = -1 then
+  [ 63] getparam 0 .............................. <me>
+  [ 65] getlocal 4 .............................. <tilex>
+  [ 67] getlocal 3 .............................. <tiley>
+  [ 69] pusharglist 3 ........................... <me, tilex, tiley>
+  [ 71] objcall 127 ............................. <me.mGetTileBuilding(tilex, tiley)>
+  [ 73] setlocal 5 .............................. building = me.mGetTileBuilding(tilex, tiley)
+  [ 75] getlocal 5 .............................. <building>
+  [ 77] pusharglist 0 ........................... <>
+  [ 79] extcall 128 ............................. <VOID>
+  [ 81] eq ...................................... <building = VOID>
+  [ 82] jmpifz [114] ............................ if building = VOID then / else
+  [ 85] getparam 0 .............................. <me>
+  [ 87] getlocal 0 .............................. <thecount>
+  [ 89] getlocal 4 .............................. <tilex>
+  [ 91] getlocal 3 .............................. <tiley>
+  [ 93] pusharglistnoret 4 ...................... <me, thecount, tilex, tiley>
+  [ 95] objcall 195 ............................. me.mSetTileDepth(thecount, tilex, tiley)
+  [ 97] getlocal 0 .............................. <thecount>
+  [ 99] pushint8 1 .............................. <1>
+  [101] add ..................................... <thecount + 1>
+  [102] setlocal 0 .............................. thecount = thecount + 1
+  [104] getlocal 4 .............................. <tilex>
+  [106] pushint8 1 .............................. <1>
+  [108] add ..................................... <tilex + 1>
+  [109] setlocal 4 .............................. tilex = tilex + 1
+  [111] jmp [195]
+  [114] getlocal 5 .............................. <building>
+  [116] getchainedprop 171 ...................... <building.thetype>
+  [118] getobjprop 173 .......................... <building.thetype.theheight>
+  [120] pushint8 1 .............................. <1>
+  [122] eq ...................................... <building.thetype.theheight = 1>
+  [123] jmpifz [155] ............................ if building.thetype.theheight = 1 then / else
+  [126] getparam 0 .............................. <me>
+  [128] getlocal 0 .............................. <thecount>
+  [130] getlocal 4 .............................. <tilex>
+  [132] getlocal 3 .............................. <tiley>
+  [134] pusharglistnoret 4 ...................... <me, thecount, tilex, tiley>
+  [136] objcall 195 ............................. me.mSetTileDepth(thecount, tilex, tiley)
+  [138] getlocal 0 .............................. <thecount>
+  [140] pushint8 1 .............................. <1>
+  [142] add ..................................... <thecount + 1>
+  [143] setlocal 0 .............................. thecount = thecount + 1
+  [145] getlocal 4 .............................. <tilex>
+  [147] pushint8 1 .............................. <1>
+  [149] add ..................................... <tilex + 1>
+  [150] setlocal 4 .............................. tilex = tilex + 1
+  [152] jmp [195]
+  [155] pushint8 1 .............................. <1>
+  [157] setlocal 2 .............................. thestate = 1
+  [159] pushsymb 208 ............................ <#destx>
+  [161] getlocal 4 .............................. <tilex>
+  [163] pushsymb 209 ............................ <#DestY>
+  [165] getlocal 3 .............................. <tiley>
+  [167] getlocal 5 .............................. <building>
+  [169] getchainedprop 171 ...................... <building.thetype>
+  [171] getobjprop 173 .......................... <building.thetype.theheight>
+  [173] add ..................................... <tiley + building.thetype.theheight>
+  [174] pushint8 1 .............................. <1>
+  [176] sub ..................................... <tiley + building.thetype.theheight - 1>
+  [177] pusharglist 4 ........................... <[#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]>
+  [179] pushproplist ............................ <[#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]>
+  [180] setlocal 6 .............................. obj = [#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]
+  [182] getlocal 1 .............................. <array>
+  [184] pushint8 1 .............................. <1>
+  [186] getlocal 6 .............................. <obj>
+  [188] pusharglistnoret 3 ...................... <array, 1, obj>
+  [190] objcall 210 ............................. array.addAt(1, obj)
+  [192] jmp [207] ............................... exit repeat
+  [195] jmp [205] ............................... next repeat
+  [198] getlocal 4 .............................. <tilex>
+  [200] pushint8 1 .............................. <1>
+  [202] add ..................................... <tilex + 1>
+  [203] setlocal 4 .............................. tilex = tilex + 1
+  [205] endrepeat [ 36]
+  [207] getlocal 3 .............................. <tiley>
+  [209] pushint8 1 .............................. <1>
+  [211] add ..................................... <tiley + 1>
+  [212] setlocal 3 .............................. tiley = tiley + 1
+  [214] jmp [611]
+  [217] peek 0
+  [219] pushint8 1 .............................. <1>
+  [221] eq
+  [222] jmpifz [611] ............................ (case) 1:
+  [225] getlocal 4 .............................. <tilex>
+  [227] getlocal 1 .............................. <array>
+  [229] pushint8 1 .............................. <1>
+  [231] pusharglist 2 ........................... <array, 1>
+  [233] objcall 211 ............................. <array[1]>
+  [235] getobjprop 208 .......................... <array[1].destx>
+  [237] lt ...................................... <tilex < array[1].destx>
+  [238] jmpifz [596] ............................ repeat while tilex < array[1].destx
+  [241] getlocal 4 .............................. <tilex>
+  [243] getlocal 1 .............................. <array>
+  [245] pushint8 1 .............................. <1>
+  [247] pusharglist 2 ........................... <array, 1>
+  [249] objcall 211 ............................. <array[1]>
+  [251] getobjprop 208 .......................... <array[1].destx>
+  [253] pushint8 1 .............................. <1>
+  [255] sub ..................................... <array[1].destx - 1>
+  [256] eq ...................................... <tilex = (array[1].destx - 1)>
+  [257] getlocal 3 .............................. <tiley>
+  [259] getlocal 1 .............................. <array>
+  [261] pushint8 1 .............................. <1>
+  [263] pusharglist 2 ........................... <array, 1>
+  [265] objcall 211 ............................. <array[1]>
+  [267] getobjprop 209 .......................... <array[1].DestY>
+  [269] eq ...................................... <tiley = array[1].DestY>
+  [270] and ..................................... <(tilex = (array[1].destx - 1)) and (tiley = array[1].DestY)>
+  [271] jmpifz [455] ............................ if (tilex = (array[1].destx - 1)) and (tiley = array[1].DestY) then
+  [274] getparam 0 .............................. <me>
+  [276] getlocal 0 .............................. <thecount>
+  [278] getlocal 4 .............................. <tilex>
+  [280] getlocal 3 .............................. <tiley>
+  [282] pusharglistnoret 4 ...................... <me, thecount, tilex, tiley>
+  [284] objcall 195 ............................. me.mSetTileDepth(thecount, tilex, tiley)
+  [286] getlocal 0 .............................. <thecount>
+  [288] pushint8 1 .............................. <1>
+  [290] add ..................................... <thecount + 1>
+  [291] setlocal 0 .............................. thecount = thecount + 1
+  [293] getlocal 1 .............................. <array>
+  [295] pushint8 1 .............................. <1>
+  [297] pusharglist 2 ........................... <array, 1>
+  [299] objcall 211 ............................. <array[1]>
+  [301] setlocal 6 .............................. obj = array[1]
+  [303] getlocal 6 .............................. <obj>
+  [305] getobjprop 208 .......................... <obj.destx>
+  [307] setlocal 4 .............................. tilex = obj.destx
+  [309] getparam 0 .............................. <me>
+  [311] getlocal 4 .............................. <tilex>
+  [313] getlocal 3 .............................. <tiley>
+  [315] pusharglist 3 ........................... <me, tilex, tiley>
+  [317] objcall 127 ............................. <me.mGetTileBuilding(tilex, tiley)>
+  [319] setlocal 5 .............................. building = me.mGetTileBuilding(tilex, tiley)
+  [321] getlocal 6 .............................. <obj>
+  [323] getobjprop 209 .......................... <obj.DestY>
+  [325] getlocal 5 .............................. <building>
+  [327] getchainedprop 171 ...................... <building.thetype>
+  [329] getobjprop 173 .......................... <building.thetype.theheight>
+  [331] sub ..................................... <obj.DestY - building.thetype.theheight>
+  [332] pushint8 1 .............................. <1>
+  [334] add ..................................... <obj.DestY - building.thetype.theheight + 1>
+  [335] setlocal 3 .............................. tiley = obj.DestY - building.thetype.theheight + 1
+  [337] getlocal 1 .............................. <array>
+  [339] pushint8 1 .............................. <1>
+  [341] pusharglistnoret 2 ...................... <array, 1>
+  [343] objcall 162 ............................. array.deleteAt(1)
+  [345] getlocal 4 .............................. <tilex>
+  [347] setlocal 7
+  [349] getlocal 7
+  [351] getlocal 4 .............................. <tilex>
+  [353] getlocal 5 .............................. <building>
+  [355] getchainedprop 171 ...................... <building.thetype>
+  [357] getobjprop 172 .......................... <building.thetype.thewidth>
+  [359] add ..................................... <tilex + building.thetype.thewidth>
+  [360] pushint8 1 .............................. <1>
+  [362] sub ..................................... <tilex + building.thetype.thewidth - 1>
+  [363] lteq
+  [364] jmpifz [419] ............................ repeat with i = tilex to tilex + building.thetype.thewidth - 1
+  [367] getlocal 3 .............................. <tiley>
+  [369] setlocal 8
+  [371] getlocal 8
+  [373] getlocal 3 .............................. <tiley>
+  [375] getlocal 5 .............................. <building>
+  [377] getchainedprop 171 ...................... <building.thetype>
+  [379] getobjprop 173 .......................... <building.thetype.theheight>
+  [381] add ..................................... <tiley + building.thetype.theheight>
+  [382] pushint8 1 .............................. <1>
+  [384] sub ..................................... <tiley + building.thetype.theheight - 1>
+  [385] lteq
+  [386] jmpifz [410] ............................ repeat with j = tiley to tiley + building.thetype.theheight - 1
+  [389] getparam 0 .............................. <me>
+  [391] getlocal 0 .............................. <thecount>
+  [393] getlocal 7 .............................. <i>
+  [395] getlocal 8 .............................. <j>
+  [397] pusharglistnoret 4 ...................... <me, thecount, i, j>
+  [399] objcall 195 ............................. me.mSetTileDepth(thecount, i, j)
+  [401] pushint8 1
+  [403] getlocal 8
+  [405] add
+  [406] setlocal 8
+  [408] endrepeat [371]
+  [410] pushint8 1
+  [412] getlocal 7
+  [414] add
+  [415] setlocal 7
+  [417] endrepeat [349]
+  [419] getlocal 4 .............................. <tilex>
+  [421] getlocal 5 .............................. <building>
+  [423] getchainedprop 171 ...................... <building.thetype>
+  [425] getobjprop 172 .......................... <building.thetype.thewidth>
+  [427] add ..................................... <tilex + building.thetype.thewidth>
+  [428] setlocal 4 .............................. tilex = tilex + building.thetype.thewidth
+  [430] getlocal 0 .............................. <thecount>
+  [432] pushint8 1 .............................. <1>
+  [434] add ..................................... <thecount + 1>
+  [435] setlocal 0 .............................. thecount = thecount + 1
+  [437] getlocal 1 .............................. <array>
+  [439] getobjprop 137 .......................... <array.count>
+  [441] pushzero ................................ <0>
+  [442] eq ...................................... <array.count = 0>
+  [443] jmpifz [452] ............................ if array.count = 0 then
+  [446] pushzero ................................ <0>
+  [447] setlocal 2 .............................. thestate = 0
+  [449] jmp [596] ............................... exit repeat
+  [452] jmp [593] ............................... next repeat
+  [455] getparam 0 .............................. <me>
+  [457] getlocal 4 .............................. <tilex>
+  [459] getlocal 3 .............................. <tiley>
+  [461] pusharglist 3 ........................... <me, tilex, tiley>
+  [463] objcall 129 ............................. <me.mGetTileDepth(tilex, tiley)>
+  [465] pushint8 1 .............................. <1>
+  [467] inv ..................................... <-1>
+  [468] eq ...................................... <me.mGetTileDepth(tilex, tiley) = -1>
+  [469] jmpifz [586] ............................ if me.mGetTileDepth(tilex, tiley) = -1 then
+  [472] getparam 0 .............................. <me>
+  [474] getlocal 4 .............................. <tilex>
+  [476] getlocal 3 .............................. <tiley>
+  [478] pusharglist 3 ........................... <me, tilex, tiley>
+  [480] objcall 127 ............................. <me.mGetTileBuilding(tilex, tiley)>
+  [482] setlocal 5 .............................. building = me.mGetTileBuilding(tilex, tiley)
+  [484] getlocal 5 .............................. <building>
+  [486] pusharglist 0 ........................... <>
+  [488] extcall 128 ............................. <VOID>
+  [490] eq ...................................... <building = VOID>
+  [491] jmpifz [516] ............................ if building = VOID then / else
+  [494] getparam 0 .............................. <me>
+  [496] getlocal 0 .............................. <thecount>
+  [498] getlocal 4 .............................. <tilex>
+  [500] getlocal 3 .............................. <tiley>
+  [502] pusharglistnoret 4 ...................... <me, thecount, tilex, tiley>
+  [504] objcall 195 ............................. me.mSetTileDepth(thecount, tilex, tiley)
+  [506] getlocal 0 .............................. <thecount>
+  [508] pushint8 1 .............................. <1>
+  [510] add ..................................... <thecount + 1>
+  [511] setlocal 0 .............................. thecount = thecount + 1
+  [513] jmp [586]
+  [516] getlocal 5 .............................. <building>
+  [518] getchainedprop 171 ...................... <building.thetype>
+  [520] getobjprop 173 .......................... <building.thetype.theheight>
+  [522] pushint8 1 .............................. <1>
+  [524] eq ...................................... <building.thetype.theheight = 1>
+  [525] jmpifz [550] ............................ if building.thetype.theheight = 1 then / else
+  [528] getparam 0 .............................. <me>
+  [530] getlocal 0 .............................. <thecount>
+  [532] getlocal 4 .............................. <tilex>
+  [534] getlocal 3 .............................. <tiley>
+  [536] pusharglistnoret 4 ...................... <me, thecount, tilex, tiley>
+  [538] objcall 195 ............................. me.mSetTileDepth(thecount, tilex, tiley)
+  [540] getlocal 0 .............................. <thecount>
+  [542] pushint8 1 .............................. <1>
+  [544] add ..................................... <thecount + 1>
+  [545] setlocal 0 .............................. thecount = thecount + 1
+  [547] jmp [586]
+  [550] pushsymb 208 ............................ <#destx>
+  [552] getlocal 4 .............................. <tilex>
+  [554] pushsymb 209 ............................ <#DestY>
+  [556] getlocal 3 .............................. <tiley>
+  [558] getlocal 5 .............................. <building>
+  [560] getchainedprop 171 ...................... <building.thetype>
+  [562] getobjprop 173 .......................... <building.thetype.theheight>
+  [564] add ..................................... <tiley + building.thetype.theheight>
+  [565] pushint8 1 .............................. <1>
+  [567] sub ..................................... <tiley + building.thetype.theheight - 1>
+  [568] pusharglist 4 ........................... <[#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]>
+  [570] pushproplist ............................ <[#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]>
+  [571] setlocal 6 .............................. obj = [#destx: tilex, #DestY: tiley + building.thetype.theheight - 1]
+  [573] getlocal 1 .............................. <array>
+  [575] pushint8 1 .............................. <1>
+  [577] getlocal 6 .............................. <obj>
+  [579] pusharglistnoret 3 ...................... <array, 1, obj>
+  [581] objcall 210 ............................. array.addAt(1, obj)
+  [583] jmp [596] ............................... exit repeat
+  [586] getlocal 4 .............................. <tilex>
+  [588] pushint8 1 .............................. <1>
+  [590] add ..................................... <tilex + 1>
+  [591] setlocal 4 .............................. tilex = tilex + 1
+  [593] endrepeat [225]
+  [596] getlocal 2 .............................. <thestate>
+  [598] pushint8 1 .............................. <1>
+  [600] eq ...................................... <thestate = 1>
+  [601] jmpifz [611] ............................ if thestate = 1 then
+  [604] getlocal 3 .............................. <tiley>
+  [606] pushint8 1 .............................. <1>
+  [608] add ..................................... <tiley + 1>
+  [609] setlocal 3 .............................. tiley = tiley + 1
+  [611] pop 1 ................................... end case
+  [613] endrepeat [ 14]
+  [616] ret
+end
+
+on mDraw me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getglobal 112 ........................... <oBuilding>
+  [  8] pushsymb 136 ............................ <#pActualBuildingArray>
+  [ 10] pusharglist 2 ........................... <oBuilding, #pActualBuildingArray>
+  [ 12] objcall 137 ............................. <oBuilding.pActualBuildingArray.count>
+  [ 14] lteq
+  [ 15] jmpifz [ 76] ............................ repeat with i = 1 to oBuilding.pActualBuildingArray.count
+  [ 18] getglobal 9 ............................. <oG>
+  [ 20] getobjprop 89 ........................... <oG.BUILDING1STSPRITE>
+  [ 22] getlocal 0 .............................. <i>
+  [ 24] add ..................................... <oG.BUILDING1STSPRITE + i>
+  [ 25] pushint8 1 .............................. <1>
+  [ 27] sub ..................................... <oG.BUILDING1STSPRITE + i - 1>
+  [ 28] pusharglist 1 ........................... <oG.BUILDING1STSPRITE + i - 1>
+  [ 30] extcall 7 ............................... <sprite(oG.BUILDING1STSPRITE + i - 1)>
+  [ 32] getglobal 9 ............................. <oG>
+  [ 34] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [ 36] getglobal 112 ........................... <oBuilding>
+  [ 38] pushsymb 136 ............................ <#pActualBuildingArray>
+  [ 40] getlocal 0 .............................. <i>
+  [ 42] pusharglist 3 ........................... <oBuilding, #pActualBuildingArray, i>
+  [ 44] objcall 138 ............................. <oBuilding.pActualBuildingArray[i]>
+  [ 46] getobjprop 21 ........................... <oBuilding.pActualBuildingArray[i].thex>
+  [ 48] getglobal 112 ........................... <oBuilding>
+  [ 50] pushsymb 136 ............................ <#pActualBuildingArray>
+  [ 52] getlocal 0 .............................. <i>
+  [ 54] pusharglist 3 ........................... <oBuilding, #pActualBuildingArray, i>
+  [ 56] objcall 138 ............................. <oBuilding.pActualBuildingArray[i]>
+  [ 58] getobjprop 20 ........................... <oBuilding.pActualBuildingArray[i].they>
+  [ 60] pusharglist 2 ........................... <oBuilding.pActualBuildingArray[i].thex, oBuilding.pActualBuildingArray[i].they>
+  [ 62] extcall 38 .............................. <GetTileDepth(oBuilding.pActualBuildingArray[i].thex, oBuilding.pActualBuildingArray[i].they)>
+  [ 64] add ..................................... <oG.PERSON1STSPRITE + GetTileDepth(oBuilding.pActualBuildingArray[i].thex, oBuilding.pActualBuildingArray[i].they)>
+  [ 65] setobjprop 11 ........................... sprite(oG.BUILDING1STSPRITE + i - 1).locZ = oG.PERSON1STSPRITE + GetTileDepth(oBuilding.pActualBuildingArray[i].thex, oBuilding.pActualBuildingArray[i].they)
+  [ 67] pushint8 1
+  [ 69] getlocal 0
+  [ 71] add
+  [ 72] setlocal 0
+  [ 74] endrepeat [  4]
+  [ 76] getglobal 112 ........................... <oBuilding>
+  [ 78] pusharglistnoret 1 ...................... <oBuilding>
+  [ 80] objcall 215 ............................. oBuilding.mSortActualBuildingArray()
+  [ 82] ret
+end
+
+on mSetTileBuilding me, obj, thex, they
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 205 ............................ <#pArray>
+  [  4] getparam 2 .............................. <thex>
+  [  6] getparam 3 .............................. <they>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 198 .......................... <me.pWidth>
+  [ 12] mul ..................................... <they * me.pWidth>
+  [ 13] add ..................................... <thex + (they * me.pWidth)>
+  [ 14] pushint8 1 .............................. <1>
+  [ 16] add ..................................... <thex + (they * me.pWidth) + 1>
+  [ 17] pusharglist 3 ........................... <me, #pArray, thex + (they * me.pWidth) + 1>
+  [ 19] objcall 138 ............................. <me.pArray[thex + (they * me.pWidth) + 1]>
+  [ 21] getparam 1 .............................. <obj>
+  [ 23] setobjprop 170 .......................... me.pArray[thex + (they * me.pWidth) + 1].building = obj
+  [ 25] ret
+end
+
+on mGetTileBuilding me, thex, they
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 205 ............................ <#pArray>
+  [  4] getparam 1 .............................. <thex>
+  [  6] getparam 2 .............................. <they>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 198 .......................... <me.pWidth>
+  [ 12] mul ..................................... <they * me.pWidth>
+  [ 13] add ..................................... <thex + (they * me.pWidth)>
+  [ 14] pushint8 1 .............................. <1>
+  [ 16] add ..................................... <thex + (they * me.pWidth) + 1>
+  [ 17] pusharglist 3 ........................... <me, #pArray, thex + (they * me.pWidth) + 1>
+  [ 19] objcall 138 ............................. <me.pArray[thex + (they * me.pWidth) + 1]>
+  [ 21] getobjprop 170 .......................... <me.pArray[thex + (they * me.pWidth) + 1].building>
+  [ 23] pusharglistnoret 1 ...................... <me.pArray[thex + (they * me.pWidth) + 1].building>
+  [ 25] extcall 22 .............................. return me.pArray[thex + (they * me.pWidth) + 1].building
+  [ 27] ret
+end
+
+on mSetTileDepth me, val, thex, they
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 205 ............................ <#pArray>
+  [  4] getparam 2 .............................. <thex>
+  [  6] getparam 3 .............................. <they>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 198 .......................... <me.pWidth>
+  [ 12] mul ..................................... <they * me.pWidth>
+  [ 13] add ..................................... <thex + (they * me.pWidth)>
+  [ 14] pushint8 1 .............................. <1>
+  [ 16] add ..................................... <thex + (they * me.pWidth) + 1>
+  [ 17] pusharglist 3 ........................... <me, #pArray, thex + (they * me.pWidth) + 1>
+  [ 19] objcall 138 ............................. <me.pArray[thex + (they * me.pWidth) + 1]>
+  [ 21] getparam 1 .............................. <val>
+  [ 23] setobjprop 175 .......................... me.pArray[thex + (they * me.pWidth) + 1].thedepth = val
+  [ 25] ret
+end
+
+on mGetTileDepth me, thex, they
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 205 ............................ <#pArray>
+  [  4] getparam 1 .............................. <thex>
+  [  6] getparam 2 .............................. <they>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 198 .......................... <me.pWidth>
+  [ 12] mul ..................................... <they * me.pWidth>
+  [ 13] add ..................................... <thex + (they * me.pWidth)>
+  [ 14] pushint8 1 .............................. <1>
+  [ 16] add ..................................... <thex + (they * me.pWidth) + 1>
+  [ 17] pusharglist 3 ........................... <me, #pArray, thex + (they * me.pWidth) + 1>
+  [ 19] objcall 138 ............................. <me.pArray[thex + (they * me.pWidth) + 1]>
+  [ 21] getobjprop 175 .......................... <me.pArray[thex + (they * me.pWidth) + 1].thedepth>
+  [ 23] pusharglistnoret 1 ...................... <me.pArray[thex + (they * me.pWidth) + 1].thedepth>
+  [ 25] extcall 22 .............................. return me.pArray[thex + (they * me.pWidth) + 1].thedepth
+  [ 27] ret
+end

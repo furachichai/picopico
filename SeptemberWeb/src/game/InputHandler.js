@@ -1,0 +1,185 @@
+/**
+ * InputHandler.js — Mouse/touch input for crosshair and missile firing
+ * Source: 2_1.ls (target behavior), observation from gameplay
+ *
+ * Uses the original target sprite assets.
+ * Triggers horizontal scrolling when crosshair is near screen edges.
+ */
+
+import {
+    SCREEN_W, SCREEN_H, SCROLL_HORIZ, SCROLL_STEP, GAME_STATE,
+} from './constants.js';
+
+export class InputHandler {
+    constructor(engine) {
+        this.engine = engine;
+        this.mouseX = SCREEN_W / 2;
+        this.mouseY = SCREEN_H / 2;
+        this.isOverCanvas = false;
+        this.canFire = true;    // brief cooldown after firing
+
+        this._boundMouseMove = this._onMouseMove.bind(this);
+        this._boundMouseDown = this._onMouseDown.bind(this);
+        this._boundMouseEnter = this._onMouseEnter.bind(this);
+        this._boundMouseLeave = this._onMouseLeave.bind(this);
+        this._boundTouchStart = this._onTouchStart.bind(this);
+        this._boundTouchMove = this._onTouchMove.bind(this);
+    }
+
+    attach(canvas) {
+        this.canvas = canvas;
+        canvas.addEventListener('mousemove', this._boundMouseMove);
+        canvas.addEventListener('mousedown', this._boundMouseDown);
+        canvas.addEventListener('mouseenter', this._boundMouseEnter);
+        canvas.addEventListener('mouseleave', this._boundMouseLeave);
+        canvas.addEventListener('touchstart', this._boundTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', this._boundTouchMove, { passive: false });
+
+        // Hide system cursor over canvas
+        canvas.style.cursor = 'none';
+    }
+
+    detach() {
+        if (this.canvas) {
+            this.canvas.removeEventListener('mousemove', this._boundMouseMove);
+            this.canvas.removeEventListener('mousedown', this._boundMouseDown);
+            this.canvas.removeEventListener('mouseenter', this._boundMouseEnter);
+            this.canvas.removeEventListener('mouseleave', this._boundMouseLeave);
+            this.canvas.removeEventListener('touchstart', this._boundTouchStart);
+            this.canvas.removeEventListener('touchmove', this._boundTouchMove);
+            this.canvas.style.cursor = '';
+        }
+    }
+
+    _getCanvasCoords(clientX, clientY) {
+        const rect = this.canvas.getBoundingClientRect();
+        const scaleX = SCREEN_W / rect.width;
+        const scaleY = SCREEN_H / rect.height;
+        return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY,
+        };
+    }
+
+    _onMouseMove(e) {
+        const pos = this._getCanvasCoords(e.clientX, e.clientY);
+        this.mouseX = pos.x;
+        this.mouseY = pos.y;
+    }
+
+    _onMouseDown(e) {
+        e.preventDefault();
+        this._fire();
+    }
+
+    _onMouseEnter() {
+        this.isOverCanvas = true;
+    }
+
+    _onMouseLeave() {
+        this.isOverCanvas = false;
+    }
+
+    _onTouchStart(e) {
+        e.preventDefault();
+        if (e.touches.length > 0) {
+            const pos = this._getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+            this.mouseX = pos.x;
+            this.mouseY = pos.y;
+            this.isOverCanvas = true;
+            this._fire();
+        }
+    }
+
+    _onTouchMove(e) {
+        e.preventDefault();
+        if (e.touches.length > 0) {
+            const pos = this._getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+            this.mouseX = pos.x;
+            this.mouseY = pos.y;
+        }
+    }
+
+    _fire() {
+        if (this.engine.state !== GAME_STATE.PLAYING) return;
+        if (!this.canFire) return;
+        if (this.engine.missileSystem.isLaunched()) return;
+
+        const worldMap = this.engine.worldMap;
+        const tile = worldMap.screenToTile(this.mouseX, this.mouseY);
+
+        this.engine.missileSystem.launch(
+            this.mouseX, this.mouseY,
+            tile.tileX, tile.tileY
+        );
+
+        // Play click sound
+        if (this.engine.soundManager) {
+            this.engine.soundManager.playClick();
+        }
+
+        // Brief cooldown
+        this.canFire = false;
+        setTimeout(() => { this.canFire = true; }, 500);
+    }
+
+    // ——— Scrolling (from 2_1.ls ScrollScreen) ———
+
+    updateScroll() {
+        const worldMap = this.engine.worldMap;
+
+        if (this.mouseX < SCROLL_HORIZ) {
+            worldMap.scroll(SCROLL_STEP);
+        } else if (this.mouseX > SCREEN_W - SCROLL_HORIZ) {
+            worldMap.scroll(-SCROLL_STEP);
+        }
+    }
+
+    // ——— Rendering the crosshair ———
+
+    render(ctx, assetManager) {
+        if (!this.isOverCanvas) return;
+
+        // Try to use original target sprites
+        const targetImg = assetManager.getImage('target-empty') || assetManager.getImage('target-full');
+
+        ctx.save();
+
+        if (targetImg) {
+            ctx.drawImage(
+                targetImg,
+                this.mouseX - targetImg.width / 2,
+                this.mouseY - targetImg.height / 2
+            );
+        } else {
+            // Fallback: draw a crosshair
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.8)';
+            ctx.lineWidth = 2;
+
+            // Outer circle
+            ctx.beginPath();
+            ctx.arc(this.mouseX, this.mouseY, 20, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Inner dot
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.9)';
+            ctx.beginPath();
+            ctx.arc(this.mouseX, this.mouseY, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Cross lines
+            ctx.beginPath();
+            ctx.moveTo(this.mouseX - 25, this.mouseY);
+            ctx.lineTo(this.mouseX - 10, this.mouseY);
+            ctx.moveTo(this.mouseX + 10, this.mouseY);
+            ctx.lineTo(this.mouseX + 25, this.mouseY);
+            ctx.moveTo(this.mouseX, this.mouseY - 25);
+            ctx.lineTo(this.mouseX, this.mouseY - 10);
+            ctx.moveTo(this.mouseX, this.mouseY + 10);
+            ctx.lineTo(this.mouseX, this.mouseY + 25);
+            ctx.stroke();
+        }
+
+        ctx.restore();
+    }
+}

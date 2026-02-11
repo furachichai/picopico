@@ -1,0 +1,251 @@
+property DTHREE, DFOUR, pBuildingArray, pActualBuildingArray, pWait, pDestroyed
+global oG, oMap
+
+on new me
+  put "BUILDING OBJECT CREATED"
+  me.DTHREE = 1
+  me.DFOUR = 2
+  me.pWait = 0
+  me.pActualBuildingArray = []
+  me.pDestroyed = []
+  me.mCreateBuildingArray()
+  return me
+end
+
+on mCreateBuildingArray me
+  me.pBuildingArray = []
+  me.pBuildingArray.append([#tall: 0, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 9, #theheight: 5, #maxhealth: 25, #themedia: member("casa011", oG.MEDIACASTNUMBER), #themedia1: member("casa012", oG.MEDIACASTNUMBER), #themedia2: member("casa013", oG.MEDIACASTNUMBER), #themedia3: member("casa014", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 7, #theheight: 4, #maxhealth: 25, #themedia: member("casa021", oG.MEDIACASTNUMBER), #themedia1: member("casa022", oG.MEDIACASTNUMBER), #themedia2: member("casa023", oG.MEDIACASTNUMBER), #themedia3: member("casa024", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 4, #theheight: 5, #maxhealth: 25, #themedia: member("casa031", oG.MEDIACASTNUMBER), #themedia1: member("casa032", oG.MEDIACASTNUMBER), #themedia2: member("casa033", oG.MEDIACASTNUMBER), #themedia3: member("casa034", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 5, #theheight: 6, #maxhealth: 50, #themedia: member("casa041", oG.MEDIACASTNUMBER), #themedia1: member("casa042", oG.MEDIACASTNUMBER), #themedia2: member("casa043", oG.MEDIACASTNUMBER), #themedia3: member("casa044", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 5, #theheight: 8, #maxhealth: 25, #themedia: member("casa051", oG.MEDIACASTNUMBER), #themedia1: member("casa052", oG.MEDIACASTNUMBER), #themedia2: member("casa053", oG.MEDIACASTNUMBER), #themedia3: member("casa054", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 2, #destructionstages: me.DTHREE, #thewidth: 7, #theheight: 8, #maxhealth: 25, #themedia: member("casa061", oG.MEDIACASTNUMBER), #themedia1: member("casa062", oG.MEDIACASTNUMBER), #themedia2: member("casa063", oG.MEDIACASTNUMBER), #themedia3: member("casa064", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 4, #theheight: 7, #maxhealth: 100, #themedia: member("edificio011", oG.MEDIACASTNUMBER), #themedia1: member("edificio012", oG.MEDIACASTNUMBER), #themedia2: member("edificio013", oG.MEDIACASTNUMBER), #themedia3: member("edificio014", oG.MEDIACASTNUMBER), #themedia4: member("edificio015", oG.MEDIACASTNUMBER), #themedia5: member("edificio016", oG.MEDIACASTNUMBER), #themedia6: member("edificio017", oG.MEDIACASTNUMBER), #themedia7: member("edificio018", oG.MEDIACASTNUMBER), #themedia8: member("edificio019", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 5, #theheight: 5, #maxhealth: 100, #themedia: member("edificio021", oG.MEDIACASTNUMBER), #themedia1: member("edificio022", oG.MEDIACASTNUMBER), #themedia2: member("edificio023", oG.MEDIACASTNUMBER), #themedia3: member("edificio024", oG.MEDIACASTNUMBER), #themedia4: member("edificio025", oG.MEDIACASTNUMBER), #themedia5: member("edificio026", oG.MEDIACASTNUMBER), #themedia6: member("edificio027", oG.MEDIACASTNUMBER), #themedia7: member("edificio028", oG.MEDIACASTNUMBER), #themedia8: member("edificio029", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 7, #theheight: 6, #maxhealth: 100, #themedia: member("edificio031", oG.MEDIACASTNUMBER), #themedia1: member("edificio032", oG.MEDIACASTNUMBER), #themedia2: member("edificio033", oG.MEDIACASTNUMBER), #themedia3: member("edificio034", oG.MEDIACASTNUMBER), #themedia4: member("edificio035", oG.MEDIACASTNUMBER), #themedia5: member("edificio036", oG.MEDIACASTNUMBER), #themedia6: member("edificio037", oG.MEDIACASTNUMBER), #themedia7: member("edificio038", oG.MEDIACASTNUMBER), #themedia8: member("edificio039", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 6, #theheight: 7, #maxhealth: 100, #themedia: member("edificio041", oG.MEDIACASTNUMBER), #themedia1: member("edificio042", oG.MEDIACASTNUMBER), #themedia2: member("edificio043", oG.MEDIACASTNUMBER), #themedia3: member("edificio044", oG.MEDIACASTNUMBER), #themedia4: member("edificio045", oG.MEDIACASTNUMBER), #themedia5: member("edificio046", oG.MEDIACASTNUMBER), #themedia6: member("edificio047", oG.MEDIACASTNUMBER), #themedia7: member("edificio048", oG.MEDIACASTNUMBER), #themedia8: member("edificio049", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 8, #theheight: 6, #maxhealth: 100, #themedia: member("edificio051", oG.MEDIACASTNUMBER), #themedia1: member("edificio052", oG.MEDIACASTNUMBER), #themedia2: member("edificio053", oG.MEDIACASTNUMBER), #themedia3: member("edificio054", oG.MEDIACASTNUMBER), #themedia4: member("edificio055", oG.MEDIACASTNUMBER), #themedia5: member("edificio056", oG.MEDIACASTNUMBER), #themedia6: member("edificio057", oG.MEDIACASTNUMBER), #themedia7: member("edificio058", oG.MEDIACASTNUMBER), #themedia8: member("edificio059", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 1, #destructionstages: me.DFOUR, #thewidth: 7, #theheight: 7, #maxhealth: 100, #themedia: member("edificio061", oG.MEDIACASTNUMBER), #themedia1: member("edificio062", oG.MEDIACASTNUMBER), #themedia2: member("edificio063", oG.MEDIACASTNUMBER), #themedia3: member("edificio064", oG.MEDIACASTNUMBER), #themedia4: member("edificio065", oG.MEDIACASTNUMBER), #themedia5: member("edificio066", oG.MEDIACASTNUMBER), #themedia6: member("edificio067", oG.MEDIACASTNUMBER), #themedia7: member("edificio068", oG.MEDIACASTNUMBER), #themedia8: member("edificio069", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 5, #theheight: 5, #maxhealth: 25, #themedia: member("fuente011", oG.MEDIACASTNUMBER), #themedia1: member("fuente012", oG.MEDIACASTNUMBER), #themedia2: member("fuente013", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 5, #theheight: 5, #maxhealth: 25, #themedia: member("fuente021", oG.MEDIACASTNUMBER), #themedia1: member("fuente022", oG.MEDIACASTNUMBER), #themedia2: member("fuente023", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera011", oG.MEDIACASTNUMBER), #themedia1: member("palmera012", oG.MEDIACASTNUMBER), #themedia2: member("palmera013", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera021", oG.MEDIACASTNUMBER), #themedia1: member("palmera022", oG.MEDIACASTNUMBER), #themedia2: member("palmera023", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera031", oG.MEDIACASTNUMBER), #themedia1: member("palmera032", oG.MEDIACASTNUMBER), #themedia2: member("palmera033", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera041", oG.MEDIACASTNUMBER), #themedia1: member("palmera042", oG.MEDIACASTNUMBER), #themedia2: member("palmera043", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera051", oG.MEDIACASTNUMBER), #themedia1: member("palmera052", oG.MEDIACASTNUMBER), #themedia2: member("palmera053", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera061", oG.MEDIACASTNUMBER), #themedia1: member("palmera062", oG.MEDIACASTNUMBER), #themedia2: member("palmera063", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera071", oG.MEDIACASTNUMBER), #themedia1: member("palmera072", oG.MEDIACASTNUMBER), #themedia2: member("palmera073", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera081", oG.MEDIACASTNUMBER), #themedia1: member("palmera082", oG.MEDIACASTNUMBER), #themedia2: member("palmera083", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera091", oG.MEDIACASTNUMBER), #themedia1: member("palmera092", oG.MEDIACASTNUMBER), #themedia2: member("palmera093", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera101", oG.MEDIACASTNUMBER), #themedia1: member("palmera102", oG.MEDIACASTNUMBER), #themedia2: member("palmera103", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera111", oG.MEDIACASTNUMBER), #themedia1: member("palmera112", oG.MEDIACASTNUMBER), #themedia2: member("palmera113", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 1, #regentype: 0, #destructionstages: me.DTHREE, #thewidth: 1, #theheight: 1, #maxhealth: 3, #themedia: member("palmera121", oG.MEDIACASTNUMBER), #themedia1: member("palmera122", oG.MEDIACASTNUMBER), #themedia2: member("palmera123", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 3, #theheight: 3, #maxhealth: 25, #themedia: member("puesto011", oG.MEDIACASTNUMBER), #themedia1: member("puesto012", oG.MEDIACASTNUMBER), #themedia2: member("puesto013", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 3, #theheight: 4, #maxhealth: 25, #themedia: member("puesto021", oG.MEDIACASTNUMBER), #themedia1: member("puesto022", oG.MEDIACASTNUMBER), #themedia2: member("puesto023", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 3, #theheight: 6, #maxhealth: 25, #themedia: member("puesto031", oG.MEDIACASTNUMBER), #themedia1: member("puesto032", oG.MEDIACASTNUMBER), #themedia2: member("puesto033", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 3, #theheight: 4, #maxhealth: 25, #themedia: member("puesto041", oG.MEDIACASTNUMBER), #themedia1: member("puesto042", oG.MEDIACASTNUMBER), #themedia2: member("puesto043", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 6, #theheight: 6, #maxhealth: 25, #themedia: member("puesto051", oG.MEDIACASTNUMBER), #themedia1: member("puesto052", oG.MEDIACASTNUMBER), #themedia2: member("puesto053", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 5, #theheight: 3, #maxhealth: 25, #themedia: member("puesto061", oG.MEDIACASTNUMBER), #themedia1: member("puesto062", oG.MEDIACASTNUMBER), #themedia2: member("puesto063", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 4, #theheight: 4, #maxhealth: 25, #themedia: member("puesto071", oG.MEDIACASTNUMBER), #themedia1: member("puesto072", oG.MEDIACASTNUMBER), #themedia2: member("puesto073", oG.MEDIACASTNUMBER)])
+  me.pBuildingArray.append([#tall: 0, #regentype: 3, #destructionstages: me.DTHREE, #thewidth: 6, #theheight: 4, #maxhealth: 25, #themedia: member("puesto081", oG.MEDIACASTNUMBER), #themedia1: member("puesto082", oG.MEDIACASTNUMBER), #themedia2: member("puesto083", oG.MEDIACASTNUMBER)])
+end
+
+on mCreateBuilding me, thetype, thex, they, thesprite
+  obj = [#thetype: me.pBuildingArray[thetype], #thex: thex, #they: they, #health: me.pBuildingArray[thetype].maxhealth, #destroyed: 0, #thesprite: thesprite]
+  me.pActualBuildingArray.append(obj)
+  repeat with tilex = thex - me.pBuildingArray[thetype].thewidth + 1 to thex
+    repeat with tiley = they - me.pBuildingArray[thetype].theheight + 1 to they
+      oMap.mSetTileBuilding(obj, tilex, tiley)
+    end repeat
+  end repeat
+end
+
+on mLoad me
+  i = oG.BUILDING1STSPRITE
+  thesprite = sprite(i)
+  themember = thesprite.member
+  repeat while themember <> member(0, 0)
+    thesprite.ink = 36
+    thesprite.blend = 100
+    thesprite.rotation = 0
+    obj = GetTileFromMap(thesprite.locH, thesprite.locV)
+    repeat with j = 1 to me.pBuildingArray.count
+      if thesprite.member = me.pBuildingArray[j].themedia then
+        exit repeat
+      end if
+    end repeat
+    me.mCreateBuilding(j, obj.tilex, obj.tiley, thesprite)
+    i = i + 1
+    thesprite = sprite(i)
+    themember = thesprite.member
+  end repeat
+  oMap.mSetDepth()
+end
+
+on mSortActualBuildingArray me
+  temparray = []
+  repeat with i = 1 to me.pActualBuildingArray.count
+    obj = me.pActualBuildingArray[i]
+    j = 1
+    repeat while j <= temparray.count
+      if obj.thesprite.locZ > temparray[j].thesprite.locZ then
+        exit repeat
+        next repeat
+      end if
+      j = j + 1
+    end repeat
+    temparray.addAt(j, obj)
+  end repeat
+  me.pActualBuildingArray = temparray
+end
+
+on mHit me, thex, they
+  hitted = 0
+  thebottom = 1
+  repeat with i = 1 to me.pActualBuildingArray.count
+    building = me.pActualBuildingArray[i]
+    thesprite = building.thesprite
+    if inside(point(thex, they), thesprite.rect) then
+      tempvert = they - thesprite.top
+      if thesprite.member.image.getPixel(thex - thesprite.left, tempvert) <> rgb(255, 255, 255) then
+        hitted = 1
+        if building.thetype.tall and (building.health >= (building.thetype.maxhealth / 2)) and (tempvert < (thesprite.member.height / 2)) then
+          thebottom = 0
+        end if
+        exit repeat
+      end if
+    end if
+  end repeat
+  return [#hitted: hitted, #thebottom: thebottom, #building: building]
+end
+
+on mDecrementHealth me, building, thedamage
+  thesprite = building.thesprite
+  building.health = building.health - thedamage
+  if building.health <= 0 then
+    building.health = -50
+    if building.thetype.destructionstages = me.DTHREE then
+      thesprite.member = building.thetype.themedia2
+    else
+      thesprite.member = building.thetype.themedia3
+    end if
+    if (building.thetype.regentype > 0) and (building.destroyed = 0) then
+      me.pDestroyed.append(building)
+      building.destroyed = 1
+    end if
+  else
+    if building.thetype.destructionstages = me.DTHREE then
+      if thesprite.member <> building.thetype.themedia1 then
+        thesprite.member = building.thetype.themedia1
+      end if
+    else
+      if building.health < (building.thetype.maxhealth / 2) then
+        if thesprite.member <> building.thetype.themedia2 then
+          thesprite.member = building.thetype.themedia2
+        end if
+      else
+        if thesprite.member <> building.thetype.themedia1 then
+          thesprite.member = building.thetype.themedia1
+        end if
+      end if
+    end if
+  end if
+end
+
+on mSetReconstructionMedia me, building
+  thesprite = building.thesprite
+  if building.thetype.regentype = 2 then
+    if (building.health > (building.thetype.maxhealth * 0.14999999999999999)) and (thesprite.member <> building.thetype.themedia3) then
+      thesprite.member = building.thetype.themedia3
+    end if
+  else
+    if building.thetype.regentype = 1 then
+      if building.health > (building.thetype.maxhealth * 0.14999999999999999) then
+        if building.health < (building.thetype.maxhealth * 0.25) then
+          if thesprite.member <> building.thetype.themedia4 then
+            thesprite.member = building.thetype.themedia4
+          end if
+        else
+          if building.health < (building.thetype.maxhealth * 0.45000000000000001) then
+            if thesprite.member <> building.thetype.themedia5 then
+              thesprite.member = building.thetype.themedia5
+            end if
+          else
+            if building.health < (building.thetype.maxhealth * 0.59999999999999998) then
+              if thesprite.member <> building.thetype.themedia6 then
+                thesprite.member = building.thetype.themedia6
+              end if
+            else
+              if building.health < (building.thetype.maxhealth * 0.75) then
+                if thesprite.member <> building.thetype.themedia7 then
+                  thesprite.member = building.thetype.themedia7
+                end if
+              else
+                if building.health < (building.thetype.maxhealth * 0.90000000000000002) then
+                  if thesprite.member <> building.thetype.themedia8 then
+                    thesprite.member = building.thetype.themedia8
+                  end if
+                end if
+              end if
+            end if
+          end if
+        end if
+      end if
+    end if
+  end if
+end
+
+on mUpdate me
+  if me.pWait = 0 then
+    me.pWait = oG.BUILDINGHEALTHRECOVERYTIME * oG.fps
+    repeat with i = 1 to me.pDestroyed.count
+      building = me.pDestroyed[i]
+      building.health = building.health + oG.BUILDINGHEALTHRECOVERY
+      if building.health >= building.thetype.maxhealth then
+        building.health = building.thetype.maxhealth
+        building.destroyed = 0
+        building.thesprite.member = building.thetype.themedia
+        me.pDestroyed.deleteAt(i)
+        i = i - 1
+        next repeat
+      end if
+      me.mSetReconstructionMedia(building)
+    end repeat
+  else
+    me.pWait = me.pWait - 1
+  end if
+end
+
+on mExplode me, centerx, centery
+  xstart = centerx - oG.BLASTX
+  ystart = centery - oG.BLASTY
+  xfinish = centerx + oG.BLASTX
+  yfinish = centery + oG.BLASTY
+  repeat with i = xstart to xfinish
+    repeat with j = ystart to yfinish
+      building = oMap.mGetTileBuilding(i, j)
+      if building <> VOID then
+        thedamage = GetBlastDamage(i - xstart, j - ystart)
+        me.mDecrementHealth(building, thedamage)
+      end if
+    end repeat
+  end repeat
+end
+
+on mExplodeTall me, centerx, centery
+  xstart = centerx - oG.BLASTX
+  ystart = centery - oG.BLASTY
+  xfinish = centerx + oG.BLASTX
+  yfinish = centery + oG.BLASTY
+  repeat with i = xstart to xfinish
+    repeat with j = ystart to yfinish
+      building = oMap.mGetTileBuilding(i, j)
+      if building <> VOID then
+        if building.thetype.tall then
+          thedamage = GetBlastDamage(i - xstart, j - ystart)
+          me.mDecrementHealth(building, thedamage)
+        end if
+      end if
+    end repeat
+  end repeat
+end

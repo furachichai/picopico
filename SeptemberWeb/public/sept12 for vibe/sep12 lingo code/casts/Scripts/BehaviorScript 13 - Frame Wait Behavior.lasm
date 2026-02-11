@@ -1,0 +1,8 @@
+on exitFrame me
+  [  0] pushcons 0 .............................. <"MMenu">
+  [  2] pusharglist 1 ........................... <"MMenu">
+  [  4] extcall 165 ............................. <marker("MMenu")>
+  [  6] pusharglistnoret 1 ...................... <marker("MMenu")>
+  [  8] extcall 185 ............................. go(marker("MMenu"))
+  [ 10] ret
+end

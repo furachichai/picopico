@@ -1,0 +1,1 @@
+on prepareFrame me  sprite(2).locZ=50000endon exitFrame me  BeginGame()  go marker("MWait")  end

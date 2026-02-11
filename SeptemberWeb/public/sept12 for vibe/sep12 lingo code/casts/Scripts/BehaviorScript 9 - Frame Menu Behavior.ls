@@ -1,0 +1,14 @@
+global oG
+
+on prepareFrame me
+  sprite(oG.SPRITEMENU).locZ = oG.TARGETDEPTH
+end
+
+on exitFrame me
+  if getVariable(sprite(oG.SPRITEMENU), "pEnd") = "false" then
+    go(the frame)
+  else
+    sprite(500).locZ = oG.TARGETDEPTH
+    go(marker("MPlay"))
+  end if
+end

@@ -1,0 +1,1 @@
+global waitstreamingon exitFrame me  if waitstreaming then    go to the frame  else    go Marker("MInit")  end if  end

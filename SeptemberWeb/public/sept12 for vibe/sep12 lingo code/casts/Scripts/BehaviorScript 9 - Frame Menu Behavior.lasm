@@ -1,0 +1,42 @@
+global oG
+
+on prepareFrame me
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 86 ........................... <oG.SPRITEMENU>
+  [  4] pusharglist 1 ........................... <oG.SPRITEMENU>
+  [  6] extcall 7 ............................... <sprite(oG.SPRITEMENU)>
+  [  8] getglobal 9 ............................. <oG>
+  [ 10] getobjprop 10 ........................... <oG.TARGETDEPTH>
+  [ 12] setobjprop 11 ........................... sprite(oG.SPRITEMENU).locZ = oG.TARGETDEPTH
+  [ 14] ret
+end
+
+on exitFrame me
+  [  0] getglobal 9 ............................. <oG>
+  [  2] getobjprop 86 ........................... <oG.SPRITEMENU>
+  [  4] pusharglist 1 ........................... <oG.SPRITEMENU>
+  [  6] extcall 7 ............................... <sprite(oG.SPRITEMENU)>
+  [  8] pushcons 0 .............................. <"pEnd">
+  [ 10] pusharglist 2 ........................... <sprite(oG.SPRITEMENU), "pEnd">
+  [ 12] extcall 373 ............................. <getVariable(sprite(oG.SPRITEMENU), "pEnd")>
+  [ 15] pushcons 1 .............................. <"false">
+  [ 17] eq ...................................... <getVariable(sprite(oG.SPRITEMENU), "pEnd") = "false">
+  [ 18] jmpifz [ 32] ............................ if getVariable(sprite(oG.SPRITEMENU), "pEnd") = "false" then / else
+  [ 21] pusharglist 0 ........................... <>
+  [ 23] thebuiltin 25 ........................... <the frame>
+  [ 25] pusharglistnoret 1 ...................... <the frame>
+  [ 27] extcall 185 ............................. go(the frame)
+  [ 29] jmp [ 55]
+  [ 32] pushint16 500 ........................... <500>
+  [ 35] pusharglist 1 ........................... <500>
+  [ 37] extcall 7 ............................... <sprite(500)>
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 10 ........................... <oG.TARGETDEPTH>
+  [ 43] setobjprop 11 ........................... sprite(500).locZ = oG.TARGETDEPTH
+  [ 45] pushcons 2 .............................. <"MPlay">
+  [ 47] pusharglist 1 ........................... <"MPlay">
+  [ 49] extcall 165 ............................. <marker("MPlay")>
+  [ 51] pusharglistnoret 1 ...................... <marker("MPlay")>
+  [ 53] extcall 185 ............................. go(marker("MPlay"))
+  [ 55] ret
+end

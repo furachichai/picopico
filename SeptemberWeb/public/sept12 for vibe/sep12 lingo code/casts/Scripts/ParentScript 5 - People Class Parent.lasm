@@ -1,0 +1,980 @@
+property MAXPEOPLETYPE, TWOMAN, TKID, TDOG, TMAN, TEVIL, pEmptySpriteArray, pUsedSpriteArray, pWait, pMediaArray, pProbArray, pEvilCount, pEvilToRegenerate
+global oG
+
+on new me
+  [  0] pushcons 0 .............................. <"PEOPLE OBJECT CREATED">
+  [  2] pusharglistnoret 1 ...................... <"PEOPLE OBJECT CREATED">
+  [  4] extcall 107 ............................. put "PEOPLE OBJECT CREATED"
+  [  6] getparam 0 .............................. <me>
+  [  8] pushint8 1 .............................. <1>
+  [ 10] setobjprop 220 .......................... me.TWOMAN = 1
+  [ 12] getparam 0 .............................. <me>
+  [ 14] pushint8 2 .............................. <2>
+  [ 16] setobjprop 221 .......................... me.TKID = 2
+  [ 18] getparam 0 .............................. <me>
+  [ 20] pushint8 3 .............................. <3>
+  [ 22] setobjprop 222 .......................... me.TDOG = 3
+  [ 24] getparam 0 .............................. <me>
+  [ 26] pushint8 4 .............................. <4>
+  [ 28] setobjprop 223 .......................... me.TMAN = 4
+  [ 30] getparam 0 .............................. <me>
+  [ 32] pushint8 5 .............................. <5>
+  [ 34] setobjprop 159 .......................... me.TEVIL = 5
+  [ 36] getparam 0 .............................. <me>
+  [ 38] pushint8 5 .............................. <5>
+  [ 40] setobjprop 224 .......................... me.MAXPEOPLETYPE = 5
+  [ 42] getparam 0 .............................. <me>
+  [ 44] pusharglist 0 ........................... <[]>
+  [ 46] pushlist ................................ <[]>
+  [ 47] setobjprop 160 .......................... me.pEmptySpriteArray = []
+  [ 49] getparam 0 .............................. <me>
+  [ 51] pusharglist 0 ........................... <[]>
+  [ 53] pushlist ................................ <[]>
+  [ 54] setobjprop 139 .......................... me.pUsedSpriteArray = []
+  [ 56] getparam 0 .............................. <me>
+  [ 58] getglobal 9 ............................. <oG>
+  [ 60] getobjprop 74 ........................... <oG.GENERATIONRATIO>
+  [ 62] getglobal 9 ............................. <oG>
+  [ 64] getobjprop 60 ........................... <oG.fps>
+  [ 66] mul ..................................... <oG.GENERATIONRATIO * oG.fps>
+  [ 67] setobjprop 225 .......................... me.pWait = oG.GENERATIONRATIO * oG.fps
+  [ 69] getparam 0 .............................. <me>
+  [ 71] pushzero ................................ <0>
+  [ 72] setobjprop 122 .......................... me.pEvilCount = 0
+  [ 74] getparam 0 .............................. <me>
+  [ 76] pushzero ................................ <0>
+  [ 77] setobjprop 163 .......................... me.pEvilToRegenerate = 0
+  [ 79] getglobal 9 ............................. <oG>
+  [ 81] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [ 83] setlocal 0
+  [ 85] getlocal 0
+  [ 87] getglobal 9 ............................. <oG>
+  [ 89] getobjprop 90 ........................... <oG.PERSON1STSPRITE>
+  [ 91] getglobal 9 ............................. <oG>
+  [ 93] getobjprop 69 ........................... <oG.MAXPEOPLE>
+  [ 95] add ..................................... <oG.PERSON1STSPRITE + oG.MAXPEOPLE>
+  [ 96] pushint8 1 .............................. <1>
+  [ 98] sub ..................................... <oG.PERSON1STSPRITE + oG.MAXPEOPLE - 1>
+  [ 99] lteq
+  [100] jmpifz [126] ............................ repeat with i = oG.PERSON1STSPRITE to oG.PERSON1STSPRITE + oG.MAXPEOPLE - 1
+  [103] getparam 0 .............................. <me>
+  [105] getchainedprop 160 ...................... <me.pEmptySpriteArray>
+  [107] getlocal 0 .............................. <i>
+  [109] pusharglist 1 ........................... <i>
+  [111] extcall 7 ............................... <sprite(i)>
+  [113] pusharglistnoret 2 ...................... <me.pEmptySpriteArray, sprite(i)>
+  [115] objcall 161 ............................. me.pEmptySpriteArray.append(sprite(i))
+  [117] pushint8 1
+  [119] getlocal 0
+  [121] add
+  [122] setlocal 0
+  [124] endrepeat [ 85]
+  [126] getparam 0 .............................. <me>
+  [128] pushcons 1 .............................. <"FullWoman">
+  [130] pusharglist 1 ........................... <"FullWoman">
+  [132] extcall 26 .............................. <member("FullWoman")>
+  [134] pushcons 2 .............................. <"FullKid">
+  [136] pusharglist 1 ........................... <"FullKid">
+  [138] extcall 26 .............................. <member("FullKid")>
+  [140] pushcons 3 .............................. <"FullDog">
+  [142] pusharglist 1 ........................... <"FullDog">
+  [144] extcall 26 .............................. <member("FullDog")>
+  [146] pushcons 4 .............................. <"FullMan">
+  [148] pusharglist 1 ........................... <"FullMan">
+  [150] extcall 26 .............................. <member("FullMan")>
+  [152] pushcons 5 .............................. <"FullEvil">
+  [154] pusharglist 1 ........................... <"FullEvil">
+  [156] extcall 26 .............................. <member("FullEvil")>
+  [158] pusharglist 5 ........................... <[member("FullWoman"), member("FullKid"), member("FullDog"), member("FullMan"), member("FullEvil")]>
+  [160] pushlist ................................ <[member("FullWoman"), member("FullKid"), member("FullDog"), member("FullMan"), member("FullEvil")]>
+  [161] setobjprop 158 .......................... me.pMediaArray = [member("FullWoman"), member("FullKid"), member("FullDog"), member("FullMan"), member("FullEvil")]
+  [163] getparam 0 .............................. <me>
+  [165] pushint8 40 ............................. <40>
+  [167] pushint8 25 ............................. <25>
+  [169] pushint8 5 .............................. <5>
+  [171] pushint8 40 ............................. <40>
+  [173] pusharglist 4 ........................... <[40, 25, 5, 40]>
+  [175] pushlist ................................ <[40, 25, 5, 40]>
+  [176] setobjprop 226 .......................... me.pProbArray = [40, 25, 5, 40]
+  [178] getparam 0 .............................. <me>
+  [180] pusharglistnoret 1 ...................... <me>
+  [182] extcall 22 .............................. return me
+  [184] ret
+end
+
+on mGetRandomPerson me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getparam 0 .............................. <me>
+  [  8] pushsymb 226 ............................ <#pProbArray>
+  [ 10] pusharglist 2 ........................... <me, #pProbArray>
+  [ 12] objcall 137 ............................. <me.pProbArray.count>
+  [ 14] pushint8 1 .............................. <1>
+  [ 16] sub ..................................... <me.pProbArray.count - 1>
+  [ 17] lteq
+  [ 18] jmpifz [ 56] ............................ repeat with i = 1 to me.pProbArray.count - 1
+  [ 21] pushint8 100 ............................ <100>
+  [ 23] pusharglist 1 ........................... <100>
+  [ 25] extcall 152 ............................. <random(100)>
+  [ 27] getparam 0 .............................. <me>
+  [ 29] pushsymb 226 ............................ <#pProbArray>
+  [ 31] getlocal 0 .............................. <i>
+  [ 33] pusharglist 3 ........................... <me, #pProbArray, i>
+  [ 35] objcall 140 ............................. <me.pProbArray[i]>
+  [ 37] lteq .................................... <random(100) <= me.pProbArray[i]>
+  [ 38] jmpifz [ 47] ............................ if random(100) <= me.pProbArray[i] then
+  [ 41] getlocal 0 .............................. <i>
+  [ 43] pusharglistnoret 1 ...................... <i>
+  [ 45] extcall 22 .............................. return i
+  [ 47] pushint8 1
+  [ 49] getlocal 0
+  [ 51] add
+  [ 52] setlocal 0
+  [ 54] endrepeat [  4]
+  [ 56] getparam 0 .............................. <me>
+  [ 58] getobjprop 223 .......................... <me.TMAN>
+  [ 60] pusharglistnoret 1 ...................... <me.TMAN>
+  [ 62] extcall 22 .............................. return me.TMAN
+  [ 64] ret
+end
+
+on mCreatePerson me, themode
+  [  0] getparam 0 .............................. <me>
+  [  2] pushsymb 160 ............................ <#pEmptySpriteArray>
+  [  4] pusharglist 2 ........................... <me, #pEmptySpriteArray>
+  [  6] objcall 137 ............................. <me.pEmptySpriteArray.count>
+  [  8] pushzero ................................ <0>
+  [  9] gt ...................................... <me.pEmptySpriteArray.count > 0>
+  [ 10] jmpifz [252] ............................ if me.pEmptySpriteArray.count > 0 then / else
+  [ 13] getparam 0 .............................. <me>
+  [ 15] pushsymb 160 ............................ <#pEmptySpriteArray>
+  [ 17] pushint8 1 .............................. <1>
+  [ 19] pusharglist 3 ........................... <me, #pEmptySpriteArray, 1>
+  [ 21] objcall 140 ............................. <me.pEmptySpriteArray[1]>
+  [ 23] setlocal 0 .............................. thesprite = me.pEmptySpriteArray[1]
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getchainedprop 160 ...................... <me.pEmptySpriteArray>
+  [ 29] pushint8 1 .............................. <1>
+  [ 31] pusharglistnoret 2 ...................... <me.pEmptySpriteArray, 1>
+  [ 33] objcall 162 ............................. me.pEmptySpriteArray.deleteAt(1)
+  [ 35] getparam 0 .............................. <me>
+  [ 37] getchainedprop 139 ...................... <me.pUsedSpriteArray>
+  [ 39] getlocal 0 .............................. <thesprite>
+  [ 41] pusharglistnoret 2 ...................... <me.pUsedSpriteArray, thesprite>
+  [ 43] objcall 161 ............................. me.pUsedSpriteArray.append(thesprite)
+  [ 45] getparam 0 .............................. <me>
+  [ 47] pusharglist 1 ........................... <me>
+  [ 49] objcall 216 ............................. <me.mGetRandomPerson()>
+  [ 51] setlocal 1 .............................. tempperson = me.mGetRandomPerson()
+  [ 53] getparam 0 .............................. <me>
+  [ 55] getobjprop 163 .......................... <me.pEvilToRegenerate>
+  [ 57] pushzero ................................ <0>
+  [ 58] gt ...................................... <me.pEvilToRegenerate > 0>
+  [ 59] jmpifz [125] ............................ if me.pEvilToRegenerate > 0 then / else
+  [ 62] getlocal 1 .............................. <tempperson>
+  [ 64] getparam 0 .............................. <me>
+  [ 66] getobjprop 222 .......................... <me.TDOG>
+  [ 68] eq ...................................... <tempperson = me.TDOG>
+  [ 69] jmpifz [ 82] ............................ repeat while tempperson = me.TDOG
+  [ 72] getparam 0 .............................. <me>
+  [ 74] pusharglist 1 ........................... <me>
+  [ 76] objcall 216 ............................. <me.mGetRandomPerson()>
+  [ 78] setlocal 1 .............................. tempperson = me.mGetRandomPerson()
+  [ 80] endrepeat [ 62]
+  [ 82] getparam 0 .............................. <me>
+  [ 84] pushsymb 158 ............................ <#pMediaArray>
+  [ 86] getlocal 1 .............................. <tempperson>
+  [ 88] pusharglist 3 ........................... <me, #pMediaArray, tempperson>
+  [ 90] objcall 140 ............................. <me.pMediaArray[tempperson]>
+  [ 92] setlocal 2 .............................. prevmedia = me.pMediaArray[tempperson]
+  [ 94] getparam 0 .............................. <me>
+  [ 96] getobjprop 159 .......................... <me.TEVIL>
+  [ 98] setlocal 1 .............................. tempperson = me.TEVIL
+  [100] getparam 0 .............................. <me>
+  [102] getparam 0 .............................. <me>
+  [104] getobjprop 122 .......................... <me.pEvilCount>
+  [106] pushint8 1 .............................. <1>
+  [108] add ..................................... <me.pEvilCount + 1>
+  [109] setobjprop 122 .......................... me.pEvilCount = me.pEvilCount + 1
+  [111] getparam 0 .............................. <me>
+  [113] getparam 0 .............................. <me>
+  [115] getobjprop 163 .......................... <me.pEvilToRegenerate>
+  [117] pushint8 1 .............................. <1>
+  [119] sub ..................................... <me.pEvilToRegenerate - 1>
+  [120] setobjprop 163 .......................... me.pEvilToRegenerate = me.pEvilToRegenerate - 1
+  [122] jmp [201]
+  [125] getparam 0 .............................. <me>
+  [127] getobjprop 122 .......................... <me.pEvilCount>
+  [129] getglobal 9 ............................. <oG>
+  [131] getobjprop 71 ........................... <oG.EVILMIN>
+  [133] lt ...................................... <me.pEvilCount < oG.EVILMIN>
+  [134] jmpifz [189] ............................ if me.pEvilCount < oG.EVILMIN then / else
+  [137] getlocal 1 .............................. <tempperson>
+  [139] getparam 0 .............................. <me>
+  [141] getobjprop 222 .......................... <me.TDOG>
+  [143] eq ...................................... <tempperson = me.TDOG>
+  [144] jmpifz [157] ............................ repeat while tempperson = me.TDOG
+  [147] getparam 0 .............................. <me>
+  [149] pusharglist 1 ........................... <me>
+  [151] objcall 216 ............................. <me.mGetRandomPerson()>
+  [153] setlocal 1 .............................. tempperson = me.mGetRandomPerson()
+  [155] endrepeat [137]
+  [157] getparam 0 .............................. <me>
+  [159] pushsymb 158 ............................ <#pMediaArray>
+  [161] getlocal 1 .............................. <tempperson>
+  [163] pusharglist 3 ........................... <me, #pMediaArray, tempperson>
+  [165] objcall 140 ............................. <me.pMediaArray[tempperson]>
+  [167] setlocal 2 .............................. prevmedia = me.pMediaArray[tempperson]
+  [169] getparam 0 .............................. <me>
+  [171] getobjprop 159 .......................... <me.TEVIL>
+  [173] setlocal 1 .............................. tempperson = me.TEVIL
+  [175] getparam 0 .............................. <me>
+  [177] getparam 0 .............................. <me>
+  [179] getobjprop 122 .......................... <me.pEvilCount>
+  [181] pushint8 1 .............................. <1>
+  [183] add ..................................... <me.pEvilCount + 1>
+  [184] setobjprop 122 .......................... me.pEvilCount = me.pEvilCount + 1
+  [186] jmp [201]
+  [189] getparam 0 .............................. <me>
+  [191] pushsymb 158 ............................ <#pMediaArray>
+  [193] getlocal 1 .............................. <tempperson>
+  [195] pusharglist 3 ........................... <me, #pMediaArray, tempperson>
+  [197] objcall 140 ............................. <me.pMediaArray[tempperson]>
+  [199] setlocal 2 .............................. prevmedia = me.pMediaArray[tempperson]
+  [201] getparam 0 .............................. <me>
+  [203] getlocal 1 .............................. <tempperson>
+  [205] pusharglist 2 ........................... <me, tempperson>
+  [207] objcall 218 ............................. <me.mCreateFrames(tempperson)>
+  [209] setlocal 3 .............................. obj = me.mCreateFrames(tempperson)
+  [211] getlocal 0 .............................. <thesprite>
+  [213] getchainedprop 227 ...................... <thesprite.scriptInstanceList>
+  [215] pushcons 6 .............................. <"Person Class Behavior">
+  [217] pusharglist 1 ........................... <"Person Class Behavior">
+  [219] extcall 109 ............................. <script("Person Class Behavior")>
+  [221] getlocal 0 .............................. <thesprite>
+  [223] getobjprop 8 ............................ <thesprite.spriteNum>
+  [225] getlocal 3 .............................. <obj>
+  [227] getparam 0 .............................. <me>
+  [229] pushsymb 158 ............................ <#pMediaArray>
+  [231] getlocal 1 .............................. <tempperson>
+  [233] pusharglist 3 ........................... <me, #pMediaArray, tempperson>
+  [235] objcall 140 ............................. <me.pMediaArray[tempperson]>
+  [237] getlocal 2 .............................. <prevmedia>
+  [239] getparam 1 .............................. <themode>
+  [241] pusharglist 6 ........................... <script("Person Class Behavior"), thesprite.spriteNum, obj, me.pMediaArray[tempperson], prevmedia, themode>
+  [243] objcall 110 ............................. <script("Person Class Behavior").new(thesprite.spriteNum, obj, me.pMediaArray[tempperson], prevmedia, themode)>
+  [245] pusharglistnoret 2 ...................... <thesprite.scriptInstanceList, script("Person Class Behavior").new(thesprite.spriteNum, obj, me.pMediaArray[tempperson], prevmedia, themode)>
+  [247] objcall 228 ............................. thesprite.scriptInstanceList.add(script("Person Class Behavior").new(thesprite.spriteNum, obj, me.pMediaArray[tempperson], prevmedia, themode))
+  [249] jmp [258]
+  [252] pushcons 7 .............................. <"mCreatePerson ERROR! OUT OF SPRITES TO CREATE PERSON">
+  [254] pusharglistnoret 1 ...................... <"mCreatePerson ERROR! OUT OF SPRITES TO CREATE PERSON">
+  [256] extcall 107 ............................. put "mCreatePerson ERROR! OUT OF SPRITES TO CREATE PERSON"
+  [258] ret
+end
+
+on mCreateFrames me, thetype
+  [  0] getparam 1 .............................. <thetype>
+  [  2] getparam 0 .............................. <me>
+  [  4] getobjprop 220 .......................... <me.TWOMAN>
+  [  6] eq ...................................... <thetype = me.TWOMAN>
+  [  7] jmpifz [ 39] ............................ if thetype = me.TWOMAN then / else
+  [ 10] pushsymb 232 ............................ <#crystart>
+  [ 12] pushint8 33 ............................. <33>
+  [ 14] pushsymb 233 ............................ <#crylength>
+  [ 16] pushint8 10 ............................. <10>
+  [ 18] pushsymb 234 ............................ <#turnstart>
+  [ 20] pushint8 73 ............................. <73>
+  [ 22] pushsymb 235 ............................ <#turnlength>
+  [ 24] pushint8 31 ............................. <31>
+  [ 26] pushsymb 236 ............................ <#deathstart>
+  [ 28] pushint16 197 ........................... <197>
+  [ 31] pusharglist 10 .......................... <[#crystart: 33, #crylength: 10, #turnstart: 73, #turnlength: 31, #deathstart: 197]>
+  [ 33] pushproplist ............................ <[#crystart: 33, #crylength: 10, #turnstart: 73, #turnlength: 31, #deathstart: 197]>
+  [ 34] setlocal 0 .............................. obj = [#crystart: 33, #crylength: 10, #turnstart: 73, #turnlength: 31, #deathstart: 197]
+  [ 36] jmp [158]
+  [ 39] getparam 1 .............................. <thetype>
+  [ 41] getparam 0 .............................. <me>
+  [ 43] getobjprop 221 .......................... <me.TKID>
+  [ 45] eq ...................................... <thetype = me.TKID>
+  [ 46] jmpifz [ 78] ............................ if thetype = me.TKID then / else
+  [ 49] pushsymb 232 ............................ <#crystart>
+  [ 51] pushint8 33 ............................. <33>
+  [ 53] pushsymb 233 ............................ <#crylength>
+  [ 55] pushint8 3 .............................. <3>
+  [ 57] pushsymb 234 ............................ <#turnstart>
+  [ 59] pushint8 45 ............................. <45>
+  [ 61] pushsymb 235 ............................ <#turnlength>
+  [ 63] pushint8 31 ............................. <31>
+  [ 65] pushsymb 236 ............................ <#deathstart>
+  [ 67] pushint16 169 ........................... <169>
+  [ 70] pusharglist 10 .......................... <[#crystart: 33, #crylength: 3, #turnstart: 45, #turnlength: 31, #deathstart: 169]>
+  [ 72] pushproplist ............................ <[#crystart: 33, #crylength: 3, #turnstart: 45, #turnlength: 31, #deathstart: 169]>
+  [ 73] setlocal 0 .............................. obj = [#crystart: 33, #crylength: 3, #turnstart: 45, #turnlength: 31, #deathstart: 169]
+  [ 75] jmp [158]
+  [ 78] getparam 1 .............................. <thetype>
+  [ 80] getparam 0 .............................. <me>
+  [ 82] getobjprop 222 .......................... <me.TDOG>
+  [ 84] eq ...................................... <thetype = me.TDOG>
+  [ 85] jmpifz [100] ............................ if thetype = me.TDOG then / else
+  [ 88] pushsymb 236 ............................ <#deathstart>
+  [ 90] pushint8 33 ............................. <33>
+  [ 92] pusharglist 2 ........................... <[#deathstart: 33]>
+  [ 94] pushproplist ............................ <[#deathstart: 33]>
+  [ 95] setlocal 0 .............................. obj = [#deathstart: 33]
+  [ 97] jmp [158]
+  [100] getparam 1 .............................. <thetype>
+  [102] getparam 0 .............................. <me>
+  [104] getobjprop 223 .......................... <me.TMAN>
+  [106] eq ...................................... <thetype = me.TMAN>
+  [107] jmpifz [139] ............................ if thetype = me.TMAN then / else
+  [110] pushsymb 232 ............................ <#crystart>
+  [112] pushint8 33 ............................. <33>
+  [114] pushsymb 233 ............................ <#crylength>
+  [116] pushint8 20 ............................. <20>
+  [118] pushsymb 234 ............................ <#turnstart>
+  [120] pushint8 113 ............................ <113>
+  [122] pushsymb 235 ............................ <#turnlength>
+  [124] pushint8 31 ............................. <31>
+  [126] pushsymb 236 ............................ <#deathstart>
+  [128] pushint16 237 ........................... <237>
+  [131] pusharglist 10 .......................... <[#crystart: 33, #crylength: 20, #turnstart: 113, #turnlength: 31, #deathstart: 237]>
+  [133] pushproplist ............................ <[#crystart: 33, #crylength: 20, #turnstart: 113, #turnlength: 31, #deathstart: 237]>
+  [134] setlocal 0 .............................. obj = [#crystart: 33, #crylength: 20, #turnstart: 113, #turnlength: 31, #deathstart: 237]
+  [136] jmp [158]
+  [139] getparam 1 .............................. <thetype>
+  [141] getparam 0 .............................. <me>
+  [143] getobjprop 159 .......................... <me.TEVIL>
+  [145] eq ...................................... <thetype = me.TEVIL>
+  [146] jmpifz [158] ............................ if thetype = me.TEVIL then
+  [149] pushsymb 236 ............................ <#deathstart>
+  [151] pushint8 33 ............................. <33>
+  [153] pusharglist 2 ........................... <[#deathstart: 33]>
+  [155] pushproplist ............................ <[#deathstart: 33]>
+  [156] setlocal 0 .............................. obj = [#deathstart: 33]
+  [158] getlocal 0 .............................. <obj>
+  [160] pusharglistnoret 1 ...................... <obj>
+  [162] extcall 22 .............................. return obj
+  [164] ret
+end
+
+on mCreateFrames2 me, themedia
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getparam 0 .............................. <me>
+  [  8] pushsymb 158 ............................ <#pMediaArray>
+  [ 10] pusharglist 2 ........................... <me, #pMediaArray>
+  [ 12] objcall 137 ............................. <me.pMediaArray.count>
+  [ 14] lteq
+  [ 15] jmpifz [ 56] ............................ repeat with i = 1 to me.pMediaArray.count
+  [ 18] getparam 1 .............................. <themedia>
+  [ 20] getparam 0 .............................. <me>
+  [ 22] pushsymb 158 ............................ <#pMediaArray>
+  [ 24] getlocal 0 .............................. <i>
+  [ 26] pusharglist 3 ........................... <me, #pMediaArray, i>
+  [ 28] objcall 140 ............................. <me.pMediaArray[i]>
+  [ 30] eq ...................................... <themedia = me.pMediaArray[i]>
+  [ 31] jmpifz [ 47] ............................ if themedia = me.pMediaArray[i] then
+  [ 34] getparam 0 .............................. <me>
+  [ 36] getlocal 0 .............................. <i>
+  [ 38] pusharglist 2 ........................... <me, i>
+  [ 40] objcall 218 ............................. <me.mCreateFrames(i)>
+  [ 42] setlocal 1 .............................. obj = me.mCreateFrames(i)
+  [ 44] jmp [ 56] ............................... exit repeat
+  [ 47] pushint8 1
+  [ 49] getlocal 0
+  [ 51] add
+  [ 52] setlocal 0
+  [ 54] endrepeat [  4]
+  [ 56] getlocal 1 .............................. <obj>
+  [ 58] pusharglistnoret 1 ...................... <obj>
+  [ 60] extcall 22 .............................. return obj
+  [ 62] ret
+end
+
+on mPopulate me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getglobal 9 ............................. <oG>
+  [  8] getobjprop 70 ........................... <oG.STARTPEOPLE>
+  [ 10] lteq
+  [ 11] jmpifz [ 33] ............................ repeat with i = 1 to oG.STARTPEOPLE
+  [ 14] getparam 0 .............................. <me>
+  [ 16] getglobal 9 ............................. <oG>
+  [ 18] getobjprop 94 ........................... <oG.ONOFFSCREEN>
+  [ 20] pusharglistnoret 2 ...................... <me, oG.ONOFFSCREEN>
+  [ 22] objcall 217 ............................. me.mCreatePerson(oG.ONOFFSCREEN)
+  [ 24] pushint8 1
+  [ 26] getlocal 0
+  [ 28] add
+  [ 29] setlocal 0
+  [ 31] endrepeat [  4]
+  [ 33] ret
+end
+
+on mGenerate me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 225 .......................... <me.pWait>
+  [  4] pushzero ................................ <0>
+  [  5] eq ...................................... <me.pWait = 0>
+  [  6] jmpifz [ 65] ............................ if me.pWait = 0 then / else
+  [  9] getparam 0 .............................. <me>
+  [ 11] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 13] pusharglist 2 ........................... <me, #pUsedSpriteArray>
+  [ 15] objcall 137 ............................. <me.pUsedSpriteArray.count>
+  [ 17] getglobal 9 ............................. <oG>
+  [ 19] getobjprop 69 ........................... <oG.MAXPEOPLE>
+  [ 21] lt ...................................... <me.pUsedSpriteArray.count < oG.MAXPEOPLE>
+  [ 22] jmpifz [ 35] ............................ if me.pUsedSpriteArray.count < oG.MAXPEOPLE then
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getglobal 9 ............................. <oG>
+  [ 29] getobjprop 93 ........................... <oG.OFFSCREEN>
+  [ 31] pusharglistnoret 2 ...................... <me, oG.OFFSCREEN>
+  [ 33] objcall 217 ............................. me.mCreatePerson(oG.OFFSCREEN)
+  [ 35] getparam 0 .............................. <me>
+  [ 37] getglobal 9 ............................. <oG>
+  [ 39] getobjprop 74 ........................... <oG.GENERATIONRATIO>
+  [ 41] getglobal 9 ............................. <oG>
+  [ 43] getobjprop 60 ........................... <oG.fps>
+  [ 45] mul ..................................... <oG.GENERATIONRATIO * oG.fps>
+  [ 46] getglobal 9 ............................. <oG>
+  [ 48] getobjprop 75 ........................... <oG.RANDGENERATIONRATIO>
+  [ 50] getglobal 9 ............................. <oG>
+  [ 52] getobjprop 60 ........................... <oG.fps>
+  [ 54] mul ..................................... <oG.RANDGENERATIONRATIO * oG.fps>
+  [ 55] pusharglist 1 ........................... <oG.RANDGENERATIONRATIO * oG.fps>
+  [ 57] extcall 152 ............................. <random(oG.RANDGENERATIONRATIO * oG.fps)>
+  [ 59] add ..................................... <(oG.GENERATIONRATIO * oG.fps) + random(oG.RANDGENERATIONRATIO * oG.fps)>
+  [ 60] setobjprop 225 .......................... me.pWait = (oG.GENERATIONRATIO * oG.fps) + random(oG.RANDGENERATIONRATIO * oG.fps)
+  [ 62] jmp [ 76]
+  [ 65] getparam 0 .............................. <me>
+  [ 67] getparam 0 .............................. <me>
+  [ 69] getobjprop 225 .......................... <me.pWait>
+  [ 71] pushint8 1 .............................. <1>
+  [ 73] sub ..................................... <me.pWait - 1>
+  [ 74] setobjprop 225 .......................... me.pWait = me.pWait - 1
+  [ 76] ret
+end
+
+on mUndoEvil me, amount
+  [  0] pusharglist 0 ........................... <[]>
+  [  2] pushlist ................................ <[]>
+  [  3] setlocal 0 .............................. array = []
+  [  5] pushzero ................................ <0>
+  [  6] setlocal 1 .............................. thecount = 0
+  [  8] pushint8 1 .............................. <1>
+  [ 10] setlocal 2
+  [ 12] getlocal 2
+  [ 14] getparam 0 .............................. <me>
+  [ 16] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 18] pusharglist 2 ........................... <me, #pUsedSpriteArray>
+  [ 20] objcall 137 ............................. <me.pUsedSpriteArray.count>
+  [ 22] lteq
+  [ 23] jmpifz [125] ............................ repeat with i = 1 to me.pUsedSpriteArray.count
+  [ 26] getparam 0 .............................. <me>
+  [ 28] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 30] getlocal 2 .............................. <i>
+  [ 32] pusharglist 3 ........................... <me, #pUsedSpriteArray, i>
+  [ 34] objcall 140 ............................. <me.pUsedSpriteArray[i]>
+  [ 36] setlocal 3 .............................. thesprite = me.pUsedSpriteArray[i]
+  [ 38] getlocal 3 .............................. <thesprite>
+  [ 40] getobjprop 26 ........................... <thesprite.member>
+  [ 42] getparam 0 .............................. <me>
+  [ 44] pushsymb 158 ............................ <#pMediaArray>
+  [ 46] getparam 0 .............................. <me>
+  [ 48] getobjprop 159 .......................... <me.TEVIL>
+  [ 50] pusharglist 3 ........................... <me, #pMediaArray, me.TEVIL>
+  [ 52] objcall 140 ............................. <me.pMediaArray[me.TEVIL]>
+  [ 54] eq ...................................... <thesprite.member = me.pMediaArray[me.TEVIL]>
+  [ 55] jmpifz [116] ............................ if thesprite.member = me.pMediaArray[me.TEVIL] then
+  [ 58] getlocal 3 .............................. <thesprite>
+  [ 60] pusharglist 1 ........................... <thesprite>
+  [ 62] objcall 238 ............................. <thesprite.mGetX()>
+  [ 64] getlocal 3 .............................. <thesprite>
+  [ 66] pusharglist 1 ........................... <thesprite>
+  [ 68] objcall 239 ............................. <thesprite.mGetY()>
+  [ 70] pusharglist 2 ........................... <thesprite.mGetX(), thesprite.mGetY()>
+  [ 72] extcall 44 .............................. <TileOnScreen(thesprite.mGetX(), thesprite.mGetY())>
+  [ 74] jmpifz [108] ............................ if TileOnScreen(thesprite.mGetX(), thesprite.mGetY()) then
+  [ 77] getlocal 0 .............................. <array>
+  [ 79] pushint8 1 .............................. <1>
+  [ 81] getlocal 3 .............................. <thesprite>
+  [ 83] pusharglistnoret 3 ...................... <array, 1, thesprite>
+  [ 85] objcall 210 ............................. array.addAt(1, thesprite)
+  [ 87] getlocal 1 .............................. <thecount>
+  [ 89] pushint8 1 .............................. <1>
+  [ 91] add ..................................... <thecount + 1>
+  [ 92] setlocal 1 .............................. thecount = thecount + 1
+  [ 94] getlocal 1 .............................. <thecount>
+  [ 96] getparam 1 .............................. <amount>
+  [ 98] eq ...................................... <thecount = amount>
+  [ 99] jmpifz [105] ............................ if thecount = amount then
+  [102] jmp [125] ............................... exit repeat
+  [105] jmp [116] ............................... next repeat
+  [108] getlocal 0 .............................. <array>
+  [110] getlocal 3 .............................. <thesprite>
+  [112] pusharglistnoret 2 ...................... <array, thesprite>
+  [114] objcall 161 ............................. array.append(thesprite)
+  [116] pushint8 1
+  [118] getlocal 2
+  [120] add
+  [121] setlocal 2
+  [123] endrepeat [ 12]
+  [125] getparam 1 .............................. <amount>
+  [127] getlocal 0 .............................. <array>
+  [129] getobjprop 137 .......................... <array.count>
+  [131] lt ...................................... <amount < array.count>
+  [132] jmpifz [142] ............................ if amount < array.count then / else
+  [135] getparam 1 .............................. <amount>
+  [137] setlocal 4 .............................. themax = amount
+  [139] jmp [148]
+  [142] getlocal 0 .............................. <array>
+  [144] getobjprop 137 .......................... <array.count>
+  [146] setlocal 4 .............................. themax = array.count
+  [148] getparam 0 .............................. <me>
+  [150] getobjprop 122 .......................... <me.pEvilCount>
+  [152] getlocal 4 .............................. <themax>
+  [154] sub ..................................... <me.pEvilCount - themax>
+  [155] getglobal 9 ............................. <oG>
+  [157] getobjprop 71 ........................... <oG.EVILMIN>
+  [159] sub ..................................... <me.pEvilCount - themax - oG.EVILMIN>
+  [160] pushint8 1 .............................. <1>
+  [162] lt ...................................... <(me.pEvilCount - themax - oG.EVILMIN) < 1>
+  [163] jmpifz [177] ............................ if (me.pEvilCount - themax - oG.EVILMIN) < 1 then
+  [166] getparam 0 .............................. <me>
+  [168] getobjprop 122 .......................... <me.pEvilCount>
+  [170] getglobal 9 ............................. <oG>
+  [172] getobjprop 71 ........................... <oG.EVILMIN>
+  [174] sub ..................................... <me.pEvilCount - oG.EVILMIN>
+  [175] setlocal 4 .............................. themax = me.pEvilCount - oG.EVILMIN
+  [177] pushint8 1 .............................. <1>
+  [179] setlocal 2
+  [181] getlocal 2
+  [183] getlocal 4 .............................. <themax>
+  [185] lteq
+  [186] jmpifz [210] ............................ repeat with i = 1 to themax
+  [189] getlocal 0 .............................. <array>
+  [191] getlocal 2 .............................. <i>
+  [193] pusharglist 2 ........................... <array, i>
+  [195] objcall 211 ............................. <array[i]>
+  [197] pusharglistnoret 1 ...................... <array[i]>
+  [199] objcall 121 ............................. array[i].mUndoEvil()
+  [201] pushint8 1
+  [203] getlocal 2
+  [205] add
+  [206] setlocal 2
+  [208] endrepeat [181]
+  [210] ret
+end
+
+on mKill me, centerx, centery
+  [  0] pusharglist 0 ........................... <[]>
+  [  2] pushlist ................................ <[]>
+  [  3] setlocal 0 .............................. distancearray = []
+  [  5] pusharglist 0 ........................... <[]>
+  [  7] pushlist ................................ <[]>
+  [  8] setlocal 1 .............................. tomournarray = []
+  [ 10] getparam 1 .............................. <centerx>
+  [ 12] getglobal 9 ............................. <oG>
+  [ 14] getobjprop 76 ........................... <oG.BLASTX>
+  [ 16] sub ..................................... <centerx - oG.BLASTX>
+  [ 17] setlocal 2 .............................. xstart = centerx - oG.BLASTX
+  [ 19] getparam 2 .............................. <centery>
+  [ 21] getglobal 9 ............................. <oG>
+  [ 23] getobjprop 77 ........................... <oG.BLASTY>
+  [ 25] sub ..................................... <centery - oG.BLASTY>
+  [ 26] setlocal 3 .............................. ystart = centery - oG.BLASTY
+  [ 28] getparam 1 .............................. <centerx>
+  [ 30] getglobal 9 ............................. <oG>
+  [ 32] getobjprop 76 ........................... <oG.BLASTX>
+  [ 34] add ..................................... <centerx + oG.BLASTX>
+  [ 35] setlocal 4 .............................. xfinish = centerx + oG.BLASTX
+  [ 37] getparam 2 .............................. <centery>
+  [ 39] getglobal 9 ............................. <oG>
+  [ 41] getobjprop 77 ........................... <oG.BLASTY>
+  [ 43] add ..................................... <centery + oG.BLASTY>
+  [ 44] setlocal 5 .............................. yfinish = centery + oG.BLASTY
+  [ 46] pushint8 1 .............................. <1>
+  [ 48] setlocal 6
+  [ 50] getlocal 6
+  [ 52] getparam 0 .............................. <me>
+  [ 54] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 56] pusharglist 2 ........................... <me, #pUsedSpriteArray>
+  [ 58] objcall 137 ............................. <me.pUsedSpriteArray.count>
+  [ 60] lteq
+  [ 61] jmpifz [371] ............................ repeat with i = 1 to me.pUsedSpriteArray.count
+  [ 64] getparam 0 .............................. <me>
+  [ 66] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [ 68] getlocal 6 .............................. <i>
+  [ 70] pusharglist 3 ........................... <me, #pUsedSpriteArray, i>
+  [ 72] objcall 140 ............................. <me.pUsedSpriteArray[i]>
+  [ 74] setlocal 7 .............................. thesprite = me.pUsedSpriteArray[i]
+  [ 76] getlocal 7 .............................. <thesprite>
+  [ 78] pusharglist 1 ........................... <thesprite>
+  [ 80] objcall 238 ............................. <thesprite.mGetX()>
+  [ 82] setlocal 8 .............................. thex = thesprite.mGetX()
+  [ 84] getlocal 7 .............................. <thesprite>
+  [ 86] pusharglist 1 ........................... <thesprite>
+  [ 88] objcall 239 ............................. <thesprite.mGetY()>
+  [ 90] setlocal 9 .............................. they = thesprite.mGetY()
+  [ 92] getlocal 8 .............................. <thex>
+  [ 94] getlocal 2 .............................. <xstart>
+  [ 96] gteq .................................... <thex >= xstart>
+  [ 97] getlocal 8 .............................. <thex>
+  [ 99] getlocal 4 .............................. <xfinish>
+  [101] lteq .................................... <thex <= xfinish>
+  [102] and ..................................... <(thex >= xstart) and (thex <= xfinish)>
+  [103] getlocal 9 .............................. <they>
+  [105] getlocal 3 .............................. <ystart>
+  [107] gteq .................................... <they >= ystart>
+  [108] and ..................................... <(thex >= xstart) and (thex <= xfinish) and (they >= ystart)>
+  [109] getlocal 9 .............................. <they>
+  [111] getlocal 5 .............................. <yfinish>
+  [113] lteq .................................... <they <= yfinish>
+  [114] and ..................................... <(thex >= xstart) and (thex <= xfinish) and (they >= ystart) and (they <= yfinish)>
+  [115] getlocal 7 .............................. <thesprite>
+  [117] pusharglist 1 ........................... <thesprite>
+  [119] objcall 242 ............................. <thesprite.mIsAlive()>
+  [121] and ..................................... <(thex >= xstart) and (thex <= xfinish) and (they >= ystart) and (they <= yfinish) and thesprite.mIsAlive()>
+  [122] jmpifz [361] ............................ if (thex >= xstart) and (thex <= xfinish) and (they >= ystart) and (they <= yfinish) and thesprite.mIsAlive() then
+  [125] getlocal 8 .............................. <thex>
+  [127] setlocal 10 ............................. tilex = thex
+  [129] getlocal 9 .............................. <they>
+  [131] setlocal 11 ............................. tiley = they
+  [133] getlocal 7 .............................. <thesprite>
+  [135] getlocal 10 ............................. <tilex>
+  [137] getlocal 11 ............................. <tiley>
+  [139] pusharglistnoret 3 ...................... <thesprite, tilex, tiley>
+  [141] objcall 243 ............................. thesprite.mDie(tilex, tiley)
+  [143] getlocal 7 .............................. <thesprite>
+  [145] getobjprop 26 ........................... <thesprite.member>
+  [147] getparam 0 .............................. <me>
+  [149] pushsymb 158 ............................ <#pMediaArray>
+  [151] getparam 0 .............................. <me>
+  [153] getobjprop 159 .......................... <me.TEVIL>
+  [155] pusharglist 3 ........................... <me, #pMediaArray, me.TEVIL>
+  [157] objcall 140 ............................. <me.pMediaArray[me.TEVIL]>
+  [159] nteq .................................... <thesprite.member <> me.pMediaArray[me.TEVIL]>
+  [160] getlocal 7 .............................. <thesprite>
+  [162] getobjprop 26 ........................... <thesprite.member>
+  [164] getparam 0 .............................. <me>
+  [166] pushsymb 158 ............................ <#pMediaArray>
+  [168] getparam 0 .............................. <me>
+  [170] getobjprop 222 .......................... <me.TDOG>
+  [172] pusharglist 3 ........................... <me, #pMediaArray, me.TDOG>
+  [174] objcall 140 ............................. <me.pMediaArray[me.TDOG]>
+  [176] nteq .................................... <thesprite.member <> me.pMediaArray[me.TDOG]>
+  [177] and ..................................... <(thesprite.member <> me.pMediaArray[me.TEVIL]) and (thesprite.member <> me.pMediaArray[me.TDOG])>
+  [178] jmpifz [361] ............................ if (thesprite.member <> me.pMediaArray[me.TEVIL]) and (thesprite.member <> me.pMediaArray[me.TDOG]) then
+  [181] pusharglist 0 ........................... <[]>
+  [183] pushlist ................................ <[]>
+  [184] setlocal 12 ............................. array = []
+  [186] getlocal 10 ............................. <tilex>
+  [188] getlocal 11 ............................. <tiley>
+  [190] getglobal 9 ............................. <oG>
+  [192] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [194] add ..................................... <tiley + oG.DISTANCEFROMDEAD>
+  [195] pusharglist 2 ........................... <tilex, tiley + oG.DISTANCEFROMDEAD>
+  [197] extcall 37 .............................. <PosEmpty(tilex, tiley + oG.DISTANCEFROMDEAD)>
+  [199] jmpifz [227] ............................ if PosEmpty(tilex, tiley + oG.DISTANCEFROMDEAD) then
+  [202] getlocal 12 ............................. <array>
+  [204] pushsymb 148 ............................ <#tilex>
+  [206] getlocal 10 ............................. <tilex>
+  [208] pushsymb 147 ............................ <#tiley>
+  [210] getlocal 11 ............................. <tiley>
+  [212] getglobal 9 ............................. <oG>
+  [214] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [216] add ..................................... <tiley + oG.DISTANCEFROMDEAD>
+  [217] pushsymb 244 ............................ <#facing>
+  [219] pushzero ................................ <0>
+  [220] pusharglist 6 ........................... <[#tilex: tilex, #tiley: tiley + oG.DISTANCEFROMDEAD, #facing: 0]>
+  [222] pushproplist ............................ <[#tilex: tilex, #tiley: tiley + oG.DISTANCEFROMDEAD, #facing: 0]>
+  [223] pusharglistnoret 2 ...................... <array, [#tilex: tilex, #tiley: tiley + oG.DISTANCEFROMDEAD, #facing: 0]>
+  [225] objcall 161 ............................. array.append([#tilex: tilex, #tiley: tiley + oG.DISTANCEFROMDEAD, #facing: 0])
+  [227] getlocal 10 ............................. <tilex>
+  [229] getlocal 11 ............................. <tiley>
+  [231] getglobal 9 ............................. <oG>
+  [233] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [235] sub ..................................... <tiley - oG.DISTANCEFROMDEAD>
+  [236] pusharglist 2 ........................... <tilex, tiley - oG.DISTANCEFROMDEAD>
+  [238] extcall 37 .............................. <PosEmpty(tilex, tiley - oG.DISTANCEFROMDEAD)>
+  [240] jmpifz [269] ............................ if PosEmpty(tilex, tiley - oG.DISTANCEFROMDEAD) then
+  [243] getlocal 12 ............................. <array>
+  [245] pushsymb 148 ............................ <#tilex>
+  [247] getlocal 10 ............................. <tilex>
+  [249] pushsymb 147 ............................ <#tiley>
+  [251] getlocal 11 ............................. <tiley>
+  [253] getglobal 9 ............................. <oG>
+  [255] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [257] sub ..................................... <tiley - oG.DISTANCEFROMDEAD>
+  [258] pushsymb 244 ............................ <#facing>
+  [260] pushint8 1 .............................. <1>
+  [262] pusharglist 6 ........................... <[#tilex: tilex, #tiley: tiley - oG.DISTANCEFROMDEAD, #facing: 1]>
+  [264] pushproplist ............................ <[#tilex: tilex, #tiley: tiley - oG.DISTANCEFROMDEAD, #facing: 1]>
+  [265] pusharglistnoret 2 ...................... <array, [#tilex: tilex, #tiley: tiley - oG.DISTANCEFROMDEAD, #facing: 1]>
+  [267] objcall 161 ............................. array.append([#tilex: tilex, #tiley: tiley - oG.DISTANCEFROMDEAD, #facing: 1])
+  [269] getlocal 10 ............................. <tilex>
+  [271] getglobal 9 ............................. <oG>
+  [273] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [275] add ..................................... <tilex + oG.DISTANCEFROMDEAD>
+  [276] getlocal 11 ............................. <tiley>
+  [278] pusharglist 2 ........................... <tilex + oG.DISTANCEFROMDEAD, tiley>
+  [280] extcall 37 .............................. <PosEmpty(tilex + oG.DISTANCEFROMDEAD, tiley)>
+  [282] jmpifz [311] ............................ if PosEmpty(tilex + oG.DISTANCEFROMDEAD, tiley) then
+  [285] getlocal 12 ............................. <array>
+  [287] pushsymb 148 ............................ <#tilex>
+  [289] getlocal 10 ............................. <tilex>
+  [291] getglobal 9 ............................. <oG>
+  [293] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [295] add ..................................... <tilex + oG.DISTANCEFROMDEAD>
+  [296] pushsymb 147 ............................ <#tiley>
+  [298] getlocal 11 ............................. <tiley>
+  [300] pushsymb 244 ............................ <#facing>
+  [302] pushint8 2 .............................. <2>
+  [304] pusharglist 6 ........................... <[#tilex: tilex + oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 2]>
+  [306] pushproplist ............................ <[#tilex: tilex + oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 2]>
+  [307] pusharglistnoret 2 ...................... <array, [#tilex: tilex + oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 2]>
+  [309] objcall 161 ............................. array.append([#tilex: tilex + oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 2])
+  [311] getlocal 10 ............................. <tilex>
+  [313] getglobal 9 ............................. <oG>
+  [315] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [317] sub ..................................... <tilex - oG.DISTANCEFROMDEAD>
+  [318] getlocal 11 ............................. <tiley>
+  [320] pusharglist 2 ........................... <tilex - oG.DISTANCEFROMDEAD, tiley>
+  [322] extcall 37 .............................. <PosEmpty(tilex - oG.DISTANCEFROMDEAD, tiley)>
+  [324] jmpifz [353] ............................ if PosEmpty(tilex - oG.DISTANCEFROMDEAD, tiley) then
+  [327] getlocal 12 ............................. <array>
+  [329] pushsymb 148 ............................ <#tilex>
+  [331] getlocal 10 ............................. <tilex>
+  [333] getglobal 9 ............................. <oG>
+  [335] getobjprop 96 ........................... <oG.DISTANCEFROMDEAD>
+  [337] sub ..................................... <tilex - oG.DISTANCEFROMDEAD>
+  [338] pushsymb 147 ............................ <#tiley>
+  [340] getlocal 11 ............................. <tiley>
+  [342] pushsymb 244 ............................ <#facing>
+  [344] pushint8 3 .............................. <3>
+  [346] pusharglist 6 ........................... <[#tilex: tilex - oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 3]>
+  [348] pushproplist ............................ <[#tilex: tilex - oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 3]>
+  [349] pusharglistnoret 2 ...................... <array, [#tilex: tilex - oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 3]>
+  [351] objcall 161 ............................. array.append([#tilex: tilex - oG.DISTANCEFROMDEAD, #tiley: tiley, #facing: 3])
+  [353] getlocal 1 .............................. <tomournarray>
+  [355] getlocal 12 ............................. <array>
+  [357] pusharglistnoret 2 ...................... <tomournarray, array>
+  [359] objcall 161 ............................. tomournarray.append(array)
+  [361] pushint8 1
+  [363] getlocal 6
+  [365] add
+  [366] setlocal 6
+  [368] endrepeat [ 50]
+  [371] getlocal 1 .............................. <tomournarray>
+  [373] getobjprop 137 .......................... <tomournarray.count>
+  [375] pushzero ................................ <0>
+  [376] gt ...................................... <tomournarray.count > 0>
+  [377] jmpifz [709] ............................ if tomournarray.count > 0 then
+  [380] pushint8 1 .............................. <1>
+  [382] setlocal 6
+  [384] getlocal 6
+  [386] getparam 0 .............................. <me>
+  [388] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [390] pusharglist 2 ........................... <me, #pUsedSpriteArray>
+  [392] objcall 137 ............................. <me.pUsedSpriteArray.count>
+  [394] lteq
+  [395] jmpifz [529] ............................ repeat with i = 1 to me.pUsedSpriteArray.count
+  [398] getparam 0 .............................. <me>
+  [400] pushsymb 139 ............................ <#pUsedSpriteArray>
+  [402] getlocal 6 .............................. <i>
+  [404] pusharglist 3 ........................... <me, #pUsedSpriteArray, i>
+  [406] objcall 140 ............................. <me.pUsedSpriteArray[i]>
+  [408] setlocal 7 .............................. thesprite = me.pUsedSpriteArray[i]
+  [410] getparam 0 .............................. <me>
+  [412] getlocal 7 .............................. <thesprite>
+  [414] pusharglist 2 ........................... <me, thesprite>
+  [416] objcall 219 ............................. <me.mCanMourn(thesprite)>
+  [418] jmpifz [520] ............................ if me.mCanMourn(thesprite) then
+  [421] getparam 1 .............................. <centerx>
+  [423] getlocal 7 .............................. <thesprite>
+  [425] pusharglist 1 ........................... <thesprite>
+  [427] objcall 238 ............................. <thesprite.mGetX()>
+  [429] sub ..................................... <centerx - thesprite.mGetX()>
+  [430] pusharglist 1 ........................... <centerx - thesprite.mGetX()>
+  [432] extcall 245 ............................. <abs(centerx - thesprite.mGetX())>
+  [434] getparam 2 .............................. <centery>
+  [436] getlocal 7 .............................. <thesprite>
+  [438] pusharglist 1 ........................... <thesprite>
+  [440] objcall 239 ............................. <thesprite.mGetY()>
+  [442] sub ..................................... <centery - thesprite.mGetY()>
+  [443] pusharglist 1 ........................... <centery - thesprite.mGetY()>
+  [445] extcall 245 ............................. <abs(centery - thesprite.mGetY())>
+  [447] add ..................................... <abs(centerx - thesprite.mGetX()) + abs(centery - thesprite.mGetY())>
+  [448] setlocal 13 ............................. dist = abs(centerx - thesprite.mGetX()) + abs(centery - thesprite.mGetY())
+  [450] pushsymb 126 ............................ <#thesprite>
+  [452] getlocal 7 .............................. <thesprite>
+  [454] pushsymb 246 ............................ <#dist>
+  [456] getlocal 13 ............................. <dist>
+  [458] pusharglist 4 ........................... <[#thesprite: thesprite, #dist: dist]>
+  [460] pushproplist ............................ <[#thesprite: thesprite, #dist: dist]>
+  [461] setlocal 14 ............................. obj = [#thesprite: thesprite, #dist: dist]
+  [463] pushint8 1 .............................. <1>
+  [465] setlocal 15 ............................. j = 1
+  [467] getlocal 15 ............................. <j>
+  [469] getlocal 0 .............................. <distancearray>
+  [471] getobjprop 137 .......................... <distancearray.count>
+  [473] lteq .................................... <j <= distancearray.count>
+  [474] jmpifz [510] ............................ repeat while j <= distancearray.count
+  [477] getlocal 0 .............................. <distancearray>
+  [479] getlocal 15 ............................. <j>
+  [481] pusharglist 2 ........................... <distancearray, j>
+  [483] objcall 211 ............................. <distancearray[j]>
+  [485] getobjprop 246 .......................... <distancearray[j].dist>
+  [487] getlocal 14 ............................. <obj>
+  [489] getobjprop 246 .......................... <obj.dist>
+  [491] gt ...................................... <distancearray[j].dist > obj.dist>
+  [492] jmpifz [501] ............................ if distancearray[j].dist > obj.dist then
+  [495] jmp [510] ............................... exit repeat
+  [498] jmp [508] ............................... next repeat
+  [501] getlocal 15 ............................. <j>
+  [503] pushint8 1 .............................. <1>
+  [505] add ..................................... <j + 1>
+  [506] setlocal 15 ............................. j = j + 1
+  [508] endrepeat [467]
+  [510] getlocal 0 .............................. <distancearray>
+  [512] getlocal 15 ............................. <j>
+  [514] getlocal 14 ............................. <obj>
+  [516] pusharglistnoret 3 ...................... <distancearray, j, obj>
+  [518] objcall 210 ............................. distancearray.addAt(j, obj)
+  [520] pushint8 1
+  [522] getlocal 6
+  [524] add
+  [525] setlocal 6
+  [527] endrepeat [384]
+  [529] pushint8 1 .............................. <1>
+  [531] setlocal 6 .............................. i = 1
+  [533] pushint8 1 .............................. <1>
+  [535] setlocal 15 ............................. j = 1
+  [537] getlocal 1 .............................. <tomournarray>
+  [539] getobjprop 137 .......................... <tomournarray.count>
+  [541] getglobal 9 ............................. <oG>
+  [543] getobjprop 72 ........................... <oG.EVILPERDEATH>
+  [545] mul ..................................... <tomournarray.count * oG.EVILPERDEATH>
+  [546] setlocal 16 ............................. peopletomourn = tomournarray.count * oG.EVILPERDEATH
+  [548] getlocal 6 .............................. <i>
+  [550] getlocal 0 .............................. <distancearray>
+  [552] getobjprop 137 .......................... <distancearray.count>
+  [554] lteq .................................... <i <= distancearray.count>
+  [555] getlocal 6 .............................. <i>
+  [557] getlocal 16 ............................. <peopletomourn>
+  [559] lteq .................................... <i <= peopletomourn>
+  [560] and ..................................... <(i <= distancearray.count) and (i <= peopletomourn)>
+  [561] jmpifz [709] ............................ repeat while (i <= distancearray.count) and (i <= peopletomourn)
+  [564] getlocal 0 .............................. <distancearray>
+  [566] getlocal 6 .............................. <i>
+  [568] pusharglist 2 ........................... <distancearray, i>
+  [570] objcall 211 ............................. <distancearray[i]>
+  [572] getobjprop 246 .......................... <distancearray[i].dist>
+  [574] getglobal 9 ............................. <oG>
+  [576] getobjprop 95 ........................... <oG.MOURNDISTANCE>
+  [578] lt ...................................... <distancearray[i].dist < oG.MOURNDISTANCE>
+  [579] jmpifz [704] ............................ if distancearray[i].dist < oG.MOURNDISTANCE then
+  [582] getlocal 0 .............................. <distancearray>
+  [584] getlocal 6 .............................. <i>
+  [586] pusharglist 2 ........................... <distancearray, i>
+  [588] objcall 211 ............................. <distancearray[i]>
+  [590] getobjprop 126 .......................... <distancearray[i].thesprite>
+  [592] setlocal 7 .............................. thesprite = distancearray[i].thesprite
+  [594] getlocal 6 .............................. <i>
+  [596] pushint8 1 .............................. <1>
+  [598] add ..................................... <i + 1>
+  [599] setlocal 6 .............................. i = i + 1
+  [601] getlocal 1 .............................. <tomournarray>
+  [603] getlocal 15 ............................. <j>
+  [605] pusharglist 2 ........................... <tomournarray, j>
+  [607] objcall 211 ............................. <tomournarray[j]>
+  [609] getobjprop 137 .......................... <tomournarray[j].count>
+  [611] pushzero ................................ <0>
+  [612] gt ...................................... <tomournarray[j].count > 0>
+  [613] jmpifz [701] ............................ if tomournarray[j].count > 0 then
+  [616] getlocal 1 .............................. <tomournarray>
+  [618] getlocal 15 ............................. <j>
+  [620] pusharglist 2 ........................... <tomournarray, j>
+  [622] objcall 211 ............................. <tomournarray[j]>
+  [624] getobjprop 137 .......................... <tomournarray[j].count>
+  [626] pusharglist 1 ........................... <tomournarray[j].count>
+  [628] extcall 152 ............................. <random(tomournarray[j].count)>
+  [630] setlocal 17 ............................. temppos = random(tomournarray[j].count)
+  [632] getlocal 1 .............................. <tomournarray>
+  [634] getlocal 15 ............................. <j>
+  [636] pusharglist 2 ........................... <tomournarray, j>
+  [638] objcall 211 ............................. <tomournarray[j]>
+  [640] getlocal 17 ............................. <temppos>
+  [642] pusharglist 2 ........................... <tomournarray[j], temppos>
+  [644] objcall 211 ............................. <tomournarray[j][temppos]>
+  [646] setlocal 14 ............................. obj = tomournarray[j][temppos]
+  [648] getlocal 7 .............................. <thesprite>
+  [650] getlocal 14 ............................. <obj>
+  [652] getobjprop 148 .......................... <obj.tilex>
+  [654] getlocal 14 ............................. <obj>
+  [656] getobjprop 147 .......................... <obj.tiley>
+  [658] getlocal 14 ............................. <obj>
+  [660] getobjprop 244 .......................... <obj.facing>
+  [662] pusharglistnoret 4 ...................... <thesprite, obj.tilex, obj.tiley, obj.facing>
+  [664] objcall 247 ............................. thesprite.mGoToMourn(obj.tilex, obj.tiley, obj.facing)
+  [666] getlocal 1 .............................. <tomournarray>
+  [668] getlocal 15 ............................. <j>
+  [670] pusharglist 2 ........................... <tomournarray, j>
+  [672] objcall 211 ............................. <tomournarray[j]>
+  [674] getlocal 17 ............................. <temppos>
+  [676] pusharglistnoret 2 ...................... <tomournarray[j], temppos>
+  [678] objcall 162 ............................. tomournarray[j].deleteAt(temppos)
+  [680] getlocal 15 ............................. <j>
+  [682] pushint8 1 .............................. <1>
+  [684] add ..................................... <j + 1>
+  [685] setlocal 15 ............................. j = j + 1
+  [687] getlocal 15 ............................. <j>
+  [689] getlocal 1 .............................. <tomournarray>
+  [691] getobjprop 137 .......................... <tomournarray.count>
+  [693] gt ...................................... <j > tomournarray.count>
+  [694] jmpifz [701] ............................ if j > tomournarray.count then
+  [697] pushint8 1 .............................. <1>
+  [699] setlocal 15 ............................. j = 1
+  [701] jmp [707] ............................... next repeat
+  [704] jmp [709] ............................... exit repeat
+  [707] endrepeat [548]
+  [709] ret
+end
+
+on mCanMourn me, thesprite
+  [  0] getparam 1 .............................. <thesprite>
+  [  2] getobjprop 26 ........................... <thesprite.member>
+  [  4] getparam 0 .............................. <me>
+  [  6] pushsymb 158 ............................ <#pMediaArray>
+  [  8] getparam 0 .............................. <me>
+  [ 10] getobjprop 159 .......................... <me.TEVIL>
+  [ 12] pusharglist 3 ........................... <me, #pMediaArray, me.TEVIL>
+  [ 14] objcall 140 ............................. <me.pMediaArray[me.TEVIL]>
+  [ 16] eq ...................................... <thesprite.member = me.pMediaArray[me.TEVIL]>
+  [ 17] getparam 1 .............................. <thesprite>
+  [ 19] getobjprop 26 ........................... <thesprite.member>
+  [ 21] getparam 0 .............................. <me>
+  [ 23] pushsymb 158 ............................ <#pMediaArray>
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getobjprop 222 .......................... <me.TDOG>
+  [ 29] pusharglist 3 ........................... <me, #pMediaArray, me.TDOG>
+  [ 31] objcall 140 ............................. <me.pMediaArray[me.TDOG]>
+  [ 33] eq ...................................... <thesprite.member = me.pMediaArray[me.TDOG]>
+  [ 34] or ...................................... <(thesprite.member = me.pMediaArray[me.TEVIL]) or (thesprite.member = me.pMediaArray[me.TDOG])>
+  [ 35] getparam 1 .............................. <thesprite>
+  [ 37] pusharglist 1 ........................... <thesprite>
+  [ 39] objcall 258 ............................. <thesprite.mCantMourn()>
+  [ 42] or ...................................... <(thesprite.member = me.pMediaArray[me.TEVIL]) or (thesprite.member = me.pMediaArray[me.TDOG]) or thesprite.mCantMourn()>
+  [ 43] jmpifz [ 54] ............................ if (thesprite.member = me.pMediaArray[me.TEVIL]) or (thesprite.member = me.pMediaArray[me.TDOG]) or thesprite.mCantMourn() then / else
+  [ 46] pushzero ................................ <0>
+  [ 47] pusharglistnoret 1 ...................... <0>
+  [ 49] extcall 22 .............................. return 0
+  [ 51] jmp [ 60]
+  [ 54] pushint8 1 .............................. <1>
+  [ 56] pusharglistnoret 1 ...................... <1>
+  [ 58] extcall 22 .............................. return 1
+  [ 60] ret
+end

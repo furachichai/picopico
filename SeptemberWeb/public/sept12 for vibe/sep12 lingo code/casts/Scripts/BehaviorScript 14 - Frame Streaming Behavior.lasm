@@ -1,0 +1,17 @@
+global waitstreaming
+
+on exitFrame me
+  [  0] getglobal 181 ........................... <waitstreaming>
+  [  2] jmpifz [ 16] ............................ if waitstreaming then / else
+  [  5] pusharglist 0 ........................... <>
+  [  7] thebuiltin 25 ........................... <the frame>
+  [  9] pusharglistnoret 1 ...................... <the frame>
+  [ 11] extcall 185 ............................. go(the frame)
+  [ 13] jmp [ 26]
+  [ 16] pushcons 0 .............................. <"MInit">
+  [ 18] pusharglist 1 ........................... <"MInit">
+  [ 20] extcall 165 ............................. <marker("MInit")>
+  [ 22] pusharglistnoret 1 ...................... <marker("MInit")>
+  [ 24] extcall 185 ............................. go(marker("MInit"))
+  [ 26] ret
+end

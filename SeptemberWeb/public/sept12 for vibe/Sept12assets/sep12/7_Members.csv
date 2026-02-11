@@ -1,0 +1,7 @@
+Number,Type,Name,Registration Point,Filename
+2,sound,Ambient,"(0, 0)",
+3,sound,Turn,"(0, 0)",
+4,sound,Missile,"(0, 0)",
+5,sound,Explotion,"(0, 0)",
+6,sound,Cry,"(0, 0)",
+7,sound,Click,"(0, 0)",

@@ -1,0 +1,286 @@
+property SAMBIENT, STURN, SMISSILE, SEXPLOTION, SCRY, SCLICK, SMAX, People, array, countcry
+global oG
+
+on new me
+  [  0] getparam 0 .............................. <me>
+  [  2] pushint8 1 .............................. <1>
+  [  4] setobjprop 117 .......................... me.SAMBIENT = 1
+  [  6] getparam 0 .............................. <me>
+  [  8] pushint8 2 .............................. <2>
+  [ 10] setobjprop 324 .......................... me.STURN = 2
+  [ 13] getparam 0 .............................. <me>
+  [ 15] pushint8 3 .............................. <3>
+  [ 17] setobjprop 166 .......................... me.SCLICK = 3
+  [ 19] getparam 0 .............................. <me>
+  [ 21] pushint8 4 .............................. <4>
+  [ 23] setobjprop 376 .......................... me.SMISSILE = 4
+  [ 26] getparam 0 .............................. <me>
+  [ 28] pushint8 5 .............................. <5>
+  [ 30] setobjprop 377 .......................... me.SEXPLOTION = 5
+  [ 33] getparam 0 .............................. <me>
+  [ 35] pushint8 6 .............................. <6>
+  [ 37] setobjprop 378 .......................... me.SCRY = 6
+  [ 40] getparam 0 .............................. <me>
+  [ 42] pushint8 6 .............................. <6>
+  [ 44] setobjprop 379 .......................... me.SMAX = 6
+  [ 47] getparam 0 .............................. <me>
+  [ 49] pushint8 50 ............................. <50>
+  [ 51] setobjprop 380 .......................... me.People = 50
+  [ 54] getparam 0 .............................. <me>
+  [ 56] pushzero ................................ <0>
+  [ 57] setobjprop 381 .......................... me.countcry = 0
+  [ 60] getparam 0 .............................. <me>
+  [ 62] pusharglist 0 ........................... <[]>
+  [ 64] pushlist ................................ <[]>
+  [ 65] setobjprop 214 .......................... me.array = []
+  [ 67] getparam 0 .............................. <me>
+  [ 69] getchainedprop 214 ...................... <me.array>
+  [ 71] pushsymb 382 ............................ <#thesound>
+  [ 74] pushcons 0 .............................. <"Ambient">
+  [ 76] pushsymb 383 ............................ <#thefadein>
+  [ 79] pushint8 1 .............................. <1>
+  [ 81] pushsymb 384 ............................ <#thefadeout>
+  [ 84] pushint16 300 ........................... <300>
+  [ 87] pushsymb 385 ............................ <#vol>
+  [ 90] pushint8 50 ............................. <50>
+  [ 92] pusharglist 8 ........................... <[#thesound: "Ambient", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [ 94] pushproplist ............................ <[#thesound: "Ambient", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [ 95] pusharglistnoret 2 ...................... <me.array, [#thesound: "Ambient", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [ 97] objcall 161 ............................. me.array.append([#thesound: "Ambient", #thefadein: 1, #thefadeout: 300, #vol: 50])
+  [ 99] getparam 0 .............................. <me>
+  [101] getchainedprop 214 ...................... <me.array>
+  [103] pushsymb 382 ............................ <#thesound>
+  [106] pushcons 1 .............................. <"Turn">
+  [108] pushsymb 383 ............................ <#thefadein>
+  [111] pushint8 1 .............................. <1>
+  [113] pushsymb 384 ............................ <#thefadeout>
+  [116] pushint16 300 ........................... <300>
+  [119] pushsymb 385 ............................ <#vol>
+  [122] pushint8 70 ............................. <70>
+  [124] pusharglist 8 ........................... <[#thesound: "Turn", #thefadein: 1, #thefadeout: 300, #vol: 70]>
+  [126] pushproplist ............................ <[#thesound: "Turn", #thefadein: 1, #thefadeout: 300, #vol: 70]>
+  [127] pusharglistnoret 2 ...................... <me.array, [#thesound: "Turn", #thefadein: 1, #thefadeout: 300, #vol: 70]>
+  [129] objcall 161 ............................. me.array.append([#thesound: "Turn", #thefadein: 1, #thefadeout: 300, #vol: 70])
+  [131] getparam 0 .............................. <me>
+  [133] getchainedprop 214 ...................... <me.array>
+  [135] pushsymb 382 ............................ <#thesound>
+  [138] pushcons 2 .............................. <"Click">
+  [140] pushsymb 383 ............................ <#thefadein>
+  [143] pushint8 1 .............................. <1>
+  [145] pushsymb 384 ............................ <#thefadeout>
+  [148] pushint16 300 ........................... <300>
+  [151] pushsymb 385 ............................ <#vol>
+  [154] pushint8 75 ............................. <75>
+  [156] pusharglist 8 ........................... <[#thesound: "Click", #thefadein: 1, #thefadeout: 300, #vol: 75]>
+  [158] pushproplist ............................ <[#thesound: "Click", #thefadein: 1, #thefadeout: 300, #vol: 75]>
+  [159] pusharglistnoret 2 ...................... <me.array, [#thesound: "Click", #thefadein: 1, #thefadeout: 300, #vol: 75]>
+  [161] objcall 161 ............................. me.array.append([#thesound: "Click", #thefadein: 1, #thefadeout: 300, #vol: 75])
+  [163] getparam 0 .............................. <me>
+  [165] getchainedprop 214 ...................... <me.array>
+  [167] pushsymb 382 ............................ <#thesound>
+  [170] pushcons 3 .............................. <"Missile">
+  [172] pushsymb 383 ............................ <#thefadein>
+  [175] pushint8 1 .............................. <1>
+  [177] pushsymb 384 ............................ <#thefadeout>
+  [180] pushint16 300 ........................... <300>
+  [183] pushsymb 385 ............................ <#vol>
+  [186] pushint16 200 ........................... <200>
+  [189] pusharglist 8 ........................... <[#thesound: "Missile", #thefadein: 1, #thefadeout: 300, #vol: 200]>
+  [191] pushproplist ............................ <[#thesound: "Missile", #thefadein: 1, #thefadeout: 300, #vol: 200]>
+  [192] pusharglistnoret 2 ...................... <me.array, [#thesound: "Missile", #thefadein: 1, #thefadeout: 300, #vol: 200]>
+  [194] objcall 161 ............................. me.array.append([#thesound: "Missile", #thefadein: 1, #thefadeout: 300, #vol: 200])
+  [196] getparam 0 .............................. <me>
+  [198] getchainedprop 214 ...................... <me.array>
+  [200] pushsymb 382 ............................ <#thesound>
+  [203] pushcons 4 .............................. <"Explotion">
+  [205] pushsymb 383 ............................ <#thefadein>
+  [208] pushint8 1 .............................. <1>
+  [210] pushsymb 384 ............................ <#thefadeout>
+  [213] pushint16 300 ........................... <300>
+  [216] pushsymb 385 ............................ <#vol>
+  [219] pushint16 215 ........................... <215>
+  [222] pusharglist 8 ........................... <[#thesound: "Explotion", #thefadein: 1, #thefadeout: 300, #vol: 215]>
+  [224] pushproplist ............................ <[#thesound: "Explotion", #thefadein: 1, #thefadeout: 300, #vol: 215]>
+  [225] pusharglistnoret 2 ...................... <me.array, [#thesound: "Explotion", #thefadein: 1, #thefadeout: 300, #vol: 215]>
+  [227] objcall 161 ............................. me.array.append([#thesound: "Explotion", #thefadein: 1, #thefadeout: 300, #vol: 215])
+  [229] getparam 0 .............................. <me>
+  [231] getchainedprop 214 ...................... <me.array>
+  [233] pushsymb 382 ............................ <#thesound>
+  [236] pushcons 5 .............................. <"Cry">
+  [238] pushsymb 383 ............................ <#thefadein>
+  [241] pushint8 1 .............................. <1>
+  [243] pushsymb 384 ............................ <#thefadeout>
+  [246] pushint16 300 ........................... <300>
+  [249] pushsymb 385 ............................ <#vol>
+  [252] pushint8 50 ............................. <50>
+  [254] pusharglist 8 ........................... <[#thesound: "Cry", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [256] pushproplist ............................ <[#thesound: "Cry", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [257] pusharglistnoret 2 ...................... <me.array, [#thesound: "Cry", #thefadein: 1, #thefadeout: 300, #vol: 50]>
+  [259] objcall 161 ............................. me.array.append([#thesound: "Cry", #thefadein: 1, #thefadeout: 300, #vol: 50])
+  [261] getparam 0 .............................. <me>
+  [263] pusharglistnoret 1 ...................... <me>
+  [265] objcall 374 ............................. me.mSetVolumes()
+  [268] getparam 0 .............................. <me>
+  [270] pusharglistnoret 1 ...................... <me>
+  [272] extcall 22 .............................. return me
+  [274] ret
+end
+
+on mSetVolumes me
+  [  0] pushint8 1 .............................. <1>
+  [  2] setlocal 0
+  [  4] getlocal 0
+  [  6] getparam 0 .............................. <me>
+  [  8] getobjprop 379 .......................... <me.SMAX>
+  [ 11] lteq
+  [ 12] jmpifz [ 47] ............................ repeat with i = 1 to me.SMAX
+  [ 15] getlocal 0 .............................. <i>
+  [ 17] pusharglist 1 ........................... <i>
+  [ 19] extcall 386 ............................. <sound(i)>
+  [ 22] getparam 0 .............................. <me>
+  [ 24] pushsymb 214 ............................ <#array>
+  [ 26] getlocal 0 .............................. <i>
+  [ 28] pusharglist 3 ........................... <me, #array, i>
+  [ 30] objcall 138 ............................. <me.array[i]>
+  [ 32] getobjprop 385 .......................... <me.array[i].vol>
+  [ 35] setobjprop 387 .......................... sound(i).volume = me.array[i].vol
+  [ 38] pushint8 1
+  [ 40] getlocal 0
+  [ 42] add
+  [ 43] setlocal 0
+  [ 45] endrepeat [  4]
+  [ 47] ret
+end
+
+on mPlay me, thesound
+  [  0] getparam 1 .............................. <thesound>
+  [  2] pusharglist 1 ........................... <thesound>
+  [  4] extcall 386 ............................. <sound(thesound)>
+  [  7] pusharglist 1 ........................... <sound(thesound)>
+  [  9] objcall 388 ............................. <sound(thesound).isBusy()>
+  [ 12] not ..................................... <not sound(thesound).isBusy()>
+  [ 13] jmpifz [ 47] ............................ if not sound(thesound).isBusy() then
+  [ 16] getparam 1 .............................. <thesound>
+  [ 18] getparam 0 .............................. <me>
+  [ 20] pushsymb 214 ............................ <#array>
+  [ 22] getparam 1 .............................. <thesound>
+  [ 24] pusharglist 3 ........................... <me, #array, thesound>
+  [ 26] objcall 138 ............................. <me.array[thesound]>
+  [ 28] getobjprop 382 .......................... <me.array[thesound].thesound>
+  [ 31] pusharglistnoret 2 ...................... <thesound, me.array[thesound].thesound>
+  [ 33] extcall 389 ............................. puppetSound(thesound, me.array[thesound].thesound)
+  [ 36] getparam 1 .............................. <thesound>
+  [ 38] pusharglist 1 ........................... <thesound>
+  [ 40] extcall 386 ............................. <sound(thesound)>
+  [ 43] pusharglistnoret 1 ...................... <sound(thesound)>
+  [ 45] objcall 24 .............................. sound(thesound).play()
+  [ 47] ret
+end
+
+on mPlayPeople me, thesound
+  [  0] getparam 1 .............................. <thesound>
+  [  2] getparam 0 .............................. <me>
+  [  4] pushsymb 214 ............................ <#array>
+  [  6] getparam 1 .............................. <thesound>
+  [  8] pusharglist 3 ........................... <me, #array, thesound>
+  [ 10] objcall 138 ............................. <me.array[thesound]>
+  [ 12] getobjprop 382 .......................... <me.array[thesound].thesound>
+  [ 15] pusharglistnoret 2 ...................... <thesound, me.array[thesound].thesound>
+  [ 17] extcall 389 ............................. puppetSound(thesound, me.array[thesound].thesound)
+  [ 20] getparam 1 .............................. <thesound>
+  [ 22] pusharglist 1 ........................... <thesound>
+  [ 24] extcall 386 ............................. <sound(thesound)>
+  [ 27] pusharglist 1 ........................... <sound(thesound)>
+  [ 29] objcall 388 ............................. <sound(thesound).isBusy()>
+  [ 32] jmpifz [ 86] ............................ if sound(thesound).isBusy() then / else
+  [ 35] getparam 1 .............................. <thesound>
+  [ 37] pusharglist 1 ........................... <thesound>
+  [ 39] extcall 386 ............................. <sound(thesound)>
+  [ 42] getobjprop 390 .......................... <sound(thesound).currentTime>
+  [ 45] getparam 0 .............................. <me>
+  [ 47] pushsymb 214 ............................ <#array>
+  [ 49] getparam 1 .............................. <thesound>
+  [ 51] pusharglist 3 ........................... <me, #array, thesound>
+  [ 53] objcall 138 ............................. <me.array[thesound]>
+  [ 55] getobjprop 382 .......................... <me.array[thesound].thesound>
+  [ 58] pusharglist 1 ........................... <me.array[thesound].thesound>
+  [ 60] extcall 26 .............................. <member(me.array[thesound].thesound)>
+  [ 62] getobjprop 391 .......................... <member(me.array[thesound].thesound).duration>
+  [ 65] pushint8 3 .............................. <3>
+  [ 67] div ..................................... <member(me.array[thesound].thesound).duration / 3>
+  [ 68] gt ...................................... <sound(thesound).currentTime > (member(me.array[thesound].thesound).duration / 3)>
+  [ 69] jmpifz [ 83] ............................ if sound(thesound).currentTime > (member(me.array[thesound].thesound).duration / 3) then
+  [ 72] getparam 1 .............................. <thesound>
+  [ 74] pusharglist 1 ........................... <thesound>
+  [ 76] extcall 386 ............................. <sound(thesound)>
+  [ 79] pusharglistnoret 1 ...................... <sound(thesound)>
+  [ 81] objcall 24 .............................. sound(thesound).play()
+  [ 83] jmp [ 97]
+  [ 86] getparam 1 .............................. <thesound>
+  [ 88] pusharglist 1 ........................... <thesound>
+  [ 90] extcall 386 ............................. <sound(thesound)>
+  [ 93] pusharglistnoret 1 ...................... <sound(thesound)>
+  [ 95] objcall 24 .............................. sound(thesound).play()
+  [ 97] ret
+end
+
+on mPlayCry me
+  [  0] getparam 0 .............................. <me>
+  [  2] getobjprop 381 .......................... <me.countcry>
+  [  5] pushzero ................................ <0>
+  [  6] eq ...................................... <me.countcry = 0>
+  [  7] jmpifz [ 21] ............................ if me.countcry = 0 then
+  [ 10] getparam 0 .............................. <me>
+  [ 12] getparam 0 .............................. <me>
+  [ 14] getobjprop 378 .......................... <me.SCRY>
+  [ 17] pusharglistnoret 2 ...................... <me, me.SCRY>
+  [ 19] objcall 118 ............................. me.mPlay(me.SCRY)
+  [ 21] getparam 0 .............................. <me>
+  [ 23] getparam 0 .............................. <me>
+  [ 25] getobjprop 381 .......................... <me.countcry>
+  [ 28] pushint8 1 .............................. <1>
+  [ 30] add ..................................... <me.countcry + 1>
+  [ 31] setobjprop 381 .......................... me.countcry = me.countcry + 1
+  [ 34] ret
+end
+
+on mStopCry me
+  [  0] getparam 0 .............................. <me>
+  [  2] getparam 0 .............................. <me>
+  [  4] getobjprop 381 .......................... <me.countcry>
+  [  7] pushint8 1 .............................. <1>
+  [  9] sub ..................................... <me.countcry - 1>
+  [ 10] setobjprop 381 .......................... me.countcry = me.countcry - 1
+  [ 13] getparam 0 .............................. <me>
+  [ 15] getobjprop 381 .......................... <me.countcry>
+  [ 18] pushzero ................................ <0>
+  [ 19] eq ...................................... <me.countcry = 0>
+  [ 20] jmpifz [ 35] ............................ if me.countcry = 0 then
+  [ 23] getparam 0 .............................. <me>
+  [ 25] getparam 0 .............................. <me>
+  [ 27] getobjprop 378 .......................... <me.SCRY>
+  [ 30] pusharglistnoret 2 ...................... <me, me.SCRY>
+  [ 32] objcall 375 ............................. me.mStop(me.SCRY)
+  [ 35] ret
+end
+
+on mStop me, thesound
+  [  0] getparam 1 .............................. <thesound>
+  [  2] pusharglist 1 ........................... <thesound>
+  [  4] extcall 386 ............................. <sound(thesound)>
+  [  7] pusharglist 1 ........................... <sound(thesound)>
+  [  9] objcall 388 ............................. <sound(thesound).isBusy()>
+  [ 12] jmpifz [ 40] ............................ if sound(thesound).isBusy() then
+  [ 15] getparam 1 .............................. <thesound>
+  [ 17] pusharglist 1 ........................... <thesound>
+  [ 19] extcall 386 ............................. <sound(thesound)>
+  [ 22] getparam 0 .............................. <me>
+  [ 24] pushsymb 214 ............................ <#array>
+  [ 26] getparam 1 .............................. <thesound>
+  [ 28] pusharglist 3 ........................... <me, #array, thesound>
+  [ 30] objcall 138 ............................. <me.array[thesound]>
+  [ 32] getobjprop 384 .......................... <me.array[thesound].thefadeout>
+  [ 35] pusharglistnoret 2 ...................... <sound(thesound), me.array[thesound].thefadeout>
+  [ 37] objcall 392 ............................. sound(thesound).fadeOut(me.array[thesound].thefadeout)
+  [ 40] ret
+end

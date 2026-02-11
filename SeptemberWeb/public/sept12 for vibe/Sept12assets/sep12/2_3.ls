@@ -1,0 +1,1 @@
+on exitFrame me  -- SOME OF THE GAME CODE NEEDS TO BE ON exitFrame, OTHERWISE IT WOULDN'T WORK.  PlayGame()   go to the frameend
