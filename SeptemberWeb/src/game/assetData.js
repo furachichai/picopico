@@ -1039,6 +1039,132 @@ export const ASSETS = {
     "regX": 53,
     "regY": 80
   },
+  "4_17": {
+    "id": "4_17",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_17.png",
+    "regX": 10,
+    "regY": 13
+  },
+  "4_18": {
+    "id": "4_18",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_18.png",
+    "regX": 10,
+    "regY": 14
+  },
+  "4_19": {
+    "id": "4_19",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_19.png",
+    "regX": 10,
+    "regY": 15
+  },
+  "4_20": {
+    "id": "4_20",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_20.png",
+    "regX": 10,
+    "regY": 14
+  },
+  "4_21": {
+    "id": "4_21",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_21.png",
+    "regX": 10,
+    "regY": 13
+  },
+  "4_22": {
+    "id": "4_22",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_22.png",
+    "regX": 10,
+    "regY": 14
+  },
+  "4_23": {
+    "id": "4_23",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_23.png",
+    "regX": 10,
+    "regY": 15
+  },
+  "4_24": {
+    "id": "4_24",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_24.png",
+    "regX": 10,
+    "regY": 14
+  },
+  "4_25": {
+    "id": "4_25",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_25.png",
+    "regX": 9,
+    "regY": 13
+  },
+  "4_26": {
+    "id": "4_26",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_26.png",
+    "regX": 9,
+    "regY": 14
+  },
+  "4_27": {
+    "id": "4_27",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_27.png",
+    "regX": 8,
+    "regY": 15
+  },
+  "4_28": {
+    "id": "4_28",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_28.png",
+    "regX": 8,
+    "regY": 14
+  },
+  "4_29": {
+    "id": "4_29",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_29.png",
+    "regX": 10,
+    "regY": 13
+  },
+  "4_30": {
+    "id": "4_30",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_30.png",
+    "regX": 8,
+    "regY": 14
+  },
+  "4_31": {
+    "id": "4_31",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_31.png",
+    "regX": 9,
+    "regY": 15
+  },
+  "4_32": {
+    "id": "4_32",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_32.png",
+    "regX": 9,
+    "regY": 14
+  },
+  "4_33": {
+    "id": "4_33",
+    "name": "copy",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_33.png",
+    "regX": 16,
+    "regY": 10
+  },
+  "4_34": {
+    "id": "4_34",
+    "name": "deadTerrorNorth",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/4_34.png",
+    "regX": 16,
+    "regY": 10
+  },
   "5_12": {
     "id": "5_12",
     "name": "copy",

@@ -52,8 +52,8 @@ export const WAIT_UNDO_EVIL = 90;          // seconds
 export const UNDO_EVIL_PEOPLE = 3;         // base amount to convert back
 
 // Blast / explosion
-export const BLAST_X = 5;                  // half-width of blast grid
-export const BLAST_Y = 5;
+export const BLAST_X = 2;                  // half-width of blast grid
+export const BLAST_Y = 2;
 export const BLAST_DAMAGE = 5;             // center damage
 export const BLAST_DECREMENT = 1;          // damage decrease per ring
 

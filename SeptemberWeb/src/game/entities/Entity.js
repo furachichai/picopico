@@ -148,10 +148,22 @@ export class Entity {
 
     avoidHoriz(worldMap) {
         if (!this.moveVert(worldMap)) {
-            this.tileX += this.avoidDir;
-            this.tileX = Math.max(0, Math.min(MAP_WIDTH - 1, this.tileX));
-            this.stateGoto = this.avoidDir === 1 ? DIR.EAST : DIR.WEST;
-            this.setAnim(this.stateGoto);
+            // Can't move vertical (goal), try avoiding horizontally
+            if (worldMap.posNotEmpty(this.tileX + this.avoidDir, this.tileY)) {
+                // Horizontal path also blocked! Try opposite or stop
+                this.tileX -= this.avoidDir; // reverse if we blindly added (but wait, we didn't add yet)
+                // Actually, check before adding.
+                // Wait, logic above was this.tileX += ...
+
+                // If blocked, pick new destination
+                this.state = STATE.STOP;
+                this.processGrid(worldMap); // pick new target
+            } else {
+                this.tileX += this.avoidDir;
+                this.tileX = Math.max(0, Math.min(MAP_WIDTH - 1, this.tileX));
+                this.stateGoto = this.avoidDir === 1 ? DIR.EAST : DIR.WEST;
+                this.setAnim(this.stateGoto);
+            }
         } else {
             this.state = STATE.GOTO;
         }
@@ -159,10 +171,16 @@ export class Entity {
 
     avoidVert(worldMap) {
         if (!this.moveHoriz(worldMap)) {
-            this.tileY += this.avoidDir;
-            this.tileY = Math.max(0, Math.min(MAP_HEIGHT - 1, this.tileY));
-            this.stateGoto = this.avoidDir === 1 ? DIR.SOUTH : DIR.NORTH;
-            this.setAnim(this.stateGoto);
+            if (worldMap.posNotEmpty(this.tileX, this.tileY + this.avoidDir)) {
+                // Vertical path also blocked! Pick new destination
+                this.state = STATE.STOP;
+                this.processGrid(worldMap);
+            } else {
+                this.tileY += this.avoidDir;
+                this.tileY = Math.max(0, Math.min(MAP_HEIGHT - 1, this.tileY));
+                this.stateGoto = this.avoidDir === 1 ? DIR.SOUTH : DIR.NORTH;
+                this.setAnim(this.stateGoto);
+            }
         } else {
             this.state = STATE.GOTO;
         }

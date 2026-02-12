@@ -192,6 +192,21 @@ export class PlacementTool {
                     this._exportPlacements();
                     e.preventDefault();
                     break;
+                case 'k': // Keep / Save
+                case 'K':
+                    this._saveToFile();
+                    e.preventDefault();
+                    break;
+                case 'l': // Load
+                case 'L':
+                    this._loadFromFile();
+                    e.preventDefault();
+                    break;
+                case 'h': // History
+                case 'H':
+                    this._showHistoryModal();
+                    e.preventDefault();
+                    break;
                 case 'c':
                 case 'C':
                     this._clearAll();
@@ -199,6 +214,98 @@ export class PlacementTool {
                     break;
             }
         }
+    }
+
+    // ——— File I/O ———
+
+    _saveToFile() {
+        const bm = this.engine.buildingManager;
+        const data = bm.buildings.map(b => ({
+            type: b.typeIndex,
+            x: b.tileX,
+            y: b.tileY,
+        }));
+
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'september_map.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        console.log(`[PlacementTool] Saved ${data.length} buildings to september_map.json`);
+    }
+
+    _loadFromFile() {
+        // Create a hidden file input
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.style.display = 'none';
+
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (Array.isArray(data)) {
+                        this._restoreFromData(data);
+                        console.log(`[PlacementTool] Loaded ${data.length} buildings from file`);
+                    } else {
+                        console.error('[PlacementTool] Invalid map file format');
+                        alert('Invalid map file format');
+                    }
+                } catch (err) {
+                    console.error('[PlacementTool] Failed to parse map file:', err);
+                    alert('Failed to parse map file');
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        document.body.appendChild(input);
+        input.click();
+        document.body.removeChild(input);
+    }
+
+    _restoreFromData(data) {
+        // Clear existing first
+        this._clearAll();
+
+        const bm = this.engine.buildingManager;
+        const worldMap = this.engine.worldMap;
+
+        // Re-create buildings
+        // Note: _clearAll empties the array, so we can just push new ones
+        // But _clearAll pushes to undo stack, which is fine
+
+        // We need to temporarily disable undo logging for individual placements 
+        // to avoid spamming the undo stack with 100 items
+        // OR we can just treat this as a bulk operation.
+        // For simplicity, let's just use the BuildingManager directly 
+        // and then save to localStorage.
+
+        // Actually, _clearAll clears the data. Let's just use the same logic 
+        // as _placeBuildings in BuildingManager but we are in PlacementTool.
+
+        for (const p of data) {
+            if (p.type < BUILDING_TYPES.length) {
+                bm._createBuilding(p.type, p.x, p.y);
+            }
+        }
+        worldMap.calculateDepths();
+        this._saveToLocalStorage();
+
+        // Clear undo stack because we just reset the world state
+        this.undoStack = [];
     }
 
     _onMouseDown(e) {
@@ -252,6 +359,8 @@ export class PlacementTool {
 
     // ——— Persistence ———
 
+    // ——— Persistence ———
+
     _saveToLocalStorage() {
         const bm = this.engine.buildingManager;
         const data = bm.buildings.map(b => ({
@@ -259,11 +368,137 @@ export class PlacementTool {
             x: b.tileX,
             y: b.tileY,
         }));
+
+        const json = JSON.stringify(data);
+
         try {
-            localStorage.setItem('picopico_map', JSON.stringify(data));
+            // 1. Save current state (as before)
+            localStorage.setItem('picopico_map', json);
+
+            // 2. Save to history
+            let history = [];
+            const historyJson = localStorage.getItem('picopico_history');
+            if (historyJson) {
+                try {
+                    history = JSON.parse(historyJson);
+                    if (!Array.isArray(history)) history = [];
+                } catch (e) { console.warn('History parse error', e); }
+            }
+
+            // Check if different from last save to avoid duplicates
+            if (history.length > 0) {
+                const last = history[history.length - 1];
+                // Simple check based on string length and building count first for speed
+                if (last.buildings && JSON.stringify(last.buildings) === json) {
+                    return; // No change
+                }
+            }
+
+            // Add new entry
+            const entry = {
+                timestamp: Date.now(),
+                dateStr: new Date().toLocaleString(),
+                buildings: data,
+                count: data.length
+            };
+
+            history.push(entry);
+
+            // Limit to 10 entries
+            if (history.length > 10) {
+                history = history.slice(history.length - 10);
+            }
+
+            localStorage.setItem('picopico_history', JSON.stringify(history));
+            console.log(`[PlacementTool] Auto-saved to history (${history.length}/10)`);
+
         } catch (e) {
             console.warn('[PlacementTool] Failed to save to localStorage:', e);
         }
+    }
+
+    _showHistoryModal() {
+        // Load history
+        let history = [];
+        try {
+            const h = localStorage.getItem('picopico_history');
+            if (h) history = JSON.parse(h);
+        } catch (e) {
+            console.error(e);
+        }
+
+        if (!Array.isArray(history) || history.length === 0) {
+            alert('No history found.');
+            return;
+        }
+
+        // Remove existing modal
+        const existing = document.getElementById('history-modal');
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'history-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '50%';
+        modal.style.left = '50%';
+        modal.style.transform = 'translate(-50%, -50%)';
+        modal.style.backgroundColor = '#222';
+        modal.style.padding = '20px';
+        modal.style.border = '2px solid #fff';
+        modal.style.zIndex = '1000';
+        modal.style.maxHeight = '80vh';
+        modal.style.overflowY = 'auto';
+        modal.style.fontFamily = 'monospace';
+        modal.style.color = '#fff';
+        modal.style.width = '400px';
+
+        const title = document.createElement('h3');
+        title.innerText = 'Autosave History (Last 10)';
+        title.style.borderBottom = '1px solid #555';
+        title.style.paddingBottom = '10px';
+        modal.appendChild(title);
+
+        // Reverse to show newest first
+        [...history].reverse().forEach((entry, index) => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.justifyContent = 'space-between';
+            row.style.alignItems = 'center';
+            row.style.padding = '8px 0';
+            row.style.borderBottom = '1px solid #333';
+
+            const info = document.createElement('div');
+            info.innerHTML = `<strong>${entry.dateStr}</strong><br><span style="color:#aaa">${entry.count} buildings</span>`;
+
+            const btn = document.createElement('button');
+            btn.innerText = 'Restore';
+            btn.style.padding = '4px 8px';
+            btn.style.cursor = 'pointer';
+            btn.style.backgroundColor = '#444';
+            btn.style.color = '#fff';
+            btn.style.border = 'none';
+            btn.onclick = () => {
+                if (confirm(`Restore version from ${entry.dateStr}? Current unsaved changes will be lost.`)) {
+                    this._restoreFromData(entry.buildings);
+                    modal.remove();
+                }
+            };
+
+            row.appendChild(info);
+            row.appendChild(btn);
+            modal.appendChild(row);
+        });
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = 'Close';
+        closeBtn.style.marginTop = '15px';
+        closeBtn.style.padding = '8px 16px';
+        closeBtn.style.width = '100%';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.onclick = () => modal.remove();
+        modal.appendChild(closeBtn);
+
+        document.body.appendChild(modal);
     }
 
     // ——— Delete ———
@@ -420,6 +655,76 @@ export class PlacementTool {
                 console.log('[PlacementTool] (clipboard copy failed, use console output)');
             });
         }
+
+        // Show on screen for easier copying
+        this._showExportModal(output);
+    }
+
+    _showExportModal(text) {
+        // Remove existing modal if any
+        const existing = document.getElementById('export-modal');
+        if (existing) existing.remove();
+
+        // Create container
+        const modal = document.createElement('div');
+        modal.id = 'export-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '50%';
+        modal.style.left = '50%';
+        modal.style.transform = 'translate(-50%, -50%)';
+        modal.style.backgroundColor = '#222';
+        modal.style.padding = '20px';
+        modal.style.border = '2px solid #fff';
+        modal.style.zIndex = '1000';
+        modal.style.display = 'flex';
+        modal.style.flexDirection = 'column';
+        modal.style.gap = '10px';
+        modal.style.boxShadow = '0 0 20px rgba(0,0,0,0.8)';
+
+        // Title
+        const title = document.createElement('h3');
+        title.innerText = 'Map Export Data';
+        title.style.color = '#fff';
+        title.style.margin = '0';
+        title.style.fontFamily = 'monospace';
+        modal.appendChild(title);
+
+        // Instruction
+        const instr = document.createElement('p');
+        instr.innerText = 'Copy the text below and paste it into the chat:';
+        instr.style.color = '#aaa';
+        instr.style.margin = '0';
+        instr.style.fontSize = '14px';
+        modal.appendChild(instr);
+
+        // Textarea
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.width = '500px';
+        textarea.style.height = '300px';
+        textarea.style.backgroundColor = '#111';
+        textarea.style.color = '#0f0';
+        textarea.style.fontFamily = 'monospace';
+        textarea.style.fontSize = '12px';
+        textarea.style.border = '1px solid #444';
+        textarea.style.whiteSpace = 'pre';
+        modal.appendChild(textarea);
+
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = 'Close';
+        closeBtn.style.padding = '8px 16px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.backgroundColor = '#444';
+        closeBtn.style.color = '#fff';
+        closeBtn.style.border = 'none';
+        closeBtn.onclick = () => modal.remove();
+        modal.appendChild(closeBtn);
+
+        document.body.appendChild(modal);
+
+        // Auto-select text
+        textarea.select();
     }
 
     // ——— Update ———
@@ -703,14 +1008,16 @@ export class PlacementTool {
             ctx.fillText(`Arrows=nudge offset${nudgeText}`, textX, hudY + 64);
 
             // Line 5: Controls
-            ctx.fillStyle = '#888';
-            ctx.font = '10px monospace';
             ctx.fillText(`Q=cycle  Click=place  D=del mode  Ctrl+Z=undo(${this.undoStack.length})  E=export`, textX, hudY + 78);
 
-            // Line 6: Building count
+            // Line 6: File I/O & History
+            ctx.fillStyle = '#0ff';
+            ctx.fillText(`K=save (file)  L=load (file)  H=history (autosave)`, textX, hudY + 92);
+
+            // Line 7: Building count
             const count = this.engine.buildingManager.buildings.length;
             ctx.fillStyle = '#0f0';
-            ctx.fillText(`Buildings: ${count}`, textX, hudY + 92);
+            ctx.fillText(`Buildings: ${count}`, textX, hudY + 106);
         }
 
         ctx.restore();

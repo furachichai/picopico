@@ -5,18 +5,49 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ASSET_DIR = path.join(__dirname, '../public/Sept12assets/sep12');
+const ASSET_DIR = path.join(__dirname, '../public/sept12 for vibe/Sept12assets/sep12');
 const OUTPUT_FILE = path.join(__dirname, '../src/game/assetData.js');
 
 const CSV_FILES = [
     '3_Members.csv', // Buildings, palms
-    '5_Members.csv', // Men, Terrorists
+    '4_Members.csv', // Terrorists
+    '5_Members.csv', // Men
     '6_Members.csv', // Women
     '8_Members.csv', // Kids
     '9_Members.csv', // Dogs
 ];
 
-const assetData = {};
+// Initialize with manual assets that were overwritten
+const assetData = {
+    "titlecard": {
+        "id": "titlecard",
+        "name": "TitleCard",
+        "src": "/sept12%20for%20vibe/Sept12assets/sep12/titlecard.png",
+        "regX": 0,
+        "regY": 0
+    },
+    "titlecard2": {
+        "id": "titlecard2",
+        "name": "TitleCard2",
+        "src": "/sept12%20for%20vibe/Sept12assets/sep12/titlecard2.png",
+        "regX": 0,
+        "regY": 0
+    },
+    "newsgaming_logo": {
+        "id": "newsgaming_logo",
+        "name": "NewsgamingLogo",
+        "src": "/sept12%20for%20vibe/Sept12assets/sep12/newsgaming-logo.png",
+        "regX": 0,
+        "regY": 0
+    },
+    "3_2": {
+        "id": "3_2",
+        "name": "Map",
+        "src": "/sept12%20for%20vibe/Sept12assets/sep12/3_2.png",
+        "regX": 640,
+        "regY": 240
+    },
+};
 
 function parseCSV(filename) {
     const content = fs.readFileSync(path.join(ASSET_DIR, filename), 'utf8');
@@ -54,7 +85,7 @@ function parseCSV(filename) {
             assetData[uniqueId] = {
                 id: uniqueId,
                 name: name,
-                src: `/Sept12assets/sep12/${imageFilename}`,
+                src: `/sept12%20for%20vibe/Sept12assets/sep12/${imageFilename}`,
                 regX: regX,
                 regY: regY
             };
