@@ -69,6 +69,8 @@ export class InputHandler {
 
     _onMouseDown(e) {
         e.preventDefault();
+        // Don't fire when placement tool is active
+        if (this.engine.placementTool && this.engine.placementTool.active) return;
         this._fire();
     }
 
@@ -139,6 +141,8 @@ export class InputHandler {
 
     render(ctx, assetManager) {
         if (!this.isOverCanvas) return;
+        // Don't show crosshair when placement tool is active
+        if (this.engine.placementTool && this.engine.placementTool.active) return;
 
         // Try to use original target sprites
         const targetImg = assetManager.getImage('target-empty') || assetManager.getImage('target-full');

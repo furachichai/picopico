@@ -91,9 +91,11 @@ export class WorldMap {
     screenToTile(screenX, screenY) {
         const sx = screenX - this.scrollX - ISO_START_X;
         const sy = screenY - ISO_START_Y;
-        // Inverse: isoX = sy + sx/2, isoZ = sy - sx/2 (with isoY=0)
-        const isoX = sy + sx / 2;
-        const isoZ = sy - sx / 2;
+        // Inverse of mapToScreen (with isoY=0):
+        //   sx = isoX + isoZ  →  isoX = (sx + 2*sy) / 2 = sx/2 + sy
+        //   sy = (isoX - isoZ) / 2  →  isoZ = (sx - 2*sy) / 2 = sx/2 - sy
+        const isoX = sx / 2 + sy;
+        const isoZ = sx / 2 - sy;
         const tileX = Math.floor(isoX / ISO_TILE_W);
         const tileY = Math.floor(-isoZ / ISO_TILE_H);
         return { tileX, tileY };

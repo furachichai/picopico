@@ -15,6 +15,7 @@ import {
     BLAST_X, BLAST_Y, BLAST_DAMAGE, BLAST_DECREMENT,
     BUILDING_HEALTH_RECOVERY, BUILDING_HEALTH_RECOVERY_TIME, FPS,
 } from './constants.js';
+import { MAP_PLACEMENTS } from './mapData.js';
 
 // ——— Building type definitions ———
 // Each entry mirrors the original pBuildingArray from 2_8.ls
@@ -235,43 +236,20 @@ export class BuildingManager {
     _placeBuildings() {
         const worldMap = this.engine.worldMap;
 
-        // We'll place buildings in a pattern similar to the original
-        // The original has ~40-50 buildings placed manually in the Director score
-        // We'll place them semi-randomly within the map bounds
-
-        const placements = [
-            // Houses
-            { type: 0, x: 15, y: 10 }, { type: 1, x: 30, y: 15 },
-            { type: 2, x: 45, y: 8 }, { type: 3, x: 60, y: 12 },
-            { type: 4, x: 75, y: 18 }, { type: 5, x: 90, y: 10 },
-            { type: 0, x: 20, y: 40 }, { type: 1, x: 50, y: 35 },
-            { type: 2, x: 70, y: 45 }, { type: 3, x: 85, y: 38 },
-            { type: 4, x: 100, y: 42 }, { type: 5, x: 35, y: 50 },
-
-            // Tall buildings
-            { type: 6, x: 25, y: 25 }, { type: 7, x: 55, y: 20 },
-            { type: 8, x: 40, y: 30 }, { type: 9, x: 65, y: 28 },
-            { type: 10, x: 80, y: 22 }, { type: 11, x: 95, y: 30 },
-            { type: 6, x: 15, y: 55 }, { type: 7, x: 45, y: 60 },
-            { type: 8, x: 75, y: 55 }, { type: 9, x: 100, y: 58 },
-
-            // Fountains
-            { type: 12, x: 50, y: 50 }, { type: 13, x: 70, y: 35 },
-
-            // Palms (scattered throughout)
-            { type: 14, x: 10, y: 5 }, { type: 15, x: 5, y: 30 },
-            { type: 16, x: 110, y: 15 }, { type: 17, x: 105, y: 45 },
-            { type: 18, x: 8, y: 60 }, { type: 19, x: 112, y: 55 },
-            { type: 20, x: 25, y: 5 }, { type: 21, x: 95, y: 5 },
-            { type: 22, x: 55, y: 5 }, { type: 23, x: 38, y: 65 },
-            { type: 24, x: 62, y: 65 }, { type: 25, x: 85, y: 65 },
-
-            // Market stalls
-            { type: 26, x: 35, y: 20 }, { type: 27, x: 65, y: 15 },
-            { type: 28, x: 48, y: 45 }, { type: 29, x: 82, y: 48 },
-            { type: 30, x: 22, y: 35 }, { type: 31, x: 58, y: 55 },
-            { type: 32, x: 92, y: 40 }, { type: 33, x: 42, y: 15 },
-        ];
+        // Try loading from localStorage first (editor persistence)
+        let placements = MAP_PLACEMENTS;
+        try {
+            const saved = localStorage.getItem('picopico_map');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    placements = parsed;
+                    console.log(`[BuildingManager] Loaded ${parsed.length} buildings from localStorage`);
+                }
+            }
+        } catch (e) {
+            console.warn('[BuildingManager] Failed to load from localStorage:', e);
+        }
 
         for (const p of placements) {
             if (p.type < BUILDING_TYPES.length) {

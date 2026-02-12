@@ -7,6 +7,7 @@
  */
 
 import { AssetManager } from './AssetManager.js';
+import { PlacementTool } from './PlacementTool.js';
 import { WorldMap } from './WorldMap.js';
 import { BuildingManager } from './BuildingManager.js';
 import { EntityManager } from './EntityManager.js';
@@ -30,6 +31,7 @@ export class GameEngine {
     this.missileSystem = new MissileSystem(this);
     this.inputHandler = new InputHandler(this);
     this.soundManager = new SoundManager();
+    this.placementTool = new PlacementTool(this);
 
     // Game state
     this.state = GAME_STATE.LOADING;
@@ -64,6 +66,7 @@ export class GameEngine {
 
     // Attach input
     this.inputHandler.attach(canvas);
+    this.placementTool.attach(canvas);
 
     // Show title screen
     this.state = GAME_STATE.TITLE;
@@ -116,6 +119,7 @@ export class GameEngine {
     this.buildingManager.update(dt);
     this.entityManager.update(dt);
     this.missileSystem.update(dt);
+    this.placementTool.update();
   }
 
   // ——— Rendering ———
@@ -217,30 +221,68 @@ export class GameEngine {
   _renderGame() {
     const ctx = this.ctx;
     const am = this.assetManager;
+    const worldMap = this.worldMap;
 
     // Layer 1: Ground (pre-rendered bitmap)
-    this.worldMap.render(ctx, am);
+    worldMap.render(ctx, am);
 
-    // Layer 2: Buildings
-    this.buildingManager.render(ctx, am);
+    // Layer 2: Unified depth-sorted buildings + entities
+    // Collect all renderables with their depth key (tileX + tileY)
+    const renderables = [];
 
-    // Layer 3: Missile craters (below entities)
-    // (Rendered as part of missile system)
+    // Add buildings
+    for (const building of this.buildingManager.buildings) {
+      renderables.push({
+        kind: 'building',
+        building,
+        depthKey: building.tileX + building.tileY,
+        tileY: building.tileY,
+      });
+    }
 
-    // Layer 4: Entities (sorted by depth)
-    this.entityManager.render(ctx, am);
+    // Add living entities (hidden in editor mode for clarity)
+    if (!this.placementTool.active) {
+      for (const entity of this.entityManager.entities) {
+        renderables.push({
+          kind: 'entity',
+          entity,
+          depthKey: entity.tileX + entity.tileY,
+          tileY: entity.tileY,
+        });
+      }
+    }
 
-    // Layer 5: Missile & explosions (above entities)
+    // Sort by depth (lower tileX+tileY renders first = further from camera)
+    renderables.sort((a, b) => {
+      if (a.depthKey !== b.depthKey) return a.depthKey - b.depthKey;
+      return a.tileY - b.tileY;
+    });
+
+    // Render in sorted order
+    for (const item of renderables) {
+      if (item.kind === 'building') {
+        const pos = worldMap.tileToSpritePos(item.building.tileX, item.building.tileY);
+        am.drawSprite(ctx, item.building.currentSpriteId, pos.x, pos.y);
+      } else {
+        item.entity.render(ctx, am);
+      }
+    }
+
+    // Layer 3: Missile & explosions (above everything)
     this.missileSystem.render(ctx, am);
 
-    // Layer 6: Crosshair (topmost)
+    // Layer 4: Crosshair (topmost)
     this.inputHandler.render(ctx, am);
+
+    // Layer 5: Placement tool overlay (debug)
+    this.placementTool.render(ctx);
   }
 
   // ——— Cleanup ———
 
   destroy() {
     this.inputHandler.detach();
+    this.placementTool.detach();
     this.soundManager.stopAmbient();
   }
 }
