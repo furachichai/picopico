@@ -276,6 +276,58 @@ export class GameEngine {
 
     // Layer 5: Placement tool overlay (debug)
     this.placementTool.render(ctx);
+
+    // Layer 6: Mute/unmute icon (bottom-left corner)
+    this._renderMuteIcon(ctx);
+  }
+
+  _renderMuteIcon(ctx) {
+    const isMuted = this.soundManager && this.soundManager.muted;
+    const x = 12;
+    const y = SCREEN_H - 18;
+
+    ctx.save();
+    ctx.globalAlpha = 0.6;
+
+    // Speaker body
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+
+    // Speaker cone
+    ctx.beginPath();
+    ctx.moveTo(x, y - 3);
+    ctx.lineTo(x, y + 3);
+    ctx.lineTo(x + 4, y + 3);
+    ctx.lineTo(x + 8, y + 6);
+    ctx.lineTo(x + 8, y - 6);
+    ctx.lineTo(x + 4, y - 3);
+    ctx.closePath();
+    ctx.fill();
+
+    if (isMuted) {
+      // Draw X
+      ctx.strokeStyle = '#f44';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x + 11, y - 4);
+      ctx.lineTo(x + 17, y + 4);
+      ctx.moveTo(x + 17, y - 4);
+      ctx.lineTo(x + 11, y + 4);
+      ctx.stroke();
+    } else {
+      // Draw sound waves
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(x + 9, y, 3, -0.6, 0.6);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x + 9, y, 6, -0.6, 0.6);
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   // ——— Cleanup ———

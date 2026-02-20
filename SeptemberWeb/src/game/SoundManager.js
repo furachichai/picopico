@@ -29,7 +29,7 @@ export class SoundManager {
             { name: 'click', src: `${BASE}/7_7.mp3`, volume: 0.5, loop: false },
             { name: 'missile', src: `${BASE}/7_4.mp3`, volume: 0.8, loop: false },
             { name: 'explosion', src: `${BASE}/7_5.mp3`, volume: 0.9, loop: false },
-            { name: 'cry', src: `${BASE}/7_6.mp3`, volume: 0.3, loop: true },
+            { name: 'cry', src: `${BASE}/7_6.mp3`, volume: 0.3, loop: false },
         ];
 
         const loadPromises = soundDefs.map(def => {
@@ -99,20 +99,13 @@ export class SoundManager {
     playExplosion() { this._play('explosion'); }
     playTurn() { this._play('turn'); }
 
-    // Cry with reference counting (from 2_10.ls mPlayCry / mStopCry)
+    // Cry plays once per mourning event (not looped)
     playCry() {
-        if (this.cryCount === 0) {
-            this._play('cry');
-        }
-        this.cryCount++;
+        this._play('cry');
     }
 
     stopCry() {
-        this.cryCount--;
-        if (this.cryCount <= 0) {
-            this.cryCount = 0;
-            this._stop('cry');
-        }
+        this._stop('cry');
     }
 
     // Resume audio (called after user gesture)

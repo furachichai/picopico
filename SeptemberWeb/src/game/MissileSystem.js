@@ -16,7 +16,7 @@ import {
 // Animation constants
 const MISSILE_FPS = 12;           // original SWF frame rate
 const TOTAL_FRAMES = 35;
-const EXPLOSION_FRAME = 16;       // frame where explosion starts
+const EXPLOSION_FRAME = 17;       // frame where explosion cloud starts (synced with sound)
 const DESTRUCTION_FRAME = 18;     // frame where damage is applied
 const FRAME_INTERVAL = 1 / MISSILE_FPS; // seconds between frames
 
@@ -58,9 +58,13 @@ export class MissileSystem {
             destroyed: false,
         };
 
-        // Play missile sound
+        // Play missile sound after a short delay (pause after click sound)
         if (this.engine.soundManager) {
-            this.engine.soundManager.playMissile();
+            setTimeout(() => {
+                if (this.activeMissile) { // still active
+                    this.engine.soundManager.playMissile();
+                }
+            }, 300);
         }
     }
 
@@ -146,23 +150,27 @@ export class MissileSystem {
         }
 
         // Draw missile animation frame
-        if (this.activeMissile) {
+        if (this.activeMissile && worldMap) {
             const m = this.activeMissile;
             const frameNum = Math.min(m.frameIndex + 1, TOTAL_FRAMES); // 1-indexed
             const frameId = `missile-frame-${String(frameNum).padStart(3, '0')}`;
             const frameImg = assetManager.getImage(frameId);
 
             if (frameImg) {
-                // Calculate draw position:
-                // We want the explosion anchor point (ANCHOR_X, ANCHOR_Y) in frame coords
-                // to map to the click position (targetScreenX, targetScreenY) on screen.
+                // Convert tile coords to current screen position each frame
+                // so the animation tracks with the world during panning
+                const screenPos = worldMap.tileToScreen(m.tileX, m.tileY);
+                const currentScreenX = screenPos.x + 32; // center of tile (TILE_W/2)
+                const currentScreenY = screenPos.y + 16; // center of tile (TILE_H/2)
+
+                // Scale and position so the explosion anchor aligns with the tile
                 const drawW = RAW_W * FRAME_SCALE;
                 const drawH = RAW_H * FRAME_SCALE;
                 const anchorScreenX = ANCHOR_X * FRAME_SCALE;
                 const anchorScreenY = ANCHOR_Y * FRAME_SCALE;
 
-                const drawX = m.targetScreenX - anchorScreenX;
-                const drawY = m.targetScreenY - anchorScreenY;
+                const drawX = currentScreenX - anchorScreenX;
+                const drawY = currentScreenY - anchorScreenY;
 
                 ctx.drawImage(frameImg, drawX, drawY, drawW, drawH);
             }

@@ -413,6 +413,10 @@ export class Entity {
                 if (this.stateAnim >= DIR.CRY_NORTH && this.stateAnim <= DIR.CRY_EAST) {
                     this.setAnim(this.stateAnim + 4); // CRY_X → TURN_X
                 }
+                // Initialize turn flash state if subclass supports it
+                if (typeof this._startTurn === 'function') {
+                    this._startTurn();
+                }
             } else {
                 this.deadWait--;
             }

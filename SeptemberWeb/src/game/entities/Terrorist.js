@@ -31,6 +31,8 @@ export class Terrorist extends Entity {
         this.animInfo = { deathstart: 33 };
         this.wasConverted = false;
         this.prevPersonType = null; // what civilian type they were before conversion
+        // Pre-select death sprite to avoid flickering (random per-frame was causing glitch)
+        this._deadSpriteId = DEAD_SPRITES[Math.floor(Math.random() * DEAD_SPRITES.length)];
 
         this.setAnim(Math.floor(Math.random() * 4));
     }
@@ -42,7 +44,7 @@ export class Terrorist extends Entity {
 
     getSpriteId() {
         if (this.state === STATE.DEAD) {
-            return DEAD_SPRITES[Math.floor(Math.random() * DEAD_SPRITES.length)];
+            return this._deadSpriteId;
         }
 
         const idx = this.currentFrame % WALK_SPRITES.length;

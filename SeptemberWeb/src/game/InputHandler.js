@@ -24,6 +24,7 @@ export class InputHandler {
         this._boundMouseLeave = this._onMouseLeave.bind(this);
         this._boundTouchStart = this._onTouchStart.bind(this);
         this._boundTouchMove = this._onTouchMove.bind(this);
+        this._boundKeyDown = this._onKeyDown.bind(this);
     }
 
     attach(canvas) {
@@ -34,6 +35,7 @@ export class InputHandler {
         canvas.addEventListener('mouseleave', this._boundMouseLeave);
         canvas.addEventListener('touchstart', this._boundTouchStart, { passive: false });
         canvas.addEventListener('touchmove', this._boundTouchMove, { passive: false });
+        document.addEventListener('keydown', this._boundKeyDown);
 
         // Hide system cursor over canvas
         canvas.style.cursor = 'none';
@@ -49,6 +51,7 @@ export class InputHandler {
             this.canvas.removeEventListener('touchmove', this._boundTouchMove);
             this.canvas.style.cursor = '';
         }
+        document.removeEventListener('keydown', this._boundKeyDown);
     }
 
     _getCanvasCoords(clientX, clientY) {
@@ -80,6 +83,15 @@ export class InputHandler {
 
     _onMouseLeave() {
         this.isOverCanvas = false;
+    }
+
+    _onKeyDown(e) {
+        if (this.engine.state !== GAME_STATE.PLAYING) return;
+        if (e.key === 's' || e.key === 'S') {
+            if (this.engine.soundManager) {
+                this.engine.soundManager.toggleMute();
+            }
+        }
     }
 
     _onTouchStart(e) {
@@ -140,7 +152,7 @@ export class InputHandler {
     // ——— Rendering the crosshair ———
 
     render(ctx, assetManager) {
-        if (!this.isOverCanvas) return;
+        // Always show crosshair during gameplay (hidden only on explicit mouseleave)
         // Don't show crosshair when placement tool is active
         if (this.engine.placementTool && this.engine.placementTool.active) return;
 

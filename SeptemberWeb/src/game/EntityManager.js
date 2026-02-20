@@ -239,11 +239,23 @@ export class EntityManager {
         // Undo evil timer
         this._updateUndoEvil();
 
+        // Track whether turn sound already played this frame
+        let turnSoundPlayed = false;
+
         // Update all entities
         for (let i = this.entities.length - 1; i >= 0; i--) {
             const entity = this.entities[i];
 
             entity.update(worldMap);
+
+            // Check for turn started (play turn sound once per group)
+            if (entity._turnStartedCallback) {
+                entity._turnStartedCallback = false;
+                if (!turnSoundPlayed && this.engine.soundManager) {
+                    this.engine.soundManager.playTurn();
+                    turnSoundPlayed = true;
+                }
+            }
 
             // Check for turn completion (civilian → terrorist)
             if (entity._turnCompleteCallback) {

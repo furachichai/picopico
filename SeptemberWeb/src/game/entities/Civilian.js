@@ -73,20 +73,14 @@ const DEAD_SPRITES = {
     [PERSON_TYPE.KID]: ['8_17', '8_18', '8_17', '8_18'],
 };
 
-// Turn (conversion) sprites — we use the cry→turn transition frames
-// In the original these are long sequences in the film loop.
-// We'll use a subset of available frames for the visual transition.
-const TURN_SPRITES = {
-    [PERSON_TYPE.MAN]: [
-        '5_30', '5_31', '5_32', '5_33', '5_34', '5_46',
-    ],
-    [PERSON_TYPE.WOMAN]: [
-        '6_59', '6_60', '6_61', '6_62', '6_63', '6_69', '6_70',
-    ],
-    [PERSON_TYPE.KID]: [
-        '8_19', '8_20', '8_21', '8_28', '8_29',
-    ],
+// Civilian with raised gun sprites for flash transition
+const CIVILIAN_RAISED_GUN = {
+    [PERSON_TYPE.MAN]: ['5_34', '5_46'],
+    [PERSON_TYPE.WOMAN]: ['6_64', '6_70'],
 };
+
+// Terrorist with raised gun sprites for flash transition
+const TERRORIST_RAISED_GUN = ['5_28', '5_29'];
 
 export class Civilian extends Entity {
     constructor(tileX, tileY, worldMap, personType) {
@@ -100,9 +94,13 @@ export class Civilian extends Entity {
         // Start walking in a random direction
         this.setAnim(Math.floor(Math.random() * 4));
 
-        // Frame tracking
-        this.animFrameTimer = 0;
-        this.animFrameDelay = 1; // frames between sprite changes
+        // Turn animation: flashing civilian ↔ terrorist
+        // 3 loops × 2 flashes per loop = 6 total frame changes
+        this.turnFlashTimer = 0;
+        this.turnFlashCount = 0;
+        this.turnFlashMax = 6;     // 3 full loops (civilian→terrorist→civilian→...)
+        this.turnFlashInterval = 12; // frames between flashes (~0.25s at 48 FPS)
+        this.turnShowTerrorist = false;
     }
 
     getSpriteId() {
@@ -127,11 +125,18 @@ export class Civilian extends Entity {
         }
 
         if (this.state === STATE.TURN) {
-            const turnFrames = TURN_SPRITES[this.personType];
-            if (turnFrames && turnFrames.length > 0) {
-                const base = this.animInfo?.turnstart || 0;
-                const idx = Math.min(frame - base, turnFrames.length - 1);
-                return turnFrames[Math.max(0, idx)] || turnFrames[0];
+            // Kids don't turn — getSpriteId won't be called in TURN for kids
+            // but safety fallback
+            if (this.personType === PERSON_TYPE.KID) {
+                const walkFrames = WALK_SPRITES[this.personType];
+                return walkFrames ? walkFrames[0] : null;
+            }
+            // Flash between civilian-raised-gun and terrorist-raised-gun
+            const civFrames = CIVILIAN_RAISED_GUN[this.personType];
+            if (this.turnShowTerrorist) {
+                return TERRORIST_RAISED_GUN[this.turnFlashCount % TERRORIST_RAISED_GUN.length];
+            } else {
+                return civFrames ? civFrames[this.turnFlashCount % civFrames.length] : TERRORIST_RAISED_GUN[0];
             }
         }
 
@@ -174,6 +179,44 @@ export class Civilian extends Entity {
         // Civilian finished turning → they become a terrorist
         // This is handled by EntityManager
         this._turnCompleteCallback = true;
+    }
+
+    _startTurn() {
+        // Kids don't turn into terrorists — skip straight back to walking
+        if (this.personType === PERSON_TYPE.KID) {
+            this.state = STATE.STOP;
+            return;
+        }
+        // Reset flash state for the turn animation
+        this.turnFlashTimer = 0;
+        this.turnFlashCount = 0;
+        this.turnShowTerrorist = false;
+        // Signal EntityManager to play the turn sound
+        this._turnStartedCallback = true;
+    }
+
+    // Override _advanceFrame to handle the turn flashing
+    _advanceFrame() {
+        if (this.state === STATE.TURN) {
+            // Custom flash animation for turning
+            this.turnFlashTimer++;
+            if (this.turnFlashTimer >= this.turnFlashInterval) {
+                this.turnFlashTimer = 0;
+                this.turnShowTerrorist = !this.turnShowTerrorist;
+                this.turnFlashCount++;
+
+                if (this.turnFlashCount >= this.turnFlashMax) {
+                    // Turn complete — become terrorist
+                    this.state = STATE.STOP;
+                    this._onTurnComplete();
+                    return;
+                }
+            }
+            return; // Skip normal frame advancement during turn
+        }
+
+        // Normal animation for all other states
+        super._advanceFrame();
     }
 
     _onUndoEvil() {
