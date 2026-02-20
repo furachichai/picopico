@@ -64,7 +64,9 @@ export class Terrorist extends Entity {
         ctx.save();
         ctx.translate(this.screenX, this.screenY);
 
-        if (this._shouldFlip()) {
+        // Use locked flip state for dead entities to prevent twerking
+        const flip = this.state === STATE.DEAD ? !!this._deadFlip : this._shouldFlip();
+        if (flip) {
             ctx.scale(-1, 1);
         }
 

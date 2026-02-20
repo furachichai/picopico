@@ -161,7 +161,10 @@ export class Civilian extends Entity {
         const spriteId = this.getSpriteId();
         if (!spriteId) return;
 
-        const flip = this._shouldFlip();
+        // Use locked flip state for dead/turn entities to prevent inconsistency
+        const flip = this.state === STATE.DEAD ? !!this._deadFlip
+            : this.state === STATE.TURN ? !!this._turnFlip
+                : this._shouldFlip();
 
         ctx.save();
         ctx.translate(this.screenX, this.screenY);
@@ -191,6 +194,8 @@ export class Civilian extends Entity {
         this.turnFlashTimer = 0;
         this.turnFlashCount = 0;
         this.turnShowTerrorist = false;
+        // Lock flip to false so both raised-gun sprites face the same direction
+        this._turnFlip = false;
         // Signal EntityManager to play the turn sound
         this._turnStartedCallback = true;
     }

@@ -92,6 +92,9 @@ export class InputHandler {
                 this.engine.soundManager.toggleMute();
             }
         }
+        if (e.key === 't' || e.key === 'T') {
+            this.engine.showTileDebug = !this.engine.showTileDebug;
+        }
     }
 
     _onTouchStart(e) {

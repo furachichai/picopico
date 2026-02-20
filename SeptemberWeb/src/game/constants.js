@@ -41,11 +41,11 @@ export const PROB_DOG = 5;
 // Man is the fallback
 
 // Mourning / death
-export const MOURN_DISTANCE = 25;          // tiles
+export const MOURN_DISTANCE = 8;           // tiles (near blast area only)
 export const DISTANCE_FROM_DEAD = 2;       // tiles offset for mourn spot
-export const WAIT_DEAD = 30;               // seconds before dead body removed
+export const WAIT_DEAD = 10;               // seconds before dead body removed
 export const WAIT_RANDOM_DEAD = 2;         // random extra seconds
-export const WAIT_MOURN = 3;               // seconds of mourning
+export const WAIT_MOURN = 4;               // seconds of mourning
 
 // Undo evil (passive terrorist reduction when idle)
 export const WAIT_UNDO_EVIL = 90;          // seconds

@@ -159,18 +159,18 @@ export class EntityManager {
             this.engine.soundManager.playCry();
         }
 
-        // Find mourners for dead civilians (not dogs, not terrorists)
-        const deadCivilians = killed.filter(e => e.type === 'civilian');
-        if (deadCivilians.length === 0) return;
+        // Find mournable dead — civilians and dogs (not terrorists)
+        const mournableDead = killed.filter(e => e.type === 'civilian' || e.type === 'dog');
+        if (mournableDead.length === 0) return;
 
-        const mournerCount = deadCivilians.length * EVIL_PER_DEATH;
+        const mournerCount = mournableDead.length * EVIL_PER_DEATH;
 
-        // Find nearby living non-evil, non-dog entities that can mourn
+        // Find nearby living civilians that can mourn (dogs can't mourn)
         const candidates = this.entities
             .filter(e => !e.cantMourn() && e.type === 'civilian')
             .map(e => ({
                 entity: e,
-                dist: Math.min(...deadCivilians.map(d => e.distanceTo(d))),
+                dist: Math.min(...mournableDead.map(d => e.distanceTo(d))),
             }))
             .filter(c => c.dist <= MOURN_DISTANCE)
             .sort((a, b) => a.dist - b.dist);
@@ -179,7 +179,7 @@ export class EntityManager {
         const mourners = candidates.slice(0, mournerCount);
         let deadIdx = 0;
         for (const m of mourners) {
-            const deadTarget = deadCivilians[deadIdx % deadCivilians.length];
+            const deadTarget = mournableDead[deadIdx % mournableDead.length];
             deadIdx++;
 
             // Calculate mourn spot: offset from dead body

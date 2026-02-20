@@ -70,6 +70,10 @@ export class Entity {
         this.shouldRemove = false;
         this.opacity = 1;
 
+        // Locked flip states
+        this._deadFlip = false;
+        this._turnFlip = false;
+
         // Flip tracking
         this.kludge = false;
         this.kludge2 = false;
@@ -163,12 +167,7 @@ export class Entity {
         if (!this.moveVert(worldMap)) {
             // Can't move vertical (goal), try avoiding horizontally
             if (worldMap.posNotEmpty(this.tileX + this.avoidDir, this.tileY)) {
-                // Horizontal path also blocked! Try opposite or stop
-                this.tileX -= this.avoidDir; // reverse if we blindly added (but wait, we didn't add yet)
-                // Actually, check before adding.
-                // Wait, logic above was this.tileX += ...
-
-                // If blocked, pick new destination
+                // Horizontal path also blocked! Pick new destination
                 this.state = STATE.STOP;
                 this.processGrid(worldMap); // pick new target
             } else {
@@ -374,6 +373,8 @@ export class Entity {
         this.deadWait = (WAIT_DEAD * FPS) + Math.floor(Math.random() * WAIT_RANDOM_DEAD * FPS);
         this.isoX = tileX * ISO_TILE_W;
         this.isoZ = -tileY * ISO_TILE_H;
+        // Lock the flip state at death to prevent twerking between flipped states
+        this._deadFlip = (this.stateGoto === DIR.NORTH || this.stateGoto === DIR.EAST);
         this.setAnim(DIR.DEAD);
         if (worldMap) {
             const pos = worldMap.tileToDeadPos(tileX, tileY);

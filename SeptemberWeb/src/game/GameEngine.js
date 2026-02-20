@@ -36,6 +36,7 @@ export class GameEngine {
     // Game state
     this.state = GAME_STATE.LOADING;
     this.ready = false;
+    this.showTileDebug = false; // T key toggle for tile walkability overlay
 
     // Frame timing
     this.lastFrameTime = 0;
@@ -230,13 +231,14 @@ export class GameEngine {
     // Collect all renderables with their depth key (tileX + tileY)
     const renderables = [];
 
-    // Add buildings
+    // Add buildings — compute screen Y for depth sorting
     for (const building of this.buildingManager.buildings) {
+      const pos = worldMap.tileToSpritePos(building.tileX, building.tileY);
       renderables.push({
         kind: 'building',
         building,
-        depthKey: building.tileX + building.tileY,
-        tileY: building.tileY,
+        screenY: pos.y,
+        renderPos: pos,
       });
     }
 
@@ -246,23 +248,18 @@ export class GameEngine {
         renderables.push({
           kind: 'entity',
           entity,
-          depthKey: entity.depthX + entity.depthY,
-          tileY: entity.depthY, // secondary sort if needed, though depthKey is primary
+          screenY: entity.screenY,
         });
       }
     }
 
-    // Sort by depth (lower tileX+tileY renders first = further from camera)
-    renderables.sort((a, b) => {
-      if (a.depthKey !== b.depthKey) return a.depthKey - b.depthKey;
-      return a.tileY - b.tileY;
-    });
+    // Sort by screen Y position (lower Y renders first = further from camera)
+    renderables.sort((a, b) => a.screenY - b.screenY);
 
     // Render in sorted order
     for (const item of renderables) {
       if (item.kind === 'building') {
-        const pos = worldMap.tileToSpritePos(item.building.tileX, item.building.tileY);
-        am.drawSprite(ctx, item.building.currentSpriteId, pos.x, pos.y);
+        am.drawSprite(ctx, item.building.currentSpriteId, item.renderPos.x, item.renderPos.y);
       } else {
         item.entity.render(ctx, am);
       }
@@ -279,6 +276,11 @@ export class GameEngine {
 
     // Layer 6: Mute/unmute icon (bottom-left corner)
     this._renderMuteIcon(ctx);
+
+    // Layer 7: Tile debug overlay (T key toggle)
+    if (this.showTileDebug) {
+      this._renderTileDebug(ctx, worldMap);
+    }
   }
 
   _renderMuteIcon(ctx) {
@@ -325,6 +327,39 @@ export class GameEngine {
       ctx.beginPath();
       ctx.arc(x + 9, y, 6, -0.6, 0.6);
       ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  // ——— Tile debug overlay ———
+
+  _renderTileDebug(ctx, worldMap) {
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+
+    // Only render tiles whose screen position is visible
+    for (let ty = 0; ty < 120; ty++) {
+      for (let tx = 0; tx < 120; tx++) {
+        const pos = worldMap.tileToScreen(tx, ty);
+        const sx = pos.x + 10; // center of tile diamond
+        const sy = pos.y + 5;
+
+        // Cull tiles outside screen
+        if (sx < -20 || sx > SCREEN_W + 20 || sy < -10 || sy > SCREEN_H + 10) continue;
+
+        const empty = worldMap.posEmpty(tx, ty);
+        ctx.fillStyle = empty ? '#006600' : '#880000';
+
+        // Draw isometric diamond
+        ctx.beginPath();
+        ctx.moveTo(sx, sy - 5);      // top
+        ctx.lineTo(sx + 10, sy);     // right
+        ctx.lineTo(sx, sy + 5);      // bottom
+        ctx.lineTo(sx - 10, sy);     // left
+        ctx.closePath();
+        ctx.fill();
+      }
     }
 
     ctx.restore();

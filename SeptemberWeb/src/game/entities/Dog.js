@@ -25,6 +25,8 @@ export class Dog extends Entity {
         this.type = 'dog';
         this.personType = PERSON_TYPE.DOG;
         this.animInfo = { deathstart: 33 }; // only death animation
+        // Pre-select death sprite to avoid flickering
+        this._deadSpriteId = DEAD_SPRITES[Math.floor(Math.random() * DEAD_SPRITES.length)];
         this.setAnim(Math.floor(Math.random() * 4));
     }
 
@@ -35,7 +37,7 @@ export class Dog extends Entity {
 
     getSpriteId() {
         if (this.state === STATE.DEAD) {
-            return DEAD_SPRITES[Math.floor(Math.random() * DEAD_SPRITES.length)];
+            return this._deadSpriteId;
         }
 
         const idx = this.currentFrame % WALK_SPRITES.length;
@@ -55,7 +57,9 @@ export class Dog extends Entity {
         ctx.save();
         ctx.translate(this.screenX, this.screenY);
 
-        if (this._shouldFlip()) {
+        // Use locked flip state for dead entities to prevent twerking
+        const flip = this.state === STATE.DEAD ? !!this._deadFlip : this._shouldFlip();
+        if (flip) {
             ctx.scale(-1, 1);
         }
 
