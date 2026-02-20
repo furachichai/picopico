@@ -39,7 +39,7 @@ export class GameEngine {
 
     // Frame timing
     this.lastFrameTime = 0;
-    this.frameDuration = 1000 / FPS; // target 16 FPS like original
+    this.frameDuration = 1000 / FPS; // target 48 FPS
     this.accumulator = 0;
   }
 
@@ -246,8 +246,8 @@ export class GameEngine {
         renderables.push({
           kind: 'entity',
           entity,
-          depthKey: entity.tileX + entity.tileY,
-          tileY: entity.tileY,
+          depthKey: entity.depthX + entity.depthY,
+          tileY: entity.depthY, // secondary sort if needed, though depthKey is primary
         });
       }
     }

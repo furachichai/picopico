@@ -6,7 +6,7 @@
 // Screen / viewport
 export const SCREEN_W = 640;
 export const SCREEN_H = 480;
-export const FPS = 16; // original frame rate
+export const FPS = 48; // increased for smooth movement (was 16)
 
 // Logical map grid
 export const MAP_WIDTH = 120;
@@ -66,7 +66,7 @@ export const SCROLL_HORIZ = 100;           // px from edge to trigger scroll
 export const SCROLL_STEP = 10;             // px per frame scroll
 
 // Movement sub-steps per tile
-export const MOVE_PARTS = 6;
+export const MOVE_PARTS = 18; // scaled for 48 FPS (was 6)
 
 // Entity states
 export const STATE = {

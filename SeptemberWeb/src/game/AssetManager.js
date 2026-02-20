@@ -12,6 +12,7 @@ import { ASSETS } from './assetData.js';
 export class AssetManager {
     constructor() {
         this.images = {};     // loaded Image objects, keyed by asset ID
+        this.videos = {};     // loaded Video objects, keyed by asset ID
         this.data = {};       // asset metadata (regX, regY, name), keyed by asset ID
         this.processed = {};  // processed (transparent) canvases, keyed by asset ID
         this.loaded = false;
@@ -35,13 +36,36 @@ export class AssetManager {
     }
 
     async _loadOne(id, asset) {
+        if (asset.type === 'video') {
+            return new Promise((resolve) => {
+                const video = document.createElement('video');
+                video.src = asset.src;
+                video.preload = 'auto';
+                video.autoplay = false;
+                video.loop = false;
+                video.muted = true; // start muted to allow autoplay policy if needed
+                // We don't wait for 'canplaythrough' because it might take too long
+                // Just ensuring the element is created and key props are set
+                video.onloadeddata = () => {
+                    this.videos[id] = video;
+                    this.progress++;
+                    resolve();
+                };
+                video.onerror = () => {
+                    console.warn(`Failed to load video: ${asset.src}`);
+                    this.progress++;
+                    resolve();
+                };
+            });
+        }
+
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => {
                 this.images[id] = img;
                 this.data[id] = {
-                    regX: asset.regX,
-                    regY: asset.regY,
+                    regX: asset.regX || 0,
+                    regY: asset.regY || 0,
                     name: asset.name,
                     width: img.width,
                     height: img.height,
@@ -66,6 +90,10 @@ export class AssetManager {
         // Skip the map bitmap — it doesn't need transparency
         if (id === '3_2') return;
 
+        // Check if this is a missile frame (needs black→transparent)
+        const assetEntry = ASSETS[id];
+        const isMissileFrame = assetEntry && assetEntry.missileFrame;
+
         try {
             const canvas = document.createElement('canvas');
             canvas.width = img.width;
@@ -76,19 +104,36 @@ export class AssetManager {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
 
-            // Make white pixels transparent
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
+            if (isMissileFrame) {
+                // Make black pixels transparent (missile frames have black backgrounds)
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const brightness = (r + g + b) / 3;
 
-                // White threshold
-                if (r > 240 && g > 240 && b > 240) {
-                    data[i + 3] = 0; // fully transparent
+                    if (brightness < 30) {
+                        data[i + 3] = 0; // fully transparent
+                    } else if (brightness < 60) {
+                        // Near-black: fade alpha proportionally
+                        data[i + 3] = Math.floor(255 * ((brightness - 30) / 30));
+                    }
                 }
-                // Near-white (anti-aliased edges)
-                else if (r > 220 && g > 220 && b > 220) {
-                    data[i + 3] = Math.floor(255 * (1 - (r + g + b - 660) / (765 - 660)));
+            } else {
+                // Make white pixels transparent (standard sprites)
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+
+                    // White threshold
+                    if (r > 240 && g > 240 && b > 240) {
+                        data[i + 3] = 0; // fully transparent
+                    }
+                    // Near-white (anti-aliased edges)
+                    else if (r > 220 && g > 220 && b > 220) {
+                        data[i + 3] = Math.floor(255 * (1 - (r + g + b - 660) / (765 - 660)));
+                    }
                 }
             }
 
@@ -103,6 +148,10 @@ export class AssetManager {
 
     getImage(id) {
         return this.processed[id] || this.images[id] || null;
+    }
+
+    getVideo(id) {
+        return this.videos[id] || null;
     }
 
     getData(id) {

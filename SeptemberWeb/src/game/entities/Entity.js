@@ -22,6 +22,10 @@ export class Entity {
         this.tileX = tileX;
         this.tileY = tileY;
 
+        // Depth sorting position (updates later than logical position for N/W moves)
+        this.depthX = tileX;
+        this.depthY = tileY;
+
         // Isometric world coordinates (sub-tile precision for smooth movement)
         this.isoX = tileX * ISO_TILE_W;
         this.isoZ = -tileY * ISO_TILE_H;
@@ -58,6 +62,7 @@ export class Entity {
         this.frameStart = 1;
         this.frameStop = 8;
         this.currentFrame = 0;
+        this.animWait = 0;          // throttle animation speed
         this.animInfo = null;       // { crystart, crylength, turnstart, turnlength, deathstart }
 
         // Death
@@ -114,6 +119,8 @@ export class Entity {
         if (this.tileX > this.destX) {
             if (worldMap.posNotEmpty(this.tileX - 1, this.tileY)) return false;
             this.tileX--;
+            // Moving WEST (backwards visually): Keep old depth until halfway
+            // this.depthX remains old value
             this.stateGoto = DIR.WEST;
             this.setAnim(DIR.WEST);
             return true;
@@ -121,6 +128,8 @@ export class Entity {
         if (this.tileX < this.destX) {
             if (worldMap.posNotEmpty(this.tileX + 1, this.tileY)) return false;
             this.tileX++;
+            // Moving EAST (forwards visually): Update depth immediately to pop in front
+            this.depthX = this.tileX;
             this.stateGoto = DIR.EAST;
             this.setAnim(DIR.EAST);
             return true;
@@ -132,6 +141,8 @@ export class Entity {
         if (this.tileY > this.destY) {
             if (worldMap.posNotEmpty(this.tileX, this.tileY - 1)) return false;
             this.tileY--;
+            // Moving NORTH (backwards visually): Keep old depth until halfway
+            // this.depthY remains old value
             this.stateGoto = DIR.NORTH;
             this.setAnim(DIR.NORTH);
             return true;
@@ -139,6 +150,8 @@ export class Entity {
         if (this.tileY < this.destY) {
             if (worldMap.posNotEmpty(this.tileX, this.tileY + 1)) return false;
             this.tileY++;
+            // Moving SOUTH (forwards visually): Update depth immediately
+            this.depthY = this.tileY;
             this.stateGoto = DIR.SOUTH;
             this.setAnim(DIR.SOUTH);
             return true;
@@ -270,7 +283,9 @@ export class Entity {
     move(worldMap) {
         if (!this.depthNotYet && this.wait <= this.parts / 2) {
             this.depthNotYet = true;
-            // Depth update would happen here
+            // Mid-move depth update for N/W movement
+            this.depthX = this.tileX;
+            this.depthY = this.tileY;
         }
 
         if (this.wait - 1 === 0) {
@@ -371,6 +386,13 @@ export class Entity {
 
     update(worldMap) {
         if (this.state === STATE.DEAD) {
+            // Ensure screen position updates with scroll
+            if (worldMap) {
+                const pos = worldMap.tileToDeadPos(this.tileX, this.tileY);
+                this.screenX = pos.x;
+                this.screenY = pos.y;
+            }
+
             if (this.deadWait <= 0) {
                 this.shouldRemove = true;
             } else {
@@ -381,6 +403,9 @@ export class Entity {
                 }
             }
         } else if (this.state === STATE.MOURN) {
+            // Position update for scrolling
+            if (worldMap) this._updateScreenPos(worldMap);
+
             if (this.deadWait <= 0) {
                 this.goToMourn = false;
                 this.state = STATE.TURN;
@@ -391,10 +416,16 @@ export class Entity {
             } else {
                 this.deadWait--;
             }
+        } else if (this.state === STATE.TURN) {
+            // Position update for scrolling
+            if (worldMap) this._updateScreenPos(worldMap);
         } else if (this.state !== STATE.TURN) {
             // Walking / avoiding
             if (this.state !== STATE.STOP) {
                 this.move(worldMap);
+            } else {
+                // Even if stopped, update pos for scroll
+                if (worldMap) this._updateScreenPos(worldMap);
             }
             if (this.wait <= 0) {
                 this.wait = this.parts;
@@ -407,6 +438,11 @@ export class Entity {
     }
 
     _advanceFrame() {
+        // Throttle animation to match original speed (48 FPS / 3 = 16 FPS)
+        this.animWait++;
+        if (this.animWait < 3) return;
+        this.animWait = 0;
+
         if (this.kludge2) {
             this.kludge2 = false;
             if (this.stateAnim >= DIR.CRY_NORTH) {
