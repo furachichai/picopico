@@ -17,6 +17,20 @@ export const ASSETS = {
     "regX": 0,
     "regY": 0
   },
+  "titlecard_01": {
+    "id": "titlecard_01",
+    "name": "TitleCard01",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/titlecard_01.png",
+    "regX": 0,
+    "regY": 0
+  },
+  "instruction_01": {
+    "id": "instruction_01",
+    "name": "Instruction01",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/Instruction_01.png",
+    "regX": 0,
+    "regY": 0
+  },
   "newsgaming_logo": {
     "id": "newsgaming_logo",
     "name": "NewsgamingLogo",

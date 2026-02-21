@@ -37,6 +37,8 @@ export class GameEngine {
     this.state = GAME_STATE.LOADING;
     this.ready = false;
     this.showTileDebug = false; // T key toggle for tile walkability overlay
+    this.titleMode = 0; // 0 = titlecard_01, 1 = instructions_01
+    this.titleStartTime = 0;
 
     // Tile editor cursor (visible when showTileDebug is true)
     this.tileEditorX = 60;
@@ -75,10 +77,23 @@ export class GameEngine {
 
     // Show title screen
     this.state = GAME_STATE.TITLE;
+    this.titleMode = 0;
+    this.titleStartTime = 0; // Will be set on first render frame
     this.ready = true;
 
     // Load tile walkability overrides from file (non-blocking)
     this.worldMap.loadGridOverridesFromFile().catch(() => { });
+  }
+
+  handleTitleClick(x, y) {
+    if (this.state !== GAME_STATE.TITLE) return;
+    if (this.titleMode === 1) {
+      // Strict bounding box for the dark grey "CONTINUE" button
+      // Coords based on 640x480 canvas size
+      if (x >= 404 && x <= 556 && y >= 366 && y <= 408) {
+        this.startGame();
+      }
+    }
   }
 
   startGame() {
@@ -88,6 +103,11 @@ export class GameEngine {
     // Initialize world
     this.buildingManager.init();
     this.entityManager.init();
+
+    // Force an immediate update with 0 dt to initialize exact pixel coordinates 
+    // and animation frames for all entities before the first _render() call!
+    // This prevents the "flash" of characters at default positions.
+    this._update(0);
 
     // Resume audio context (required after user gesture)
     this.soundManager.resume();
@@ -140,6 +160,13 @@ export class GameEngine {
     ctx.fillStyle = '#87CEEB'; // sky blue background
     ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
 
+    // Update cursor visibility here so it is responsive to state changes
+    // Only update if it has changed to prevent browser flickering/hiding
+    const targetCursor = (this.state === GAME_STATE.PLAYING && (!this.placementTool || !this.placementTool.active)) ? 'none' : 'default';
+    if (this.canvas.style.cursor !== targetCursor) {
+      this.canvas.style.cursor = targetCursor;
+    }
+
     switch (this.state) {
       case GAME_STATE.LOADING:
         this._renderLoading();
@@ -155,73 +182,69 @@ export class GameEngine {
 
   _renderLoading() {
     const ctx = this.ctx;
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+    // Fallback white screen while loading graphic itself fetches
     ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
+    ctx.fillStyle = '#000';
     ctx.font = '20px Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Loading...', SCREEN_W / 2, SCREEN_H / 2);
+
+    // Fetch and draw the loading screen graphic immediately
+    if (!this._loadingImg) {
+      this._loadingImg = new Image();
+      this._loadingImg.onload = () => {
+        // Double check state in case loading finished instantly
+        if (this.state === GAME_STATE.LOADING) {
+          ctx.drawImage(this._loadingImg, 0, 0, SCREEN_W, SCREEN_H);
+        }
+      };
+      this._loadingImg.src = '/sept12 for vibe/Sept12assets/sep12/loading_01.png';
+    } else if (this._loadingImg.complete) {
+      ctx.drawImage(this._loadingImg, 0, 0, SCREEN_W, SCREEN_H);
+    }
   }
 
   _renderTitle() {
     const ctx = this.ctx;
     const am = this.assetManager;
 
-    // White background (matching original game)
+    // White background to fix alpha-blending "solarized" effect on edges
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
 
-    // Draw original title card (game logo + hand-drawn character)
-    const titleImg = am.getImage('titlecard');
-    const instrImg = am.getImage('titlecard2');
+    if (this.titleMode === 0) {
+      const titleImg = am.getImage('titlecard_01');
+      if (titleImg) {
+        // Draw the title card scaled to fit screen.
+        ctx.drawImage(titleImg, 0, 0, SCREEN_W, SCREEN_H);
+      } else {
+        // Fallback text
+        ctx.fillStyle = '#000';
+        ctx.font = '24px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SEPTEMBER 12th', SCREEN_W / 2, SCREEN_H / 2);
+      }
 
-    if (titleImg && instrImg) {
-      // Draw the title card (logo side) — positioned at left/top area
-      // The original titlecard.png is ~550x400 and positioned at top-left
-      ctx.drawImage(titleImg, 0, 0);
+      // Initialize start time on the very first frame of title screen render
+      if (this.titleStartTime === 0) {
+        this.titleStartTime = performance.now();
+      }
 
-      // Draw the instructions panel (orange box) next to/below the title
-      // The original titlecard2.png is ~450x420, shown to the right
-      const instrX = titleImg.width * 0.42;
-      const instrY = titleImg.height * 0.55;
-      ctx.drawImage(instrImg, instrX, instrY);
-
-      // "Click anywhere to start" prompt
-      ctx.fillStyle = '#666';
-      ctx.font = '13px Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Click anywhere to start.', SCREEN_W / 2, SCREEN_H - 15);
-    } else {
-      // Fallback title screen (no original assets loaded)
-      ctx.fillStyle = '#1a1a2e';
-      ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
-
-      ctx.fillStyle = '#e0d4c0';
-      ctx.font = 'bold 36px Georgia, serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('SEPTEMBER 12th', SCREEN_W / 2, 120);
-
-      ctx.font = '16px Georgia, serif';
-      ctx.fillStyle = '#b8a88a';
-      ctx.fillText('A Toy World', SCREEN_W / 2, 150);
-
-      ctx.font = '14px Arial, sans-serif';
-      ctx.fillStyle = '#d4c4a8';
-      const lines = [
-        'This is not a game.',
-        'You can\'t win and you can\'t lose.',
-        'This is a simulation.',
-        'It has no ending. It has already begun.',
-        '',
-        'The rules are deadly simple.',
-        'You can shoot. Or not.',
-        '',
-        'Click anywhere to start.',
-      ];
-      let y = 200;
-      for (const line of lines) {
-        ctx.fillText(line, SCREEN_W / 2, y);
-        y += 22;
+      // Check time to transition
+      if (performance.now() - this.titleStartTime > 3000) {
+        this.titleMode = 1;
+      }
+    } else if (this.titleMode === 1) {
+      const instrImg = am.getImage('instruction_01');
+      if (instrImg) {
+        ctx.drawImage(instrImg, 0, 0, SCREEN_W, SCREEN_H);
+      } else {
+        // Fallback text
+        ctx.fillStyle = '#000';
+        ctx.font = '24px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Instructions: Click CONTINUE to start', SCREEN_W / 2, SCREEN_H / 2);
       }
     }
   }

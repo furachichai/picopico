@@ -22,9 +22,14 @@ export default function Game() {
         engineRef.current = engine;
 
         // Click handler for title screen → gameplay transition
-        const handleClick = () => {
+        const handleClick = (e) => {
             if (engine.state === GAME_STATE.TITLE) {
-                engine.startGame();
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = 640 / rect.width; // SCREEN_W
+                const scaleY = 480 / rect.height; // SCREEN_H
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                engine.handleTitleClick(x, y);
             }
         };
         canvas.addEventListener('click', handleClick);

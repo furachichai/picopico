@@ -236,8 +236,10 @@ export class InputHandler {
     }
 
     render(ctx, assetManager) {
-        // Always show crosshair during gameplay (hidden only on explicit mouseleave)
-        // Don't show crosshair when placement tool is active
+        if (!this.canvas) return;
+
+        // Don't show crosshair when placement tool is active or not playing
+        if (this.engine.state !== GAME_STATE.PLAYING) return;
         if (this.engine.placementTool && this.engine.placementTool.active) return;
 
         ctx.save();

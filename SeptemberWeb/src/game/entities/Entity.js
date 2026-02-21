@@ -210,11 +210,25 @@ export class Entity {
         switch (this.state) {
             case STATE.STOP:
                 if (worldMap) {
-                    const tile = worldMap.randTileOnMap();
+                    let tile = worldMap.randTileOnMap();
+                    // Prevent randomly selecting the exact same tile which causes looping
+                    let attempts = 10;
+                    while (tile.tileX === this.tileX && tile.tileY === this.tileY && attempts > 0) {
+                        tile = worldMap.randTileOnMap();
+                        attempts--;
+                    }
                     this.destX = tile.tileX;
                     this.destY = tile.tileY;
                     this.state = STATE.GOTO;
                     this.wait = this.parts;
+
+                    // Immediately transition step to prevent "ghost walking" without incrementing tileX/Y
+                    if (this.destX !== this.tileX || this.destY !== this.tileY) {
+                        this.changeTile(worldMap);
+                    } else {
+                        // Fallback: stay stopped if we still can't find a new tile
+                        this.state = STATE.STOP;
+                    }
                 }
                 break;
             case STATE.GOTO:
