@@ -372,10 +372,17 @@ export class PlacementTool {
         const json = JSON.stringify(data);
 
         try {
-            // 1. Save current state (as before)
+            // 1. Save current state
             localStorage.setItem('picopico_map', json);
 
-            // 2. Save to history
+            // 2. Sync to purely local filesystem via our Vite dev server plugin
+            fetch('/api/save-map', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: json
+            }).catch(e => console.warn('[PlacementTool] Failed to sync map to filesystem:', e));
+
+            // 3. Save to history
             let history = [];
             const historyJson = localStorage.getItem('picopico_history');
             if (historyJson) {
@@ -388,7 +395,6 @@ export class PlacementTool {
             // Check if different from last save to avoid duplicates
             if (history.length > 0) {
                 const last = history[history.length - 1];
-                // Simple check based on string length and building count first for speed
                 if (last.buildings && JSON.stringify(last.buildings) === json) {
                     return; // No change
                 }
@@ -410,7 +416,7 @@ export class PlacementTool {
             }
 
             localStorage.setItem('picopico_history', JSON.stringify(history));
-            console.log(`[PlacementTool] Auto-saved to history (${history.length}/10)`);
+            console.log(`[PlacementTool] Auto-saved to history (${history.length}/10) and synced to mapData.js`);
 
         } catch (e) {
             console.warn('[PlacementTool] Failed to save to localStorage:', e);
@@ -907,12 +913,14 @@ export class PlacementTool {
 
     _drawCrosshair(ctx, am, input) {
         ctx.save();
-        const targetImg = am.getImage('target-empty') || am.getImage('target-full');
+        const targetImg = am.getImage('target_frame_001') || am.getImage('target-empty') || am.getImage('target-full');
         if (targetImg) {
+            const size = 90; // Scale 1080x1080 frame down to crosshair size
             ctx.drawImage(
                 targetImg,
-                input.mouseX - targetImg.width / 2,
-                input.mouseY - targetImg.height / 2
+                input.mouseX - size / 2,
+                input.mouseY - size / 2,
+                size, size
             );
         } else {
             // Fallback crosshair

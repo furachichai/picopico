@@ -16,7 +16,12 @@ export class InputHandler {
         this.mouseX = SCREEN_W / 2;
         this.mouseY = SCREEN_H / 2;
         this.isOverCanvas = false;
-        this.canFire = true;    // brief cooldown after firing
+
+        // Firing cooldown animation
+        this.canFire = true;
+        this.cooldownFrames = 108; // Total frames in our animation
+        this.cooldownDuration = 9000; // 9 seconds (108 frames at 12fps)
+        this.lastFireTime = 0;
 
         this._boundMouseMove = this._onMouseMove.bind(this);
         this._boundMouseDown = this._onMouseDown.bind(this);
@@ -135,9 +140,10 @@ export class InputHandler {
             this.engine.soundManager.playClick();
         }
 
-        // Brief cooldown
+        // Start cooldown animation (9 seconds)
         this.canFire = false;
-        setTimeout(() => { this.canFire = true; }, 500);
+        this.lastFireTime = Date.now();
+        setTimeout(() => { this.canFire = true; }, this.cooldownDuration);
     }
 
     // ——— Scrolling (from 2_1.ls ScrollScreen) ———
@@ -159,16 +165,38 @@ export class InputHandler {
         // Don't show crosshair when placement tool is active
         if (this.engine.placementTool && this.engine.placementTool.active) return;
 
-        // Try to use original target sprites
-        const targetImg = assetManager.getImage('target-empty') || assetManager.getImage('target-full');
-
         ctx.save();
 
+        let targetImg = null;
+
+        if (!this.canFire) {
+            // Player is in cooldown, calculate which frame to show
+            const elapsed = Date.now() - this.lastFireTime;
+            let frameIdx = Math.floor((elapsed / this.cooldownDuration) * this.cooldownFrames) + 1;
+
+            // Clamp frame index
+            if (frameIdx < 1) frameIdx = 1;
+            if (frameIdx > this.cooldownFrames) frameIdx = this.cooldownFrames;
+
+            const idStr = frameIdx.toString().padStart(3, '0');
+            targetImg = assetManager.getImage('target_frame_' + idStr);
+        } else {
+            // Player can fire, show the empty target (first frame of the animation)
+            targetImg = assetManager.getImage('target_frame_001');
+        }
+
+        if (!targetImg) {
+            // Fallback to original asset if frames aren't loaded yet
+            targetImg = assetManager.getImage('target-empty') || assetManager.getImage('target-full');
+        }
+
         if (targetImg) {
+            const size = 90; // scale the 1080x1080 frames down to crosshair size (50% bigger)
             ctx.drawImage(
                 targetImg,
-                this.mouseX - targetImg.width / 2,
-                this.mouseY - targetImg.height / 2
+                this.mouseX - size / 2,
+                this.mouseY - size / 2,
+                size, size
             );
         } else {
             // Fallback: draw a crosshair

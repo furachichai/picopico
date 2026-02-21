@@ -47,9 +47,19 @@ export class MissileSystem {
     launch(screenX, screenY, tileX, tileY) {
         if (this.activeMissile) return; // only one at a time
 
+        // Calculate exact pixel offset from the tile's center at the moment of launch
+        const worldMap = this.engine.worldMap;
+        const launchPos = worldMap.tileToScreen(tileX, tileY);
+        const tileCenterX = launchPos.x + 32;
+        const tileCenterY = launchPos.y + 16;
+        const offsetX = screenX - tileCenterX;
+        const offsetY = screenY - tileCenterY;
+
         this.activeMissile = {
             targetScreenX: screenX,
             targetScreenY: screenY,
+            offsetX,
+            offsetY,
             tileX,
             tileY,
             frameIndex: 0,
@@ -94,10 +104,12 @@ export class MissileSystem {
                     m.destroyed = true;
                     this._applyDestruction(m.tileX, m.tileY);
 
-                    // Add crater
+                    // Add crater exactly where clicked
                     this.craters.push({
                         tileX: m.tileX,
                         tileY: m.tileY,
+                        offsetX: m.offsetX,
+                        offsetY: m.offsetY,
                         opacity: 0.6,
                     });
                 }
@@ -136,8 +148,8 @@ export class MissileSystem {
         if (worldMap) {
             for (const crater of this.craters) {
                 const pos = worldMap.tileToScreen(crater.tileX, crater.tileY);
-                const x = pos.x + 32; // TILE_W/2
-                const y = pos.y + 16; // TILE_H/2
+                const x = pos.x + 32 + (crater.offsetX || 0); // Exact clicked center
+                const y = pos.y + 16 + (crater.offsetY || 0);
 
                 ctx.save();
                 ctx.globalAlpha = crater.opacity;
@@ -160,8 +172,8 @@ export class MissileSystem {
                 // Convert tile coords to current screen position each frame
                 // so the animation tracks with the world during panning
                 const screenPos = worldMap.tileToScreen(m.tileX, m.tileY);
-                const currentScreenX = screenPos.x + 32; // center of tile (TILE_W/2)
-                const currentScreenY = screenPos.y + 16; // center of tile (TILE_H/2)
+                const currentScreenX = screenPos.x + 32 + m.offsetX; // Exact sub-tile match
+                const currentScreenY = screenPos.y + 16 + m.offsetY;
 
                 // Scale and position so the explosion anchor aligns with the tile
                 const drawW = RAW_W * FRAME_SCALE;

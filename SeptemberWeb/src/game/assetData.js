@@ -2278,3 +2278,15 @@ export const ASSETS = {
     "regY": 6
   }
 };
+
+for (let i = 1; i <= 108; i++) {
+  const idStr = i.toString().padStart(3, '0');
+  ASSETS['target_frame_' + idStr] = {
+    id: 'target_frame_' + idStr,
+    name: 'Target Frame ' + i,
+    src: '/media/target_frames_transparent/frame_' + idStr + '.png',
+    regX: 540,
+    regY: 540,
+    isTargetFrame: true
+  };
+}
