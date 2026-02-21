@@ -517,9 +517,11 @@ export class PlacementTool {
         const building = this.hoveredBuilding;
         const type = building.type;
 
-        // Unregister from grid
-        for (let x = building.tileX - type.w + 1; x <= building.tileX; x++) {
-            for (let y = building.tileY - type.h + 1; y <= building.tileY; y++) {
+        // Unregister collision footprint from grid
+        const collW = type.cw || type.w;
+        const collH = type.ch || type.h;
+        for (let x = building.tileX - collW + 1; x <= building.tileX; x++) {
+            for (let y = building.tileY - collH + 1; y <= building.tileY; y++) {
                 if (worldMap.getTileBuilding(x, y) === building) {
                     worldMap.setTileBuilding(null, x, y);
                 }
@@ -566,8 +568,10 @@ export class PlacementTool {
             );
             if (building) {
                 const type = building.type;
-                for (let x = building.tileX - type.w + 1; x <= building.tileX; x++) {
-                    for (let y = building.tileY - type.h + 1; y <= building.tileY; y++) {
+                const collW = type.cw || type.w;
+                const collH = type.ch || type.h;
+                for (let x = building.tileX - collW + 1; x <= building.tileX; x++) {
+                    for (let y = building.tileY - collH + 1; y <= building.tileY; y++) {
                         if (worldMap.getTileBuilding(x, y) === building) {
                             worldMap.setTileBuilding(null, x, y);
                         }
@@ -607,8 +611,10 @@ export class PlacementTool {
 
         for (const b of bm.buildings) {
             const type = b.type;
-            for (let dy = 0; dy < type.h; dy++) {
-                for (let dx = 0; dx < type.w; dx++) {
+            const collW = type.cw || type.w;
+            const collH = type.ch || type.h;
+            for (let dy = 0; dy < collH; dy++) {
+                for (let dx = 0; dx < collW; dx++) {
                     const tx = b.tileX - dx;
                     const ty = b.tileY - dy;
                     if (worldMap.getTileBuilding(tx, ty) === b) {

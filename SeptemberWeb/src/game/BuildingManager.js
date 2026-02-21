@@ -26,68 +26,73 @@ import { MAP_PLACEMENTS } from './mapData.js';
 
 const BUILDING_TYPES = [
     // ——— Houses (casa) ———
+    // cw/ch = collision footprint (ground-level only); w/h = visual footprint
+    // Keep ch close to h to prevent north-walk clipping; reduce cw to open side paths
     {
-        name: 'casa01', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 9, h: 5, maxHealth: 25,
+        name: 'casa01', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 9, h: 5, cw: 6, ch: 5, maxHealth: 25,
         media: ['3_206', '3_240', '3_241', '3_344']
     },
     {
-        name: 'casa02', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 7, h: 4, maxHealth: 25,
+        name: 'casa02', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 7, h: 4, cw: 5, ch: 4, maxHealth: 25,
         media: ['3_207', '3_242', '3_243', '3_345']
     },
     {
-        name: 'casa03', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 4, h: 5, maxHealth: 25,
+        name: 'casa03', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 4, h: 5, cw: 3, ch: 4, maxHealth: 25,
         media: ['3_208', '3_244', '3_245', '3_346']
     },
     {
-        name: 'casa04', tall: true, regentype: 2, destruction: DESTRUCTION.THREE, w: 5, h: 6, maxHealth: 50,
+        name: 'casa04', tall: true, regentype: 2, destruction: DESTRUCTION.THREE, w: 5, h: 6, cw: 3, ch: 5, maxHealth: 50,
         media: ['3_209', '3_246', '3_247', '3_347']
     },
     {
-        name: 'casa05', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 5, h: 8, maxHealth: 25,
+        name: 'casa05', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 5, h: 8, cw: 3, ch: 7, maxHealth: 25,
         media: ['3_210', '3_248', '3_249', '3_348']
     },
     {
-        name: 'casa06', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 7, h: 8, maxHealth: 25,
+        name: 'casa06', tall: false, regentype: 2, destruction: DESTRUCTION.THREE, w: 7, h: 8, cw: 5, ch: 7, maxHealth: 25,
         media: ['3_211', '3_250', '3_251', '3_349']
     },
 
     // ——— Tall buildings (edificio) ———
+    // Keep ch close to h — tall buildings have large vertical sprites
     {
-        name: 'edificio01', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 4, h: 7, maxHealth: 100,
+        name: 'edificio01', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 4, h: 7, cw: 3, ch: 6, maxHealth: 100,
         media: ['3_212', '3_252', '3_253', '3_254', '3_314', '3_315', '3_316', '3_317', '3_318']
     },
     {
-        name: 'edificio02', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 5, h: 5, maxHealth: 100,
+        name: 'edificio02', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 5, h: 5, cw: 3, ch: 5, maxHealth: 100,
         media: ['3_213', '3_255', '3_256', '3_257', '3_319', '3_320', '3_321', '3_322', '3_323']
     },
     {
-        name: 'edificio03', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 7, h: 6, maxHealth: 100,
+        name: 'edificio03', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 7, h: 6, cw: 4, ch: 6, maxHealth: 100,
         media: ['3_214', '3_258', '3_259', '3_260', '3_324', '3_325', '3_326', '3_327', '3_328']
     },
     {
-        name: 'edificio04', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 6, h: 7, maxHealth: 100,
+        name: 'edificio04', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 6, h: 7, cw: 4, ch: 6, maxHealth: 100,
         media: ['3_215', '3_261', '3_262', '3_263', '3_329', '3_330', '3_331', '3_332', '3_333']
     },
     {
-        name: 'edificio05', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 8, h: 6, maxHealth: 100,
+        name: 'edificio05', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 8, h: 6, cw: 5, ch: 6, maxHealth: 100,
         media: ['3_216', '3_264', '3_265', '3_266', '3_334', '3_335', '3_336', '3_337', '3_338']
     },
     {
-        name: 'edificio06', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 7, h: 7, maxHealth: 100,
+        name: 'edificio06', tall: true, regentype: 1, destruction: DESTRUCTION.FOUR, w: 7, h: 7, cw: 4, ch: 6, maxHealth: 100,
         media: ['3_217', '3_267', '3_268', '3_269', '3_339', '3_340', '3_341', '3_342', '3_343']
     },
 
     // ——— Fountains (fuente) ———
+    // Keep ch at full h; only reduce cw
     {
-        name: 'fuente01', tall: false, regentype: 0, destruction: DESTRUCTION.THREE, w: 5, h: 5, maxHealth: 25,
+        name: 'fuente01', tall: false, regentype: 0, destruction: DESTRUCTION.THREE, w: 5, h: 5, cw: 3, ch: 4, maxHealth: 25,
         media: ['3_218', '3_310', '3_311']
     },
     {
-        name: 'fuente02', tall: false, regentype: 0, destruction: DESTRUCTION.THREE, w: 5, h: 5, maxHealth: 25,
+        name: 'fuente02', tall: false, regentype: 0, destruction: DESTRUCTION.THREE, w: 5, h: 5, cw: 3, ch: 4, maxHealth: 25,
         media: ['3_219', '3_312', '3_313']
     },
 
     // ——— Palms (palmera) ———
+    // Already minimal (1×1), no reduction needed
     {
         name: 'palmera01', tall: true, regentype: 0, destruction: DESTRUCTION.THREE, w: 1, h: 1, maxHealth: 3,
         media: ['3_220', '3_270', '3_271']
@@ -138,36 +143,37 @@ const BUILDING_TYPES = [
     },
 
     // ——— Market stalls (puesto) ———
+    // Keep ch at full h; slightly reduce cw
     {
-        name: 'puesto01', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 3, maxHealth: 25,
+        name: 'puesto01', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 3, cw: 2, ch: 3, maxHealth: 25,
         media: ['3_232', '3_294', '3_295']
     },
     {
-        name: 'puesto02', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 4, maxHealth: 25,
+        name: 'puesto02', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 4, cw: 2, ch: 4, maxHealth: 25,
         media: ['3_233', '3_296', '3_297']
     },
     {
-        name: 'puesto03', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 6, maxHealth: 25,
+        name: 'puesto03', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 6, cw: 2, ch: 5, maxHealth: 25,
         media: ['3_234', '3_298', '3_299']
     },
     {
-        name: 'puesto04', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 4, maxHealth: 25,
+        name: 'puesto04', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 3, h: 4, cw: 2, ch: 4, maxHealth: 25,
         media: ['3_235', '3_300', '3_301']
     },
     {
-        name: 'puesto05', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 6, h: 6, maxHealth: 25,
+        name: 'puesto05', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 6, h: 6, cw: 4, ch: 5, maxHealth: 25,
         media: ['3_236', '3_302', '3_303']
     },
     {
-        name: 'puesto06', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 5, h: 3, maxHealth: 25,
+        name: 'puesto06', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 5, h: 3, cw: 3, ch: 3, maxHealth: 25,
         media: ['3_237', '3_304', '3_305']
     },
     {
-        name: 'puesto07', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 4, h: 4, maxHealth: 25,
+        name: 'puesto07', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 4, h: 4, cw: 3, ch: 4, maxHealth: 25,
         media: ['3_238', '3_306', '3_307']
     },
     {
-        name: 'puesto08', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 6, h: 4, maxHealth: 25,
+        name: 'puesto08', tall: false, regentype: 3, destruction: DESTRUCTION.THREE, w: 6, h: 4, cw: 4, ch: 4, maxHealth: 25,
         media: ['3_239', '3_308', '3_309']
     },
 ];
@@ -275,9 +281,11 @@ export class BuildingManager {
             currentSpriteId: type.media[0], // intact sprite
         };
 
-        // Register tiles occupied by this building on the grid
-        for (let x = tileX - type.w + 1; x <= tileX; x++) {
-            for (let y = tileY - type.h + 1; y <= tileY; y++) {
+        // Register collision footprint on the grid (cw/ch if defined, else w/h)
+        const collW = type.cw || type.w;
+        const collH = type.ch || type.h;
+        for (let x = tileX - collW + 1; x <= tileX; x++) {
+            for (let y = tileY - collH + 1; y <= tileY; y++) {
                 worldMap.setTileBuilding(building, x, y);
             }
         }
