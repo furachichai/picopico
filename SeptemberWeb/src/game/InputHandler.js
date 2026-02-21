@@ -160,6 +160,18 @@ export class InputHandler {
 
     // ——— Rendering the crosshair ———
 
+    getCurrentTargetFrameId() {
+        if (this.canFire) return 'target_frame_001';
+
+        const elapsed = Date.now() - this.lastFireTime;
+        let frameIdx = Math.floor((elapsed / this.cooldownDuration) * this.cooldownFrames) + 1;
+
+        if (frameIdx < 1) frameIdx = 1;
+        if (frameIdx > this.cooldownFrames) frameIdx = this.cooldownFrames;
+
+        return 'target_frame_' + frameIdx.toString().padStart(3, '0');
+    }
+
     render(ctx, assetManager) {
         // Always show crosshair during gameplay (hidden only on explicit mouseleave)
         // Don't show crosshair when placement tool is active
@@ -170,16 +182,7 @@ export class InputHandler {
         let targetImg = null;
 
         if (!this.canFire) {
-            // Player is in cooldown, calculate which frame to show
-            const elapsed = Date.now() - this.lastFireTime;
-            let frameIdx = Math.floor((elapsed / this.cooldownDuration) * this.cooldownFrames) + 1;
-
-            // Clamp frame index
-            if (frameIdx < 1) frameIdx = 1;
-            if (frameIdx > this.cooldownFrames) frameIdx = this.cooldownFrames;
-
-            const idStr = frameIdx.toString().padStart(3, '0');
-            targetImg = assetManager.getImage('target_frame_' + idStr);
+            targetImg = assetManager.getImage(this.getCurrentTargetFrameId());
         } else {
             // Player can fire, show the empty target (first frame of the animation)
             targetImg = assetManager.getImage('target_frame_001');
@@ -192,12 +195,38 @@ export class InputHandler {
 
         if (targetImg) {
             const size = 90; // scale the 1080x1080 frames down to crosshair size (50% bigger)
-            ctx.drawImage(
-                targetImg,
-                this.mouseX - size / 2,
-                this.mouseY - size / 2,
-                size, size
-            );
+
+            if (!this.canFire) {
+                // Dual-layer draw for cooldown:
+                // 1. Draw the red cooldown animation frame at 50% transparency
+                ctx.globalAlpha = 0.5;
+                ctx.drawImage(
+                    targetImg,
+                    this.mouseX - size / 2,
+                    this.mouseY - size / 2,
+                    size, size
+                );
+
+                // 2. Draw the empty target frame (black outline) exactly on top at 100% opacity
+                ctx.globalAlpha = 1.0;
+                const emptyFrame = assetManager.getImage('target_frame_001');
+                if (emptyFrame) {
+                    ctx.drawImage(
+                        emptyFrame,
+                        this.mouseX - size / 2,
+                        this.mouseY - size / 2,
+                        size, size
+                    );
+                }
+            } else {
+                // Normal draw (just the empty frame)
+                ctx.drawImage(
+                    targetImg,
+                    this.mouseX - size / 2,
+                    this.mouseY - size / 2,
+                    size, size
+                );
+            }
         } else {
             // Fallback: draw a crosshair
             ctx.strokeStyle = 'rgba(255, 0, 0, 0.8)';

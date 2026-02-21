@@ -913,15 +913,43 @@ export class PlacementTool {
 
     _drawCrosshair(ctx, am, input) {
         ctx.save();
-        const targetImg = am.getImage('target_frame_001') || am.getImage('target-empty') || am.getImage('target-full');
+        // In Placement tool, we just want to show the current crosshair state.
+        // We can just query InputHandler to see if we are in cooldown.
+        const canFire = input.canFire;
+        const targetImg = am.getImage(canFire ? 'target_frame_001' : input.getCurrentTargetFrameId?.() || 'target_frame_001') || am.getImage('target-empty') || am.getImage('target-full');
         if (targetImg) {
             const size = 90; // Scale 1080x1080 frame down to crosshair size
-            ctx.drawImage(
-                targetImg,
-                input.mouseX - size / 2,
-                input.mouseY - size / 2,
-                size, size
-            );
+
+            if (!canFire && targetImg.src && !targetImg.src.includes('001')) {
+                // Dual-layer draw for cooldown:
+                // 1. Draw the red cooldown animation frame at 50% transparency
+                ctx.globalAlpha = 0.5;
+                ctx.drawImage(
+                    targetImg,
+                    input.mouseX - size / 2,
+                    input.mouseY - size / 2,
+                    size, size
+                );
+
+                // 2. Draw the empty target frame (black outline) exactly on top at 100% opacity
+                ctx.globalAlpha = 1.0;
+                const emptyFrame = am.getImage('target_frame_001');
+                if (emptyFrame) {
+                    ctx.drawImage(
+                        emptyFrame,
+                        input.mouseX - size / 2,
+                        input.mouseY - size / 2,
+                        size, size
+                    );
+                }
+            } else {
+                ctx.drawImage(
+                    targetImg,
+                    input.mouseX - size / 2,
+                    input.mouseY - size / 2,
+                    size, size
+                );
+            }
         } else {
             // Fallback crosshair
             ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
