@@ -93,13 +93,76 @@ export class InputHandler {
     _onKeyDown(e) {
         if (this.engine.state !== GAME_STATE.PLAYING) return;
         if (e.key === 's' || e.key === 'S') {
-            if (this.engine.soundManager) {
-                this.engine.soundManager.toggleMute();
+            if (!e.ctrlKey && !e.metaKey) {
+                if (this.engine.soundManager) {
+                    this.engine.soundManager.toggleMute();
+                }
+                return;
             }
         }
         if (e.key === 't' || e.key === 'T') {
             this.engine.showTileDebug = !this.engine.showTileDebug;
+            if (this.engine.showTileDebug) {
+                // Center cursor on whatever tile is at the middle of the screen
+                const center = this.engine.worldMap.screenToTile(320, 240);
+                this.engine.tileEditorX = Math.max(0, Math.min(119, center.tileX));
+                this.engine.tileEditorY = Math.max(0, Math.min(119, center.tileY));
+            }
+            return;
         }
+
+        // ——— Tile editor controls (only when overlay is visible) ———
+        if (!this.engine.showTileDebug) return;
+
+        const worldMap = this.engine.worldMap;
+
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.engine.tileEditorY = Math.max(0, this.engine.tileEditorY - 1);
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.engine.tileEditorY = Math.min(119, this.engine.tileEditorY + 1);
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.engine.tileEditorX = Math.max(0, this.engine.tileEditorX - 1);
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.engine.tileEditorX = Math.min(119, this.engine.tileEditorX + 1);
+        } else if (e.key === 'r' || e.key === 'R') {
+            // Flip tile walkability
+            worldMap.toggleTileOverride(this.engine.tileEditorX, this.engine.tileEditorY);
+            worldMap.saveGridOverridesToLocalStorage();
+        } else if ((e.key === 's' || e.key === 'S') && (e.ctrlKey || e.metaKey)) {
+            // Ctrl+S / Cmd+S: save overrides to file
+            e.preventDefault();
+            this._saveTileOverrides();
+        } else if (e.key === 'Escape') {
+            // Esc: save and close
+            this._saveTileOverrides();
+            this.engine.showTileDebug = false;
+        }
+    }
+
+    _saveTileOverrides() {
+        const worldMap = this.engine.worldMap;
+        worldMap.saveGridOverridesToLocalStorage();
+
+        // Save directly to local file via Vite dev server API
+        const data = worldMap.exportGridOverrides();
+        fetch('/api/save-grid-overrides', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        })
+            .then(r => r.json())
+            .then(result => {
+                if (result.success) {
+                    console.log(`[TileEditor] Saved ${data.length} grid overrides to file`);
+                } else {
+                    console.error('[TileEditor] Save failed:', result.error);
+                }
+            })
+            .catch(err => console.error('[TileEditor] Save request failed:', err));
     }
 
     _onTouchStart(e) {

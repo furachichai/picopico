@@ -33,6 +33,7 @@ export class Entity {
         // Screen position (computed from iso coords)
         this.screenX = 0;
         this.screenY = 0;
+        this.sortY = 0; // z-sort key (separate from visual screenY)
 
         // Movement state
         this.state = STATE.STOP;
@@ -84,11 +85,18 @@ export class Entity {
 
     _updateScreenPos(worldMap) {
         if (worldMap) {
-            const pos = worldMap.tileToSpritePos(this.tileX, this.tileY);
-            // But for smooth movement we use isoX/isoZ interpolation
+            // Use isoX/isoZ interpolation for smooth movement
             const smoothPos = worldMap.mapToScreen(this.isoX, 0, this.isoZ);
-            this.screenX = smoothPos.x + 10 + 1; // offset like PutFilmLoopOnScreen
-            this.screenY = smoothPos.y + 10;
+
+            // Visual position: align horizontally with diamond center (+10), 
+            // but shift vertically UP to prevent feet from bleeding into lower tiles
+            this.screenX = smoothPos.x + 10;
+            this.screenY = Math.floor(smoothPos.y);
+
+            // Z-sort key: MUST match building sort = tileToSpritePos().y = tileToScreen().y + TILE_H
+            // tileToScreen delegates to mapToScreen, so building sort = mapToScreen().y + 10
+            // Entity sort must use the same +10 so same-row entities render IN FRONT of same-row buildings
+            this.sortY = smoothPos.y + 10;
         }
     }
 

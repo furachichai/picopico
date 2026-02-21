@@ -19,13 +19,16 @@ export class WorldMap {
         this.grid = [];
         this._createEmptyGrid();
 
+        // Manual tile overrides (XOR with building check)
+        // Stores tile indices that have been manually flipped
+        this.gridOverrides = new Set();
+        this._loadOverridesFromLocalStorage();
+
         // Camera / scroll offset (horizontal only, like original)
         this.scrollX = 0;
 
         // Map sprite position (the bitmap's locH)
-        // In the original, the map sprite regPoint is (640, 240) and it's placed at (320, 240)
-        // This means the map image's left edge starts at 320-640 = -320
-        this.mapLeft = 0;  // will be calculated on init
+        this.mapLeft = 0;
     }
 
     _createEmptyGrid() {
@@ -63,11 +66,76 @@ export class WorldMap {
 
     posEmpty(x, y) {
         if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return false;
-        return this.getTileBuilding(x, y) === null;
+        const hasBuilding = this.getTileBuilding(x, y) !== null;
+        const isOverridden = this.gridOverrides.has(this._getIndex(x, y));
+        // XOR: override flips the result
+        return hasBuilding ? isOverridden : !isOverridden;
     }
 
     posNotEmpty(x, y) {
         return !this.posEmpty(x, y);
+    }
+
+    // ——— Grid overrides ———
+
+    toggleTileOverride(x, y) {
+        if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) return;
+        const idx = this._getIndex(x, y);
+        if (this.gridOverrides.has(idx)) {
+            this.gridOverrides.delete(idx);
+        } else {
+            this.gridOverrides.add(idx);
+        }
+    }
+
+    exportGridOverrides() {
+        // Return as array of [x, y] pairs
+        const pairs = [];
+        for (const idx of this.gridOverrides) {
+            const x = idx % MAP_WIDTH;
+            const y = Math.floor(idx / MAP_WIDTH);
+            pairs.push([x, y]);
+        }
+        return pairs;
+    }
+
+    loadGridOverrides(pairs) {
+        this.gridOverrides.clear();
+        if (!Array.isArray(pairs)) return;
+        for (const [x, y] of pairs) {
+            if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT) {
+                this.gridOverrides.add(this._getIndex(x, y));
+            }
+        }
+    }
+
+    saveGridOverridesToLocalStorage() {
+        const data = this.exportGridOverrides();
+        localStorage.setItem('gridOverrides', JSON.stringify(data));
+    }
+
+    _loadOverridesFromLocalStorage() {
+        try {
+            const raw = localStorage.getItem('gridOverrides');
+            if (raw) {
+                this.loadGridOverrides(JSON.parse(raw));
+            }
+        } catch (e) {
+            console.warn('[WorldMap] Failed to load grid overrides from localStorage:', e);
+        }
+    }
+
+    async loadGridOverridesFromFile() {
+        try {
+            const resp = await fetch('/data/gridOverrides.json');
+            if (resp.ok) {
+                const pairs = await resp.json();
+                this.loadGridOverrides(pairs);
+                console.log(`[WorldMap] Loaded ${this.gridOverrides.size} grid overrides from file`);
+            }
+        } catch (e) {
+            console.warn('[WorldMap] No gridOverrides.json found, using defaults');
+        }
     }
 
     // ——— Isometric conversion ———

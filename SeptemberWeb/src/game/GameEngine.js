@@ -38,6 +38,10 @@ export class GameEngine {
     this.ready = false;
     this.showTileDebug = false; // T key toggle for tile walkability overlay
 
+    // Tile editor cursor (visible when showTileDebug is true)
+    this.tileEditorX = 60;
+    this.tileEditorY = 60;
+
     // Frame timing
     this.lastFrameTime = 0;
     this.frameDuration = 1000 / FPS; // target 48 FPS
@@ -72,6 +76,9 @@ export class GameEngine {
     // Show title screen
     this.state = GAME_STATE.TITLE;
     this.ready = true;
+
+    // Load tile walkability overrides from file (non-blocking)
+    this.worldMap.loadGridOverridesFromFile().catch(() => { });
   }
 
   startGame() {
@@ -248,7 +255,7 @@ export class GameEngine {
         renderables.push({
           kind: 'entity',
           entity,
-          screenY: entity.screenY,
+          screenY: entity.sortY, // use sortY for depth ordering, not visual screenY
         });
       }
     }
@@ -361,6 +368,49 @@ export class GameEngine {
         ctx.fill();
       }
     }
+
+    // Draw cursor (highly visible crosshair + diamond)
+    ctx.globalAlpha = 1.0;
+    const cursorPos = worldMap.tileToScreen(this.tileEditorX, this.tileEditorY);
+    const cx = cursorPos.x + 10;
+    const cy = cursorPos.y + 5;
+
+    // Optional crosshair extending outward
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 20); ctx.lineTo(cx, cy + 20);
+    ctx.moveTo(cx - 40, cy); ctx.lineTo(cx + 40, cy);
+    ctx.stroke();
+
+    // Draw cursor diamond path
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 6);
+    ctx.lineTo(cx + 11, cy);
+    ctx.lineTo(cx, cy + 6);
+    ctx.lineTo(cx - 11, cy);
+    ctx.closePath();
+
+    // Thick black outer outline
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Bright white inner outline
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw coordinate HUD
+    ctx.globalAlpha = 0.85;
+    const isEmpty = worldMap.posEmpty(this.tileEditorX, this.tileEditorY);
+    const statusText = isEmpty ? 'WALKABLE' : 'BLOCKED';
+    const hudText = `Tile (${this.tileEditorX}, ${this.tileEditorY}) ${statusText}  |  Overrides: ${worldMap.gridOverrides.size}  |  ←↑→↓ Move  R Flip  Ctrl+S Save  Esc Save+Close`;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, SCREEN_H - 18, SCREEN_W, 18);
+    ctx.fillStyle = isEmpty ? '#44ff44' : '#ff4444';
+    ctx.font = '11px monospace';
+    ctx.fillText(hudText, 6, SCREEN_H - 5);
 
     ctx.restore();
   }

@@ -27,6 +27,27 @@ const saveMapPlugin = () => ({
             res.end(JSON.stringify({ error: e.message }))
           }
         })
+      } else if (req.url === '/api/save-grid-overrides' && req.method === 'POST') {
+        let body = ''
+        req.on('data', chunk => {
+          body += chunk.toString()
+        })
+        req.on('end', () => {
+          try {
+            const data = JSON.parse(body)
+            const filePath = path.resolve(__dirname, 'public/data/gridOverrides.json')
+            fs.mkdirSync(path.dirname(filePath), { recursive: true })
+            fs.writeFileSync(filePath, JSON.stringify(data))
+            console.log(`[GridOverrides] Saved ${data.length} overrides to ${filePath}`)
+
+            res.statusCode = 200
+            res.end(JSON.stringify({ success: true }))
+          } catch (e) {
+            console.error('Error saving grid overrides:', e)
+            res.statusCode = 500
+            res.end(JSON.stringify({ error: e.message }))
+          }
+        })
       } else {
         next()
       }
