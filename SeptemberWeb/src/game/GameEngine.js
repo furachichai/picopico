@@ -90,6 +90,13 @@ export class GameEngine {
 
     // Instruction Screen
     if (this.titleMode === 1) {
+      // Fullscreen button bounds (top right)
+      if (x >= 590 && x <= 630 && y >= 10 && y <= 50) {
+        if (this.soundManager) this.soundManager.playClick();
+        this.toggleFullscreen();
+        return; // Don't trigger other clicks
+      }
+
       // "CONTINUE" button bounds (gray box, measured from canvas screenshots)
       if (x >= 423 && x <= 524 && y >= 384 && y <= 422) {
         if (this.soundManager) this.soundManager.playClick();
@@ -127,6 +134,18 @@ export class GameEngine {
     // Resume audio context (required after user gesture)
     this.soundManager.resume();
     this.soundManager.playAmbient();
+  }
+
+  toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.warn(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
   }
 
   // ——— Main loop step ———
@@ -273,12 +292,6 @@ export class GameEngine {
           }
         }
 
-      } else {
-        // Fallback text
-        ctx.fillStyle = '#000';
-        ctx.font = '24px Arial, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Instructions: Click CONTINUE to start, CREDITS for credits', SCREEN_W / 2, SCREEN_H / 2);
       }
     } else if (this.titleMode === 2) {
       const creditsImg = am.getImage('credits_01');
@@ -291,6 +304,11 @@ export class GameEngine {
         ctx.textAlign = 'center';
         ctx.fillText('Credits: Click BACK to return', SCREEN_W / 2, SCREEN_H / 2);
       }
+    }
+
+    // Always render the fullscreen icon over the Instruction screen
+    if (this.titleMode === 1) {
+      this._renderFullscreenIcon(ctx);
     }
   }
 
@@ -404,6 +422,47 @@ export class GameEngine {
       ctx.stroke();
     }
 
+    ctx.restore();
+  }
+
+  _renderFullscreenIcon(ctx) {
+    const isFS = !!document.fullscreenElement;
+    const x = SCREEN_W - 30;
+    const y = 30;
+    const s = 7; // icon size
+
+    ctx.save();
+
+    // Hover effect
+    const mx = this.inputHandler.mouseX;
+    const my = this.inputHandler.mouseY;
+    if (mx >= x - 20 && mx <= x + 20 && my >= y - 20 && my <= y + 20) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.beginPath();
+      ctx.arc(x, y, 16, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'miter';
+    ctx.beginPath();
+
+    if (!isFS) {
+      // Expand icon: Corners pointing outward
+      ctx.moveTo(x - s, y - 3); ctx.lineTo(x - s, y - s); ctx.lineTo(x - 3, y - s);
+      ctx.moveTo(x + 3, y - s); ctx.lineTo(x + s, y - s); ctx.lineTo(x + s, y - 3);
+      ctx.moveTo(x - s, y + 3); ctx.lineTo(x - s, y + s); ctx.lineTo(x - 3, y + s);
+      ctx.moveTo(x + 3, y + s); ctx.lineTo(x + s, y + s); ctx.lineTo(x + s, y + 3);
+    } else {
+      // Shrink icon: Corners pointing inward
+      ctx.moveTo(x - s, y - 3); ctx.lineTo(x - 3, y - 3); ctx.lineTo(x - 3, y - s);
+      ctx.moveTo(x + s, y - 3); ctx.lineTo(x + 3, y - 3); ctx.lineTo(x + 3, y - s);
+      ctx.moveTo(x - s, y + 3); ctx.lineTo(x - 3, y + 3); ctx.lineTo(x - 3, y + s);
+      ctx.moveTo(x + s, y + 3); ctx.lineTo(x + 3, y + 3); ctx.lineTo(x + 3, y + s);
+    }
+
+    ctx.stroke();
     ctx.restore();
   }
 

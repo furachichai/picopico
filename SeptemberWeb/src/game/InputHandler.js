@@ -91,7 +91,7 @@ export class InputHandler {
     }
 
     _onKeyDown(e) {
-        if (this.engine.state !== GAME_STATE.PLAYING) return;
+        // Global hotkeys (work in any state)
         if (e.key === 's' || e.key === 'S') {
             if (!e.ctrlKey && !e.metaKey) {
                 if (this.engine.soundManager) {
@@ -100,6 +100,14 @@ export class InputHandler {
                 return;
             }
         }
+        if (e.key === 'f' || e.key === 'F') {
+            this.engine.toggleFullscreen();
+            return;
+        }
+
+        // Gameplay-only hotkeys
+        if (this.engine.state !== GAME_STATE.PLAYING) return;
+
         if (e.key === 't' || e.key === 'T') {
             this.engine.showTileDebug = !this.engine.showTileDebug;
             if (this.engine.showTileDebug) {

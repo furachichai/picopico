@@ -1,0 +1,6 @@
+{
+    "name": "september-12th-web",
+    "framework": "vite",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
+}
