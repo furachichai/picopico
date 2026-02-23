@@ -73,14 +73,22 @@ const DEAD_SPRITES = {
     [PERSON_TYPE.KID]: ['8_17', '8_18', '8_17', '8_18'],
 };
 
-// Civilian with raised gun sprites for flash transition
-const CIVILIAN_RAISED_GUN = {
-    [PERSON_TYPE.MAN]: ['5_34', '5_46'],
-    [PERSON_TYPE.WOMAN]: ['6_64', '6_70'],
+// Turn flash sprite pairs: direction-aware civilian→terrorist mappings
+// 'normal' = SOUTH/WEST facing (no flip on civilian), 'flipped' = NORTH/EAST facing
+const TURN_FLASH_PAIRS = {
+    [PERSON_TYPE.MAN]: {
+        normal: { civ: '5_34', terror: '5_29', terrorFlip: false },
+        flipped: { civ: '5_46', terror: '5_29', terrorFlip: true },
+    },
+    [PERSON_TYPE.WOMAN]: {
+        normal: { civ: '6_64', terror: '6_58', terrorFlip: true },
+        flipped: { civ: '6_70', terror: '6_57', terrorFlip: true },
+    },
+    [PERSON_TYPE.KID]: {
+        normal: { civ: '8_29', terror: '6_57', terrorFlip: false },
+        flipped: { civ: '8_64', terror: '8_67', terrorFlip: true },
+    },
 };
-
-// Terrorist with raised gun sprites for flash transition
-const TERRORIST_RAISED_GUN = ['5_28', '5_29'];
 
 export class Civilian extends Entity {
     constructor(tileX, tileY, worldMap, personType) {
@@ -125,18 +133,11 @@ export class Civilian extends Entity {
         }
 
         if (this.state === STATE.TURN) {
-            // Kids don't turn — getSpriteId won't be called in TURN for kids
-            // but safety fallback
-            if (this.personType === PERSON_TYPE.KID) {
-                const walkFrames = WALK_SPRITES[this.personType];
-                return walkFrames ? walkFrames[0] : null;
-            }
-            // Flash between civilian-raised-gun and terrorist-raised-gun
-            const civFrames = CIVILIAN_RAISED_GUN[this.personType];
+            // Use pre-selected paired sprites from _startTurn()
             if (this.turnShowTerrorist) {
-                return TERRORIST_RAISED_GUN[this.turnFlashCount % TERRORIST_RAISED_GUN.length];
+                return this._turnTerrorSprite;
             } else {
-                return civFrames ? civFrames[this.turnFlashCount % civFrames.length] : TERRORIST_RAISED_GUN[0];
+                return this._turnCivSprite;
             }
         }
 
@@ -163,7 +164,7 @@ export class Civilian extends Entity {
 
         // Use locked flip state for dead/turn entities to prevent inconsistency
         const flip = this.state === STATE.DEAD ? !!this._deadFlip
-            : this.state === STATE.TURN ? !!this._turnFlip
+            : this.state === STATE.TURN ? (this.turnShowTerrorist ? !!this._turnTerrorFlip : false)
                 : this._shouldFlip();
 
         ctx.save();
@@ -185,17 +186,23 @@ export class Civilian extends Entity {
     }
 
     _startTurn() {
-        // Kids don't turn into terrorists — skip straight back to walking
-        if (this.personType === PERSON_TYPE.KID) {
+        // Select the correct sprite pair based on mourn facing direction
+        const isFlipped = (this.mournFacing === DIR.NORTH || this.mournFacing === DIR.EAST);
+        const pairs = TURN_FLASH_PAIRS[this.personType];
+        if (!pairs) {
+            // Fallback: skip turn for unknown types
             this.state = STATE.STOP;
             return;
         }
+        const pair = isFlipped ? pairs.flipped : pairs.normal;
+        this._turnCivSprite = pair.civ;
+        this._turnTerrorSprite = pair.terror;
+        this._turnTerrorFlip = pair.terrorFlip;
+
         // Reset flash state for the turn animation
         this.turnFlashTimer = 0;
         this.turnFlashCount = 0;
         this.turnShowTerrorist = false;
-        // Lock flip to false so both raised-gun sprites face the same direction
-        this._turnFlip = false;
         // Signal EntityManager to play the turn sound
         this._turnStartedCallback = true;
     }

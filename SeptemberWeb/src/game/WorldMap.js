@@ -73,7 +73,12 @@ export class WorldMap {
     }
 
     posNotEmpty(x, y) {
-        return !this.posEmpty(x, y);
+        if (!this.posEmpty(x, y)) return true;
+        // Also block tiles occupied by dead bodies
+        if (this.engine && this.engine.entityManager) {
+            return this.engine.entityManager.deadBodyTiles.has(`${x},${y}`);
+        }
+        return false;
     }
 
     // ——— Grid overrides ———

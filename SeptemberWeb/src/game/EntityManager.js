@@ -29,6 +29,9 @@ export class EntityManager {
         this.deadEntities = [];       // dead bodies waiting to fade
         this.spawnTimer = 0;          // countdown to next spawn
 
+        // Dead body obstacle tiles
+        this.deadBodyTiles = new Set();
+
         // Undo evil tracker
         this.undoEvilTimer = WAIT_UNDO_EVIL * FPS;
         this.undoEvilCounter = 0;     // increases each cycle, converting more each time
@@ -42,6 +45,7 @@ export class EntityManager {
     init() {
         this.entities = [];
         this.deadEntities = [];
+        this.deadBodyTiles = new Set();
         this.spawnTimer = GENERATION_RATIO;
 
         const worldMap = this.engine.worldMap;
@@ -133,6 +137,9 @@ export class EntityManager {
             if (dist <= 5) { // within blast grid radius
                 entity.die(entity.tileX, entity.tileY, worldMap);
                 killed.push(entity);
+
+                // Mark the dead body's tile as a temporary obstacle
+                this.deadBodyTiles.add(`${entity.tileX},${entity.tileY}`);
                 this.totalKilled++;
 
                 // If terrorist killed, chance to regenerate
@@ -183,19 +190,22 @@ export class EntityManager {
             deadIdx++;
 
             // Calculate mourn spot: offset from dead body
-            const facing = Math.floor(Math.random() * 4);
+            const offsetDir = Math.floor(Math.random() * 4);
             let mx = deadTarget.tileX;
             let my = deadTarget.tileY;
-            switch (facing) {
-                case 0: my -= DISTANCE_FROM_DEAD; break; // mourn from north
-                case 1: my += DISTANCE_FROM_DEAD; break; // south
-                case 2: mx -= DISTANCE_FROM_DEAD; break; // west
-                case 3: mx += DISTANCE_FROM_DEAD; break; // east
+            switch (offsetDir) {
+                case 0: my -= DISTANCE_FROM_DEAD; break; // position north of body
+                case 1: my += DISTANCE_FROM_DEAD; break; // position south
+                case 2: mx -= DISTANCE_FROM_DEAD; break; // position west
+                case 3: mx += DISTANCE_FROM_DEAD; break; // position east
             }
             mx = Math.max(0, Math.min(MAP_WIDTH - 1, mx));
             my = Math.max(0, Math.min(MAP_HEIGHT - 1, my));
 
-            m.entity.goToMournPos(mx, my, facing);
+            // Invert facing so mourner looks TOWARD the dead body
+            // N(0)→S(1), S(1)→N(0), W(2)→E(3), E(3)→W(2)
+            const lookFacing = [1, 0, 3, 2][offsetDir];
+            m.entity.goToMournPos(mx, my, lookFacing);
         }
 
         this._updateCounts();
@@ -274,6 +284,8 @@ export class EntityManager {
 
             // Remove faded dead
             if (entity.shouldRemove) {
+                // Clear the dead body obstacle tile
+                this.deadBodyTiles.delete(`${entity.tileX},${entity.tileY}`);
                 this.entities.splice(i, 1);
             }
         }
