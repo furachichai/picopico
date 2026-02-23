@@ -4,7 +4,7 @@
  *
  * Each type has different animation frame counts for walk, cry, turn, and death.
  * Walk animations are film loops with 8 frames per direction × 4 directions.
- * Crying, turning (to terrorist), and death have their own frame ranges.
+ * Mourning sequence: cry loop → stand-up transition → flash transformation.
  */
 
 import { Entity } from './Entity.js';
@@ -18,18 +18,14 @@ const ANIM_INFO = {
 };
 
 // ——— Sprite ID mappings ———
-// Walk frames: 8 per direction (N, S, W, E), from the Member CSVs
-// We use the sprite frame index to pick from the walk arrays
-
 const WALK_SPRITES = {
-    // User-confirmed mapping:
-    // Set A (first 8, e.g. man0001-0008) = SOUTH unflipped, EAST when flipped
-    // Set B (second 8, e.g. man0009-0016) = WEST unflipped, NORTH when flipped
+    // Set A = SOUTH unflipped / EAST flipped
+    // Set B = WEST unflipped / NORTH flipped
     [PERSON_TYPE.MAN]: [
-        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // North (0-7)  — set B flipped
-        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // South (8-15) — set A unflipped
-        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // West (16-23) — set B unflipped
-        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // East (24-31) — set A flipped
+        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // North — set B flipped
+        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // South — set A unflipped
+        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // West — set B unflipped
+        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // East — set A flipped
     ],
     [PERSON_TYPE.WOMAN]: [
         '6_49', '6_50', '6_51', '6_52', '6_53', '6_54', '6_55', '6_56', // North — set B flipped
@@ -45,27 +41,6 @@ const WALK_SPRITES = {
     ],
 };
 
-// Cry sprites (mourning)
-const CRY_SPRITES = {
-    [PERSON_TYPE.MAN]: [
-        // Man has 20 cry frames per direction (crystart=33, crylength=20)
-        // We use south-facing crying frames from the man cast: 5_30 through 5_45 (16 frames)
-        // Plus repeat some. Practically we'll loop the available ones.
-        '5_30', '5_31', '5_32', '5_33', '5_34', '5_35', '5_36', '5_37',
-        '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44', '5_45',
-        '5_30', '5_31', '5_32', '5_33',
-    ],
-    [PERSON_TYPE.WOMAN]: [
-        // Woman has 10 cry frames: 6_59 through 6_63, and south versions
-        '6_59', '6_60', '6_61', '6_62', '6_63', '6_64',
-        '6_65', '6_66', '6_67', '6_68',
-    ],
-    [PERSON_TYPE.KID]: [
-        // Kid has 3 cry frames per direction: 8_19, 8_20, 8_21 (then repeats for other dirs)
-        '8_19', '8_20', '8_21',
-    ],
-};
-
 // Death sprites
 const DEAD_SPRITES = {
     [PERSON_TYPE.MAN]: ['5_47', '5_48', '5_47', '5_48'],
@@ -73,20 +48,45 @@ const DEAD_SPRITES = {
     [PERSON_TYPE.KID]: ['8_17', '8_18', '8_17', '8_18'],
 };
 
-// Turn flash sprite pairs: direction-aware civilian→terrorist mappings
-// 'normal' = SOUTH/WEST facing (no flip on civilian), 'flipped' = NORTH/EAST facing
-const TURN_FLASH_PAIRS = {
+// ——— Multi-phase mourn/transform animation data ———
+// setA = SOUTH/EAST facing (canvas flip for EAST)
+// setB = WEST/NORTH facing (canvas flip for NORTH)
+const MOURN_SEQUENCE = {
     [PERSON_TYPE.MAN]: {
-        normal: { civ: '5_34', terror: '5_29', terrorFlip: false },
-        flipped: { civ: '5_46', terror: '5_29', terrorFlip: true },
+        setA: {
+            cryLoop: ['5_30', '5_31'],
+            standUp: ['5_32', '5_33', '5_34'],
+            flash: { civ: '5_34', terror: '5_29', terrorFlip: false },
+        },
+        setB: {
+            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'],
+            standUp: ['5_45', '5_46'],
+            flash: { civ: '5_46', terror: '5_28', terrorFlip: true },
+        },
     },
     [PERSON_TYPE.WOMAN]: {
-        normal: { civ: '6_64', terror: '6_58', terrorFlip: true },
-        flipped: { civ: '6_70', terror: '6_57', terrorFlip: true },
+        setA: {
+            cryLoop: ['6_59', '6_60'],
+            standUp: ['6_61', '6_62', '6_63', '6_64'],
+            flash: { civ: '6_64', terror: '6_58', terrorFlip: true },
+        },
+        setB: {
+            cryLoop: ['6_65', '6_66', '6_67'],
+            standUp: ['6_68', '6_69', '6_70'],
+            flash: { civ: '6_70', terror: '6_57', terrorFlip: true },
+        },
     },
     [PERSON_TYPE.KID]: {
-        normal: { civ: '8_29', terror: '6_57', terrorFlip: false },
-        flipped: { civ: '8_64', terror: '8_67', terrorFlip: true },
+        setA: {
+            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'],
+            standUp: ['8_40', '8_41'],
+            flash: { civ: '8_29', terror: '6_57', terrorFlip: false },
+        },
+        setB: {
+            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'],
+            standUp: ['8_51', '8_52'],
+            flash: { civ: '8_64', terror: '8_67', terrorFlip: true },
+        },
     },
 };
 
@@ -102,13 +102,39 @@ export class Civilian extends Entity {
         // Start walking in a random direction
         this.setAnim(Math.floor(Math.random() * 4));
 
-        // Turn animation: flashing civilian ↔ terrorist
-        // 3 loops × 2 flashes per loop = 6 total frame changes
+        // Mourn animation state
+        this._cryLoopSprites = null;
+        this._cryFrameIdx = 0;
+        this._cryFrameTimer = 0;
+
+        // Turn animation state
+        this._turnPhase = null;       // 'standup' or 'flash'
+        this._standUpSprites = null;
+        this._standUpIndex = 0;
+        this._standUpTimer = 0;
+        this._turnCivSprite = null;
+        this._turnTerrorSprite = null;
+        this._turnTerrorFlip = false;
         this.turnFlashTimer = 0;
         this.turnFlashCount = 0;
-        this.turnFlashMax = 6;     // 3 full loops (civilian→terrorist→civilian→...)
-        this.turnFlashInterval = 12; // frames between flashes (~0.25s at 48 FPS)
+        this.turnFlashMax = 6;        // 3 full loops
+        this.turnFlashInterval = 12;  // frames between flashes (~0.25s at 48 FPS)
         this.turnShowTerrorist = false;
+    }
+
+    // Called when civilian arrives at mourn position and enters MOURN state
+    _onMournStart() {
+        const useSetA = (this.mournFacing === DIR.SOUTH || this.mournFacing === DIR.EAST);
+        const seq = MOURN_SEQUENCE[this.personType];
+        if (!seq) return;
+        const dir = useSetA ? seq.setA : seq.setB;
+        this._cryLoopSprites = dir.cryLoop;
+        this._standUpSprites = dir.standUp;
+        this._cryFrameIdx = 0;
+        this._cryFrameTimer = 0;
+
+        // Canvas flip during mourn: NORTH and EAST get flipped
+        this._mournFlip = (this.mournFacing === DIR.NORTH || this.mournFacing === DIR.EAST);
     }
 
     getSpriteId() {
@@ -121,19 +147,20 @@ export class Civilian extends Entity {
         }
 
         if (this.state === STATE.MOURN) {
-            const cryFrames = CRY_SPRITES[this.personType];
-            if (cryFrames && cryFrames.length > 0) {
-                const base = this.animInfo?.crystart || 0;
-                const idx = (frame - base) % cryFrames.length;
-                return cryFrames[Math.max(0, idx)] || cryFrames[0];
+            if (this._cryLoopSprites && this._cryLoopSprites.length > 0) {
+                return this._cryLoopSprites[this._cryFrameIdx % this._cryLoopSprites.length];
             }
-            // Fallback to standing
+            // Fallback
             const walkFrames = WALK_SPRITES[this.personType];
             return walkFrames ? walkFrames[0] : null;
         }
 
         if (this.state === STATE.TURN) {
-            // Use pre-selected paired sprites from _startTurn()
+            if (this._turnPhase === 'standup') {
+                const idx = Math.min(this._standUpIndex, this._standUpSprites.length - 1);
+                return this._standUpSprites[idx];
+            }
+            // Flash phase
             if (this.turnShowTerrorist) {
                 return this._turnTerrorSprite;
             } else {
@@ -162,10 +189,26 @@ export class Civilian extends Entity {
         const spriteId = this.getSpriteId();
         if (!spriteId) return;
 
-        // Use locked flip state for dead/turn entities to prevent inconsistency
-        const flip = this.state === STATE.DEAD ? !!this._deadFlip
-            : this.state === STATE.TURN ? (this.turnShowTerrorist ? !!this._turnTerrorFlip : false)
-                : this._shouldFlip();
+        let flip;
+        if (this.state === STATE.DEAD) {
+            flip = !!this._deadFlip;
+        } else if (this.state === STATE.MOURN) {
+            flip = !!this._mournFlip;
+        } else if (this.state === STATE.TURN) {
+            if (this._turnPhase === 'standup') {
+                flip = !!this._mournFlip; // Same flip as mourning
+            } else {
+                // Flash phase: maintain same direction as mourn/standup
+                if (this.turnShowTerrorist) {
+                    // XOR: if mourner is flipped AND terror is flipped, they cancel out
+                    flip = this._mournFlip ? !this._turnTerrorFlip : !!this._turnTerrorFlip;
+                } else {
+                    flip = !!this._mournFlip;
+                }
+            }
+        } else {
+            flip = this._shouldFlip();
+        }
 
         ctx.save();
         ctx.translate(this.screenX, this.screenY);
@@ -186,45 +229,78 @@ export class Civilian extends Entity {
     }
 
     _startTurn() {
-        // Select the correct sprite pair based on mourn facing direction
-        const isFlipped = (this.mournFacing === DIR.NORTH || this.mournFacing === DIR.EAST);
-        const pairs = TURN_FLASH_PAIRS[this.personType];
-        if (!pairs) {
-            // Fallback: skip turn for unknown types
+        // Select direction data
+        const useSetA = (this.mournFacing === DIR.SOUTH || this.mournFacing === DIR.EAST);
+        const seq = MOURN_SEQUENCE[this.personType];
+        if (!seq) {
             this.state = STATE.STOP;
             return;
         }
-        const pair = isFlipped ? pairs.flipped : pairs.normal;
-        this._turnCivSprite = pair.civ;
-        this._turnTerrorSprite = pair.terror;
-        this._turnTerrorFlip = pair.terrorFlip;
+        const dir = useSetA ? seq.setA : seq.setB;
 
-        // Reset flash state for the turn animation
+        // Set flash pair sprites
+        this._turnCivSprite = dir.flash.civ;
+        this._turnTerrorSprite = dir.flash.terror;
+        this._turnTerrorFlip = dir.flash.terrorFlip;
+
+        // Start with stand-up phase
+        this._turnPhase = 'standup';
+        this._standUpIndex = 0;
+        this._standUpTimer = 0;
+
+        // Flash state (for after stand-up)
         this.turnFlashTimer = 0;
         this.turnFlashCount = 0;
         this.turnShowTerrorist = false;
+
         // Signal EntityManager to play the turn sound
         this._turnStartedCallback = true;
     }
 
-    // Override _advanceFrame to handle the turn flashing
+    // Override _advanceFrame to handle all custom animation phases
     _advanceFrame() {
-        if (this.state === STATE.TURN) {
-            // Custom flash animation for turning
-            this.turnFlashTimer++;
-            if (this.turnFlashTimer >= this.turnFlashInterval) {
-                this.turnFlashTimer = 0;
-                this.turnShowTerrorist = !this.turnShowTerrorist;
-                this.turnFlashCount++;
-
-                if (this.turnFlashCount >= this.turnFlashMax) {
-                    // Turn complete — become terrorist
-                    this.state = STATE.STOP;
-                    this._onTurnComplete();
-                    return;
+        if (this.state === STATE.MOURN) {
+            // Cycle through cry loop sprites
+            this._cryFrameTimer++;
+            if (this._cryFrameTimer >= 4) { // ~12fps at 48fps engine
+                this._cryFrameTimer = 0;
+                this._cryFrameIdx++;
+                if (this._cryLoopSprites && this._cryFrameIdx >= this._cryLoopSprites.length) {
+                    this._cryFrameIdx = 0;
                 }
             }
-            return; // Skip normal frame advancement during turn
+            return; // Skip base class frame advancement
+        }
+
+        if (this.state === STATE.TURN) {
+            if (this._turnPhase === 'standup') {
+                // Play stand-up frames once
+                this._standUpTimer++;
+                if (this._standUpTimer >= 4) { // ~12fps
+                    this._standUpTimer = 0;
+                    this._standUpIndex++;
+                    if (this._standUpSprites && this._standUpIndex >= this._standUpSprites.length) {
+                        // Stand-up complete → switch to flash phase
+                        this._turnPhase = 'flash';
+                    }
+                }
+            } else {
+                // Flash phase
+                this.turnFlashTimer++;
+                if (this.turnFlashTimer >= this.turnFlashInterval) {
+                    this.turnFlashTimer = 0;
+                    this.turnShowTerrorist = !this.turnShowTerrorist;
+                    this.turnFlashCount++;
+
+                    if (this.turnFlashCount >= this.turnFlashMax) {
+                        // Turn complete — become terrorist
+                        this.state = STATE.STOP;
+                        this._onTurnComplete();
+                        return;
+                    }
+                }
+            }
+            return; // Skip base class frame advancement
         }
 
         // Normal animation for all other states

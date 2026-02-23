@@ -260,6 +260,10 @@ export class Entity {
                 this.parts = Math.min(MOVE_PARTS, this.parts * 2);
                 this.setAnim(DIR.CRY_NORTH + this.mournFacing);
                 this.deadWait = WAIT_MOURN * FPS;
+                // Initialize direction-specific cry animation
+                if (typeof this._onMournStart === 'function') {
+                    this._onMournStart();
+                }
             } else if (this.undoEvil) {
                 this.state = STATE.TURN;
                 this.kludge = true;

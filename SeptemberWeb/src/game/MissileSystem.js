@@ -35,7 +35,6 @@ export class MissileSystem {
     constructor(engine) {
         this.engine = engine;
         this.activeMissile = null;
-        this.craters = [];            // persistent ground marks
     }
 
     isLaunched() {
@@ -103,15 +102,6 @@ export class MissileSystem {
                 if (m.exploded && !m.destroyed && m.frameIndex >= DESTRUCTION_FRAME) {
                     m.destroyed = true;
                     this._applyDestruction(m.tileX, m.tileY);
-
-                    // Add crater exactly where clicked
-                    this.craters.push({
-                        tileX: m.tileX,
-                        tileY: m.tileY,
-                        offsetX: m.offsetX,
-                        offsetY: m.offsetY,
-                        opacity: 0.6,
-                    });
                 }
 
                 // Animation complete
@@ -119,14 +109,6 @@ export class MissileSystem {
                     this.activeMissile = null;
                     break;
                 }
-            }
-        }
-
-        // Fade craters
-        for (let i = this.craters.length - 1; i >= 0; i--) {
-            this.craters[i].opacity -= 0.0005;
-            if (this.craters[i].opacity <= 0) {
-                this.craters.splice(i, 1);
             }
         }
     }
@@ -143,23 +125,7 @@ export class MissileSystem {
     // ——— Rendering ———
 
     render(ctx, assetManager) {
-        // Draw craters (behind everything)
         const worldMap = this.engine.worldMap;
-        if (worldMap) {
-            for (const crater of this.craters) {
-                const pos = worldMap.tileToScreen(crater.tileX, crater.tileY);
-                const x = pos.x + 32 + (crater.offsetX || 0); // Exact clicked center
-                const y = pos.y + 16 + (crater.offsetY || 0);
-
-                ctx.save();
-                ctx.globalAlpha = crater.opacity;
-                ctx.fillStyle = '#3a2a1a';
-                ctx.beginPath();
-                ctx.ellipse(x, y, 20, 10, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
 
         // Draw missile animation frame
         if (this.activeMissile && worldMap) {
