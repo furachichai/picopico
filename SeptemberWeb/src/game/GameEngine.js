@@ -87,11 +87,26 @@ export class GameEngine {
 
   handleTitleClick(x, y) {
     if (this.state !== GAME_STATE.TITLE) return;
+
+    // Instruction Screen
     if (this.titleMode === 1) {
-      // Strict bounding box for the dark grey "CONTINUE" button
-      // Coords based on 640x480 canvas size
-      if (x >= 404 && x <= 556 && y >= 366 && y <= 408) {
+      // "CONTINUE" button bounds (gray box, measured from canvas screenshots)
+      if (x >= 423 && x <= 524 && y >= 384 && y <= 422) {
+        if (this.soundManager) this.soundManager.playClick();
         this.startGame();
+      }
+      // "CREDITS" button bounds - generously expanded hotspot
+      else if (x >= 350 && x <= 500 && y >= 430 && y <= 480) {
+        if (this.soundManager) this.soundManager.playClick();
+        this.titleMode = 2; // Move to Credits screen
+      }
+    }
+    // Credits Screen
+    else if (this.titleMode === 2) {
+      // "BACK" button bounds (bottom left) - generously expanded hotspot
+      if (x >= 0 && x <= 120 && y >= 430 && y <= 480) {
+        if (this.soundManager) this.soundManager.playClick();
+        this.titleMode = 1; // Return to Instruction screen
       }
     }
   }
@@ -239,12 +254,42 @@ export class GameEngine {
       const instrImg = am.getImage('instruction_01');
       if (instrImg) {
         ctx.drawImage(instrImg, 0, 0, SCREEN_W, SCREEN_H);
+
+        // Render Continue button rollover if mouse is over it
+        const mx = this.inputHandler.mouseX;
+        const my = this.inputHandler.mouseY;
+        // Bounding box based on measured canvas position of the grey Continue box
+        if (mx >= 423 && mx <= 524 && my >= 384 && my <= 422) {
+          const hoverImg = am.getImage('Continue_button_over');
+          if (hoverImg) {
+            // Fill an orange rectangle to "erase" the original grey button underneath
+            // so it doesn't bleed through the transparent parts of the rollover graphic
+            ctx.fillStyle = '#cf5111'; // Precise match for the surrounding instruction background 
+            ctx.fillRect(414, 384, 114, 40);
+
+            // Draw at measured position, native aspect ratio (359x126)
+            // Scale to match button height (~40px): width = 40 * 359/126 ≈ 114
+            ctx.drawImage(hoverImg, 414, 384, 114, 40);
+          }
+        }
+
       } else {
         // Fallback text
         ctx.fillStyle = '#000';
         ctx.font = '24px Arial, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Instructions: Click CONTINUE to start', SCREEN_W / 2, SCREEN_H / 2);
+        ctx.fillText('Instructions: Click CONTINUE to start, CREDITS for credits', SCREEN_W / 2, SCREEN_H / 2);
+      }
+    } else if (this.titleMode === 2) {
+      const creditsImg = am.getImage('credits_01');
+      if (creditsImg) {
+        ctx.drawImage(creditsImg, 0, 0, SCREEN_W, SCREEN_H);
+      } else {
+        // Fallback text
+        ctx.fillStyle = '#000';
+        ctx.font = '24px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Credits: Click BACK to return', SCREEN_W / 2, SCREEN_H / 2);
       }
     }
   }

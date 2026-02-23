@@ -31,6 +31,21 @@ export const ASSETS = {
     "regX": 0,
     "regY": 0
   },
+  "credits_01": {
+    "id": "credits_01",
+    "name": "Credits01",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/credits_01.png",
+    "regX": 0,
+    "regY": 0
+  },
+  "Continue_button_over": {
+    "id": "Continue_button_over",
+    "name": "ContinueButtonOver",
+    "src": "/sept12%20for%20vibe/Sept12assets/sep12/Continue_button_over.png",
+    "regX": 0,
+    "regY": 0,
+    "noTransparency": true
+  },
   "newsgaming_logo": {
     "id": "newsgaming_logo",
     "name": "NewsgamingLogo",

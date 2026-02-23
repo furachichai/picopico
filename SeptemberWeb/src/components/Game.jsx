@@ -22,7 +22,7 @@ export default function Game() {
         engineRef.current = engine;
 
         // Click handler for title screen → gameplay transition
-        const handleClick = (e) => {
+        const handlePointerUp = (e) => {
             if (engine.state === GAME_STATE.TITLE) {
                 const rect = canvas.getBoundingClientRect();
                 const scaleX = 640 / rect.width; // SCREEN_W
@@ -32,7 +32,8 @@ export default function Game() {
                 engine.handleTitleClick(x, y);
             }
         };
-        canvas.addEventListener('click', handleClick);
+        // Use pointerup instead of click to fix issues with quick taps not registering
+        canvas.addEventListener('pointerup', handlePointerUp);
 
         // Initialize
         engine.init(canvas).then(() => {
@@ -41,7 +42,7 @@ export default function Game() {
         });
 
         return () => {
-            canvas.removeEventListener('click', handleClick);
+            canvas.removeEventListener('pointerup', handlePointerUp);
             if (rafRef.current) {
                 cancelAnimationFrame(rafRef.current);
             }

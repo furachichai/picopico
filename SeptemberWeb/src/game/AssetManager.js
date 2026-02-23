@@ -87,11 +87,11 @@ export class AssetManager {
     }
 
     _processTransparency(id, img) {
-        // Skip the map bitmap — it doesn't need transparency
-        if (id === '3_2') return;
+        const assetEntry = ASSETS[id];
+        // Skip the map bitmap or any explicitly marked assets
+        if (id === '3_2' || (assetEntry && assetEntry.noTransparency)) return;
 
         // Check if this is a missile frame (needs black→transparent)
-        const assetEntry = ASSETS[id];
         const isMissileFrame = assetEntry && assetEntry.missileFrame;
 
         try {
