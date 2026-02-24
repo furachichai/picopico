@@ -28,7 +28,7 @@ export const ISO_START_Y = -325;
 export const MAX_PEOPLE = 100;
 export const START_PEOPLE = 100;
 export const EVIL_MIN = 10;
-export const EVIL_PER_DEATH = 4;           // mourners per dead civilian
+export const EVIL_PER_DEATH = 2;           // mourners per dead civilian
 export const EVIL_REGENERATION = 40;       // % chance killed terrorist respawns as terrorist
 export const GENERATION_RATIO = 1;         // seconds between new people spawns
 export const RAND_GENERATION_RATIO = 1;    // random extra seconds
@@ -41,8 +41,8 @@ export const PROB_DOG = 5;
 // Man is the fallback
 
 // Mourning / death
-export const MOURN_DISTANCE = 8;           // tiles (near blast area only)
-export const DISTANCE_FROM_DEAD = 2;       // tiles offset for mourn spot
+export const MOURN_DISTANCE = 15;          // tiles (capture more nearby civilians)
+export const DISTANCE_FROM_DEAD = 1;       // tiles offset for mourn spot
 export const WAIT_DEAD = 10;               // seconds before dead body removed
 export const WAIT_RANDOM_DEAD = 2;         // random extra seconds
 export const WAIT_MOURN = 2;               // seconds of mourning

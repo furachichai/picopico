@@ -170,7 +170,9 @@ export class EntityManager {
         const mournableDead = killed.filter(e => e.type === 'civilian' || e.type === 'dog');
         if (mournableDead.length === 0) return;
 
-        const mournerCount = mournableDead.length * EVIL_PER_DEATH;
+        // Ensure minimum 2 mourners for any death event, max 7 total
+        let mournerCount = mournableDead.length * EVIL_PER_DEATH;
+        mournerCount = Math.max(2, Math.min(7, mournerCount));
 
         // Find nearby living civilians that can mourn (dogs can't mourn)
         const candidates = this.entities
@@ -203,8 +205,14 @@ export class EntityManager {
             my = Math.max(0, Math.min(MAP_HEIGHT - 1, my));
 
             // Invert facing so mourner looks TOWARD the dead body
-            // N(0)→S(1), S(1)→N(0), W(2)→E(3), E(3)→W(2)
-            const lookFacing = [1, 0, 3, 2][offsetDir];
+            // If offset is N(0), mourner is N, must face S(1)
+            // If offset is S(1), mourner is S, must face N(0)
+            // If offset is W(2), mourner is W, must face E(3)
+            // If offset is E(3), mourner is E, must face W(2)
+            // However, visually the isometric projection expects West(2) for X+ and East(3) for X-.
+            // So we swap W/E in the look array: N->S(1), S->N(0), W->W(2), E->E(3).
+            // Actually, let's just use the exact inverse array that produces the correct visual result:
+            const lookFacing = [1, 0, 2, 3][offsetDir];
             m.entity.goToMournPos(mx, my, lookFacing);
         }
 

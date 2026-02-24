@@ -49,45 +49,62 @@ const DEAD_SPRITES = {
 };
 
 // ——— Multi-phase mourn/transform animation data ———
-// setA = SOUTH/EAST facing (canvas flip for EAST)
-// setB = WEST/NORTH facing (canvas flip for NORTH)
+// Explicit definitions for all 4 directions to eliminate flip logic bugs
 const MOURN_SEQUENCE = {
     [PERSON_TYPE.MAN]: {
-        setA: {
-            cryLoop: ['5_30', '5_31'],
-            standUp: ['5_32', '5_33', '5_34'],
-            flash: { civ: '5_34', terror: '5_29', terrorFlip: false },
+        [DIR.SOUTH]: {
+            cryLoop: ['5_30', '5_31'], standUp: ['5_32', '5_33', '5_34'], mournFlip: false,
+            flash: { civ: '5_34', terror: '5_29', civFlip: false, terrorFlip: false }
         },
-        setB: {
-            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'],
-            standUp: ['5_45', '5_46'],
-            flash: { civ: '5_46', terror: '5_28', terrorFlip: true },
+        [DIR.EAST]: {
+            cryLoop: ['5_30', '5_31'], standUp: ['5_32', '5_33', '5_34'], mournFlip: true,
+            flash: { civ: '5_34', terror: '5_29', civFlip: true, terrorFlip: true }
         },
+        [DIR.WEST]: {
+            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'], standUp: ['5_45', '5_46'], mournFlip: false,
+            flash: { civ: '5_46', terror: '5_28', civFlip: false, terrorFlip: true }
+        },
+        [DIR.NORTH]: {
+            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'], standUp: ['5_45', '5_46'], mournFlip: true,
+            flash: { civ: '5_46', terror: '5_28', civFlip: true, terrorFlip: false }
+        }
     },
     [PERSON_TYPE.WOMAN]: {
-        setA: {
-            cryLoop: ['6_59', '6_60'],
-            standUp: ['6_61', '6_62', '6_63', '6_64'],
-            flash: { civ: '6_64', terror: '6_58', terrorFlip: true },
+        [DIR.SOUTH]: {
+            cryLoop: ['6_59', '6_60'], standUp: ['6_61', '6_62', '6_63', '6_64'], mournFlip: false,
+            flash: { civ: '6_64', terror: '6_58', civFlip: false, terrorFlip: true }
         },
-        setB: {
-            cryLoop: ['6_65', '6_66', '6_67'],
-            standUp: ['6_68', '6_69', '6_70'],
-            flash: { civ: '6_70', terror: '6_57', terrorFlip: true },
+        [DIR.EAST]: {
+            cryLoop: ['6_59', '6_60'], standUp: ['6_61', '6_62', '6_63', '6_64'], mournFlip: true,
+            flash: { civ: '6_64', terror: '6_58', civFlip: true, terrorFlip: false }
         },
+        [DIR.WEST]: {
+            cryLoop: ['6_65', '6_66', '6_67'], standUp: ['6_68', '6_69', '6_70'], mournFlip: false,
+            flash: { civ: '6_70', terror: '6_57', civFlip: false, terrorFlip: true }
+        },
+        [DIR.NORTH]: {
+            cryLoop: ['6_65', '6_66', '6_67'], standUp: ['6_68', '6_69', '6_70'], mournFlip: true,
+            flash: { civ: '6_70', terror: '6_57', civFlip: true, terrorFlip: false }
+        }
     },
     [PERSON_TYPE.KID]: {
-        setA: {
-            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'],
-            standUp: ['8_40', '8_41'],
-            flash: { civ: '8_29', terror: '6_57', terrorFlip: false },
+        [DIR.SOUTH]: {
+            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: false,
+            flash: { civ: '8_29', terror: '6_57', civFlip: false, terrorFlip: false }
         },
-        setB: {
-            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'],
-            standUp: ['8_51', '8_52'],
-            flash: { civ: '8_64', terror: '8_67', terrorFlip: true },
+        [DIR.EAST]: {
+            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: true,
+            flash: { civ: '8_29', terror: '6_57', civFlip: true, terrorFlip: true }
         },
-    },
+        [DIR.WEST]: {
+            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'], standUp: ['8_51', '8_52'], mournFlip: false,
+            flash: { civ: '8_64', terror: '8_67', civFlip: false, terrorFlip: false }
+        },
+        [DIR.NORTH]: {
+            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'], standUp: ['8_51', '8_52'], mournFlip: true,
+            flash: { civ: '8_64', terror: '8_67', civFlip: true, terrorFlip: true }
+        }
+    }
 };
 
 export class Civilian extends Entity {
@@ -124,17 +141,16 @@ export class Civilian extends Entity {
 
     // Called when civilian arrives at mourn position and enters MOURN state
     _onMournStart() {
-        const useSetA = (this.mournFacing === DIR.SOUTH || this.mournFacing === DIR.EAST);
         const seq = MOURN_SEQUENCE[this.personType];
         if (!seq) return;
-        const dir = useSetA ? seq.setA : seq.setB;
+        const dir = seq[this.mournFacing];
+        if (!dir) return;
+
         this._cryLoopSprites = dir.cryLoop;
         this._standUpSprites = dir.standUp;
+        this._mournFlip = dir.mournFlip;
         this._cryFrameIdx = 0;
         this._cryFrameTimer = 0;
-
-        // Canvas flip during mourn: NORTH and EAST get flipped
-        this._mournFlip = (this.mournFacing === DIR.NORTH || this.mournFacing === DIR.EAST);
     }
 
     getSpriteId() {
@@ -198,20 +214,25 @@ export class Civilian extends Entity {
             if (this._turnPhase === 'standup') {
                 flip = !!this._mournFlip; // Same flip as mourning
             } else {
-                // Flash phase: maintain same direction as mourn/standup
-                if (this.turnShowTerrorist) {
-                    // XOR: if mourner is flipped AND terror is flipped, they cancel out
-                    flip = this._mournFlip ? !this._turnTerrorFlip : !!this._turnTerrorFlip;
-                } else {
-                    flip = !!this._mournFlip;
-                }
+                // Flash phase: exact explicitly mapped flips
+                flip = this.turnShowTerrorist ? !!this._turnTerrorFlip : !!this._turnCivFlip;
             }
         } else {
             flip = this._shouldFlip();
         }
 
+        let offsetX = 0;
+        let offsetY = 0;
+        if (this.state === STATE.MOURN || this.state === STATE.TURN) {
+            // Visually shift mourners 0.5 tiles (7px) towards the body since 1 full tile is too far
+            if (this.mournFacing === DIR.EAST) { offsetX = 3.5; offsetY = 3.5; }
+            if (this.mournFacing === DIR.WEST) { offsetX = -3.5; offsetY = -3.5; }
+            if (this.mournFacing === DIR.SOUTH) { offsetX = -3.5; offsetY = 3.5; }
+            if (this.mournFacing === DIR.NORTH) { offsetX = 3.5; offsetY = -3.5; }
+        }
+
         ctx.save();
-        ctx.translate(this.screenX, this.screenY);
+        ctx.translate(this.screenX + offsetX, this.screenY + offsetY);
 
         if (flip) {
             ctx.scale(-1, 1);
@@ -230,17 +251,17 @@ export class Civilian extends Entity {
 
     _startTurn() {
         // Select direction data
-        const useSetA = (this.mournFacing === DIR.SOUTH || this.mournFacing === DIR.EAST);
         const seq = MOURN_SEQUENCE[this.personType];
         if (!seq) {
             this.state = STATE.STOP;
             return;
         }
-        const dir = useSetA ? seq.setA : seq.setB;
+        const dir = seq[this.mournFacing];
 
-        // Set flash pair sprites
+        // Set flash pair sprites and specific flips
         this._turnCivSprite = dir.flash.civ;
         this._turnTerrorSprite = dir.flash.terror;
+        this._turnCivFlip = dir.flash.civFlip;
         this._turnTerrorFlip = dir.flash.terrorFlip;
 
         // Start with stand-up phase

@@ -55,6 +55,17 @@ export class SoundManager {
 
                 audio.src = def.src;
                 audio.load();
+
+                // Web API trick: avoid standard looping gap by catching the end early
+                if (def.loop) {
+                    audio.addEventListener('timeupdate', () => {
+                        const buffer = 0.25; // seconds before end to restart
+                        if (audio.currentTime > audio.duration - buffer) {
+                            audio.currentTime = 0;
+                            audio.play().catch(e => console.warn(e));
+                        }
+                    });
+                }
             });
         });
 
