@@ -19,7 +19,7 @@ import {
     EVIL_REGENERATION, MOURN_DISTANCE, DISTANCE_FROM_DEAD,
     WAIT_UNDO_EVIL, UNDO_EVIL_PEOPLE, GENERATION_RATIO,
     RAND_GENERATION_RATIO, PROB_WOMAN, PROB_KID, PROB_DOG,
-    PERSON_TYPE, STATE, SPAWN_MODE, FPS,
+    PERSON_TYPE, STATE, DIR, SPAWN_MODE, FPS,
 } from './constants.js';
 
 export class EntityManager {
@@ -170,19 +170,20 @@ export class EntityManager {
         const mournableDead = killed.filter(e => e.type === 'civilian' || e.type === 'dog');
         if (mournableDead.length === 0) return;
 
-        // Ensure minimum 2 mourners for any death event, max 7 total
-        let mournerCount = mournableDead.length * EVIL_PER_DEATH;
-        mournerCount = Math.max(2, Math.min(7, mournerCount));
+        // Take as many nearby civilians as available, up to 10
+        const mournerCount = 10;
 
         // Find nearby living civilians that can mourn (dogs can't mourn)
-        const candidates = this.entities
-            .filter(e => !e.cantMourn() && e.type === 'civilian')
+        const allCivs = this.entities.filter(e => e.type === 'civilian');
+        const canMournCivs = allCivs.filter(e => !e.cantMourn());
+        const candidates = canMournCivs
             .map(e => ({
                 entity: e,
                 dist: Math.min(...mournableDead.map(d => e.distanceTo(d))),
             }))
             .filter(c => c.dist <= MOURN_DISTANCE)
             .sort((a, b) => a.dist - b.dist);
+
 
         // Assign mourners
         const mourners = candidates.slice(0, mournerCount);
@@ -191,29 +192,32 @@ export class EntityManager {
             const deadTarget = mournableDead[deadIdx % mournableDead.length];
             deadIdx++;
 
-            // Calculate mourn spot: offset from dead body
+            // Calculate mourn spot: offset from dead body (randomly 1 to 2 tiles)
             const offsetDir = Math.floor(Math.random() * 4);
+            const dist = Math.floor(Math.random() * 2) + 1; // 1 or 2
             let mx = deadTarget.tileX;
             let my = deadTarget.tileY;
             switch (offsetDir) {
-                case 0: my -= DISTANCE_FROM_DEAD; break; // position north of body
-                case 1: my += DISTANCE_FROM_DEAD; break; // position south
-                case 2: mx -= DISTANCE_FROM_DEAD; break; // position west
-                case 3: mx += DISTANCE_FROM_DEAD; break; // position east
+                case 0: my -= dist; break; // position north of body
+                case 1: my += dist; break; // position south
+                case 2: mx -= dist; break; // position west
+                case 3: mx += dist; break; // position east
             }
             mx = Math.max(0, Math.min(MAP_WIDTH - 1, mx));
             my = Math.max(0, Math.min(MAP_HEIGHT - 1, my));
 
-            // Invert facing so mourner looks TOWARD the dead body
-            // If offset is N(0), mourner is N, must face S(1)
-            // If offset is S(1), mourner is S, must face N(0)
-            // If offset is W(2), mourner is W, must face E(3)
-            // If offset is E(3), mourner is E, must face W(2)
-            // However, visually the isometric projection expects West(2) for X+ and East(3) for X-.
-            // So we swap W/E in the look array: N->S(1), S->N(0), W->W(2), E->E(3).
-            // Actually, let's just use the exact inverse array that produces the correct visual result:
-            const lookFacing = [1, 0, 2, 3][offsetDir];
-            m.entity.goToMournPos(mx, my, lookFacing);
+            // Calculate facing from mourner position TOWARD the dead body
+            const dx = deadTarget.tileX - mx;
+            const dy = deadTarget.tileY - my;
+            let lookFacing;
+            if (Math.abs(dx) >= Math.abs(dy)) {
+                // Horizontal dominant
+                lookFacing = dx > 0 ? DIR.EAST : DIR.WEST;
+            } else {
+                // Vertical dominant
+                lookFacing = dy > 0 ? DIR.SOUTH : DIR.NORTH;
+            }
+            m.entity.goToMournPos(mx, my, lookFacing, deadTarget);
         }
 
         this._updateCounts();
@@ -294,6 +298,7 @@ export class EntityManager {
             if (entity.shouldRemove) {
                 // Clear the dead body obstacle tile
                 this.deadBodyTiles.delete(`${entity.tileX},${entity.tileY}`);
+                entity.removed = true; // Signal mourners to abort
                 this.entities.splice(i, 1);
             }
         }

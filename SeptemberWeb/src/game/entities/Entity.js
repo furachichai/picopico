@@ -110,12 +110,13 @@ export class Entity {
         this.processGrid(null); // will be called with worldMap in update
     }
 
-    goToMournPos(destX, destY, facing) {
+    goToMournPos(destX, destY, facing, targetEntity) {
         this.goToMourn = true;
         this.changeDest = true;
         this.futDestX = destX;
         this.futDestY = destY;
         this.mournFacing = facing;
+        this.mournTarget = targetEntity;
     }
 
     startUndoEvil() {
@@ -244,12 +245,24 @@ export class Entity {
     }
 
     changeTile(worldMap) {
+        // Abort mourning if the target corpse has vanished or decayed while we were walking
+        if (this.goToMourn && this.mournTarget && this.mournTarget.removed) {
+            this.goToMourn = false;
+            this.mournTarget = null;
+            this.changeDest = false;
+            this.parts = MOVE_PARTS; // restore normal walking speed
+            this.state = STATE.STOP;
+            this.processGrid(worldMap); // pick a new random walking destination
+            return;
+        }
+
         if (this.changeDest) {
             this.changeDest = false;
             this.destX = this.futDestX;
             this.destY = this.futDestY;
             if (!this.undoEvil) {
-                this.parts = Math.max(3, Math.floor(this.parts / 2)); // move faster to mourn
+                // Rush to mourn: move 2x faster than normal walking speed (was 3x)
+                this.parts = Math.max(3, Math.floor(this.parts / 2));
             }
         }
 
@@ -451,6 +464,18 @@ export class Entity {
             // Position update for scrolling
             if (worldMap) this._updateScreenPos(worldMap);
         } else if (this.state !== STATE.TURN) {
+            // Abort mourning if target body decayed while en-route
+            if (this.goToMourn && this.mournTarget && this.mournTarget.removed) {
+                this.goToMourn = false;
+                this.mournTarget = null;
+                this.changeDest = false;
+                this.parts = MOVE_PARTS;
+                this.state = STATE.STOP;
+                this.wait = 0; // trigger processGrid on next tick
+                if (worldMap) this._updateScreenPos(worldMap);
+                this.processGrid(worldMap); // pick a new random destination
+                return;
+            }
             // Walking / avoiding
             if (this.state !== STATE.STOP) {
                 this.move(worldMap);

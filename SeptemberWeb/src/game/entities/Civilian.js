@@ -221,18 +221,8 @@ export class Civilian extends Entity {
             flip = this._shouldFlip();
         }
 
-        let offsetX = 0;
-        let offsetY = 0;
-        if (this.state === STATE.MOURN || this.state === STATE.TURN) {
-            // Visually shift mourners 0.5 tiles (7px) towards the body since 1 full tile is too far
-            if (this.mournFacing === DIR.EAST) { offsetX = 3.5; offsetY = 3.5; }
-            if (this.mournFacing === DIR.WEST) { offsetX = -3.5; offsetY = -3.5; }
-            if (this.mournFacing === DIR.SOUTH) { offsetX = -3.5; offsetY = 3.5; }
-            if (this.mournFacing === DIR.NORTH) { offsetX = 3.5; offsetY = -3.5; }
-        }
-
         ctx.save();
-        ctx.translate(this.screenX + offsetX, this.screenY + offsetY);
+        ctx.translate(this.screenX, this.screenY);
 
         if (flip) {
             ctx.scale(-1, 1);

@@ -45,7 +45,7 @@ export const MOURN_DISTANCE = 15;          // tiles (capture more nearby civilia
 export const DISTANCE_FROM_DEAD = 1;       // tiles offset for mourn spot
 export const WAIT_DEAD = 10;               // seconds before dead body removed
 export const WAIT_RANDOM_DEAD = 2;         // random extra seconds
-export const WAIT_MOURN = 2;               // seconds of mourning
+export const WAIT_MOURN = 4;               // seconds of mourning
 
 // Undo evil (passive terrorist reduction when idle)
 export const WAIT_UNDO_EVIL = 90;          // seconds
