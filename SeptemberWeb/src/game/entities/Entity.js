@@ -110,13 +110,14 @@ export class Entity {
         this.processGrid(null); // will be called with worldMap in update
     }
 
-    goToMournPos(destX, destY, facing, targetEntity) {
+    goToMournPos(destX, destY, facing, targetEntity, mournDeadline) {
         this.goToMourn = true;
         this.changeDest = true;
         this.futDestX = destX;
         this.futDestY = destY;
         this.mournFacing = facing;
         this.mournTarget = targetEntity;
+        this.mournDeadline = mournDeadline || 0; // shared deadline frame
     }
 
     startUndoEvil() {
@@ -260,7 +261,7 @@ export class Entity {
             this.changeDest = false;
             this.destX = this.futDestX;
             this.destY = this.futDestY;
-            if (!this.undoEvil) {
+            if (!this.undoEvil && this.goToMourn && this.type === 'civilian') {
                 // Rush to mourn: move 2x faster than normal walking speed (was 3x)
                 this.parts = Math.max(3, Math.floor(this.parts / 2));
             }
@@ -272,7 +273,17 @@ export class Entity {
                 this.state = STATE.MOURN;
                 this.parts = Math.min(MOVE_PARTS, this.parts * 2);
                 this.setAnim(DIR.CRY_NORTH + this.mournFacing);
-                this.deadWait = WAIT_MOURN * FPS;
+                // Synchronized mourn: use shared deadline if available
+                if (this.mournDeadline > 0) {
+                    // Calculate remaining frames until the shared deadline
+                    // Get current frame from the engine via a simple estimate
+                    const remaining = this.mournDeadline - this._getCurrentFrame();
+                    // Clamp to minimum 1.5s so they at least cry briefly
+                    const minMourn = Math.floor(1.5 * FPS);
+                    this.deadWait = Math.max(minMourn, remaining);
+                } else {
+                    this.deadWait = WAIT_MOURN * FPS;
+                }
                 // Initialize direction-specific cry animation
                 if (typeof this._onMournStart === 'function') {
                     this._onMournStart();
@@ -424,7 +435,10 @@ export class Entity {
 
     // ——— Per-frame update (from 2_6.ls exitFrame) ———
 
-    update(worldMap) {
+    update(worldMap, globalFrame) {
+        // Track global frame for synchronized mourn deadlines
+        this._globalFrame = globalFrame || 0;
+
         if (this.state === STATE.DEAD) {
             // Ensure screen position updates with scroll
             if (worldMap) {
@@ -564,6 +578,10 @@ export class Entity {
     }
 
     // ——— Utility ———
+
+    _getCurrentFrame() {
+        return this._globalFrame || 0;
+    }
 
     distanceTo(other) {
         return Math.abs(this.tileX - other.tileX) + Math.abs(this.tileY - other.tileY);

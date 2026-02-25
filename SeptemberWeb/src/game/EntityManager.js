@@ -19,7 +19,7 @@ import {
     EVIL_REGENERATION, MOURN_DISTANCE, DISTANCE_FROM_DEAD,
     WAIT_UNDO_EVIL, UNDO_EVIL_PEOPLE, GENERATION_RATIO,
     RAND_GENERATION_RATIO, PROB_WOMAN, PROB_KID, PROB_DOG,
-    PERSON_TYPE, STATE, DIR, SPAWN_MODE, FPS,
+    PERSON_TYPE, STATE, DIR, SPAWN_MODE, FPS, WAIT_MOURN,
 } from './constants.js';
 
 export class EntityManager {
@@ -35,6 +35,12 @@ export class EntityManager {
         // Undo evil tracker
         this.undoEvilTimer = WAIT_UNDO_EVIL * FPS;
         this.undoEvilCounter = 0;     // increases each cycle, converting more each time
+
+        // Turn sound cooldown — prevent overlapping sounds from multiple mourners
+        this.turnSoundCooldown = 0;
+
+        // Frame counter for synchronized mourn deadlines
+        this.frameCounter = 0;
 
         // Statistics
         this.civilianCount = 0;
@@ -134,7 +140,7 @@ export class EntityManager {
         for (const entity of this.entities) {
             if (entity.state === STATE.DEAD) continue;
             const dist = entity.distanceToTile(centerX, centerY);
-            if (dist <= 5) { // within blast grid radius
+            if (dist <= 4) { // within blast grid radius (reduced 20% from original 5)
                 entity.die(entity.tileX, entity.tileY, worldMap);
                 killed.push(entity);
 
@@ -170,54 +176,64 @@ export class EntityManager {
         const mournableDead = killed.filter(e => e.type === 'civilian' || e.type === 'dog');
         if (mournableDead.length === 0) return;
 
-        // Take as many nearby civilians as available, up to 10
-        const mournerCount = 10;
+        // Synchronized mourn deadline: all mourners from this blast transform together
+        // Deadline = now + estimated rush time (~3s) + mourn duration
+        const mournDeadline = this.frameCounter + (3 * FPS) + (WAIT_MOURN * FPS);
 
         // Find nearby living civilians that can mourn (dogs can't mourn)
         const allCivs = this.entities.filter(e => e.type === 'civilian');
         const canMournCivs = allCivs.filter(e => !e.cantMourn());
-        const candidates = canMournCivs
+
+        // All civilians within MOURN_DISTANCE of the bomb blast rush to mourn
+        const mourners = canMournCivs
             .map(e => ({
                 entity: e,
-                dist: Math.min(...mournableDead.map(d => e.distanceTo(d))),
+                dist: e.distanceToTile(centerX, centerY),
             }))
             .filter(c => c.dist <= MOURN_DISTANCE)
             .sort((a, b) => a.dist - b.dist);
 
-
-        // Assign mourners
-        const mourners = candidates.slice(0, mournerCount);
-        let deadIdx = 0;
         for (const m of mourners) {
-            const deadTarget = mournableDead[deadIdx % mournableDead.length];
-            deadIdx++;
+            // Assign each mourner to the CLOSEST dead body
+            let closestDead = mournableDead[0];
+            let closestDist = m.entity.distanceTo(mournableDead[0]);
+            for (let i = 1; i < mournableDead.length; i++) {
+                const d = m.entity.distanceTo(mournableDead[i]);
+                if (d < closestDist) {
+                    closestDist = d;
+                    closestDead = mournableDead[i];
+                }
+            }
 
-            // Calculate mourn spot: offset from dead body (randomly 1 to 2 tiles)
+            // Calculate mourn spot: 0-1 tiles from dead body (matches original)
             const offsetDir = Math.floor(Math.random() * 4);
-            const dist = Math.floor(Math.random() * 2) + 1; // 1 or 2
-            let mx = deadTarget.tileX;
-            let my = deadTarget.tileY;
-            switch (offsetDir) {
-                case 0: my -= dist; break; // position north of body
-                case 1: my += dist; break; // position south
-                case 2: mx -= dist; break; // position west
-                case 3: mx += dist; break; // position east
+            const dist = Math.floor(Math.random() * 2); // 0 or 1
+            let mx = closestDead.tileX;
+            let my = closestDead.tileY;
+            if (dist === 1) {
+                switch (offsetDir) {
+                    case 0: my -= 1; break; // north
+                    case 1: my += 1; break; // south
+                    case 2: mx -= 1; break; // west
+                    case 3: mx += 1; break; // east
+                }
             }
             mx = Math.max(0, Math.min(MAP_WIDTH - 1, mx));
             my = Math.max(0, Math.min(MAP_HEIGHT - 1, my));
 
             // Calculate facing from mourner position TOWARD the dead body
-            const dx = deadTarget.tileX - mx;
-            const dy = deadTarget.tileY - my;
+            const dx = closestDead.tileX - mx;
+            const dy = closestDead.tileY - my;
             let lookFacing;
-            if (Math.abs(dx) >= Math.abs(dy)) {
-                // Horizontal dominant
+            if (dist === 0) {
+                // On the same tile — pick a random facing
+                lookFacing = Math.floor(Math.random() * 4);
+            } else if (Math.abs(dx) >= Math.abs(dy)) {
                 lookFacing = dx > 0 ? DIR.EAST : DIR.WEST;
             } else {
-                // Vertical dominant
                 lookFacing = dy > 0 ? DIR.SOUTH : DIR.NORTH;
             }
-            m.entity.goToMournPos(mx, my, lookFacing, deadTarget);
+            m.entity.goToMournPos(mx, my, lookFacing, closestDead, mournDeadline);
         }
 
         this._updateCounts();
@@ -258,8 +274,14 @@ export class EntityManager {
         // Spawn new people
         this._spawn(dt);
 
+        // Increment frame counter for mourn deadline synchronization
+        this.frameCounter++;
+
         // Undo evil timer
         this._updateUndoEvil();
+
+        // Decrement turn sound cooldown
+        if (this.turnSoundCooldown > 0) this.turnSoundCooldown--;
 
         // Track whether turn sound already played this frame
         let turnSoundPlayed = false;
@@ -268,14 +290,15 @@ export class EntityManager {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             const entity = this.entities[i];
 
-            entity.update(worldMap);
+            entity.update(worldMap, this.frameCounter);
 
             // Check for turn started (play turn sound once per group)
             if (entity._turnStartedCallback) {
                 entity._turnStartedCallback = false;
-                if (!turnSoundPlayed && this.engine.soundManager) {
+                if (!turnSoundPlayed && this.turnSoundCooldown <= 0 && this.engine.soundManager) {
                     this.engine.soundManager.playTurn();
                     turnSoundPlayed = true;
+                    this.turnSoundCooldown = 2 * FPS; // 2 second cooldown
                 }
             }
 
@@ -312,6 +335,8 @@ export class EntityManager {
         t.prevPersonType = civilian.personType;
         t.wasConverted = true;
         t.state = STATE.STOP;
+        t.stateGoto = civilian.mournFacing !== undefined ? civilian.mournFacing : civilian.stateGoto;
+        t.setAnim(t.stateGoto);
         this.entities[index] = t;
     }
 
@@ -320,6 +345,8 @@ export class EntityManager {
         const prevType = terrorist.prevPersonType || PERSON_TYPE.MAN;
         const c = new Civilian(terrorist.tileX, terrorist.tileY, worldMap, prevType);
         c.state = STATE.STOP;
+        c.stateGoto = terrorist.stateGoto;
+        c.setAnim(c.stateGoto);
         this.entities[index] = c;
     }
 

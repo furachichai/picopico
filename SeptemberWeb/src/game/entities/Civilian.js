@@ -90,11 +90,11 @@ const MOURN_SEQUENCE = {
     [PERSON_TYPE.KID]: {
         [DIR.SOUTH]: {
             cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: false,
-            flash: { civ: '8_29', terror: '6_57', civFlip: false, terrorFlip: false }
+            flash: { civ: '8_29', terror: '8_28', civFlip: false, terrorFlip: false }
         },
         [DIR.EAST]: {
             cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: true,
-            flash: { civ: '8_29', terror: '6_57', civFlip: true, terrorFlip: true }
+            flash: { civ: '8_29', terror: '8_28', civFlip: true, terrorFlip: true }
         },
         [DIR.WEST]: {
             cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'], standUp: ['8_51', '8_52'], mournFlip: false,
