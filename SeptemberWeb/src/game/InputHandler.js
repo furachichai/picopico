@@ -221,9 +221,7 @@ export class InputHandler {
     _onTouchEnd(e) {
         e.preventDefault();
 
-        // Stop panning: reset cursor to center so scrolling stops
-        this.mouseX = SCREEN_W / 2;
-        this.mouseY = SCREEN_H / 2;
+        // Stop panning: mark finger as lifted so scrolling stops
         this.isOverCanvas = false;
 
         // Only fire if: (1) it was a tap, (2) game was already PLAYING at touch start
@@ -261,6 +259,9 @@ export class InputHandler {
     // ——— Scrolling (from 2_1.ls ScrollScreen) ———
 
     updateScroll() {
+        // Don't scroll if touch finger was lifted
+        if (this.isTouch && !this.isOverCanvas) return;
+
         const worldMap = this.engine.worldMap;
 
         if (this.mouseX < SCROLL_HORIZ) {
