@@ -29,7 +29,15 @@ export class InputHandler {
         this._boundMouseLeave = this._onMouseLeave.bind(this);
         this._boundTouchStart = this._onTouchStart.bind(this);
         this._boundTouchMove = this._onTouchMove.bind(this);
+        this._boundTouchEnd = this._onTouchEnd.bind(this);
         this._boundKeyDown = this._onKeyDown.bind(this);
+
+        // Touch detection: distinguish tap from drag
+        this.isTouch = false;         // True once a touch event is detected
+        this._touchStartX = 0;
+        this._touchStartY = 0;
+        this._touchMoved = false;     // Set to true if finger moved > threshold
+        this._tapThreshold = 10;      // Pixels — movement below this = tap
     }
 
     attach(canvas) {
@@ -40,6 +48,7 @@ export class InputHandler {
         canvas.addEventListener('mouseleave', this._boundMouseLeave);
         canvas.addEventListener('touchstart', this._boundTouchStart, { passive: false });
         canvas.addEventListener('touchmove', this._boundTouchMove, { passive: false });
+        canvas.addEventListener('touchend', this._boundTouchEnd, { passive: false });
         document.addEventListener('keydown', this._boundKeyDown);
 
         // Hide system cursor over canvas
@@ -54,6 +63,7 @@ export class InputHandler {
             this.canvas.removeEventListener('mouseleave', this._boundMouseLeave);
             this.canvas.removeEventListener('touchstart', this._boundTouchStart);
             this.canvas.removeEventListener('touchmove', this._boundTouchMove);
+            this.canvas.removeEventListener('touchend', this._boundTouchEnd);
             this.canvas.style.cursor = '';
         }
         document.removeEventListener('keydown', this._boundKeyDown);
@@ -175,12 +185,17 @@ export class InputHandler {
 
     _onTouchStart(e) {
         e.preventDefault();
+        this.isTouch = true; // Mark as touchscreen user
         if (e.touches.length > 0) {
             const pos = this._getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
             this.mouseX = pos.x;
             this.mouseY = pos.y;
             this.isOverCanvas = true;
-            this._fire();
+
+            // Record start position for tap detection
+            this._touchStartX = e.touches[0].clientX;
+            this._touchStartY = e.touches[0].clientY;
+            this._touchMoved = false;
         }
     }
 
@@ -190,6 +205,23 @@ export class InputHandler {
             const pos = this._getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
             this.mouseX = pos.x;
             this.mouseY = pos.y;
+
+            // Check if finger moved beyond tap threshold
+            const dx = e.touches[0].clientX - this._touchStartX;
+            const dy = e.touches[0].clientY - this._touchStartY;
+            if (Math.sqrt(dx * dx + dy * dy) > this._tapThreshold) {
+                this._touchMoved = true;
+            }
+        }
+    }
+
+    _onTouchEnd(e) {
+        e.preventDefault();
+        // Only fire if the touch was a tap (not a drag/scroll)
+        if (!this._touchMoved) {
+            // Don't fire when placement tool is active
+            if (this.engine.placementTool && this.engine.placementTool.active) return;
+            this._fire();
         }
     }
 

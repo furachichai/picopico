@@ -61,12 +61,25 @@ export class GameEngine {
     // Disable image smoothing for pixel-art crispness
     this.ctx.imageSmoothingEnabled = false;
 
-    // Show loading state
+    // Show loading state with animated render loop
     this.state = GAME_STATE.LOADING;
-    this._renderLoading();
+    this._loadingAnimId = null;
+    const animateLoading = () => {
+      if (this.state === GAME_STATE.LOADING) {
+        this._renderLoading();
+        this._loadingAnimId = requestAnimationFrame(animateLoading);
+      }
+    };
+    animateLoading();
 
     // Load assets
     await this.assetManager.loadAll();
+
+    // Stop loading animation loop
+    if (this._loadingAnimId) {
+      cancelAnimationFrame(this._loadingAnimId);
+      this._loadingAnimId = null;
+    }
 
     // Load sounds (non-blocking, failures are OK)
     await this.soundManager.init().catch(e => console.warn('Sound init failed:', e));
@@ -216,27 +229,31 @@ export class GameEngine {
 
   _renderLoading() {
     const ctx = this.ctx;
-    // Fallback white screen while loading graphic itself fetches
+    // White background
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, SCREEN_W, SCREEN_H);
-    ctx.fillStyle = '#000';
-    ctx.font = '20px Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Loading...', SCREEN_W / 2, SCREEN_H / 2);
 
-    // Fetch and draw the loading screen graphic immediately
+    // Fetch the loading screen graphic
     if (!this._loadingImg) {
       this._loadingImg = new Image();
-      this._loadingImg.onload = () => {
-        // Double check state in case loading finished instantly
-        if (this.state === GAME_STATE.LOADING) {
-          ctx.drawImage(this._loadingImg, 0, 0, SCREEN_W, SCREEN_H);
-        }
-      };
       this._loadingImg.src = '/sept12 for vibe/Sept12assets/sep12/loading_01.png';
-    } else if (this._loadingImg.complete) {
+    }
+
+    // Draw the loading image if ready
+    if (this._loadingImg.complete && this._loadingImg.naturalWidth > 0) {
       ctx.drawImage(this._loadingImg, 0, 0, SCREEN_W, SCREEN_H);
     }
+
+    // Animated "LOADING..." text below the logo
+    const dotCount = Math.floor((performance.now() / 400) % 4); // 0, 1, 2, 3 dots cycling
+    const dots = '.'.repeat(dotCount);
+
+    ctx.fillStyle = '#999';
+    ctx.font = 'bold 14px Arial, sans-serif';
+    ctx.textAlign = 'left';
+    const loadingWidth = ctx.measureText('LOADING').width;
+    const startX = (SCREEN_W - loadingWidth) / 2;
+    ctx.fillText('LOADING' + dots, startX, SCREEN_H / 2 + 80);
   }
 
   _renderTitle() {
