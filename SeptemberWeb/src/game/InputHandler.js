@@ -196,6 +196,9 @@ export class InputHandler {
             this._touchStartX = e.touches[0].clientX;
             this._touchStartY = e.touches[0].clientY;
             this._touchMoved = false;
+
+            // Record game state at touch start — only fire if already PLAYING
+            this._touchStartState = this.engine.state;
         }
     }
 
@@ -217,8 +220,14 @@ export class InputHandler {
 
     _onTouchEnd(e) {
         e.preventDefault();
-        // Only fire if the touch was a tap (not a drag/scroll)
-        if (!this._touchMoved) {
+
+        // Stop panning: reset cursor to center so scrolling stops
+        this.mouseX = SCREEN_W / 2;
+        this.mouseY = SCREEN_H / 2;
+        this.isOverCanvas = false;
+
+        // Only fire if: (1) it was a tap, (2) game was already PLAYING at touch start
+        if (!this._touchMoved && this._touchStartState === GAME_STATE.PLAYING) {
             // Don't fire when placement tool is active
             if (this.engine.placementTool && this.engine.placementTool.active) return;
             this._fire();
