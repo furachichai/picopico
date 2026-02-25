@@ -9,15 +9,15 @@
 import { Entity } from './Entity.js';
 import { STATE, DIR, PERSON_TYPE } from '../constants.js';
 
-// Dog walk sprites: 8 frames per direction (N, S, W, E)
+// Dog walk sprites: direction-prefixed, 8 frames per direction (N, S, W, E)
 const WALK_SPRITES = [
-    '9_9', '9_10', '9_11', '9_12', '9_13', '9_14', '9_15', '9_16', // North — set B flipped
-    '9_1', '9_2', '9_3', '9_4', '9_5', '9_6', '9_7', '9_8',       // South — set A unflipped
-    '9_9', '9_10', '9_11', '9_12', '9_13', '9_14', '9_15', '9_16', // West — set B unflipped
-    '9_1', '9_2', '9_3', '9_4', '9_5', '9_6', '9_7', '9_8',       // East — set A flipped
+    'n_dog_walk_0', 'n_dog_walk_1', 'n_dog_walk_2', 'n_dog_walk_3', 'n_dog_walk_4', 'n_dog_walk_5', 'n_dog_walk_6', 'n_dog_walk_7', // North
+    's_dog_walk_0', 's_dog_walk_1', 's_dog_walk_2', 's_dog_walk_3', 's_dog_walk_4', 's_dog_walk_5', 's_dog_walk_6', 's_dog_walk_7', // South
+    'w_dog_walk_0', 'w_dog_walk_1', 'w_dog_walk_2', 'w_dog_walk_3', 'w_dog_walk_4', 'w_dog_walk_5', 'w_dog_walk_6', 'w_dog_walk_7', // West
+    'e_dog_walk_0', 'e_dog_walk_1', 'e_dog_walk_2', 'e_dog_walk_3', 'e_dog_walk_4', 'e_dog_walk_5', 'e_dog_walk_6', 'e_dog_walk_7', // East
 ];
 
-const DEAD_SPRITES = ['9_17', '9_18'];
+const DEAD_SPRITES = ['dead_dog_0', 'dead_dog_1'];
 
 export class Dog extends Entity {
     constructor(tileX, tileY, worldMap) {
@@ -45,7 +45,8 @@ export class Dog extends Entity {
     }
 
     _shouldFlip() {
-        return this.stateGoto === DIR.NORTH || this.stateGoto === DIR.EAST;
+        // All sprites are pre-flipped — no software flipping needed
+        return false;
     }
 
     _drawCharacter(ctx, assetManager) {
@@ -54,17 +55,7 @@ export class Dog extends Entity {
         const spriteId = this.getSpriteId();
         if (!spriteId) return;
 
-        ctx.save();
-        ctx.translate(this.screenX, this.screenY);
-
-        // Use locked flip state for dead entities to prevent twerking
-        const flip = this.state === STATE.DEAD ? !!this._deadFlip : this._shouldFlip();
-        if (flip) {
-            ctx.scale(-1, 1);
-        }
-
-        assetManager.drawSprite(ctx, spriteId, 0, 0);
-
-        ctx.restore();
+        // No flip logic needed — all sprites are direction-prefixed and pre-flipped
+        assetManager.drawSprite(ctx, spriteId, this.screenX, this.screenY);
     }
 }

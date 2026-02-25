@@ -13,15 +13,15 @@
 import { Entity } from './Entity.js';
 import { STATE, DIR, PERSON_TYPE } from '../constants.js';
 
-// Evil walk sprites: 8 frames per direction (from Cast 4)
+// Evil walk sprites: direction-prefixed, 8 frames per direction (from Cast 4)
 const WALK_SPRITES = [
-    '4_25', '4_26', '4_27', '4_28', '4_29', '4_30', '4_31', '4_32', // North — set B flipped
-    '4_17', '4_18', '4_19', '4_20', '4_21', '4_22', '4_23', '4_24', // South — set A unflipped
-    '4_25', '4_26', '4_27', '4_28', '4_29', '4_30', '4_31', '4_32', // West — set B unflipped
-    '4_17', '4_18', '4_19', '4_20', '4_21', '4_22', '4_23', '4_24', // East — set A flipped
+    'n_terror_walk_0', 'n_terror_walk_1', 'n_terror_walk_2', 'n_terror_walk_3', 'n_terror_walk_4', 'n_terror_walk_5', 'n_terror_walk_6', 'n_terror_walk_7', // North
+    's_terror_walk_0', 's_terror_walk_1', 's_terror_walk_2', 's_terror_walk_3', 's_terror_walk_4', 's_terror_walk_5', 's_terror_walk_6', 's_terror_walk_7', // South
+    'w_terror_walk_0', 'w_terror_walk_1', 'w_terror_walk_2', 'w_terror_walk_3', 'w_terror_walk_4', 'w_terror_walk_5', 'w_terror_walk_6', 'w_terror_walk_7', // West
+    'e_terror_walk_0', 'e_terror_walk_1', 'e_terror_walk_2', 'e_terror_walk_3', 'e_terror_walk_4', 'e_terror_walk_5', 'e_terror_walk_6', 'e_terror_walk_7', // East
 ];
 
-const DEAD_SPRITES = ['4_33', '4_34'];
+const DEAD_SPRITES = ['dead_terror_0', 'dead_terror_1'];
 
 export class Terrorist extends Entity {
     constructor(tileX, tileY, worldMap) {
@@ -52,7 +52,8 @@ export class Terrorist extends Entity {
     }
 
     _shouldFlip() {
-        return this.stateGoto === DIR.NORTH || this.stateGoto === DIR.EAST;
+        // All sprites are pre-flipped — no software flipping needed
+        return false;
     }
 
     _drawCharacter(ctx, assetManager) {
@@ -61,18 +62,8 @@ export class Terrorist extends Entity {
         const spriteId = this.getSpriteId();
         if (!spriteId) return;
 
-        ctx.save();
-        ctx.translate(this.screenX, this.screenY);
-
-        // Use locked flip state for dead entities to prevent twerking
-        const flip = this.state === STATE.DEAD ? !!this._deadFlip : this._shouldFlip();
-        if (flip) {
-            ctx.scale(-1, 1);
-        }
-
-        assetManager.drawSprite(ctx, spriteId, 0, 0);
-
-        ctx.restore();
+        // No flip logic needed — all sprites are direction-prefixed and pre-flipped
+        assetManager.drawSprite(ctx, spriteId, this.screenX, this.screenY);
     }
 
     _onUndoEvil() {

@@ -17,92 +17,98 @@ const ANIM_INFO = {
     [PERSON_TYPE.MAN]: { crystart: 33, crylength: 20, turnstart: 113, turnlength: 31, deathstart: 237 },
 };
 
-// ——— Sprite ID mappings ———
+// ——— Direction-prefixed sprite ID mappings (no software flipping needed) ———
 const WALK_SPRITES = {
-    // Set A = SOUTH unflipped / EAST flipped
-    // Set B = WEST unflipped / NORTH flipped
     [PERSON_TYPE.MAN]: [
-        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // North — set B flipped
-        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // South — set A unflipped
-        '5_20', '5_21', '5_22', '5_23', '5_24', '5_25', '5_26', '5_27', // West — set B unflipped
-        '5_12', '5_13', '5_14', '5_15', '5_16', '5_17', '5_18', '5_19', // East — set A flipped
+        'n_man_walk_0', 'n_man_walk_1', 'n_man_walk_2', 'n_man_walk_3', 'n_man_walk_4', 'n_man_walk_5', 'n_man_walk_6', 'n_man_walk_7', // North
+        's_man_walk_0', 's_man_walk_1', 's_man_walk_2', 's_man_walk_3', 's_man_walk_4', 's_man_walk_5', 's_man_walk_6', 's_man_walk_7', // South
+        'w_man_walk_0', 'w_man_walk_1', 'w_man_walk_2', 'w_man_walk_3', 'w_man_walk_4', 'w_man_walk_5', 'w_man_walk_6', 'w_man_walk_7', // West
+        'e_man_walk_0', 'e_man_walk_1', 'e_man_walk_2', 'e_man_walk_3', 'e_man_walk_4', 'e_man_walk_5', 'e_man_walk_6', 'e_man_walk_7', // East
     ],
     [PERSON_TYPE.WOMAN]: [
-        '6_49', '6_50', '6_51', '6_52', '6_53', '6_54', '6_55', '6_56', // North — set B flipped
-        '6_41', '6_42', '6_43', '6_44', '6_45', '6_46', '6_47', '6_48', // South — set A unflipped
-        '6_49', '6_50', '6_51', '6_52', '6_53', '6_54', '6_55', '6_56', // West — set B unflipped
-        '6_41', '6_42', '6_43', '6_44', '6_45', '6_46', '6_47', '6_48', // East — set A flipped
+        'n_woman_walk_0', 'n_woman_walk_1', 'n_woman_walk_2', 'n_woman_walk_3', 'n_woman_walk_4', 'n_woman_walk_5', 'n_woman_walk_6', 'n_woman_walk_7',
+        's_woman_walk_0', 's_woman_walk_1', 's_woman_walk_2', 's_woman_walk_3', 's_woman_walk_4', 's_woman_walk_5', 's_woman_walk_6', 's_woman_walk_7',
+        'w_woman_walk_0', 'w_woman_walk_1', 'w_woman_walk_2', 'w_woman_walk_3', 'w_woman_walk_4', 'w_woman_walk_5', 'w_woman_walk_6', 'w_woman_walk_7',
+        'e_woman_walk_0', 'e_woman_walk_1', 'e_woman_walk_2', 'e_woman_walk_3', 'e_woman_walk_4', 'e_woman_walk_5', 'e_woman_walk_6', 'e_woman_walk_7',
     ],
     [PERSON_TYPE.KID]: [
-        '8_9', '8_10', '8_11', '8_12', '8_13', '8_14', '8_15', '8_16', // North — set B flipped
-        '8_1', '8_2', '8_3', '8_4', '8_5', '8_6', '8_7', '8_8',       // South — set A unflipped
-        '8_9', '8_10', '8_11', '8_12', '8_13', '8_14', '8_15', '8_16', // West — set B unflipped
-        '8_1', '8_2', '8_3', '8_4', '8_5', '8_6', '8_7', '8_8',       // East — set A flipped
+        'n_kid_walk_0', 'n_kid_walk_1', 'n_kid_walk_2', 'n_kid_walk_3', 'n_kid_walk_4', 'n_kid_walk_5', 'n_kid_walk_6', 'n_kid_walk_7',
+        's_kid_walk_0', 's_kid_walk_1', 's_kid_walk_2', 's_kid_walk_3', 's_kid_walk_4', 's_kid_walk_5', 's_kid_walk_6', 's_kid_walk_7',
+        'w_kid_walk_0', 'w_kid_walk_1', 'w_kid_walk_2', 'w_kid_walk_3', 'w_kid_walk_4', 'w_kid_walk_5', 'w_kid_walk_6', 'w_kid_walk_7',
+        'e_kid_walk_0', 'e_kid_walk_1', 'e_kid_walk_2', 'e_kid_walk_3', 'e_kid_walk_4', 'e_kid_walk_5', 'e_kid_walk_6', 'e_kid_walk_7',
     ],
 };
 
-// Death sprites
+// Death sprites (direction-independent)
 const DEAD_SPRITES = {
-    [PERSON_TYPE.MAN]: ['5_47', '5_48', '5_47', '5_48'],
-    [PERSON_TYPE.WOMAN]: ['6_71', '6_72', '6_71', '6_72'],
-    [PERSON_TYPE.KID]: ['8_17', '8_18', '8_17', '8_18'],
+    [PERSON_TYPE.MAN]: ['dead_man_0', 'dead_man_1', 'dead_man_0', 'dead_man_1'],
+    [PERSON_TYPE.WOMAN]: ['dead_woman_0', 'dead_woman_1', 'dead_woman_0', 'dead_woman_1'],
+    [PERSON_TYPE.KID]: ['dead_kid_0', 'dead_kid_1', 'dead_kid_0', 'dead_kid_1'],
 };
 
 // ——— Multi-phase mourn/transform animation data ———
-// Explicit definitions for all 4 directions to eliminate flip logic bugs
+// All sprites are direction-prefixed — NO software flipping needed
 const MOURN_SEQUENCE = {
     [PERSON_TYPE.MAN]: {
         [DIR.SOUTH]: {
-            cryLoop: ['5_30', '5_31'], standUp: ['5_32', '5_33', '5_34'], mournFlip: false,
-            flash: { civ: '5_34', terror: '5_29', civFlip: false, terrorFlip: false }
+            cryLoop: ['s_man_cry_0', 's_man_cry_1'], standUp: ['s_man_standup_0', 's_man_standup_1', 's_man_standup_2'],
+            flash: { civ: 's_man_flash_civ', terror: 's_man_flash_terror' }
         },
         [DIR.EAST]: {
-            cryLoop: ['5_30', '5_31'], standUp: ['5_32', '5_33', '5_34'], mournFlip: true,
-            flash: { civ: '5_34', terror: '5_29', civFlip: true, terrorFlip: true }
+            cryLoop: ['e_man_cry_0', 'e_man_cry_1'], standUp: ['e_man_standup_0', 'e_man_standup_1', 'e_man_standup_2'],
+            flash: { civ: 'e_man_flash_civ', terror: 'e_man_flash_terror' }
         },
         [DIR.WEST]: {
-            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'], standUp: ['5_45', '5_46'], mournFlip: false,
-            flash: { civ: '5_46', terror: '5_28', civFlip: false, terrorFlip: true }
+            cryLoop: ['w_man_cry_0', 'w_man_cry_1', 'w_man_cry_2', 'w_man_cry_3', 'w_man_cry_4', 'w_man_cry_5', 'w_man_cry_6', 'w_man_cry_7', 'w_man_cry_8', 'w_man_cry_9'],
+            standUp: ['w_man_standup_0', 'w_man_standup_1'],
+            flash: { civ: 'w_man_flash_civ', terror: 'w_man_flash_terror' }
         },
         [DIR.NORTH]: {
-            cryLoop: ['5_35', '5_36', '5_37', '5_38', '5_39', '5_40', '5_41', '5_42', '5_43', '5_44'], standUp: ['5_45', '5_46'], mournFlip: true,
-            flash: { civ: '5_46', terror: '5_28', civFlip: true, terrorFlip: false }
+            cryLoop: ['n_man_cry_0', 'n_man_cry_1', 'n_man_cry_2', 'n_man_cry_3', 'n_man_cry_4', 'n_man_cry_5', 'n_man_cry_6', 'n_man_cry_7', 'n_man_cry_8', 'n_man_cry_9'],
+            standUp: ['n_man_standup_0', 'n_man_standup_1'],
+            flash: { civ: 'n_man_flash_civ', terror: 'n_man_flash_terror' }
         }
     },
     [PERSON_TYPE.WOMAN]: {
         [DIR.SOUTH]: {
-            cryLoop: ['6_59', '6_60'], standUp: ['6_61', '6_62', '6_63', '6_64'], mournFlip: false,
-            flash: { civ: '6_64', terror: '6_58', civFlip: false, terrorFlip: true }
+            cryLoop: ['s_woman_cry_0', 's_woman_cry_1'], standUp: ['s_woman_standup_0', 's_woman_standup_1', 's_woman_standup_2', 's_woman_standup_3'],
+            flash: { civ: 's_woman_flash_civ', terror: 's_woman_flash_terror' }
         },
         [DIR.EAST]: {
-            cryLoop: ['6_59', '6_60'], standUp: ['6_61', '6_62', '6_63', '6_64'], mournFlip: true,
-            flash: { civ: '6_64', terror: '6_58', civFlip: true, terrorFlip: false }
+            cryLoop: ['e_woman_cry_0', 'e_woman_cry_1'], standUp: ['e_woman_standup_0', 'e_woman_standup_1', 'e_woman_standup_2', 'e_woman_standup_3'],
+            flash: { civ: 'e_woman_flash_civ', terror: 'e_woman_flash_terror' }
         },
         [DIR.WEST]: {
-            cryLoop: ['6_65', '6_66', '6_67'], standUp: ['6_68', '6_69', '6_70'], mournFlip: false,
-            flash: { civ: '6_70', terror: '6_57', civFlip: false, terrorFlip: true }
+            cryLoop: ['w_woman_cry_0', 'w_woman_cry_1', 'w_woman_cry_2'],
+            standUp: ['w_woman_standup_0', 'w_woman_standup_1', 'w_woman_standup_2'],
+            flash: { civ: 'w_woman_flash_civ', terror: 'w_woman_flash_terror' }
         },
         [DIR.NORTH]: {
-            cryLoop: ['6_65', '6_66', '6_67'], standUp: ['6_68', '6_69', '6_70'], mournFlip: true,
-            flash: { civ: '6_70', terror: '6_57', civFlip: true, terrorFlip: false }
+            cryLoop: ['n_woman_cry_0', 'n_woman_cry_1', 'n_woman_cry_2'],
+            standUp: ['n_woman_standup_0', 'n_woman_standup_1', 'n_woman_standup_2'],
+            flash: { civ: 'n_woman_flash_civ', terror: 'n_woman_flash_terror' }
         }
     },
     [PERSON_TYPE.KID]: {
         [DIR.SOUTH]: {
-            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: false,
-            flash: { civ: '8_29', terror: '8_28', civFlip: false, terrorFlip: false }
+            cryLoop: ['s_kid_cry_0', 's_kid_cry_1', 's_kid_cry_2', 's_kid_cry_3', 's_kid_cry_4', 's_kid_cry_5', 's_kid_cry_6', 's_kid_cry_7', 's_kid_cry_8', 's_kid_cry_9'],
+            standUp: ['s_kid_standup_0', 's_kid_standup_1'],
+            flash: { civ: 's_kid_flash_civ', terror: 's_kid_flash_terror' }
         },
         [DIR.EAST]: {
-            cryLoop: ['8_30', '8_31', '8_32', '8_33', '8_34', '8_35', '8_36', '8_37', '8_38', '8_39'], standUp: ['8_40', '8_41'], mournFlip: true,
-            flash: { civ: '8_29', terror: '8_28', civFlip: true, terrorFlip: true }
+            cryLoop: ['e_kid_cry_0', 'e_kid_cry_1', 'e_kid_cry_2', 'e_kid_cry_3', 'e_kid_cry_4', 'e_kid_cry_5', 'e_kid_cry_6', 'e_kid_cry_7', 'e_kid_cry_8', 'e_kid_cry_9'],
+            standUp: ['e_kid_standup_0', 'e_kid_standup_1'],
+            flash: { civ: 'e_kid_flash_civ', terror: 'e_kid_flash_terror' }
         },
         [DIR.WEST]: {
-            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'], standUp: ['8_51', '8_52'], mournFlip: false,
-            flash: { civ: '8_64', terror: '8_67', civFlip: false, terrorFlip: false }
+            cryLoop: ['w_kid_cry_0', 'w_kid_cry_1', 'w_kid_cry_2', 'w_kid_cry_3', 'w_kid_cry_4', 'w_kid_cry_5', 'w_kid_cry_6', 'w_kid_cry_7', 'w_kid_cry_8'],
+            standUp: ['w_kid_standup_0', 'w_kid_standup_1'],
+            flash: { civ: 'w_kid_flash_civ', terror: 'w_kid_flash_terror' }
         },
         [DIR.NORTH]: {
-            cryLoop: ['8_42', '8_43', '8_44', '8_45', '8_46', '8_47', '8_48', '8_49', '8_50'], standUp: ['8_51', '8_52'], mournFlip: true,
-            flash: { civ: '8_64', terror: '8_67', civFlip: true, terrorFlip: true }
+            cryLoop: ['n_kid_cry_0', 'n_kid_cry_1', 'n_kid_cry_2', 'n_kid_cry_3', 'n_kid_cry_4', 'n_kid_cry_5', 'n_kid_cry_6', 'n_kid_cry_7', 'n_kid_cry_8'],
+            standUp: ['n_kid_standup_0', 'n_kid_standup_1'],
+            flash: { civ: 'n_kid_flash_civ', terror: 'n_kid_flash_terror' }
         }
     }
 };
@@ -131,7 +137,6 @@ export class Civilian extends Entity {
         this._standUpTimer = 0;
         this._turnCivSprite = null;
         this._turnTerrorSprite = null;
-        this._turnTerrorFlip = false;
         this.turnFlashTimer = 0;
         this.turnFlashCount = 0;
         this.turnFlashMax = 6;        // 3 full loops
@@ -148,7 +153,6 @@ export class Civilian extends Entity {
 
         this._cryLoopSprites = dir.cryLoop;
         this._standUpSprites = dir.standUp;
-        this._mournFlip = dir.mournFlip;
         this._cryFrameIdx = 0;
         this._cryFrameTimer = 0;
     }
@@ -195,8 +199,8 @@ export class Civilian extends Entity {
     }
 
     _shouldFlip() {
-        // North = West sprite flipped, East = South sprite flipped
-        return this.stateGoto === DIR.NORTH || this.stateGoto === DIR.EAST;
+        // All sprites are pre-flipped — no software flipping needed
+        return false;
     }
 
     _drawCharacter(ctx, assetManager) {
@@ -205,32 +209,8 @@ export class Civilian extends Entity {
         const spriteId = this.getSpriteId();
         if (!spriteId) return;
 
-        let flip;
-        if (this.state === STATE.DEAD) {
-            flip = !!this._deadFlip;
-        } else if (this.state === STATE.MOURN) {
-            flip = !!this._mournFlip;
-        } else if (this.state === STATE.TURN) {
-            if (this._turnPhase === 'standup') {
-                flip = !!this._mournFlip; // Same flip as mourning
-            } else {
-                // Flash phase: exact explicitly mapped flips
-                flip = this.turnShowTerrorist ? !!this._turnTerrorFlip : !!this._turnCivFlip;
-            }
-        } else {
-            flip = this._shouldFlip();
-        }
-
-        ctx.save();
-        ctx.translate(this.screenX, this.screenY);
-
-        if (flip) {
-            ctx.scale(-1, 1);
-        }
-
-        assetManager.drawSprite(ctx, spriteId, 0, 0);
-
-        ctx.restore();
+        // No flip logic needed — all sprites are direction-prefixed and pre-flipped
+        assetManager.drawSprite(ctx, spriteId, this.screenX, this.screenY);
     }
 
     _onTurnComplete() {
@@ -248,11 +228,9 @@ export class Civilian extends Entity {
         }
         const dir = seq[this.mournFacing];
 
-        // Set flash pair sprites and specific flips
+        // Set flash pair sprites (no flips needed — pre-baked)
         this._turnCivSprite = dir.flash.civ;
         this._turnTerrorSprite = dir.flash.terror;
-        this._turnCivFlip = dir.flash.civFlip;
-        this._turnTerrorFlip = dir.flash.terrorFlip;
 
         // Start with stand-up phase
         this._turnPhase = 'standup';
