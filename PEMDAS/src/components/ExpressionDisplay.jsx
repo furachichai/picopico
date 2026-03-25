@@ -87,12 +87,15 @@ function ArrowCanvas({ visible, leftOffset, arrowWidth }) {
       ctx.fillStyle = 'rgba(139, 92, 246, 0.9)';
       ctx.fill();
 
-      // Glow
+      // Glow for the arrow head itself instead of a circle
       ctx.shadowColor = '#8b5cf6';
       ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.arc(tipX, yMid, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#8b5cf6';
+      ctx.moveTo(tipX, yMid);
+      ctx.lineTo(tipX - 6, yMid - 4);
+      ctx.lineTo(tipX - 6, yMid + 4);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.9)'; // Use the same color as the arrowhead
       ctx.fill();
       ctx.shadowBlur = 0;
 
@@ -112,8 +115,7 @@ function ArrowCanvas({ visible, leftOffset, arrowWidth }) {
       style={{
         position: 'absolute',
         left: `${leftOffset || 0}px`,
-        top: '100%',
-        marginTop: '6px',
+        bottom: '2px',
         width: `${arrowWidth || 100}px`,
         height: '24px',
         display: 'block',
@@ -262,14 +264,14 @@ export default function ExpressionDisplay({
           <AnimatePresence mode="popLayout">
             {tokenElements}
           </AnimatePresence>
-        </div>
 
-        {/* Canvas-drawn animated arrow — positioned under the scoped tokens */}
-        <ArrowCanvas
-          visible={showArrow}
-          leftOffset={arrowPos.left}
-          arrowWidth={arrowPos.width}
-        />
+          {/* Canvas-drawn animated arrow — positioned under the scoped tokens */}
+          <ArrowCanvas
+            visible={showArrow}
+            leftOffset={arrowPos.left}
+            arrowWidth={arrowPos.width}
+          />
+        </div>
       </motion.div>
     </div>
   );
