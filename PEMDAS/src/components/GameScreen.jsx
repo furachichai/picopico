@@ -10,14 +10,13 @@ import {
   validateOperation,
   replaceNodeWithResult,
   isFullySimplified,
-  shouldShowArrow,
   findNodeById,
   getOperationTokenIds,
   getWrongFlashTargets,
   astToString,
 } from '../game/ExpressionEngine';
 import { KEY_TO_OPERATION } from '../game/locales';
-import { getExpressionForLevel, getTotalLevels } from '../game/LevelGenerator';
+import { getExpressionForLevel, getTestExpression, getTotalLevels } from '../game/LevelGenerator';
 import {
   unlockAudio,
   playCorrect,
@@ -31,10 +30,13 @@ import {
 } from '../game/SoundManager';
 
 const MAX_LIVES = 5;
-const FALL_DURATION = 34000; // 34 seconds to fall
+const FALL_DURATION = 37500; // 37.5 seconds to fall
 const FALL_TICK = 50; // update every 50ms
 
-export default function GameScreen({ onGameOver, locale }) {
+export default function GameScreen({ onGameOver, locale, secretSettings }) {
+  const speedMult = secretSettings?.speedMult || 1.0;
+  const fruitMode = secretSettings?.fruitMode || false;
+  const testDifficulty = secretSettings?.difficulty ?? null;
   const [gameState, setGameState] = useState('playing'); // playing | levelComplete | gameOver
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
@@ -46,6 +48,7 @@ export default function GameScreen({ onGameOver, locale }) {
   const [mergeInfo, setMergeInfo] = useState(null);
   const [fallProgress, setFallProgress] = useState(0);
   const [showArrow, setShowArrow] = useState(false);
+  const [arrowScopeId, setArrowScopeId] = useState(null);
   const [flyingNumber, setFlyingNumber] = useState(null);
 
 
@@ -56,7 +59,9 @@ export default function GameScreen({ onGameOver, locale }) {
   // ─── Initialize a level ──────────────────────────────────
   const startLevel = useCallback((lvl) => {
     resetIdCounter();
-    const { expr } = getExpressionForLevel(lvl);
+    const { expr } = testDifficulty !== null
+      ? getTestExpression(testDifficulty, lvl)
+      : getExpressionForLevel(lvl);
     const parsed = parseExpression(expr);
     setAst(parsed);
     setSelectedScopeId(null);
@@ -65,9 +70,10 @@ export default function GameScreen({ onGameOver, locale }) {
     setMergeInfo(null);
     setFallProgress(0);
     setShowArrow(false);
+    setArrowScopeId(null);
     setGameState('playing');
     isProcessingRef.current = false;
-  }, []);
+  }, [testDifficulty]);
 
   // Start first level
   useEffect(() => {
@@ -78,11 +84,12 @@ export default function GameScreen({ onGameOver, locale }) {
   useEffect(() => {
     if (gameState !== 'playing') return;
 
-    const startTime = Date.now() - fallProgress * FALL_DURATION;
+    const effectiveDuration = FALL_DURATION * (1 / speedMult);
+    const startTime = Date.now() - fallProgress * effectiveDuration;
 
     fallTimerRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / FALL_DURATION, 1);
+      const progress = Math.min(elapsed / effectiveDuration, 1);
       setFallProgress(progress);
 
       if (progress >= 1) {
@@ -103,12 +110,7 @@ export default function GameScreen({ onGameOver, locale }) {
     }
   }, [gameState, score, onGameOver]);
 
-  // ─── Update arrow hint ──────────────────────────────────
-  useEffect(() => {
-    if (ast) {
-      setShowArrow(shouldShowArrow(ast, selectedScopeId));
-    }
-  }, [ast, selectedScopeId]);
+  // (arrow hint is now shown only on left_to_right errors)
 
   // ─── Flash helper ────────────────────────────────────────
   const doFlash = useCallback((nodeIds, color, duration = 600) => {
@@ -152,6 +154,12 @@ export default function GameScreen({ onGameOver, locale }) {
       playWrong();
       playHeartLost();
 
+      // If it's a left-to-right error, show the scoped arrow hint
+      if (result.errorType === 'left_to_right') {
+        setShowArrow(true);
+        setArrowScopeId(selectedScopeId);
+      }
+
       // Flash wrong targets
       const wrongTargets = getWrongFlashTargets(ast, selectedScopeId, key);
       if (wrongTargets && wrongTargets.allIds) {
@@ -169,9 +177,11 @@ export default function GameScreen({ onGameOver, locale }) {
       return;
     }
 
-    // Correct operation!
+    // Correct operation — hide arrow if showing
     isProcessingRef.current = true;
     playCorrect();
+    setShowArrow(false);
+    setArrowScopeId(null);
 
     // Flash green on the target operation
     const opTokens = getOperationTokenIds(result.targetNode);
@@ -254,31 +264,37 @@ export default function GameScreen({ onGameOver, locale }) {
         locale={locale}
       />
 
-      <ExpressionDisplay
-        ast={ast}
-        selectedScopeId={selectedScopeId}
-        flashIds={flashIds}
-        mergeInfo={mergeInfo}
-        showArrow={showArrow}
-        fallProgress={fallProgress}
-      />
+      {flyingNumber === null && (
+        <ExpressionDisplay
+          ast={ast}
+          selectedScopeId={selectedScopeId}
+          flashIds={flashIds}
+          mergeInfo={mergeInfo}
+          showArrow={showArrow}
+          arrowScopeId={arrowScopeId}
+          fallProgress={fallProgress}
+          fruitMode={fruitMode}
+        />
+      )}
 
       {/* Flying number animation on level complete */}
       <AnimatePresence>
         {flyingNumber !== null && (
-          <motion.div
-            className="flying-number"
-            initial={{ opacity: 1, scale: 1.2, y: 0 }}
-            animate={{
-              opacity: [1, 1, 0],
-              scale: [1.2, 1.8, 0.3],
-              y: [0, -40, -300],
-              x: [0, 0, 0],
-            }}
-            transition={{ duration: 1.1, times: [0, 0.4, 1], ease: 'easeInOut' }}
-          >
-            {flyingNumber}
-          </motion.div>
+          <div className="expression-area">
+            <motion.div
+              className="flying-number"
+              style={{ top: `${fallProgress * 100}%` }}
+              initial={{ opacity: 1, scale: 1.2 }}
+              animate={{
+                opacity: [1, 1, 0],
+                scale: [1.2, 1.8, 0.3],
+                y: [0, -40, -300],
+              }}
+              transition={{ duration: 1.1, times: [0, 0.4, 1], ease: 'easeInOut' }}
+            >
+              {flyingNumber}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 

@@ -29,6 +29,8 @@
 }
 
 html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: none;
   height: 100%;
   overflow: hidden;
   touch-action: manipulation;
@@ -64,7 +66,7 @@ body {
 }
 
 .start-title {
-  font-size: 4.5rem;
+  font-size: clamp(2.2rem, 10vw, 4.5rem);
   font-weight: 800;
   letter-spacing: -2px;
   background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink), var(--accent-cyan));
@@ -73,6 +75,7 @@ body {
   -webkit-text-fill-color: transparent;
   text-shadow: none;
   filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.3));
+  white-space: nowrap;
 }
 
 .start-subtitle {
@@ -127,8 +130,8 @@ body {
   position: absolute;
   top: 1.2rem;
   right: 1.2rem;
-  width: 48px;
-  height: 48px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   border: 2px solid rgba(255, 255, 255, 0.15);
@@ -148,7 +151,7 @@ body {
 }
 
 .flag-emoji {
-  font-size: 1.5rem;
+  font-size: 2rem;
   line-height: 1;
 }
 
@@ -189,7 +192,7 @@ body {
 .hud-score {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .hud-value {
@@ -284,17 +287,28 @@ body {
 
 .token-number {
   color: var(--text-main);
+  font-size: 0.85em;
 }
 
 .token-op {
   color: var(--accent-cyan);
   font-weight: 400;
+  font-size: 1.15em;
 }
 
 .token-paren {
   color: var(--accent-purple);
   font-weight: 400;
   opacity: 0.7;
+}
+
+.token-superscript {
+  color: var(--text-main);
+  font-size: 0.6em;
+  position: relative;
+  top: -0.6em;
+  margin-left: -1px;
+  line-height: 0;
 }
 
 .token-dimmed {
@@ -417,7 +431,6 @@ body {
   font-weight: 600;
   letter-spacing: 2px;
   color: var(--text-dim);
-  text-transform: uppercase;
 }
 
 /* ─── Level Message ────────────────────────────────────── */
@@ -438,9 +451,9 @@ body {
 
 .flying-number {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  right: 0;
+  text-align: center;
   font-size: 2.5rem;
   font-weight: 800;
   font-family: var(--font-mono);
@@ -558,4 +571,105 @@ body {
   .pemdas-btn {
     padding: 1.1rem 0.5rem;
   }
+}
+
+/* ─── Secret Menu ──────────────────────────────────────── */
+
+.secret-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.secret-menu {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 0 60px rgba(139, 92, 246, 0.15);
+}
+
+.secret-menu-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.secret-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.secret-menu-row:last-of-type {
+  border-bottom: none;
+}
+
+.secret-menu-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  min-width: 80px;
+}
+
+.secret-menu-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  min-width: 80px;
+  text-align: center;
+}
+
+.secret-menu-hint {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.secret-menu-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secret-menu-controls button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secret-menu-controls button:active {
+  background: rgba(139, 92, 246, 0.3);
+}
+
+.secret-menu-footer {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
 }

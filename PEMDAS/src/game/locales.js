@@ -61,14 +61,14 @@ const LOCALES = {
     score: 'PUNTOS',
     level: 'NIVEL',
     buttons: [
-      { key: 'P', label: '()', symbol: '( )', name: 'Paréntesis', color: '#8b5cf6', smallLabel: true },
-      { key: 'O', label: 'aⁿ', symbol: 'aⁿ', name: 'Potencias', color: '#ec4899', smallLabel: true },
-      { key: 'M', label: '×', symbol: '×', name: 'Multiplicación', color: '#3b82f6' },
+      { key: 'P', label: '()', symbol: '( )', name: 'Paréntesis', color: '#8b5cf6', smallLabel: true, displayKey: 'Pa' },
+      { key: 'O', label: 'aⁿ', symbol: 'aⁿ', name: 'Potencias', color: '#ec4899', smallLabel: true, displayKey: 'Po' },
+      { key: 'M', label: '×', symbol: '×', name: 'Multiplicación', color: '#3b82f6', displayKey: 'Mu' },
       { key: 'D', label: '÷', symbol: '÷', name: 'División', color: '#f59e0b' },
       { key: 'A', label: '+', symbol: '+', name: 'Adición', color: '#10b981' },
       { key: 'S', label: '−', symbol: '−', name: 'Sustracción', color: '#06b6d4' },
     ],
-    letters: ['P', 'O', 'M', 'U', 'D', 'A', 'S'],
+    letters: ['Pa', 'Po', 'Mu', 'D', 'A', 'S'],
   },
 
   CA: {

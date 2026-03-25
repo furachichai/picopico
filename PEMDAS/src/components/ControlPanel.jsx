@@ -27,7 +27,7 @@ export default function ControlPanel({ buttons, onButtonPress, disabled }) {
             disabled={disabled}
           >
             <span className={`btn-symbol${btn.smallLabel ? ' btn-symbol-sm' : ''}`}>{btn.label}</span>
-            <span className="btn-key">{btn.key}</span>
+            <span className="btn-key">{btn.displayKey || btn.key}</span>
           </motion.button>
         ))}
       </div>

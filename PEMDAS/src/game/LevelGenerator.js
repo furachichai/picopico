@@ -57,9 +57,9 @@ const TIER_4 = [
 ];
 
 const TIER_5 = [
-  // Nested parentheses, more complex
-  { expr: '(2 + 3) * (8 - (6 / 2))', answer: 25 },
-  { expr: '(10 - (4 + 2)) * 3', answer: 12 },
+  // Nested parentheses with exponents
+  { expr: '12 / 2 * 3 + (4 - 1)', answer: 21 },
+  { expr: '(3 ^ 2 - (4 + 2)) * 3', answer: 9 },
   { expr: '((8 - 2) * 3 + 6) / 4', answer: 6 },
   { expr: '5 * (3 + (12 - 8))', answer: 35 },
   { expr: '(4 * (2 + 3) - 10) * 2', answer: 20 },
@@ -117,4 +117,43 @@ export function verifyExpression(exprStr, expectedAnswer) {
   } catch {
     return false;
   }
+}
+
+// ─── Secret Menu Test Expression Banks ───────────────────────
+const TEST_BANKS = [
+  // 0: Complex (all buttons)
+  [
+    { expr: '(2 ^ 3 + 1) * (8 - (6 / 2))', answer: 45 },
+    { expr: '(3 ^ 2 - (4 + 2)) * 3', answer: 9 },
+    { expr: '((8 - 2) * 3 + 6) / 4', answer: 6 },
+  ],
+  // 1: Arrow in parens (mixed ops inside parens)
+  [
+    { expr: '(6 / 2 * 3) + 1', answer: 10 },
+    { expr: '5 + (8 / 4 * 2)', answer: 9 },
+    { expr: '(12 / 3 * 2 - 1) + 4', answer: 11 },
+  ],
+  // 2: Arrow full expression (mixed ops at top level)
+  [
+    { expr: '12 / 2 * 3 + 5', answer: 23 },
+    { expr: '8 * 2 / 4 + 3 - 1', answer: 6 },
+    { expr: '10 / 5 * 3 - 2 + 4', answer: 8 },
+  ],
+  // 3: Exponents heavy
+  [
+    { expr: '2 ^ 3 + 4 ^ 2 - 1', answer: 23 },
+    { expr: '3 ^ 2 * 2 - 2 ^ 3', answer: 10 },
+    { expr: '(2 ^ 2) ^ 2 + 1', answer: 17 },
+  ],
+];
+
+/**
+ * Get a test expression for the secret menu difficulty preset.
+ * @param {number} difficulty - 0-3
+ * @param {number} level - current level
+ */
+export function getTestExpression(difficulty, level) {
+  const bank = TEST_BANKS[difficulty] || TEST_BANKS[0];
+  const idx = (level - 1) % bank.length;
+  return bank[idx];
 }

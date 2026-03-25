@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { astToTokens, getNodeIdsInScope, findNodeById } from '../game/ExpressionEngine';
 
@@ -9,7 +9,7 @@ import { astToTokens, getNodeIdsInScope, findNodeById } from '../game/Expression
  * Handles: scope highlighting, flash red/green, merge animation, canvas-drawn arrow hint.
  */
 
-function ArrowCanvas({ visible }) {
+function ArrowCanvas({ visible, leftOffset, arrowWidth }) {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
 
@@ -23,31 +23,31 @@ function ArrowCanvas({ visible }) {
     if (!canvas) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    const W = arrowWidth || canvas.getBoundingClientRect().width;
+    const H = 24;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
-    const W = rect.width;
-    const H = rect.height;
     const arrowLen = 30;
     const headSize = 8;
     const yMid = H / 2;
-    const pad = 16;
-    const travelDist = W - pad * 2 - arrowLen;
+    const pad = 4;
+    const travelDist = Math.max(W - pad * 2 - arrowLen, 10);
 
     let start = null;
-    const duration = 1800; // ms for a full sweep
+    const duration = 900;
 
     function draw(ts) {
       if (!start) start = ts;
       const elapsed = (ts - start) % duration;
-      const t = elapsed / duration; // 0..1
+      const t = elapsed / duration;
 
       ctx.clearRect(0, 0, W, H);
 
-      // Current arrow x (tip position)
       const tipX = pad + arrowLen + t * travelDist;
       const tailX = tipX - arrowLen;
 
@@ -65,7 +65,7 @@ function ArrowCanvas({ visible }) {
       ctx.lineCap = 'round';
       ctx.stroke();
 
-      // Arrow body (brighter)
+      // Arrow body
       const bodyGrad = ctx.createLinearGradient(tailX, 0, tipX, 0);
       bodyGrad.addColorStop(0, 'rgba(139, 92, 246, 0.3)');
       bodyGrad.addColorStop(1, 'rgba(139, 92, 246, 0.9)');
@@ -87,7 +87,7 @@ function ArrowCanvas({ visible }) {
       ctx.fillStyle = 'rgba(139, 92, 246, 0.9)';
       ctx.fill();
 
-      // Glow around arrowhead
+      // Glow
       ctx.shadowColor = '#8b5cf6';
       ctx.shadowBlur = 10;
       ctx.beginPath();
@@ -101,7 +101,7 @@ function ArrowCanvas({ visible }) {
 
     animRef.current = requestAnimationFrame(draw);
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
-  }, [visible]);
+  }, [visible, arrowWidth]);
 
   if (!visible) return null;
 
@@ -109,20 +109,42 @@ function ArrowCanvas({ visible }) {
     <canvas
       ref={canvasRef}
       className="arrow-canvas"
-      style={{ width: '100%', height: '24px', display: 'block', marginTop: '6px' }}
+      style={{
+        position: 'absolute',
+        left: `${leftOffset || 0}px`,
+        top: '100%',
+        marginTop: '6px',
+        width: `${arrowWidth || 100}px`,
+        height: '24px',
+        display: 'block',
+      }}
     />
   );
+}
+
+const FRUIT_MAP = ['🍇', '🍎', '🍊', '🍋', '🍌', '🍑', '🫐', '🍓', '🍒', '🥝'];
+
+function toFruit(str) {
+  return str.replace(/[0-9]/g, d => FRUIT_MAP[parseInt(d)]);
 }
 
 export default function ExpressionDisplay({
   ast,
   selectedScopeId,
-  flashIds,          // { nodeIds: [...], color: 'green' | 'red' }
-  mergeInfo,         // { nodeId, resultValue } - the node being merged
+  flashIds,
+  mergeInfo,
   showArrow,
-  fallProgress,      // 0..1, how far the expression has fallen
+  arrowScopeId,
+  fallProgress,
+  levelComplete,
+  fruitMode,
 }) {
   const tokens = useMemo(() => ast ? astToTokens(ast) : [], [ast]);
+  const tokensContainerRef = useRef(null);
+  const tokenRefsMap = useRef({});
+
+  // Arrow positioning
+  const [arrowPos, setArrowPos] = useState({ left: 0, width: 0 });
 
   // Get IDs in the selected scope for highlighting
   const scopeIds = useMemo(() => {
@@ -132,6 +154,47 @@ export default function ExpressionDisplay({
     return new Set(getNodeIdsInScope(scopeNode));
   }, [ast, selectedScopeId]);
 
+  // Get IDs in the arrow scope
+  const arrowScopeIds = useMemo(() => {
+    if (!showArrow || !ast) return null;
+    if (arrowScopeId === null) return null;
+    const scopeNode = findNodeById(ast, arrowScopeId);
+    if (!scopeNode) return null;
+    return new Set(getNodeIdsInScope(scopeNode));
+  }, [ast, showArrow, arrowScopeId]);
+
+  // Measure scoped token positions for arrow
+  useEffect(() => {
+    if (!showArrow || !tokensContainerRef.current) return;
+
+    const container = tokensContainerRef.current;
+    const containerRect = container.getBoundingClientRect();
+
+    // Find the first and last token elements that belong to the arrow scope
+    const tokenEls = container.querySelectorAll('.token');
+    let minLeft = Infinity;
+    let maxRight = -Infinity;
+    let found = false;
+
+    tokens.forEach((token, idx) => {
+      const inArrowScope = arrowScopeIds ? arrowScopeIds.has(token.nodeId) : true;
+      // Skip parenthesis characters themselves — arrow should only cover inner content
+      const isParen = token.type === 'paren';
+      if (inArrowScope && !isParen && tokenEls[idx]) {
+        const rect = tokenEls[idx].getBoundingClientRect();
+        minLeft = Math.min(minLeft, rect.left - containerRect.left);
+        maxRight = Math.max(maxRight, rect.right - containerRect.left);
+        found = true;
+      }
+    });
+
+    if (found) {
+      setArrowPos({ left: minLeft, width: maxRight - minLeft });
+    } else {
+      setArrowPos({ left: 0, width: containerRect.width });
+    }
+  }, [showArrow, arrowScopeIds, tokens]);
+
   // Flash set
   const flashSet = useMemo(() => {
     if (!flashIds || !flashIds.nodeIds) return null;
@@ -140,61 +203,74 @@ export default function ExpressionDisplay({
 
   const flashColor = flashIds?.color || null;
 
+  // Build token elements
+  const tokenElements = tokens.map((token, idx) => {
+    // Hidden tokens (the ^ operator) — skip rendering
+    if (token.hidden) return null;
+
+    const isInScope = scopeIds ? scopeIds.has(token.nodeId) : true;
+    const isFlashing = flashSet ? flashSet.has(token.nodeId) : false;
+    const isMerging = mergeInfo && mergeInfo.nodeId === token.nodeId;
+
+    let className = 'token';
+    if (token.superscript) className += ' token-superscript';
+    else if (token.type === 'number') className += ' token-number';
+    else if (token.type === 'op') className += ' token-op';
+    else if (token.type === 'paren') className += ' token-paren';
+
+    if (!isInScope) className += ' token-dimmed';
+    if (isFlashing && flashColor === 'green') className += ' token-flash-green';
+    if (isFlashing && flashColor === 'red') className += ' token-flash-red';
+
+    let display = token.value;
+    if (token.type === 'op') {
+      display = ` ${token.value} `;
+    }
+    if (token.value === '*') display = ' × ';
+    if (token.value === '/') display = ' ÷ ';
+
+    // Fruit mode: replace digits with fruit emoji
+    if (fruitMode && token.type === 'number') {
+      display = toFruit(display);
+    }
+
+    return (
+      <motion.span
+        key={`${token.nodeId}-${idx}`}
+        className={className}
+        layout
+        initial={{ opacity: 1, scale: 1 }}
+        animate={{
+          opacity: isMerging ? 0 : (levelComplete ? 0 : 1),
+          scale: isMerging ? 0 : 1,
+        }}
+        exit={{ opacity: 0, scale: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {token.superscript ? <sup>{display}</sup> : display}
+      </motion.span>
+    );
+  }).filter(Boolean);
+
   return (
     <div className="expression-area">
       <motion.div
         className="expression-container"
-        style={{ top: `${fallProgress * 100}%` }}
+        style={{ top: `${fallProgress * 100}%`, position: 'relative' }}
       >
-        <div className="expression-tokens">
+        <div className="expression-tokens" ref={tokensContainerRef} style={{ position: 'relative' }}>
           <AnimatePresence mode="popLayout">
-            {tokens.map((token, idx) => {
-              const isInScope = scopeIds ? scopeIds.has(token.nodeId) : true;
-              const isFlashing = flashSet ? flashSet.has(token.nodeId) : false;
-              const isMerging = mergeInfo && mergeInfo.nodeId === token.nodeId;
-
-              let className = 'token';
-              if (token.type === 'number') className += ' token-number';
-              else if (token.type === 'op') className += ' token-op';
-              else if (token.type === 'paren') className += ' token-paren';
-
-              if (!isInScope) className += ' token-dimmed';
-              if (isFlashing && flashColor === 'green') className += ' token-flash-green';
-              if (isFlashing && flashColor === 'red') className += ' token-flash-red';
-
-              // Display value - add spaces around operators
-              let display = token.value;
-              if (token.type === 'op') {
-                display = ` ${token.value} `;
-              }
-              // Use × for multiplication, ÷ for division
-              if (token.value === '*') display = ' × ';
-              if (token.value === '/') display = ' ÷ ';
-
-              return (
-                <motion.span
-                  key={`${token.nodeId}-${idx}`}
-                  className={className}
-                  layout
-                  initial={{ opacity: 1, scale: 1 }}
-                  animate={{
-                    opacity: isMerging ? 0 : 1,
-                    scale: isMerging ? 0 : 1,
-                  }}
-                  exit={{ opacity: 0, scale: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {display}
-                </motion.span>
-              );
-            })}
+            {tokenElements}
           </AnimatePresence>
         </div>
 
-        {/* Canvas-drawn animated arrow hint */}
-        <ArrowCanvas visible={showArrow} />
+        {/* Canvas-drawn animated arrow — positioned under the scoped tokens */}
+        <ArrowCanvas
+          visible={showArrow}
+          leftOffset={arrowPos.left}
+          arrowWidth={arrowPos.width}
+        />
       </motion.div>
     </div>
   );
 }
-

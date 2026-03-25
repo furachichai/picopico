@@ -174,8 +174,12 @@ export function astToTokens(node) {
   } else if (node.type === NODE_EXPONENT) {
     if (node.parenthesized) tokens.push({ type: 'paren', value: '(', nodeId: node.id });
     tokens.push(...astToTokens(node.base));
-    tokens.push({ type: 'op', value: '^', nodeId: node.id });
-    tokens.push(...astToTokens(node.exponent));
+    // Hide the ^ operator — exponent will be rendered as superscript
+    tokens.push({ type: 'op', value: '^', nodeId: node.id, hidden: true });
+    // Mark exponent tokens as superscript
+    const expTokens = astToTokens(node.exponent);
+    expTokens.forEach(t => { t.superscript = true; });
+    tokens.push(...expTokens);
     if (node.parenthesized) tokens.push({ type: 'paren', value: ')', nodeId: node.id });
   } else if (node.type === NODE_BINOP) {
     if (node.parenthesized) tokens.push({ type: 'paren', value: '(', nodeId: node.id });
@@ -344,7 +348,6 @@ function validateFromOps(opsInScope, targetOps, pemdasKey) {
   const pressedPriority = PEMDAS_PRIORITY[targetOps[0]];
   if (pressedPriority > highestPriority) {
     // Wrong order — there's a higher-priority op to do first
-    // Flash the first matching op of the pressed type
     const firstMatch = matchingOps[0];
     return {
       valid: false,
@@ -354,9 +357,25 @@ function validateFromOps(opsInScope, targetOps, pemdasKey) {
     };
   }
 
-  // Correct priority level! Now find the leftmost operation of this type.
-  // The "leftmost" is the one whose left operand appears first in the expression.
-  // Since our AST is left-associative, the leftmost op at this level is the deepest left child.
+  // Correct priority level! Check left-to-right rule.
+  // Among all ops at this priority level, the leftmost must be done first.
+  const samePriorityOps = opsInScope.filter(o => PEMDAS_PRIORITY[o.op] === pressedPriority);
+  samePriorityOps.sort((a, b) => a.nodeId - b.nodeId);
+
+  const leftmostSamePriority = samePriorityOps[0];
+  if (!targetOps.includes(leftmostSamePriority.op)) {
+    // The leftmost op at this priority is a DIFFERENT operation type —
+    // e.g., pressed M but leftmost is / (division comes first, left-to-right)
+    const firstMatch = matchingOps[0];
+    return {
+      valid: false,
+      errorType: 'left_to_right',
+      flash: firstMatch ? { nodeId: firstMatch.nodeId } : null,
+      nodeIds: matchingOps.map(o => o.nodeId),
+    };
+  }
+
+  // Find the leftmost operation of the pressed type
   const leftmostOp = findLeftmostOperation(opsInScope, targetOps);
 
   return {

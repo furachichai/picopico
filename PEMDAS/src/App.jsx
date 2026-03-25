@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GameScreen from './components/GameScreen';
+import SecretMenu from './components/SecretMenu';
 import { unlockAudio } from './game/SoundManager';
 import { LOCALES, LOCALE_ORDER } from './game/locales';
 
@@ -53,7 +54,6 @@ function StartScreen({ onStart, localeKey, onToggleLocale }) {
   const letters = locale.letters || locale.acronym.split('');
   const buttonConfigs = locale.buttons;
 
-  // Map letters to colors from button configs
   const letterColors = letters.map((letter, i) => {
     const btn = buttonConfigs[i];
     return { letter, color: btn ? btn.color : '#8b5cf6' };
@@ -164,11 +164,23 @@ function GameOverScreen({ score, level, onRestart, locale }) {
   );
 }
 
+// ─── Default secret menu settings ────────────────────────────
+const DEFAULT_SETTINGS = {
+  speedMult: 1.0,      // 1.0 = default speed
+  fruitMode: false,
+  difficulty: null,     // null = normal game, 0-3 = test presets
+};
+
 export default function App() {
-  const [screen, setScreen] = useState('start'); // start | game | gameOver
+  const [screen, setScreen] = useState('start');
   const [finalScore, setFinalScore] = useState(0);
   const [finalLevel, setFinalLevel] = useState(1);
   const [localeKey, setLocaleKey] = useState('US');
+  const [showSecretMenu, setShowSecretMenu] = useState(false);
+  const [settings, setSettings] = useState({ ...DEFAULT_SETTINGS });
+
+  // Double-W detection
+  const lastWRef = useRef(0);
 
   const locale = LOCALES[localeKey];
 
@@ -184,6 +196,58 @@ export default function App() {
     setFinalLevel(level);
     setScreen('gameOver');
   };
+
+  const updateSettings = useCallback((updates) => {
+    setSettings(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  // Global keyboard handler for double-W and secret menu controls
+  useEffect(() => {
+    const handler = (e) => {
+      const key = e.key.toUpperCase();
+
+      // Escape closes secret menu
+      if (e.key === 'Escape' && showSecretMenu) {
+        setShowSecretMenu(false);
+        return;
+      }
+
+      // Double-W detection
+      if (key === 'W') {
+        const now = Date.now();
+        if (now - lastWRef.current < 500) {
+          setShowSecretMenu(prev => !prev);
+          lastWRef.current = 0;
+        } else {
+          lastWRef.current = now;
+        }
+        return;
+      }
+
+      // Secret menu controls (only when menu is visible)
+      if (!showSecretMenu) return;
+
+      if (key === 'F') {
+        e.preventDefault();
+        setSettings(prev => ({ ...prev, fruitMode: !prev.fruitMode }));
+      } else if (key === 'R') {
+        e.preventDefault();
+        setSettings(prev => {
+          const next = prev.difficulty === null ? 0 : (prev.difficulty + 1) % 4;
+          return { ...prev, difficulty: next };
+        });
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        setSettings(prev => ({ ...prev, speedMult: Math.min(3, prev.speedMult + 0.1) }));
+      } else if (e.key === '-') {
+        e.preventDefault();
+        setSettings(prev => ({ ...prev, speedMult: Math.max(0.2, prev.speedMult - 0.1) }));
+      }
+    };
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [showSecretMenu]);
 
   return (
     <>
@@ -208,6 +272,7 @@ export default function App() {
             <GameScreen
               onGameOver={(score, level) => handleGameOver(score, level)}
               locale={locale}
+              secretSettings={settings}
             />
           </motion.div>
         )}
@@ -218,6 +283,17 @@ export default function App() {
             level={finalLevel}
             onRestart={() => setScreen('game')}
             locale={locale}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Secret Menu Overlay */}
+      <AnimatePresence>
+        {showSecretMenu && (
+          <SecretMenu
+            settings={settings}
+            onUpdate={updateSettings}
+            onClose={() => setShowSecretMenu(false)}
           />
         )}
       </AnimatePresence>
