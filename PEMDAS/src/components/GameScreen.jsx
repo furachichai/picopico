@@ -30,7 +30,7 @@ import {
 } from '../game/SoundManager';
 
 const MAX_LIVES = 5;
-const FALL_DURATION = 37500; // 37.5 seconds to fall
+const FALL_DURATION = 56250; // 56.25 seconds to fall (50% slower)
 const FALL_TICK = 50; // update every 50ms
 
 export default function GameScreen({ onGameOver, locale, secretSettings }) {
@@ -204,6 +204,12 @@ export default function GameScreen({ onGameOver, locale, secretSettings }) {
         setTimeout(() => {
           setFlyingNumber(null);
           const nextLevel = level + 1;
+          
+          // If we completed a full set of levels, grant an extra life
+          if (nextLevel > 1 && (nextLevel - 1) % getTotalLevels() === 0) {
+            setLives(prev => Math.min(prev + 1, MAX_LIVES));
+          }
+
           setLevel(nextLevel);
           startLevel(nextLevel);
         }, 1200);
@@ -251,7 +257,8 @@ export default function GameScreen({ onGameOver, locale, secretSettings }) {
     return () => window.removeEventListener('keydown', handler);
   }, [handleButtonPress, locale]);
 
-  const progress = Math.min(level / getTotalLevels(), 1);
+  const total = getTotalLevels();
+  const progress = ((level - 1) % total) / (total - 1 || 1);
 
   return (
     <div className="game-screen" onClick={unlockAudio}>
