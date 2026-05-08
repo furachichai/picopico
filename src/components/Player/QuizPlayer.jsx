@@ -74,6 +74,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemNoteIndex, setPemNoteIndex] = useState(0);
     const [pemExprStr, setPemExprStr] = useState(null);
     const [pemArrow, setPemArrow] = useState(false);
+    const [pemGameLevel, setPemGameLevel] = useState(0);
     const pemAudioCtx = React.useRef(null);
 
     const attemptsUsed = wrongIndices.size;
@@ -528,6 +529,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 const diff = data.metadata?.pemDifficulty || 5;
                 if (mode === 'MANUAL' && data.metadata?.pemExpression) {
                     expr = editorToEngine(data.metadata.pemExpression);
+                } else if (mode === 'GAME') {
+                    const gameModes = ['A', 'S', 'M', 'D', 'E', 'P'];
+                    const currentMode = gameModes[Math.min(pemGameLevel, gameModes.length - 1)];
+                    expr = getExpression(currentMode, 5); // always diff 5
                 } else {
                     expr = getExpression(mode, diff);
                 }
@@ -593,7 +598,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         setPemFlash(null);
                         playSound('correct');
                         if (onBanner) onBanner('correct', 'Topo!');
-                        setTimeout(() => { if (onNext) onNext(); }, 2000);
+                        
+                        const currentMode = data.metadata?.pemMode || 'P';
+                        if (currentMode === 'GAME') {
+                            setTimeout(() => {
+                                setPemGameLevel(prev => prev + 1);
+                                setPemAst(null);
+                                setPemSolved(false);
+                                setPemErrors(0);
+                            }, 2000);
+                        } else {
+                            setTimeout(() => { if (onNext) onNext(); }, 2000);
+                        }
                     } else {
                         setPemAst(newAst);
                         setPemFlash(null);

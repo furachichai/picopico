@@ -240,6 +240,7 @@ export const PEM_MODES = [
   { key: 'PP', label: 'PP (nested)' },
   { key: 'PPP', label: 'PPP (3 nested)' },
   { key: 'MANUAL', label: 'Manual' },
+  { key: 'GAME', label: 'GAME (Progression)' },
 ];
 
 export function clearCache() {
