@@ -49,8 +49,8 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             return;
         }
 
-        // ChatQuiz/PEM: no dragging, resizing, or rotating — it fills the stage
-        const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+        // ChatQuiz: no dragging, resizing, or rotating — it fills the stage
+        const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
             if (!isSelected) onSelect();
@@ -219,22 +219,22 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             ref={stickerRef}
             className={`sticker ${isSelected ? 'selected' : ''}`}
             style={{
-                left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '50%' : `${element.x}%`,
-                top: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '55%' : `${element.y}%`,
-                width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
-                height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
-                transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: isSelected ? 100 : ((element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 0 : 1),
+                left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
+                top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
+                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
+                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                zIndex: isSelected ? 100 : ((element.metadata?.quizType === 'chatquiz') ? 0 : 1),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
             onMouseDownCapture={() => {
                 // Capture phase fires parent-first, before child stopPropagation
-                const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+                const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
                 if (isLockedQuiz && !isSelected) onSelect();
             }}
             onTouchStartCapture={() => {
-                const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+                const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
                 if (isLockedQuiz && !isSelected) onSelect();
             }}
             onDoubleClick={() => {
@@ -242,7 +242,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             }}
         >
             <div className="sticker-content" style={{
-                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'auto' : undefined
+                pointerEvents: (element.metadata?.quizType === 'chatquiz') ? 'auto' : undefined
             }}>
                 {element.type === 'text' && (
                     <div

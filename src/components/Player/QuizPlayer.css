@@ -1178,9 +1178,9 @@
 }
 
 .pem-token-superscript.pem-token-op .pem-op-circle {
-    width: 1em;
-    height: 1em;
-    font-size: 0.75em;
+    width: 2em;
+    height: 2em;
+    font-size: 1em;
 }
 
 .pem-greyed {
