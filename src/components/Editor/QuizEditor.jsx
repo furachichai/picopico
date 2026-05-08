@@ -86,7 +86,7 @@ const QuizEditor = ({ element, onChange }) => {
         const pemExpression = element.metadata?.pemExpression || null;
 
         return (
-            <div className="quiz-editor-2 pem-editor-mode" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="quiz-editor-2 pem-editor-mode">
                 <div className="pem-editor-preview">
                     <div className="pem-editor-icon">🧮</div>
                     <div className="pem-editor-info">

@@ -174,11 +174,13 @@ export function astToTokens(node) {
   } else if (node.type === NODE_EXPONENT) {
     if (node.parenthesized) tokens.push({ type: 'paren', value: '(', nodeId: node.id });
     tokens.push(...astToTokens(node.base));
-    // Show the ^ operator as a tappable superscript circle
-    tokens.push({ type: 'op', value: '^', nodeId: node.id, superscript: true });
-    // Mark exponent tokens as superscript
+    // Do NOT push a ^ operator token. Instead, the exponent number acts as the operator.
     const expTokens = astToTokens(node.exponent);
-    expTokens.forEach(t => { t.superscript = true; });
+    expTokens.forEach(t => { 
+        t.superscript = true; 
+        t.isExponentOp = true; 
+        t.exponentParentId = node.id; 
+    });
     tokens.push(...expTokens);
     if (node.parenthesized) tokens.push({ type: 'paren', value: ')', nodeId: node.id });
   } else if (node.type === NODE_BINOP) {
@@ -512,7 +514,7 @@ export function shouldShowArrow(ast, scopeNodeId) {
   const highestOpTypes = new Set(highestOps.map(o => o.op));
 
   if ((highestOpTypes.has('*') && highestOpTypes.has('/')) ||
-      (highestOpTypes.has('+') && highestOpTypes.has('-'))) {
+    (highestOpTypes.has('+') && highestOpTypes.has('-'))) {
     return true;
   }
 
@@ -565,7 +567,7 @@ export function getOperationTokenIds(node) {
   if (node.type === NODE_EXPONENT) {
     const baseIds = getAllDescendantIds(node.base);
     const expIds = getAllDescendantIds(node.exponent);
-    return { leftIds: baseIds, rightIds: expIds, opId: node.id, allIds: [...baseIds, node.id, ...expIds] };
+    return { leftIds: baseIds, rightIds: [], opId: node.id, allIds: [...baseIds, node.id, ...expIds] };
   }
   return { leftIds: [], rightIds: [], opId: node.id, allIds: [node.id] };
 }

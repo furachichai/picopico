@@ -657,13 +657,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         const isInScope = !scopeNodeIds || scopeNodeIds.has(token.nodeId);
                         const isFlashRed = flashIds.has(token.nodeId) && pemFlash?.color === 'red';
 
+                        // For exponent tokens, their merge target is the parent node
+                        const mergeTargetId = token.isExponentOp ? token.exponentParentId : token.nodeId;
+                        
                         // Merge animation classes
-                        const isMergeLeft = pemMerge?.phase === 'slide' && pemMerge.leftIds.has(token.nodeId);
-                        const isMergeRight = pemMerge?.phase === 'slide' && pemMerge.rightIds.has(token.nodeId);
-                        const isMergeOp = pemMerge?.phase === 'slide' && pemMerge.opId === token.nodeId;
-                        const isMerging = pemMerge && pemMerge.allIds.has(token.nodeId);
-                        const isMergePop = pemMerge?.phase === 'pop' && pemMerge.opId === token.nodeId;
-                        const isMergeFade = pemMerge?.phase === 'pop' && pemMerge.allIds.has(token.nodeId) && pemMerge.opId !== token.nodeId;
+                        const isMergeLeft = pemMerge?.phase === 'slide' && pemMerge.leftIds.has(mergeTargetId);
+                        const isMergeRight = pemMerge?.phase === 'slide' && pemMerge.rightIds.has(mergeTargetId);
+                        const isMergeOp = pemMerge?.phase === 'slide' && pemMerge.opId === mergeTargetId;
+                        const isMerging = pemMerge && pemMerge.allIds.has(mergeTargetId);
+                        const isMergePop = pemMerge?.phase === 'pop' && pemMerge.opId === mergeTargetId;
+                        const isMergeFade = pemMerge?.phase === 'pop' && pemMerge.allIds.has(mergeTargetId) && pemMerge.opId !== mergeTargetId;
 
                         if (token.type === 'paren') {
                             return (
@@ -673,11 +676,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 >{token.value}</span>
                             );
                         }
-                        if (token.type === 'op') {
+                        if (token.type === 'op' || token.isExponentOp) {
+                            if (token.hidden) return null;
                             return (
                                 <span key={i}
                                     className={`pem-token pem-token-op ${!isInScope ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
-                                    onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token); }}
+                                    onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token.isExponentOp ? { value: '^', nodeId: mergeTargetId } : token); }}
                                     data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
                                     {isMergePop ? (

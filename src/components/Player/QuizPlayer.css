@@ -1257,8 +1257,8 @@
 }
 
 @keyframes pemFadeOut {
-    0% { opacity: 0.4; transform: scale(0.8); }
-    100% { opacity: 0; transform: scale(0.5); }
+    0% { opacity: 0.4; transform: scale(0.8); margin-left: 0; margin-right: 0; font-size: 1.7rem; }
+    100% { opacity: 0; transform: scale(0); margin-left: -4px; margin-right: -4px; font-size: 0; }
 }
 
 @keyframes pemPopIn {
