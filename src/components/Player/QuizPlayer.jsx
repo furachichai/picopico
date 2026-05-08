@@ -530,7 +530,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 if (mode === 'MANUAL' && data.metadata?.pemExpression) {
                     expr = editorToEngine(data.metadata.pemExpression);
                 } else if (mode === 'GAME') {
-                    const gameModes = ['A', 'S', 'M', 'D', 'E', 'P'];
+                    const gameModes = ['AS', 'MD', 'MDAS', 'EAS', 'EMDAS', 'P', 'P2', 'PP', 'PPP'];
                     const currentMode = gameModes[Math.min(pemGameLevel, gameModes.length - 1)];
                     expr = getExpression(currentMode, 5); // always diff 5
                 } else {
@@ -601,6 +601,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         
                         const currentMode = data.metadata?.pemMode || 'P';
                         if (currentMode === 'GAME') {
+                            setTimeout(() => { if (onBanner) onBanner(null); }, 1500);
                             setTimeout(() => {
                                 setPemGameLevel(prev => prev + 1);
                                 setPemAst(null);
@@ -724,7 +725,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 </div>
                 {pemArrow && (
                     <div className="pem-arrow-container">
-                        <div className="pem-arrow">➔</div>
+                        <svg className="pem-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+                            <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                     </div>
                 )}
                 {pemFailed && !disabled && (
