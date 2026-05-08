@@ -301,7 +301,7 @@ const PEMDAS_PRIORITY = {
 // ─── Validate a button press ─────────────────────────────────
 // Returns: { valid, flash, nodeIds, errorType }
 // errorType: 'not_present' (no life lost), 'wrong_order' (life lost), null (valid)
-export function validateOperation(ast, scopeNodeId, pemdasKey) {
+export function validateOperation(ast, scopeNodeId, pemdasKey, tappedNodeId = null) {
   // Determine the scope
   let scope = ast;
   if (scopeNodeId !== null) {
@@ -319,6 +319,8 @@ export function validateOperation(ast, scopeNodeId, pemdasKey) {
     return { valid: false, errorType: 'not_present', flash: null, nodeIds: [] };
   }
 
+  const errorNodeIds = tappedNodeId ? [tappedNodeId] : matchingOps.map(o => o.nodeId);
+
   // Check if any parenthesized sub-groups still exist in scope (P should be pressed first)
   const subParens = getParenGroups(scope, 0).filter(g => g.id !== scope.id);
   if (subParens.length > 0) {
@@ -329,14 +331,14 @@ export function validateOperation(ast, scopeNodeId, pemdasKey) {
       valid: false,
       errorType: 'wrong_order',
       flash: null,
-      nodeIds: matchingOps.map(o => o.nodeId),
+      nodeIds: errorNodeIds,
     };
   }
 
-  return validateFromOps(opsInScope, targetOps, pemdasKey);
+  return validateFromOps(opsInScope, targetOps, pemdasKey, errorNodeIds);
 }
 
-function validateFromOps(opsInScope, targetOps, pemdasKey) {
+function validateFromOps(opsInScope, targetOps, pemdasKey, errorNodeIds) {
   // Find the highest priority operation in scope
   let highestPriority = Infinity;
   for (const o of opsInScope) {
@@ -355,7 +357,7 @@ function validateFromOps(opsInScope, targetOps, pemdasKey) {
       valid: false,
       errorType: 'wrong_order',
       flash: firstMatch ? { nodeId: firstMatch.nodeId } : null,
-      nodeIds: matchingOps.map(o => o.nodeId),
+      nodeIds: errorNodeIds,
     };
   }
 
@@ -373,12 +375,22 @@ function validateFromOps(opsInScope, targetOps, pemdasKey) {
       valid: false,
       errorType: 'left_to_right',
       flash: firstMatch ? { nodeId: firstMatch.nodeId } : null,
-      nodeIds: matchingOps.map(o => o.nodeId),
+      nodeIds: errorNodeIds,
     };
   }
 
   // Find the leftmost operation of the pressed type
   const leftmostOp = findLeftmostOperation(opsInScope, targetOps);
+
+  // If the tapped node is NOT the leftmost one of its type, it's a left-to-right error
+  if (errorNodeIds.length === 1 && errorNodeIds[0] !== leftmostOp.nodeId) {
+    return {
+      valid: false,
+      errorType: 'left_to_right',
+      flash: null,
+      nodeIds: errorNodeIds,
+    };
+  }
 
   return {
     valid: true,

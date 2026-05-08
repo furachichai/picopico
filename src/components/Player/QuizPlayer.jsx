@@ -73,6 +73,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemMerge, setPemMerge] = useState(null); // { leftIds, rightIds, opId, result, phase: 'slide'|'pop' }
     const [pemNoteIndex, setPemNoteIndex] = useState(0);
     const [pemExprStr, setPemExprStr] = useState(null);
+    const [pemArrow, setPemArrow] = useState(false);
     const pemAudioCtx = React.useRef(null);
 
     const attemptsUsed = wrongIndices.size;
@@ -549,7 +550,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             const pemKey = opMap[token.value];
             if (!pemKey) return;
 
-            const result = validateOperation(pemAst, pemScopeId, pemKey);
+            const result = validateOperation(pemAst, pemScopeId, pemKey, token.nodeId);
             if (result.valid) {
                 const opTokens = getOperationTokenIds(result.targetNode);
                 // Compute the result value directly from the target node
@@ -600,6 +601,11 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 }, 700);
             } else {
                 // Wrong
+                if (result.errorType === 'left_to_right') {
+                    setPemArrow(true);
+                    setTimeout(() => setPemArrow(false), 1000);
+                }
+                
                 setPemFlash({ ids: result.nodeIds || [token.nodeId], color: 'red' });
                 playErrorSfx();
                 setPemNoteIndex(0); // Reset scale
@@ -700,6 +706,11 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         );
                     })}
                 </div>
+                {pemArrow && (
+                    <div className="pem-arrow-container">
+                        <div className="pem-arrow">➔</div>
+                    </div>
+                )}
                 {pemFailed && !disabled && (
                     <button className="pem-continue-btn" onClick={(e) => { e.stopPropagation(); if (onNext) onNext(); }}>Continue</button>
                 )}
