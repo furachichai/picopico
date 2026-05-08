@@ -1064,6 +1064,8 @@
     justify-content: center;
     min-height: 200px;
     height: 100%;
+    width: 100%;
+    box-sizing: border-box;
     background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
     border-radius: 16px;
     padding: 30px 20px;
@@ -1308,9 +1310,9 @@
 
 .pem-arrow-container {
     position: absolute;
-    bottom: 5px;
-    left: 10px;
-    width: calc(100% - 20px);
+    bottom: -5px;
+    left: 0;
+    width: 100%;
     height: 10px;
     display: flex;
     justify-content: flex-start;
