@@ -70,6 +70,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemFailed, setPemFailed] = useState(false);
     const [pemSolved, setPemSolved] = useState(false);
     const [pemFlash, setPemFlash] = useState(null); // { ids: [], color: 'red'|'green' }
+    const [pemMerge, setPemMerge] = useState(null); // { leftIds, rightIds, opId, result, phase: 'slide'|'pop' }
     const [pemNoteIndex, setPemNoteIndex] = useState(0);
     const [pemExprStr, setPemExprStr] = useState(null);
     const pemAudioCtx = React.useRef(null);
@@ -550,17 +551,37 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
             const result = validateOperation(pemAst, pemScopeId, pemKey);
             if (result.valid) {
-                // Flash green on the operation tokens
                 const opTokens = getOperationTokenIds(result.targetNode);
-                setPemFlash({ ids: opTokens.allIds, color: 'green' });
+                // Compute the result value
+                let newAstPreview = replaceNodeWithResult(pemAst, result.targetNodeId);
+                newAstPreview = simplifyParens(newAstPreview);
+                const resultNode = findNodeById(newAstPreview, result.targetNodeId) ||
+                    (newAstPreview.type === 'NumberNode' ? newAstPreview : null);
+                const resultValue = resultNode ? resultNode.value : '?';
+
                 playNote(pemNoteIndex);
                 setPemNoteIndex(prev => prev + 1);
 
+                // Phase 1: slide animation (operands slide toward operator)
+                setPemMerge({
+                    leftIds: new Set(opTokens.leftIds),
+                    rightIds: new Set(opTokens.rightIds),
+                    opId: opTokens.opId,
+                    allIds: new Set(opTokens.allIds),
+                    result: resultValue,
+                    phase: 'slide'
+                });
+
+                // Phase 2: pop-in result
+                setTimeout(() => {
+                    setPemMerge(prev => prev ? { ...prev, phase: 'pop' } : null);
+                }, 350);
+
+                // Phase 3: apply AST change
                 setTimeout(() => {
                     let newAst = replaceNodeWithResult(pemAst, result.targetNodeId);
                     newAst = simplifyParens(newAst);
 
-                    // If scope was resolved, auto-exit scope
                     if (pemScopeId) {
                         const scopeNode = findNodeById(newAst, pemScopeId);
                         if (!scopeNode || scopeNode.type === 'NumberNode') {
@@ -568,6 +589,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         }
                     }
 
+                    setPemMerge(null);
                     if (isFullySimplified(newAst)) {
                         setPemAst(newAst);
                         setPemSolved(true);
@@ -579,7 +601,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         setPemAst(newAst);
                         setPemFlash(null);
                     }
-                }, 400);
+                }, 700);
             } else {
                 // Wrong
                 setPemFlash({ ids: result.nodeIds || [token.nodeId], color: 'red' });
@@ -637,8 +659,15 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     {tokens.map((token, i) => {
                         if (token.hidden) return null;
                         const isInScope = !scopeNodeIds || scopeNodeIds.has(token.nodeId);
-                        const isFlashGreen = flashIds.has(token.nodeId) && pemFlash?.color === 'green';
                         const isFlashRed = flashIds.has(token.nodeId) && pemFlash?.color === 'red';
+
+                        // Merge animation classes
+                        const isMergeLeft = pemMerge?.phase === 'slide' && pemMerge.leftIds.has(token.nodeId);
+                        const isMergeRight = pemMerge?.phase === 'slide' && pemMerge.rightIds.has(token.nodeId);
+                        const isMergeOp = pemMerge?.phase === 'slide' && pemMerge.opId === token.nodeId;
+                        const isMerging = pemMerge && pemMerge.allIds.has(token.nodeId);
+                        const isMergePop = pemMerge?.phase === 'pop' && pemMerge.opId === token.nodeId;
+                        const isMergeFade = pemMerge?.phase === 'pop' && pemMerge.allIds.has(token.nodeId) && pemMerge.opId !== token.nodeId;
 
                         if (token.type === 'paren') {
                             return (
@@ -651,17 +680,22 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         if (token.type === 'op') {
                             return (
                                 <span key={i}
-                                    className={`pem-token pem-token-op ${!isInScope ? 'pem-greyed' : ''} ${isFlashGreen ? 'pem-flash-green' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                                    className={`pem-token pem-token-op ${!isInScope ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token); }}
+                                    data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
-                                    <span className="pem-op-circle">{token.value === '*' ? '×' : token.value === '/' ? '÷' : token.value}</span>
+                                    {isMergePop ? (
+                                        <span className="pem-result-value">{pemMerge.result}</span>
+                                    ) : (
+                                        <span className="pem-op-circle">{token.value === '*' ? '×' : token.value === '/' ? '÷' : token.value}</span>
+                                    )}
                                 </span>
                             );
                         }
                         // number
                         return (
                             <span key={i}
-                                className={`pem-token pem-token-number ${!isInScope ? 'pem-greyed' : ''} ${isFlashGreen ? 'pem-flash-green' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                                className={`pem-token pem-token-number ${!isInScope ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeLeft ? 'pem-merge-left' : ''} ${isMergeRight ? 'pem-merge-right' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${isMerging ? 'pem-merging' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
                             >{token.value}</span>
                         );
                     })}

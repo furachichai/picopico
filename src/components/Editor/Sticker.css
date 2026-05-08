@@ -29,6 +29,17 @@
     align-items: center;
 }
 
+/* Override grab cursor for locked-position quiz types */
+.sticker:has(.pem-editor-mode),
+.sticker:has(.chatquiz-mode) {
+    cursor: default;
+}
+
+.sticker:has(.pem-editor-mode) .sticker-content,
+.sticker:has(.chatquiz-mode) .sticker-content {
+    pointer-events: auto;
+}
+
 .sticker-text {
     font-size: 1.5rem;
     font-weight: 900;
