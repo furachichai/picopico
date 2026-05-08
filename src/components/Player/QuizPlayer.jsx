@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
 import './QuizPlayer.css';
 import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
-import { parseExpression, astToTokens, validateOperation, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
+import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine } from './PEMExpressionPool';
 
 /**
@@ -523,8 +523,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 resetIdCounter();
                 let expr;
-                const mode = data.metadata?.pemMode || 'A';
-                const diff = data.metadata?.pemDifficulty || 1;
+                const mode = data.metadata?.pemMode || 'P';
+                const diff = data.metadata?.pemDifficulty || 5;
                 if (mode === 'MANUAL' && data.metadata?.pemExpression) {
                     expr = editorToEngine(data.metadata.pemExpression);
                 } else {
@@ -534,8 +534,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 setPemAst(parseExpression(expr));
             } catch(e) {
                 console.error('PEM parse error:', e);
-                setPemExprStr('3 + 2');
-                setPemAst(parseExpression('3 + 2'));
+                setPemExprStr('2 + (4 - 2 * 2) ^ 2 - 6 / 3');
+                setPemAst(parseExpression('2 + (4 - 2 * 2) ^ 2 - 6 / 3'));
             }
         }
 
@@ -552,12 +552,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             const result = validateOperation(pemAst, pemScopeId, pemKey);
             if (result.valid) {
                 const opTokens = getOperationTokenIds(result.targetNode);
-                // Compute the result value
-                let newAstPreview = replaceNodeWithResult(pemAst, result.targetNodeId);
-                newAstPreview = simplifyParens(newAstPreview);
-                const resultNode = findNodeById(newAstPreview, result.targetNodeId) ||
-                    (newAstPreview.type === 'NumberNode' ? newAstPreview : null);
-                const resultValue = resultNode ? resultNode.value : '?';
+                // Compute the result value directly from the target node
+                const resultValue = evaluateNode(result.targetNode);
 
                 playNote(pemNoteIndex);
                 setPemNoteIndex(prev => prev + 1);

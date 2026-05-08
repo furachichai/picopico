@@ -174,8 +174,8 @@ export function astToTokens(node) {
   } else if (node.type === NODE_EXPONENT) {
     if (node.parenthesized) tokens.push({ type: 'paren', value: '(', nodeId: node.id });
     tokens.push(...astToTokens(node.base));
-    // Hide the ^ operator — exponent will be rendered as superscript
-    tokens.push({ type: 'op', value: '^', nodeId: node.id, hidden: true });
+    // Show the ^ operator as a tappable superscript circle
+    tokens.push({ type: 'op', value: '^', nodeId: node.id, superscript: true });
     // Mark exponent tokens as superscript
     const expTokens = astToTokens(node.exponent);
     expTokens.forEach(t => { t.superscript = true; });

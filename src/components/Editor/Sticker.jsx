@@ -224,7 +224,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
                 height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: isSelected ? 100 : 1,
+                zIndex: isSelected ? 100 : ((element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 0 : 1),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
@@ -241,7 +241,9 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 if (element.type !== 'quiz' && onEdit) onEdit();
             }}
         >
-            <div className="sticker-content">
+            <div className="sticker-content" style={{
+                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'auto' : undefined
+            }}>
                 {element.type === 'text' && (
                     <div
                         className="sticker-text"
@@ -321,7 +323,15 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                     />
                 )}
                 {element.type === 'quiz' && (
-                    <div className="sticker-quiz-wysiwyg">
+                    <div className="sticker-quiz-wysiwyg"
+                        onClick={(e) => {
+                            const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+                            if (isLockedQuiz && !isSelected) {
+                                e.stopPropagation();
+                                onSelect();
+                            }
+                        }}
+                    >
                         <QuizEditor
                             element={element}
                             onChange={(id, updates) => onChange(id, { metadata: { ...element.metadata, ...updates } })}
