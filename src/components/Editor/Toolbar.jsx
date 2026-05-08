@@ -45,10 +45,12 @@ const Toolbar = ({ onOpenLibrary }) => {
 
         const isTF = type === 'tf';
         const isReorder = type === 'reorder';
+        const isChatQuiz = type === 'chatquiz';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
         else if (isReorder) defaultOptions = ['First', 'Second', 'Third', 'Fourth'];
+        else if (isChatQuiz) defaultOptions = [];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -66,6 +68,13 @@ const Toolbar = ({ onOpenLibrary }) => {
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
                     ...(preset?.quizAnswers?.fontSize && { answerFontSize: preset.quizAnswers.fontSize }),
                     ...(preset?.quizAnswers?.color && { answerColor: preset.quizAnswers.color }),
+                    // ChatQuiz Defaults
+                    ...(isChatQuiz && {
+                        chatNodes: [
+                            { type: 'message', text: 'Hello! Let me ask you something.' },
+                            { type: 'quiz', options: ['Answer A', 'Answer B'], correctIndex: 0 }
+                        ]
+                    }),
                     // NL Defaults
                     nlConfig: type === 'nl' ? {
                         min: 0,
@@ -119,6 +128,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 <button onClick={() => handleAddQuiz('4sq')}>4 Squares</button>
                                 <button onClick={() => handleAddQuiz('nl')}>Number Line</button>
                                 <button onClick={() => handleAddQuiz('reorder')}>Reorder</button>
+                                <button onClick={() => handleAddQuiz('chatquiz')}>Chat</button>
                             </div>
                         )}
                     </div>

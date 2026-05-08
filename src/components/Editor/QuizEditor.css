@@ -386,3 +386,180 @@ input:checked+.toggle-slider:before {
     height: 100%;
     width: 100%;
 }
+
+/* ============================================================
+   CHATQUIZ EDITOR
+   ============================================================ */
+.chatquiz-mode {
+    align-items: stretch;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.chatquiz-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.chatquiz-node {
+    border-radius: 10px;
+    padding: 8px 10px;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+.chatquiz-node-message {
+    background: #E8F4FD;
+    border-left: 4px solid #1cb0f6;
+}
+
+.chatquiz-node-quiz {
+    background: #FFF8E1;
+    border-left: 4px solid #ffc800;
+}
+
+.chatquiz-node-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.chatquiz-node-icon {
+    font-size: 1rem;
+}
+
+.chatquiz-node-label {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748B;
+    flex: 1;
+}
+
+.chatquiz-node-actions {
+    display: flex;
+    gap: 3px;
+}
+
+.chatquiz-arrow {
+    background: rgba(0,0,0,0.06);
+    border: none;
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatquiz-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.chatquiz-delete,
+.chatquiz-opt-delete {
+    background: #FF6B6B;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatquiz-message-input {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    min-height: 1.4em;
+    outline: none;
+    cursor: text;
+    user-select: text;
+}
+
+.chatquiz-message-input:empty::before {
+    content: attr(data-placeholder);
+    color: #94A3B8;
+}
+
+.chatquiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chatquiz-option-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chatquiz-option-input {
+    flex: 1;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    min-height: 1.2em;
+    outline: none;
+    cursor: text;
+    user-select: text;
+}
+
+.chatquiz-option-input:empty::before {
+    content: attr(data-placeholder);
+    color: #94A3B8;
+}
+
+.chatquiz-add-opt {
+    background: none;
+    border: 1px dashed #CBD5E1;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748B;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.chatquiz-add-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.chatquiz-add-btn {
+    flex: 1;
+    background: #F1F5F9;
+    border: 1px dashed #94A3B8;
+    border-radius: 8px;
+    padding: 6px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #475569;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chatquiz-add-btn:hover {
+    background: #E2E8F0;
+}

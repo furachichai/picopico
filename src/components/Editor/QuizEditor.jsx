@@ -78,6 +78,156 @@ const QuizEditor = ({ element, onChange }) => {
     };
 
     // -------------------------------------------------------------------------
+    // CHATQUIZ RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'chatquiz') {
+        const chatNodes = element.metadata?.chatNodes || [];
+
+        const updateChatNodes = (newNodes) => {
+            onChange(element.id, { chatNodes: newNodes });
+        };
+
+        const addMessageNode = () => {
+            updateChatNodes([...chatNodes, { type: 'message', text: 'New message...' }]);
+        };
+
+        const addQuizNode = () => {
+            updateChatNodes([...chatNodes, { type: 'quiz', options: ['Option A', 'Option B'], correctIndex: 0 }]);
+        };
+
+        const deleteNode = (index) => {
+            if (chatNodes.length <= 1) return;
+            updateChatNodes(chatNodes.filter((_, i) => i !== index));
+        };
+
+        const moveNode = (index, direction) => {
+            const target = index + direction;
+            if (target < 0 || target >= chatNodes.length) return;
+            const newNodes = [...chatNodes];
+            [newNodes[index], newNodes[target]] = [newNodes[target], newNodes[index]];
+            updateChatNodes(newNodes);
+        };
+
+        const updateNodeText = (index, text) => {
+            const newNodes = [...chatNodes];
+            newNodes[index] = { ...newNodes[index], text };
+            updateChatNodes(newNodes);
+        };
+
+        const updateQuizOption = (nodeIndex, optIndex, value) => {
+            const newNodes = [...chatNodes];
+            const newOpts = [...newNodes[nodeIndex].options];
+            newOpts[optIndex] = value;
+            newNodes[nodeIndex] = { ...newNodes[nodeIndex], options: newOpts };
+            updateChatNodes(newNodes);
+        };
+
+        const setQuizCorrect = (nodeIndex, optIndex) => {
+            const newNodes = [...chatNodes];
+            newNodes[nodeIndex] = { ...newNodes[nodeIndex], correctIndex: optIndex };
+            updateChatNodes(newNodes);
+        };
+
+        const addQuizOption = (nodeIndex) => {
+            const newNodes = [...chatNodes];
+            const newOpts = [...newNodes[nodeIndex].options, `Option ${newNodes[nodeIndex].options.length + 1}`];
+            newNodes[nodeIndex] = { ...newNodes[nodeIndex], options: newOpts };
+            updateChatNodes(newNodes);
+        };
+
+        const removeQuizOption = (nodeIndex, optIndex) => {
+            const newNodes = [...chatNodes];
+            const opts = newNodes[nodeIndex].options;
+            if (opts.length <= 2) return;
+            const newOpts = opts.filter((_, i) => i !== optIndex);
+            let newCorrect = newNodes[nodeIndex].correctIndex;
+            if (optIndex === newCorrect) newCorrect = 0;
+            else if (optIndex < newCorrect) newCorrect--;
+            newNodes[nodeIndex] = { ...newNodes[nodeIndex], options: newOpts, correctIndex: newCorrect };
+            updateChatNodes(newNodes);
+        };
+
+        return (
+            <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => e.stopPropagation()}>
+                <div className="chatquiz-timeline">
+                    {chatNodes.map((node, index) => (
+                        <div key={index} className={`chatquiz-node chatquiz-node-${node.type}`}>
+                            <div className="chatquiz-node-header">
+                                <span className="chatquiz-node-icon">{node.type === 'message' ? '🤖' : '🧩'}</span>
+                                <span className="chatquiz-node-label">{node.type === 'message' ? 'Message' : 'Quiz'}</span>
+                                <div className="chatquiz-node-actions">
+                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, -1)} disabled={index === 0}>▲</button>
+                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, 1)} disabled={index === chatNodes.length - 1}>▼</button>
+                                    {chatNodes.length > 1 && (
+                                        <button className="chatquiz-delete" onClick={() => deleteNode(index)}>×</button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {node.type === 'message' && (
+                                <div
+                                    contentEditable
+                                    suppressContentEditableWarning
+                                    className="chatquiz-message-input"
+                                    onInput={(e) => updateNodeText(index, e.currentTarget.textContent)}
+                                    ref={(el) => {
+                                        if (el && el.textContent !== node.text && document.activeElement !== el) {
+                                            el.textContent = node.text;
+                                        }
+                                    }}
+                                    data-placeholder="Type a message..."
+                                />
+                            )}
+
+                            {node.type === 'quiz' && (
+                                <div className="chatquiz-options">
+                                    {node.options.map((opt, optIdx) => (
+                                        <div key={optIdx} className="chatquiz-option-row">
+                                            <div
+                                                contentEditable
+                                                suppressContentEditableWarning
+                                                className="chatquiz-option-input"
+                                                data-option-index={optIdx}
+                                                onInput={(e) => updateQuizOption(index, optIdx, e.currentTarget.innerHTML)}
+                                                ref={(el) => {
+                                                    if (el && el.innerHTML !== opt && document.activeElement !== el) {
+                                                        el.innerHTML = opt;
+                                                    }
+                                                }}
+                                                data-placeholder={`Option ${optIdx + 1}`}
+                                            />
+                                            <input
+                                                type="radio"
+                                                name={`chatquiz-correct-${element.id}-${index}`}
+                                                checked={node.correctIndex === optIdx}
+                                                onChange={() => setQuizCorrect(index, optIdx)}
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="correct-radio-2"
+                                                title="Mark as correct"
+                                            />
+                                            {node.options.length > 2 && (
+                                                <button className="chatquiz-opt-delete" onClick={() => removeQuizOption(index, optIdx)}>×</button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {node.options.length < 5 && (
+                                        <button className="chatquiz-add-opt" onClick={() => addQuizOption(index)}>+ Option</button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="chatquiz-add-buttons">
+                    <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Message</button>
+                    <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
+                </div>
+            </div>
+        );
+    }
+
+    // -------------------------------------------------------------------------
     // REORDER RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'reorder') {

@@ -493,6 +493,7 @@ const Editor = () => {
                                 onDelete={handleContextMenuDelete}
                                 onDuplicate={handleContextMenuDuplicate}
                                 onOpenLibrary={handleContextMenuOpenLibrary}
+                                onOpenPresets={() => setShowPresetPanel(true)}
                             />
                         </div>
                     )}
@@ -507,6 +508,7 @@ const Editor = () => {
                             onDelete={handleContextMenuDelete}
                             onDuplicate={handleContextMenuDuplicate}
                             onOpenLibrary={handleContextMenuOpenLibrary}
+                            onOpenPresets={() => setShowPresetPanel(true)}
                         />
                     ) : (
                         <Toolbar

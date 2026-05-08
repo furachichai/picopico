@@ -523,16 +523,15 @@ const Player = () => {
                                     return (
                                         <div
                                             key={element.id}
-                                            className="player-element"
+                                            className={`player-element ${element.metadata?.quizType === 'chatquiz' ? 'player-element-chatquiz' : ''}`}
                                             style={{
-                                                left: `${element.x}%`,
-                                                top: `${element.y}%`,
-                                                left: `${element.x}%`,
-                                                top: `${element.y}%`,
-                                                width: element.type === 'quiz' ? '360px' : `${element.width}%`,
-                                                height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
-                                                transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                                                zIndex: 10, // Ensure stickers render above cartridge (zIndex: 1)
+                                                left: element.metadata?.quizType === 'chatquiz' ? '50%' : `${element.x}%`,
+                                                top: element.metadata?.quizType === 'chatquiz' ? '55%' : `${element.y}%`,
+                                                width: element.metadata?.quizType === 'chatquiz' ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
+                                                height: element.metadata?.quizType === 'chatquiz' ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                                                transform: element.metadata?.quizType === 'chatquiz' ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
+                                                zIndex: element.metadata?.quizType === 'chatquiz' ? 100 : 10,
+                                                pointerEvents: element.metadata?.quizType === 'chatquiz' ? 'auto' : undefined,
                                             }}
                                         >
                                             {element.type === 'text' && (

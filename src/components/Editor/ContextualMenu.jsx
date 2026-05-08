@@ -12,7 +12,7 @@ const COLORS = [
     '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
 ];
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -138,6 +138,17 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             </button>
                         )}
                     </div>
+
+                    {onOpenPresets && (
+                        <button
+                            className="btn-secondary"
+                            onClick={onOpenPresets}
+                            title="Text Presets"
+                            style={{ fontSize: '0.8rem', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                            🎨 Presets
+                        </button>
+                    )}
 
                     <div className="menu-divider"></div>
                 </>
@@ -601,6 +612,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
             {/* Quiz Text Color */}
             {element.type === 'quiz' && (
+                <>
                 <div className="menu-group">
                     <label>Text Color</label>
                     <div className="color-picker-mini">
@@ -633,10 +645,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         ))}
                     </div>
                 </div>
+                {onOpenPresets && (
+                    <button
+                        className="btn-secondary"
+                        onClick={onOpenPresets}
+                        title="Text Presets"
+                        style={{ fontSize: '0.8rem', padding: '4px 10px', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                        🎨 Presets
+                    </button>
+                )}
+                </>
             )}
 
             {/* Quiz Settings */}
-            {element.type === 'quiz' && metadata.quizType === 'tf' && (
+            {element.type === 'quiz' && metadata.quizType === 'tf' && metadata.quizType !== 'chatquiz' && (
                 <>
                     <div className="menu-group">
                         <label>Visual Answer</label>
@@ -655,7 +678,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             )}
 
             {/* NL Quiz Settings */}
-            {element.type === 'quiz' && metadata.quizType === 'nl' && (
+            {element.type === 'quiz' && metadata.quizType === 'nl' && metadata.quizType !== 'chatquiz' && (
                 <>
                     <div className="menu-group">
                         <label>Mode</label>

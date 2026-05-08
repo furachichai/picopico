@@ -7,7 +7,7 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1778190728137",
+          "id": "el-1778202644751",
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
@@ -17,66 +17,115 @@
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "options": [
-              "First",
-              "Third",
-              "Second",
-              "Fourth"
-            ],
+            "options": [],
             "correctIndex": 0,
             "correctIndices": [
               0
             ],
-            "quizType": "reorder",
-            "visualMode": false
+            "quizType": "chatquiz",
+            "visualMode": false,
+            "chatNodes": [
+              {
+                "type": "message",
+                "text": "What is 2+2?"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "yes",
+                  "no"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "Great job!"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Option A",
+                  "Option B",
+                  "yes"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Option A",
+                  "Option B"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "message",
+                "text": "New message..."
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Option A",
+                  "Option B"
+                ],
+                "correctIndex": 0
+              }
+            ],
+            "answerFontFamily": "Nunito",
+            "answerFontSize": 16,
+            "answerColor": "#ffffff"
           }
         }
       ],
       "order": 0
-    },
-    {
-      "id": "slide-1778201767746",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1778201773139",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 75,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "options": [
-              "<font color=\"#1cb0f6\">Op</font><font color=\"#ff4b4b\">ti</font>on 1",
-              "Option 2",
-              "Option 3",
-              "Option 4"
-            ],
-            "correctIndex": 0,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "classic",
-            "visualMode": false
-          }
-        }
-      ],
-      "order": 1
-    },
-    {
-      "id": "slide-1778190703379",
-      "background": "#E1F5FE",
-      "elements": [],
-      "order": 2
     }
   ],
   "author": "User",
-  "createdAt": "2026-05-07T21:51:22.114Z",
-  "updatedAt": "2026-05-08T00:56:28.154Z",
+  "createdAt": "2026-05-08T01:10:16.386Z",
+  "updatedAt": "2026-05-08T02:31:36.710Z",
   "path": "lessons/Math/General/00-Chapter/00-Untitled Lesson/lesson.json",
+  "textPreset": {
+    "text": {
+      "fontFamily": "Nunito",
+      "fontSize": 1632,
+      "color": "#ff4b4b"
+    },
+    "quizAnswers": {
+      "fontFamily": "Nunito",
+      "fontSize": 16,
+      "color": "#ffffff"
+    },
+    "balloon": {
+      "fontFamily": "Nunito",
+      "fontSize": 16,
+      "color": "#000000"
+    },
+    "mathOperatorColor": "#ff4b4b"
+  },
   "subject": "Math",
   "topic": "General",
   "chapterId": "00",
@@ -84,7 +133,7 @@
   "lessonId": "00",
   "name": "lesson.json",
   "type": "file",
-  "status": "active",
+  "status": "completed",
   "icon": {
     "type": {},
     "key": null,
@@ -96,7 +145,7 @@
   },
   "progress": {
     "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1778193848711
+    "completed": true,
+    "lastPlayed": 1778204130526
   }
 }

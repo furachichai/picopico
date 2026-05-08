@@ -50,6 +50,17 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [isDragging, setIsDragging] = useState(false);
     const trackRef = React.useRef(null);
 
+    // ChatQuiz State (always declared to avoid hook order issues)
+    const chatContainerRef = React.useRef(null);
+    const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
+    const [chatWrongSets, setChatWrongSets] = useState({});
+    const [chatSolvedSet, setChatSolvedSet] = useState(new Set());
+    const [chatShaking, setChatShaking] = useState(null);
+    const [chatFinished, setChatFinished] = useState(false);
+    const [chatOptionsVisible, setChatOptionsVisible] = useState(false);
+    const [chatFadingOut, setChatFadingOut] = useState(false);
+    const chatAdvanceTimer = React.useRef(null);
+
     const attemptsUsed = wrongIndices.size;
 
     // -------------------------------------------------------------------------
@@ -59,6 +70,49 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const audio = new Audio(`/sounds/${type}.mp3`);
         audio.play().catch(e => console.log('Audio play failed:', e));
     };
+
+    // ChatQuiz auto-scroll
+    useEffect(() => {
+        if (quizType === 'chatquiz' && chatContainerRef.current) {
+            setTimeout(() => {
+                if (chatContainerRef.current) {
+                    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                }
+            }, 50);
+        }
+    }, [quizType, currentNodeIndex, chatSolvedSet.size, chatOptionsVisible]);
+
+    // ChatQuiz auto-advance: message nodes auto-advance; quiz nodes show options after delay
+    useEffect(() => {
+        if (quizType !== 'chatquiz') return;
+        const chatNodes = data.metadata?.chatNodes || [];
+        const currentNode = chatNodes[currentNodeIndex];
+        if (!currentNode || chatFinished) return;
+
+        // Clear any previous timer
+        if (chatAdvanceTimer.current) clearTimeout(chatAdvanceTimer.current);
+
+        if (currentNode.type === 'message') {
+            // Auto-advance after pause
+            setChatOptionsVisible(false);
+            const isLast = currentNodeIndex >= chatNodes.length - 1;
+            if (!isLast) {
+                chatAdvanceTimer.current = setTimeout(() => {
+                    setCurrentNodeIndex(prev => Math.min(prev + 1, chatNodes.length - 1));
+                }, 1200);
+            }
+        } else if (currentNode.type === 'quiz') {
+            // Show options after a brief pause
+            setChatOptionsVisible(false);
+            chatAdvanceTimer.current = setTimeout(() => {
+                setChatOptionsVisible(true);
+            }, 600);
+        }
+
+        return () => {
+            if (chatAdvanceTimer.current) clearTimeout(chatAdvanceTimer.current);
+        };
+    }, [quizType, currentNodeIndex, chatFinished]);
 
     const getThumbImage = (index) => {
         return index === 0 ? '/assets/quiz/thumbs_up.png' : '/assets/quiz/thumbs_down.png';
@@ -280,6 +334,131 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     // -------------------------------------------------------------------------
     // 5. RENDER
     // -------------------------------------------------------------------------
+
+    // CHATQUIZ MODE
+    if (quizType === 'chatquiz') {
+        const chatNodes = data.metadata?.chatNodes || [];
+
+        const currentNode = chatNodes[currentNodeIndex];
+        const isLastNode = currentNodeIndex >= chatNodes.length - 1;
+        // Determine if all nodes have been shown AND resolved
+        const allRevealed = currentNodeIndex >= chatNodes.length - 1;
+        const lastNodeResolved = (() => {
+            const last = chatNodes[chatNodes.length - 1];
+            if (!last) return true;
+            if (last.type === 'message') return true;
+            if (last.type === 'quiz') return chatSolvedSet.has(chatNodes.length - 1);
+            return true;
+        })();
+        const showDoneBtn = allRevealed && lastNodeResolved && !chatFinished;
+
+        const handleChatDone = () => {
+            if (chatFinished) return;
+            setChatFinished(true);
+            playSound('correct');
+            if (onBanner) onBanner('correct', 'Topo!');
+            setTimeout(() => { if (onNext) onNext(); }, 2000);
+        };
+
+        const handleChatOptionClick = (nodeIdx, optIdx) => {
+            if (chatSolvedSet.has(nodeIdx) || disabled || chatFadingOut) return;
+            const node = chatNodes[nodeIdx];
+            const wrongSet = chatWrongSets[nodeIdx] || new Set();
+            if (wrongSet.has(optIdx)) return;
+
+            if (optIdx === node.correctIndex) {
+                // Correct!
+                const newSolved = new Set(chatSolvedSet);
+                newSolved.add(nodeIdx);
+                setChatSolvedSet(newSolved);
+                playSound('correct');
+
+                // Fade out distractors, then auto-advance after delay
+                setChatFadingOut(true);
+                const isLast = nodeIdx >= chatNodes.length - 1;
+                setTimeout(() => {
+                    setChatFadingOut(false);
+                    if (!isLast) {
+                        setCurrentNodeIndex(prev => Math.min(prev + 1, chatNodes.length - 1));
+                    }
+                }, 1000);
+            } else {
+                // Wrong
+                const newWrongSets = { ...chatWrongSets };
+                const newWrong = new Set(wrongSet);
+                newWrong.add(optIdx);
+                newWrongSets[nodeIdx] = newWrong;
+                setChatWrongSets(newWrongSets);
+                setChatShaking({ nodeIdx, optIdx });
+                playSound('wrong');
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                setTimeout(() => setChatShaking(null), 600);
+            }
+        };
+
+        return (
+            <div className={`quiz-player-2 chatquiz-player-mode ${disabled ? 'disabled' : ''}`}>
+                <div className="chat-container" ref={chatContainerRef}>
+                    <div className="chat-spacer" />
+                    {chatNodes.slice(0, currentNodeIndex + 1).map((node, idx) => {
+                        if (node.type === 'message') {
+                            return (
+                                <div key={idx} className="chat-bubble-row chat-row-tutor">
+                                    <div className="chat-avatar">🤖</div>
+                                    <div className="chat-bubble chat-bubble-tutor">
+                                        {node.text}
+                                    </div>
+                                </div>
+                            );
+                        }
+                        if (node.type === 'quiz') {
+                            const nodeSolved = chatSolvedSet.has(idx);
+                            const wrongSet = chatWrongSets[idx] || new Set();
+                            // Only show options for the current quiz node when chatOptionsVisible is true,
+                            // or for already-solved quiz nodes (always show them)
+                            const isCurrentQuiz = idx === currentNodeIndex;
+                            const showOpts = !isCurrentQuiz || chatOptionsVisible || nodeSolved;
+                            return (
+                                <div key={idx} className={`chat-bubble-row chat-row-options ${!showOpts ? 'chat-opts-hidden' : ''}`}>
+                                    <div className="chat-options-group">
+                                        {showOpts && node.options.map((opt, optIdx) => {
+                                            const isCorrectOpt = optIdx === node.correctIndex;
+                                            const isWrong = wrongSet.has(optIdx);
+                                            const isShaking = chatShaking?.nodeIdx === idx && chatShaking?.optIdx === optIdx;
+                                            const isChosen = nodeSolved && isCorrectOpt;
+                                            const isDimmed = nodeSolved && !isCorrectOpt;
+
+                                            return (
+                                                <div key={optIdx} className={`chat-option-row ${isDimmed && chatFadingOut ? 'chat-fade-out' : ''} ${isDimmed && !chatFadingOut ? 'chat-faded' : ''}`}>
+                                                    <button
+                                                        className={`chat-bubble chat-bubble-option ${isChosen ? 'chat-correct' : ''} ${isWrong ? 'chat-wrong' : ''} ${isShaking ? 'chat-shake' : ''}`}
+                                                        onClick={(e) => { e.stopPropagation(); handleChatOptionClick(idx, optIdx); }}
+                                                        disabled={nodeSolved || isWrong || disabled || chatFadingOut}
+                                                        dangerouslySetInnerHTML={{ __html: opt }}
+                                                    />
+                                                    <div className="chat-avatar chat-avatar-user">🧑</div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
+
+                {showDoneBtn && !disabled && (
+                    <button
+                        className="chat-continue-btn"
+                        onClick={(e) => { e.stopPropagation(); handleChatDone(); }}
+                    >
+                        Done
+                    </button>
+                )}
+            </div>
+        );
+    }
 
     // REORDER MODE
     if (quizType === 'reorder') {
