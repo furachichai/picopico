@@ -182,6 +182,14 @@
     padding: 0;
     margin: 0;
     text-transform: none;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.option-input-2:empty:before {
+    content: attr(data-placeholder);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
 }
 
 .option-input-2::placeholder {

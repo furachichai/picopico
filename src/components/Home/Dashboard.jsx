@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Compass, Settings, Flame } from 'lucide-react';
+import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Gamepad2, Compass } from 'lucide-react';
 
 import { useEditor } from '../../context/EditorContext';
 import { getLessonProgress } from '../../utils/storage';
@@ -16,8 +16,7 @@ const t = (key) => {
     'dashboard.editor': 'EDITOR',
     'dashboard.locked': 'Locked',
     'dashboard.lessons': 'LESSONS',
-    'dashboard.discover': 'DISCOVER',
-    'dashboard.settings': 'SETTINGS',
+    'dashboard.game': 'GAME',
     'lesson.1.title': 'Intro to Coding',
     'lesson.1.desc': 'Learn the basics',
     'lesson.2.title': 'Variables',
@@ -412,86 +411,99 @@ const Dashboard = () => {
         }
 
         .lesson-card {
-          background: var(--white);
           border-radius: var(--radius);
-          padding: 16px;
+          padding: 18px 20px;
           display: flex;
           align-items: center;
           gap: 16px;
-          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
           position: relative;
-          border-bottom: 4px solid #E2E8F0;
+          color: white;
+          cursor: pointer;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+          overflow: hidden;
+        }
+
+        .lesson-card::before {
+          content: '';
+          position: absolute;
+          top: -40%;
+          right: -20%;
+          width: 120px;
+          height: 120px;
+          background: rgba(255,255,255,0.12);
+          border-radius: 50%;
+          pointer-events: none;
+        }
+
+        .lesson-card::after {
+          content: '';
+          position: absolute;
+          bottom: -30%;
+          left: -10%;
+          width: 80px;
+          height: 80px;
+          background: rgba(255,255,255,0.08);
+          border-radius: 50%;
+          pointer-events: none;
         }
 
         .lesson-card:active {
-          transform: translateY(2px);
-          border-bottom-width: 2px;
+          transform: scale(0.97);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .lesson-icon-box {
-          width: 56px;
-          height: 56px;
-          border-radius: 16px;
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
           font-weight: 700;
           font-size: 1.2rem;
+          background: rgba(255,255,255,0.25);
+          color: white;
+          backdrop-filter: blur(4px);
         }
 
         .lesson-info {
           flex: 1;
+          position: relative;
+          z-index: 1;
         }
 
         .lesson-title {
           font-weight: 700;
           font-size: 1.1rem;
           margin-bottom: 4px;
-          color: var(--text);
+          color: white;
         }
 
         .lesson-desc {
-          font-size: 0.9rem;
-          color: var(--text-light);
+          font-size: 0.85rem;
+          color: rgba(255,255,255,0.85);
         }
 
         /* Status Styles */
         .status-completed .lesson-icon-box {
-          background-color: #DCFCE7;
-          color: #16A34A;
-        }
-        
-        .status-completed .lesson-card {
-           border-bottom-color: #CBD5E1;
+          background: rgba(255,255,255,0.35);
         }
 
         .status-active {
           transform: scale(1.02);
-          box-shadow: var(--shadow-lg);
-          border: 2px solid var(--primary);
-          border-bottom: 6px solid var(--primary);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
         
         .status-active:active {
-           transform: scale(1.02) translateY(2px);
-           border-bottom-width: 4px;
-        }
-
-        .status-active .lesson-icon-box {
-          background-color: var(--primary);
-          color: var(--white);
+           transform: scale(0.98);
         }
 
         .status-locked {
-          opacity: 0.6;
-          filter: grayscale(1);
+          opacity: 0.5;
+          filter: grayscale(0.5);
           pointer-events: none;
-        }
-
-        .status-locked .lesson-icon-box {
-          background-color: #F1F5F9;
-          color: #94A3B8;
         }
 
         /* Start Button */
@@ -611,25 +623,7 @@ const Dashboard = () => {
           >
             {t('dashboard.editor')}
           </button>
-          <div className="streak-counter" style={{
-            backgroundColor: 'var(--white)',
-            padding: '6px 12px',
-            borderRadius: '999px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontWeight: '700',
-            color: '#F97316', // Orange-500
-            boxShadow: 'var(--shadow)',
-            border: '2px solid #F1F5F9'
-          }}>
-            <Flame size={16} fill="#F97316" stroke="none" />
-            <span>0</span>
-          </div>
-          <div className="gem-counter">
-            <Trophy size={16} fill="#EAB308" stroke="none" />
-            <span>1,240</span>
-          </div>
+
         </div>
       </div>
 
@@ -650,108 +644,123 @@ const Dashboard = () => {
           {loading ? (
             <div>Loading lessons...</div>
           ) : (
-            lessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className={`lesson-card status-${lesson.status}`}
-                onClick={(e) => {
-                  // Prevent playing if editing or clicking inputs
-                  if (e.target.closest('input') || e.target.closest('button')) return;
-                  handlePlayLesson(lesson)
-                }}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="lesson-icon-box">
-                  {lesson.icon}
-                </div>
-                <div className="lesson-info">
-                  <div className="lesson-title">{lesson.title}</div>
-                  {/* Description Editing Logic */}
-                  {editingLessonId === lesson.id ? (
-                    <div className="description-edit-area" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
-                      <input
-                        autoFocus
-                        value={editDescriptionValue}
-                        onChange={(e) => setEditDescriptionValue(e.target.value)}
-                        onClick={(e) => e.stopPropagation()} // Prevent card click
-                        style={{
-                          flex: 1,
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          border: '1px solid #CBD5E1',
-                          fontSize: '0.9rem',
-                          fontFamily: 'inherit'
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleSaveDescription(lesson);
-                          if (e.key === 'Escape') cancelEdit();
-                        }}
-                      />
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSaveDescription(lesson);
-                        }}
-                        style={{
-                          background: 'var(--primary)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '4px 8px',
-                          cursor: 'pointer',
-                          fontSize: '0.8rem',
-                          fontWeight: 'bold'
-                        }}
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          cancelEdit();
-                        }}
-                        style={{
-                          background: '#E2E8F0',
-                          color: '#64748B',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '4px 8px',
-                          cursor: 'pointer',
-                          fontSize: '0.8rem'
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div className="lesson-desc">{lesson.description || lesson.chapterName}</div>
-                      {!state.readOnly && (
+            lessons.map((lesson, idx) => {
+              const GRADIENTS = [
+                'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)',
+                'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
+                'linear-gradient(135deg, #06B6D4 0%, #10B981 100%)',
+                'linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)',
+                'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+                'linear-gradient(135deg, #14B8A6 0%, #3B82F6 100%)',
+                'linear-gradient(135deg, #A855F7 0%, #EC4899 100%)',
+                'linear-gradient(135deg, #22D3EE 0%, #818CF8 100%)',
+              ];
+              const gradient = GRADIENTS[idx % GRADIENTS.length];
+
+              return (
+                <div
+                  key={lesson.id}
+                  className={`lesson-card status-${lesson.status}`}
+                  onClick={(e) => {
+                    if (e.target.closest('input') || e.target.closest('button')) return;
+                    handlePlayLesson(lesson)
+                  }}
+                  style={{ background: gradient }}
+                >
+                  <div className="lesson-icon-box">
+                    {lesson.icon}
+                  </div>
+                  <div className="lesson-info">
+                    <div className="lesson-title">{lesson.title}</div>
+                    {editingLessonId === lesson.id ? (
+                      <div className="description-edit-area" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
+                        <input
+                          autoFocus
+                          value={editDescriptionValue}
+                          onChange={(e) => setEditDescriptionValue(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            flex: 1,
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            border: '1px solid rgba(255,255,255,0.4)',
+                            background: 'rgba(255,255,255,0.2)',
+                            color: 'white',
+                            fontSize: '0.9rem',
+                            fontFamily: 'inherit'
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleSaveDescription(lesson);
+                            if (e.key === 'Escape') cancelEdit();
+                          }}
+                        />
                         <button
-                          className="edit-desc-btn"
                           onClick={(e) => {
                             e.stopPropagation();
-                            startEditing(lesson);
+                            handleSaveDescription(lesson);
                           }}
-                          title="Edit Description"
                           style={{
-                            background: 'transparent',
+                            background: 'rgba(255,255,255,0.3)',
+                            color: 'white',
                             border: 'none',
+                            borderRadius: '4px',
+                            padding: '4px 8px',
                             cursor: 'pointer',
-                            opacity: 0.5,
-                            padding: '2px',
-                            display: 'flex',
-                            alignItems: 'center'
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold'
                           }}
                         >
-                          <Settings size={14} />
+                          Save
                         </button>
-                      )}
-                    </div>
-                  )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            cancelEdit();
+                          }}
+                          style={{
+                            background: 'rgba(0,0,0,0.15)',
+                            color: 'rgba(255,255,255,0.9)',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '4px 8px',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className="lesson-desc">{lesson.description || lesson.chapterName}</div>
+                        {!state.readOnly && (
+                          <button
+                            className="edit-desc-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEditing(lesson);
+                            }}
+                            title="Edit Description"
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              opacity: 0.7,
+                              padding: '2px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              filter: 'brightness(2)'
+                            }}
+                          >
+                            ✏️
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>
@@ -767,20 +776,20 @@ const Dashboard = () => {
           <span className="nav-label">{t('dashboard.lessons')}</span>
         </button>
         <button
-          className={`nav-item ${activeTab === 'discover' ? 'active' : ''}`}
-          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
-          style={{ color: activeTab === 'discover' ? '#F59E0B' : '#94A3B8' }}
+          className={`nav-item`}
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'game' })}
+          style={{ color: '#F59E0B' }}
         >
-          <Compass size={36} strokeWidth={1.5} />
-          <span className="nav-label">{t('dashboard.discover')}</span>
+          <Gamepad2 size={36} strokeWidth={1.5} />
+          <span className="nav-label">{t('dashboard.game')}</span>
         </button>
         <button
-          className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-          style={{ color: activeTab === 'settings' ? '#3B82F6' : '#94A3B8' }}
+          className={`nav-item ${activeTab === 'explore' ? 'active' : ''}`}
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
+          style={{ color: activeTab === 'explore' ? '#06B6D4' : '#94A3B8' }}
         >
-          <Settings size={36} strokeWidth={1.5} />
-          <span className="nav-label">{t('dashboard.settings')}</span>
+          <Compass size={36} strokeWidth={1.5} />
+          <span className="nav-label">EXPLORE</span>
         </button>
       </div>
     </div>

@@ -200,7 +200,11 @@ const DiscoverView = () => {
             dispatch({ type: 'SET_CURRENT_SLIDE', payload: fullLesson.slides[1].id });
         }
 
-        dispatch({ type: 'SET_VIEW', payload: 'player' });
+        // Defer view switch by one frame so the lesson data is committed
+        // before the transition animation starts (prevents flash glitch)
+        requestAnimationFrame(() => {
+            dispatch({ type: 'SET_VIEW', payload: 'player' });
+        });
     };
 
     // Keyboard controls
@@ -358,9 +362,8 @@ const DiscoverView = () => {
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none'
                                 }}
-                            >
-                                {element.content}
-                            </div>
+                                dangerouslySetInnerHTML={{ __html: element.content }}
+                            />
                         )}
                         {element.type === 'image' && <img src={element.content} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                         {element.type === 'balloon' && (

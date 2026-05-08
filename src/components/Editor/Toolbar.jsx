@@ -18,9 +18,18 @@ const Toolbar = ({ onOpenLibrary }) => {
     const colorValue = isHex ? currentBackground : '#000000';
 
     const handleAddText = () => {
+        const preset = state.lesson.textPreset;
         dispatch({
             type: 'ADD_ELEMENT',
-            payload: { type: ELEMENT_TYPES.TEXT, content: 'New Text' }
+            payload: {
+                type: ELEMENT_TYPES.TEXT,
+                content: 'New Text',
+                metadata: {
+                    ...(preset?.text?.fontFamily && { fontFamily: preset.text.fontFamily }),
+                    ...(preset?.text?.fontSize && { fontSize: preset.text.fontSize }),
+                    ...(preset?.text?.color && { color: preset.text.color }),
+                }
+            }
         });
     };
 
@@ -35,18 +44,28 @@ const Toolbar = ({ onOpenLibrary }) => {
         }
 
         const isTF = type === 'tf';
+        const isReorder = type === 'reorder';
 
+        let defaultOptions;
+        if (isTF) defaultOptions = ['True', 'False'];
+        else if (isReorder) defaultOptions = ['First', 'Second', 'Third', 'Fourth'];
+        else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+
+        const preset = state.lesson.textPreset;
         dispatch({
             type: 'ADD_ELEMENT',
             payload: {
                 type: ELEMENT_TYPES.QUIZ,
                 content: 'Quiz',
                 metadata: {
-                    options: isTF ? ['True', 'False'] : ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+                    options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder'
                     visualMode: false,
+                    ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
+                    ...(preset?.quizAnswers?.fontSize && { answerFontSize: preset.quizAnswers.fontSize }),
+                    ...(preset?.quizAnswers?.color && { answerColor: preset.quizAnswers.color }),
                     // NL Defaults
                     nlConfig: type === 'nl' ? {
                         min: 0,
@@ -69,10 +88,21 @@ const Toolbar = ({ onOpenLibrary }) => {
             <div className="editor-toolbar">
                 <div className="toolbar-section">
                     <button className="btn-secondary" onClick={handleAddText} title={t('editor.addText')} style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>T</button>
-                    <button className="btn-secondary" onClick={() => dispatch({
-                        type: 'ADD_ELEMENT',
-                        payload: { type: ELEMENT_TYPES.BALLOON, content: 'Hello!' }
-                    })} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
+                    <button className="btn-secondary" onClick={() => {
+                        const preset = state.lesson.textPreset;
+                        dispatch({
+                            type: 'ADD_ELEMENT',
+                            payload: {
+                                type: ELEMENT_TYPES.BALLOON,
+                                content: 'Hello!',
+                                metadata: {
+                                    ...(preset?.balloon?.fontFamily && { fontFamily: preset.balloon.fontFamily }),
+                                    ...(preset?.balloon?.fontSize && { fontSize: preset.balloon.fontSize }),
+                                    ...(preset?.balloon?.color && { color: preset.balloon.color }),
+                                }
+                            }
+                        });
+                    }} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
 
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
@@ -88,6 +118,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 <button onClick={() => handleAddQuiz('tf')}>True/False</button>
                                 <button onClick={() => handleAddQuiz('4sq')}>4 Squares</button>
                                 <button onClick={() => handleAddQuiz('nl')}>Number Line</button>
+                                <button onClick={() => handleAddQuiz('reorder')}>Reorder</button>
                             </div>
                         )}
                     </div>
@@ -154,6 +185,22 @@ const Toolbar = ({ onOpenLibrary }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>Swipe Sorter</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'PEMDAS',
+                                                config: {
+                                                    locale: 'US',
+                                                    startLevel: 1,
+                                                    targetLevel: 3
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>PEMDAS</button>
                             </div>
                         )}
                     </div>

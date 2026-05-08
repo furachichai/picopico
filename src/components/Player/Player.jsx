@@ -6,6 +6,7 @@ import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
+import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
 import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
@@ -55,6 +56,7 @@ const Player = () => {
     }, [currentSlideIndex, lesson.path, lesson.slides.length]);
     const touchStartRef = useRef(null);
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
+    const [solvedSlides, setSolvedSlides] = useState(new Set()); // Track slides whose quiz/cartridge is complete
 
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
@@ -96,7 +98,25 @@ const Player = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [currentSlideIndex, isGameActive, currentSlide]);
 
-    const nextSlide = () => {
+    // Check if a slide has an unsolved interactive (quiz or cartridge)
+    const slideHasUnsolvedInteractive = (slideIndex) => {
+        const slide = slides[slideIndex];
+        if (!slide) return false;
+        if (solvedSlides.has(slideIndex)) return false;
+        // Check for quiz elements
+        const hasQuiz = slide.elements?.some(el => el.type === 'quiz');
+        // Check for cartridge (game)
+        const hasCartridge = !!slide.cartridge;
+        return hasQuiz || hasCartridge;
+    };
+
+    const markSlideSolved = (slideIndex) => {
+        setSolvedSlides(prev => new Set(prev).add(slideIndex));
+    };
+
+    const nextSlide = (force = false) => {
+        // Block if current slide has unsolved quiz/cartridge
+        if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) return;
         if (currentSlideIndex < slides.length - 1) {
             setCurrentSlideIndex(prev => prev + 1);
         }
@@ -114,7 +134,43 @@ const Player = () => {
     const [scale, setScale] = useState(1);
     const viewportRef = useRef(null);
 
+    // ── Web Audio SFX ──
+    const playTone = (type) => {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'correct') {
+                // Happy ascending arpeggio
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523, ctx.currentTime);       // C5
+                osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1); // E5
+                osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2); // G5
+                osc.frequency.setValueAtTime(1047, ctx.currentTime + 0.3); // C6
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.5);
+            } else {
+                // Descending sad tone
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.5);
+            }
+        } catch (e) {
+            console.log('Audio not available:', e);
+        }
+    };
+
     const handleBanner = (type, text) => {
+        playTone(type);
         setBanner({ type, text });
     };
 
@@ -324,9 +380,14 @@ const Player = () => {
                 </div>
 
                 {banner && (
-                    <div className={`player-banner ${banner.type}-banner`}>
-                        {banner.text}
-                    </div>
+                    <>
+                        <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'}`} />
+                        <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'}`}>
+                            {banner.text.split('').map((letter, i) => (
+                                <span key={i} className="sign-letter">{letter}</span>
+                            ))}
+                        </div>
+                    </>
                 )}
 
                 {/* Render all slides with transition classes */}
@@ -412,8 +473,9 @@ const Player = () => {
                                         <FractionAlpha
                                             config={slide.cartridge.config}
                                             onComplete={() => {
+                                                markSlideSolved(currentSlideIndex);
                                                 setIsGameActive(false);
-                                                nextSlide();
+                                                nextSlide(true);
                                             }}
                                         />
                                     )}
@@ -422,8 +484,9 @@ const Player = () => {
                                             <FractionSlicer
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
+                                                    markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                    nextSlide();
+                                                        nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>
@@ -433,8 +496,21 @@ const Player = () => {
                                             <SwipeSorter
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
+                                                    markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                    nextSlide();
+                                                        nextSlide(true);
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
+                                    {slide.cartridge.type === 'PEMDAS' && (
+                                        <ErrorBoundary>
+                                            <PEMDASCartridge
+                                                config={slide.cartridge.config}
+                                                onComplete={() => {
+                                                    markSlideSolved(currentSlideIndex);
+                                                    setIsGameActive(false);
+                                                        nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>
@@ -472,15 +548,17 @@ const Player = () => {
                                                         border: element.metadata?.border || 'none',
                                                         lineHeight: 1,
                                                     }}
-                                                >
-                                                    {element.content}
-                                                </div>
+                                                    dangerouslySetInnerHTML={{ __html: element.content }}
+                                                />
                                             )}
                                             {element.type === 'image' && <img src={element.content} alt="content" />}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
                                                     data={element}
-                                                    onNext={nextSlide}
+                                                    onNext={() => {
+                                                        markSlideSolved(currentSlideIndex);
+                                                            nextSlide(true);
+                                                    }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
                                                     debugMode={debugMode}

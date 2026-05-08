@@ -78,7 +78,37 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         key={c}
                                         className={`color-swatch ${metadata.color === c ? 'active' : ''}`}
                                         style={{ backgroundColor: c }}
-                                        onClick={() => updateMetadata({ color: c })}
+                                        onMouseDown={(e) => {
+                                            e.preventDefault(); // Prevent losing selection
+                                            // Check if there's a text selection inside a contentEditable
+                                            const sel = window.getSelection();
+                                            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                                                const range = sel.getRangeAt(0);
+                                                const container = range.commonAncestorContainer;
+                                                const editableEl = container.nodeType === 3
+                                                    ? container.parentElement?.closest('[contenteditable="true"]')
+                                                    : container.closest?.('[contenteditable="true"]');
+                                                if (editableEl) {
+                                                    // Apply color to selection only
+                                                    document.execCommand('foreColor', false, c);
+                                                    
+                                                    // Check if this is a quiz option (has data-option-index)
+                                                    const optionIndex = editableEl.dataset.optionIndex;
+                                                    if (optionIndex !== undefined) {
+                                                        // Update the specific option in the options array
+                                                        const currentOptions = [...(element.metadata?.options || [])];
+                                                        currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                                        onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                                    } else {
+                                                        // Regular text sticker
+                                                        onChange(element.id, { content: editableEl.innerHTML });
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                            // Fallback: apply to whole element
+                                            updateMetadata({ color: c });
+                                        }}
                                     />
                                 ))}
                             </div>
@@ -525,8 +555,84 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </>
                     )}
 
+                    {/* PEMDAS Settings */}
+                    {element.cartridgeType === 'PEMDAS' && (
+                        <>
+                            <div className="menu-group">
+                                <label>Locale</label>
+                                <select
+                                    value={element.config?.locale || 'US'}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, locale: e.target.value } })}
+                                >
+                                    <option value="US">🇺🇸 PEMDAS</option>
+                                    <option value="UK">🇬🇧 BODMAS</option>
+                                    <option value="ES">🇪🇸 PAPOMUDAS</option>
+                                    <option value="CA">🇨🇦 BEDMAS</option>
+                                </select>
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Start Lvl</label>
+                                <input
+                                    type="number"
+                                    min="1" max="9"
+                                    value={element.config?.startLevel || 1}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, startLevel: parseInt(e.target.value) } })}
+                                    style={{ width: '50px' }}
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Target Lvl</label>
+                                <input
+                                    type="number"
+                                    min={element.config?.startLevel || 1} max="9"
+                                    value={element.config?.targetLevel || 3}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, targetLevel: parseInt(e.target.value) } })}
+                                    style={{ width: '50px' }}
+                                />
+                            </div>
+                        </>
+                    )}
+
                     <div className="menu-divider"></div>
                 </>
+            )}
+
+            {/* Quiz Text Color */}
+            {element.type === 'quiz' && (
+                <div className="menu-group">
+                    <label>Text Color</label>
+                    <div className="color-picker-mini">
+                        {COLORS.map(c => (
+                            <div
+                                key={c}
+                                className={`color-swatch`}
+                                style={{ backgroundColor: c }}
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    const sel = window.getSelection();
+                                    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                                        const range = sel.getRangeAt(0);
+                                        const container = range.commonAncestorContainer;
+                                        const editableEl = container.nodeType === 3
+                                            ? container.parentElement?.closest('[contenteditable="true"]')
+                                            : container.closest?.('[contenteditable="true"]');
+                                        if (editableEl) {
+                                            document.execCommand('foreColor', false, c);
+                                            const optionIndex = editableEl.dataset.optionIndex;
+                                            if (optionIndex !== undefined) {
+                                                const currentOptions = [...(element.metadata?.options || [])];
+                                                currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                                onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                            }
+                                        }
+                                    }
+                                }}
+                            />
+                        ))}
+                    </div>
+                </div>
             )}
 
             {/* Quiz Settings */}

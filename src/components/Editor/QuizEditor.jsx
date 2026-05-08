@@ -78,6 +78,80 @@ const QuizEditor = ({ element, onChange }) => {
     };
 
     // -------------------------------------------------------------------------
+    // REORDER RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'reorder') {
+        const moveOption = (index, direction) => {
+            const newOptions = [...options];
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= newOptions.length) return;
+            [newOptions[index], newOptions[targetIndex]] = [newOptions[targetIndex], newOptions[index]];
+            onChange(element.id, { options: newOptions });
+        };
+
+        const addOption = () => {
+            if (options.length >= 5) return;
+            const newOptions = [...options, `Step ${options.length + 1}`];
+            onChange(element.id, { options: newOptions });
+        };
+
+        const removeReorderOption = (index) => {
+            if (options.length <= 2) return;
+            const newOptions = options.filter((_, i) => i !== index);
+            onChange(element.id, { options: newOptions });
+        };
+
+        return (
+            <div className="quiz-editor-2 reorder-mode" onMouseDown={(e) => e.stopPropagation()}>
+                {options.map((option, index) => (
+                    <div key={index} className="quiz-option-row reorder-row">
+                        <span className="reorder-index">{index + 1}</span>
+                        <div
+                            className="quiz-option-2"
+                            style={{ backgroundColor: colors[index % colors.length], flex: 1 }}
+                        >
+                            <div
+                                contentEditable
+                                suppressContentEditableWarning
+                                className="option-input-2"
+                                data-option-index={index}
+                                onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
+                                ref={(el) => {
+                                    if (el && el.innerHTML !== option && document.activeElement !== el) {
+                                        el.innerHTML = option;
+                                    }
+                                }}
+                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                data-placeholder={`Step ${index + 1}`}
+                            />
+                        </div>
+                        <div className="reorder-arrows">
+                            <button
+                                className="reorder-arrow-btn"
+                                onClick={() => moveOption(index, -1)}
+                                disabled={index === 0}
+                                title="Move up"
+                            >▲</button>
+                            <button
+                                className="reorder-arrow-btn"
+                                onClick={() => moveOption(index, 1)}
+                                disabled={index === options.length - 1}
+                                title="Move down"
+                            >▼</button>
+                        </div>
+                        {options.length > 2 && (
+                            <button className="remove-btn-2" onClick={() => removeReorderOption(index)} title="Remove">×</button>
+                        )}
+                    </div>
+                ))}
+                {options.length < 5 && (
+                    <button className="reorder-add-btn" onClick={addOption}>+ Add Step</button>
+                )}
+            </div>
+        );
+    }
+
+    // -------------------------------------------------------------------------
     // NL RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'nl') {
@@ -155,14 +229,19 @@ const QuizEditor = ({ element, onChange }) => {
                                 />
                             </div>
                         ) : (
-                            <textarea
-                                value={option}
-                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                            <div
+                                contentEditable
+                                suppressContentEditableWarning
                                 className="option-input-2"
-                                placeholder={`Option ${index + 1}`}
-                                maxLength={70}
-                                rows={2}
-                                style={{ resize: 'none', overflow: 'hidden' }}
+                                data-option-index={index}
+                                onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
+                                ref={(el) => {
+                                    if (el && el.innerHTML !== option && document.activeElement !== el) {
+                                        el.innerHTML = option;
+                                    }
+                                }}
+                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                data-placeholder={`Option ${index + 1}`}
                             />
                         )}
                     </div>

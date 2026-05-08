@@ -5,6 +5,10 @@ import lessonManagerPlugin from './vite-plugin-lesson-manager'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: true,  // Listen on all interfaces (0.0.0.0)
+    port: 5173,
+  },
   plugins: [
     react(),
     lessonManagerPlugin(),

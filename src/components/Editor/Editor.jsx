@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Disc } from 'lucide-react';
 import Canvas from './Canvas';
 import Toolbar from './Toolbar';
@@ -10,6 +10,7 @@ import ContextualMenu from './ContextualMenu';
 import BurgerMenu from './BurgerMenu';
 import LessonInfoModal from './LessonInfoModal';
 import ConfirmationModal from './ConfirmationModal';
+import PresetPanel from './PresetPanel';
 import { useTranslation } from 'react-i18next';
 
 const Editor = () => {
@@ -23,6 +24,21 @@ const Editor = () => {
     const [libraryTab, setLibraryTab] = useState('custom');
     const [libraryAllowedTabs, setLibraryAllowedTabs] = useState(null);
     const [libraryCallback, setLibraryCallback] = useState(null);
+    const [showPresetPanel, setShowPresetPanel] = useState(false);
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+    // Detect mobile keyboard via VisualViewport
+    useEffect(() => {
+        const vv = window.visualViewport;
+        if (!vv) return;
+        const initialHeight = vv.height;
+        const handleResize = () => {
+            // If viewport shrinks by >150px, keyboard is likely open
+            setIsKeyboardVisible(vv.height < initialHeight - 150);
+        };
+        vv.addEventListener('resize', handleResize);
+        return () => vv.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleEdit = (id) => {
         setEditingElementId(id);
@@ -190,6 +206,75 @@ const Editor = () => {
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
 
+    // Shared ContextualMenu handlers (used in both bottom-menus and floating keyboard mode)
+    const handleContextMenuChange = (id, updates) => {
+        if (id === 'cartridge') {
+            const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            dispatch({
+                type: 'UPDATE_SLIDE',
+                payload: {
+                    cartridge: {
+                        ...slide?.cartridge,
+                        ...updates
+                    }
+                }
+            });
+        } else if (id === 'background') {
+            const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            const newSettings = {};
+            let newBackground = undefined;
+            if (updates.metadata) {
+                if (updates.metadata.backgroundColor) newBackground = updates.metadata.backgroundColor;
+                if (updates.metadata.opacity !== undefined) newSettings.opacity = updates.metadata.opacity;
+                if (updates.metadata.brightness !== undefined) newSettings.brightness = updates.metadata.brightness;
+                if (updates.metadata.flipX !== undefined) newSettings.flipX = updates.metadata.flipX;
+                if (updates.metadata.flipY !== undefined) newSettings.flipY = updates.metadata.flipY;
+            }
+            dispatch({
+                type: 'UPDATE_SLIDE',
+                payload: {
+                    ...(newBackground ? { background: newBackground } : {}),
+                    backgroundSettings: { ...slide?.backgroundSettings, ...newSettings }
+                }
+            });
+        } else {
+            dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
+        }
+    };
+
+    const handleContextMenuDelete = (id) => {
+        if (id === 'cartridge') {
+            dispatch({ type: 'UPDATE_SLIDE', payload: { cartridge: null } });
+            dispatch({ type: 'SELECT_ELEMENT', payload: null });
+        } else {
+            dispatch({ type: 'DELETE_ELEMENT', payload: id });
+        }
+    };
+
+    const handleContextMenuDuplicate = () => {
+        const sel = state.lesson.slides.find(s => s.id === state.currentSlideId)?.elements.find(e => e.id === state.selectedElementId);
+        if (sel && sel.id !== 'cartridge') {
+            dispatch({ type: 'DUPLICATE_ELEMENT', payload: sel.id });
+        }
+    };
+
+    const handleContextMenuOpenLibrary = (tab, callback) => {
+        if (callback) {
+            setLibraryCallback(() => callback);
+        } else {
+            setLibraryCallback(null);
+        }
+        const sel = state.lesson.slides.find(s => s.id === state.currentSlideId)?.elements.find(e => e.id === state.selectedElementId);
+        if (sel?.type === 'background' || state.selectedElementId === 'background') {
+            setLibraryTab(tab || 'custom-bg');
+            setLibraryAllowedTabs(['custom-bg', 'backgrounds']);
+        } else {
+            setLibraryTab(tab || 'custom');
+            setLibraryAllowedTabs(['custom', 'emojis', 'gifs']);
+        }
+        setShowLibrary(true);
+    };
+
     const editingElement = state.lesson.slides
         .find(s => s.id === state.currentSlideId)
         ?.elements.find(e => e.id === editingElementId);
@@ -316,6 +401,10 @@ const Editor = () => {
                     cancelText={t('common.no')}
                 />
 
+                {showPresetPanel && (
+                    <PresetPanel onClose={() => setShowPresetPanel(false)} />
+                )}
+
                 {/* Lesson Info Header */}
                 <div className="lesson-info-header">
                     <span className="lesson-title">{state.lesson.title}</span>
@@ -328,6 +417,7 @@ const Editor = () => {
                         onNew={handleNewLesson}
                         onMenu={handleGoToMenu}
                         onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
+                        onPresets={() => setShowPresetPanel(true)}
                     />
                     <div className="top-right-actions">
                         <button
@@ -391,88 +481,32 @@ const Editor = () => {
                         currentSlideIndex={currentSlideIndex}
                         totalSlides={state.lesson.slides.length}
                     />
+
+                    {/* Floating Context Menu — appears above quiz when keyboard is visible */}
+                    {isKeyboardVisible && selectedElement?.type === 'quiz' && (
+                        <div className="floating-context-menu" style={{
+                            bottom: `${100 - (selectedElement.y || 50)}%`
+                        }}>
+                            <ContextualMenu
+                                element={selectedElement}
+                                onChange={handleContextMenuChange}
+                                onDelete={handleContextMenuDelete}
+                                onDuplicate={handleContextMenuDuplicate}
+                                onOpenLibrary={handleContextMenuOpenLibrary}
+                            />
+                        </div>
+                    )}
                 </div>
 
-                <div className="bottom-menus">
+                <div className={`bottom-menus ${isKeyboardVisible && selectedElement?.type === 'quiz' ? 'hidden-menus' : ''}`}>
                     {/* SlideStrip Removed */}
                     {selectedElement ? (
                         <ContextualMenu
                             element={selectedElement}
-                            onChange={(id, updates) => {
-                                if (id === 'cartridge') {
-                                    // Updates contains { config: ... } here based on our ContextualMenu change
-                                    dispatch({
-                                        type: 'UPDATE_SLIDE',
-                                        payload: {
-                                            cartridge: {
-                                                ...currentSlide.cartridge, // Keep type
-                                                ...updates // Merge updates (config)
-                                            }
-                                        }
-                                    });
-                                } else if (id === 'background') {
-                                    // Handle background updates
-                                    // updates.metadata contains settings like opacity, flip, etc.
-                                    // AND possibly 'backgroundColor' if user picked a solid color.
-                                    // If 'backgroundColor' is present, update the slide background directly.
-
-                                    const newSettings = {};
-                                    let newBackground = undefined;
-
-                                    if (updates.metadata) {
-                                        if (updates.metadata.backgroundColor) {
-                                            newBackground = updates.metadata.backgroundColor;
-                                        }
-                                        // Merge other settings
-                                        if (updates.metadata.opacity !== undefined) newSettings.opacity = updates.metadata.opacity;
-                                        if (updates.metadata.brightness !== undefined) newSettings.brightness = updates.metadata.brightness;
-                                        if (updates.metadata.flipX !== undefined) newSettings.flipX = updates.metadata.flipX;
-                                        if (updates.metadata.flipY !== undefined) newSettings.flipY = updates.metadata.flipY;
-                                    }
-
-                                    dispatch({
-                                        type: 'UPDATE_SLIDE',
-                                        payload: {
-                                            ...(newBackground ? { background: newBackground } : {}),
-                                            backgroundSettings: {
-                                                ...currentSlide.backgroundSettings,
-                                                ...newSettings
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
-                                }
-                            }}
-                            onDelete={(id) => {
-                                if (id === 'cartridge') {
-                                    dispatch({ type: 'UPDATE_SLIDE', payload: { cartridge: null } });
-                                    dispatch({ type: 'SELECT_ELEMENT', payload: null });
-                                } else {
-                                    dispatch({ type: 'DELETE_ELEMENT', payload: id });
-                                }
-                            }}
-                            onDuplicate={() => {
-                                if (selectedElement.id !== 'cartridge') {
-                                    dispatch({ type: 'DUPLICATE_ELEMENT', payload: selectedElement.id });
-                                }
-                            }}
-                            onOpenLibrary={(tab, callback) => {
-                                if (callback) {
-                                    setLibraryCallback(() => callback);
-                                } else {
-                                    setLibraryCallback(null);
-                                }
-
-                                if (selectedElement.type === 'background') {
-                                    setLibraryTab(tab || 'custom-bg');
-                                    setLibraryAllowedTabs(['custom-bg', 'backgrounds']); // Background Mode
-                                } else {
-                                    setLibraryTab(tab || 'custom');
-                                    setLibraryAllowedTabs(['custom', 'emojis', 'gifs']); // Sticker Mode
-                                }
-                                setShowLibrary(true);
-                            }}
+                            onChange={handleContextMenuChange}
+                            onDelete={handleContextMenuDelete}
+                            onDuplicate={handleContextMenuDuplicate}
+                            onOpenLibrary={handleContextMenuOpenLibrary}
                         />
                     ) : (
                         <Toolbar

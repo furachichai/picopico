@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css'; // Reusing contextual menu styles for simplicity or create new ones
 
-const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons }) => {
+const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -53,6 +53,10 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons }) => {
                         <button className="menu-item" onClick={() => { onInfo(); setIsOpen(false); }}>
                             <span className="menu-icon">ℹ️</span>
                             <span className="menu-text">{t('editor.info')}</span>
+                        </button>
+                        <button className="menu-item" onClick={() => { if (onPresets) onPresets(); setIsOpen(false); }}>
+                            <span className="menu-icon">🎨</span>
+                            <span className="menu-text">Text Presets</span>
                         </button>
                         <button className="menu-item" onClick={() => { onMenu(); setIsOpen(false); }}>
                             <span className="menu-icon">🏠</span>

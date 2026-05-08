@@ -584,3 +584,181 @@
     position: relative;
     z-index: 300;
 }
+
+/* ==========================================
+   REORDER QUIZ MODE
+   ========================================== */
+
+.quiz-options-container-reorder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    min-width: 250px;
+    pointer-events: auto;
+    z-index: 10;
+    margin: auto 0;
+    padding: 1rem 1rem 0.25rem 1rem;
+}
+
+.quiz-option-reorder {
+    width: 100%;
+    min-height: 52px;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-left: 5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    position: relative;
+    touch-action: none;
+}
+
+.quiz-option-reorder:active {
+    cursor: grabbing;
+}
+
+.quiz-option-reorder.dragging {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    opacity: 0.95;
+    cursor: grabbing;
+}
+
+/* Grip dots handle */
+.reorder-grip {
+    font-size: 1.2rem;
+    opacity: 0.5;
+    letter-spacing: -3px;
+    margin-left: 8px;
+    flex-shrink: 0;
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Shuffle hint animation — vertical position swap */
+@keyframes shuffleSwap {
+    0% {
+        opacity: 0.4;
+        transform: translateY(var(--shuffle-offset, 40px)) scale(0.95);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(calc(var(--shuffle-offset, 40px) * -0.3)) scale(1.02);
+    }
+    70% {
+        transform: translateY(calc(var(--shuffle-offset, 40px) * 0.1)) scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.quiz-option-reorder.shuffling {
+    animation: shuffleSwap 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    pointer-events: none;
+}
+
+.quiz-option-reorder.shuffling:nth-child(1) { --shuffle-offset: 60px; }
+.quiz-option-reorder.shuffling:nth-child(2) { --shuffle-offset: -50px; }
+.quiz-option-reorder.shuffling:nth-child(3) { --shuffle-offset: 40px; }
+.quiz-option-reorder.shuffling:nth-child(4) { --shuffle-offset: -60px; }
+.quiz-option-reorder.shuffling:nth-child(5) { --shuffle-offset: 50px; }
+
+/* Correct/Wrong states */
+.quiz-option-reorder.correct {
+    z-index: 10;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+.quiz-option-reorder.wrong {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* ==========================================
+   REORDER EDITOR STYLES
+   ========================================== */
+
+.reorder-mode .quiz-option-row.reorder-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.reorder-index {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.reorder-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.reorder-arrow-btn {
+    width: 24px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #555;
+    font-size: 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.reorder-arrow-btn:hover:not(:disabled) {
+    background: #eee;
+}
+
+.reorder-arrow-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.reorder-add-btn {
+    margin-top: 6px;
+    padding: 6px 16px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    background: transparent;
+    color: #888;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    width: 100%;
+    text-transform: none;
+}
+
+.reorder-add-btn:hover {
+    border-color: #999;
+    color: #555;
+}

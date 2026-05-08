@@ -94,7 +94,12 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 // Calculate new position as percentage of parent
                 const newX = startLeft + (dx / parentWidth) * 100;
                 const newY = startTop + (dy / parentHeight) * 100;
-                onChange(element.id, { x: newX, y: newY });
+                if (element.type === 'quiz') {
+                    // Quiz elements only move vertically, locked horizontally
+                    onChange(element.id, { y: newY });
+                } else {
+                    onChange(element.id, { x: newX, y: newY });
+                }
             } else if (type === 'resize') {
                 // Distance-based resize logic:
                 // Calculate current distance from center
@@ -226,12 +231,12 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         contentEditable
                         suppressContentEditableWarning
                         onInput={(e) => {
-                            // Update state but don't force re-render of children
-                            onChange(element.id, { content: e.currentTarget.innerText });
+                            // Capture innerHTML to preserve per-character color spans
+                            onChange(element.id, { content: e.currentTarget.innerHTML });
                         }}
                         ref={(el) => {
-                            if (el && el.innerText !== element.content && document.activeElement !== el) {
-                                el.innerText = element.content;
+                            if (el && el.innerHTML !== element.content && document.activeElement !== el) {
+                                el.innerHTML = element.content;
                             }
                         }}
                         style={{

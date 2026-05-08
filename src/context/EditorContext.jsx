@@ -19,6 +19,7 @@ const initialState = {
         createdAt: new Date(),
         updatedAt: null,
         path: null, // Local file path
+        textPreset: null, // { text: {fontFamily, fontSize, color}, quizAnswers: {...}, balloon: {...}, mathOperatorColor: '#ff4b4b' }
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
@@ -366,6 +367,116 @@ const editorReducer = (state, action) => {
                     ...action.payload,
                 },
             };
+
+        case 'SET_TEXT_PRESET':
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    textPreset: { ...state.lesson.textPreset, ...action.payload }
+                }
+            };
+
+        case 'APPLY_TEXT_PRESET': {
+            const preset = state.lesson.textPreset;
+            if (!preset) return state;
+
+            const MATH_OPS = ['+', '-', '×', '÷', '=', '(', ')'];
+
+            // Helper: wrap math operators in colored spans within HTML content
+            const colorMathOps = (html, opColor) => {
+                if (!opColor || !html) return html;
+                // First strip existing operator spans to avoid nesting
+                let clean = html.replace(/<span[^>]*class="math-op"[^>]*>(.*?)<\/span>/gi, '$1');
+                // Now wrap each operator character
+                let result = '';
+                let inTag = false;
+                for (let i = 0; i < clean.length; i++) {
+                    const ch = clean[i];
+                    if (ch === '<') inTag = true;
+                    if (inTag) {
+                        result += ch;
+                        if (ch === '>') inTag = false;
+                        continue;
+                    }
+                    if (MATH_OPS.includes(ch)) {
+                        result += `<span class="math-op" style="color:${opColor}">${ch}</span>`;
+                    } else {
+                        result += ch;
+                    }
+                }
+                return result;
+            };
+
+            // Helper: apply plain-text color (strip existing color spans, re-wrap whole text)
+            const applyTextColor = (html, color) => {
+                if (!color || !html) return html;
+                // Strip all font color tags added by execCommand
+                let clean = html.replace(/<font[^>]*color="[^"]*"[^>]*>(.*?)<\/font>/gi, '$1');
+                clean = clean.replace(/<span[^>]*style="[^"]*color:[^"]*"[^>]*>(.*?)<\/span>/gi, '$1');
+                // Wrap entire text in color
+                return `<span style="color:${color}">${clean}</span>`;
+            };
+
+            const newSlides = state.lesson.slides.map(slide => ({
+                ...slide,
+                elements: slide.elements.map(el => {
+                    if (el.type === 'text' && preset.text) {
+                        let content = el.content || '';
+                        if (preset.mathOperatorColor) content = colorMathOps(content, preset.mathOperatorColor);
+                        return {
+                            ...el,
+                            content,
+                            metadata: {
+                                ...el.metadata,
+                                ...(preset.text.fontFamily && { fontFamily: preset.text.fontFamily }),
+                                ...(preset.text.fontSize && { fontSize: preset.text.fontSize }),
+                                ...(preset.text.color && { color: preset.text.color }),
+                            }
+                        };
+                    }
+                    if (el.type === 'balloon' && preset.balloon) {
+                        let content = el.content || '';
+                        if (preset.mathOperatorColor) content = colorMathOps(content, preset.mathOperatorColor);
+                        return {
+                            ...el,
+                            content,
+                            metadata: {
+                                ...el.metadata,
+                                ...(preset.balloon.fontFamily && { fontFamily: preset.balloon.fontFamily }),
+                                ...(preset.balloon.fontSize && { fontSize: preset.balloon.fontSize }),
+                                ...(preset.balloon.color && { color: preset.balloon.color }),
+                            }
+                        };
+                    }
+                    if (el.type === 'quiz' && preset.quizAnswers) {
+                        const newOptions = (el.metadata?.options || []).map(opt => {
+                            let processed = opt;
+                            if (preset.mathOperatorColor) processed = colorMathOps(processed, preset.mathOperatorColor);
+                            return processed;
+                        });
+                        return {
+                            ...el,
+                            metadata: {
+                                ...el.metadata,
+                                options: newOptions,
+                                ...(preset.quizAnswers.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
+                                ...(preset.quizAnswers.fontSize && { answerFontSize: preset.quizAnswers.fontSize }),
+                                ...(preset.quizAnswers.color && { answerColor: preset.quizAnswers.color }),
+                            }
+                        };
+                    }
+                    return el;
+                })
+            }));
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: { ...state.lesson, slides: newSlides }
+            };
+        }
 
         case 'LOAD_LESSON':
             return {

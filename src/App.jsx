@@ -5,6 +5,7 @@ import Player from './components/Player/Player';
 import SlidesPage from './components/Editor/SlidesPage';
 import LessonsPage from './components/Home/LessonsPage';
 import Dashboard from './components/Home/Dashboard';
+import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
@@ -27,14 +28,12 @@ const AppContent = () => {
       let animDir = 'forward'; // Default: Slide In (Discover -> Player, etc)
       let shouldAnimate = true;
 
-      if (from === 'player' && (to === 'dashboard' || to === 'discover')) {
+      if (from === 'player' && (to === 'dashboard')) {
         animDir = 'back'; // Slide Out (Player -> Dashboard)
-      } else if (from === 'slides' && to === 'editor') {
-        // animDir = 'forward'; 
-      } else if (from === 'editor' && to === 'slides') {
-        // animDir = 'back';
-      } else if ((from === 'dashboard' && to === 'discover') || (from === 'discover' && to === 'dashboard')) {
-        shouldAnimate = false; // No animation for these transitions
+      } else if (from === 'game' && to === 'dashboard') {
+        animDir = 'back';
+      } else if (from === 'discover' && to === 'dashboard') {
+        animDir = 'back';
       }
 
       setDirection(animDir);
@@ -65,12 +64,24 @@ const AppContent = () => {
     };
 
     document.addEventListener('gesturestart', handleGestureStart);
-    // Also prevent touchmove scaling with 2 fingers if possible (though gesturestart usually catches it)
     return () => {
       document.removeEventListener('gesturestart', handleGestureStart);
     };
+  }, []);
+
+  // Track real viewport height for iOS Safari URL bar
+  React.useEffect(() => {
+    const setAppHeight = () => {
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    };
+
+    setAppHeight();
+
+    window.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', setAppHeight);
     return () => {
-      document.removeEventListener('gesturestart', handleGestureStart);
+      window.removeEventListener('resize', setAppHeight);
+      window.removeEventListener('orientationchange', setAppHeight);
     };
   }, []);
 
@@ -103,6 +114,27 @@ const AppContent = () => {
       case 'lessons': return <LessonsPage />;
       case 'player': return <Player />;
       case 'discover': return <DiscoverView />;
+      case 'game': return (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#0a0a0f' }}>
+          <PEMDASCartridge
+            config={{ locale: 'US', startLevel: 1, targetLevel: 9 }}
+            onComplete={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
+          />
+          <button
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
+            style={{
+              position: 'absolute', top: 12, left: 12, zIndex: 200,
+              background: 'rgba(255,255,255,0.15)', border: 'none',
+              borderRadius: '50%', width: 40, height: 40,
+              color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              backdropFilter: 'blur(6px)'
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      );
       default: return <Editor />;
     }
   };
