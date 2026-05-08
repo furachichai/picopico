@@ -228,6 +228,11 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
+            onClickCapture={() => {
+                // For locked quiz types, ensure selection always fires via capture phase
+                const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+                if (isLockedQuiz && !isSelected) onSelect();
+            }}
             onDoubleClick={() => {
                 if (element.type !== 'quiz' && onEdit) onEdit();
             }}

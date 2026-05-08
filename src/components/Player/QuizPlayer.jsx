@@ -599,12 +599,29 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             }
         };
 
+        const playParenSound = () => {
+            try {
+                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = pemAudioCtx.current;
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.12);
+            } catch(e) {}
+        };
+
         const handleParenClick = (token) => {
             if (pemSolved || pemFailed || disabled) return;
             // Find paren groups, set scope to the clicked one
             const groups = getParenGroups(pemAst);
             const match = groups.find(g => g.id === token.nodeId);
             if (match) {
+                playParenSound();
                 setPemScopeId(pemScopeId === match.id ? null : match.id);
             }
         };

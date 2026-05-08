@@ -1111,12 +1111,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.6em;
-    height: 1.6em;
+    width: 1.28em;
+    height: 1.28em;
     border-radius: 50%;
     background: rgba(167, 139, 250, 0.2);
     border: 2px solid rgba(167, 139, 250, 0.4);
     font-size: 0.85em;
+    color: #FFFFFF;
     transition: all 0.15s;
 }
 
@@ -1131,14 +1132,39 @@
 }
 
 .pem-token-paren {
-    color: #818CF8;
+    color: #A78BFA;
     cursor: pointer;
     font-size: 2.2rem;
     -webkit-tap-highlight-color: transparent;
+    padding: 0 4px;
+    border: 2px solid rgba(167, 139, 250, 0.35);
+    border-radius: 8px;
+    transition: all 0.15s;
+    position: relative;
+}
+
+.pem-token-paren::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+}
+
+.pem-token-paren:hover {
+    border-color: rgba(167, 139, 250, 0.6);
+    background: rgba(167, 139, 250, 0.1);
+}
+
+.pem-token-paren:active {
+    transform: scale(0.95);
 }
 
 .pem-paren-active {
     color: #FCD34D;
+    border-color: rgba(252, 211, 77, 0.5);
+    background: rgba(252, 211, 77, 0.1);
     text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
 }
 

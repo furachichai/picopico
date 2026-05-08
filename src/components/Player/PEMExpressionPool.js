@@ -144,13 +144,39 @@ function genEMDAS(diff) {
 }
 
 function genParen1(diff) {
-  const a = rand(1, 6), b = rand(1, 6);
-  const inner = `${a} ${pick(['+','-'])} ${b}`;
-  const outer = rand(2, 5);
-  let expr = `(${inner}) * ${outer}`;
-  if (diff > 2) expr += ` ${pick(['+','-'])} ${rand(1, 8)}`;
-  if (diff > 3) expr += ` ${pick(['+','-'])} ${rand(1, 5)}`;
-  return verify(expr) ? expr : `(3 + 2) * 4`;
+  if (diff <= 2) {
+    // Simple: (a+b) * c
+    const a = rand(1, 6), b = rand(1, 6);
+    const inner = `${a} ${pick(['+','-'])} ${b}`;
+    const outer = rand(2, 5);
+    return `(${inner}) * ${outer}`;
+  }
+  // Difficulty 3-5: mixed ops with parens, like 2+(4-2*2)^2-5/3
+  const allOps = ['+', '-', '*', '/'];
+  // Build inner paren with 2-3 terms
+  const innerTerms = diff >= 4 ? 3 : 2;
+  let inner = `${rand(1, 8)}`;
+  for (let i = 1; i < innerTerms; i++) {
+    inner += ` ${pick(allOps.slice(0,2))} ${rand(1, 6)}`;
+    if (i === 1 && diff >= 4) inner += ` ${pick(['*','/'])} ${rand(2, 4)}`;
+  }
+  let expr = '';
+  // Prefix: optional number + op
+  if (Math.random() > 0.3) expr += `${rand(1, 8)} ${pick(allOps)} `;
+  expr += `(${inner})`;
+  // Optional exponent at high difficulty
+  if (diff >= 5 && Math.random() > 0.4) expr += ` ^ 2`;
+  // Suffix: more terms
+  const suffixCount = diff >= 4 ? 2 : 1;
+  for (let i = 0; i < suffixCount; i++) {
+    const op = pick(allOps);
+    if (op === '/') {
+      expr += ` / ${pick([2, 3, 5])}`;
+    } else {
+      expr += ` ${op} ${rand(1, 8)}`;
+    }
+  }
+  return verify(expr) ? expr : `(3 + 2) * 4 - 1`;
 }
 
 function genParen2(diff) {

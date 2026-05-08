@@ -81,8 +81,8 @@ const Toolbar = ({ onOpenLibrary }) => {
                     }),
                     // PEM Defaults
                     ...(isPEM && {
-                        pemMode: 'A',
-                        pemDifficulty: 1,
+                        pemMode: 'P',
+                        pemDifficulty: 5,
                         pemExpression: null,
                     }),
                     // NL Defaults
