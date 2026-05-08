@@ -799,6 +799,25 @@
     flex-shrink: 0;
 }
 
+/* ---------- Narrator Message ---------- */
+.chat-narrator-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 8px 0;
+}
+
+.chat-narrator-text {
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    color: #475569;
+    font-weight: 600;
+    max-width: 85%;
+}
+
 .chat-row-tutor {
     justify-content: flex-start;
 }
@@ -1031,6 +1050,159 @@
 }
 
 .chat-continue-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #4F46E5;
+}
+
+/* ================================================================
+   PEM (PEMDAS Expression Manipulative) PLAYER
+   ================================================================ */
+.pem-player-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
+    border-radius: 16px;
+    padding: 30px 20px;
+    position: relative;
+}
+
+.pem-expression {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px;
+}
+
+.pem-token {
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.pem-token-number {
+    color: #FFFFFF;
+}
+
+.pem-token-op {
+    color: #A78BFA;
+    cursor: pointer;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Invisible larger tap area */
+.pem-token-op::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -10px;
+    right: -10px;
+    bottom: -12px;
+}
+
+.pem-op-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    background: rgba(167, 139, 250, 0.2);
+    border: 2px solid rgba(167, 139, 250, 0.4);
+    font-size: 0.85em;
+    transition: all 0.15s;
+}
+
+.pem-token-op:hover .pem-op-circle {
+    background: rgba(167, 139, 250, 0.35);
+    border-color: rgba(167, 139, 250, 0.7);
+    transform: scale(1.1);
+}
+
+.pem-token-op:active .pem-op-circle {
+    transform: scale(0.95);
+}
+
+.pem-token-paren {
+    color: #818CF8;
+    cursor: pointer;
+    font-size: 2.2rem;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pem-paren-active {
+    color: #FCD34D;
+    text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
+}
+
+.pem-token-superscript {
+    font-size: 1.2rem;
+    vertical-align: super;
+    margin-left: -2px;
+}
+
+.pem-greyed {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+/* Flash animations */
+.pem-flash-green {
+    animation: pemFlashGreen 0.4s ease;
+}
+
+.pem-flash-red {
+    animation: pemFlashRed 0.5s ease;
+}
+
+@keyframes pemFlashGreen {
+    0% { color: #34D399; transform: scale(1.15); }
+    100% { color: inherit; transform: scale(1); }
+}
+
+@keyframes pemFlashRed {
+    0%, 20%, 40%, 60%, 80% { color: #EF4444; transform: translateX(-3px); }
+    10%, 30%, 50%, 70%, 90% { color: #EF4444; transform: translateX(3px); }
+    100% { color: inherit; transform: translateX(0); }
+}
+
+/* Failed state */
+.pem-failed .pem-expression {
+    filter: saturate(0.3);
+}
+
+.pem-failed .pem-token {
+    color: #EF4444 !important;
+    opacity: 0.6;
+}
+
+.pem-continue-btn {
+    margin-top: 20px;
+    padding: 12px 40px;
+    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #4F46E5;
+    transition: all 0.15s;
+}
+
+.pem-continue-btn:hover {
+    background: linear-gradient(135deg, #4F46E5, #7C3AED);
+}
+
+.pem-continue-btn:active {
     transform: translateY(2px);
     box-shadow: 0 2px 0 #4F46E5;
 }

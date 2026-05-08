@@ -523,15 +523,15 @@ const Player = () => {
                                     return (
                                         <div
                                             key={element.id}
-                                            className={`player-element ${element.metadata?.quizType === 'chatquiz' ? 'player-element-chatquiz' : ''}`}
+                                            className={`player-element ${(element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'player-element-chatquiz' : ''}`}
                                             style={{
-                                                left: element.metadata?.quizType === 'chatquiz' ? '50%' : `${element.x}%`,
-                                                top: element.metadata?.quizType === 'chatquiz' ? '55%' : `${element.y}%`,
-                                                width: element.metadata?.quizType === 'chatquiz' ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
-                                                height: element.metadata?.quizType === 'chatquiz' ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
-                                                transform: element.metadata?.quizType === 'chatquiz' ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                                                zIndex: element.metadata?.quizType === 'chatquiz' ? 100 : 10,
-                                                pointerEvents: element.metadata?.quizType === 'chatquiz' ? 'auto' : undefined,
+                                                left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '50%' : `${element.x}%`,
+                                                top: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '55%' : `${element.y}%`,
+                                                width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
+                                                height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                                                transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
+                                                zIndex: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 100 : 10,
+                                                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'auto' : undefined,
                                             }}
                                         >
                                             {element.type === 'text' && (

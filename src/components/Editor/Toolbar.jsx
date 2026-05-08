@@ -8,6 +8,7 @@ const Toolbar = ({ onOpenLibrary }) => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [showQuizMenu, setShowQuizMenu] = useState(false);
+    const [showQ2Menu, setShowQ2Menu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
 
     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
@@ -35,6 +36,7 @@ const Toolbar = ({ onOpenLibrary }) => {
 
     const handleAddQuiz = (type = 'classic') => {
         setShowQuizMenu(false);
+        setShowQ2Menu(false);
 
         // Check for existing quiz
         const hasQuiz = currentSlide?.elements?.some(el => el.type === ELEMENT_TYPES.QUIZ);
@@ -46,11 +48,13 @@ const Toolbar = ({ onOpenLibrary }) => {
         const isTF = type === 'tf';
         const isReorder = type === 'reorder';
         const isChatQuiz = type === 'chatquiz';
+        const isPEM = type === 'pem';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
         else if (isReorder) defaultOptions = ['First', 'Second', 'Third', 'Fourth'];
         else if (isChatQuiz) defaultOptions = [];
+        else if (isPEM) defaultOptions = [];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -74,6 +78,12 @@ const Toolbar = ({ onOpenLibrary }) => {
                             { type: 'message', text: 'Hello! Let me ask you something.' },
                             { type: 'quiz', options: ['Answer A', 'Answer B'], correctIndex: 0 }
                         ]
+                    }),
+                    // PEM Defaults
+                    ...(isPEM && {
+                        pemMode: 'A',
+                        pemDifficulty: 1,
+                        pemExpression: null,
                     }),
                     // NL Defaults
                     nlConfig: type === 'nl' ? {
@@ -129,6 +139,21 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 <button onClick={() => handleAddQuiz('nl')}>Number Line</button>
                                 <button onClick={() => handleAddQuiz('reorder')}>Reorder</button>
                                 <button onClick={() => handleAddQuiz('chatquiz')}>Chat</button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
+                        <button
+                            className={`btn-secondary ${showQ2Menu ? 'active' : ''}`}
+                            onClick={() => setShowQ2Menu(!showQ2Menu)}
+                            title="Interactive Q2"
+                        >
+                            Q2
+                        </button>
+                        {showQ2Menu && (
+                            <div className="toolbar-submenu">
+                                <button onClick={() => handleAddQuiz('pem')}>PEM</button>
                             </div>
                         )}
                     </div>

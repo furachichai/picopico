@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ContextualMenu.css';
+import { PEM_MODES } from '../Player/PEMExpressionPool';
 
 const FONTS = [
     { name: 'Nunito', value: 'Nunito' },
@@ -655,6 +656,49 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         🎨 Presets
                     </button>
                 )}
+                </>
+            )}
+
+            {/* PEM Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'pem' && (
+                <>
+                    <div className="menu-group">
+                        <label>Mode</label>
+                        <select
+                            value={metadata.pemMode || 'A'}
+                            onChange={(e) => updateMetadata({ pemMode: e.target.value })}
+                            style={{ fontSize: '0.8rem' }}
+                        >
+                            {PEM_MODES.map(m => (
+                                <option key={m.key} value={m.key}>{m.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                    {metadata.pemMode !== 'MANUAL' && (
+                        <div className="menu-group">
+                            <label>Difficulty</label>
+                            <input
+                                type="number"
+                                min="1" max="5"
+                                value={metadata.pemDifficulty || 1}
+                                onChange={(e) => updateMetadata({ pemDifficulty: parseInt(e.target.value) })}
+                                style={{ width: '50px' }}
+                            />
+                        </div>
+                    )}
+                    {metadata.pemMode === 'MANUAL' && (
+                        <div className="menu-group">
+                            <label>Expression</label>
+                            <input
+                                type="text"
+                                value={metadata.pemExpression || ''}
+                                onChange={(e) => updateMetadata({ pemExpression: e.target.value })}
+                                placeholder="e.g. 2!3 + 4 * 5"
+                                style={{ flex: 1, padding: '5px', fontFamily: 'monospace' }}
+                            />
+                        </div>
+                    )}
+                    <div className="menu-divider"></div>
                 </>
             )}
 

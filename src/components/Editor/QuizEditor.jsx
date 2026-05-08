@@ -78,6 +78,49 @@ const QuizEditor = ({ element, onChange }) => {
     };
 
     // -------------------------------------------------------------------------
+    // PEM RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'pem') {
+        const pemMode = element.metadata?.pemMode || 'A';
+        const pemDifficulty = element.metadata?.pemDifficulty || 1;
+        const pemExpression = element.metadata?.pemExpression || null;
+
+        return (
+            <div className="quiz-editor-2 pem-editor-mode" onMouseDown={(e) => e.stopPropagation()}>
+                <div className="pem-editor-preview">
+                    <div className="pem-editor-icon">🧮</div>
+                    <div className="pem-editor-info">
+                        <div className="pem-editor-title">PEM Expression</div>
+                        <div className="pem-editor-detail">
+                            Mode: <strong>{pemMode}</strong> &nbsp;|&nbsp; Difficulty: <strong>{pemDifficulty}</strong>
+                        </div>
+                        {pemMode === 'MANUAL' && (
+                            <div className="pem-editor-manual">
+                                <div
+                                    contentEditable
+                                    suppressContentEditableWarning
+                                    className="pem-manual-input"
+                                    onInput={(e) => onChange(element.id, { pemExpression: e.currentTarget.textContent })}
+                                    ref={(el) => {
+                                        if (el && el.textContent !== (pemExpression || '') && document.activeElement !== el) {
+                                            el.textContent = pemExpression || '';
+                                        }
+                                    }}
+                                    data-placeholder="e.g. 2!3 + (4 * 5)"
+                                />
+                                <div className="pem-manual-hint">Use ! for exponents: 2!3 = 2³</div>
+                            </div>
+                        )}
+                        {pemMode !== 'MANUAL' && (
+                            <div className="pem-editor-hint">Expression auto-generated. Configure in contextual menu.</div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // -------------------------------------------------------------------------
     // CHATQUIZ RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'chatquiz') {
@@ -111,6 +154,13 @@ const QuizEditor = ({ element, onChange }) => {
         const updateNodeText = (index, text) => {
             const newNodes = [...chatNodes];
             newNodes[index] = { ...newNodes[index], text };
+            updateChatNodes(newNodes);
+        };
+
+        const toggleNodeStyle = (index) => {
+            const newNodes = [...chatNodes];
+            const current = newNodes[index].style || 'bubble';
+            newNodes[index] = { ...newNodes[index], style: current === 'bubble' ? 'narrator' : 'bubble' };
             updateChatNodes(newNodes);
         };
 
@@ -151,10 +201,19 @@ const QuizEditor = ({ element, onChange }) => {
             <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => e.stopPropagation()}>
                 <div className="chatquiz-timeline">
                     {chatNodes.map((node, index) => (
-                        <div key={index} className={`chatquiz-node chatquiz-node-${node.type}`}>
+                        <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>
                             <div className="chatquiz-node-header">
-                                <span className="chatquiz-node-icon">{node.type === 'message' ? '🤖' : '🧩'}</span>
-                                <span className="chatquiz-node-label">{node.type === 'message' ? 'Message' : 'Quiz'}</span>
+                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : '🧩'}</span>
+                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : 'Quiz'}</span>
+                                {node.type === 'message' && (
+                                    <button
+                                        className={`chatquiz-style-toggle ${node.style === 'narrator' ? 'active' : ''}`}
+                                        onClick={() => toggleNodeStyle(index)}
+                                        title={node.style === 'narrator' ? 'Switch to bubble' : 'Switch to narrator'}
+                                    >
+                                        {node.style === 'narrator' ? '💬' : '📢'}
+                                    </button>
+                                )}
                                 <div className="chatquiz-node-actions">
                                     <button className="chatquiz-arrow" onClick={() => moveNode(index, -1)} disabled={index === 0}>▲</button>
                                     <button className="chatquiz-arrow" onClick={() => moveNode(index, 1)} disabled={index === chatNodes.length - 1}>▼</button>

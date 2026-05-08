@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
 import './QuizPlayer.css';
 import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
+import { parseExpression, astToTokens, validateOperation, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
+import { getExpression, editorToEngine } from './PEMExpressionPool';
 
 /**
  * QuizPlayer Component
@@ -60,6 +62,17 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [chatOptionsVisible, setChatOptionsVisible] = useState(false);
     const [chatFadingOut, setChatFadingOut] = useState(false);
     const chatAdvanceTimer = React.useRef(null);
+
+    // PEM State (always declared to avoid hook order issues)
+    const [pemAst, setPemAst] = useState(null);
+    const [pemScopeId, setPemScopeId] = useState(null);
+    const [pemErrors, setPemErrors] = useState(0);
+    const [pemFailed, setPemFailed] = useState(false);
+    const [pemSolved, setPemSolved] = useState(false);
+    const [pemFlash, setPemFlash] = useState(null); // { ids: [], color: 'red'|'green' }
+    const [pemNoteIndex, setPemNoteIndex] = useState(0);
+    const [pemExprStr, setPemExprStr] = useState(null);
+    const pemAudioCtx = React.useRef(null);
 
     const attemptsUsed = wrongIndices.size;
 
@@ -402,6 +415,15 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     <div className="chat-spacer" />
                     {chatNodes.slice(0, currentNodeIndex + 1).map((node, idx) => {
                         if (node.type === 'message') {
+                            if (node.style === 'narrator') {
+                                return (
+                                    <div key={idx} className="chat-narrator-row">
+                                        <div className="chat-narrator-text">
+                                            {node.text}
+                                        </div>
+                                    </div>
+                                );
+                            }
                             return (
                                 <div key={idx} className="chat-bubble-row chat-row-tutor">
                                     <div className="chat-avatar">🤖</div>
@@ -455,6 +477,180 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     >
                         Done
                     </button>
+                )}
+            </div>
+        );
+    }
+
+    // PEM MODE
+    if (quizType === 'pem') {
+        const C_MAJOR = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+
+        const playNote = (noteIdx) => {
+            try {
+                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = pemAudioCtx.current;
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], ctx.currentTime);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+            } catch(e) {}
+        };
+
+        const playErrorSfx = () => {
+            try {
+                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = pemAudioCtx.current;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, ctx.currentTime);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        };
+
+        // Initialize PEM AST on first render
+        if (!pemAst && !pemSolved && !pemFailed) {
+            try {
+                resetIdCounter();
+                let expr;
+                const mode = data.metadata?.pemMode || 'A';
+                const diff = data.metadata?.pemDifficulty || 1;
+                if (mode === 'MANUAL' && data.metadata?.pemExpression) {
+                    expr = editorToEngine(data.metadata.pemExpression);
+                } else {
+                    expr = getExpression(mode, diff);
+                }
+                setPemExprStr(expr);
+                setPemAst(parseExpression(expr));
+            } catch(e) {
+                console.error('PEM parse error:', e);
+                setPemExprStr('3 + 2');
+                setPemAst(parseExpression('3 + 2'));
+            }
+        }
+
+        const tokens = pemAst ? astToTokens(pemAst) : [];
+        const scopeNodeIds = pemScopeId && pemAst ? new Set(getNodeIdsInScope(findNodeById(pemAst, pemScopeId))) : null;
+        const flashIds = pemFlash ? new Set(pemFlash.ids) : new Set();
+
+        const handlePemOperatorClick = (token) => {
+            if (pemSolved || pemFailed || disabled) return;
+            const opMap = { '+': 'A', '-': 'S', '*': 'M', '/': 'D', '^': 'E' };
+            const pemKey = opMap[token.value];
+            if (!pemKey) return;
+
+            const result = validateOperation(pemAst, pemScopeId, pemKey);
+            if (result.valid) {
+                // Flash green on the operation tokens
+                const opTokens = getOperationTokenIds(result.targetNode);
+                setPemFlash({ ids: opTokens.allIds, color: 'green' });
+                playNote(pemNoteIndex);
+                setPemNoteIndex(prev => prev + 1);
+
+                setTimeout(() => {
+                    let newAst = replaceNodeWithResult(pemAst, result.targetNodeId);
+                    newAst = simplifyParens(newAst);
+
+                    // If scope was resolved, auto-exit scope
+                    if (pemScopeId) {
+                        const scopeNode = findNodeById(newAst, pemScopeId);
+                        if (!scopeNode || scopeNode.type === 'NumberNode') {
+                            setPemScopeId(null);
+                        }
+                    }
+
+                    if (isFullySimplified(newAst)) {
+                        setPemAst(newAst);
+                        setPemSolved(true);
+                        setPemFlash(null);
+                        playSound('correct');
+                        if (onBanner) onBanner('correct', 'Topo!');
+                        setTimeout(() => { if (onNext) onNext(); }, 2000);
+                    } else {
+                        setPemAst(newAst);
+                        setPemFlash(null);
+                    }
+                }, 400);
+            } else {
+                // Wrong
+                setPemFlash({ ids: result.nodeIds || [token.nodeId], color: 'red' });
+                playErrorSfx();
+                setPemNoteIndex(0); // Reset scale
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                const newErrors = pemErrors + 1;
+                setPemErrors(newErrors);
+                if (newErrors >= 3) {
+                    setTimeout(() => {
+                        setPemFailed(true);
+                        setPemFlash(null);
+                    }, 600);
+                } else {
+                    setTimeout(() => setPemFlash(null), 600);
+                }
+            }
+        };
+
+        const handleParenClick = (token) => {
+            if (pemSolved || pemFailed || disabled) return;
+            // Find paren groups, set scope to the clicked one
+            const groups = getParenGroups(pemAst);
+            const match = groups.find(g => g.id === token.nodeId);
+            if (match) {
+                setPemScopeId(pemScopeId === match.id ? null : match.id);
+            }
+        };
+
+        const handlePemOutsideClick = () => {
+            if (pemScopeId) setPemScopeId(null);
+        };
+
+        return (
+            <div className={`quiz-player-2 pem-player-mode ${pemFailed ? 'pem-failed' : ''}`}
+                 onClick={handlePemOutsideClick}>
+                <div className="pem-expression" onClick={(e) => e.stopPropagation()}>
+                    {tokens.map((token, i) => {
+                        if (token.hidden) return null;
+                        const isInScope = !scopeNodeIds || scopeNodeIds.has(token.nodeId);
+                        const isFlashGreen = flashIds.has(token.nodeId) && pemFlash?.color === 'green';
+                        const isFlashRed = flashIds.has(token.nodeId) && pemFlash?.color === 'red';
+
+                        if (token.type === 'paren') {
+                            return (
+                                <span key={i}
+                                    className={`pem-token pem-token-paren ${!isInScope ? 'pem-greyed' : ''} ${pemScopeId === token.nodeId ? 'pem-paren-active' : ''}`}
+                                    onClick={(e) => { e.stopPropagation(); handleParenClick(token); }}
+                                >{token.value}</span>
+                            );
+                        }
+                        if (token.type === 'op') {
+                            return (
+                                <span key={i}
+                                    className={`pem-token pem-token-op ${!isInScope ? 'pem-greyed' : ''} ${isFlashGreen ? 'pem-flash-green' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                                    onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token); }}
+                                >
+                                    <span className="pem-op-circle">{token.value === '*' ? '×' : token.value === '/' ? '÷' : token.value}</span>
+                                </span>
+                            );
+                        }
+                        // number
+                        return (
+                            <span key={i}
+                                className={`pem-token pem-token-number ${!isInScope ? 'pem-greyed' : ''} ${isFlashGreen ? 'pem-flash-green' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                            >{token.value}</span>
+                        );
+                    })}
+                </div>
+                {pemFailed && !disabled && (
+                    <button className="pem-continue-btn" onClick={(e) => { e.stopPropagation(); if (onNext) onNext(); }}>Continue</button>
                 )}
             </div>
         );

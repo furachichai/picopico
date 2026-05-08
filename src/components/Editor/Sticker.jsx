@@ -49,8 +49,9 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             return;
         }
 
-        // ChatQuiz: no dragging, resizing, or rotating — it fills the stage
-        if (element.metadata?.quizType === 'chatquiz' && type === 'move') {
+        // ChatQuiz/PEM: no dragging, resizing, or rotating — it fills the stage
+        const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+        if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
             if (!isSelected) onSelect();
             return;
@@ -218,11 +219,11 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             ref={stickerRef}
             className={`sticker ${isSelected ? 'selected' : ''}`}
             style={{
-                left: element.metadata?.quizType === 'chatquiz' ? '50%' : `${element.x}%`,
-                top: element.metadata?.quizType === 'chatquiz' ? '55%' : `${element.y}%`,
-                width: element.metadata?.quizType === 'chatquiz' ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
-                height: element.metadata?.quizType === 'chatquiz' ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
-                transform: element.metadata?.quizType === 'chatquiz' ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '50%' : `${element.x}%`,
+                top: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '55%' : `${element.y}%`,
+                width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
+                height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: isSelected ? 100 : 1,
             }}
             onMouseDown={(e) => handleStart(e, 'move')}

@@ -388,6 +388,75 @@ input:checked+.toggle-slider:before {
 }
 
 /* ============================================================
+   PEM EDITOR
+   ============================================================ */
+.pem-editor-mode {
+    padding: 12px;
+}
+
+.pem-editor-preview {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    background: linear-gradient(135deg, #1E1B4B, #312E81);
+    border-radius: 12px;
+}
+
+.pem-editor-icon {
+    font-size: 2rem;
+}
+
+.pem-editor-info {
+    flex: 1;
+}
+
+.pem-editor-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.pem-editor-detail {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    color: #C7D2FE;
+}
+
+.pem-editor-hint {
+    font-size: 0.7rem;
+    color: #A5B4FC;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.pem-manual-input {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    min-height: 1.5em;
+    outline: none;
+}
+
+.pem-manual-input:empty::before {
+    content: attr(data-placeholder);
+    color: rgba(255,255,255,0.4);
+}
+
+.pem-manual-hint {
+    font-size: 0.65rem;
+    color: #818CF8;
+    margin-top: 4px;
+}
+
+/* ============================================================
    CHATQUIZ EDITOR
    ============================================================ */
 .chatquiz-mode {
@@ -437,7 +506,32 @@ input:checked+.toggle-slider:before {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #64748B;
-    flex: 1;
+}
+
+.chatquiz-style-toggle {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.chatquiz-style-toggle:hover {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.chatquiz-style-toggle.active {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.chatquiz-node-narrator {
+    border-color: #A78BFA;
+    border-style: dashed;
+    background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
 }
 
 .chatquiz-node-actions {
