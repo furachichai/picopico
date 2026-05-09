@@ -707,7 +707,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             if (token.hidden) return null;
                             return (
                                 <span key={`${token.nodeId}-${token.type}-${token.value}`}
-                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript && !isMergePop ? 'pem-token-superscript' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token.isExponentOp ? { value: '^', nodeId: mergeTargetId } : token); }}
                                     data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
