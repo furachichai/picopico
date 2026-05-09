@@ -256,9 +256,9 @@ const Dashboard = () => {
           --primary-dark: #7C3AED;
           --secondary: #FACC15;
           --secondary-dark: #EAB308;
-          --bg: #F8FAFC;
-          --text: #1E293B;
-          --text-light: #64748B;
+          --bg: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+          --text: #F8FAFC;
+          --text-light: #CBD5E1;
           --white: #ffffff;
           --radius: 20px;
           --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -267,7 +267,7 @@ const Dashboard = () => {
 
         .dashboard-container {
           font-family: 'Outfit', 'Inter', sans-serif;
-          background-color: var(--bg);
+          background: var(--bg);
           height: 100vh;
           display: flex;
           flex-direction: column;
@@ -285,7 +285,7 @@ const Dashboard = () => {
           justify-content: space-between;
           align-items: center;
           padding: 20px;
-          background-color: var(--bg);
+          background: transparent;
           z-index: 10;
           flex-shrink: 0;
         }
@@ -338,68 +338,6 @@ const Dashboard = () => {
         }
         .scroll-area::-webkit-scrollbar {
           display: none; /* Chrome/Safari */
-        }
-
-        /* Hero Card */
-        .hero-card {
-          background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-          border-radius: var(--radius);
-          padding: 24px;
-          color: var(--white);
-          margin-bottom: 32px;
-          box-shadow: var(--shadow-lg);
-          position: relative;
-          overflow: hidden;
-          flex-shrink: 0;
-        }
-
-        .hero-card::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          right: -20%;
-          width: 200px;
-          height: 200px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 50%;
-        }
-
-        .mission-label {
-          text-transform: uppercase;
-          font-size: 0.75rem;
-          letter-spacing: 1px;
-          opacity: 0.9;
-          margin-bottom: 8px;
-          font-weight: 600;
-        }
-
-        .mission-title {
-          font-size: 1.5rem;
-          font-weight: 800;
-          margin-bottom: 16px;
-          line-height: 1.2;
-        }
-
-        .progress-container {
-          background: rgba(0, 0, 0, 0.2);
-          height: 8px;
-          border-radius: 4px;
-          overflow: hidden;
-          margin-bottom: 8px;
-        }
-
-        .progress-bar {
-          height: 100%;
-          background: var(--secondary);
-          width: 66%;
-          border-radius: 4px;
-        }
-
-        .progress-text {
-          font-size: 0.85rem;
-          text-align: right;
-          opacity: 0.9;
-          font-weight: 500;
         }
 
         /* Lesson Path */
@@ -600,16 +538,6 @@ const Dashboard = () => {
 
       {/* Scrollable Content */}
       <div className="scroll-area">
-        {/* Hero Card */}
-        <div className="hero-card">
-          <div className="mission-label">{t('dashboard.mission')}</div>
-          <div className="mission-title">{lessons.length > 0 ? lessons[0].title : 'Start Learning'}</div>
-          <div className="progress-container">
-            <div className="progress-bar"></div>
-          </div>
-          <div className="progress-text">1/{lessons.length} Lessons</div>
-        </div>
-
         {/* Lesson Path */}
         <div className="lesson-path">
           {loading ? (
@@ -709,11 +637,10 @@ const Dashboard = () => {
                               background: 'transparent',
                               border: 'none',
                               cursor: 'pointer',
-                              opacity: 0.7,
+                              opacity: 0.9,
                               padding: '2px',
                               display: 'flex',
-                              alignItems: 'center',
-                              filter: 'brightness(2)'
+                              alignItems: 'center'
                             }}
                           >
                             ✏️
