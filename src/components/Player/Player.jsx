@@ -435,7 +435,7 @@ const Player = () => {
                                         left: 0,
                                         width: '100%',
                                         height: '100%',
-                                        backgroundImage: slide.background,
+                                        backgroundImage: slide.background.replaceAll('/src/assets/', '/assets/'),
                                         backgroundSize: 'contain',
                                         backgroundPosition: 'center',
                                         backgroundRepeat: 'no-repeat',
@@ -554,7 +554,7 @@ const Player = () => {
                                                     dangerouslySetInnerHTML={{ __html: element.content }}
                                                 />
                                             )}
-                                            {element.type === 'image' && <img src={element.content} alt="content" />}
+                                            {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" />}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
                                                     data={element}
