@@ -1086,7 +1086,7 @@
 
 .pem-token {
     font-family: 'Outfit', 'Nunito', sans-serif;
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     font-weight: 700;
     transition: all 0.3s ease;
     user-select: none;
@@ -1101,6 +1101,7 @@
     cursor: pointer;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+    font-size: 1.7rem;
 }
 
 /* Invisible larger tap area */
@@ -1138,12 +1139,12 @@
 }
 
 .pem-token-paren {
-    color: #A78BFA;
+    color: #FFFFFF;
     cursor: pointer;
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     -webkit-tap-highlight-color: transparent;
     padding: 0 4px;
-    border: 2px solid rgba(167, 139, 250, 0.35);
+    border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 8px;
     transition: all 0.15s;
     position: relative;
@@ -1159,8 +1160,8 @@
 }
 
 .pem-token-paren:hover {
-    border-color: rgba(167, 139, 250, 0.6);
-    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .pem-token-paren:active {

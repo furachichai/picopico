@@ -18,6 +18,11 @@ function verify(expr) {
   try {
     const jsExpr = expr.replace(/\^/g, '**');
     const result = eval(jsExpr);
+    
+    // Ensure expression fits in a single line (max 16 tokens)
+    const tokenCount = expr.replace(/\s+/g, '').match(/\d+|[+\-*/^()]/g)?.length || 0;
+    if (tokenCount > 16) return false;
+
     return Number.isInteger(result) && result > 0 && result < 10000;
   } catch { return false; }
 }
@@ -145,16 +150,16 @@ function genEMDAS(diff) {
 
 function genParen1(diff) {
   if (diff <= 2) {
-    // Simple: (a+b) * c
-    const a = rand(1, 6), b = rand(1, 6);
-    const inner = `${a} ${pick(['+','-'])} ${b}`;
+    // Need at least 2 operations inside: (a + b * c)
+    const a = rand(1, 6), b = rand(1, 6), c = rand(1, 6);
+    const inner = `${a} ${pick(['+','-'])} ${b} * ${c}`;
     const outer = rand(2, 5);
     return `(${inner}) * ${outer}`;
   }
-  // Difficulty 3-5: mixed ops with parens, like 2+(4-2*2)^2-5/3
+  // Difficulty 3-5: mixed ops with parens
   const allOps = ['+', '-', '*', '/'];
-  // Build inner paren with 2-3 terms
-  const innerTerms = diff >= 4 ? 3 : 2;
+  // Build inner paren with at least 3 terms (2 operations)
+  const innerTerms = 3;
   let inner = `${rand(1, 8)}`;
   for (let i = 1; i < innerTerms; i++) {
     inner += ` ${pick(allOps.slice(0,2))} ${rand(1, 6)}`;
@@ -167,34 +172,35 @@ function genParen1(diff) {
   // Optional exponent at high difficulty
   if (diff >= 5 && Math.random() > 0.4) expr += ` ^ 2`;
   // Suffix: more terms
-  const suffixCount = diff >= 4 ? 2 : 1;
+  const suffixCount = diff >= 4 ? 1 : 0;
   for (let i = 0; i < suffixCount; i++) {
     const op = pick(allOps);
     if (op === '/') {
-      expr += ` / ${pick([2, 3, 5])}`;
+      expr += ` / ${pick([2, 3])}`;
     } else {
-      expr += ` ${op} ${rand(1, 8)}`;
+      expr += ` ${op} ${rand(1, 5)}`;
     }
   }
-  return verify(expr) ? expr : `(3 + 2) * 4 - 1`;
+  return verify(expr) ? expr : `(3 + 2 * 2) * 2`;
 }
 
 function genParen2(diff) {
-  const a = rand(1, 5), b = rand(1, 5);
-  const c = rand(1, 5), d = rand(1, 5);
-  let expr = `(${a} + ${b}) * (${c} + ${d})`;
-  if (diff > 3) expr += ` - ${rand(1, 5)}`;
-  return verify(expr) ? expr : `(2 + 3) * (4 + 1)`;
+  // Ensure both parens have at least 2 operations
+  const a = rand(1, 5), b = rand(1, 5), c = rand(1, 5);
+  const d = rand(1, 5), e = rand(1, 5), f = rand(1, 5);
+  let expr = `(${a} + ${b} * ${c}) + (${d} * ${e} - ${f})`;
+  return verify(expr) ? expr : `(1 + 2 * 2) + (3 * 2 - 1)`;
 }
 
 function genParenNested(diff, depth) {
-  let inner = `${rand(1, 5)} ${pick(['+','-'])} ${rand(1, 5)}`;
+  // Inner most needs 2 operations
+  let inner = `${rand(1, 5)} ${pick(['+','-'])} ${rand(1, 5)} * ${rand(2, 4)}`;
   for (let d = 1; d < depth; d++) {
-    inner = `(${inner}) ${pick(['*','+'])} ${rand(2, 5)}`;
+    inner = `(${inner}) ${pick(['*','+'])} ${rand(2, 4)} + ${rand(1, 3)}`;
   }
   let expr = `(${inner})`;
-  if (diff > 2) expr += ` ${pick(['+','-'])} ${rand(1, 8)}`;
-  return verify(expr) ? expr : `((2 + 1) * 3) + 5`;
+  if (diff > 2) expr += ` ${pick(['+','-'])} ${rand(1, 5)}`;
+  return verify(expr) ? expr : `((2 + 1 * 2) * 2 + 1)`;
 }
 
 // Cache pools per mode+difficulty
