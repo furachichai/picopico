@@ -411,41 +411,12 @@ const Dashboard = () => {
         }
 
         .lesson-card {
-          border-radius: var(--radius);
-          padding: 18px 20px;
+          padding: 12px 16px;
           display: flex;
           align-items: center;
-          gap: 16px;
-          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
-          position: relative;
-          color: white;
+          gap: 20px;
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
           cursor: pointer;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-          overflow: hidden;
-        }
-
-        .lesson-card::before {
-          content: '';
-          position: absolute;
-          top: -40%;
-          right: -20%;
-          width: 120px;
-          height: 120px;
-          background: rgba(255,255,255,0.12);
-          border-radius: 50%;
-          pointer-events: none;
-        }
-
-        .lesson-card::after {
-          content: '';
-          position: absolute;
-          bottom: -30%;
-          left: -10%;
-          width: 80px;
-          height: 80px;
-          background: rgba(255,255,255,0.08);
-          border-radius: 50%;
-          pointer-events: none;
         }
 
         .lesson-card:active {
@@ -454,18 +425,19 @@ const Dashboard = () => {
         }
 
         .lesson-icon-box {
-          width: 52px;
-          height: 52px;
-          border-radius: 14px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
+          background: transparent;
+          border: 3px solid currentColor;
+          color: currentColor;
           font-weight: 700;
-          font-size: 1.2rem;
-          background: rgba(255,255,255,0.25);
-          color: white;
-          backdrop-filter: blur(4px);
+          font-size: 1.5rem;
+          transition: all 0.2s;
         }
 
         .lesson-info {
@@ -475,25 +447,24 @@ const Dashboard = () => {
         }
 
         .lesson-title {
-          font-weight: 700;
-          font-size: 1.1rem;
+          font-weight: 800;
+          font-size: 1.15rem;
           margin-bottom: 4px;
-          color: white;
+          color: var(--text);
         }
 
         .lesson-desc {
-          font-size: 0.85rem;
-          color: rgba(255,255,255,0.85);
+          font-size: 0.9rem;
+          color: var(--text-light);
         }
 
         /* Status Styles */
         .status-completed .lesson-icon-box {
-          background: rgba(255,255,255,0.35);
+          background: rgba(0,0,0,0.03);
         }
 
         .status-active {
           transform: scale(1.02);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
         
         .status-active:active {
@@ -645,17 +616,10 @@ const Dashboard = () => {
             <div>Loading lessons...</div>
           ) : (
             lessons.map((lesson, idx) => {
-              const GRADIENTS = [
-                'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)',
-                'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)',
-                'linear-gradient(135deg, #06B6D4 0%, #10B981 100%)',
-                'linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)',
-                'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
-                'linear-gradient(135deg, #14B8A6 0%, #3B82F6 100%)',
-                'linear-gradient(135deg, #A855F7 0%, #EC4899 100%)',
-                'linear-gradient(135deg, #22D3EE 0%, #818CF8 100%)',
+              const COLORS = [
+                '#FF6B6B', '#8B5CF6', '#06B6D4', '#EC4899', '#F59E0B', '#14B8A6', '#A855F7', '#22D3EE'
               ];
-              const gradient = GRADIENTS[idx % GRADIENTS.length];
+              const color = COLORS[idx % COLORS.length];
 
               return (
                 <div
@@ -665,7 +629,7 @@ const Dashboard = () => {
                     if (e.target.closest('input') || e.target.closest('button')) return;
                     handlePlayLesson(lesson)
                   }}
-                  style={{ background: gradient }}
+                  style={{ color: color }}
                 >
                   <div className="lesson-icon-box">
                     {lesson.icon}
