@@ -551,7 +551,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const flashIds = pemFlash ? new Set(pemFlash.ids) : new Set();
 
         const handlePemOperatorClick = (token) => {
-            if (pemSolved || pemFailed || disabled) return;
+            if (pemSolved || pemFailed || disabled || pemMerge) return;
             const opMap = { '+': 'A', '-': 'S', '*': 'M', '/': 'D', '^': 'E' };
             const pemKey = opMap[token.value];
             if (!pemKey) return;
@@ -692,10 +692,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         const isMergePop = pemMerge?.phase === 'pop' && pemMerge.opId === mergeTargetId;
                         const isMergeFade = pemMerge?.phase === 'pop' && pemMerge.allIds.has(mergeTargetId) && pemMerge.opId !== mergeTargetId;
 
+                        const isGreyed = !isInScope || (pemMerge && !isMerging);
+
                         if (token.type === 'paren') {
+                            if (token.hidden) return null;
                             return (
-                                <span key={i}
-                                    className={`pem-token pem-token-paren ${!isInScope ? 'pem-greyed' : ''} ${pemScopeId === token.nodeId ? 'pem-paren-active' : ''}`}
+                                <span key={`${token.nodeId}-${token.type}-${token.value}`}
+                                    className={`pem-token pem-token-paren ${isGreyed ? 'pem-greyed' : ''} ${pemScopeId === token.nodeId ? 'pem-paren-active' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handleParenClick(token); }}
                                 >{token.value}</span>
                             );
@@ -703,8 +706,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         if (token.type === 'op' || token.isExponentOp) {
                             if (token.hidden) return null;
                             return (
-                                <span key={i}
-                                    className={`pem-token pem-token-op ${!isInScope ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                                <span key={`${token.nodeId}-${token.type}-${token.value}`}
+                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token.isExponentOp ? { value: '^', nodeId: mergeTargetId } : token); }}
                                     data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
@@ -718,14 +721,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         }
                         // number
                         return (
-                            <span key={i}
-                                className={`pem-token pem-token-number ${!isInScope ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeLeft ? 'pem-merge-left' : ''} ${isMergeRight ? 'pem-merge-right' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${isMerging ? 'pem-merging' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
+                            <span key={`${token.nodeId}-${token.type}-${token.value}`}
+                                className={`pem-token pem-token-number ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeLeft ? 'pem-merge-left' : ''} ${isMergeRight ? 'pem-merge-right' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${isMerging ? 'pem-merging' : ''} ${token.superscript ? 'pem-token-superscript' : ''}`}
                             >{token.value}</span>
                         );
                     })}
                     {pemArrow && (
                         <div className="pem-arrow-container">
-                            <svg className="pem-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+                            <svg className="pem-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
                                 <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>

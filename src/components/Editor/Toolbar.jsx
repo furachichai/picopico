@@ -153,7 +153,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                         </button>
                         {showQ2Menu && (
                             <div className="toolbar-submenu">
-                                <button onClick={() => handleAddQuiz('pem')}>PEM</button>
+                                <button onClick={() => handleAddQuiz('pem')}>MEP</button>
                             </div>
                         )}
                     </div>

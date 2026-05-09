@@ -170,6 +170,10 @@ const Player = () => {
     };
 
     const handleBanner = (type, text) => {
+        if (!type) {
+            setBanner(null);
+            return;
+        }
         playTone(type);
         setBanner({ type, text });
     };

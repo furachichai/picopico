@@ -90,7 +90,7 @@ const QuizEditor = ({ element, onChange }) => {
                 <div className="pem-editor-preview">
                     <div className="pem-editor-icon">🧮</div>
                     <div className="pem-editor-info">
-                        <div className="pem-editor-title">PEM Expression</div>
+                        <div className="pem-editor-title">MEP Expression</div>
                         <div className="pem-editor-detail">
                             Mode: <strong>{pemMode}</strong> &nbsp;|&nbsp; Difficulty: <strong>{pemDifficulty}</strong>
                         </div>
