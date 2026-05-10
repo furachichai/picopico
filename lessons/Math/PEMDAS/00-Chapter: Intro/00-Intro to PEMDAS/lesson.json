@@ -184,18 +184,82 @@
       "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png?t=1778450935252\")",
       "elements": [
         {
-          "id": "el-1778450991222",
+          "id": "el-1778452542511",
           "type": "image",
-          "content": "/src/assets/characters/fight%20answers.png?t=1778450935228",
-          "x": 52.22222222222222,
-          "y": 57.1875,
+          "content": "/src/assets/characters/dilla%20and%20pesto%20fighting%20chef%20freaks%20out.png",
+          "x": 50,
+          "y": 59.375,
           "width": 40,
-          "height": 33.89900662251656,
+          "height": 33.75,
           "rotation": 0,
-          "scale": 2.4580202750733746,
+          "scale": 2.3072961452092993,
           "metadata": {
             "width": 40,
-            "height": 33.89900662251656
+            "height": 33.75,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778452577298",
+          "type": "balloon",
+          "content": "11",
+          "x": 82.08333333333333,
+          "y": 46.25,
+          "width": 27.500000000000004,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 30,
+            "tailPos": {
+              "x": -15,
+              "y": 72
+            }
+          }
+        },
+        {
+          "id": "el-1778452552278",
+          "type": "balloon",
+          "content": "16",
+          "x": 19.86111111111111,
+          "y": 45.78125,
+          "width": 27.500000000000004,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 30,
+            "tailPos": {
+              "x": 15,
+              "y": 63
+            }
+          }
+        },
+        {
+          "id": "el-1778452606877",
+          "type": "balloon",
+          "content": "Stop!",
+          "x": 27.63888888888889,
+          "y": 20.078125,
+          "width": 35.27777777777778,
+          "height": 12.65625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 30,
+            "tailPos": {
+              "x": 33,
+              "y": 57
+            }
           }
         }
       ],
@@ -231,7 +295,7 @@
     },
     {
       "id": "slide-1778451106316",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png?t=1778452495310\")",
       "elements": [
         {
           "id": "el-1778451111181",
@@ -251,7 +315,7 @@
         {
           "id": "el-1778451128684",
           "type": "balloon",
-          "content": "5+3x2= 8x2= 16",
+          "content": "5+3<font color=\"#000000\">x2= </font>8<font color=\"#000000\">x2= 16</font>",
           "x": 34.72222222222222,
           "y": 30.234375,
           "width": 68.8888888888889,
@@ -272,7 +336,7 @@
         {
           "id": "el-1778451447261",
           "type": "balloon",
-          "content": "5+3x2= 5+6= 11",
+          "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= 11",
           "x": 67.3611111111111,
           "y": 46.09375,
           "width": 68.61111111111113,
@@ -291,18 +355,80 @@
           }
         }
       ],
-      "order": 5
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.13
+      }
     },
     {
       "id": "slide-1778450494817",
-      "background": "#E1F5FE",
-      "elements": [],
-      "order": 6
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778452495308\")",
+      "elements": [
+        {
+          "id": "el-1778452811249",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 79.84375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "None",
+              "One",
+              "Two",
+              "Several"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1778452814473",
+          "type": "text",
+          "content": "<span id=\"docs-internal-guid-aa7f4c7c-7fff-3622-3d81-d2c07988d88c\" style=\"text-align: start; white-space: normal; font-weight: normal;\"><span style=\"font-size: 11pt; font-family: Arial, sans-serif; font-variant-ligatures: normal; font-variant-alternates: normal; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-position: normal; vertical-align: baseline; white-space: pre-wrap;\">How many solutions 5+3x2 should have?</span></span><br>",
+          "x": 48.75,
+          "y": 20.78125,
+          "width": 46.38888888888889,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.3242141797705609,
+          "metadata": {
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 19
+          }
+        },
+        {
+          "id": "el-1778452897747",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_front.png?t=1778452495231",
+          "x": 48.333333333333336,
+          "y": 43.75,
+          "width": 40,
+          "height": 23.677130044843047,
+          "rotation": 0,
+          "scale": 1.3140438281110371,
+          "metadata": {
+            "width": 40,
+            "height": 23.677130044843047
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {
+        "opacity": 0.23
+      }
     }
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-10T22:20:09.780Z",
+  "updatedAt": "2026-05-10T22:41:43.557Z",
   "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",

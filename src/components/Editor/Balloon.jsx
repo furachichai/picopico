@@ -188,6 +188,12 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                     contentEditable={!readOnly}
                     suppressContentEditableWarning
                     onInput={handleInput}
+                    onPaste={(e) => {
+                        if (readOnly) return;
+                        e.preventDefault();
+                        const text = e.clipboardData.getData('text/plain');
+                        document.execCommand('insertText', false, text);
+                    }}
                     onBlur={() => {
                         if (!readOnly && textRef.current) {
                             onChange(element.id, { content: textRef.current.innerHTML });

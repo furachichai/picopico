@@ -101,6 +101,11 @@ const QuizEditor = ({ element, onChange }) => {
                                     suppressContentEditableWarning
                                     className="pem-manual-input"
                                     onInput={(e) => onChange(element.id, { pemExpression: e.currentTarget.textContent })}
+                                    onPaste={(e) => {
+                                        e.preventDefault();
+                                        const text = e.clipboardData.getData('text/plain');
+                                        document.execCommand('insertText', false, text);
+                                    }}
                                     ref={(el) => {
                                         if (el && el.textContent !== (pemExpression || '') && document.activeElement !== el) {
                                             el.textContent = pemExpression || '';
@@ -229,6 +234,11 @@ const QuizEditor = ({ element, onChange }) => {
                                     suppressContentEditableWarning
                                     className="chatquiz-message-input"
                                     onInput={(e) => updateNodeText(index, e.currentTarget.textContent)}
+                                    onPaste={(e) => {
+                                        e.preventDefault();
+                                        const text = e.clipboardData.getData('text/plain');
+                                        document.execCommand('insertText', false, text);
+                                    }}
                                     ref={(el) => {
                                         if (el && el.textContent !== node.text && document.activeElement !== el) {
                                             el.textContent = node.text;
@@ -248,6 +258,11 @@ const QuizEditor = ({ element, onChange }) => {
                                                 className="chatquiz-option-input"
                                                 data-option-index={optIdx}
                                                 onInput={(e) => updateQuizOption(index, optIdx, e.currentTarget.innerHTML)}
+                                                onPaste={(e) => {
+                                                    e.preventDefault();
+                                                    const text = e.clipboardData.getData('text/plain');
+                                                    document.execCommand('insertText', false, text);
+                                                }}
                                                 ref={(el) => {
                                                     if (el && el.innerHTML !== opt && document.activeElement !== el) {
                                                         el.innerHTML = opt;
@@ -325,6 +340,11 @@ const QuizEditor = ({ element, onChange }) => {
                                 className="option-input-2"
                                 data-option-index={index}
                                 onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const text = e.clipboardData.getData('text/plain');
+                                    document.execCommand('insertText', false, text);
+                                }}
                                 ref={(el) => {
                                     if (el && el.innerHTML !== option && document.activeElement !== el) {
                                         el.innerHTML = option;
@@ -444,6 +464,11 @@ const QuizEditor = ({ element, onChange }) => {
                                 className="option-input-2"
                                 data-option-index={index}
                                 onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const text = e.clipboardData.getData('text/plain');
+                                    document.execCommand('insertText', false, text);
+                                }}
                                 ref={(el) => {
                                     if (el && el.innerHTML !== option && document.activeElement !== el) {
                                         el.innerHTML = option;

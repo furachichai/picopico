@@ -255,6 +255,11 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                             // Capture innerHTML to preserve per-character color spans
                             onChange(element.id, { content: e.currentTarget.innerHTML });
                         }}
+                        onPaste={(e) => {
+                            e.preventDefault();
+                            const text = e.clipboardData.getData('text/plain');
+                            document.execCommand('insertText', false, text);
+                        }}
                         ref={(el) => {
                             if (el && el.innerHTML !== element.content && document.activeElement !== el) {
                                 el.innerHTML = element.content;
