@@ -424,11 +424,150 @@
       "backgroundSettings": {
         "opacity": 0.23
       }
+    },
+    {
+      "id": "slide-1778453102804",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778453116073",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20with%20ice%20cream%20cone.png?t=1778452495183",
+          "x": 30.833333333333332,
+          "y": 58.90625,
+          "width": 40,
+          "height": 58.318739054290724,
+          "rotation": 0,
+          "scale": 1.3049954822663998,
+          "metadata": {
+            "width": 40,
+            "height": 58.318739054290724
+          }
+        },
+        {
+          "id": "el-1778453122998",
+          "type": "balloon",
+          "content": "If everyone got different results, bridges would fall and rockets would miss the moon.<div><br></div>",
+          "x": 68.61111111111111,
+          "y": 32.34375,
+          "width": 50,
+          "height": 31.874999999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -107,
+              "y": 1
+            }
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1778453153922",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778453169358",
+          "type": "balloon",
+          "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
+          "x": 67.08333333333333,
+          "y": 25.15625,
+          "width": 59.166666666666664,
+          "height": 25.3125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -56,
+              "y": 87
+            }
+          }
+        },
+        {
+          "id": "el-1778453225745",
+          "type": "balloon",
+          "content": "<div>It's called</div><div>PEMDAS</div>",
+          "x": 77.08333333333333,
+          "y": 68.125,
+          "width": 43.05555555555556,
+          "height": 14.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -96,
+              "y": -21
+            }
+          }
+        },
+        {
+          "id": "el-1778453163112",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
+          "x": 45.83333333333332,
+          "y": 62.03125,
+          "width": 40,
+          "height": 30.809659090909093,
+          "rotation": 0,
+          "scale": 2.5681461438141,
+          "metadata": {
+            "width": 40,
+            "height": 30.809659090909093,
+            "locked": true
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1778453284631",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778453299767",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "<font color=\"#000000\">P</font>laying <font color=\"#000000\">E</font>pic Minecraft <font color=\"#000000\">D</font>estroys <font color=\"#000000\">A</font>ll <font color=\"#000000\">S</font>leep",
+              "Parenthesis Exponents Multiplication Division Addition Subtraction<div><br></div>",
+              "<font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack <font color=\"#000000\">S</font>quirrell"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 9
     }
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-10T22:41:43.557Z",
+  "updatedAt": "2026-05-10T22:49:51.893Z",
   "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
