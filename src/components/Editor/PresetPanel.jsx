@@ -17,7 +17,7 @@ const PresetPanel = ({ onClose }) => {
     const { state, dispatch } = useEditor();
     const existing = state.lesson.textPreset || {};
 
-    const [textFont, setTextFont] = useState(existing.text?.fontFamily || 'Nunito');
+    const [textFont, setTextFont] = useState(existing.text?.fontFamily || '"HVD Comic Serif Pro", sans-serif');
     const [textSize, setTextSize] = useState(existing.text?.fontSize || 24);
     const [textColor, setTextColor] = useState(existing.text?.color || '#000000');
 
@@ -25,7 +25,7 @@ const PresetPanel = ({ onClose }) => {
     const [quizSize, setQuizSize] = useState(existing.quizAnswers?.fontSize || 16);
     const [quizColor, setQuizColor] = useState(existing.quizAnswers?.color || '#ffffff');
 
-    const [balloonFont, setBalloonFont] = useState(existing.balloon?.fontFamily || 'Nunito');
+    const [balloonFont, setBalloonFont] = useState(existing.balloon?.fontFamily || '"HVD Comic Serif Pro", sans-serif');
     const [balloonSize, setBalloonSize] = useState(existing.balloon?.fontSize || 16);
     const [balloonColor, setBalloonColor] = useState(existing.balloon?.color || '#000000');
 

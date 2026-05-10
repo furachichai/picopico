@@ -130,7 +130,7 @@ const editorReducer = (state, action) => {
                     ...elementMetadata,
                     backgroundColor: '#ffffff',
                     color: '#000000',
-                    fontFamily: 'Comic Sans MS, Comic Sans, cursive',
+                    fontFamily: '"HVD Comic Serif Pro", sans-serif',
                     fontSize: 16,
                     tailPos: { x: 20, y: 50 }
                 };

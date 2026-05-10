@@ -3,6 +3,7 @@ import './ContextualMenu.css';
 import { PEM_MODES } from '../Player/PEMExpressionPool';
 
 const FONTS = [
+    { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
     { name: 'Nunito', value: 'Nunito' },
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },
     { name: 'Serif', value: 'Georgia, serif' },

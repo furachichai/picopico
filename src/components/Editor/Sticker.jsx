@@ -261,7 +261,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                             }
                         }}
                         style={{
-                            fontFamily: element.metadata?.fontFamily || 'Nunito',
+                            fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                             fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                             color: element.metadata?.color || 'black',
                             backgroundColor: element.metadata?.backgroundColor || 'transparent',

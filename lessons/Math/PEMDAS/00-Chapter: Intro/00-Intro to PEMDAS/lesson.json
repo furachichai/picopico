@@ -1,0 +1,201 @@
+{
+  "id": "draft-1",
+  "title": "Intro to PEMDAS",
+  "slides": [
+    {
+      "id": "slide-1778449564989",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+      "elements": [
+        {
+          "id": "el-1778449574610",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png?t=1778448462548",
+          "x": 47.22222222222222,
+          "y": 57.96875,
+          "width": 40,
+          "height": 39.97874601487779,
+          "rotation": 0,
+          "scale": 2.113585939096094,
+          "metadata": {
+            "width": 40,
+            "height": 39.97874601487779,
+            "opacity": 1
+          }
+        }
+      ],
+      "order": 0,
+      "backgroundSettings": {
+        "opacity": 0.42
+      }
+    },
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png?t=1778448469816\")",
+      "elements": [
+        {
+          "id": "el-1778449469024",
+          "type": "text",
+          "content": "<font color=\"#1cb0f6\">2</font>x<font color=\"#1cb0f6\">3</font>+<font color=\"#1cb0f6\">5</font>=<font color=\"#1cb0f6\">?</font>",
+          "x": 49.30555555555556,
+          "y": 19.375,
+          "width": 39.72222222222222,
+          "height": 10,
+          "rotation": 0,
+          "scale": 2.1335235508432833,
+          "metadata": {
+            "color": "#ce82ff",
+            "fontFamily": "monospace",
+            "fontSize": 25
+          }
+        },
+        {
+          "id": "el-1778449554728",
+          "type": "image",
+          "content": "/src/assets/characters/without%20balloons.png?t=1778448462975",
+          "x": 49.72222222222222,
+          "y": 63.75,
+          "width": 40,
+          "height": 29.458023379383636,
+          "rotation": 0,
+          "scale": 2.455463068602705,
+          "metadata": {
+            "width": 40,
+            "height": 29.458023379383636
+          }
+        },
+        {
+          "id": "el-1778449663005",
+          "type": "balloon",
+          "content": "16",
+          "x": 18.194444444444446,
+          "y": 33.75,
+          "width": 29.166666666666668,
+          "height": 14.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 30,
+            "tailPos": {
+              "x": -8,
+              "y": 58
+            }
+          }
+        },
+        {
+          "id": "el-1778449690651",
+          "type": "balloon",
+          "content": "11",
+          "x": 77.91666666666667,
+          "y": 37.5,
+          "width": 29.166666666666668,
+          "height": 14.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 30,
+            "tailPos": {
+              "x": -2,
+              "y": 58
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.15
+      }
+    },
+    {
+      "id": "slide-1778449713057",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+      "elements": [
+        {
+          "id": "el-1778449725019",
+          "type": "image",
+          "content": "/src/assets/characters/dilla%20pesto%20boxing.png?t=1778448462583",
+          "x": 49.166666666666664,
+          "y": 71.875,
+          "width": 40,
+          "height": 19.72635494155154,
+          "rotation": 0,
+          "scale": 2.5414668953255077,
+          "metadata": {
+            "width": 40,
+            "height": 19.72635494155154
+          }
+        },
+        {
+          "id": "el-1778449753213",
+          "type": "balloon",
+          "content": "I'm right!",
+          "x": 28.8888888888889,
+          "y": 35.625,
+          "width": 47.77777777777778,
+          "height": 14.374999999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 20,
+            "tailPos": {
+              "x": 7,
+              "y": 82
+            }
+          }
+        },
+        {
+          "id": "el-1778449733038",
+          "type": "balloon",
+          "content": "No, I am!",
+          "x": 77.6388888888889,
+          "y": 38.90625,
+          "width": 43.05555555555556,
+          "height": 14.374999999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 20,
+            "tailPos": {
+              "x": 1,
+              "y": 55
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.25
+      }
+    },
+    {
+      "id": "slide-1778449782585",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+      "elements": [],
+      "order": 3,
+      "backgroundSettings": {
+        "opacity": 0.48
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-10T21:44:26.467Z",
+  "updatedAt": "2026-05-10T21:51:23.946Z",
+  "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
+  "textPreset": null,
+  "subject": "Math",
+  "topic": "PEMDAS",
+  "chapterId": "00",
+  "chapterName": "Chapter: Intro",
+  "lessonId": "00"
+}
