@@ -226,7 +226,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: isSelected ? 100 : ((element.metadata?.quizType === 'chatquiz') ? 0 : 1),
+                zIndex: (isSelected && !element.metadata?.locked) ? 100 : ((element.metadata?.quizType === 'chatquiz') ? 0 : 1),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
