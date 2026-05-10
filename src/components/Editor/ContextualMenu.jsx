@@ -10,15 +10,7 @@ const FONTS = [
 ];
 
 const COLORS = [
-    '#000000', '#333333', '#888888', '#cccccc', '#ffffff',
-    '#ff0000', '#ff4b4b', '#ff9999',
-    '#ff6600', '#ff9900', '#ffcc88',
-    '#ffc800', '#ffee00', '#ffffaa',
-    '#00aa00', '#58cc02', '#aaffaa',
-    '#00aaaa', '#00ffff', '#aaffff',
-    '#0000ff', '#1cb0f6', '#ccccff',
-    '#aa00aa', '#ce82ff', '#eeaaff',
-    '#ff00ff', '#ffccff'
+    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
 ];
 
 const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets }) => {
