@@ -10,12 +10,12 @@
           "id": "el-1778449574610",
           "type": "image",
           "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png?t=1778448462548",
-          "x": 47.22222222222222,
-          "y": 57.96875,
+          "x": 52.77777777777778,
+          "y": 57.5,
           "width": 40,
           "height": 39.97874601487779,
           "rotation": 0,
-          "scale": 2.113585939096094,
+          "scale": 2.7841341841956515,
           "metadata": {
             "width": 40,
             "height": 39.97874601487779,
@@ -32,22 +32,6 @@
       "id": "slide-1",
       "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png?t=1778448469816\")",
       "elements": [
-        {
-          "id": "el-1778449469024",
-          "type": "text",
-          "content": "<font color=\"#1cb0f6\">2</font>x<font color=\"#1cb0f6\">3</font>+<font color=\"#1cb0f6\">5</font>=<font color=\"#1cb0f6\">?</font>",
-          "x": 49.30555555555556,
-          "y": 19.375,
-          "width": 39.72222222222222,
-          "height": 10,
-          "rotation": 0,
-          "scale": 2.1335235508432833,
-          "metadata": {
-            "color": "#ce82ff",
-            "fontFamily": "monospace",
-            "fontSize": 25
-          }
-        },
         {
           "id": "el-1778449554728",
           "type": "image",
@@ -103,6 +87,23 @@
               "x": -2,
               "y": 58
             }
+          }
+        },
+        {
+          "id": "el-1778449469024",
+          "type": "text",
+          "content": "<font color=\"#1cb0f6\">2</font>x<font color=\"#1cb0f6\">3</font>+<font color=\"#1cb0f6\">5</font>=<font color=\"#1cb0f6\">?</font>",
+          "x": 51.25,
+          "y": 19.6875,
+          "width": 39.72222222222222,
+          "height": 10,
+          "rotation": 0,
+          "scale": 2.1335235508432833,
+          "metadata": {
+            "color": "#ce82ff",
+            "fontFamily": "monospace",
+            "fontSize": 25,
+            "backgroundColor": "#ffc800"
           }
         }
       ],
@@ -179,18 +180,46 @@
       }
     },
     {
+      "id": "slide-1778450519975",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 3
+    },
+    {
       "id": "slide-1778449782585",
       "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
-      "elements": [],
-      "order": 3,
+      "elements": [
+        {
+          "id": "el-1778450507224",
+          "type": "image",
+          "content": "/src/assets/characters/dilla%20pesto%20scratching%20head.png?t=1778448462585",
+          "x": 49.166666666666664,
+          "y": 73.125,
+          "width": 40,
+          "height": 17.16790648246546,
+          "rotation": 0,
+          "scale": 2.473645651334105,
+          "metadata": {
+            "width": 40,
+            "height": 17.16790648246546
+          }
+        }
+      ],
+      "order": 4,
       "backgroundSettings": {
         "opacity": 0.48
       }
+    },
+    {
+      "id": "slide-1778450494817",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 5
     }
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-10T21:51:23.946Z",
+  "updatedAt": "2026-05-10T22:03:00.826Z",
   "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
