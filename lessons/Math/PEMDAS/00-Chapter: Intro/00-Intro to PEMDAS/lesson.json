@@ -92,7 +92,7 @@
         {
           "id": "el-1778449469024",
           "type": "text",
-          "content": "<font color=\"#1cb0f6\">2</font>x<font color=\"#1cb0f6\">3</font>+<font color=\"#1cb0f6\">5</font>=<font color=\"#1cb0f6\">?</font>",
+          "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
           "x": 51.25,
           "y": 19.6875,
           "width": 39.72222222222222,
@@ -181,9 +181,28 @@
     },
     {
       "id": "slide-1778450519975",
-      "background": "#E1F5FE",
-      "elements": [],
-      "order": 3
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png?t=1778450935252\")",
+      "elements": [
+        {
+          "id": "el-1778450991222",
+          "type": "image",
+          "content": "/src/assets/characters/fight%20answers.png?t=1778450935228",
+          "x": 52.22222222222222,
+          "y": 57.1875,
+          "width": 40,
+          "height": 33.89900662251656,
+          "rotation": 0,
+          "scale": 2.4580202750733746,
+          "metadata": {
+            "width": 40,
+            "height": 33.89900662251656
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {
+        "opacity": 0.23
+      }
     },
     {
       "id": "slide-1778449782585",
@@ -211,15 +230,79 @@
       }
     },
     {
+      "id": "slide-1778451106316",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778451111181",
+          "type": "image",
+          "content": "/src/assets/characters/dilla%20pesto%20wondering.png?t=1778450935156",
+          "x": 48.888888888888886,
+          "y": 75.3125,
+          "width": 40,
+          "height": 16.45058448459086,
+          "rotation": 0,
+          "scale": 2.588366082414242,
+          "metadata": {
+            "width": 40,
+            "height": 16.45058448459086
+          }
+        },
+        {
+          "id": "el-1778451128684",
+          "type": "balloon",
+          "content": "5+3x2= 8x2= 16",
+          "x": 34.72222222222222,
+          "y": 30.234375,
+          "width": 68.8888888888889,
+          "height": 13.90625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#ce82ff",
+            "fontFamily": "monospace",
+            "fontSize": 24,
+            "tailPos": {
+              "x": -32,
+              "y": 110
+            }
+          }
+        },
+        {
+          "id": "el-1778451447261",
+          "type": "balloon",
+          "content": "5+3x2= 5+6= 11",
+          "x": 67.3611111111111,
+          "y": 46.09375,
+          "width": 68.61111111111113,
+          "height": 14.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 24,
+            "tailPos": {
+              "x": 8,
+              "y": 63
+            }
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
       "id": "slide-1778450494817",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 5
+      "order": 6
     }
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-10T22:03:00.826Z",
+  "updatedAt": "2026-05-10T22:20:09.780Z",
   "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",

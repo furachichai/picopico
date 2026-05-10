@@ -7,7 +7,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     // Only set content when element changes, not on every render
     useEffect(() => {
         if (textRef.current && element.id !== lastElementId.current) {
-            textRef.current.innerText = element.content || '';
+            textRef.current.innerHTML = element.content || '';
             lastElementId.current = element.id;
         }
     }, [element.id, element.content]);
@@ -15,7 +15,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     // Sync content changes
     const handleInput = (e) => {
         if (readOnly) return;
-        onChange(element.id, { content: e.currentTarget.innerText });
+        onChange(element.id, { content: e.currentTarget.innerHTML });
     };
 
     // Calculate inverse scale to fix text direction if parent is flipped
@@ -190,13 +190,11 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                     onInput={handleInput}
                     onBlur={() => {
                         if (!readOnly && textRef.current) {
-                            onChange(element.id, { content: textRef.current.innerText });
+                            onChange(element.id, { content: textRef.current.innerHTML });
                         }
                     }}
                     style={{
-                        fontFamily: element.metadata?.fontFamily && element.metadata.fontFamily.includes('Comic')
-                            ? '"Comic Neue", "Chalkboard SE", "Comic Sans MS", "Comic Sans", cursive, sans-serif'
-                            : (element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif'),
+                        fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                         fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                         color: element.metadata?.color || 'black',
                         outline: 'none',
