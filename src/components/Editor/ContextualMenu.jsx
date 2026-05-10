@@ -822,6 +822,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
+                    {element.type === 'image' && (
+                        <button 
+                            className={`btn-icon ${metadata.locked ? 'active' : ''}`} 
+                            onClick={() => updateMetadata({ locked: !metadata.locked })} 
+                            title={metadata.locked ? "Unlock Image" : "Lock Image"}
+                            style={{ backgroundColor: metadata.locked ? '#ffcccc' : undefined }}
+                        >
+                            {metadata.locked ? '🔒' : '🔓'}
+                        </button>
+                    )}
                     {element.type !== 'cartridge' && element.type !== 'quiz' && (
                         <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
                             ❐

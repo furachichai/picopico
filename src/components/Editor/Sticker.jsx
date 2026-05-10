@@ -64,7 +64,9 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             onSelect(element.id);
         }
 
-
+        if (element.metadata?.locked) {
+            return;
+        }
 
         setInteractionType(type);
         setIsDragging(true);
@@ -345,7 +347,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 )}
             </div>
 
-            {isSelected && element.type !== 'quiz' && element.type !== 'balloon' && (
+            {isSelected && element.type !== 'quiz' && element.type !== 'balloon' && !element.metadata?.locked && (
                 <div className="sticker-controls">
                     {/* Top Left Resize */}
                     <div
