@@ -223,7 +223,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
-                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.width}%`),
+                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: isSelected ? 100 : ((element.metadata?.quizType === 'chatquiz') ? 0 : 1),
@@ -377,6 +377,44 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         onMouseDown={(e) => handleStart(e, 'resize')}
                         onTouchStart={(e) => handleStart(e, 'resize')}
                     />
+
+                    {/* East Resize (Text only) */}
+                    {element.type === 'text' && (
+                        <div
+                            className="handle resize-handle e"
+                            style={{
+                                right: 0, top: '50%', marginRight: '-6px', marginTop: '-6px',
+                                cursor: 'ew-resize',
+                                position: 'absolute',
+                                width: '12px', height: '12px',
+                                backgroundColor: 'white',
+                                border: '1px solid #3b82f6',
+                                pointerEvents: 'auto',
+                                transform: `scale(${1 / element.scale})`
+                            }}
+                            onMouseDown={(e) => handleStart(e, 'resize-e')}
+                            onTouchStart={(e) => handleStart(e, 'resize-e')}
+                        />
+                    )}
+                    
+                    {/* West Resize (Text only) */}
+                    {element.type === 'text' && (
+                        <div
+                            className="handle resize-handle w"
+                            style={{
+                                left: 0, top: '50%', marginLeft: '-6px', marginTop: '-6px',
+                                cursor: 'ew-resize',
+                                position: 'absolute',
+                                width: '12px', height: '12px',
+                                backgroundColor: 'white',
+                                border: '1px solid #3b82f6',
+                                pointerEvents: 'auto',
+                                transform: `scale(${1 / element.scale})`
+                            }}
+                            onMouseDown={(e) => handleStart(e, 'resize-w')}
+                            onTouchStart={(e) => handleStart(e, 'resize-w')}
+                        />
+                    )}
 
                     {/* Rotate Handle */}
                     <div

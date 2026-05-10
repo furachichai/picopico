@@ -128,6 +128,9 @@
 .color-picker-mini {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
+    max-width: 220px;
+    justify-content: center;
 }
 
 .color-swatch {
