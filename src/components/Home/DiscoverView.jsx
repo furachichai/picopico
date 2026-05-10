@@ -292,12 +292,13 @@ const DiscoverView = () => {
     // Render a single slide (simplified for Mask integration)
     const renderSlide = (slide, additionalStyle = {}) => {
         if (!slide) return null;
+        const mappedBackground = slide.background ? slide.background.replaceAll('/src/assets/', '/assets/') : slide.background;
         return (
             <div
                 key={slide.id}
                 style={{
-                    backgroundColor: (slide.background && !slide.background.includes('url') && !slide.background.includes('gradient')) ? slide.background : 'transparent',
-                    backgroundImage: (slide.background && (slide.background.includes('url') || slide.background.includes('gradient'))) ? slide.background : 'none',
+                    backgroundColor: (mappedBackground && !mappedBackground.includes('url') && !mappedBackground.includes('gradient')) ? mappedBackground : 'transparent',
+                    backgroundImage: (mappedBackground && (mappedBackground.includes('url') || mappedBackground.includes('gradient'))) ? mappedBackground : 'none',
                     backgroundSize: 'contain',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -365,7 +366,7 @@ const DiscoverView = () => {
                                 dangerouslySetInnerHTML={{ __html: element.content }}
                             />
                         )}
-                        {element.type === 'image' && <img src={element.content} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                        {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                         {element.type === 'balloon' && (
                             <Balloon
                                 element={element}
@@ -479,7 +480,7 @@ const DiscoverView = () => {
                             height: '110%',
                             zIndex: -1,
                             backgroundColor: (lesson.slides && lesson.slides[0]?.background && !lesson.slides[0].background.includes('url') && !lesson.slides[0].background.includes('gradient')) ? lesson.slides[0].background : '#1a202c',
-                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? lesson.slides[0].background : 'none',
+                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? lesson.slides[0].background.replaceAll('/src/assets/', '/assets/') : 'none',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             filter: 'blur(20px) brightness(0.8)', // Blur to make it distinct from content
