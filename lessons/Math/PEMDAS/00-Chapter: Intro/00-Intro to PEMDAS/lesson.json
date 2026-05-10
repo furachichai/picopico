@@ -365,11 +365,11 @@
       "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778452495308\")",
       "elements": [
         {
-          "id": "el-1778452811249",
+          "id": "el-1778453688740",
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 79.84375,
+          "y": 81.875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -381,39 +381,38 @@
               "Two",
               "Several"
             ],
-            "correctIndex": 1,
+            "correctIndex": 0,
             "correctIndices": [
               0
             ],
-            "quizType": "classic",
+            "quizType": "4sq",
             "visualMode": false
           }
         },
         {
-          "id": "el-1778452814473",
+          "id": "el-1778453716834",
           "type": "text",
-          "content": "<span id=\"docs-internal-guid-aa7f4c7c-7fff-3622-3d81-d2c07988d88c\" style=\"text-align: start; white-space: normal; font-weight: normal;\"><span style=\"font-size: 11pt; font-family: Arial, sans-serif; font-variant-ligatures: normal; font-variant-alternates: normal; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-position: normal; vertical-align: baseline; white-space: pre-wrap;\">How many solutions 5+3x2 should have?</span></span><br>",
-          "x": 48.75,
-          "y": 20.78125,
-          "width": 46.38888888888889,
+          "content": "How many solutions should 5+2x6 have?",
+          "x": 52.22222222222222,
+          "y": 20.625,
+          "width": 52.124561263633936,
           "height": 10,
-          "rotation": 0,
-          "scale": 1.3242141797705609,
+          "rotation": -7.426750398360696,
+          "scale": 1.3009184706551526,
           "metadata": {
-            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
-            "fontSize": 19
+            "backgroundColor": "#58cc02"
           }
         },
         {
           "id": "el-1778452897747",
           "type": "image",
           "content": "/src/assets/characters/pest_scratches%20head_front.png?t=1778452495231",
-          "x": 48.333333333333336,
-          "y": 43.75,
+          "x": 49.72222222222223,
+          "y": 46.5625,
           "width": 40,
           "height": 23.677130044843047,
           "rotation": 0,
-          "scale": 1.3140438281110371,
+          "scale": 1.4752661737566275,
           "metadata": {
             "width": 40,
             "height": 23.677130044843047
@@ -473,11 +472,27 @@
       "background": "#E1F5FE",
       "elements": [
         {
+          "id": "el-1778453163112",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
+          "x": 45.83333333333332,
+          "y": 62.03125,
+          "width": 40,
+          "height": 30.809659090909093,
+          "rotation": 0,
+          "scale": 2.5681461438141,
+          "metadata": {
+            "width": 40,
+            "height": 30.809659090909093,
+            "locked": true
+          }
+        },
+        {
           "id": "el-1778453169358",
           "type": "balloon",
           "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
           "x": 67.08333333333333,
-          "y": 25.15625,
+          "y": 25,
           "width": 59.166666666666664,
           "height": 25.3125,
           "rotation": 0,
@@ -497,14 +512,14 @@
           "id": "el-1778453225745",
           "type": "balloon",
           "content": "<div>It's called</div><div>PEMDAS</div>",
-          "x": 77.08333333333333,
-          "y": 68.125,
+          "x": 76.80555555555556,
+          "y": 69.21875,
           "width": 43.05555555555556,
           "height": 14.0625,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "backgroundColor": "#ffffff",
+            "backgroundColor": "#58cc02",
             "color": "#000000",
             "fontFamily": "monospace",
             "fontSize": 16,
@@ -512,22 +527,6 @@
               "x": -96,
               "y": -21
             }
-          }
-        },
-        {
-          "id": "el-1778453163112",
-          "type": "image",
-          "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
-          "x": 45.83333333333332,
-          "y": 62.03125,
-          "width": 40,
-          "height": 30.809659090909093,
-          "rotation": 0,
-          "scale": 2.5681461438141,
-          "metadata": {
-            "width": 40,
-            "height": 30.809659090909093,
-            "locked": true
           }
         }
       ],
@@ -567,7 +566,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-10T22:49:51.893Z",
+  "updatedAt": "2026-05-10T22:57:43.991Z",
   "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
