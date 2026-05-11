@@ -78,7 +78,7 @@
 }
 
 .pot-token-emoji {
-  font-size: 0.85rem;
+  font-size: 0.5rem; /* 40% smaller than previous 0.85rem */
   line-height: 1;
 }
 
@@ -86,17 +86,17 @@
   cursor: pointer;
   position: relative;
   -webkit-tap-highlight-color: transparent;
-  font-size: 2.04rem;
+  font-size: 1.5rem; /* 25% smaller than previous 2.04rem */
 }
 
-/* Invisible larger tap area */
+/* Invisible larger tap area (minimum 48x48px for touch UI standards) */
 .pot-token-op::before {
   content: '';
   position: absolute;
-  top: -12px;
-  left: -10px;
-  right: -10px;
-  bottom: -12px;
+  top: -16px;
+  left: -16px;
+  right: -16px;
+  bottom: -16px;
 }
 
 .pot-op-circle {
