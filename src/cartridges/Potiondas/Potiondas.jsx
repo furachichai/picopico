@@ -123,11 +123,11 @@ function playMergeSound() {
     const gain = ctx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(600, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.1);
     gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
     osc.connect(gain); gain.connect(ctx.destination);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.2);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
   } catch(e) {}
 }
 
@@ -247,7 +247,7 @@ export default function Potiondas({ config = {}, onComplete }) {
 
       setTimeout(() => {
         setMerging(prev => ({ ...prev, phase: 'pop' }));
-      }, 300);
+      }, 100);
 
       setTimeout(() => {
         setCurrentEmojis(prev => {
@@ -271,7 +271,7 @@ export default function Potiondas({ config = {}, onComplete }) {
           playMergeSound();
           confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
         }
-      }, 600);
+      }, 200);
 
     } else {
       // ─── Wrong! ───

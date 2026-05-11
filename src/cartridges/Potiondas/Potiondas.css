@@ -35,7 +35,7 @@
   font-size: 1.1rem;
   width: 100%;
   justify-content: flex-end;
-  margin-top: 16px; /* Space to sit below the slide's progress bar */
+  margin-top: 7vh; /* Downwards 7% of the screen height */
   padding-right: 8px;
 }
 
@@ -173,23 +173,23 @@
 
 /* ─── Merge Animations ──────────────────────────────── */
 .pot-merge-left {
-  animation: potSlideRight 0.3s ease-in forwards;
+  animation: potSlideRight 0.1s ease-in forwards;
 }
 
 .pot-merge-right {
-  animation: potSlideLeft 0.3s ease-in forwards;
+  animation: potSlideLeft 0.1s ease-in forwards;
 }
 
 .pot-merge-op {
-  animation: potOpShrink 0.3s ease-in forwards;
+  animation: potOpShrink 0.1s ease-in forwards;
 }
 
 .pot-merge-fade {
-  animation: potFadeOut 0.3s ease-out forwards;
+  animation: potFadeOut 0.1s ease-out forwards;
 }
 
 .pot-merge-pop {
-  animation: potPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: potPopIn 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes potSlideRight {
