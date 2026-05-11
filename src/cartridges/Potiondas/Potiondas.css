@@ -1,0 +1,344 @@
+/* ================================================================
+   POTIONDAS CARTRIDGE
+   ================================================================ */
+
+.pot-cartridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
+  border-radius: 16px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Outfit', 'Nunito', sans-serif;
+}
+
+/* ─── Header: Progress + Hearts ─────────────────────── */
+.pot-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.pot-progress-bar {
+  width: 80%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pot-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8B5CF6, #A78BFA);
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pot-progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pot-hearts {
+  display: flex;
+  gap: 4px;
+  font-size: 1.1rem;
+}
+
+.pot-heart {
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.pot-heart-lost {
+  opacity: 0.3;
+  transform: scale(0.8);
+  filter: grayscale(1);
+}
+
+/* ─── Expression Area ───────────────────────────────── */
+.pot-expression-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.pot-expression {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 10px;
+}
+
+/* ─── Tokens ────────────────────────────────────────── */
+.pot-token {
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.pot-token-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.pot-token-op {
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 1.7rem;
+}
+
+/* Invisible larger tap area */
+.pot-token-op::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: -10px;
+  right: -10px;
+  bottom: -12px;
+}
+
+.pot-op-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.28em;
+  height: 1.28em;
+  border-radius: 50%;
+  font-size: 0.85em;
+  color: #FFFFFF;
+  transition: all 0.15s;
+  font-weight: 700;
+}
+
+/* Dark Violet for × ÷ */
+.pot-op-violet {
+  background: rgba(91, 33, 182, 0.4);
+  border: 2px solid rgba(91, 33, 182, 0.7);
+}
+
+/* Dark Lilac for + − */
+.pot-op-lilac {
+  background: rgba(124, 58, 237, 0.3);
+  border: 2px solid rgba(124, 58, 237, 0.6);
+}
+
+.pot-token-op:hover .pot-op-circle {
+  transform: scale(1.15);
+  filter: brightness(1.3);
+}
+
+.pot-token-op:active .pot-op-circle {
+  transform: scale(0.9);
+}
+
+/* ─── Wrong State ───────────────────────────────────── */
+.pot-wrong .pot-op-circle {
+  background: rgba(239, 68, 68, 0.5) !important;
+  border-color: #EF4444 !important;
+  animation: potShake 0.4s ease-in-out;
+}
+
+.pot-faded {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ─── Flash Correct ─────────────────────────────────── */
+.pot-flash-correct .pot-op-circle {
+  animation: potFlashGlow 0.6s ease-in-out infinite;
+  border-color: #34D399 !important;
+  background: rgba(52, 211, 153, 0.3) !important;
+}
+
+@keyframes potFlashGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.8);
+    transform: scale(1.2);
+  }
+}
+
+@keyframes potShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* ─── Merge Animations ──────────────────────────────── */
+.pot-merge-left {
+  animation: potSlideRight 0.3s ease-in forwards;
+}
+
+.pot-merge-right {
+  animation: potSlideLeft 0.3s ease-in forwards;
+}
+
+.pot-merge-op {
+  animation: potOpShrink 0.3s ease-in forwards;
+}
+
+.pot-merge-fade {
+  animation: potFadeOut 0.3s ease-out forwards;
+}
+
+.pot-merge-pop {
+  animation: potPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes potSlideRight {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(14px); opacity: 0.4; }
+}
+
+@keyframes potSlideLeft {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-14px); opacity: 0.4; }
+}
+
+@keyframes potOpShrink {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.3); opacity: 0; }
+}
+
+@keyframes potFadeOut {
+  0% { opacity: 0.4; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(0); font-size: 0; margin: 0; padding: 0; width: 0; }
+}
+
+@keyframes potPopIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Arrow Hints ───────────────────────────────────── */
+.pot-arrow-hint {
+  width: 60%;
+  height: 10px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pot-arrow-svg {
+  height: 100%;
+  width: 100%;
+  animation: potArrowSlide 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+  opacity: 0;
+}
+
+.pot-arrow-correction .pot-arrow-svg {
+  animation: potArrowPulse 0.8s ease-in-out infinite;
+  opacity: 1;
+}
+
+@keyframes potArrowSlide {
+  0% { transform: translateX(-20%); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateX(20%); opacity: 0; }
+}
+
+@keyframes potArrowPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ─── Bottom Buttons ────────────────────────────────── */
+.pot-bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+  min-height: 50px;
+}
+
+.pot-btn {
+  padding: 14px 40px;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+  animation: potBtnAppear 0.3s ease-out;
+}
+
+@keyframes potBtnAppear {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.pot-btn-next {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+  box-shadow: 0 4px 0 #15803D;
+}
+
+.pot-btn-next:hover {
+  background: linear-gradient(135deg, #16A34A, #15803D);
+}
+
+.pot-btn-next:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #15803D;
+}
+
+.pot-btn-restart {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  box-shadow: 0 4px 0 #B45309;
+}
+
+.pot-btn-restart:hover {
+  background: linear-gradient(135deg, #D97706, #B45309);
+}
+
+.pot-btn-restart:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #B45309;
+}
+
+.pot-game-over {
+  color: #EF4444;
+  font-size: 1.2rem;
+  font-weight: 700;
+  animation: potPulse 1s infinite ease-in-out;
+}
+
+@keyframes potPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}

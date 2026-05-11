@@ -7,6 +7,7 @@ import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
+import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
 import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
@@ -515,6 +516,18 @@ const Player = () => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
                                                         nextSlide(true);
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
+                                    {slide.cartridge.type === 'Potiondas' && (
+                                        <ErrorBoundary>
+                                            <Potiondas
+                                                config={slide.cartridge.config}
+                                                onComplete={() => {
+                                                    markSlideSolved(currentSlideIndex);
+                                                    setIsGameActive(false);
+                                                    nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>

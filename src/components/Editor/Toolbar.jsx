@@ -154,6 +154,18 @@ const Toolbar = ({ onOpenLibrary }) => {
                         {showQ2Menu && (
                             <div className="toolbar-submenu">
                                 <button onClick={() => handleAddQuiz('pem')}>MEP</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'Potiondas',
+                                                config: {}
+                                            }
+                                        }
+                                    });
+                                    setShowQ2Menu(false);
+                                }}>POTIONDAS</button>
                             </div>
                         )}
                     </div>
