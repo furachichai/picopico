@@ -65,7 +65,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 4px; /* Reduced from 6px */
+  gap: 3.5px; /* Reduced further from 4px */
   padding: 20px 10px;
   position: relative;
 }
@@ -78,7 +78,7 @@
 }
 
 .pot-token-emoji {
-  font-size: 0.65rem; /* 30% larger than 0.5rem */
+  font-size: 0.78rem; /* 20% larger than 0.65rem */
   line-height: 1;
 }
 
