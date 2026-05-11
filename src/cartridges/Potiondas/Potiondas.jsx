@@ -77,49 +77,54 @@ function charToSymbol(ch) {
 // ─── Audio ────────────────────────────────────────────────────
 const C_MAJOR = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
 
-function playNote(audioCtx, noteIdx) {
+let globalAudioCtx = null;
+function getAudioCtx() {
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (globalAudioCtx.state === 'suspended') {
+    globalAudioCtx.resume();
+  }
+  return globalAudioCtx;
+}
+
+function playNote(noteIdx) {
   try {
-    if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = audioCtx.current;
-    if (ctx.state === 'suspended') ctx.resume();
+    const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.type = 'sine';
+    osc.type = 'triangle'; // Louder and clearer
     osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], ctx.currentTime);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.setValueAtTime(0.5, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
   } catch(e) {}
 }
 
-function playErrorSfx(audioCtx) {
+function playErrorSfx() {
   try {
-    if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = audioCtx.current;
-    if (ctx.state === 'suspended') ctx.resume();
+    const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(180, ctx.currentTime);
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
   } catch(e) {}
 }
 
-function playMergeSound(audioCtx) {
+function playMergeSound() {
   try {
-    if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = audioCtx.current;
-    if (ctx.state === 'suspended') ctx.resume();
+    const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(600, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
     osc.connect(gain); gain.connect(ctx.destination);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.2);
@@ -134,7 +139,6 @@ function isHighPriority(op) {
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, onComplete }) {
   const totalLevels = LEVELS.length;
-  const audioCtx = useRef(null);
   const expressionRef = useRef(null);
   const opRefs = useRef({});
 
@@ -231,7 +235,7 @@ export default function Potiondas({ config = {}, onComplete }) {
 
     if (opIdx === correctOpIdx) {
       // ─── Correct! ───
-      playNote(audioCtx, noteIndex);
+      playNote(noteIndex);
       setNoteIndex(prev => prev + 1);
 
       let leftIdx = opIdx;
@@ -264,14 +268,14 @@ export default function Potiondas({ config = {}, onComplete }) {
 
         if (newStep >= levelData.order.length) {
           setLevelSolved(true);
-          playMergeSound(audioCtx);
+          playMergeSound();
           confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
         }
       }, 600);
 
     } else {
       // ─── Wrong! ───
-      playErrorSfx(audioCtx);
+      playErrorSfx();
       if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
       
       setWrongIdx(opIdx);
@@ -339,12 +343,8 @@ export default function Potiondas({ config = {}, onComplete }) {
 
   return (
     <div className="pot-cartridge">
-      {/* Progress Bar */}
+      {/* Header / Hearts */}
       <div className="pot-header">
-        <div className="pot-progress-bar">
-          <div className="pot-progress-fill" style={{ width: `${((level) / totalLevels) * 100}%` }} />
-          <span className="pot-progress-text">{level + 1} / {totalLevels}</span>
-        </div>
         <div className="pot-hearts">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className={`pot-heart ${i < lives ? '' : 'pot-heart-lost'}`}>
