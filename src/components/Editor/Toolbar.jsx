@@ -126,7 +126,11 @@ const Toolbar = ({ onOpenLibrary }) => {
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
                             className={`btn-secondary ${showQuizMenu ? 'active' : ''}`}
-                            onClick={() => setShowQuizMenu(!showQuizMenu)}
+                            onClick={() => {
+                                setShowQuizMenu(!showQuizMenu);
+                                setShowQ2Menu(false);
+                                setShowGameMenu(false);
+                            }}
                             title={t('editor.addQuiz')}
                         >
                             Quiz
@@ -146,7 +150,11 @@ const Toolbar = ({ onOpenLibrary }) => {
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
                             className={`btn-secondary ${showQ2Menu ? 'active' : ''}`}
-                            onClick={() => setShowQ2Menu(!showQ2Menu)}
+                            onClick={() => {
+                                setShowQ2Menu(!showQ2Menu);
+                                setShowQuizMenu(false);
+                                setShowGameMenu(false);
+                            }}
                             title="Interactive Q2"
                         >
                             Q2
@@ -173,7 +181,11 @@ const Toolbar = ({ onOpenLibrary }) => {
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
                             className={`btn-secondary ${showGameMenu ? 'active' : ''}`}
-                            onClick={() => setShowGameMenu(!showGameMenu)}
+                            onClick={() => {
+                                setShowGameMenu(!showGameMenu);
+                                setShowQuizMenu(false);
+                                setShowQ2Menu(false);
+                            }}
                             title={t('editor.addGame')}
                         >
                             <Gamepad2 size={24} />
