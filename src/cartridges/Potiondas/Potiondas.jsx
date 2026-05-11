@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import './Potiondas.css';
 
@@ -27,7 +27,6 @@ function generateEmojis(count, exclude = []) {
 }
 
 // ─── Level Definitions ────────────────────────────────────────
-// Each level: operators string + showArrow flag
 const LEVELS = [
   { ops: 'x',              arrow: false },
   { ops: 'xx',             arrow: true  },
@@ -50,11 +49,9 @@ const LEVELS = [
 ];
 
 // ─── PEMDAS Ordering Logic ────────────────────────────────────
-// Given an array of operators, return the indices in correct PEMDAS order
-// Priority: * and / (left to right) before + and - (left to right)
 function getPemdasOrder(operators) {
-  const highPriority = []; // × ÷
-  const lowPriority = [];  // + -
+  const highPriority = [];
+  const lowPriority = [];
   
   operators.forEach((op, idx) => {
     if (op === '×' || op === '÷') {
@@ -64,11 +61,9 @@ function getPemdasOrder(operators) {
     }
   });
   
-  // Within each priority group, order is left-to-right (already sorted by index)
   return [...highPriority, ...lowPriority];
 }
 
-// Convert raw level op char to display symbol
 function charToSymbol(ch) {
   switch (ch) {
     case 'x': return '×';
@@ -131,27 +126,34 @@ function playMergeSound(audioCtx) {
   } catch(e) {}
 }
 
+// Check if an operator is high priority (× ÷)
+function isHighPriority(op) {
+  return op === '×' || op === '÷';
+}
+
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, onComplete }) {
   const totalLevels = LEVELS.length;
   const audioCtx = useRef(null);
+  const expressionRef = useRef(null);
+  const opRefs = useRef({});
 
   // Game state
   const [level, setLevel] = useState(0);
   const [lives, setLives] = useState(5);
   const [noteIndex, setNoteIndex] = useState(0);
-  const [step, setStep] = useState(0); // which operator in the pemdas order we're at
-  const [levelKey, setLevelKey] = useState(0); // forces re-render on restart
+  const [step, setStep] = useState(0);
+  const [levelKey, setLevelKey] = useState(0);
 
   // Animation state
-  const [wrongIdx, setWrongIdx] = useState(null); // index of wrong-pressed operator
-  const [flashCorrectIdx, setFlashCorrectIdx] = useState(null); // correct op to flash
-  const [showArrowRange, setShowArrowRange] = useState(null); // {from, to} indices for green arrow
-  const [fadedOps, setFadedOps] = useState(false); // fade all ops on wrong
-  const [merging, setMerging] = useState(null); // {opIdx, phase: 'slide'|'pop'}
+  const [wrongIdx, setWrongIdx] = useState(null);
+  const [flashCorrectIdx, setFlashCorrectIdx] = useState(null);
+  const [fadedOps, setFadedOps] = useState(false);
+  const [merging, setMerging] = useState(null);
   const [showRestart, setShowRestart] = useState(false);
   const [levelSolved, setLevelSolved] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [arrowStyle, setArrowStyle] = useState(null); // {left, width} for green arrow
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -163,46 +165,66 @@ export default function Potiondas({ config = {}, onComplete }) {
     return { operators, emojis, order, arrow: def.arrow };
   }, [level, levelKey]);
 
-  // Live mutable state for emojis (they change during merges)
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
   const [solvedOps, setSolvedOps] = useState(new Set());
 
-  // Reset emojis when level changes
-  React.useEffect(() => {
+  // Reset when level changes
+  useEffect(() => {
     setCurrentEmojis(levelData.emojis);
     setSolvedOps(new Set());
     setStep(0);
     setNoteIndex(0);
     setWrongIdx(null);
     setFlashCorrectIdx(null);
-    setShowArrowRange(null);
     setFadedOps(false);
     setMerging(null);
     setShowRestart(false);
     setLevelSolved(false);
+    setArrowStyle(null);
   }, [level, levelKey]);
 
-  // Find which op should be pressed next
   const correctOpIdx = levelData.order[step];
 
-  // Find the arrow range: from correctOpIdx to the last op in the same priority group
-  const getArrowRange = useCallback((correctIdx) => {
+  // Get all unsolved operator indices in the same priority group as the given index
+  const getSamePriorityGroup = useCallback((correctIdx) => {
     const op = levelData.operators[correctIdx];
-    const isHigh = op === '×' || op === '÷';
-    
-    // Find all indices of the same priority group
-    const groupIndices = levelData.operators
+    const high = isHighPriority(op);
+    return levelData.operators
       .map((o, i) => ({ op: o, idx: i }))
-      .filter(({ op: o }) => {
-        const oHigh = o === '×' || o === '÷';
-        return isHigh === oHigh;
+      .filter(({ op: o, idx }) => {
+        const oHigh = isHighPriority(o);
+        return high === oHigh && !solvedOps.has(idx);
       })
       .map(({ idx }) => idx);
+  }, [levelData.operators, solvedOps]);
+
+  // Compute arrow position from DOM refs
+  const computeArrowFromRefs = useCallback((groupIndices) => {
+    if (!expressionRef.current || groupIndices.length < 2) {
+      setArrowStyle(null);
+      return;
+    }
     
-    // Find the last consecutive one from correctIdx
-    const lastInGroup = groupIndices[groupIndices.length - 1];
-    return { from: correctIdx, to: lastInGroup };
-  }, [levelData.operators]);
+    const firstIdx = groupIndices[0];
+    const lastIdx = groupIndices[groupIndices.length - 1];
+    const firstEl = opRefs.current[firstIdx];
+    const lastEl = opRefs.current[lastIdx];
+    const container = expressionRef.current;
+    
+    if (!firstEl || !lastEl || !container) {
+      setArrowStyle(null);
+      return;
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const firstRect = firstEl.getBoundingClientRect();
+    const lastRect = lastEl.getBoundingClientRect();
+
+    setArrowStyle({
+      left: firstRect.left - containerRect.left + firstRect.width / 2 - 4,
+      width: (lastRect.left + lastRect.width / 2) - (firstRect.left + firstRect.width / 2) + 8,
+    });
+  }, []);
 
   const handleOpClick = useCallback((opIdx) => {
     if (levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx)) return;
@@ -212,7 +234,6 @@ export default function Potiondas({ config = {}, onComplete }) {
       playNote(audioCtx, noteIndex);
       setNoteIndex(prev => prev + 1);
 
-      // Start merge animation
       setMerging({ opIdx, phase: 'slide' });
 
       setTimeout(() => {
@@ -220,13 +241,11 @@ export default function Potiondas({ config = {}, onComplete }) {
       }, 300);
 
       setTimeout(() => {
-        // Merge emojis: left and right combine into a new one
         setCurrentEmojis(prev => {
           const newEmojis = [...prev];
           const resultEmoji = pickRandomEmoji(newEmojis);
-          // Replace the left emoji with result, mark right for removal
           newEmojis[opIdx] = resultEmoji;
-          newEmojis[opIdx + 1] = null; // will be filtered visually
+          newEmojis[opIdx + 1] = null;
           return newEmojis;
         });
 
@@ -238,7 +257,6 @@ export default function Potiondas({ config = {}, onComplete }) {
         const newStep = step + 1;
         setStep(newStep);
 
-        // Check if level complete
         if (newStep >= levelData.order.length) {
           setLevelSolved(true);
           playMergeSound(audioCtx);
@@ -254,14 +272,21 @@ export default function Potiondas({ config = {}, onComplete }) {
       setWrongIdx(opIdx);
       setFadedOps(true);
       setFlashCorrectIdx(correctOpIdx);
-      setShowArrowRange(getArrowRange(correctOpIdx));
       setNoteIndex(0);
+
+      // Only show arrow if there are >1 buttons in the correct priority group
+      const group = getSamePriorityGroup(correctOpIdx);
+      if (group.length > 1) {
+        // Delay slightly so DOM refs are up to date
+        requestAnimationFrame(() => computeArrowFromRefs(group));
+      } else {
+        setArrowStyle(null);
+      }
 
       const newLives = lives - 1;
       setLives(newLives);
 
       if (newLives <= 0) {
-        // Game over — move to next slide after delay
         setTimeout(() => {
           setGameOver(true);
           setTimeout(() => {
@@ -269,13 +294,12 @@ export default function Potiondas({ config = {}, onComplete }) {
           }, 2000);
         }, 1500);
       } else {
-        // Show restart button after 1.5s
         setTimeout(() => {
           setShowRestart(true);
         }, 1500);
       }
     }
-  }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getArrowRange, onComplete]);
+  }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
 
   const handleRestart = useCallback(() => {
     setLevelKey(prev => prev + 1);
@@ -283,7 +307,6 @@ export default function Potiondas({ config = {}, onComplete }) {
 
   const handleNextLevel = useCallback(() => {
     if (level + 1 >= totalLevels) {
-      // All levels complete
       if (onComplete) onComplete();
     } else {
       setLevel(prev => prev + 1);
@@ -291,29 +314,23 @@ export default function Potiondas({ config = {}, onComplete }) {
     }
   }, [level, totalLevels, onComplete]);
 
-  // Build the visible tokens (emojis + operators interleaved)
-  // After merges, some emojis become null — we skip them
+  // Build visible tokens
   const tokens = useMemo(() => {
     const result = [];
     for (let i = 0; i < levelData.operators.length; i++) {
-      // Emoji before this operator
       if (currentEmojis[i] !== null) {
         result.push({ type: 'emoji', value: currentEmojis[i], emojiIdx: i });
       }
-      // The operator itself
       if (!solvedOps.has(i)) {
         result.push({ type: 'op', value: levelData.operators[i], opIdx: i });
       }
     }
-    // Last emoji
     const lastIdx = levelData.operators.length;
     if (currentEmojis[lastIdx] !== null) {
       result.push({ type: 'emoji', value: currentEmojis[lastIdx], emojiIdx: lastIdx });
     }
     return result;
   }, [currentEmojis, solvedOps, levelData]);
-
-  const isHighPriority = (op) => op === '×' || op === '÷';
 
   return (
     <div className="pot-cartridge">
@@ -334,7 +351,7 @@ export default function Potiondas({ config = {}, onComplete }) {
 
       {/* Expression Area */}
       <div className="pot-expression-area">
-        <div className="pot-expression">
+        <div className="pot-expression" ref={expressionRef}>
           {tokens.map((token, i) => {
             if (token.type === 'emoji') {
               const isMergeLeft = merging?.phase === 'slide' && token.emojiIdx === merging.opIdx;
@@ -364,6 +381,7 @@ export default function Potiondas({ config = {}, onComplete }) {
             return (
               <span
                 key={`op-${opIdx}-${levelKey}`}
+                ref={el => { opRefs.current[opIdx] = el; }}
                 className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
               >
@@ -373,20 +391,20 @@ export default function Potiondas({ config = {}, onComplete }) {
               </span>
             );
           })}
+
+          {/* Dynamic green arrow positioned under the correct priority group */}
+          {arrowStyle && (
+            <div className="pot-green-arrow" style={{ left: arrowStyle.left, width: arrowStyle.width }}>
+              <svg viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
+                <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          )}
         </div>
 
-        {/* Green Arrow (level hint) */}
+        {/* Green Arrow (level hint — shown below expression for levels with >) */}
         {levelData.arrow && !wrongIdx && !levelSolved && (
           <div className="pot-arrow-hint">
-            <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
-              <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        )}
-
-        {/* Wrong-answer arrow (from correct to end of priority group) */}
-        {showArrowRange && (
-          <div className="pot-arrow-hint pot-arrow-correction">
             <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
               <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
