@@ -109,17 +109,8 @@
   font-size: 0.85em;
   color: #FFFFFF;
   transition: all 0.15s;
-  font-weight: 700;
-}
-
-/* Dark Violet for × ÷ */
-.pot-op-violet {
-  background: rgba(91, 33, 182, 0.4);
-  border: 2px solid rgba(91, 33, 182, 0.7);
-}
-
-/* Dark Lilac for + − (Lighter lilac) */
-.pot-op-lilac {
+  font-weight: 800;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: rgba(167, 139, 250, 0.4);
   border: 2px solid rgba(167, 139, 250, 0.8);
 }
