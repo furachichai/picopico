@@ -234,18 +234,23 @@ export default function Potiondas({ config = {}, onComplete }) {
       playNote(audioCtx, noteIndex);
       setNoteIndex(prev => prev + 1);
 
-      setMerging({ opIdx, phase: 'slide' });
+      let leftIdx = opIdx;
+      while (leftIdx >= 0 && currentEmojis[leftIdx] === null) leftIdx--;
+      let rightIdx = opIdx + 1;
+      while (rightIdx < currentEmojis.length && currentEmojis[rightIdx] === null) rightIdx++;
+
+      setMerging({ opIdx, leftIdx, rightIdx, phase: 'slide' });
 
       setTimeout(() => {
-        setMerging({ opIdx, phase: 'pop' });
+        setMerging(prev => ({ ...prev, phase: 'pop' }));
       }, 300);
 
       setTimeout(() => {
         setCurrentEmojis(prev => {
           const newEmojis = [...prev];
           const resultEmoji = pickRandomEmoji(newEmojis);
-          newEmojis[opIdx] = resultEmoji;
-          newEmojis[opIdx + 1] = null;
+          newEmojis[leftIdx] = resultEmoji;
+          newEmojis[rightIdx] = null;
           return newEmojis;
         });
 
@@ -354,10 +359,10 @@ export default function Potiondas({ config = {}, onComplete }) {
         <div className="pot-expression" ref={expressionRef}>
           {tokens.map((token, i) => {
             if (token.type === 'emoji') {
-              const isMergeLeft = merging?.phase === 'slide' && token.emojiIdx === merging.opIdx;
-              const isMergeRight = merging?.phase === 'slide' && token.emojiIdx === merging.opIdx + 1;
-              const isMergeFade = merging?.phase === 'pop' && (token.emojiIdx === merging.opIdx + 1);
-              const isMergePop = merging?.phase === 'pop' && token.emojiIdx === merging.opIdx;
+              const isMergeLeft = merging?.phase === 'slide' && token.emojiIdx === merging.leftIdx;
+              const isMergeRight = merging?.phase === 'slide' && token.emojiIdx === merging.rightIdx;
+              const isMergeFade = merging?.phase === 'pop' && token.emojiIdx === merging.rightIdx;
+              const isMergePop = merging?.phase === 'pop' && token.emojiIdx === merging.leftIdx;
 
               return (
                 <span
