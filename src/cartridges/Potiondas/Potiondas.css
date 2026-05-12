@@ -75,6 +75,9 @@
   user-select: none;
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pot-token-emoji {
