@@ -266,8 +266,9 @@ export default function Potiondas({ config = {}, onComplete }) {
     const firstRect = firstEl.getBoundingClientRect();
     const lastRect = lastEl.getBoundingClientRect();
 
-    const startLeft = firstRect.left - containerRect.left + firstRect.width / 2;
-    const totalWidth = (lastRect.left + lastRect.width / 2) - startLeft;
+    // Span from left edge of first op to right edge of last op
+    const startLeft = firstRect.left - containerRect.left;
+    const totalWidth = (lastRect.left + lastRect.width) - firstRect.left;
     const arrowWidth = Math.max(totalWidth / 3, 16);
 
     setArrowStyle({
