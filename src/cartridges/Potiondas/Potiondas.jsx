@@ -54,7 +54,7 @@ export function serializeLevels(levels) {
     let line = lv.ops;
     if (lv.arrow) line += '>';
     if (lv.newOp) {
-      const charMap = { '÷': '/', '+': '+', '−': '-', '×': 'x' };
+      const charMap = { '÷': '/', '+': '+', '−': '-', '×': 'x', '★': 'e' };
       const c = charMap[lv.newOp] || lv.newOp;
       line += ` n${c}`;
     }
@@ -64,14 +64,14 @@ export function serializeLevels(levels) {
 
 // Deserialize user text back into levels array
 export function deserializeLevels(text) {
-  const newOpMap = { '/': '÷', '+': '+', '-': '−', 'x': '×' };
+  const newOpMap = { '/': '÷', '+': '+', '-': '−', 'x': '×', 'e': '★' };
   return text.split('\n').filter(l => l.trim()).map(line => {
     line = line.trim();
     let newOp = undefined;
-    const nMatch = line.match(/\sn([/+\-x])$/i);
+    const nMatch = line.match(/\sn([/+\-xe])$/i);
     if (nMatch) {
       newOp = newOpMap[nMatch[1]] || nMatch[1];
-      line = line.replace(/\sn[/+\-x]$/i, '');
+      line = line.replace(/\sn[/+\-xe]$/i, '');
     }
     const arrow = line.endsWith('>');
     if (arrow) line = line.slice(0, -1);
@@ -82,19 +82,18 @@ export function deserializeLevels(text) {
 }
 
 // ─── PEMDAS Ordering Logic ────────────────────────────────────
+// Priority: 0 = Exponents (★), 1 = ×/÷, 2 = +/−
+function getOpPriority(op) {
+  if (op === '★') return 0;
+  if (op === '×' || op === '÷') return 1;
+  return 2;
+}
+
 function getPemdasOrder(operators) {
-  const highPriority = [];
-  const lowPriority = [];
-  
-  operators.forEach((op, idx) => {
-    if (op === '×' || op === '÷') {
-      highPriority.push(idx);
-    } else {
-      lowPriority.push(idx);
-    }
-  });
-  
-  return [...highPriority, ...lowPriority];
+  const indexed = operators.map((op, idx) => ({ op, idx, priority: getOpPriority(op) }));
+  // Sort by priority (ascending = highest first), then by index (left-to-right)
+  indexed.sort((a, b) => a.priority - b.priority || a.idx - b.idx);
+  return indexed.map(o => o.idx);
 }
 
 function charToSymbol(ch) {
@@ -103,6 +102,7 @@ function charToSymbol(ch) {
     case '/': return '÷';
     case '+': return '+';
     case '-': return '−';
+    case 'e': return '★';
     default: return ch;
   }
 }
@@ -164,9 +164,13 @@ function playMergeSound() {
   } catch(e) {}
 }
 
-// Check if an operator is high priority (× ÷)
+// Check if an operator is high priority (× ÷) — used for arrow grouping
 function isHighPriority(op) {
   return op === '×' || op === '÷';
+}
+
+function isExponent(op) {
+  return op === '★';
 }
 
 // ─── Main Component ───────────────────────────────────────────
@@ -213,7 +217,14 @@ export default function Potiondas({ config = {}, onComplete }) {
     const emojiCount = operators.length + 1;
     const emojis = generateEmojis(emojiCount);
     const order = getPemdasOrder(operators);
-    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp };
+    // Generate random exponent numbers for ★ operators
+    const exponents = {};
+    operators.forEach((op, idx) => {
+      if (op === '★') {
+        exponents[idx] = Math.floor(Math.random() * 8) + 2; // 2-9
+      }
+    });
+    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp, exponents };
   }, [level, levelKey]);
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
@@ -277,12 +288,11 @@ export default function Potiondas({ config = {}, onComplete }) {
   // Get all unsolved operator indices in the same priority group as the given index
   const getSamePriorityGroup = useCallback((correctIdx) => {
     const op = levelData.operators[correctIdx];
-    const high = isHighPriority(op);
+    const priority = getOpPriority(op);
     return levelData.operators
       .map((o, i) => ({ op: o, idx: i }))
       .filter(({ op: o, idx }) => {
-        const oHigh = isHighPriority(o);
-        return high === oHigh && !solvedOps.has(idx);
+        return getOpPriority(o) === priority && !solvedOps.has(idx);
       })
       .map(({ idx }) => idx);
   }, [levelData.operators, solvedOps]);
@@ -505,7 +515,14 @@ export default function Potiondas({ config = {}, onComplete }) {
                   <div className="pot-new-balloon">NEW</div>
                 )}
                 <span className={`pot-op-circle`}>
-                  {token.value}
+                  {isExponent(token.value) ? (
+                    <>
+                      <span className="pot-exp-star">⭐</span>
+                      <span className="pot-exp-number">{levelData.exponents[opIdx]}</span>
+                    </>
+                  ) : (
+                    token.value
+                  )}
                 </span>
               </span>
             );
