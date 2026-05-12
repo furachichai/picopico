@@ -240,9 +240,14 @@ export default function Potiondas({ config = {}, onComplete }) {
     const firstRect = firstEl.getBoundingClientRect();
     const lastRect = lastEl.getBoundingClientRect();
 
+    const startLeft = firstRect.left - containerRect.left + firstRect.width / 2;
+    const totalWidth = (lastRect.left + lastRect.width / 2) - startLeft;
+    const arrowWidth = Math.max(totalWidth / 3, 16);
+
     setArrowStyle({
-      left: firstRect.left - containerRect.left + firstRect.width / 2 - 4,
-      width: (lastRect.left + lastRect.width / 2) - (firstRect.left + firstRect.width / 2) + 8,
+      left: startLeft,
+      width: arrowWidth,
+      slideDistance: totalWidth - arrowWidth
     });
   }, []);
 
@@ -359,16 +364,20 @@ export default function Potiondas({ config = {}, onComplete }) {
 
   if (gameOver) {
     return (
-      <div className="pot-cartridge" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: 'white', fontWeight: '900', fontSize: '2.5rem', marginBottom: '30px', letterSpacing: '4px', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>GAME OVER</div>
-        <button className="pot-btn pot-btn-restart" onClick={() => {
-          setLives(5);
-          setLevel(0);
-          setLevelKey(prev => prev + 1);
-          setSeenLevels(new Set());
-        }}>
-          PLAY AGAIN
-        </button>
+      <div className="pot-cartridge" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ color: 'white', fontWeight: '900', fontSize: '2.5rem', letterSpacing: '4px', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>GAME OVER</div>
+        </div>
+        <div className="pot-bottom">
+          <button className="pot-btn pot-btn-restart" onClick={() => {
+            setLives(5);
+            setLevel(0);
+            setLevelKey(prev => prev + 1);
+            setSeenLevels(new Set());
+          }}>
+            PLAY AGAIN
+          </button>
+        </div>
       </div>
     );
   }
@@ -434,7 +443,7 @@ export default function Potiondas({ config = {}, onComplete }) {
 
           {/* Dynamic green arrow positioned under the correct priority group */}
           {arrowStyle && (
-            <div className="pot-green-arrow" style={{ left: arrowStyle.left, width: arrowStyle.width }}>
+            <div className="pot-green-arrow" style={{ left: arrowStyle.left, width: arrowStyle.width, '--slide-dist': `${arrowStyle.slideDistance}px` }}>
               <svg viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
                 <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

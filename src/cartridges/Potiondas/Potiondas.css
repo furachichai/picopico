@@ -218,6 +218,12 @@
   height: 10px;
   pointer-events: none;
   z-index: 20;
+  animation: potArrowSlide 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes potArrowSlide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--slide-dist, 0px)); }
 }
 
 .pot-green-arrow svg {
