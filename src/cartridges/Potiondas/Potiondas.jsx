@@ -390,8 +390,7 @@ export default function Potiondas({ config = {}, onComplete }) {
                 className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
               >
-                <span className={`pot-op-circle`}>
-                  {token.value}
+                <span className={`pot-op-circle pot-ball-${token.value === '+' ? 'plus' : token.value === '-' ? 'minus' : token.value === 'x' ? 'mult' : 'div'} pot-state-${isWrong ? 'wrong' : isFlashing ? 'correct' : isFaded ? 'faded' : 'normal'}`}>
                 </span>
               </span>
             );

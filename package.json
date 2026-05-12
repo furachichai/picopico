@@ -13,7 +13,10 @@
   "dependencies": {
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.38.0",
+    "get-pixels": "^3.3.3",
     "i18next": "^25.7.0",
+    "image-size": "^2.0.2",
+    "jimp": "^1.6.1",
     "lucide-react": "^0.555.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
