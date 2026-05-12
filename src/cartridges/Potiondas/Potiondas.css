@@ -108,7 +108,7 @@
   border-radius: 50%;
   font-size: 0.85em;
   color: #FFFFFF;
-  transition: all 0.15s;
+  transition: transform 0.15s;
   font-weight: 800;
   line-height: 1; /* Center vertically */
   padding-bottom: 2px; /* Micro adjustment for baseline centering */
