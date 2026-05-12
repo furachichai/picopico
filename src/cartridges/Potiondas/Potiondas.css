@@ -361,3 +361,38 @@
   font-size: 0.85rem;
   color: rgba(167, 139, 250, 0.6);
 }
+
+/* ─── New Operator Balloon ──────────────────────────── */
+.pot-new-balloon {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: #1E1B4B;
+  font-weight: 900;
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: potPulseBalloon 0.5s infinite alternate ease-in-out;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.pot-new-balloon::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+@keyframes potPulseBalloon {
+  0% { transform: translateX(-50%) scale(1); }
+  100% { transform: translateX(-50%) scale(1.15); }
+}

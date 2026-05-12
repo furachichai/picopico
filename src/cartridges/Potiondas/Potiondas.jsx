@@ -31,17 +31,17 @@ const LEVELS = [
   { ops: 'x',              arrow: false },
   { ops: 'xx',             arrow: true  },
   { ops: 'xxx',            arrow: true  },
-  { ops: '/xx',            arrow: false },
+  { ops: '/xx',            arrow: false, newOp: '÷' },
   { ops: 'x/x',            arrow: false },
   { ops: 'x//x//',         arrow: false },
-  { ops: '+x',             arrow: false },
+  { ops: '+x',             arrow: false, newOp: '+' },
   { ops: 'x+x',            arrow: false },
   { ops: 'x+xx+',          arrow: false },
   { ops: '+x++x+',         arrow: false },
   { ops: 'x/x',            arrow: false },
   { ops: '+x/+',           arrow: false },
   { ops: '/++x/+',         arrow: false },
-  { ops: '+-',             arrow: false },
+  { ops: '+-',             arrow: false, newOp: '−' },
   { ops: '-+',             arrow: true  },
   { ops: '+-++-+',         arrow: false },
   { ops: '+-x+-+',         arrow: false },
@@ -158,6 +158,8 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [levelSolved, setLevelSolved] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [arrowStyle, setArrowStyle] = useState(null); // {left, width} for green arrow
+  const [showNewBalloon, setShowNewBalloon] = useState(false);
+  const [newOpIdx, setNewOpIdx] = useState(null);
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -166,7 +168,7 @@ export default function Potiondas({ config = {}, onComplete }) {
     const emojiCount = operators.length + 1;
     const emojis = generateEmojis(emojiCount);
     const order = getPemdasOrder(operators);
-    return { operators, emojis, order, arrow: def.arrow };
+    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp };
   }, [level, levelKey]);
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
@@ -185,7 +187,19 @@ export default function Potiondas({ config = {}, onComplete }) {
     setShowRestart(false);
     setLevelSolved(false);
     setArrowStyle(null);
-  }, [level, levelKey]);
+
+    if (levelData.newOp) {
+      const idx = levelData.operators.indexOf(levelData.newOp);
+      if (idx !== -1) {
+        setNewOpIdx(idx);
+        setShowNewBalloon(true);
+      } else {
+        setShowNewBalloon(false);
+      }
+    } else {
+      setShowNewBalloon(false);
+    }
+  }, [level, levelKey, levelData]);
 
   const correctOpIdx = levelData.order[step];
 
@@ -342,7 +356,7 @@ export default function Potiondas({ config = {}, onComplete }) {
   }, [currentEmojis, solvedOps, levelData]);
 
   return (
-    <div className="pot-cartridge">
+    <div className="pot-cartridge" onClick={() => showNewBalloon && setShowNewBalloon(false)}>
       {/* Header / Hearts */}
       <div className="pot-header">
         <div className="pot-hearts">
@@ -390,6 +404,9 @@ export default function Potiondas({ config = {}, onComplete }) {
                 className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
               >
+                {showNewBalloon && newOpIdx === opIdx && (
+                  <div className="pot-new-balloon">NEW</div>
+                )}
                 <span className={`pot-op-circle`}>
                   {token.value}
                 </span>
