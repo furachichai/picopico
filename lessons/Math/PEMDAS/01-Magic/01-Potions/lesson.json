@@ -1,0 +1,224 @@
+{
+  "id": "draft-1",
+  "title": "Potions",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#ffffff",
+      "elements": [
+        {
+          "id": "el-1778621155899",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20tells%20you%20a%20secret.jpg",
+          "x": 46.94444444444445,
+          "y": 51.71875,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.9147329960692745,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778621246924",
+          "type": "balloon",
+          "content": "Necesito tu ayuda...",
+          "x": 56.25000000000001,
+          "y": 69.21875,
+          "width": 53.61111111111111,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 21,
+            "tailPos": {
+              "x": -9,
+              "y": -85
+            }
+          }
+        }
+      ],
+      "order": 0,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1778621173532",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778621177838",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20making%20natural%20potions.jpg",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.9862066212476392,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1778621311270",
+          "type": "balloon",
+          "content": "...para crear mis pociones.",
+          "x": 24.72222222222222,
+          "y": 61.5625,
+          "width": 46.666666666666664,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 21,
+            "tailPos": {
+              "x": 48,
+              "y": -93
+            }
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1778621288245",
+      "background": "#ffffff",
+      "elements": [
+        {
+          "id": "el-1778621293082",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20with%20jacko%20no%20lightning.jpg",
+          "x": 43.055555555555564,
+          "y": 56.25,
+          "width": 40,
+          "height": 25.10502049180328,
+          "rotation": 0,
+          "scale": 3.46529665124954,
+          "metadata": {
+            "width": 40,
+            "height": 25.10502049180328,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778621356990",
+          "type": "balloon",
+          "content": "¡Es MUY importante que descubras el ORDEN CORRECTO!",
+          "x": 41.80555555555556,
+          "y": 55.78125,
+          "width": 66.94444444444444,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 18,
+            "tailPos": {
+              "x": 18,
+              "y": -89
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1778621428728",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 3,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {}
+      }
+    },
+    {
+      "id": "slide-1778621187219",
+      "background": "#ffffff",
+      "elements": [
+        {
+          "id": "el-1778621482289",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 84.0625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "x",
+              "÷",
+              "Cualquiera, pero de izquierda a derecha"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1778621191823",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
+          "x": 47.49999999999999,
+          "y": 47.03125,
+          "width": 40,
+          "height": 16.8561872909699,
+          "rotation": 0,
+          "scale": 2.7296649637208925,
+          "metadata": {
+            "width": 40,
+            "height": 16.8561872909699,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778621596290",
+          "type": "text",
+          "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+          "x": 49.30555555555555,
+          "y": 20.625000000000004,
+          "width": 79.16666666666666,
+          "height": 10,
+          "rotation": -8.007086120649006,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "monospace",
+            "fontSize": 25,
+            "backgroundColor": "#58cc02",
+            "color": "#ffffff"
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-12T21:25:39.254Z",
+  "updatedAt": "2026-05-12T21:36:06.228Z",
+  "path": "lessons/Math/PEMDAS/01-Magic/01-Potions/lesson.json",
+  "textPreset": null,
+  "subject": "Math",
+  "topic": "PEMDAS",
+  "chapterId": "01",
+  "chapterName": "Magic",
+  "lessonId": "01"
+}

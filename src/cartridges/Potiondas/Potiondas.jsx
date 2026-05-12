@@ -164,6 +164,22 @@ function playMergeSound() {
   } catch(e) {}
 }
 
+function playGrowingSound() {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(300, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.6);
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.3);
+    gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.6);
+  } catch(e) {}
+}
+
 // Check if an operator is high priority (× ÷) — used for arrow grouping
 function isHighPriority(op) {
   return op === '×' || op === '÷';
@@ -204,6 +220,7 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [showRestart, setShowRestart] = useState(false);
   const [levelSolved, setLevelSolved] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [showGoodJob, setShowGoodJob] = useState(false);
   const [arrowStyle, setArrowStyle] = useState(null); // {left, width} for green arrow
   const [showNewBalloon, setShowNewBalloon] = useState(false);
   const [newOpIdx, setNewOpIdx] = useState(null);
@@ -242,6 +259,7 @@ export default function Potiondas({ config = {}, onComplete }) {
     setMerging(null);
     setShowRestart(false);
     setLevelSolved(false);
+    setShowGoodJob(false);
     setArrowStyle(null);
 
     if (levelData.newOp && !seenLevels.has(level)) {
@@ -370,7 +388,17 @@ export default function Potiondas({ config = {}, onComplete }) {
         if (newStep >= levelData.order.length) {
           setLevelSolved(true);
           playMergeSound();
-          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+          setTimeout(() => playGrowingSound(), 100);
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, ticks: 60 });
+          
+          if (level + 1 >= totalLevels) {
+            setTimeout(() => {
+              setShowGoodJob(true);
+              setTimeout(() => {
+                if (onComplete) onComplete();
+              }, 2000);
+            }, 1000);
+          }
         }
       }, 200);
 
@@ -484,11 +512,12 @@ export default function Potiondas({ config = {}, onComplete }) {
               const isMergeRight = merging?.phase === 'slide' && token.emojiIdx === merging.rightIdx;
               const isMergeFade = merging?.phase === 'pop' && token.emojiIdx === merging.rightIdx;
               const isMergePop = merging?.phase === 'pop' && token.emojiIdx === merging.leftIdx;
+              const isFinalGrow = levelSolved && !isMergeFade && !isMergeRight;
 
               return (
                 <span
                   key={`emoji-${token.emojiIdx}-${levelKey}`}
-                  className={`pot-token pot-token-emoji ${isMergeLeft ? 'pot-merge-left' : ''} ${isMergeRight ? 'pot-merge-right' : ''} ${isMergeFade ? 'pot-merge-fade' : ''} ${isMergePop ? 'pot-merge-pop' : ''}`}
+                  className={`pot-token pot-token-emoji ${isMergeLeft ? 'pot-merge-left' : ''} ${isMergeRight ? 'pot-merge-right' : ''} ${isMergeFade ? 'pot-merge-fade' : ''} ${isMergePop ? 'pot-merge-pop' : ''} ${isFinalGrow ? 'pot-final-grow' : ''}`}
                 >
                   {token.value}
                 </span>
@@ -553,7 +582,7 @@ export default function Potiondas({ config = {}, onComplete }) {
 
       {/* Bottom Buttons */}
       <div className="pot-bottom">
-        {levelSolved && (
+        {levelSolved && !showGoodJob && (
           <button className="pot-btn pot-btn-next" onClick={handleNextLevel}>
             {level + 1 >= totalLevels ? 'FINISH ✨' : 'NEXT LEVEL →'}
           </button>
@@ -564,6 +593,15 @@ export default function Potiondas({ config = {}, onComplete }) {
           </button>
         )}
       </div>
+
+      {/* GOOD JOB Overlay */}
+      {showGoodJob && (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
+          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out' }}>
+            GOOD JOB! ✨
+          </div>
+        </div>
+      )}
     </div>
   );
 }
