@@ -4,10 +4,10 @@ import './Potiondas.css';
 
 // ─── Fantasy Emoji Pool ───────────────────────────────────────
 const EMOJI_POOL = [
-  '🧙','🧛','🧟','👻','🎃','🦇','🕷️','🐉','🦄','🧜',
-  '🧚','🪄','🔮','⚗️','🧪','🗡️','🛡️','💀','🐺','🦉',
-  '🌙','⭐','🍄','🐸','🦎','🐍','🪲','🕯️','📜','💎',
-  '🏰','🧝','🪬','🫧','🌿','🍵','🐈‍⬛','🦅','🐙','🫀',
+  '🧅','🧄','🌶️','🥕','🍄','🌿','🫚','🍋','🫐','🍇',
+  '🍎','🍒','🥝','🍑','🫒','🌰','🍯','🧂','🫧','🧪',
+  '⚗️','🔮','✨','💫','⭐','🌙','☄️','🌋','💎','🪨',
+  '⚡','🌀','💨','🔥','❄️','💧','🫀','🪄','🌸','🍵',
 ];
 
 function pickRandomEmoji(exclude = []) {
@@ -49,7 +49,7 @@ const DEFAULT_LEVELS = [
 ];
 
 // Serialize levels array to user-friendly text format
-function serializeLevels(levels) {
+export function serializeLevels(levels) {
   return levels.map(lv => {
     let line = lv.ops;
     if (lv.arrow) line += '>';
@@ -63,7 +63,7 @@ function serializeLevels(levels) {
 }
 
 // Deserialize user text back into levels array
-function deserializeLevels(text) {
+export function deserializeLevels(text) {
   const newOpMap = { '/': '÷', '+': '+', '-': '−', 'x': '×' };
   return text.split('\n').filter(l => l.trim()).map(line => {
     line = line.trim();
@@ -171,15 +171,19 @@ function isHighPriority(op) {
 
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, onComplete }) {
-  const [levels, setLevels] = useState(DEFAULT_LEVELS);
+  // Initialize levels from config or use defaults
+  const [levels, setLevels] = useState(() => {
+    if (config.levelsText) {
+      try {
+        const parsed = deserializeLevels(config.levelsText);
+        if (parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return DEFAULT_LEVELS;
+  });
   const totalLevels = levels.length;
   const expressionRef = useRef(null);
   const opRefs = useRef({});
-
-  // Levels editor state
-  const [showLevelsEditor, setShowLevelsEditor] = useState(false);
-  const [levelsText, setLevelsText] = useState('');
-  const [levelsOriginalText, setLevelsOriginalText] = useState('');
 
   // Game state
   const [level, setLevel] = useState(0);
@@ -459,19 +463,6 @@ export default function Potiondas({ config = {}, onComplete }) {
             </span>
           ))}
         </div>
-        <button
-          className="pot-levels-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            const text = serializeLevels(levels);
-            setLevelsText(text);
-            setLevelsOriginalText(text);
-            setShowLevelsEditor(true);
-          }}
-          title="Edit Levels"
-        >
-          LEVELS
-        </button>
       </div>
 
       {/* Expression Area */}
@@ -556,46 +547,6 @@ export default function Potiondas({ config = {}, onComplete }) {
           </button>
         )}
       </div>
-
-      {/* Levels Editor Modal */}
-      {showLevelsEditor && (
-        <div className="pot-levels-overlay" onClick={(e) => { e.stopPropagation(); setShowLevelsEditor(false); setLevelsText(levelsOriginalText); }}>
-          <div className="pot-levels-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="pot-levels-modal-title">LEVELS</div>
-            <textarea
-              className="pot-levels-textarea"
-              value={levelsText}
-              onChange={(e) => setLevelsText(e.target.value)}
-              spellCheck={false}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-            />
-            {levelsText !== levelsOriginalText && (
-              <div className="pot-levels-modal-actions">
-                <button className="pot-levels-modal-btn pot-levels-cancel" onClick={() => {
-                  setLevelsText(levelsOriginalText);
-                  setShowLevelsEditor(false);
-                }}>CANCEL</button>
-                <button className="pot-levels-modal-btn pot-levels-save" onClick={() => {
-                  try {
-                    const parsed = deserializeLevels(levelsText);
-                    if (parsed.length === 0) return;
-                    setLevels(parsed);
-                    setLevel(0);
-                    setLevelKey(prev => prev + 1);
-                    setSeenLevels(new Set());
-                    setLives(5);
-                    setShowLevelsEditor(false);
-                  } catch (err) {
-                    console.error('Failed to parse levels:', err);
-                  }
-                }}>SAVE</button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

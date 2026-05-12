@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ContextualMenu.css';
 import { PEM_MODES } from '../Player/PEMExpressionPool';
+import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 
 const FONTS = [
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
@@ -22,6 +23,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const isImageType = element.type === 'image';
 
     const [activeCardIndex, setActiveCardIndex] = useState(element.config?.previewIndex || 0);
+    const [showLevelsEditor, setShowLevelsEditor] = useState(false);
+    const [levelsText, setLevelsText] = useState('');
+    const [levelsOriginalText, setLevelsOriginalText] = useState('');
 
     // Removed crashing useEffect that attempted to force sync. 
     // Instead, we initialize state above to match the config.
@@ -606,6 +610,110 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 />
                             </div>
                         </>
+                    )}
+
+                    {/* Potiondas Settings */}
+                    {element.cartridgeType === 'Potiondas' && (
+                        <>
+                            <div className="menu-group">
+                                <button
+                                    className="btn-secondary"
+                                    style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}
+                                    onClick={() => {
+                                        const currentText = element.config?.levelsText || serializeLevels([
+                                            { ops: 'x', arrow: false },
+                                            { ops: 'xx', arrow: true },
+                                            { ops: 'xxx', arrow: true },
+                                            { ops: '/xx', arrow: false, newOp: '÷' },
+                                            { ops: 'x/x', arrow: false },
+                                            { ops: 'x//x//', arrow: false },
+                                            { ops: '+x', arrow: false, newOp: '+' },
+                                            { ops: 'x+x', arrow: false },
+                                            { ops: 'x+xx+', arrow: false },
+                                            { ops: '+x++x+', arrow: false },
+                                            { ops: 'x/x', arrow: false },
+                                            { ops: '+x/+', arrow: false },
+                                            { ops: '/++x/+', arrow: false },
+                                            { ops: '+-', arrow: false, newOp: '−' },
+                                            { ops: '-+', arrow: true },
+                                            { ops: '+-++-+', arrow: false },
+                                            { ops: '+-x+-+', arrow: false },
+                                            { ops: '-x-+x-', arrow: false },
+                                        ]);
+                                        setLevelsText(currentText);
+                                        setLevelsOriginalText(currentText);
+                                        setShowLevelsEditor(true);
+                                    }}
+                                >
+                                    📋 LEVELS
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                    {/* Potiondas Levels Editor Modal */}
+                    {showLevelsEditor && element.cartridgeType === 'Potiondas' && (
+                        <div style={{
+                            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                            background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+                            zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '20px'
+                        }} onClick={() => { setShowLevelsEditor(false); setLevelsText(levelsOriginalText); }}>
+                            <div style={{
+                                background: '#1e1b3a', border: '1px solid rgba(167,139,250,0.4)',
+                                borderRadius: '16px', padding: '20px', width: '100%', maxWidth: '360px',
+                                maxHeight: '80vh', display: 'flex', flexDirection: 'column', gap: '12px',
+                                boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
+                            }} onClick={(e) => e.stopPropagation()}>
+                                <div style={{ color: 'white', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '2px', textAlign: 'center' }}>LEVELS</div>
+                                <textarea
+                                    value={levelsText}
+                                    onChange={(e) => setLevelsText(e.target.value)}
+                                    spellCheck={false}
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    style={{
+                                        width: '100%', minHeight: '300px', maxHeight: '50vh',
+                                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(167,139,250,0.3)',
+                                        borderRadius: '8px', color: '#e2e8f0', fontFamily: "'Courier New', monospace",
+                                        fontSize: '0.85rem', padding: '12px', resize: 'vertical',
+                                        outline: 'none', lineHeight: '1.6', boxSizing: 'border-box'
+                                    }}
+                                />
+                                {levelsText !== levelsOriginalText && (
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button
+                                            onClick={() => { setLevelsText(levelsOriginalText); setShowLevelsEditor(false); }}
+                                            style={{
+                                                flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                                background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)',
+                                                letterSpacing: '1px'
+                                            }}
+                                        >CANCEL</button>
+                                        <button
+                                            onClick={() => {
+                                                try {
+                                                    const parsed = deserializeLevels(levelsText);
+                                                    if (parsed.length === 0) return;
+                                                    onChange('cartridge', { config: { ...element.config, levelsText: levelsText } });
+                                                    setShowLevelsEditor(false);
+                                                } catch (err) {
+                                                    console.error('Failed to parse levels:', err);
+                                                }
+                                            }}
+                                            style={{
+                                                flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                                background: 'linear-gradient(135deg, #22C55E, #16A34A)', color: 'white',
+                                                letterSpacing: '1px'
+                                            }}
+                                        >SAVE</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     )}
 
                     <div className="menu-divider"></div>
