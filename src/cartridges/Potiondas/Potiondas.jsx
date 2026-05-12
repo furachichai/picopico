@@ -136,16 +136,6 @@ function isHighPriority(op) {
   return op === '×' || op === '÷';
 }
 
-function getOpName(symbol) {
-  switch(symbol) {
-    case '+': return 'plus';
-    case '−': return 'minus';
-    case '×': return 'mult';
-    case '÷': return 'div';
-    default: return 'plus';
-  }
-}
-
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, onComplete }) {
   const totalLevels = LEVELS.length;
@@ -391,14 +381,7 @@ export default function Potiondas({ config = {}, onComplete }) {
             const isFaded = fadedOps && !isWrong && !isFlashing;
             const isMergeOp = merging?.phase === 'slide' && merging.opIdx === opIdx;
             const isMergeOpPop = merging?.phase === 'pop' && merging.opIdx === opIdx;
-            
-            const opName = getOpName(token.value);
-            let stateName = 'normal';
-            if (isWrong) stateName = 'wrong';
-            else if (isFlashing) stateName = 'correct';
-            else if (isFaded) stateName = 'faded';
-
-            const imgSrc = `/assets/potiondas/ball_${opName}_${stateName}.png`;
+            const isHigh = isHighPriority(token.value);
 
             return (
               <span
@@ -407,7 +390,9 @@ export default function Potiondas({ config = {}, onComplete }) {
                 className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
               >
-                <img src={imgSrc} alt={token.value} className="pot-op-ball" draggable="false" />
+                <span className={`pot-op-circle`}>
+                  {token.value}
+                </span>
               </span>
             );
           })}

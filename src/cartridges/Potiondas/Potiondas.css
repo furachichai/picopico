@@ -99,33 +99,61 @@
   bottom: -16px;
 }
 
-.pot-op-ball {
-  width: 1.92rem; /* Keep original size: 1.5rem * 1.28 = 1.92rem */
-  height: 1.92rem;
-  object-fit: contain;
-  transition: transform 0.15s;
-  pointer-events: none; /* Let clicks pass through to parent */
+.pot-op-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.28em;
+  height: 1.28em;
+  border-radius: 50%;
+  font-size: 0.85em;
+  color: #FFFFFF;
+  transition: all 0.15s;
+  font-weight: 800;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: rgba(167, 139, 250, 0.4);
+  border: 2px solid rgba(167, 139, 250, 0.8);
 }
 
-.pot-token-op:hover .pot-op-ball {
+.pot-token-op:hover .pot-op-circle {
   transform: scale(1.15);
-  filter: brightness(1.1);
+  filter: brightness(1.3);
 }
 
-.pot-token-op:active .pot-op-ball {
+.pot-token-op:active .pot-op-circle {
   transform: scale(0.9);
 }
 
 /* ─── Wrong State ───────────────────────────────────── */
-.pot-wrong .pot-op-ball {
+.pot-wrong .pot-op-circle {
+  background: rgba(239, 68, 68, 0.5) !important;
+  border-color: #EF4444 !important;
   animation: potShake 0.4s ease-in-out;
 }
 
 .pot-faded {
+  opacity: 0.3;
   pointer-events: none;
 }
 
 /* ─── Flash Correct ─────────────────────────────────── */
+.pot-flash-correct .pot-op-circle {
+  animation: potFlashGlow 0.6s ease-in-out infinite;
+  border-color: #34D399 !important;
+  background: rgba(52, 211, 153, 0.3) !important;
+}
+
+@keyframes potFlashGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.8);
+    transform: scale(1.2);
+  }
+}
+
 @keyframes potShake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-6px); }
