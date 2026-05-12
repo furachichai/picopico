@@ -231,7 +231,7 @@ export default function Potiondas({ config = {}, onComplete }) {
   }, []);
 
   const handleOpClick = useCallback((opIdx) => {
-    if (levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx)) return;
+    if (levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx) || wrongIdx !== null) return;
 
     if (opIdx === correctOpIdx) {
       // ─── Correct! ───
