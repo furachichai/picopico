@@ -161,6 +161,19 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [showNewBalloon, setShowNewBalloon] = useState(false);
   const [newOpIdx, setNewOpIdx] = useState(null);
   const [seenLevels, setSeenLevels] = useState(new Set());
+  const [expressionWidth, setExpressionWidth] = useState(0);
+
+  // Measure expression width after render
+  useEffect(() => {
+    if (expressionRef.current) {
+      const measure = () => {
+        setExpressionWidth(expressionRef.current?.scrollWidth || 0);
+      };
+      // Small delay to let the DOM settle
+      const timer = setTimeout(measure, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [level, levelKey, currentEmojis]);
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -452,8 +465,8 @@ export default function Potiondas({ config = {}, onComplete }) {
         </div>
 
         {/* Green Arrow (level hint — shown below expression for levels with >) */}
-        {levelData.arrow && !wrongIdx && !levelSolved && (
-          <div className="pot-arrow-hint">
+        {levelData.arrow && !wrongIdx && !levelSolved && expressionWidth > 0 && (
+          <div className="pot-arrow-hint" style={{ width: expressionWidth }}>
             <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
               <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

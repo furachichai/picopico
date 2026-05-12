@@ -218,12 +218,14 @@
   height: 10px;
   pointer-events: none;
   z-index: 20;
-  animation: potArrowSlide 1.2s infinite alternate ease-in-out;
+  animation: potArrowGroupSlide 1.5s ease-in-out infinite;
 }
 
-@keyframes potArrowSlide {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(var(--slide-dist, 0px)); }
+@keyframes potArrowGroupSlide {
+  0% { transform: translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(var(--slide-dist, 0px)); opacity: 0; }
 }
 
 .pot-green-arrow svg {
@@ -232,9 +234,8 @@
   filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
 }
 
-/* Level hint arrow (centered below expression) */
+/* Level hint arrow (below expression, width set dynamically via inline style) */
 .pot-arrow-hint {
-  width: 80%;
   height: 10px;
   margin-top: 12px;
   display: flex;
