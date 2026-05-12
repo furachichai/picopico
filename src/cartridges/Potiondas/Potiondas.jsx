@@ -517,7 +517,7 @@ export default function Potiondas({ config = {}, onComplete }) {
                 <span className={`pot-op-circle`}>
                   {isExponent(token.value) ? (
                     <>
-                      <span className="pot-exp-star">a</span>
+                      <span className="pot-exp-star">e</span>
                       <span className="pot-exp-number">{levelData.exponents[opIdx]}</span>
                     </>
                   ) : (
