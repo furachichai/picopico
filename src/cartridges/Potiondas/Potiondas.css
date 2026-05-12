@@ -409,3 +409,119 @@
   0% { transform: translateX(-50%) scale(1); }
   100% { transform: translateX(-50%) scale(1.15); }
 }
+
+/* ─── Levels Editor ────────────────────────────────────── */
+.pot-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.pot-levels-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 7vh;
+  margin-right: 4px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+
+.pot-levels-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.pot-levels-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pot-levels-modal {
+  background: #1e1b3a;
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 360px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.pot-levels-modal-title {
+  color: white;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.pot-levels-textarea {
+  width: 100%;
+  min-height: 300px;
+  max-height: 50vh;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  padding: 12px;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.pot-levels-textarea:focus {
+  border-color: rgba(167, 139, 250, 0.7);
+}
+
+.pot-levels-modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pot-levels-modal-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: filter 0.15s;
+}
+
+.pot-levels-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pot-levels-save {
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+  color: white;
+}
+
+.pot-levels-modal-btn:active {
+  filter: brightness(0.85);
+}
