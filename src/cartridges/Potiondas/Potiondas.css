@@ -234,15 +234,15 @@
   filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
 }
 
-/* Level hint arrow (below expression, width set dynamically via inline style) */
+/* Level hint arrow (absolutely positioned inside .pot-expression) */
 .pot-arrow-hint {
+  position: absolute;
+  bottom: 2px;
   height: 10px;
-  margin-top: 12px;
   display: flex;
   justify-content: flex-start;
   overflow: visible;
   pointer-events: none;
-  position: relative;
 }
 
 .pot-arrow-svg {

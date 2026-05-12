@@ -204,11 +204,21 @@ export default function Potiondas({ config = {}, onComplete }) {
     }
   }, [level, levelKey, levelData]);
 
-  // Measure expression width after render
+  // Measure expression content bounds after render
   useEffect(() => {
     if (expressionRef.current) {
       const measure = () => {
-        setExpressionWidth(expressionRef.current?.scrollWidth || 0);
+        const container = expressionRef.current;
+        if (!container) return;
+        const children = container.querySelectorAll('.pot-token');
+        if (children.length === 0) return;
+        const containerRect = container.getBoundingClientRect();
+        const firstRect = children[0].getBoundingClientRect();
+        const lastRect = children[children.length - 1].getBoundingClientRect();
+        setExpressionWidth({
+          left: firstRect.left - containerRect.left,
+          width: (lastRect.left + lastRect.width) - firstRect.left
+        });
       };
       const timer = setTimeout(measure, 50);
       return () => clearTimeout(timer);
@@ -461,16 +471,15 @@ export default function Potiondas({ config = {}, onComplete }) {
               </svg>
             </div>
           )}
+          {/* Level hint arrow — inside expression, positioned under tokens */}
+          {levelData.arrow && !wrongIdx && !levelSolved && expressionWidth && (
+            <div className="pot-arrow-hint" style={{ left: expressionWidth.left, width: expressionWidth.width }}>
+              <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
+                <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          )}
         </div>
-
-        {/* Green Arrow (level hint — shown below expression for levels with >) */}
-        {levelData.arrow && !wrongIdx && !levelSolved && expressionWidth > 0 && (
-          <div className="pot-arrow-hint" style={{ width: expressionWidth }}>
-            <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
-              <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        )}
       </div>
 
       {/* Bottom Buttons */}
