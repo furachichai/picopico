@@ -234,28 +234,29 @@
 
 /* Level hint arrow (centered below expression) */
 .pot-arrow-hint {
-  width: 60%;
+  width: 80%;
   height: 10px;
   margin-top: 12px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: visible;
   pointer-events: none;
+  position: relative;
 }
 
 .pot-arrow-svg {
   height: 100%;
-  width: 100%;
-  animation: potArrowSlide 1.5s ease-in-out infinite;
+  width: 33.33%; /* One third of the expression width */
+  animation: potArrowHintSlide 1.8s ease-in-out infinite;
   filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
   opacity: 0;
 }
 
-@keyframes potArrowSlide {
-  0% { transform: translateX(-20%); opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translateX(20%); opacity: 0; }
+@keyframes potArrowHintSlide {
+  0% { transform: translateX(0%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(200%); opacity: 0; }
 }
 
 /* Correction arrow that pulses */
