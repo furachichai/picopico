@@ -99,50 +99,25 @@
   bottom: -16px;
 }
 
-.pot-op-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.5em;
-  height: 2.0em; /* 78x106 aspect ratio roughly */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+.pot-op-ball {
+  width: 1.92rem; /* Keep original size: 1.5rem * 1.28 = 1.92rem */
+  height: 1.92rem;
+  object-fit: contain;
   transition: transform 0.15s;
+  pointer-events: none; /* Let clicks pass through to parent */
 }
 
-/* Base operator backgrounds */
-.pot-ball-plus.pot-state-normal { background-image: url('/assets/potiondas/ball_plus_normal.png'); }
-.pot-ball-plus.pot-state-correct { background-image: url('/assets/potiondas/ball_plus_correct.png'); }
-.pot-ball-plus.pot-state-wrong { background-image: url('/assets/potiondas/ball_plus_wrong.png'); }
-.pot-ball-plus.pot-state-faded { background-image: url('/assets/potiondas/ball_plus_faded.png'); }
-
-.pot-ball-minus.pot-state-normal { background-image: url('/assets/potiondas/ball_minus_normal.png'); }
-.pot-ball-minus.pot-state-correct { background-image: url('/assets/potiondas/ball_minus_correct.png'); }
-.pot-ball-minus.pot-state-wrong { background-image: url('/assets/potiondas/ball_minus_wrong.png'); }
-.pot-ball-minus.pot-state-faded { background-image: url('/assets/potiondas/ball_minus_faded.png'); }
-
-.pot-ball-mult.pot-state-normal { background-image: url('/assets/potiondas/ball_mult_normal.png'); }
-.pot-ball-mult.pot-state-correct { background-image: url('/assets/potiondas/ball_mult_correct.png'); }
-.pot-ball-mult.pot-state-wrong { background-image: url('/assets/potiondas/ball_mult_wrong.png'); }
-.pot-ball-mult.pot-state-faded { background-image: url('/assets/potiondas/ball_mult_faded.png'); }
-
-.pot-ball-div.pot-state-normal { background-image: url('/assets/potiondas/ball_div_normal.png'); }
-.pot-ball-div.pot-state-correct { background-image: url('/assets/potiondas/ball_div_correct.png'); }
-.pot-ball-div.pot-state-wrong { background-image: url('/assets/potiondas/ball_div_wrong.png'); }
-.pot-ball-div.pot-state-faded { background-image: url('/assets/potiondas/ball_div_faded.png'); }
-
-.pot-token-op:hover .pot-op-circle {
+.pot-token-op:hover .pot-op-ball {
   transform: scale(1.15);
-  filter: brightness(1.3);
+  filter: brightness(1.1);
 }
 
-.pot-token-op:active .pot-op-circle {
+.pot-token-op:active .pot-op-ball {
   transform: scale(0.9);
 }
 
 /* ─── Wrong State ───────────────────────────────────── */
-.pot-wrong .pot-op-circle {
+.pot-wrong .pot-op-ball {
   animation: potShake 0.4s ease-in-out;
 }
 
@@ -151,19 +126,6 @@
 }
 
 /* ─── Flash Correct ─────────────────────────────────── */
-.pot-flash-correct .pot-op-circle {
-  animation: potFlashGlow 0.6s ease-in-out infinite;
-}
-
-@keyframes potFlashGlow {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
 @keyframes potShake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-6px); }
