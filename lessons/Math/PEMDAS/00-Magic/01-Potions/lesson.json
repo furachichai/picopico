@@ -142,15 +142,37 @@
       "order": 3,
       "cartridge": {
         "type": "Potiondas",
-        "config": {
-          "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//\n+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
-        }
+        "config": {}
       }
     },
     {
       "id": "slide-1778621187219",
       "background": "#ffffff",
       "elements": [
+        {
+          "id": "el-1778621482289",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 84.0625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "x",
+              "÷",
+              "Cualquiera, pero de izquierda a derecha"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
         {
           "id": "el-1778621191823",
           "type": "image",
@@ -183,119 +205,15 @@
             "backgroundColor": "#58cc02",
             "color": "#ffffff"
           }
-        },
-        {
-          "id": "el-1778622334897",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 80.46875,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "options": [
-              "x",
-              "÷",
-              "Cualquiera, pero de izquierda a derecha",
-              "No importa el orden"
-            ],
-            "correctIndex": 2,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "classic",
-            "visualMode": false
-          }
         }
       ],
       "order": 4,
       "backgroundSettings": {}
-    },
-    {
-      "id": "slide-1778622262960",
-      "background": "#E1F5FE",
-      "elements": [],
-      "order": 5,
-      "cartridge": {
-        "type": "Potiondas",
-        "config": {
-          "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-x-+x-"
-        }
-      }
-    },
-    {
-      "id": "slide-1778622411989",
-      "background": "#ffffff",
-      "elements": [
-        {
-          "id": "el-1778622411989-wwsm0aol9",
-          "type": "image",
-          "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
-          "x": 47.49999999999999,
-          "y": 47.03125,
-          "width": 40,
-          "height": 16.8561872909699,
-          "rotation": 0,
-          "scale": 2.7296649637208925,
-          "metadata": {
-            "width": 40,
-            "height": 16.8561872909699,
-            "locked": true
-          }
-        },
-        {
-          "id": "el-1778622411989-exfhk6bh3",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 80.46875,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "options": [
-              "+",
-              "-",
-              "Cualquiera, pero de izquierda a derecha",
-              "No importa el orden"
-            ],
-            "correctIndex": 2,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "classic",
-            "visualMode": false
-          }
-        },
-        {
-          "id": "el-1778622411989-jh9v1t4ld",
-          "type": "text",
-          "content": "¿Cuál va primero:<div> + o - ?</div>",
-          "x": 49.30555555555555,
-          "y": 20.625000000000004,
-          "width": 79.16666666666666,
-          "height": 10,
-          "rotation": -8.007086120649006,
-          "scale": 1,
-          "metadata": {
-            "fontFamily": "monospace",
-            "fontSize": 25,
-            "backgroundColor": "#58cc02",
-            "color": "#ffffff"
-          }
-        }
-      ],
-      "order": 6,
-      "backgroundSettings": {},
-      "cartridge": null
     }
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-12T21:47:25.574Z",
+  "updatedAt": "2026-05-12T21:36:06.228Z",
   "path": "lessons/Math/PEMDAS/01-Magic/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",
