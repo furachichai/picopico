@@ -110,6 +110,9 @@
   color: #FFFFFF;
   transition: all 0.15s;
   font-weight: 800;
+  line-height: 1; /* Center vertically */
+  padding-bottom: 2px; /* Micro adjustment for baseline centering */
+  box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: rgba(167, 139, 250, 0.4);
   border: 2px solid rgba(167, 139, 250, 0.8);

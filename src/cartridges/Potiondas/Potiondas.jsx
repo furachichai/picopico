@@ -160,6 +160,7 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [arrowStyle, setArrowStyle] = useState(null); // {left, width} for green arrow
   const [showNewBalloon, setShowNewBalloon] = useState(false);
   const [newOpIdx, setNewOpIdx] = useState(null);
+  const [seenLevels, setSeenLevels] = useState(new Set());
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -188,11 +189,12 @@ export default function Potiondas({ config = {}, onComplete }) {
     setLevelSolved(false);
     setArrowStyle(null);
 
-    if (levelData.newOp) {
+    if (levelData.newOp && !seenLevels.has(level)) {
       const idx = levelData.operators.indexOf(levelData.newOp);
       if (idx !== -1) {
         setNewOpIdx(idx);
         setShowNewBalloon(true);
+        setSeenLevels(prev => new Set(prev).add(level));
       } else {
         setShowNewBalloon(false);
       }
@@ -355,6 +357,22 @@ export default function Potiondas({ config = {}, onComplete }) {
     return result;
   }, [currentEmojis, solvedOps, levelData]);
 
+  if (gameOver) {
+    return (
+      <div className="pot-cartridge" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'white', fontWeight: '900', fontSize: '2.5rem', marginBottom: '30px', letterSpacing: '4px', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>GAME OVER</div>
+        <button className="pot-btn pot-btn-restart" onClick={() => {
+          setLives(5);
+          setLevel(0);
+          setLevelKey(prev => prev + 1);
+          setSeenLevels(new Set());
+        }}>
+          PLAY AGAIN
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="pot-cartridge" onClick={() => showNewBalloon && setShowNewBalloon(false)}>
       {/* Header / Hearts */}
@@ -445,11 +463,6 @@ export default function Potiondas({ config = {}, onComplete }) {
           <button className="pot-btn pot-btn-restart" onClick={handleRestart}>
             RESTART 🔄
           </button>
-        )}
-        {gameOver && (
-          <div className="pot-game-over">
-            <span>💀 No more lives!</span>
-          </div>
         )}
       </div>
     </div>
