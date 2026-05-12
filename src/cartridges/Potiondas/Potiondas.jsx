@@ -163,18 +163,6 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [seenLevels, setSeenLevels] = useState(new Set());
   const [expressionWidth, setExpressionWidth] = useState(0);
 
-  // Measure expression width after render
-  useEffect(() => {
-    if (expressionRef.current) {
-      const measure = () => {
-        setExpressionWidth(expressionRef.current?.scrollWidth || 0);
-      };
-      // Small delay to let the DOM settle
-      const timer = setTimeout(measure, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [level, levelKey, currentEmojis]);
-
   // Build the current level's data
   const levelData = useMemo(() => {
     const def = LEVELS[Math.min(level, totalLevels - 1)];
@@ -215,6 +203,17 @@ export default function Potiondas({ config = {}, onComplete }) {
       setShowNewBalloon(false);
     }
   }, [level, levelKey, levelData]);
+
+  // Measure expression width after render
+  useEffect(() => {
+    if (expressionRef.current) {
+      const measure = () => {
+        setExpressionWidth(expressionRef.current?.scrollWidth || 0);
+      };
+      const timer = setTimeout(measure, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [level, levelKey, currentEmojis]);
 
   const correctOpIdx = levelData.order[step];
 
