@@ -215,9 +215,13 @@ export default function Potiondas({ config = {}, onComplete }) {
         const containerRect = container.getBoundingClientRect();
         const firstRect = children[0].getBoundingClientRect();
         const lastRect = children[children.length - 1].getBoundingClientRect();
+        const totalW = (lastRect.left + lastRect.width) - firstRect.left;
+        const arrowW = totalW / 3;
         setExpressionWidth({
           left: firstRect.left - containerRect.left,
-          width: (lastRect.left + lastRect.width) - firstRect.left
+          width: totalW,
+          arrowWidth: arrowW,
+          slideDist: totalW - arrowW
         });
       };
       const timer = setTimeout(measure, 50);
@@ -472,8 +476,12 @@ export default function Potiondas({ config = {}, onComplete }) {
             </div>
           )}
           {/* Level hint arrow — inside expression, positioned under tokens */}
-          {levelData.arrow && !wrongIdx && !levelSolved && expressionWidth && (
-            <div className="pot-arrow-hint" style={{ left: expressionWidth.left, width: expressionWidth.width }}>
+          {levelData.arrow && step === 0 && !wrongIdx && !levelSolved && expressionWidth && (
+            <div className="pot-arrow-hint" style={{
+              left: expressionWidth.left,
+              width: expressionWidth.arrowWidth,
+              '--slide-dist': `${expressionWidth.slideDist}px`
+            }}>
               <svg className="pot-arrow-svg" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible">
                 <path d="M0,5 L90,5 M85,0 L95,5 L85,10" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
