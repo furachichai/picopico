@@ -285,7 +285,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [dragOffset, setDragOffset] = useState(0);
     const reorderContainerRef = React.useRef(null);
     const dragStartY = React.useRef(0);
-    const itemHeight = 56; // Height of each bar + gap
+    const measuredItemHeight = React.useRef(80); // Default, updated on drag start
 
     // Initialize shuffled items on mount
     useEffect(() => {
@@ -311,7 +311,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     const handleReorderDragStart = (e, index) => {
         if (isShuffling || isSolved || isFailed || disabled) return;
-        e.preventDefault();
+        
+        // Measure actual height + gap (approx 8px)
+        const target = e.currentTarget;
+        if (target) {
+            measuredItemHeight.current = target.offsetHeight + 8;
+        }
+        
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         dragStartY.current = clientY;
         setDraggedIndex(index);
@@ -323,27 +329,31 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         let offset = clientY - dragStartY.current;
 
+        const h = measuredItemHeight.current;
+
         // Clamp: don't let bar go above first position or below last
-        const maxUp = -draggedIndex * itemHeight;
-        const maxDown = (reorderItems.length - 1 - draggedIndex) * itemHeight;
+        const maxUp = -draggedIndex * h;
+        const maxDown = (reorderItems.length - 1 - draggedIndex) * h;
         offset = Math.max(maxUp, Math.min(maxDown, offset));
         setDragOffset(offset);
 
         // Calculate swap
         const currentItems = [...reorderItems];
         const direction = offset > 0 ? 1 : -1;
-        const threshold = itemHeight * 0.5;
+        const threshold = h * 0.55; // Slightly more than half to require intent and create "stickiness"
         if (Math.abs(offset) > threshold) {
             const targetIndex = draggedIndex + direction;
             if (targetIndex >= 0 && targetIndex < currentItems.length) {
                 [currentItems[draggedIndex], currentItems[targetIndex]] = [currentItems[targetIndex], currentItems[draggedIndex]];
                 setReorderItems(currentItems);
                 setDraggedIndex(targetIndex);
+                // Resetting to clientY zeros the visual offset, making it 'stick' 
+                // in the new slot until they drag past the threshold again.
                 dragStartY.current = clientY;
                 setDragOffset(0);
             }
         }
-    }, [draggedIndex, reorderItems, itemHeight]);
+    }, [draggedIndex, reorderItems]);
 
     const handleReorderDragEnd = useCallback(() => {
         setDraggedIndex(null);
@@ -776,14 +786,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 </div>
                 {!isSolved && !isFailed && (
                     <button
-                        className="quiz-ready-btn"
+                        className="reorder-ok-btn"
                         onClick={(e) => {
                             e.stopPropagation();
                             handleReorderSubmit();
                         }}
                         disabled={isShuffling}
                     >
-                        READY
+                        OK
                     </button>
                 )}
             </div>
