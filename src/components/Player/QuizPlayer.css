@@ -687,6 +687,12 @@
     pointer-events: none;
 }
 
+.quiz-option-reorder.failed {
+    background-color: #FF6B6B !important;
+    opacity: 1;
+    pointer-events: none;
+}
+
 .quiz-option-reorder.reorder-flash-red {
     background-color: #FF6B6B !important;
     transition: background-color 0.2s ease;

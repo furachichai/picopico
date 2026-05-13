@@ -768,7 +768,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         return (
                             <div
                                 key={`${item.originalIndex}`}
-                                className={`quiz-option-reorder ${isDragged ? 'dragging' : ''} ${isShuffling ? 'shuffling' : ''} ${isSolved ? (item.originalIndex === index ? 'correct' : '') : ''} ${isFailed ? (item.originalIndex === index ? 'correct' : 'wrong') : ''} ${String(shakingIndex).startsWith('reorder-attempt') ? 'shake reorder-flash-red' : ''}`}
+                                className={`quiz-option-reorder ${isDragged ? 'dragging' : ''} ${isShuffling ? 'shuffling' : ''} ${isSolved ? (item.originalIndex === index ? 'correct' : '') : ''} ${isFailed ? 'failed' : ''} ${String(shakingIndex).startsWith('reorder-attempt') ? 'shake reorder-flash-red' : ''}`}
                                 style={{
                                     backgroundColor: colors[item.originalIndex % colors.length],
                                     transform: isDragged ? `translateY(${transformY}px) scale(1.05)` : 'none',
