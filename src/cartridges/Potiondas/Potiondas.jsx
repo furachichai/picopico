@@ -507,27 +507,29 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     <div className="pot-cartridge" onClick={() => showNewBalloon && setShowNewBalloon(false)}>
       {/* Header / Hearts */}
       <div className="pot-header" style={{ position: 'relative' }}>
-        {showGoodJob ? (
-          <button 
-            className="pot-btn" 
-            style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', padding: '6px 12px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)' }}
-            onClick={resetGame}
-          >
-            Play Again
-          </button>
-        ) : (
-          <div style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', width: '100px', height: '14px', borderRadius: '10px', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)' }}>
-            <div style={{ width: `${((level + (levelSolved ? 1 : 0)) / totalLevels) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #34D399, #10B981)', transition: 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: '0 0 8px #34D399' }} />
-            {/* Glossy overlay for glass effect */}
-            <div style={{ position: 'absolute', top: '1px', left: '2px', right: '2px', height: '4px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0))', borderRadius: '10px', pointerEvents: 'none' }} />
+        <div className="pot-hearts" style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px' }}>
+          {showGoodJob ? (
+            <button 
+              className="pot-btn" 
+              style={{ padding: '6px 12px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0 }}
+              onClick={resetGame}
+            >
+              Play Again
+            </button>
+          ) : (
+            <div style={{ position: 'relative', width: '130px', height: '16px', borderRadius: '10px', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)' }}>
+              <div style={{ width: `${((level + (levelSolved ? 1 : 0)) / totalLevels) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #34D399, #10B981)', transition: 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: '0 0 8px #34D399' }} />
+              {/* Glossy overlay for glass effect */}
+              <div style={{ position: 'absolute', top: '1px', left: '2px', right: '2px', height: '4px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0))', borderRadius: '10px', pointerEvents: 'none' }} />
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '4px' }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span key={i} className={`pot-heart ${i < lives ? '' : 'pot-heart-lost'}`}>
+                {i < lives ? '❤️' : '🖤'}
+              </span>
+            ))}
           </div>
-        )}
-        <div className="pot-hearts">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className={`pot-heart ${i < lives ? '' : 'pot-heart-lost'}`}>
-              {i < lives ? '❤️' : '🖤'}
-            </span>
-          ))}
         </div>
       </div>
 
