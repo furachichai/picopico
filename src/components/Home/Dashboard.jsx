@@ -45,10 +45,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isDev = import.meta.env.DEV;
 
         let data;
-        if (isLocal) {
+        if (isDev) {
           const response = await fetch('/api/list-lessons');
           data = await response.json();
         } else {
@@ -162,10 +162,10 @@ const Dashboard = () => {
     }
 
     try {
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const isDev = import.meta.env.DEV;
 
       let lessonData;
-      if (isLocal) {
+      if (isDev) {
         // Use API on localhost
         const response = await fetch(`/api/load-lesson?path=${encodeURIComponent(lessonItem.path)}`);
         if (!response.ok) throw new Error('Failed to load lesson');

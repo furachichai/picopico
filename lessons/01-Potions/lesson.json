@@ -148,6 +148,28 @@
       }
     },
     {
+      "id": "slide-1778642357631",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778642424375",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 39.97874601487779,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 39.97874601487779
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
       "id": "slide-1778621187219",
       "background": "#ffffff",
       "elements": [
@@ -212,7 +234,7 @@
           }
         }
       ],
-      "order": 4,
+      "order": 5,
       "backgroundSettings": {}
     },
     {
@@ -278,7 +300,7 @@
           }
         }
       ],
-      "order": 5,
+      "order": 6,
       "backgroundSettings": {}
     },
     {
@@ -323,14 +345,14 @@
           }
         }
       ],
-      "order": 6,
+      "order": 7,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1778622262960",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 7,
+      "order": 8,
       "cartridge": {
         "type": "Potiondas",
         "config": {
@@ -401,14 +423,14 @@
           }
         }
       ],
-      "order": 8,
+      "order": 9,
       "backgroundSettings": {},
       "cartridge": null
     }
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-13T01:34:46.656Z",
+  "updatedAt": "2026-05-13T03:20:45.338Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",

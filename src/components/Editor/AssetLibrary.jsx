@@ -33,6 +33,7 @@ const ASSETS = {
 };
 
 // Load custom characters from src/assets/characters
+// Force HMR reload
 const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customCharacterList = Object.values(customCharacters).map(mod => mod.default);
 
