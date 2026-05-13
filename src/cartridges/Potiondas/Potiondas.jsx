@@ -596,10 +596,15 @@ export default function Potiondas({ config = {}, onComplete }) {
 
       {/* GOOD JOB Overlay */}
       {showGoodJob && (
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, overflow: 'hidden' }}>
+          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51 }}>
             GOOD JOB! ✨
           </div>
+          <img 
+            src="/assets/characters/wizard party blower.png" 
+            alt="Wizard"
+            className="pot-wizard-win"
+          />
         </div>
       )}
     </div>

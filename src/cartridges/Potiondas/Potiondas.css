@@ -563,3 +563,24 @@
 .pot-levels-modal-btn:active {
   filter: brightness(0.85);
 }
+
+/* ─── Wizard Win Animation ──────────────────────────── */
+.pot-wizard-win {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 50%;
+  transform: translateX(-50%) translateY(0);
+  animation: potWizardSlideUp 1s ease-out forwards;
+  z-index: 50;
+  pointer-events: none;
+}
+
+@keyframes potWizardSlideUp {
+  0% {
+    transform: translateX(-50%) translateY(100%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
