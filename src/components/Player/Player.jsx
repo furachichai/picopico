@@ -495,7 +495,9 @@ const Player = () => {
                             {/* Cartridge Layer - Below Stickers but above background */}
                             {slide.cartridge && (
                                 <div className="cartridge-container" style={{
-                                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'auto'
+                                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+                                    zIndex: slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : 1, 
+                                    pointerEvents: slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 'none' : 'auto'
                                 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && (
                                         <FractionAlpha
