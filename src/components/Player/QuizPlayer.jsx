@@ -176,6 +176,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const newWrongIndices = new Set(wrongIndices).add(index);
         setWrongIndices(newWrongIndices);
         setShakingIndex(index);
+        setTimeout(() => setShakingIndex(null), 500); // Clear so animation can re-trigger
+
         if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
         if (newWrongIndices.size >= maxAttempts) {
@@ -766,7 +768,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         return (
                             <div
                                 key={`${item.originalIndex}`}
-                                className={`quiz-option-reorder ${isDragged ? 'dragging' : ''} ${isShuffling ? 'shuffling' : ''} ${isSolved ? (item.originalIndex === index ? 'correct' : '') : ''} ${isFailed ? (item.originalIndex === index ? 'correct' : 'wrong') : ''}`}
+                                className={`quiz-option-reorder ${isDragged ? 'dragging' : ''} ${isShuffling ? 'shuffling' : ''} ${isSolved ? (item.originalIndex === index ? 'correct' : '') : ''} ${isFailed ? (item.originalIndex === index ? 'correct' : 'wrong') : ''} ${String(shakingIndex).startsWith('reorder-attempt') ? 'shake reorder-flash-red' : ''}`}
                                 style={{
                                     backgroundColor: colors[item.originalIndex % colors.length],
                                     transform: isDragged ? `translateY(${transformY}px) scale(1.05)` : 'none',
@@ -784,18 +786,17 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         );
                     })}
                 </div>
-                {!isSolved && !isFailed && (
-                    <button
-                        className="reorder-ok-btn"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleReorderSubmit();
-                        }}
-                        disabled={isShuffling}
-                    >
-                        OK
-                    </button>
-                )}
+                <button
+                    className="reorder-ok-btn"
+                    style={{ visibility: (isSolved || isFailed) ? 'hidden' : 'visible' }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleReorderSubmit();
+                    }}
+                    disabled={isShuffling}
+                >
+                    OK
+                </button>
             </div>
         );
     }

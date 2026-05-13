@@ -687,6 +687,11 @@
     pointer-events: none;
 }
 
+.quiz-option-reorder.reorder-flash-red {
+    background-color: #FF6B6B !important;
+    transition: background-color 0.2s ease;
+}
+
 .reorder-ok-btn {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
