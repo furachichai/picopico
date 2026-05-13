@@ -20,13 +20,9 @@ const Player = () => {
     const { t } = useTranslation();
     const { lesson } = state;
 
-    // Initialize index based on the currentSlideId in global state (set by DiscoverView)
-    // Initialize index based on saved progress OR currentSlideId
-    // If we just navigated from Dashboard, we might want to resume.
-    // If we rely on currentSlideId (from Editor), it's fine for testing.
-    // But for players, let's look up progress if we are at start (approx).
-    // Always start lessons from the beginning when played from Dashboard
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    // Initialize index based on the currentSlideId set by Dashboard or Editor
+    const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
 
     // START: Update storage when slide changes
     useEffect(() => {
@@ -70,8 +66,8 @@ const Player = () => {
             }
 
             if (e.key === 'ArrowRight') {
-                if (isGameActive && currentSlide?.cartridge) return; // Block forward nav during active game
-                nextSlide();
+                if (state.readOnly && isGameActive && currentSlide?.cartridge) return; // Block forward nav during active game
+                nextSlide(!state.readOnly); // Force next if in editor mode
             } else if (e.key === 'ArrowLeft') {
                 prevSlide(); // Always allow going back
             } else if (e.key === 'Escape') {
@@ -211,10 +207,10 @@ const Player = () => {
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
         // Block forward navigation during active game, but always allow backward
-        if (direction === 'next' && isGameActive && currentSlide?.cartridge) return;
+        if (direction === 'next' && state.readOnly && isGameActive && currentSlide?.cartridge) return;
 
         setIsNavigating(true);
-        if (direction === 'next') nextSlide();
+        if (direction === 'next') nextSlide(!state.readOnly);
         else prevSlide();
 
         // Lockout: Transition (300ms) + Delay (150ms) = 450ms
