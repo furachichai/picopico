@@ -56,10 +56,15 @@ const Player = () => {
 
     // Initial check for cartridge...
 
-    // Slide navigation SFX
+    // Slide navigation SFX (use singleton context to prevent max contexts error)
     const playSlideSfx = () => {
         try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (!window._slideAudioCtx) {
+                window._slideAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const ctx = window._slideAudioCtx;
+            if (ctx.state === 'suspended') ctx.resume();
+            
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -86,7 +91,7 @@ const Player = () => {
                 if (state.readOnly && isGameActive) return; // Block forward nav during active game
                 nextSlide(!state.readOnly); // Force next if in editor mode
             } else if (e.key === 'ArrowLeft') {
-                if (state.readOnly && isGameActive) return; // Block backward nav during active game
+                // ALWAYS allow going backward so user isn't trapped
                 prevSlide();
             } else if (e.key === 'Escape') {
                 dispatch({ type: 'TOGGLE_PREVIEW' });
@@ -226,12 +231,17 @@ const Player = () => {
     // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
-        // Block all navigation during active game in read-only mode
-        if (state.readOnly && isGameActive) return;
 
-        setIsNavigating(true);
-        if (direction === 'next') nextSlide(!state.readOnly);
-        else prevSlide();
+        if (direction === 'next') {
+             // Block forward navigation during active game in read-only mode
+             if (state.readOnly && isGameActive) return;
+             setIsNavigating(true);
+             nextSlide(!state.readOnly);
+        } else {
+             // always allow backwards
+             setIsNavigating(true);
+             prevSlide();
+        }
 
         // Lockout: Transition (300ms) + Delay (150ms) = 450ms
         setTimeout(() => {

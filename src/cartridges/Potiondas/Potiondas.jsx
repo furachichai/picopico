@@ -396,7 +396,7 @@ export default function Potiondas({ config = {}, onComplete }) {
               setShowGoodJob(true);
               setTimeout(() => {
                 if (onComplete) onComplete();
-              }, 2000);
+              }, 4000);
             }, 1000);
           }
         }
