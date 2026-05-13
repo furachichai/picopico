@@ -723,6 +723,67 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             {/* Quiz Text Color */}
             {element.type === 'quiz' && (
                 <>
+                {/* Quiz Font & Size */}
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div className="menu-group">
+                        <label>Font</label>
+                        <select
+                            value={metadata.fontFamily || '"HVD Comic Serif Pro", sans-serif'}
+                            onChange={(e) => {
+                                // Apply font to all quiz options via execCommand
+                                document.execCommand('fontName', false, e.target.value);
+                                updateMetadata({ fontFamily: e.target.value });
+                            }}
+                        >
+                            {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
+                        </select>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Size</label>
+                        <input
+                            type="number"
+                            value={metadata.fontSize || 16}
+                            onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
+                            min="10" max="60"
+                            style={{ width: '60px' }}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Bold</label>
+                        <button
+                            className={`btn-icon ${metadata.fontWeight === 'bold' ? 'active' : ''}`}
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                const sel = window.getSelection();
+                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                                    document.execCommand('bold', false, null);
+                                    const container = sel.getRangeAt(0).commonAncestorContainer;
+                                    const editableEl = container.nodeType === 3
+                                        ? container.parentElement?.closest('[contenteditable="true"]')
+                                        : container.closest?.('[contenteditable="true"]');
+                                    if (editableEl) {
+                                        const optionIndex = editableEl.dataset.optionIndex;
+                                        if (optionIndex !== undefined) {
+                                            const currentOptions = [...(element.metadata?.options || [])];
+                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                        }
+                                    }
+                                } else {
+                                    updateMetadata({ fontWeight: metadata.fontWeight === 'bold' ? 'normal' : 'bold' });
+                                }
+                            }}
+                            title="Bold"
+                            style={{ fontWeight: 'bold', fontSize: '1rem' }}
+                        >
+                            B
+                        </button>
+                    </div>
+                </div>
+
+                {/* Quiz Text Color */}
                 <div className="menu-group">
                     <label>Text Color</label>
                     <div className="color-picker-mini">

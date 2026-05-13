@@ -867,7 +867,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 className={className}
                                 style={{
                                     backgroundColor: colors[index % colors.length],
-                                    pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto'
+                                    pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto',
+                                    fontFamily: data.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
+                                    fontWeight: data.metadata?.fontWeight || undefined
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();

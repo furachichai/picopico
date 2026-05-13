@@ -474,7 +474,12 @@ const QuizEditor = ({ element, onChange }) => {
                                         el.innerHTML = option;
                                     }
                                 }}
-                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                style={{
+                                    resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
+                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                    fontWeight: element.metadata?.fontWeight || 'normal'
+                                }}
                                 data-placeholder={`Option ${index + 1}`}
                             />
                         )}
@@ -494,6 +499,32 @@ const QuizEditor = ({ element, onChange }) => {
                     />
                 </div>
             ))}
+
+            {/* Add answer button for classic quiz */}
+            {quizType === 'classic' && (
+                <button
+                    className="quiz-add-answer-btn"
+                    onClick={() => {
+                        const newOptions = [...options, `Option ${options.length + 1}`];
+                        onChange(element.id, { options: newOptions });
+                    }}
+                    style={{
+                        width: '100%',
+                        padding: '10px',
+                        border: '2px dashed rgba(255,255,255,0.4)',
+                        borderRadius: '12px',
+                        background: 'rgba(255,255,255,0.1)',
+                        color: 'rgba(255,255,255,0.7)',
+                        fontWeight: 700,
+                        fontSize: '0.9rem',
+                        cursor: 'pointer',
+                        marginTop: '8px',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    + Add Answer
+                </button>
+            )}
         </div>
     );
 };

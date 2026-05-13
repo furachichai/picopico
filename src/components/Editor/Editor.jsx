@@ -347,12 +347,29 @@ const Editor = () => {
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
-        // The reducer should handle selecting the new slide, or we might need to do it here if it doesn't auto-select
-        // Assuming ADD_SLIDE adds to the end. We might want to switch to it.
-        // For now, let's assume the user manually navigates or the reducer handles it.
-        // Actually, usually we want to jump to the new slide.
-        // Let's trust the reducer or the user flow for now, but ideally the reducer sets currentSlideId to the new one.
     };
+
+    // Delete key handler for selected elements
+    React.useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Don't intercept if user is typing in an input, textarea, or contentEditable
+            if (
+                e.target.isContentEditable ||
+                e.target.closest('[contenteditable="true"]') ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA' ||
+                e.target.tagName === 'SELECT'
+            ) return;
+
+            if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedElementId) {
+                e.preventDefault();
+                handleContextMenuDelete(state.selectedElementId);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [state.selectedElementId]);
 
     return (
         <div className="editor-layout" onClick={handleGlobalClick}>
@@ -454,8 +471,8 @@ const Editor = () => {
                             +
                         </button>
                         {isLastSlide ? (
-                            <button className="nav-btn nav-add" onClick={handleAddSlide}>
-                                +
+                            <button className="nav-btn nav-next" disabled style={{ opacity: 0.3, cursor: 'default' }}>
+                                &gt;
                             </button>
                         ) : (
                             <button className="nav-btn nav-next" onClick={handleNextSlide}>
