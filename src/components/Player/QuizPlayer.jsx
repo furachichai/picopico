@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { formatExponents } from '../../utils/textFormatters';
 import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
 import './QuizPlayer.css';
@@ -463,18 +464,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             if (node.style === 'narrator') {
                                 return (
                                     <div key={idx} className="chat-narrator-row">
-                                        <div className="chat-narrator-text">
-                                            {node.text}
-                                        </div>
+                                        <div className="chat-narrator-text" dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                     </div>
                                 );
                             }
                             return (
                                 <div key={idx} className="chat-bubble-row chat-row-tutor">
                                     <div className="chat-avatar">🤖</div>
-                                    <div className="chat-bubble chat-bubble-tutor">
-                                        {node.text}
-                                    </div>
+                                    <div className="chat-bubble chat-bubble-tutor" dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                 </div>
                             );
                         }
@@ -501,7 +498,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                         className={`chat-bubble chat-bubble-option ${isChosen ? 'chat-correct' : ''} ${isWrong ? 'chat-wrong' : ''} ${isShaking ? 'chat-shake' : ''}`}
                                                         onClick={(e) => { e.stopPropagation(); handleChatOptionClick(idx, optIdx); }}
                                                         disabled={nodeSolved || isWrong || disabled || chatFadingOut}
-                                                        dangerouslySetInnerHTML={{ __html: opt }}
+                                                        dangerouslySetInnerHTML={{ __html: formatExponents(opt) }}
                                                     />
                                                     <div className="chat-avatar chat-avatar-user">🧑</div>
                                                 </div>
@@ -782,7 +779,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 onMouseDown={(e) => handleReorderDragStart(e, index)}
                                 onTouchStart={(e) => handleReorderDragStart(e, index)}
                             >
-                                <span className="quiz-option-text" dangerouslySetInnerHTML={{ __html: item.text }} />
+                                <span className="quiz-option-text" dangerouslySetInnerHTML={{ __html: formatExponents(item.text) }} />
                                 <span className="reorder-grip">⋮⋮</span>
                             </div>
                         );
@@ -899,7 +896,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         <img src={getThumbImage(index)} alt={index === 0 ? 'True' : 'False'} className="tf-image" />
                                     </div>
                                 ) : (
-                                    <span className="quiz-option-text" dangerouslySetInnerHTML={{ __html: option }} />
+                                    <span className="quiz-option-text" dangerouslySetInnerHTML={{ __html: formatExponents(option) }} />
                                 )}
                             </button>
                         </div>

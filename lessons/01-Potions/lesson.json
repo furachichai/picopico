@@ -362,7 +362,7 @@
       "cartridge": {
         "type": "Potiondas",
         "config": {
-          "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-x-+x-"
+          "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-/+\n+/x-/=\n-x-/x-"
         }
       }
     },
@@ -390,16 +390,16 @@
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 84.53125,
+          "y": 78.75,
           "width": 20,
           "height": 10,
           "rotation": 0,
           "scale": 1,
           "metadata": {
             "options": [
-              "+ ",
-              "-",
-              "Cualquiera<div>(de izquierda a derecha)</div>",
+              "<font face=\"Verdana, Arial, sans-serif\">+ </font>",
+              "<font face=\"Verdana, Arial, sans-serif\">-</font>",
+              "<font face=\"Verdana, Arial, sans-serif\">Cualquiera</font><div><font face=\"Verdana, Arial, sans-serif\">(de izquierda a derecha)</font></div>",
               "No importa el orden"
             ],
             "correctIndex": 2,
@@ -410,13 +410,13 @@
             "visualMode": false,
             "fontFamily": "\"Fira Sans\"",
             "fontWeight": "bold",
-            "fontSize": 18
+            "fontSize": 14
           }
         },
         {
           "id": "el-1778622411989-jh9v1t4ld",
           "type": "text",
-          "content": "¿Cuál va primero:<div> + o - ?</div>",
+          "content": "¿Cuál va primero:<div> + ó - ?</div>",
           "x": 49.02777777777777,
           "y": 21.093750000000004,
           "width": 79.16666666666666,
@@ -512,6 +512,18 @@
       "cartridge": null
     },
     {
+      "id": "slide-1778705953154",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 11,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {
+          "levelsText": "-/e ne\n+/-e\nxe/e\n-+e/ee\n=/ex=e"
+        }
+      }
+    },
+    {
       "id": "slide-1778687264485",
       "background": "#ffffff",
       "elements": [
@@ -564,8 +576,8 @@
           "metadata": {
             "fontFamily": "\"Fira Sans\"",
             "options": [
-              "Analiza bien toda la serie",
-              "Pulsa exponente",
+              "Analiza toda la serie",
+              "Pulsa e!2",
               "Pulsa x o /",
               "Pulsa + o -"
             ],
@@ -578,13 +590,13 @@
           }
         }
       ],
-      "order": 11,
+      "order": 12,
       "backgroundSettings": {}
     }
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-13T20:46:30.933Z",
+  "updatedAt": "2026-05-13T21:04:17.703Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",

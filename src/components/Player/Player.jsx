@@ -8,6 +8,7 @@ import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
+import { formatExponents } from '../../utils/textFormatters';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
 import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
@@ -587,7 +588,7 @@ const Player = () => {
                                                         textAlign: element.metadata?.textAlign || 'left',
                                                         lineHeight: 1,
                                                     }}
-                                                    dangerouslySetInnerHTML={{ __html: element.content }}
+                                                    dangerouslySetInnerHTML={{ __html: formatExponents(element.content) }}
                                                 />
                                             )}
                                             {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" />}
