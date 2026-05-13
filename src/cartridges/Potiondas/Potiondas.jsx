@@ -434,9 +434,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           }, 2000);
         }, 1500);
       } else {
-        setTimeout(() => {
-          setShowRestart(true);
-        }, 1500);
+        setShowRestart(true);
       }
     }
   }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
@@ -561,7 +559,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
               <span
                 key={`op-${opIdx}-${levelKey}`}
                 ref={(el) => opRefs.current[opIdx] = el}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-token-wrong' : ''} ${isFlashing ? 'pot-token-correct' : ''} ${isFaded ? 'pot-token-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-op-pop' : ''} ${isHigh ? 'pot-token-high' : ''}`}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
                 style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >
