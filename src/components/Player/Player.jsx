@@ -501,7 +501,7 @@ const Player = () => {
                                         <FractionAlpha
                                             config={slide.cartridge.config}
                                             onComplete={() => {
-                                                markSlideSolved(currentSlideIndex);
+                                                markSlideSolved(index);
                                                 setIsGameActive(false);
                                             }}
                                         />
@@ -511,7 +511,7 @@ const Player = () => {
                                             <FractionSlicer
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(currentSlideIndex);
+                                                    markSlideSolved(index);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -522,7 +522,7 @@ const Player = () => {
                                             <SwipeSorter
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(currentSlideIndex);
+                                                    markSlideSolved(index);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -533,7 +533,7 @@ const Player = () => {
                                             <PEMDASCartridge
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(currentSlideIndex);
+                                                    markSlideSolved(index);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -543,9 +543,9 @@ const Player = () => {
                                         <ErrorBoundary>
                                             <Potiondas
                                                 config={slide.cartridge.config}
-                                                isAlreadySolved={solvedSlides.has(currentSlideIndex)}
+                                                isAlreadySolved={solvedSlides.has(index)}
                                                 onComplete={() => {
-                                                    markSlideSolved(currentSlideIndex);
+                                                    markSlideSolved(index);
                                                     setIsGameActive(false);
                                                 }}
                                                 onNextSlide={() => nextSlide(true)}
