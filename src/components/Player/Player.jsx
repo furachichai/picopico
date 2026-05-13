@@ -87,11 +87,10 @@ const Player = () => {
                 return;
             }
 
+            // Keyboard navigation is UNRESTRICTED (testing/dev with physical keyboard)
             if (e.key === 'ArrowRight') {
-                if (state.readOnly && isGameActive) return; // Block forward nav during active game
-                nextSlide(!state.readOnly); // Force next if in editor mode
+                nextSlide(true); // force = true, skip all blocking
             } else if (e.key === 'ArrowLeft') {
-                // ALWAYS allow going backward so user isn't trapped
                 prevSlide();
             } else if (e.key === 'Escape') {
                 dispatch({ type: 'TOGGLE_PREVIEW' });
@@ -228,19 +227,26 @@ const Player = () => {
 
     const [isNavigating, setIsNavigating] = useState(false);
 
-    // Debounced Navigation Handler
+    // Debounced Navigation Handler (touch/hotzone — strict rules)
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
 
+        // Determine what kind of interactive is on the current slide
+        const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
+        const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
+
         if (direction === 'next') {
-             // Block forward navigation during active game in read-only mode
-             if (state.readOnly && isGameActive) return;
-             setIsNavigating(true);
-             nextSlide(!state.readOnly);
+            // Forward is ALWAYS blocked when there's an unsolved quiz or cartridge
+            if (hasCartridge || hasQuiz) return;
+            setIsNavigating(true);
+            nextSlide(false);
         } else {
-             // always allow backwards
-             setIsNavigating(true);
-             prevSlide();
+            // Backward:
+            //   - Cartridge/game: BLOCKED (can't leave mid-game)
+            //   - Quiz: ALLOWED (can go back)
+            if (hasCartridge) return;
+            setIsNavigating(true);
+            prevSlide();
         }
 
         // Lockout: Transition (300ms) + Delay (150ms) = 450ms
