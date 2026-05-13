@@ -17,7 +17,7 @@ const QuizEditor = ({ element, onChange }) => {
     const quizType = element.metadata?.quizType || 'classic';
     const visualMode = element.metadata?.visualMode || false;
 
-    const colors = ['#FF6B6B', '#4ECDC4', '#9B72CF', '#FF8C00', '#95E1D3', '#F38181'];
+    const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];

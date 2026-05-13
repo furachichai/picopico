@@ -260,7 +260,7 @@ const Player = () => {
         el => el.type === 'quiz' && el.metadata?.quizType === 'nl'
     );
 
-    // Hotzone Styles
+    // Hotzone Styles (Base)
     const hotzoneStyle = {
         position: 'absolute',
         top: '80px', // Start below progress bar (approx 72px)
@@ -269,8 +269,11 @@ const Player = () => {
         zIndex: 100, // Above stickers (10), below Buttons
         cursor: 'pointer',
         backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
-        pointerEvents: isNavigating ? 'none' : 'auto',
     };
+
+    // Determine active interactive elements
+    const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
+    const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
 
     return (
         <div className="player-container">
@@ -302,7 +305,8 @@ const Player = () => {
                         style={{
                             ...hotzoneStyle,
                             left: 0,
-                            borderRight: debugMode ? '1px solid red' : 'none'
+                            borderRight: debugMode ? '1px solid red' : 'none',
+                            pointerEvents: hasCartridge ? 'none' : 'auto'
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -316,7 +320,8 @@ const Player = () => {
                         style={{
                             ...hotzoneStyle,
                             right: 0,
-                            borderLeft: debugMode ? '1px solid red' : 'none'
+                            borderLeft: debugMode ? '1px solid red' : 'none',
+                            pointerEvents: (hasCartridge || hasQuiz) ? 'none' : 'auto'
                         }}
                         onClick={(e) => {
                             e.stopPropagation();

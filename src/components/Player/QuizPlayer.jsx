@@ -22,7 +22,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const correctIndex = data.metadata?.correctIndex ?? 0;
     const correctIndices = data.metadata?.correctIndices || [correctIndex];
     const isMultiSelect = quizType === '4sq' && correctIndices.length > 1;
-    const colors = ['#FF6B6B', '#4ECDC4', '#9B72CF', '#FF8C00', '#95E1D3', '#F38181'];
+    const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
     const maxAttempts = Math.max(1, options.length - 1);
 
     // NL Data

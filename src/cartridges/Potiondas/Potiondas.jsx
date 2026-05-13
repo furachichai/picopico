@@ -538,9 +538,10 @@ export default function Potiondas({ config = {}, onComplete, onNextSlide }) {
             return (
               <span
                 key={`op-${opIdx}-${levelKey}`}
-                ref={el => { opRefs.current[opIdx] = el; }}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''}`}
+                ref={(el) => opRefs.current[opIdx] = el}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-token-wrong' : ''} ${isFlashing ? 'pot-token-correct' : ''} ${isFaded ? 'pot-token-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-op-pop' : ''} ${isHigh ? 'pot-token-high' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
+                style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >
                 {showNewBalloon && newOpIdx === opIdx && (
                   <div className="pot-new-balloon">NEW</div>
@@ -552,7 +553,7 @@ export default function Potiondas({ config = {}, onComplete, onNextSlide }) {
                       <span className="pot-exp-number">{levelData.exponents[opIdx]}</span>
                     </>
                   ) : (
-                    token.value
+                    token.value === '÷' ? <span style={{ fontFamily: 'Verdana, Arial, sans-serif', fontSize: '1.1em' }}>÷</span> : token.value
                   )}
                 </span>
               </span>
@@ -599,7 +600,7 @@ export default function Potiondas({ config = {}, onComplete, onNextSlide }) {
       {/* GOOD JOB Overlay */}
       {showGoodJob && (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, overflow: 'hidden' }}>
-          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51 }}>
+          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51, marginBottom: '25vh' }}>
             GOOD JOB! ✨
           </div>
           <img 
@@ -608,8 +609,8 @@ export default function Potiondas({ config = {}, onComplete, onNextSlide }) {
             className="pot-wizard-win"
           />
           {showNextBtn && (
-            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
-              NEXT LEVEL →
+            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, fontSize: '2rem', padding: '10px 24px'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+              ➡
             </button>
           )}
         </div>
