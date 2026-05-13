@@ -88,7 +88,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                         }}
                     />
                 )}
-                {slide.cartridge && slide.cartridge.type === 'SwipeSorter' && (
+                {slide.cartridge && (
                     <div
                         style={{
                             position: 'absolute',
@@ -97,10 +97,41 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                             width: '100%',
                             height: '100%',
                             zIndex: 0,
-                            pointerEvents: 'none'
+                            pointerEvents: 'none',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px'
                         }}
                     >
-                        <SwipeSorter config={slide.cartridge.config} preview={true} />
+                        {slide.cartridge.type === 'SwipeSorter' ? (
+                            <SwipeSorter config={slide.cartridge.config} preview={true} />
+                        ) : (
+                            <>
+                                <div style={{ fontSize: '48px', opacity: 0.7 }}>
+                                    {slide.cartridge.type === 'FractionAlpha' && '🍕'}
+                                    {slide.cartridge.type === 'FractionSlicer' && '🔪'}
+                                    {slide.cartridge.type === 'PEMDAS' && '🧮'}
+                                    {slide.cartridge.type === 'Potiondas' && '🧪'}
+                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter'].includes(slide.cartridge.type) && '🎮'}
+                                </div>
+                                <div style={{
+                                    fontSize: '14px',
+                                    fontWeight: '700',
+                                    color: '#555',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '1px',
+                                    opacity: 0.7
+                                }}>
+                                    {slide.cartridge.type === 'FractionAlpha' && 'FRACTIONS'}
+                                    {slide.cartridge.type === 'FractionSlicer' && 'SLICER'}
+                                    {slide.cartridge.type === 'PEMDAS' && 'PEMDAS'}
+                                    {slide.cartridge.type === 'Potiondas' && 'POTIONS'}
+                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter'].includes(slide.cartridge.type) && 'GAME'}
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
                 {slide.elements.map(element => (

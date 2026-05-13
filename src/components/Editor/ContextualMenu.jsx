@@ -266,6 +266,28 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
 
+                    <div className="menu-group">
+                        <label>Layer</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className="btn-icon"
+                                onClick={() => updateMetadata({ zIndex: Math.max(1, (metadata.zIndex ?? 1) - 1) })}
+                                title="Send Backward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬇️
+                            </button>
+                            <button
+                                className="btn-icon"
+                                onClick={() => updateMetadata({ zIndex: (metadata.zIndex ?? 1) + 1 })}
+                                title="Bring Forward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬆️
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="menu-divider"></div>
                 </>
             )}
@@ -729,29 +751,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         <label>Font</label>
                         <select
                             value={metadata.fontFamily || '"HVD Comic Serif Pro", sans-serif'}
-                            onMouseDown={(e) => e.preventDefault()}
                             onChange={(e) => {
                                 const fontVal = e.target.value;
-                                const sel = window.getSelection();
-                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                                    // Apply font to selected text only
-                                    document.execCommand('fontName', false, fontVal);
-                                    const container = sel.getRangeAt(0).commonAncestorContainer;
-                                    const editableEl = container.nodeType === 3
-                                        ? container.parentElement?.closest('[contenteditable="true"]')
-                                        : container.closest?.('[contenteditable="true"]');
-                                    if (editableEl) {
-                                        const optionIndex = editableEl.dataset.optionIndex;
-                                        if (optionIndex !== undefined) {
-                                            const currentOptions = [...(element.metadata?.options || [])];
-                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
-                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
-                                        }
-                                    }
-                                } else {
-                                    // Fallback: apply to all answers as default
-                                    updateMetadata({ fontFamily: fontVal });
-                                }
+                                // Apply to all answers as default
+                                updateMetadata({ fontFamily: fontVal });
                             }}
                         >
                             {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
@@ -763,37 +766,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         <input
                             type="number"
                             value={metadata.fontSize || 16}
-                            onMouseDown={(e) => e.preventDefault()}
                             onChange={(e) => {
                                 const sizeVal = parseInt(e.target.value);
-                                const sel = window.getSelection();
-                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                                    // Use a span with inline font-size for the selection
-                                    const range = sel.getRangeAt(0);
-                                    const container = range.commonAncestorContainer;
-                                    const editableEl = container.nodeType === 3
-                                        ? container.parentElement?.closest('[contenteditable="true"]')
-                                        : container.closest?.('[contenteditable="true"]');
-                                    if (editableEl) {
-                                        // Use fontSize execCommand (1-7) then override with exact px
-                                        document.execCommand('fontSize', false, '7');
-                                        // Find the font elements just created and replace with span
-                                        const fonts = editableEl.querySelectorAll('font[size="7"]');
-                                        fonts.forEach(font => {
-                                            font.removeAttribute('size');
-                                            font.style.fontSize = `${sizeVal}px`;
-                                        });
-                                        const optionIndex = editableEl.dataset.optionIndex;
-                                        if (optionIndex !== undefined) {
-                                            const currentOptions = [...(element.metadata?.options || [])];
-                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
-                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
-                                        }
-                                    }
-                                } else {
-                                    // Fallback: apply to all answers as default
-                                    updateMetadata({ fontSize: sizeVal });
-                                }
+                                // Apply to all answers as default
+                                updateMetadata({ fontSize: sizeVal });
                             }}
                             min="10" max="60"
                             style={{ width: '60px' }}
