@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './ContextualMenu.css';
 import { PEM_MODES } from '../Player/PEMExpressionPool';
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
@@ -31,6 +31,47 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const [showLevelsEditor, setShowLevelsEditor] = useState(false);
     const [levelsText, setLevelsText] = useState('');
     const [levelsOriginalText, setLevelsOriginalText] = useState('');
+
+    // Saved selection for per-letter quiz formatting
+    const savedSelectionRef = useRef(null);
+
+    const saveSelection = () => {
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+            savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
+        } else {
+            savedSelectionRef.current = null;
+        }
+    };
+
+    const restoreSelection = () => {
+        if (savedSelectionRef.current) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(savedSelectionRef.current);
+            return true;
+        }
+        return false;
+    };
+
+    const getEditableFromSelection = () => {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return null;
+        const container = sel.getRangeAt(0).commonAncestorContainer;
+        return container.nodeType === 3
+            ? container.parentElement?.closest('[contenteditable="true"]')
+            : container.closest?.('[contenteditable="true"]');
+    };
+
+    const saveQuizOption = (editableEl) => {
+        if (!editableEl) return;
+        const optionIndex = editableEl.dataset.optionIndex;
+        if (optionIndex !== undefined) {
+            const currentOptions = [...(element.metadata?.options || [])];
+            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+        }
+    };
 
     // Removed crashing useEffect that attempted to force sync. 
     // Instead, we initialize state above to match the config.
@@ -159,6 +200,30 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         >
                             🎨 Presets
                         </button>
+                    )}
+
+                    {element.type !== 'background' && onReorderElement && (
+                        <div className="menu-group">
+                            <label>Layer</label>
+                            <div style={{ display: 'flex', gap: '5px' }}>
+                                <button
+                                    className="btn-icon"
+                                    onClick={() => onReorderElement(element.id, 'backward')}
+                                    title="Send Backward"
+                                    style={{ fontSize: '1rem' }}
+                                >
+                                    ⬇️
+                                </button>
+                                <button
+                                    className="btn-icon"
+                                    onClick={() => onReorderElement(element.id, 'forward')}
+                                    title="Bring Forward"
+                                    style={{ fontSize: '1rem' }}
+                                >
+                                    ⬆️
+                                </button>
+                            </div>
+                        </div>
                     )}
 
                     <div className="menu-divider"></div>
@@ -755,11 +820,18 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group">
                         <label>Font</label>
                         <select
-                            value={metadata.fontFamily || '"HVD Comic Serif Pro", sans-serif'}
+                            value={metadata.fontFamily || '"Fira Sans"'}
+                            onMouseDown={saveSelection}
                             onChange={(e) => {
                                 const fontVal = e.target.value;
-                                // Apply to all answers as default
-                                updateMetadata({ fontFamily: fontVal });
+                                if (restoreSelection()) {
+                                    document.execCommand('fontName', false, fontVal);
+                                    const editableEl = getEditableFromSelection();
+                                    saveQuizOption(editableEl);
+                                    savedSelectionRef.current = null;
+                                } else {
+                                    updateMetadata({ fontFamily: fontVal });
+                                }
                             }}
                         >
                             {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
@@ -771,10 +843,25 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         <input
                             type="number"
                             value={metadata.fontSize || 16}
+                            onMouseDown={saveSelection}
                             onChange={(e) => {
                                 const sizeVal = parseInt(e.target.value);
-                                // Apply to all answers as default
-                                updateMetadata({ fontSize: sizeVal });
+                                if (restoreSelection()) {
+                                    // Use fontSize execCommand then override with exact px
+                                    document.execCommand('fontSize', false, '7');
+                                    const editableEl = getEditableFromSelection();
+                                    if (editableEl) {
+                                        const fonts = editableEl.querySelectorAll('font[size="7"]');
+                                        fonts.forEach(font => {
+                                            font.removeAttribute('size');
+                                            font.style.fontSize = `${sizeVal}px`;
+                                        });
+                                        saveQuizOption(editableEl);
+                                    }
+                                    savedSelectionRef.current = null;
+                                } else {
+                                    updateMetadata({ fontSize: sizeVal });
+                                }
                             }}
                             min="10" max="60"
                             style={{ width: '60px' }}

@@ -26,6 +26,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                 type: ELEMENT_TYPES.TEXT,
                 content: 'New Text',
                 metadata: {
+                    fontFamily: '"Fira Sans"',
                     ...(preset?.text?.fontFamily && { fontFamily: preset.text.fontFamily }),
                     ...(preset?.text?.fontSize && { fontSize: preset.text.fontSize }),
                     ...(preset?.text?.color && { color: preset.text.color }),
@@ -64,6 +65,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                 type: ELEMENT_TYPES.QUIZ,
                 content: 'Quiz',
                 metadata: {
+                    fontFamily: '"Fira Sans"',
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
