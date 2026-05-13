@@ -19,7 +19,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     // Classic/TF/4SQ Data
     const options = data.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-    const correctIndex = data.metadata?.correctIndex || 0;
+    const correctIndex = data.metadata?.correctIndex ?? 0;
     const correctIndices = data.metadata?.correctIndices || [correctIndex];
     const isMultiSelect = quizType === '4sq' && correctIndices.length > 1;
     const colors = ['#FF6B6B', '#4ECDC4', '#9B72CF', '#FF8C00', '#95E1D3', '#F38181'];
@@ -169,7 +169,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         playSound('correct');
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         if (onBanner) onBanner('correct', 'Topo!');
-        setTimeout(() => { if (onNext) onNext(); }, 2000);
+        // Mark slide solved but do NOT auto-advance — user taps to move forward
+        if (onNext) onNext();
     };
 
     const handleWrong = (index) => {
@@ -184,7 +185,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             setIsFailed(true);
             playSound('fail');
             if (onBanner) onBanner('fail', 'Moco!');
-            setTimeout(() => { if (onNext) onNext(); }, 3000);
+            // Mark slide solved but do NOT auto-advance
+            if (onNext) onNext();
         } else {
             playSound('wrong');
         }
@@ -624,7 +626,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 setPemErrors(0);
                             }, 2000);
                         } else {
-                            setTimeout(() => { if (onNext) onNext(); }, 2000);
+                            if (onNext) onNext();
                         }
                     } else {
                         setPemAst(newAst);
@@ -860,7 +862,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 {options.map((option, index) => {
                     let className = getOptionClass(index);
                     const isWrong = wrongIndices.has(index);
-                    const isCorrect = correctIndices.includes(index);
+                    const actualCorrectIndices = quizType === '4sq' ? correctIndices : [correctIndex];
+                    const isCorrect = actualCorrectIndices.includes(index);
                     const isShaking = index === shakingIndex;
 
                     if (isSolved) {

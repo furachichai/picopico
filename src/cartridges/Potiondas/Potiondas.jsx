@@ -190,7 +190,7 @@ function isExponent(op) {
 }
 
 // ─── Main Component ───────────────────────────────────────────
-export default function Potiondas({ config = {}, onComplete }) {
+export default function Potiondas({ config = {}, onComplete, onNextSlide }) {
   // Initialize levels from config or use defaults
   const [levels, setLevels] = useState(() => {
     if (config.levelsText) {
@@ -221,6 +221,7 @@ export default function Potiondas({ config = {}, onComplete }) {
   const [levelSolved, setLevelSolved] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [showGoodJob, setShowGoodJob] = useState(false);
+  const [showNextBtn, setShowNextBtn] = useState(false);
   const [arrowStyle, setArrowStyle] = useState(null); // {left, width} for green arrow
   const [showNewBalloon, setShowNewBalloon] = useState(false);
   const [newOpIdx, setNewOpIdx] = useState(null);
@@ -394,9 +395,10 @@ export default function Potiondas({ config = {}, onComplete }) {
           if (level + 1 >= totalLevels) {
             setTimeout(() => {
               setShowGoodJob(true);
+              if (onComplete) onComplete();
               setTimeout(() => {
-                if (onComplete) onComplete();
-              }, 4000);
+                setShowNextBtn(true);
+              }, 1000); // Wait 1s for the wizard animation to finish
             }, 1000);
           }
         }
@@ -605,6 +607,11 @@ export default function Potiondas({ config = {}, onComplete }) {
             alt="Wizard"
             className="pot-wizard-win"
           />
+          {showNextBtn && (
+            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+              NEXT LEVEL →
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -498,7 +498,6 @@ const Player = () => {
                                             onComplete={() => {
                                                 markSlideSolved(currentSlideIndex);
                                                 setIsGameActive(false);
-                                                nextSlide(true);
                                             }}
                                         />
                                     )}
@@ -509,7 +508,6 @@ const Player = () => {
                                                 onComplete={() => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                        nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>
@@ -521,7 +519,6 @@ const Player = () => {
                                                 onComplete={() => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                        nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>
@@ -533,7 +530,6 @@ const Player = () => {
                                                 onComplete={() => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                        nextSlide(true);
                                                 }}
                                             />
                                         </ErrorBoundary>
@@ -545,8 +541,8 @@ const Player = () => {
                                                 onComplete={() => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
-                                                    nextSlide(true);
                                                 }}
+                                                onNextSlide={() => nextSlide(true)}
                                             />
                                         </ErrorBoundary>
                                     )}
@@ -592,7 +588,6 @@ const Player = () => {
                                                     data={element}
                                                     onNext={() => {
                                                         markSlideSolved(currentSlideIndex);
-                                                            nextSlide(true);
                                                     }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
