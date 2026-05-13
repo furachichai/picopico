@@ -25,24 +25,8 @@ const Player = () => {
     // If we just navigated from Dashboard, we might want to resume.
     // If we rely on currentSlideId (from Editor), it's fine for testing.
     // But for players, let's look up progress if we are at start (approx).
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(() => {
-        // If specific slide requested via state (e.g. from Editor preview), use it.
-        // But if from dashboard (often state.currentSlideId is slide-1 default), check storage.
-
-        // This logic might need refinement: if I click "Play" on a specific lesson, 
-        // I might want to start where I left off.
-        const headerPath = lesson.path;
-        if (headerPath) {
-            const saved = getLessonProgress(headerPath);
-            // Verify the index is valid (lesson might have changed)
-            if (saved && saved.lastSlideIndex < lesson.slides.length) {
-                return saved.lastSlideIndex;
-            }
-        }
-
-        const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
-        return initialIndex !== -1 ? initialIndex : 0;
-    });
+    // Always start lessons from the beginning when played from Dashboard
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
     // START: Update storage when slide changes
     useEffect(() => {
@@ -62,14 +46,15 @@ const Player = () => {
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
-    // Check if current slide has a cartridge and enable game mode
+    // Check if current slide has a cartridge/quiz and enable game mode
+    // Only block navigation if the slide hasn't been solved yet
     useEffect(() => {
-        if (currentSlide?.cartridge) {
+        if (currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex)) {
             setIsGameActive(true);
         } else {
             setIsGameActive(false);
         }
-    }, [currentSlide]);
+    }, [currentSlide, currentSlideIndex, solvedSlides]);
 
     const [debugMode, setDebugMode] = useState(false);
 
@@ -84,12 +69,11 @@ const Player = () => {
                 return;
             }
 
-            if (isGameActive && currentSlide?.cartridge) return; // Block nav keys
-
             if (e.key === 'ArrowRight') {
+                if (isGameActive && currentSlide?.cartridge) return; // Block forward nav during active game
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
-                prevSlide();
+                prevSlide(); // Always allow going back
             } else if (e.key === 'Escape') {
                 dispatch({ type: 'TOGGLE_PREVIEW' });
             }
@@ -225,7 +209,9 @@ const Player = () => {
 
     // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
-        if (isNavigating || (isGameActive && currentSlide?.cartridge)) return;
+        if (isNavigating) return;
+        // Block forward navigation during active game, but always allow backward
+        if (direction === 'next' && isGameActive && currentSlide?.cartridge) return;
 
         setIsNavigating(true);
         if (direction === 'next') nextSlide();
@@ -251,7 +237,7 @@ const Player = () => {
         zIndex: 100, // Above stickers (10), below Buttons
         cursor: 'pointer',
         backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
-        pointerEvents: (isGameActive || isNavigating) ? 'none' : 'auto',
+        pointerEvents: isNavigating ? 'none' : 'auto',
     };
 
     return (
