@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import SlideThumbnail from './SlideThumbnail';
+import ConfirmationModal from './ConfirmationModal';
+import ErrorBoundary from '../ErrorBoundary';
 import './SlidesPage.css';
 
 const SlidesPage = () => {
@@ -9,7 +11,7 @@ const SlidesPage = () => {
     const { t } = useTranslation();
     const { lesson } = state;
 
-    console.log('SlidesPage rendered', lesson);
+    const [slideToDelete, setSlideToDelete] = useState(null);
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
@@ -17,9 +19,19 @@ const SlidesPage = () => {
     };
 
     const handleDeleteSlide = (id) => {
-        if (window.confirm(t('slides.confirmDelete'))) {
-            dispatch({ type: 'DELETE_SLIDE', payload: id });
+        // Show confirmation modal instead of window.confirm
+        setSlideToDelete(id);
+    };
+
+    const confirmDelete = () => {
+        if (slideToDelete) {
+            dispatch({ type: 'DELETE_SLIDE', payload: slideToDelete });
         }
+        setSlideToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setSlideToDelete(null);
     };
 
     const handleMoveSlide = (id, direction) => {
@@ -33,6 +45,15 @@ const SlidesPage = () => {
 
     return (
         <div className="slides-page">
+            <ConfirmationModal
+                isOpen={slideToDelete !== null}
+                message={t('slides.confirmDelete') || 'Are you sure you want to delete this slide?'}
+                onConfirm={confirmDelete}
+                onCancel={cancelDelete}
+                confirmText={t('common.yes') || 'Delete'}
+                cancelText={t('common.no') || 'Cancel'}
+            />
+
             <div className="slides-header">
                 <button className="btn-back" onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}>
                     &lt; {t('slides.back')}
@@ -50,7 +71,9 @@ const SlidesPage = () => {
                             className="slide-preview"
                             onClick={() => handleEditSlide(slide.id)}
                         >
-                            <SlideThumbnail slide={slide} />
+                            <ErrorBoundary>
+                                <SlideThumbnail slide={slide} />
+                            </ErrorBoundary>
                             <span className="slide-number">{index + 1}</span>
                         </div>
                         <div className="slide-actions">

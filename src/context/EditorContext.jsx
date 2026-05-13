@@ -196,7 +196,12 @@ const editorReducer = (state, action) => {
         case 'DELETE_SLIDE': {
             if (state.lesson.slides.length <= 1) return state; // Prevent deleting last slide
             const newSlides = state.lesson.slides.filter(s => s.id !== action.payload);
-            const newCurrentId = state.currentSlideId === action.payload
+            if (newSlides.length === 0) return state; // Safety: should never happen
+
+            // If we deleted the current slide, switch to the first remaining slide
+            // Also validate that currentSlideId still exists in the remaining slides
+            const currentStillExists = newSlides.some(s => s.id === state.currentSlideId);
+            const newCurrentId = (state.currentSlideId === action.payload || !currentStillExists)
                 ? newSlides[0].id
                 : state.currentSlideId;
 
@@ -205,6 +210,7 @@ const editorReducer = (state, action) => {
                 isDirty: true,
                 lesson: { ...state.lesson, slides: newSlides },
                 currentSlideId: newCurrentId,
+                selectedElementId: null, // Clear selection to prevent stale references
             };
         }
 
