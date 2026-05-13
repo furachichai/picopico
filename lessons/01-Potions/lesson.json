@@ -302,5 +302,6 @@
   "topic": "PEMDAS",
   "chapterId": "01",
   "chapterName": "Magic",
-  "lessonId": "01"
+  "lessonId": "01",
+  "visible": true
 }

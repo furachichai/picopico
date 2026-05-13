@@ -147,18 +147,13 @@ const Editor = () => {
     };
 
     const handleUpdateInfo = async (data) => {
-        // data contains { path, title, subject, topic, ... } from LessonInfoModal
+        // data contains { path, title } from LessonInfoModal
 
         dispatch({
             type: 'UPDATE_LESSON_METADATA',
             payload: {
                 title: data.title,
                 path: data.path,
-                subject: data.subject,
-                topic: data.topic,
-                chapterId: data.chapterId,
-                chapterName: data.chapterName,
-                lessonId: data.lessonId
             }
         });
 
@@ -167,11 +162,6 @@ const Editor = () => {
             ...state.lesson,
             title: data.title,
             path: data.path,
-            subject: data.subject,
-            topic: data.topic,
-            chapterId: data.chapterId,
-            chapterName: data.chapterName,
-            lessonId: data.lessonId,
             updatedAt: new Date()
         };
 

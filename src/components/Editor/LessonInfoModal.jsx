@@ -5,22 +5,10 @@ import './ContextualMenu.css';
 const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
     const { t } = useTranslation();
 
-    // State for path components
-    const [subject, setSubject] = useState('Math');
-    const [topic, setTopic] = useState('');
-    const [chapterId, setChapterId] = useState('');
-    const [chapterName, setChapterName] = useState('');
-    const [lessonId, setLessonId] = useState('');
     const [lessonName, setLessonName] = useState('');
 
     useEffect(() => {
         if (isOpen && lesson) {
-            // Initialize fields from lesson metadata or defaults
-            setSubject(lesson.subject || 'Math');
-            setTopic(lesson.topic || '');
-            setChapterId(lesson.chapterId || '');
-            setChapterName(lesson.chapterName || '');
-            setLessonId(lesson.lessonId || '');
             setLessonName(lesson.title || '');
         }
     }, [isOpen, lesson]);
@@ -30,28 +18,32 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Construct path
-        const safeSubject = subject.trim() || 'Uncategorized';
-        const safeTopic = topic.trim() || 'General';
+        const safeName = lessonName.trim() || 'Untitled Lesson';
 
-        const cId = chapterId.trim().padStart(2, '0') || '00';
-        const cName = chapterName.trim() || 'Chapter';
-        const chapterDir = `${cId}-${cName}`;
-
-        const lId = lessonId.trim().padStart(2, '0') || '00';
-        const lName = lessonName.trim() || 'Lesson';
-        const lessonDir = `${lId}-${lName}`;
-
-        const fullPath = `lessons/${safeSubject}/${safeTopic}/${chapterDir}/${lessonDir}/lesson.json`;
+        // If lesson already has a path, preserve its order prefix
+        // Otherwise, generate a new path with a timestamp-based order
+        let fullPath;
+        if (lesson.path) {
+            // Extract the folder part from the existing path
+            const parts = lesson.path.split('/');
+            // lessons/{order}-{name}/lesson.json
+            if (parts.length >= 3) {
+                const folderName = parts[1]; // e.g. "01-Potions"
+                const match = folderName.match(/^(\d+)-(.*)$/);
+                const order = match ? match[1] : '99';
+                fullPath = `lessons/${order}-${safeName}/lesson.json`;
+            } else {
+                fullPath = lesson.path;
+            }
+        } else {
+            // New lesson — use timestamp for ordering (will be normalized later)
+            const order = String(Date.now()).slice(-4).padStart(2, '0');
+            fullPath = `lessons/${order}-${safeName}/lesson.json`;
+        }
 
         onUpdate({
             path: fullPath,
-            title: lName,
-            subject: safeSubject,
-            topic: safeTopic,
-            chapterId: cId,
-            chapterName: cName,
-            lessonId: lId
+            title: safeName,
         });
 
         onClose();
@@ -68,7 +60,8 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
         borderRadius: '8px',
         border: '1px solid #ddd',
         marginBottom: '10px',
-        fontSize: '0.9rem'
+        fontSize: '0.9rem',
+        boxSizing: 'border-box'
     };
 
     const labelStyle = {
@@ -110,80 +103,17 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Subject */}
+                    {/* Lesson Name */}
                     <div>
-                        <label style={labelStyle}>Subject</label>
-                        <select
-                            value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
-                            style={inputStyle}
-                        >
-                            <option value="Math">Math</option>
-                            <option value="History">History</option>
-                            <option value="Geography">Geography</option>
-                            <option value="Science">Science</option>
-                            <option value="Language">Language</option>
-                        </select>
-                    </div>
-
-                    {/* Topic */}
-                    <div>
-                        <label style={labelStyle}>Topic</label>
+                        <label style={labelStyle}>Lesson Name</label>
                         <input
                             type="text"
-                            value={topic}
-                            onChange={(e) => setTopic(e.target.value)}
-                            placeholder="e.g. Fractions"
+                            value={lessonName}
+                            onChange={(e) => setLessonName(e.target.value)}
+                            placeholder="e.g. Potions"
                             style={inputStyle}
+                            autoFocus
                         />
-                    </div>
-
-                    {/* Chapter */}
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <div style={{ flex: 1 }}>
-                            <label style={labelStyle}>Chapter ID</label>
-                            <input
-                                type="text"
-                                value={chapterId}
-                                onChange={(e) => setChapterId(e.target.value)}
-                                placeholder="01"
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div style={{ flex: 2 }}>
-                            <label style={labelStyle}>Chapter Name</label>
-                            <input
-                                type="text"
-                                value={chapterName}
-                                onChange={(e) => setChapterName(e.target.value)}
-                                placeholder="Introduction"
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Lesson */}
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <div style={{ flex: 1 }}>
-                            <label style={labelStyle}>Lesson ID</label>
-                            <input
-                                type="text"
-                                value={lessonId}
-                                onChange={(e) => setLessonId(e.target.value)}
-                                placeholder="01"
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div style={{ flex: 2 }}>
-                            <label style={labelStyle}>Lesson Name</label>
-                            <input
-                                type="text"
-                                value={lessonName}
-                                onChange={(e) => setLessonName(e.target.value)}
-                                placeholder="Adding Fractions"
-                                style={inputStyle}
-                            />
-                        </div>
                     </div>
 
                     {/* Metadata Display */}

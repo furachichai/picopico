@@ -573,5 +573,6 @@
   "topic": "PEMDAS",
   "chapterId": "00",
   "chapterName": "Chapter: Intro",
-  "lessonId": "00"
+  "lessonId": "00",
+  "visible": true
 }

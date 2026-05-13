@@ -41,95 +41,37 @@ const Dashboard = () => {
   const { state, dispatch } = useEditor();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('lessons');
-
-  // Helper to parse metadata from path (same as in LessonsPage)
-  const parsePathToMetadata = (path) => {
-    const parts = path.split('/');
-    let subject = 'Math';
-    let topic = '';
-    let chapterId = '';
-    let chapterName = '';
-    let lessonId = '';
-    let lessonName = '';
-
-    if (parts.length > 1) subject = parts[1];
-    if (parts.length > 2) topic = parts[2];
-
-    if (parts.length > 3) {
-      const chapterFolder = parts[3];
-      const match = chapterFolder.match(/^(\d+)-(.*)$/);
-      if (match) {
-        chapterId = match[1];
-        chapterName = match[2];
-      } else {
-        chapterName = chapterFolder;
-      }
-    }
-
-    if (parts.length > 4) {
-      const lessonFolder = parts[4];
-      const match = lessonFolder.match(/^(\d+)-(.*)$/);
-      if (match) {
-        lessonId = match[1];
-        lessonName = match[2];
-      } else {
-        lessonName = lessonFolder;
-      }
-    }
-
-    return {
-      subject,
-      topic,
-      chapterId,
-      chapterName,
-      lessonId,
-      title: lessonName
-    };
-  };
 
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        // Detect if we're on Vercel (not localhost) and use static data
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
         let data;
         if (isLocal) {
-          // Use dynamic API on localhost (Vite plugin)
           const response = await fetch('/api/list-lessons');
           data = await response.json();
         } else {
-          // Use pre-built static data on Vercel
           const response = await fetch('/lessons-data.json');
           data = await response.json();
         }
 
-        // Flatten the tree into a list of lessons
-        const flatList = [];
-        const traverse = (items) => {
-          items.forEach(item => {
-            if (item.type === 'directory') {
-              if (item.children) traverse(item.children);
-            } else if (item.name.endsWith('.json')) {
-              const metadata = parsePathToMetadata(item.path);
-              const progress = getLessonProgress(item.path);
-              const isCompleted = progress?.completed;
-
-              flatList.push({
-                ...item,
-                ...metadata,
-                id: item.path, // Use path as unique ID
-                status: isCompleted ? 'completed' : 'active',
-                icon: isCompleted ? <Trophy size={24} /> : <Play size={24} />,
-                progress // pass down full progress object
-              });
-            }
+        // data is already a flat array — filter to visible only
+        const visibleLessons = data
+          .filter(item => item.visible !== false)
+          .map(item => {
+            const progress = getLessonProgress(item.path);
+            const isCompleted = progress?.completed;
+            return {
+              ...item,
+              id: item.path,
+              status: isCompleted ? 'completed' : 'active',
+              icon: isCompleted ? <Trophy size={24} /> : <Play size={24} />,
+              progress
+            };
           });
-        };
 
-        traverse(data);
-        setLessons(flatList);
+        setLessons(visibleLessons);
       } catch (error) {
         console.error('Error fetching lessons:', error);
       } finally {
@@ -624,7 +566,7 @@ const Dashboard = () => {
                       </div>
                     ) : (
                       <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div className="lesson-desc">{lesson.description || lesson.chapterName}</div>
+                        <div className="lesson-desc">{lesson.description || ''}</div>
                         {!state.readOnly && (
                           <button
                             className="edit-desc-btn"
@@ -659,28 +601,19 @@ const Dashboard = () => {
       {/* Bottom Nav */}
       <div className="bottom-nav">
         <button
-          className={`nav-item ${activeTab === 'lessons' ? 'active' : ''}`}
-          onClick={() => setActiveTab('lessons')}
-          style={{ color: activeTab === 'lessons' ? 'var(--primary)' : '#94A3B8' }}
+          className="nav-item active"
+          style={{ color: 'var(--primary)' }}
         >
           <BookOpen size={36} strokeWidth={1.5} />
           <span className="nav-label">{t('dashboard.lessons')}</span>
         </button>
         <button
-          className={`nav-item`}
+          className="nav-item"
           onClick={() => dispatch({ type: 'SET_VIEW', payload: 'game' })}
           style={{ color: '#F59E0B' }}
         >
           <Gamepad2 size={36} strokeWidth={1.5} />
           <span className="nav-label">{t('dashboard.game')}</span>
-        </button>
-        <button
-          className={`nav-item ${activeTab === 'explore' ? 'active' : ''}`}
-          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
-          style={{ color: activeTab === 'explore' ? '#06B6D4' : '#94A3B8' }}
-        >
-          <Compass size={36} strokeWidth={1.5} />
-          <span className="nav-label">EXPLORE</span>
         </button>
       </div>
     </div>

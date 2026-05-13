@@ -56,6 +56,7 @@ export default function lessonManagerPlugin() {
                 }
             });
 
+            // List all lessons as a flat array sorted by order prefix
             server.middlewares.use('/api/list-lessons', (req, res, next) => {
                 if (req.method === 'GET') {
                     try {
@@ -68,53 +69,49 @@ export default function lessonManagerPlugin() {
                             return;
                         }
 
-                        const getDirectoryTree = (dir) => {
-                            const results = [];
-                            const list = fs.readdirSync(dir).sort((a, b) => {
-                                return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                        const results = [];
+                        const folders = fs.readdirSync(lessonsDir).sort((a, b) => {
+                            return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                        });
+
+                        folders.forEach(folder => {
+                            const folderPath = path.join(lessonsDir, folder);
+                            const stat = fs.statSync(folderPath);
+                            if (!stat.isDirectory()) return;
+
+                            const lessonFile = path.join(folderPath, 'lesson.json');
+                            if (!fs.existsSync(lessonFile)) return;
+
+                            let content = {};
+                            try {
+                                content = JSON.parse(fs.readFileSync(lessonFile, 'utf-8'));
+                            } catch (e) {
+                                console.error(`Error reading ${lessonFile}:`, e);
+                            }
+
+                            // Parse order from folder name (e.g. "01-Potions" -> order 1)
+                            const match = folder.match(/^(\d+)-(.*)$/);
+                            const order = match ? parseInt(match[1], 10) : 99;
+                            const name = match ? match[2] : folder;
+
+                            results.push({
+                                name: folder,
+                                type: 'file',
+                                path: path.relative(process.cwd(), lessonFile),
+                                title: content.title || name,
+                                description: content.description || '',
+                                visible: content.visible !== false, // default true
+                                order: order,
+                                content: content
                             });
+                        });
 
-                            list.forEach(file => {
-                                const filePath = path.join(dir, file);
-                                const stat = fs.statSync(filePath);
-
-                                if (stat && stat.isDirectory()) {
-                                    results.push({
-                                        name: file,
-                                        type: 'directory',
-                                        path: path.relative(process.cwd(), filePath),
-                                        children: getDirectoryTree(filePath)
-                                    });
-                                } else if (file.endsWith('.json')) {
-                                    // Read the file to get metadata
-                                    let metadata = {};
-                                    try {
-                                        const content = fs.readFileSync(filePath, 'utf-8');
-                                        const json = JSON.parse(content);
-                                        metadata = {
-                                            title: json.title,
-                                            description: json.description
-                                        };
-                                    } catch (e) {
-                                        console.error(`Error reading metadata for ${file}:`, e);
-                                    }
-
-                                    results.push({
-                                        name: file,
-                                        type: 'file',
-                                        path: path.relative(process.cwd(), filePath),
-                                        ...metadata
-                                    });
-                                }
-                            });
-                            return results;
-                        };
-
-                        const tree = getDirectoryTree(lessonsDir);
+                        // Sort by order
+                        results.sort((a, b) => a.order - b.order);
 
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify(tree));
+                        res.end(JSON.stringify(results));
                     } catch (error) {
                         console.error('Error listing lessons:', error);
                         res.statusCode = 500;
@@ -124,6 +121,7 @@ export default function lessonManagerPlugin() {
                     next();
                 }
             });
+
             server.middlewares.use('/api/delete-lesson', (req, res, next) => {
                 if (req.method === 'POST') {
                     let body = '';
@@ -175,6 +173,52 @@ export default function lessonManagerPlugin() {
                                 }
                                 fs.renameSync(fullOldPath, fullNewPath);
                             }
+
+                            res.statusCode = 200;
+                            res.end(JSON.stringify({ success: true }));
+                        } catch (error) {
+                            res.statusCode = 500;
+                            res.end(JSON.stringify({ error: error.message }));
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
+
+            // Reorder lessons by swapping the order prefixes of two adjacent lessons
+            server.middlewares.use('/api/reorder-lessons', (req, res, next) => {
+                if (req.method === 'POST') {
+                    let body = '';
+                    req.on('data', chunk => { body += chunk.toString(); });
+                    req.on('end', () => {
+                        try {
+                            const { folderA, folderB } = JSON.parse(body);
+                            if (!folderA || !folderB) throw new Error('Missing folder names');
+
+                            const lessonsDir = path.resolve(process.cwd(), 'lessons');
+                            const pathA = path.join(lessonsDir, folderA);
+                            const pathB = path.join(lessonsDir, folderB);
+
+                            if (!fs.existsSync(pathA) || !fs.existsSync(pathB)) {
+                                throw new Error('Folder not found');
+                            }
+
+                            // Parse order prefixes
+                            const matchA = folderA.match(/^(\d+)-(.*)$/);
+                            const matchB = folderB.match(/^(\d+)-(.*)$/);
+                            if (!matchA || !matchB) throw new Error('Invalid folder names');
+
+                            const newFolderA = `${matchB[1]}-${matchA[2]}`;
+                            const newFolderB = `${matchA[1]}-${matchB[2]}`;
+
+                            // Use temp name to avoid collision
+                            const tempName = `TEMP-${Date.now()}`;
+                            const tempPath = path.join(lessonsDir, tempName);
+
+                            fs.renameSync(pathA, tempPath);
+                            fs.renameSync(pathB, path.join(lessonsDir, newFolderB));
+                            fs.renameSync(tempPath, path.join(lessonsDir, newFolderA));
 
                             res.statusCode = 200;
                             res.end(JSON.stringify({ success: true }));
