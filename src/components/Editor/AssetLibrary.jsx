@@ -41,6 +41,10 @@ const customCharacterList = Object.values(customCharacters).map(mod => mod.defau
 const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.default);
 
+// Load custom graphics from src/assets/graphics (recursive to support subfolders)
+const customGraphics = import.meta.glob('../../assets/graphics/**/*.{png,jpg,jpeg,svg,webp}', { eager: true });
+const customGraphicsList = Object.values(customGraphics).map(mod => mod.default);
+
 const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSelect = null }) => {
     const { dispatch } = useEditor();
     const { t } = useTranslation();
@@ -69,7 +73,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
 
             dispatch({ type: 'UPDATE_SLIDE_BACKGROUND', payload: finalPayload });
             onClose();
-        } else if (activeTab === 'gifs' || activeTab === 'custom') {
+        } else if (activeTab === 'gifs' || activeTab === 'custom' || activeTab === 'graphics') {
             // Pre-load image to get dimensions
             const img = new Image();
             img.onload = () => {
@@ -128,6 +132,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         {t('library.bkgs')}
                     </button>
                 )}
+                {showTab('graphics') && (
+                    <button
+                        className={activeTab === 'graphics' ? 'active' : ''}
+                        onClick={() => setActiveTab('graphics')}
+                    >
+                        Graphics
+                    </button>
+                )}
                 {showTab('emojis') && (
                     <button
                         className={activeTab === 'emojis' ? 'active' : ''}
@@ -171,6 +183,25 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
                                 {t('library.noCharacters')} <br />
                                 {t('library.addCharacters')} <code>src/assets/characters</code>
+                            </div>
+                        )
+                    )}
+
+                    {activeTab === 'graphics' && (
+                        customGraphicsList.length > 0 ? (
+                            customGraphicsList.map((src, index) => (
+                                <div
+                                    key={index}
+                                    className="asset-item custom"
+                                    onClick={() => handleSelect(src)}
+                                >
+                                    <img src={src} alt="graphic" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
+                                No graphics found. <br />
+                                Add images to <code>src/assets/graphics</code>
                             </div>
                         )
                     )}

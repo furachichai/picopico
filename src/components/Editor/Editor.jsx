@@ -264,7 +264,7 @@ const Editor = () => {
             setLibraryAllowedTabs(['custom-bg', 'backgrounds']);
         } else {
             setLibraryTab(tab || 'custom');
-            setLibraryAllowedTabs(['custom', 'emojis', 'gifs']);
+            setLibraryAllowedTabs(['custom', 'graphics', 'emojis', 'gifs']);
         }
         setShowLibrary(true);
     };

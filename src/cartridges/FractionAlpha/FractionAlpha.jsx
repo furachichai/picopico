@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Minus, ThumbsUp } from 'lucide-react';
 import './FractionAlpha.css';
 // import confetti from 'canvas-confetti';
-import pizzaBox from '../../assets/pizza_box.png';
-import kitchenCounter from '../../assets/kitchen_counter.png';
+import pizzaBox from '../../assets/graphics/pizza_box.png';
+import kitchenCounter from '../../assets/graphics/kitchen_counter.png';
 
 const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
     // Config mainly sets the "Theme" or "Starting Point" now, but logic handles 5 levels
