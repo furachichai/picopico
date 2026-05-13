@@ -543,6 +543,7 @@ const Player = () => {
                                         <ErrorBoundary>
                                             <Potiondas
                                                 config={slide.cartridge.config}
+                                                isAlreadySolved={solvedSlides.has(currentSlideIndex)}
                                                 onComplete={() => {
                                                     markSlideSolved(currentSlideIndex);
                                                     setIsGameActive(false);
