@@ -248,6 +248,10 @@ const Editor = () => {
         }
     };
 
+    const handleReorderElement = (elementId, direction) => {
+        dispatch({ type: 'REORDER_ELEMENT', payload: { elementId, direction } });
+    };
+
     const handleContextMenuOpenLibrary = (tab, callback) => {
         if (callback) {
             setLibraryCallback(() => callback);
@@ -501,6 +505,7 @@ const Editor = () => {
                                 onDuplicate={handleContextMenuDuplicate}
                                 onOpenLibrary={handleContextMenuOpenLibrary}
                                 onOpenPresets={() => setShowPresetPanel(true)}
+                                onReorderElement={handleReorderElement}
                             />
                         </div>
                     )}
@@ -516,6 +521,7 @@ const Editor = () => {
                             onDuplicate={handleContextMenuDuplicate}
                             onOpenLibrary={handleContextMenuOpenLibrary}
                             onOpenPresets={() => setShowPresetPanel(true)}
+                            onReorderElement={handleReorderElement}
                         />
                     ) : (
                         <Toolbar

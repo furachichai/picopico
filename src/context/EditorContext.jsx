@@ -193,6 +193,35 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'REORDER_ELEMENT': {
+            const { elementId, direction } = action.payload;
+            const currentSlideForReorder = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlideForReorder) return state;
+
+            const reorderElements = [...currentSlideForReorder.elements];
+            const reorderIndex = reorderElements.findIndex(el => el.id === elementId);
+            if (reorderIndex === -1) return state;
+
+            const newReorderIndex = direction === 'forward' ? reorderIndex + 1 : reorderIndex - 1;
+            if (newReorderIndex < 0 || newReorderIndex >= reorderElements.length) return state;
+
+            const [movedElement] = reorderElements.splice(reorderIndex, 1);
+            reorderElements.splice(newReorderIndex, 0, movedElement);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(slide =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: reorderElements }
+                            : slide
+                    ),
+                },
+            };
+        }
+
         case 'DELETE_SLIDE': {
             if (state.lesson.slides.length <= 1) return state; // Prevent deleting last slide
             const newSlides = state.lesson.slides.filter(s => s.id !== action.payload);
