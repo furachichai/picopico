@@ -169,7 +169,7 @@
         {
           "id": "el-1778621596290",
           "type": "text",
-          "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+          "content": "¿Cuál va primero?",
           "x": 50.69444444444445,
           "y": 20.312500000000014,
           "width": 79.16666666666666,
@@ -195,9 +195,9 @@
           "scale": 1,
           "metadata": {
             "options": [
-              "x",
-              "<b>÷</b>",
-              "Cualquiera, pero de izquierda a derecha",
+              "Primero x",
+              "<b>Primero <font face=\"Verdana, Arial, sans-serif\">÷</font></b>",
+              "Cualquiera (de izquierda a derecha)",
               "No importa el orden"
             ],
             "correctIndex": 2,
@@ -346,7 +346,7 @@
           "scale": 1,
           "metadata": {
             "backgroundColor": "#1cb0f6",
-            "fontFamily": "monospace",
+            "fontFamily": "Verdana, Arial, sans-serif",
             "fontSize": 24
           }
         }
@@ -399,7 +399,7 @@
             "options": [
               "+ ",
               "-",
-              "Cualquiera, pero de izquierda a derecha",
+              "Cualquiera<div>(de izquierda a derecha)</div>",
               "No importa el orden"
             ],
             "correctIndex": 2,
@@ -584,7 +584,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-13T20:41:57.448Z",
+  "updatedAt": "2026-05-13T20:46:30.933Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",
