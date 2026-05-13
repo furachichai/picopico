@@ -314,11 +314,15 @@ const editorReducer = (state, action) => {
 
             const currentSlide = state.lesson.slides[currentSlideIndex];
             const elementIndex = currentSlide.elements.findIndex(el => el.id === selectedId);
+            const elementToSelect = currentSlide.elements[elementIndex];
 
-            // If element not found, or already last (visually on top), just select
-            if (elementIndex === -1 || elementIndex === currentSlide.elements.length - 1) {
-                return { ...state, selectedElementId: selectedId };
+            // If element not found, or already last (visually on top), or is LOCKED, just select
+            if (elementIndex === -1 || elementIndex === currentSlide.elements.length - 1 || elementToSelect.metadata?.locked) {
+                const snapshot = elementToSelect ? { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex } : null;
+                return { ...state, selectedElementId: selectedId, undoSnapshot: snapshot };
             }
+
+            const snapshot = { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex };
 
             // Move element to end of array (top of stack)
             const newElements = [...currentSlide.elements];
@@ -338,7 +342,35 @@ const editorReducer = (state, action) => {
                     ...state.lesson,
                     slides: newSlides
                 },
-                selectedElementId: selectedId
+                selectedElementId: selectedId,
+                undoSnapshot: snapshot
+            };
+        }
+
+        case 'UNDO_ELEMENT': {
+            if (!state.undoSnapshot || !state.selectedElementId) return state;
+            const { element, originalIndex } = state.undoSnapshot;
+            if (element.id !== state.selectedElementId) return state;
+
+            const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+            if (currentSlideIndex === -1) return state;
+
+            const currentSlide = state.lesson.slides[currentSlideIndex];
+            // Remove current state of element
+            const newElements = currentSlide.elements.filter(el => el.id !== element.id);
+            // Insert element back at its original index
+            newElements.splice(originalIndex, 0, element);
+
+            const newSlides = [...state.lesson.slides];
+            newSlides[currentSlideIndex] = {
+                ...currentSlide,
+                elements: newElements
+            };
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: { ...state.lesson, slides: newSlides }
             };
         }
 

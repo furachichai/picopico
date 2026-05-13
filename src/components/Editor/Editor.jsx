@@ -27,10 +27,6 @@ const Editor = () => {
     const [showPresetPanel, setShowPresetPanel] = useState(false);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
-    // Undo: snapshot the element state when it's first selected
-    const undoSnapshotRef = useRef(null);
-    const lastSelectedIdRef = useRef(null);
-
     // Detect mobile keyboard via VisualViewport
     useEffect(() => {
         const vv = window.visualViewport;
@@ -308,35 +304,8 @@ const Editor = () => {
         selectedElement = currentSlide?.elements.find(e => e.id === state.selectedElementId);
     }
 
-    // Undo snapshot: when a new element gets selected, save its state
-    if (selectedElement && selectedElement.id !== lastSelectedIdRef.current) {
-        lastSelectedIdRef.current = selectedElement.id;
-        undoSnapshotRef.current = JSON.parse(JSON.stringify(selectedElement));
-    } else if (!selectedElement) {
-        lastSelectedIdRef.current = null;
-        undoSnapshotRef.current = null;
-    }
-
     const handleUndo = () => {
-        if (!undoSnapshotRef.current || !selectedElement) return;
-        const snap = undoSnapshotRef.current;
-        if (snap.id === 'cartridge' || snap.id === 'background') return; // Not supported for these
-        dispatch({
-            type: 'UPDATE_ELEMENT',
-            payload: {
-                id: snap.id,
-                updates: {
-                    x: snap.x,
-                    y: snap.y,
-                    width: snap.width,
-                    height: snap.height,
-                    rotation: snap.rotation,
-                    scale: snap.scale,
-                    content: snap.content,
-                    metadata: { ...snap.metadata }
-                }
-            }
-        });
+        dispatch({ type: 'UNDO_ELEMENT' });
     };
 
     const handleGlobalClick = (e) => {
