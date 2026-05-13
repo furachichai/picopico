@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Disc } from 'lucide-react';
 import Canvas from './Canvas';
 import Toolbar from './Toolbar';
@@ -26,6 +26,10 @@ const Editor = () => {
     const [libraryCallback, setLibraryCallback] = useState(null);
     const [showPresetPanel, setShowPresetPanel] = useState(false);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+    // Undo: snapshot the element state when it's first selected
+    const undoSnapshotRef = useRef(null);
+    const lastSelectedIdRef = useRef(null);
 
     // Detect mobile keyboard via VisualViewport
     useEffect(() => {
@@ -304,6 +308,37 @@ const Editor = () => {
         selectedElement = currentSlide?.elements.find(e => e.id === state.selectedElementId);
     }
 
+    // Undo snapshot: when a new element gets selected, save its state
+    if (selectedElement && selectedElement.id !== lastSelectedIdRef.current) {
+        lastSelectedIdRef.current = selectedElement.id;
+        undoSnapshotRef.current = JSON.parse(JSON.stringify(selectedElement));
+    } else if (!selectedElement) {
+        lastSelectedIdRef.current = null;
+        undoSnapshotRef.current = null;
+    }
+
+    const handleUndo = () => {
+        if (!undoSnapshotRef.current || !selectedElement) return;
+        const snap = undoSnapshotRef.current;
+        if (snap.id === 'cartridge' || snap.id === 'background') return; // Not supported for these
+        dispatch({
+            type: 'UPDATE_ELEMENT',
+            payload: {
+                id: snap.id,
+                updates: {
+                    x: snap.x,
+                    y: snap.y,
+                    width: snap.width,
+                    height: snap.height,
+                    rotation: snap.rotation,
+                    scale: snap.scale,
+                    content: snap.content,
+                    metadata: { ...snap.metadata }
+                }
+            }
+        });
+    };
+
     const handleGlobalClick = (e) => {
         // If clicking on the workspace background (not on a sticker or menu), deselect
         // We check if the click target is strictly the editor-workspace or editor-layout
@@ -506,6 +541,7 @@ const Editor = () => {
                                 onOpenLibrary={handleContextMenuOpenLibrary}
                                 onOpenPresets={() => setShowPresetPanel(true)}
                                 onReorderElement={handleReorderElement}
+                                onUndo={handleUndo}
                             />
                         </div>
                     )}
@@ -522,6 +558,7 @@ const Editor = () => {
                             onOpenLibrary={handleContextMenuOpenLibrary}
                             onOpenPresets={() => setShowPresetPanel(true)}
                             onReorderElement={handleReorderElement}
+                            onUndo={handleUndo}
                         />
                     ) : (
                         <Toolbar

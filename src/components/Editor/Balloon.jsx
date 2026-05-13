@@ -209,7 +209,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         // Let's stick to that logic for the input itself.
                         pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
                         whiteSpace: 'pre-wrap',
-                        textAlign: 'center',
+                        textAlign: element.metadata?.textAlign || 'center',
                         width: '100%',
                         display: 'block', // Important: Layout text as block, not flex items
                         // Counter-flip the text so it stays readable when the container is flipped

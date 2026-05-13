@@ -56,20 +56,38 @@ const Player = () => {
 
     // Initial check for cartridge...
 
+    // Slide navigation SFX
+    const playSlideSfx = () => {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.12);
+        } catch (e) { /* ignore */ }
+    };
+
     useEffect(() => {
         const handleKeyDown = (e) => {
-            // Debug toggle (T) - works locally even if game is active?
-            // "Add a debug mode... can be toggled by pressing the letter T"
+            // Debug toggle (T)
             if (e.key === 't' || e.key === 'T') {
                 setDebugMode(prev => !prev);
                 return;
             }
 
             if (e.key === 'ArrowRight') {
-                if (state.readOnly && isGameActive && currentSlide?.cartridge) return; // Block forward nav during active game
+                if (state.readOnly && isGameActive) return; // Block forward nav during active game
                 nextSlide(!state.readOnly); // Force next if in editor mode
             } else if (e.key === 'ArrowLeft') {
-                prevSlide(); // Always allow going back
+                if (state.readOnly && isGameActive) return; // Block backward nav during active game
+                prevSlide();
             } else if (e.key === 'Escape') {
                 dispatch({ type: 'TOGGLE_PREVIEW' });
             }
@@ -99,12 +117,14 @@ const Player = () => {
         // Block if current slide has unsolved quiz/cartridge
         if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) return;
         if (currentSlideIndex < slides.length - 1) {
+            playSlideSfx();
             setCurrentSlideIndex(prev => prev + 1);
         }
     };
 
     const prevSlide = () => {
         if (currentSlideIndex > 0) {
+            playSlideSfx();
             setCurrentSlideIndex(prev => prev - 1);
         }
     };
@@ -206,8 +226,8 @@ const Player = () => {
     // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
-        // Block forward navigation during active game, but always allow backward
-        if (direction === 'next' && state.readOnly && isGameActive && currentSlide?.cartridge) return;
+        // Block all navigation during active game in read-only mode
+        if (state.readOnly && isGameActive) return;
 
         setIsNavigating(true);
         if (direction === 'next') nextSlide(!state.readOnly);
@@ -544,6 +564,7 @@ const Player = () => {
                                                         padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
                                                         borderRadius: element.metadata?.borderRadius || '8px',
                                                         border: element.metadata?.border || 'none',
+                                                        textAlign: element.metadata?.textAlign || 'left',
                                                         lineHeight: 1,
                                                     }}
                                                     dangerouslySetInnerHTML={{ __html: element.content }}

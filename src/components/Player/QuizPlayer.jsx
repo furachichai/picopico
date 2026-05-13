@@ -864,9 +864,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     const isShaking = index === shakingIndex;
 
                     if (isSolved) {
-                        className += isCorrect ? ' correct pulse' : ' grayed-out';
+                        className += isCorrect ? ' correct' : ' wrong';
                     } else if (isFailed) {
-                        className += isCorrect ? ' correct pulse' : ' grayed-out';
+                        className += isCorrect ? ' correct' : ' wrong';
                     } else {
                         if (isWrong && !isMultiSelect) className += ' wrong grayed-out';
                     }

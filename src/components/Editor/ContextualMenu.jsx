@@ -20,7 +20,7 @@ const COLORS = [
     '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
 ];
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -164,6 +164,24 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     />
                                 ))}
                             </div>
+                        </div>
+                    )}
+
+                    {element.type !== 'background' && (
+                        <div className="menu-group">
+                            <label>Align</label>
+                            <button
+                                className="btn-icon"
+                                onClick={() => {
+                                    const current = metadata.textAlign || 'left';
+                                    const next = current === 'left' ? 'center' : current === 'center' ? 'right' : 'left';
+                                    updateMetadata({ textAlign: next });
+                                }}
+                                title={`Align: ${metadata.textAlign || 'left'}`}
+                                style={{ fontSize: '1rem', minWidth: '36px' }}
+                            >
+                                {(metadata.textAlign || 'left') === 'left' ? '⬅' : (metadata.textAlign === 'center' ? '⬛' : '➡')}
+                            </button>
                         </div>
                     )}
 
@@ -1110,6 +1128,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
+                    {onUndo && element.type !== 'cartridge' && element.type !== 'background' && (
+                        <button className="btn-icon" onClick={onUndo} title="Undo Changes">
+                            ↩️
+                        </button>
+                    )}
                     {element.type === 'image' && (
                         <button 
                             className={`btn-icon ${metadata.locked ? 'active' : ''}`} 
