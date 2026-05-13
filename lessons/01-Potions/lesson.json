@@ -223,8 +223,8 @@
           "id": "el-1778686426188",
           "type": "image",
           "content": "/src/assets/characters/wizard%20crystal%20ball.jpg",
-          "x": 51.1111111111111,
-          "y": 65.3125,
+          "x": 50.55555555555554,
+          "y": 67.03125,
           "width": 40,
           "height": 33.5377358490566,
           "rotation": 0,
@@ -233,21 +233,6 @@
             "width": 40,
             "height": 33.5377358490566,
             "locked": false
-          }
-        },
-        {
-          "id": "el-1778704067171",
-          "type": "text",
-          "content": "<font color=\"#ce82ff\">+</font>",
-          "x": 69.44444444444446,
-          "y": 78.125,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 3.663395475705106,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 26
           }
         },
         {
@@ -269,6 +254,22 @@
               "x": 19,
               "y": 79
             }
+          }
+        },
+        {
+          "id": "el-1778704067171",
+          "type": "text",
+          "content": "<font color=\"#ce82ff\">+</font>",
+          "x": 50.63815284243228,
+          "y": 80,
+          "width": 13.88888888888889,
+          "height": 10,
+          "rotation": 0,
+          "scale": 3.6666686979489573,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 26,
+            "textAlign": "center"
           }
         }
       ],
@@ -583,7 +584,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-13T20:33:08.849Z",
+  "updatedAt": "2026-05-13T20:41:57.448Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",

@@ -14,6 +14,7 @@ const FONTS = [
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },
     { name: 'Serif', value: 'Georgia, serif' },
     { name: 'Monospace', value: 'monospace' },
+    { name: 'Verdana', value: 'Verdana, Arial, sans-serif' },
 ];
 
 const COLORS = [
