@@ -36,7 +36,6 @@ const Editor = () => {
     const TRANSLATE_LANGUAGES = [
         { code: 'es', label: 'Español', flag: '🇪🇸' },
         { code: 'en', label: 'English', flag: '🇺🇸' },
-        { code: 'pt', label: 'Português', flag: '🇧🇷' },
     ];
 
     // Detect mobile keyboard via VisualViewport
