@@ -1,5 +1,6 @@
 import React from 'react';
 import { EditorProvider, useEditor } from './context/EditorContext'
+import { LanguageProvider, useLanguage } from './context/LanguageContext'
 import Editor from './components/Editor/Editor';
 import Player from './components/Player/Player';
 import SlidesPage from './components/Editor/SlidesPage';
@@ -85,24 +86,20 @@ const AppContent = () => {
     };
   }, []);
 
-  // Check for Read-Only Mode (Network IP vs Localhost)
+  // Check for Read-Only Mode based on access level
   React.useEffect(() => {
     const hostname = window.location.hostname;
-    // Allow localhost and 127.0.0.1 as Creator Mode
     const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    const accessLevel = localStorage.getItem('pico_access_level'); // 'editor' or 'player'
+    // Legacy support: check old keys too
+    const legacyEditorUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true';
 
-    // Check if previously unlocked via PIN (either app-level or editor-level)
-    const isUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true' || localStorage.getItem('pico_app_unlocked') === 'true';
-
-    // Dispatch readOnly state
-    // We only want to set this once, but since it's driven by window, it's stable.
-    if (!isLocal && !isUnlocked) {
+    if (isLocal || accessLevel === 'editor' || legacyEditorUnlocked) {
+      dispatch({ type: 'SET_READ_ONLY', payload: false });
+      console.log('App running in Creator Mode');
+    } else {
       dispatch({ type: 'SET_READ_ONLY', payload: true });
       console.log('App running in Player Mode (Read-Only)');
-    } else {
-      // Explicitly set false just in case
-      dispatch({ type: 'SET_READ_ONLY', payload: false });
-      console.log('App running in Creator Mode (Unlocked)');
     }
   }, []);
 
@@ -172,14 +169,33 @@ const PinGate = ({ children }) => {
   });
   const [pinValue, setPinValue] = React.useState('');
   const [error, setError] = React.useState('');
+  const [selectedLang, setSelectedLang] = React.useState(() => {
+    return localStorage.getItem('pico_language') || 'es';
+  });
+
+  const languages = [
+    { code: 'es', flag: '🇪🇸' },
+    { code: 'en', flag: '🇺🇸' },
+    { code: 'pt', flag: '🇧🇷' },
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (pinValue === '2027') {
+      // Player-only access
       localStorage.setItem('pico_app_unlocked', 'true');
+      localStorage.setItem('pico_access_level', 'player');
+      localStorage.setItem('pico_language', selectedLang);
+      setIsUnlocked(true);
+    } else if (pinValue === '1314b') {
+      // Editor access
+      localStorage.setItem('pico_app_unlocked', 'true');
+      localStorage.setItem('pico_access_level', 'editor');
+      localStorage.setItem('pico_editor_unlocked', 'true');
+      localStorage.setItem('pico_language', selectedLang);
       setIsUnlocked(true);
     } else {
-      setError('Incorrect PIN');
+      setError('Incorrect code');
       setPinValue('');
     }
   };
@@ -208,18 +224,41 @@ const PinGate = ({ children }) => {
         padding: '40px',
         borderRadius: '20px',
         textAlign: 'center',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        minWidth: '280px'
       }}>
         <h1 style={{ marginBottom: '8px', fontSize: '2rem' }}>🔒 PicoPico</h1>
-        <p style={{ opacity: 0.7, marginBottom: '24px' }}>Enter PIN to continue</p>
+        <p style={{ opacity: 0.7, marginBottom: '20px' }}>Enter code to continue</p>
+
+        {/* Language Selector */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+          {languages.map(lang => (
+            <button
+              key={lang.code}
+              onClick={() => setSelectedLang(lang.code)}
+              style={{
+                fontSize: '2rem',
+                background: selectedLang === lang.code ? 'rgba(139, 92, 246, 0.4)' : 'rgba(255,255,255,0.1)',
+                border: selectedLang === lang.code ? '2px solid #8B5CF6' : '2px solid transparent',
+                borderRadius: '12px',
+                padding: '8px 14px',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                filter: selectedLang === lang.code ? 'none' : 'grayscale(0.5)',
+                opacity: selectedLang === lang.code ? 1 : 0.6
+              }}
+            >
+              {lang.flag}
+            </button>
+          ))}
+        </div>
+
         <form onSubmit={handleSubmit}>
           <input
             type="password"
-            inputMode="numeric"
-            pattern="[0-9]*"
             value={pinValue}
             onChange={(e) => { setPinValue(e.target.value); setError(''); }}
-            placeholder="Enter PIN"
+            placeholder="Enter code"
             autoFocus
             style={{
               padding: '12px 20px',
@@ -260,9 +299,11 @@ const PinGate = ({ children }) => {
 function App() {
   return (
     <PinGate>
-      <EditorProvider>
-        <AppContent />
-      </EditorProvider>
+      <LanguageProvider>
+        <EditorProvider>
+          <AppContent />
+        </EditorProvider>
+      </LanguageProvider>
     </PinGate>
   )
 }

@@ -27,6 +27,7 @@ const initialState = {
     isDirty: false,
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
     readOnly: false, // Default to false, will be set on mount
+    translationMode: null, // null | { lang: 'en' | 'pt', draft: { [slideId]: { [elementId]: { content } }, lessonTitle: '', lessonDescription: '' } }
 };
 
 const editorReducer = (state, action) => {
@@ -566,6 +567,114 @@ const editorReducer = (state, action) => {
                 },
                 isDirty: false,
             };
+
+        // ─── Translation Mode Actions ───
+        case 'START_TRANSLATION': {
+            const lang = action.payload; // 'en' | 'pt'
+            // Build a draft from existing translations for every slide/element
+            const draft = {};
+            state.lesson.slides.forEach(slide => {
+                draft[slide.id] = {};
+                slide.elements.forEach(el => {
+                    if (el.type === 'text' || el.type === 'balloon') {
+                        draft[slide.id][el.id] = {
+                            content: el.translations?.[lang]?.content || el.content
+                        };
+                    } else if (el.type === 'quiz') {
+                        draft[slide.id][el.id] = {
+                            options: el.metadata?.translations?.[lang]?.options || [...(el.metadata?.options || [])]
+                        };
+                    }
+                });
+            });
+            return {
+                ...state,
+                translationMode: {
+                    lang,
+                    draft,
+                    lessonTitle: state.lesson.translations?.[lang]?.title || state.lesson.title,
+                    lessonDescription: state.lesson.translations?.[lang]?.description || (state.lesson.description || ''),
+                },
+                selectedElementId: null, // Deselect on entering translation mode
+            };
+        }
+
+        case 'UPDATE_TRANSLATION': {
+            if (!state.translationMode) return state;
+            const { slideId, elementId, field, value } = action.payload;
+            if (field === 'lessonTitle') {
+                return {
+                    ...state,
+                    translationMode: { ...state.translationMode, lessonTitle: value }
+                };
+            }
+            if (field === 'lessonDescription') {
+                return {
+                    ...state,
+                    translationMode: { ...state.translationMode, lessonDescription: value }
+                };
+            }
+            const newDraft = { ...state.translationMode.draft };
+            newDraft[slideId] = { ...newDraft[slideId] };
+            newDraft[slideId][elementId] = { ...newDraft[slideId][elementId], ...value };
+            return {
+                ...state,
+                translationMode: { ...state.translationMode, draft: newDraft }
+            };
+        }
+
+        case 'SAVE_TRANSLATION': {
+            if (!state.translationMode) return state;
+            const { lang, draft, lessonTitle, lessonDescription } = state.translationMode;
+            const newSlides = state.lesson.slides.map(slide => ({
+                ...slide,
+                elements: slide.elements.map(el => {
+                    const draftEntry = draft[slide.id]?.[el.id];
+                    if (!draftEntry) return el;
+                    if (el.type === 'text' || el.type === 'balloon') {
+                        return {
+                            ...el,
+                            translations: {
+                                ...el.translations,
+                                [lang]: { content: draftEntry.content }
+                            }
+                        };
+                    }
+                    if (el.type === 'quiz') {
+                        return {
+                            ...el,
+                            metadata: {
+                                ...el.metadata,
+                                translations: {
+                                    ...el.metadata?.translations,
+                                    [lang]: { options: draftEntry.options }
+                                }
+                            }
+                        };
+                    }
+                    return el;
+                })
+            }));
+            return {
+                ...state,
+                isDirty: true,
+                translationMode: null,
+                lesson: {
+                    ...state.lesson,
+                    slides: newSlides,
+                    translations: {
+                        ...state.lesson.translations,
+                        [lang]: {
+                            title: lessonTitle,
+                            description: lessonDescription,
+                        }
+                    }
+                }
+            };
+        }
+
+        case 'DISCARD_TRANSLATION':
+            return { ...state, translationMode: null };
 
         default:
             return state;

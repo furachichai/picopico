@@ -65,8 +65,26 @@ const Canvas = (props) => {
 
   // Stable callback for updating an element
   const handleChange = useCallback((id, updates) => {
+    // In translation mode, only allow content changes and route to translation draft
+    if (state.translationMode) {
+      const el = currentSlide?.elements.find(e => e.id === id);
+      if (!el) return;
+      // Only text/balloon content or quiz options are translatable
+      if ((el.type === 'text' || el.type === 'balloon') && 'content' in updates) {
+        dispatch({
+          type: 'UPDATE_TRANSLATION',
+          payload: {
+            slideId: currentSlide.id,
+            elementId: id,
+            value: { content: updates.content }
+          }
+        });
+      }
+      // Block all other changes (position, scale, rotation, etc.)
+      return;
+    }
     dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
-  }, [dispatch]);
+  }, [dispatch, state.translationMode, currentSlide]);
 
   // Handle background clicks to deselect elements
   const handleCanvasClick = useCallback((e) => {
@@ -176,17 +194,28 @@ const Canvas = (props) => {
           )}
         </div>
 
-        {currentSlide.elements.map(element => (
-          <Sticker
-            key={element.id}
-            element={element}
-            isSelected={element.id === selectedElementId}
-            onSelect={handleSelect}
-            onChange={handleChange}
-            onEdit={() => handleEdit(element.id)}
-            onDelete={handleDelete}
-          />
-        ))}
+        {currentSlide.elements.map(element => {
+          // In translation mode, show draft content for text/balloon elements
+          let displayElement = element;
+          if (state.translationMode) {
+            const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
+            if (draft && (element.type === 'text' || element.type === 'balloon')) {
+              displayElement = { ...element, content: draft.content };
+            }
+          }
+          return (
+            <Sticker
+              key={element.id}
+              element={displayElement}
+              isSelected={element.id === selectedElementId}
+              onSelect={handleSelect}
+              onChange={handleChange}
+              onEdit={() => handleEdit(element.id)}
+              onDelete={handleDelete}
+              translationMode={!!state.translationMode}
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ContextualMenu.css'; // Reusing contextual menu styles for simplicity or create new ones
 
-const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets }) => {
+const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggleMenu = () => setIsOpen(!isOpen);
+    const toggleMenu = () => { if (!disabled) setIsOpen(!isOpen); };
 
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);

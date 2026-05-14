@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Gamepad2, Compass } from 'lucide-react';
 
 import { useEditor } from '../../context/EditorContext';
+import { useLanguage, getTranslatedContent } from '../../context/LanguageContext';
 import { getLessonProgress } from '../../utils/storage';
 import FullscreenToggle from '../FullscreenToggle';
 
@@ -39,6 +40,7 @@ const t = (key) => {
 
 const Dashboard = () => {
   const { state, dispatch } = useEditor();
+  const { language } = useLanguage();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,18 +85,7 @@ const Dashboard = () => {
   }, []);
 
   const handleOpenEditor = () => {
-    if (state.readOnly) {
-      const pin = window.prompt("Enter Admin PIN:");
-      if (pin === '2027') {
-        localStorage.setItem('pico_editor_unlocked', 'true');
-        dispatch({ type: 'SET_READ_ONLY', payload: false });
-        dispatch({ type: 'SET_VIEW', payload: 'editor' });
-      } else if (pin !== null) { // If user cancelled, don't alert
-        alert("Incorrect PIN");
-      }
-    } else {
-      dispatch({ type: 'SET_VIEW', payload: 'editor' });
-    }
+    dispatch({ type: 'SET_VIEW', payload: 'editor' });
   };
 
   // Editing State
@@ -457,24 +448,25 @@ const Dashboard = () => {
             height: '36px',
             padding: 0
           }} />
-          <button
-            onClick={handleOpenEditor}
-            style={{
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              border: 'none',
-              padding: '6px 12px',
-              borderRadius: '12px',
-              fontWeight: '700',
-              fontSize: '0.8rem',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow)',
-              borderBottom: '3px solid var(--primary-dark)'
-            }}
-          >
-            {t('dashboard.editor')}
-          </button>
-
+          {!state.readOnly && (
+            <button
+              onClick={handleOpenEditor}
+              style={{
+                backgroundColor: 'var(--primary)',
+                color: 'white',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: '12px',
+                fontWeight: '700',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                boxShadow: 'var(--shadow)',
+                borderBottom: '3px solid var(--primary-dark)'
+              }}
+            >
+              {t('dashboard.editor')}
+            </button>
+          )}
         </div>
       </div>
 
@@ -505,7 +497,9 @@ const Dashboard = () => {
                     {lesson.icon}
                   </div>
                   <div className="lesson-info">
-                    <div className="lesson-title">{lesson.title}</div>
+                    <div className="lesson-title">
+                      {(language !== 'es' && lesson.translations?.[language]?.title) || lesson.title}
+                    </div>
                     {editingLessonId === lesson.id ? (
                       <div className="description-edit-area" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
                         <input
@@ -566,7 +560,9 @@ const Dashboard = () => {
                       </div>
                     ) : (
                       <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div className="lesson-desc">{lesson.description || ''}</div>
+                        <div className="lesson-desc">
+                          {(language !== 'es' && lesson.translations?.[language]?.description) || lesson.description || ''}
+                        </div>
                         {!state.readOnly && (
                           <button
                             className="edit-desc-btn"

@@ -26,6 +26,17 @@ const Editor = () => {
     const [libraryCallback, setLibraryCallback] = useState(null);
     const [showPresetPanel, setShowPresetPanel] = useState(false);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+    const [showTranslateConfirm, setShowTranslateConfirm] = useState(false);
+    const [translationLang, setTranslationLang] = useState(() => {
+        return localStorage.getItem('pico_translate_lang') || 'en';
+    });
+
+    const isTranslating = !!state.translationMode;
+
+    const TRANSLATE_LANGUAGES = [
+        { code: 'en', label: 'English', flag: '🇺🇸' },
+        { code: 'pt', label: 'Português', flag: '🇧🇷' },
+    ];
 
     // Detect mobile keyboard via VisualViewport
     useEffect(() => {
@@ -435,6 +446,40 @@ const Editor = () => {
                     <span className="slide-counter">{currentSlideIndex + 1}/{state.lesson.slides.length}</span>
                 </div>
 
+                {/* Translation Mode Banner */}
+                {isTranslating && (
+                    <div style={{
+                        background: 'linear-gradient(90deg, #8B5CF6, #6D28D9)',
+                        color: 'white',
+                        padding: '6px 16px',
+                        textAlign: 'center',
+                        fontWeight: '700',
+                        fontSize: '0.8rem',
+                        letterSpacing: '0.5px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                    }}>
+                        🌐 Translating to {TRANSLATE_LANGUAGES.find(l => l.code === state.translationMode.lang)?.label}
+                        <button
+                            onClick={() => setShowTranslateConfirm(true)}
+                            style={{
+                                background: 'rgba(255,255,255,0.2)',
+                                border: 'none',
+                                borderRadius: '6px',
+                                color: 'white',
+                                padding: '2px 10px',
+                                cursor: 'pointer',
+                                fontWeight: '700',
+                                fontSize: '0.75rem'
+                            }}
+                        >
+                            Done
+                        </button>
+                    </div>
+                )}
+
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
                     <BurgerMenu
                         onInfo={() => setShowInfoModal(true)}
@@ -442,12 +487,58 @@ const Editor = () => {
                         onMenu={handleGoToMenu}
                         onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
                         onPresets={() => setShowPresetPanel(true)}
+                        disabled={isTranslating}
                     />
                     <div className="top-right-actions">
+                        {/* Translate Toggle */}
+                        {!isTranslating ? (
+                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                                <button
+                                    className="btn-floating"
+                                    onClick={() => {
+                                        dispatch({ type: 'START_TRANSLATION', payload: translationLang });
+                                    }}
+                                    title="Translate"
+                                    style={{ fontSize: '20px' }}
+                                >
+                                    🌐
+                                </button>
+                                {/* Language Selector - small dropdown next to globe */}
+                                <select
+                                    value={translationLang}
+                                    onChange={(e) => {
+                                        setTranslationLang(e.target.value);
+                                        localStorage.setItem('pico_translate_lang', e.target.value);
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '-4px',
+                                        right: '-4px',
+                                        width: '22px',
+                                        height: '18px',
+                                        fontSize: '10px',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        background: 'rgba(139, 92, 246, 0.9)',
+                                        color: 'white',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        textAlign: 'center',
+                                        appearance: 'none',
+                                        WebkitAppearance: 'none'
+                                    }}
+                                >
+                                    {TRANSLATE_LANGUAGES.map(l => (
+                                        <option key={l.code} value={l.code}>{l.code.toUpperCase()}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        ) : null}
+
                         <button
                             className={`btn-floating btn-save ${!state.isDirty ? 'disabled' : ''}`}
                             onClick={handleSaveProject}
-                            disabled={!state.isDirty}
+                            disabled={!state.isDirty || isTranslating}
                             title={t('editor.save')}
                         >
                             <span style={{ fontSize: '24px' }}>💾</span>
@@ -456,13 +547,15 @@ const Editor = () => {
                             className="btn-floating btn-preview"
                             onClick={() => dispatch({ type: 'TOGGLE_PREVIEW' })}
                             title={t('editor.preview')}
+                            disabled={isTranslating}
                         >
                             ▶
                         </button>
                     </div>
                 </div>
 
-                {/* Navigation Buttons */}
+                {/* Navigation Buttons — hidden in translation mode */}
+                {!isTranslating && (
                 <div className={`editor-navigation ${selectedElement ? 'disabled-ui' : ''}`}>
                     {!isFirstSlide && (
                         <div className="nav-group nav-group-left">
@@ -498,6 +591,27 @@ const Editor = () => {
                         )}
                     </div>
                 </div>
+                )}
+
+                {/* Simplified Navigation in Translation Mode */}
+                {isTranslating && (
+                    <div className="editor-navigation">
+                        {!isFirstSlide && (
+                            <div className="nav-group nav-group-left">
+                                <button className="nav-btn nav-prev" onClick={handlePrevSlide}>
+                                    &lt;
+                                </button>
+                            </div>
+                        )}
+                        <div className="nav-group nav-group-right">
+                            {!isLastSlide && (
+                                <button className="nav-btn nav-next" onClick={handleNextSlide}>
+                                    &gt;
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 <div className="editor-workspace">
                     <Canvas
@@ -525,6 +639,7 @@ const Editor = () => {
                     )}
                 </div>
 
+                {!isTranslating && (
                 <div className={`bottom-menus ${isKeyboardVisible && selectedElement?.type === 'quiz' ? 'hidden-menus' : ''}`}>
                     {/* SlideStrip Removed */}
                     {selectedElement ? (
@@ -548,7 +663,24 @@ const Editor = () => {
                         />
                     )}
                 </div>
+                )}
             </div>
+
+            {/* Translation Save/Discard Confirmation */}
+            <ConfirmationModal
+                isOpen={showTranslateConfirm}
+                message="Save translations?"
+                onConfirm={() => {
+                    dispatch({ type: 'SAVE_TRANSLATION' });
+                    setShowTranslateConfirm(false);
+                }}
+                onCancel={() => {
+                    dispatch({ type: 'DISCARD_TRANSLATION' });
+                    setShowTranslateConfirm(false);
+                }}
+                confirmText="Save"
+                cancelText="Discard"
+            />
         </div >
     );
 };

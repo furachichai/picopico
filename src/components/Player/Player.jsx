@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
+import { useLanguage } from '../../context/LanguageContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
@@ -19,6 +20,7 @@ import './Player.css';
 const Player = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
+    const { language } = useLanguage();
     const { lesson } = state;
 
     // Initialize index based on the currentSlideId set by Dashboard or Editor
@@ -596,13 +598,24 @@ const Player = () => {
                                                         textAlign: element.metadata?.textAlign || 'left',
                                                         lineHeight: 1,
                                                     }}
-                                                    dangerouslySetInnerHTML={{ __html: formatExponents(element.content) }}
+                                                    dangerouslySetInnerHTML={{ __html: formatExponents(
+                                                        (language !== 'es' && element.translations?.[language]?.content) || element.content
+                                                    ) }}
                                                 />
                                             )}
                                             {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" />}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
-                                                    data={element}
+                                                    data={language !== 'es' && element.metadata?.translations?.[language]?.options
+                                                        ? {
+                                                            ...element,
+                                                            metadata: {
+                                                                ...element.metadata,
+                                                                options: element.metadata.translations[language].options
+                                                            }
+                                                        }
+                                                        : element
+                                                    }
                                                     onNext={() => {
                                                         markSlideSolved(currentSlideIndex);
                                                     }}
@@ -614,7 +627,10 @@ const Player = () => {
                                             {element.type === 'game' && <MinigamePlayer data={element} />}
                                             {element.type === 'balloon' && (
                                                 <Balloon
-                                                    element={element}
+                                                    element={language !== 'es' && element.translations?.[language]?.content
+                                                        ? { ...element, content: element.translations[language].content }
+                                                        : element
+                                                    }
                                                     readOnly={true}
                                                 />
                                             )}

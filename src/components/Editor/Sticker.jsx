@@ -24,7 +24,7 @@ const rotatePoint = (x, y, angle) => {
     };
 };
 
-const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, onDelete }) => {
+const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, onDelete, translationMode = false }) => {
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [interactionType, setInteractionType] = useState(null); // 'move', 'resize', 'rotate'
@@ -65,6 +65,15 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
         }
 
         if (element.metadata?.locked) {
+            return;
+        }
+
+        // In translation mode, block all physical manipulations
+        if (translationMode && type !== 'move') {
+            return;
+        }
+        if (translationMode && type === 'move') {
+            // In translation mode, allow selection but not movement
             return;
         }
 
@@ -353,7 +362,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 )}
             </div>
 
-            {isSelected && element.type !== 'quiz' && element.type !== 'balloon' && !element.metadata?.locked && (
+            {isSelected && !translationMode && element.type !== 'quiz' && element.type !== 'balloon' && !element.metadata?.locked && (
                 <div className="sticker-controls">
                     {/* Top Left Resize */}
                     <div
@@ -434,7 +443,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 </div>
             )}
 
-            {isSelected && element.type === 'balloon' && (
+            {isSelected && !translationMode && element.type === 'balloon' && (
                 <div className="sticker-controls">
                     {/* North Resize */}
                     <div
