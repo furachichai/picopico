@@ -481,6 +481,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setLevelSolved(false);
     setSolvedOps(new Set());
     setMerging(null);
+    setNoteIndex(0);
   };
 
   if (gameOver) {
@@ -509,13 +510,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       <div className="pot-header" style={{ position: 'relative' }}>
         <div className="pot-hearts" style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px' }}>
           {showGoodJob ? (
-            <button 
-              className="pot-btn" 
-              style={{ padding: '6px 12px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto' }}
-              onClick={resetGame}
-            >
-              Play Again
-            </button>
+            <div style={{ width: '130px' }} />
           ) : (
             <div style={{ position: 'relative', width: '130px', height: '16px', borderRadius: '10px', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)' }}>
               <div style={{ width: `${((level + (levelSolved ? 1 : 0)) / totalLevels) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #34D399, #10B981)', transition: 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: '0 0 8px #34D399' }} />
@@ -652,11 +647,20 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             className="pot-wizard-win"
           />
           {showNextBtn && (
-            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
+            <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px', zIndex: 52 }}>
+              <button 
+                className="pot-btn" 
+                style={{ padding: '10px 20px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', pointerEvents: 'auto' }}
+                onClick={resetGame}
+              >
+                Play Again
+              </button>
+              <button className="pot-btn pot-btn-next" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           )}
         </div>
       )}
