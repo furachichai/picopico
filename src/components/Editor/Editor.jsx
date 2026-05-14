@@ -34,6 +34,7 @@ const Editor = () => {
     const isTranslating = !!state.translationMode;
 
     const TRANSLATE_LANGUAGES = [
+        { code: 'es', label: 'Español', flag: '🇪🇸' },
         { code: 'en', label: 'English', flag: '🇺🇸' },
         { code: 'pt', label: 'Português', flag: '🇧🇷' },
     ];
@@ -462,6 +463,42 @@ const Editor = () => {
                         gap: '8px'
                     }}>
                         🌐 Translating to {TRANSLATE_LANGUAGES.find(l => l.code === state.translationMode.lang)?.label}
+                        {/* Language switcher inside the banner */}
+                        <select
+                            value={state.translationMode.lang}
+                            onChange={(e) => {
+                                const newLang = e.target.value;
+                                if (newLang === 'es') {
+                                    // Switching to Spanish = save & exit translation mode
+                                    dispatch({ type: 'SAVE_TRANSLATION' });
+                                    setTranslationLang('es');
+                                    localStorage.setItem('pico_translate_lang', 'es');
+                                } else {
+                                    // Save current translation, start new one
+                                    dispatch({ type: 'SAVE_TRANSLATION' });
+                                    dispatch({ type: 'START_TRANSLATION', payload: newLang });
+                                    setTranslationLang(newLang);
+                                    localStorage.setItem('pico_translate_lang', newLang);
+                                }
+                            }}
+                            style={{
+                                background: 'rgba(255,255,255,0.25)',
+                                border: '1px solid rgba(255,255,255,0.4)',
+                                borderRadius: '6px',
+                                color: 'white',
+                                padding: '2px 6px',
+                                fontSize: '0.75rem',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                outline: 'none'
+                            }}
+                        >
+                            {TRANSLATE_LANGUAGES.map(l => (
+                                <option key={l.code} value={l.code} style={{ color: '#333' }}>
+                                    {l.flag} {l.code.toUpperCase()}
+                                </option>
+                            ))}
+                        </select>
                         <button
                             onClick={() => setShowTranslateConfirm(true)}
                             style={{
@@ -496,7 +533,9 @@ const Editor = () => {
                                 <button
                                     className="btn-floating"
                                     onClick={() => {
-                                        dispatch({ type: 'START_TRANSLATION', payload: translationLang });
+                                        const lang = translationLang === 'es' ? 'en' : translationLang;
+                                        setTranslationLang(lang);
+                                        dispatch({ type: 'START_TRANSLATION', payload: lang });
                                     }}
                                     title="Translate"
                                     style={{ fontSize: '20px' }}
@@ -528,7 +567,7 @@ const Editor = () => {
                                         WebkitAppearance: 'none'
                                     }}
                                 >
-                                    {TRANSLATE_LANGUAGES.map(l => (
+                                    {TRANSLATE_LANGUAGES.filter(l => l.code !== 'es').map(l => (
                                         <option key={l.code} value={l.code}>{l.code.toUpperCase()}</option>
                                     ))}
                                 </select>

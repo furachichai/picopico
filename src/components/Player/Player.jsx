@@ -20,7 +20,7 @@ import './Player.css';
 const Player = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
-    const { language } = useLanguage();
+    const { language, setLanguage, SUPPORTED_LANGUAGES } = useLanguage();
     const { lesson } = state;
 
     // Initialize index based on the currentSlideId set by Dashboard or Editor
@@ -381,8 +381,37 @@ const Player = () => {
                         position: 'absolute',
                         top: '16px',
                         right: '16px',
-                        pointerEvents: 'auto'
+                        pointerEvents: 'auto',
+                        display: 'flex',
+                        gap: '8px'
                     }}>
+                        {/* Language Flag Toggle */}
+                        <button
+                            onClick={() => {
+                                const codes = SUPPORTED_LANGUAGES.map(l => l.code);
+                                const idx = codes.indexOf(language);
+                                const nextLang = codes[(idx + 1) % codes.length];
+                                setLanguage(nextLang);
+                            }}
+                            title={`Language: ${SUPPORTED_LANGUAGES.find(l => l.code === language)?.label}`}
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.95)',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                borderRadius: '50%',
+                                width: '44px',
+                                height: '44px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0,
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                                fontSize: '22px'
+                            }}
+                        >
+                            {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag}
+                        </button>
+
                         {!state.readOnly && (
                             <button
                                 onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
