@@ -91,8 +91,8 @@ const AppContent = () => {
     // Allow localhost and 127.0.0.1 as Creator Mode
     const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
 
-    // Check if previously unlocked via PIN
-    const isUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true';
+    // Check if previously unlocked via PIN (either app-level or editor-level)
+    const isUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true' || localStorage.getItem('pico_app_unlocked') === 'true';
 
     // Dispatch readOnly state
     // We only want to set this once, but since it's driven by window, it's stable.
