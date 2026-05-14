@@ -192,7 +192,8 @@ function isExponent(op) {
 function getOpImage(op) {
   switch (op) {
     case '+': return 'potiondas_symbol_addition.png';
-    case '-': return 'potiondas_symbol_minus.png';
+    case '-': 
+    case '−': return 'potiondas_symbol_minus.png';
     case '×': 
     case 'x': return 'potiondas_symbol_multiplication.png';
     case '÷': return 'potiondas_symbol_division.png';
