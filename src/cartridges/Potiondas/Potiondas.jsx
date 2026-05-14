@@ -254,6 +254,28 @@ function parseOpsString(opsStr) {
         depth--;
       }
       i++;
+    } else if (ch === 'e') {
+      // Exponent occupies an emoji slot — it's a value, not an operator
+      const expNum = Math.floor(Math.random() * 8) + 2;
+      template.push({ type: 'exponent', emojiIdx: emojiIdx, number: expNum });
+      emojiIdx++;
+      i++;
+      // Handle parens after exponent
+      while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
+        if (opsStr[i] === '(') {
+          const gid = parenId++;
+          parenStack.push(gid);
+          parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
+          template.push({ type: 'paren', value: '(', groupId: gid });
+          depth++;
+        } else {
+          const gid = parenStack.pop();
+          if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
+          template.push({ type: 'paren', value: ')', groupId: gid });
+          depth--;
+        }
+        i++;
+      }
     } else {
       const sym = charToSymbol(ch);
       parenDepths[opIdx] = depth;
@@ -285,7 +307,10 @@ function parseOpsString(opsStr) {
     }
   }
 
-  return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx };
+  // Collect exponent indices for solve order
+  const exponentSlots = template.filter(t => t.type === 'exponent').map(t => ({ type: 'exponent', emojiIdx: t.emojiIdx, number: t.number }));
+
+  return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx, exponentSlots };
 }
 
 // ─── Main Component ───────────────────────────────────────────
@@ -333,17 +358,16 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   const levelData = useMemo(() => {
     const def = levels[Math.min(level, totalLevels - 1)];
     const parsed = parseOpsString(def.ops);
-    const { operators, parenDepths, template, parenGroups } = parsed;
+    const { operators, parenDepths, template, parenGroups, exponentSlots } = parsed;
     const emojis = generateEmojis(parsed.emojiCount);
+    // Mark exponent emoji slots as null (they show as exponent tiles until tapped)
+    exponentSlots.forEach(exp => { emojis[exp.emojiIdx] = null; });
     const order = getPemdasOrder(operators, parenDepths);
-    // Generate random exponent numbers for ★ operators
-    const exponents = {};
-    operators.forEach((op, idx) => {
-      if (op === '★') {
-        exponents[idx] = Math.floor(Math.random() * 8) + 2;
-      }
-    });
-    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp, exponents, parenDepths, template, parenGroups };
+    // Build combined solve order: exponents first (left to right), then operators by PEMDAS
+    const exponentActions = exponentSlots.map(exp => ({ type: 'exponent', emojiIdx: exp.emojiIdx, number: exp.number }));
+    const operatorActions = order.map(idx => ({ type: 'op', opIdx: idx }));
+    const combinedOrder = [...exponentActions, ...operatorActions];
+    return { operators, emojis, order: combinedOrder, arrow: def.arrow, newOp: def.newOp, parenDepths, template, parenGroups, exponentSlots };
   }, [level, levelKey]);
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
@@ -413,7 +437,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     }
   }, [level, levelKey, currentEmojis]);
 
-  const correctOpIdx = levelData.order[step];
+  const correctAction = levelData.order[step]; // { type: 'exponent', emojiIdx, number } or { type: 'op', opIdx }
 
   // Get all unsolved operator indices in the same priority group as the given index
   const getSamePriorityGroup = useCallback((correctIdx) => {
@@ -461,10 +485,99 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     });
   }, []);
 
+  // Helper to advance step after a correct action
+  const advanceStep = useCallback((newStep) => {
+    setStep(newStep);
+    if (newStep >= levelData.order.length) {
+      setLevelSolved(true);
+      playMergeSound();
+      setTimeout(() => playGrowingSound(), 100);
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, ticks: 60 });
+      if (level + 1 >= totalLevels) {
+        setTimeout(() => {
+          setWinFadeOut(true);
+          setTimeout(() => {
+            setShowGoodJob(true);
+            if (onComplete) onComplete();
+            setTimeout(() => { setShowNextBtn(true); }, 1500);
+          }, 800);
+        }, 600);
+      }
+    }
+  }, [levelData, level, totalLevels, onComplete]);
+
+  // Handle wrong tap (shared by operators and exponents)
+  const handleWrongTap = useCallback((tappedOpIdx) => {
+    playErrorSfx();
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    setWrongIdx(tappedOpIdx);
+    setFadedOps(true);
+    setNoteIndex(0);
+
+    const correctOpIdx = correctAction?.type === 'op' ? correctAction.opIdx : null;
+
+    if (correctAction?.type === 'exponent') {
+      // Should have tapped an exponent first — no specific hint
+      setFlashCorrectIdx(null);
+      setArrowStyle(null);
+    } else if (correctOpIdx !== null) {
+      const correctDepth = levelData.parenDepths?.[correctOpIdx] || 0;
+      const tappedDepth = levelData.parenDepths?.[tappedOpIdx] || 0;
+      const isParenHint = correctDepth > tappedDepth && levelData.parenGroups;
+
+      if (isParenHint) {
+        const relevantGroups = Object.entries(levelData.parenGroups)
+          .filter(([, g]) => g.opIndices.includes(correctOpIdx) && !g.opIndices.includes(tappedOpIdx))
+          .map(([gid]) => parseInt(gid));
+        if (relevantGroups.length > 0) setPulsingParens(relevantGroups);
+        setFlashCorrectIdx(null);
+        setArrowStyle(null);
+      } else {
+        setFlashCorrectIdx(correctOpIdx);
+        const group = getSamePriorityGroup(correctOpIdx);
+        if (group.length > 1) {
+          requestAnimationFrame(() => computeArrowFromRefs(group));
+        } else {
+          setArrowStyle(null);
+        }
+      }
+    }
+
+    const newLives = lives - 1;
+    setLives(newLives);
+    if (newLives <= 0) {
+      setTimeout(() => {
+        setGameOver(true);
+        setTimeout(() => { if (onComplete) onComplete(); }, 2000);
+      }, 1500);
+    } else {
+      setShowRestart(true);
+    }
+  }, [correctAction, levelData, lives, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
+
+  const handleExponentClick = useCallback((emojiIdx) => {
+    if (levelSolved || gameOver || merging || showRestart || wrongIdx !== null) return;
+    // Check if this exponent is the current correct action
+    if (correctAction?.type === 'exponent' && correctAction.emojiIdx === emojiIdx) {
+      // Correct! Transform exponent into an emoji
+      playNote(noteIndex);
+      setNoteIndex(prev => prev + 1);
+      setCurrentEmojis(prev => {
+        const newEmojis = [...prev];
+        newEmojis[emojiIdx] = pickRandomEmoji(newEmojis);
+        return newEmojis;
+      });
+      advanceStep(step + 1);
+    }
+    // If wrong exponent tapped, just ignore (no penalty for tapping wrong exponent)
+  }, [correctAction, levelSolved, gameOver, merging, showRestart, wrongIdx, noteIndex, step, advanceStep]);
+
   const handleOpClick = useCallback((opIdx) => {
     if (levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx) || wrongIdx !== null) return;
 
-    if (opIdx === correctOpIdx) {
+    const isCorrect = correctAction?.type === 'op' && correctAction.opIdx === opIdx;
+
+    if (isCorrect) {
       // ─── Correct! ───
       playNote(noteIndex);
       setNoteIndex(prev => prev + 1);
@@ -494,80 +607,14 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         setSolvedOps(newSolved);
         setMerging(null);
 
-        const newStep = step + 1;
-        setStep(newStep);
-
-        if (newStep >= levelData.order.length) {
-          setLevelSolved(true);
-          playMergeSound();
-          setTimeout(() => playGrowingSound(), 100);
-          confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, ticks: 60 });
-          
-          if (level + 1 >= totalLevels) {
-            setTimeout(() => {
-              setWinFadeOut(true);
-              setTimeout(() => {
-                setShowGoodJob(true);
-                if (onComplete) onComplete();
-                setTimeout(() => {
-                  setShowNextBtn(true);
-                }, 1500);
-              }, 800);
-            }, 600);
-          }
-        }
+        advanceStep(step + 1);
       }, 200);
 
     } else {
       // ─── Wrong! ───
-      playErrorSfx();
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-      
-      setWrongIdx(opIdx);
-      setFadedOps(true);
-      setNoteIndex(0);
-
-      // Check if the correct op is deeper inside a paren group
-      const correctDepth = levelData.parenDepths?.[correctOpIdx] || 0;
-      const tappedDepth = levelData.parenDepths?.[opIdx] || 0;
-      const isParenHint = correctDepth > tappedDepth && levelData.parenGroups;
-
-      if (isParenHint) {
-        // Only pulse the parens — don't flash the correct op
-        const relevantGroups = Object.entries(levelData.parenGroups)
-          .filter(([, g]) => g.opIndices.includes(correctOpIdx) && !g.opIndices.includes(opIdx))
-          .map(([gid]) => parseInt(gid));
-        if (relevantGroups.length > 0) {
-          setPulsingParens(relevantGroups);
-        }
-        setFlashCorrectIdx(null);
-        setArrowStyle(null);
-      } else {
-        // Standard wrong feedback — flash correct op and show arrow
-        setFlashCorrectIdx(correctOpIdx);
-        const group = getSamePriorityGroup(correctOpIdx);
-        if (group.length > 1) {
-          requestAnimationFrame(() => computeArrowFromRefs(group));
-        } else {
-          setArrowStyle(null);
-        }
-      }
-
-      const newLives = lives - 1;
-      setLives(newLives);
-
-      if (newLives <= 0) {
-        setTimeout(() => {
-          setGameOver(true);
-          setTimeout(() => {
-            if (onComplete) onComplete();
-          }, 2000);
-        }, 1500);
-      } else {
-        setShowRestart(true);
-      }
+      handleWrongTap(opIdx);
     }
-  }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getSamePriorityGroup, computeArrowFromRefs, onComplete, wrongIdx]);
+  }, [correctAction, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, currentEmojis, advanceStep, handleWrongTap, wrongIdx]);
 
   const handleRestart = useCallback(() => {
     setLevelKey(prev => prev + 1);
@@ -593,6 +640,14 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       } else if (t.type === 'op') {
         if (!solvedOps.has(t.opIdx)) {
           result.push({ type: 'op', value: levelData.operators[t.opIdx], opIdx: t.opIdx });
+        }
+      } else if (t.type === 'exponent') {
+        if (currentEmojis[t.emojiIdx] === null) {
+          // Not yet tapped — show as exponent tile
+          result.push({ type: 'exponent', emojiIdx: t.emojiIdx, number: t.number });
+        } else {
+          // Already tapped — show as regular emoji
+          result.push({ type: 'emoji', value: currentEmojis[t.emojiIdx], emojiIdx: t.emojiIdx });
         }
       } else if (t.type === 'paren') {
         // Show paren only if its group still has unsolved ops
@@ -776,6 +831,22 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
               );
             }
 
+            // Exponent token (tappable value tile)
+            if (token.type === 'exponent') {
+              return (
+                <span
+                  key={`exp-${token.emojiIdx}-${levelKey}`}
+                  className="pot-token pot-token-op pot-token-exponent"
+                  onClick={() => handleExponentClick(token.emojiIdx)}
+                >
+                  <span className="pot-op-circle pot-exp-circle">
+                    <span className="pot-exp-star">e</span>
+                    <span className="pot-exp-number">{token.number}</span>
+                  </span>
+                </span>
+              );
+            }
+
             // Paren token
             if (token.type === 'paren') {
               const isPulsing = pulsingParens && pulsingParens.includes(token.groupId);
@@ -811,7 +882,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
               <span
                 key={`op-${opIdx}-${levelKey}`}
                 ref={(el) => opRefs.current[opIdx] = el}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levels[level]?.ops === 'x' && !levelSolved && !merging && opIdx === correctOpIdx ? 'pot-hint-pulse' : ''}`}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levels[level]?.ops === 'x' && !levelSolved && !merging && correctAction?.type === 'op' && opIdx === correctAction.opIdx ? 'pot-hint-pulse' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
                 style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >
@@ -819,12 +890,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
                   <div className="pot-new-balloon">NEW</div>
                 )}
                 <span className={`pot-op-circle ${getOpImage(token.value) ? 'pot-op-circle-image' : ''}`}>
-                  {isExponent(token.value) ? (
-                    <>
-                      <span className="pot-exp-star">e</span>
-                      <span className="pot-exp-number">{levelData.exponents[opIdx]}</span>
-                    </>
-                  ) : getOpImage(token.value) ? (
+                  {getOpImage(token.value) ? (
                     <img 
                       src={`/assets/potiondas/${getOpImage(token.value)}`} 
                       alt={token.value} 
