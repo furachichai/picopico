@@ -46,6 +46,9 @@ const DEFAULT_LEVELS = [
   { ops: '+-++-+',         arrow: false },
   { ops: '+-x+-+',         arrow: false },
   { ops: '-x-+x-',         arrow: false },
+  { ops: 'x(+x)',           arrow: false, newOp: '()' },
+  { ops: '(+x)-',           arrow: false },
+  { ops: 'x(+-x)+',         arrow: false },
 ];
 
 // Serialize levels array to user-friendly text format
@@ -54,7 +57,7 @@ export function serializeLevels(levels) {
     let line = lv.ops;
     if (lv.arrow) line += '>';
     if (lv.newOp) {
-      const charMap = { '÷': '/', '+': '+', '−': '-', '×': 'x', '★': 'e' };
+      const charMap = { '÷': '/', '+': '+', '−': '-', '×': 'x', '★': 'e', '()': '()' };
       const c = charMap[lv.newOp] || lv.newOp;
       line += ` n${c}`;
     }
@@ -64,14 +67,14 @@ export function serializeLevels(levels) {
 
 // Deserialize user text back into levels array
 export function deserializeLevels(text) {
-  const newOpMap = { '/': '÷', '+': '+', '-': '−', 'x': '×', 'e': '★' };
+  const newOpMap = { '/': '÷', '+': '+', '-': '−', 'x': '×', 'e': '★', '()': '()' };
   return text.split('\n').filter(l => l.trim()).map(line => {
     line = line.trim();
     let newOp = undefined;
-    const nMatch = line.match(/\sn([/+\-xe])$/i);
+    const nMatch = line.match(/\sn([/+\-xe]|\(\))$/i);
     if (nMatch) {
       newOp = newOpMap[nMatch[1]] || nMatch[1];
-      line = line.replace(/\sn[/+\-xe]$/i, '');
+      line = line.replace(/\sn(?:[/+\-xe]|\(\))$/i, '');
     }
     const arrow = line.endsWith('>');
     if (arrow) line = line.slice(0, -1);
@@ -89,10 +92,14 @@ function getOpPriority(op) {
   return 2;
 }
 
-function getPemdasOrder(operators) {
-  const indexed = operators.map((op, idx) => ({ op, idx, priority: getOpPriority(op) }));
-  // Sort by priority (ascending = highest first), then by index (left-to-right)
-  indexed.sort((a, b) => a.priority - b.priority || a.idx - b.idx);
+function getPemdasOrder(operators, parenDepths = {}) {
+  const indexed = operators.map((op, idx) => ({
+    op, idx,
+    priority: getOpPriority(op),
+    depth: parenDepths[idx] || 0
+  }));
+  // Sort: deepest parens first, then by priority, then left-to-right
+  indexed.sort((a, b) => b.depth - a.depth || a.priority - b.priority || a.idx - b.idx);
   return indexed.map(o => o.idx);
 }
 
@@ -201,6 +208,86 @@ function getOpImage(op) {
   }
 }
 
+// Parse ops string into operators, paren depths, and a token template
+function parseOpsString(opsStr) {
+  const operators = [];
+  const parenDepths = {};
+  const template = [];
+  const parenGroups = {};
+  let emojiIdx = 0, opIdx = 0, depth = 0, parenId = 0;
+  const parenStack = [];
+
+  let i = 0;
+  // Handle leading parens
+  while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
+    if (opsStr[i] === '(') {
+      const gid = parenId++;
+      parenStack.push(gid);
+      parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
+      template.push({ type: 'paren', value: '(', groupId: gid });
+      depth++;
+    } else {
+      const gid = parenStack.pop();
+      if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
+      template.push({ type: 'paren', value: ')', groupId: gid });
+      depth--;
+    }
+    i++;
+  }
+
+  // First emoji
+  template.push({ type: 'emoji', emojiIdx: emojiIdx++ });
+
+  while (i < opsStr.length) {
+    const ch = opsStr[i];
+    if (ch === '(' || ch === ')') {
+      if (ch === '(') {
+        const gid = parenId++;
+        parenStack.push(gid);
+        parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
+        template.push({ type: 'paren', value: '(', groupId: gid });
+        depth++;
+      } else {
+        const gid = parenStack.pop();
+        if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
+        template.push({ type: 'paren', value: ')', groupId: gid });
+        depth--;
+      }
+      i++;
+    } else {
+      const sym = charToSymbol(ch);
+      parenDepths[opIdx] = depth;
+      for (const gid of parenStack) {
+        parenGroups[gid].opIndices.push(opIdx);
+      }
+      operators.push(sym);
+      template.push({ type: 'op', opIdx: opIdx });
+      opIdx++;
+      i++;
+      // Parens after operator, before next emoji
+      while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
+        if (opsStr[i] === '(') {
+          const gid = parenId++;
+          parenStack.push(gid);
+          parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
+          template.push({ type: 'paren', value: '(', groupId: gid });
+          depth++;
+        } else {
+          const gid = parenStack.pop();
+          if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
+          template.push({ type: 'paren', value: ')', groupId: gid });
+          depth--;
+        }
+        i++;
+      }
+      // Next emoji
+      template.push({ type: 'emoji', emojiIdx: emojiIdx++ });
+    }
+  }
+
+  return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx };
+}
+
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, isAlreadySolved = false, onComplete, onRestart, onNextSlide }) {
   // Initialize levels from config or use defaults
@@ -240,22 +327,23 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   const [seenLevels, setSeenLevels] = useState(new Set());
   const [expressionWidth, setExpressionWidth] = useState(0);
   const [winFadeOut, setWinFadeOut] = useState(false);
+  const [pulsingParens, setPulsingParens] = useState(null); // array of groupIds to pulse
 
   // Build the current level's data
   const levelData = useMemo(() => {
     const def = levels[Math.min(level, totalLevels - 1)];
-    const operators = def.ops.split('').map(charToSymbol);
-    const emojiCount = operators.length + 1;
-    const emojis = generateEmojis(emojiCount);
-    const order = getPemdasOrder(operators);
+    const parsed = parseOpsString(def.ops);
+    const { operators, parenDepths, template, parenGroups } = parsed;
+    const emojis = generateEmojis(parsed.emojiCount);
+    const order = getPemdasOrder(operators, parenDepths);
     // Generate random exponent numbers for ★ operators
     const exponents = {};
     operators.forEach((op, idx) => {
       if (op === '★') {
-        exponents[idx] = Math.floor(Math.random() * 8) + 2; // 2-9
+        exponents[idx] = Math.floor(Math.random() * 8) + 2;
       }
     });
-    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp, exponents };
+    return { operators, emojis, order, arrow: def.arrow, newOp: def.newOp, exponents, parenDepths, template, parenGroups };
   }, [level, levelKey]);
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
@@ -272,6 +360,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setFadedOps(false);
     setMerging(null);
     setShowRestart(false);
+    setPulsingParens(null);
     if (!isAlreadySolved) {
       setLevelSolved(false);
       setShowGoodJob(false);
@@ -279,13 +368,20 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setArrowStyle(null);
 
     if (levelData.newOp && !seenLevels.has(level)) {
-      const idx = levelData.operators.indexOf(levelData.newOp);
-      if (idx !== -1) {
-        setNewOpIdx(idx);
+      if (levelData.newOp === '()') {
+        // NEW balloon on closing paren
+        setNewOpIdx('paren-close');
         setShowNewBalloon(true);
         setSeenLevels(prev => new Set(prev).add(level));
       } else {
-        setShowNewBalloon(false);
+        const idx = levelData.operators.indexOf(levelData.newOp);
+        if (idx !== -1) {
+          setNewOpIdx(idx);
+          setShowNewBalloon(true);
+          setSeenLevels(prev => new Set(prev).add(level));
+        } else {
+          setShowNewBalloon(false);
+        }
       }
     } else {
       setShowNewBalloon(false);
@@ -441,6 +537,18 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         setArrowStyle(null);
       }
 
+      // Pulse parens if correct op is deeper inside a paren group
+      const correctDepth = levelData.parenDepths?.[correctOpIdx] || 0;
+      const tappedDepth = levelData.parenDepths?.[opIdx] || 0;
+      if (correctDepth > tappedDepth && levelData.parenGroups) {
+        const relevantGroups = Object.entries(levelData.parenGroups)
+          .filter(([, g]) => g.opIndices.includes(correctOpIdx) && !g.opIndices.includes(opIdx))
+          .map(([gid]) => parseInt(gid));
+        if (relevantGroups.length > 0) {
+          setPulsingParens(relevantGroups);
+        }
+      }
+
       const newLives = lives - 1;
       setLives(newLives);
 
@@ -470,20 +578,26 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     }
   }, [level, totalLevels, onComplete]);
 
-  // Build visible tokens
+  // Build visible tokens from template
   const tokens = useMemo(() => {
     const result = [];
-    for (let i = 0; i < levelData.operators.length; i++) {
-      if (currentEmojis[i] !== null) {
-        result.push({ type: 'emoji', value: currentEmojis[i], emojiIdx: i });
+    for (const t of levelData.template) {
+      if (t.type === 'emoji') {
+        if (currentEmojis[t.emojiIdx] !== null) {
+          result.push({ type: 'emoji', value: currentEmojis[t.emojiIdx], emojiIdx: t.emojiIdx });
+        }
+      } else if (t.type === 'op') {
+        if (!solvedOps.has(t.opIdx)) {
+          result.push({ type: 'op', value: levelData.operators[t.opIdx], opIdx: t.opIdx });
+        }
+      } else if (t.type === 'paren') {
+        // Show paren only if its group still has unsolved ops
+        const group = levelData.parenGroups[t.groupId];
+        const groupSolved = group && group.opIndices.every(idx => solvedOps.has(idx));
+        if (!groupSolved) {
+          result.push({ type: 'paren', value: t.value, groupId: t.groupId });
+        }
       }
-      if (!solvedOps.has(i)) {
-        result.push({ type: 'op', value: levelData.operators[i], opIdx: i });
-      }
-    }
-    const lastIdx = levelData.operators.length;
-    if (currentEmojis[lastIdx] !== null) {
-      result.push({ type: 'emoji', value: currentEmojis[lastIdx], emojiIdx: lastIdx });
     }
     return result;
   }, [currentEmojis, solvedOps, levelData]);
@@ -508,6 +622,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setSeenLevels(new Set());
     setArrowStyle(null);
     setWinFadeOut(false);
+    setPulsingParens(null);
     if (onRestart) onRestart();
   };
 
@@ -653,6 +768,28 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
                   className={`pot-token pot-token-emoji ${isMergeLeft ? 'pot-merge-left' : ''} ${isMergeRight ? 'pot-merge-right' : ''} ${isMergeFade ? 'pot-merge-fade' : ''} ${isMergePop ? 'pot-merge-pop' : ''} ${isFinalGrow ? 'pot-final-grow' : ''}`}
                 >
                   {token.value}
+                </span>
+              );
+            }
+
+            // Paren token
+            if (token.type === 'paren') {
+              const isPulsing = pulsingParens && pulsingParens.includes(token.groupId);
+              const isCloseParen = token.value === ')';
+              const showParenNew = showNewBalloon && newOpIdx === 'paren-close' && isCloseParen;
+              return (
+                <span
+                  key={`paren-${token.groupId}-${token.value}-${levelKey}`}
+                  className={`pot-token pot-token-paren ${isPulsing ? 'pot-paren-pulse' : ''}`}
+                >
+                  {showParenNew && (
+                    <div className="pot-new-balloon">NEW</div>
+                  )}
+                  <img
+                    src={`/assets/potiondas/curve_parentheses_${token.value === '(' ? 'open' : 'closed'}.png`}
+                    alt={token.value}
+                    className="pot-paren-img"
+                  />
                 </span>
               );
             }
