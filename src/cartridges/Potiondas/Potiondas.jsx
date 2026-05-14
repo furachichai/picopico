@@ -482,6 +482,13 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setSolvedOps(new Set());
     setMerging(null);
     setNoteIndex(0);
+    setWrongIdx(null);
+    setFlashCorrectIdx(null);
+    setFadedOps(false);
+    setShowRestart(false);
+    setShowNewBalloon(false);
+    setSeenLevels(new Set());
+    setArrowStyle(null);
   };
 
   if (gameOver) {
@@ -507,10 +514,16 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   return (
     <div className="pot-cartridge" onClick={() => showNewBalloon && setShowNewBalloon(false)}>
       {/* Header / Hearts */}
-      <div className="pot-header" style={{ position: 'relative' }}>
+      <div className="pot-header" style={{ position: 'relative', zIndex: 55 }}>
         <div className="pot-hearts" style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px' }}>
           {showGoodJob ? (
-            <div style={{ width: '130px' }} />
+            <button 
+              className="pot-btn" 
+              style={{ padding: '6px 12px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
+              onClick={resetGame}
+            >
+              Play Again
+            </button>
           ) : (
             <div style={{ position: 'relative', width: '130px', height: '16px', borderRadius: '10px', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', overflow: 'hidden', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)' }}>
               <div style={{ width: `${((level + (levelSolved ? 1 : 0)) / totalLevels) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #34D399, #10B981)', transition: 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', boxShadow: '0 0 8px #34D399' }} />
@@ -577,7 +590,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
               <span
                 key={`op-${opIdx}-${levelKey}`}
                 ref={(el) => opRefs.current[opIdx] = el}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''}`}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levelData.ops === 'x' && !levelSolved && !merging && opIdx === correctOpIdx ? 'pot-hint-pulse' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
                 style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >
@@ -647,20 +660,11 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             className="pot-wizard-win"
           />
           {showNextBtn && (
-            <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px', zIndex: 52 }}>
-              <button 
-                className="pot-btn" 
-                style={{ padding: '10px 20px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', pointerEvents: 'auto' }}
-                onClick={resetGame}
-              >
-                Play Again
-              </button>
-              <button className="pot-btn pot-btn-next" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
           )}
         </div>
       )}
