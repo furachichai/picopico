@@ -361,11 +361,13 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
   const [solvedOps, setSolvedOps] = useState(new Set());
+  const [solvedExponents, setSolvedExponents] = useState(new Set());
 
   // Reset when level changes
   useEffect(() => {
     setCurrentEmojis(levelData.emojis);
     setSolvedOps(new Set());
+    setSolvedExponents(new Set());
     setStep(0);
     setNoteIndex(0);
     setWrongIdx(null);
@@ -427,58 +429,107 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     }
   }, [level, levelKey, currentEmojis]);
 
-  // Compute valid actions dynamically based on current state
+  // Compute valid actions dynamically based on current state.
+  // Each parenthesized group is treated as an independent PEMDAS sub-expression.
+  // The player can freely solve operations in any group, in any order.
   const validActions = useMemo(() => {
-    const { operators, parenDepths, exponentSlots, exponentGroups } = levelData;
-    // Unsolved exponents
-    const unsolvedExps = exponentSlots.filter(exp => currentEmojis[exp.emojiIdx] === null);
+    const { operators, parenDepths, exponentSlots, exponentGroups, innerGroupOf, parenGroups } = levelData;
+    // Unsolved exponents (not yet tapped — use solvedExponents, not currentEmojis null check,
+    // because merge can set a solved exponent's emoji back to null)
+    const unsolvedExps = exponentSlots.filter(exp => !solvedExponents.has(exp.emojiIdx));
     // Unsolved operators
     const unsolvedOps = operators.map((op, idx) => ({
-      op, idx, depth: parenDepths[idx] || 0, priority: getOpPriority(op)
+      op, idx, depth: parenDepths[idx] || 0, priority: getOpPriority(op),
+      groupId: innerGroupOf[idx] ?? -1
     })).filter(o => !solvedOps.has(o.idx));
 
-    // Compute max depth across all unsolved content
-    const expDepths = unsolvedExps.map(exp => (exponentGroups[exp.emojiIdx] || []).length);
-    const opDepths = unsolvedOps.map(o => o.depth);
-    const maxDepth = Math.max(0, ...expDepths, ...opDepths);
+    // Check if any paren groups still have unsolved content
+    const hasUnsolvedParenContent = unsolvedOps.some(o => o.groupId >= 0) ||
+      unsolvedExps.some(exp => (exponentGroups[exp.emojiIdx] || []).length > 0);
 
-    const result = [];
-
-    // Exponents at maxDepth are always valid first (E in PEMDAS)
-    const expsAtMaxDepth = unsolvedExps.filter(exp => (exponentGroups[exp.emojiIdx] || []).length === maxDepth);
-    if (expsAtMaxDepth.length > 0) {
-      expsAtMaxDepth.forEach(exp => result.push({ type: 'exponent', emojiIdx: exp.emojiIdx }));
+    // Group unsolved ops by their innermost paren group
+    const opsByGroup = {};
+    for (const o of unsolvedOps) {
+      const key = o.groupId;
+      if (!opsByGroup[key]) opsByGroup[key] = [];
+      opsByGroup[key].push(o);
     }
 
-    // Operators at maxDepth — find best priority, all ops at that priority are valid
-    const opsAtMaxDepth = unsolvedOps.filter(o => o.depth === maxDepth);
-    if (opsAtMaxDepth.length > 0) {
-      // If there are unsolved exponents at this depth, operators aren't valid yet
-      if (expsAtMaxDepth.length === 0) {
-        const bestPriority = Math.min(...opsAtMaxDepth.map(o => o.priority));
-        opsAtMaxDepth.filter(o => o.priority === bestPriority)
-          .forEach(o => result.push({ type: 'op', opIdx: o.idx }));
+    // Group unsolved exponents by their innermost paren group
+    const expsByGroup = {};
+    for (const exp of unsolvedExps) {
+      const groups = exponentGroups[exp.emojiIdx] || [];
+      const key = groups.length > 0 ? groups[groups.length - 1] : -1;
+      if (!expsByGroup[key]) expsByGroup[key] = [];
+      expsByGroup[key].push(exp);
+    }
+
+    const result = [];
+    const allGroupIds = new Set([
+      ...Object.keys(opsByGroup).map(Number),
+      ...Object.keys(expsByGroup).map(Number)
+    ]);
+
+    for (const groupId of allGroupIds) {
+      // Root-level ops (-1) are only valid when ALL paren groups are fully solved
+      if (groupId === -1 && hasUnsolvedParenContent) continue;
+
+      // Check if this group has nested sub-groups with unsolved content
+      if (groupId >= 0) {
+        const group = parenGroups[groupId];
+        if (group) {
+          const hasNestedUnsolvedOps = group.opIndices.some(opIdx =>
+            !solvedOps.has(opIdx) && (innerGroupOf[opIdx] ?? -1) !== groupId
+          );
+          const hasNestedUnsolvedExps = unsolvedExps.some(exp => {
+            const groups = exponentGroups[exp.emojiIdx] || [];
+            return groups.includes(groupId) && groups[groups.length - 1] !== groupId;
+          });
+          if (hasNestedUnsolvedOps || hasNestedUnsolvedExps) continue;
+        }
+      }
+
+      const groupExps = expsByGroup[groupId] || [];
+      const groupOps = opsByGroup[groupId] || [];
+
+      // Within this group, apply PEMDAS independently:
+      // 1. Exponents first
+      if (groupExps.length > 0) {
+        groupExps.forEach(exp => result.push({ type: 'exponent', emojiIdx: exp.emojiIdx }));
+        // Don't add ops if exponents still exist in this group
+        continue;
+      }
+
+      // 2. Best priority ops — enforce left-to-right (only the leftmost op at best priority)
+      if (groupOps.length > 0) {
+        const bestPriority = Math.min(...groupOps.map(o => o.priority));
+        const bestOps = groupOps.filter(o => o.priority === bestPriority);
+        // Sort by index (left-to-right) and only allow the leftmost one
+        bestOps.sort((a, b) => a.idx - b.idx);
+        result.push({ type: 'op', opIdx: bestOps[0].idx });
       }
     }
 
     return result;
-  }, [levelData, solvedOps, currentEmojis]);
+  }, [levelData, solvedOps, solvedExponents, currentEmojis]);
 
   // Check if level is complete (all ops solved + all exponents resolved)
   const totalActions = levelData.operators.length + levelData.exponentSlots.length;
-  const solvedActions = solvedOps.size + levelData.exponentSlots.filter(exp => currentEmojis[exp.emojiIdx] !== null).length;
+  const solvedActions = solvedOps.size + solvedExponents.size;
 
-  // Get all unsolved operator indices in the same priority group as the given index
+  // Get all unsolved operator indices in the same priority group AND same paren group
   const getSamePriorityGroup = useCallback((correctIdx) => {
     const op = levelData.operators[correctIdx];
     const priority = getOpPriority(op);
+    const groupId = levelData.innerGroupOf?.[correctIdx] ?? -1;
     return levelData.operators
       .map((o, i) => ({ op: o, idx: i }))
       .filter(({ op: o, idx }) => {
-        return getOpPriority(o) === priority && !solvedOps.has(idx);
+        return getOpPriority(o) === priority && !solvedOps.has(idx)
+          && (levelData.innerGroupOf?.[idx] ?? -1) === groupId;
       })
       .map(({ idx }) => idx);
-  }, [levelData.operators, solvedOps]);
+  }, [levelData.operators, levelData.innerGroupOf, solvedOps]);
 
   // Compute arrow position from DOM refs
   const computeArrowFromRefs = useCallback((groupIndices) => {
@@ -516,7 +567,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
 
   // Helper to advance step after a correct action
   const advanceStep = useCallback(() => {
-    const newSolvedActions = solvedOps.size + levelData.exponentSlots.filter(exp => currentEmojis[exp.emojiIdx] !== null).length + 1;
+    const newSolvedActions = solvedOps.size + solvedExponents.size + 1;
     const total = levelData.operators.length + levelData.exponentSlots.length;
     if (newSolvedActions >= total) {
       setLevelSolved(true);
@@ -534,7 +585,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         }, 600);
       }
     }
-  }, [levelData, solvedOps, currentEmojis, level, totalLevels, onComplete]);
+  }, [levelData, solvedOps, solvedExponents, currentEmojis, level, totalLevels, onComplete]);
 
   // Handle wrong tap (shared by operators and exponents)
     const handleWrongTap = useCallback((tappedOpIdx) => {
@@ -571,9 +622,20 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       setFlashCorrectIdx(null);
       setArrowStyle(null);
     } else {
-      // Same depth — flash the valid action
-      const validOp = validActions.find(a => a.type === 'op');
-      const validExp = validActions.find(a => a.type === 'exponent');
+      // Same depth — flash the valid action from the SAME paren group as the tapped op
+      const tappedGroupId = levelData.innerGroupOf?.[tappedOpIdx] ?? -1;
+      // Prefer a valid op/exp within the same group; fall back to any valid action
+      const validOpSameGroup = validActions.find(a =>
+        a.type === 'op' && (levelData.innerGroupOf?.[a.opIdx] ?? -1) === tappedGroupId
+      );
+      const validExpSameGroup = validActions.find(a => {
+        if (a.type !== 'exponent') return false;
+        const groups = levelData.exponentGroups?.[a.emojiIdx] || [];
+        const expGroupId = groups.length > 0 ? groups[groups.length - 1] : -1;
+        return expGroupId === tappedGroupId;
+      });
+      const validExp = validExpSameGroup || validActions.find(a => a.type === 'exponent');
+      const validOp = validOpSameGroup || validActions.find(a => a.type === 'op');
       if (validExp) {
         // Exponent needs to be tapped first — flash it
         setFlashExponentIdx(validExp.emojiIdx);
@@ -615,6 +677,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       // Correct! Transform exponent into an emoji
       playNote(noteIndex);
       setNoteIndex(prev => prev + 1);
+      setSolvedExponents(prev => new Set(prev).add(emojiIdx));
       setCurrentEmojis(prev => {
         const newEmojis = [...prev];
         newEmojis[emojiIdx] = pickRandomEmoji(newEmojis);
@@ -695,13 +758,14 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           result.push({ type: 'op', value: levelData.operators[t.opIdx], opIdx: t.opIdx });
         }
       } else if (t.type === 'exponent') {
-        if (currentEmojis[t.emojiIdx] === null) {
+        if (currentEmojis[t.emojiIdx] === null && !solvedExponents.has(t.emojiIdx)) {
           // Not yet tapped — show as exponent tile
           result.push({ type: 'exponent', emojiIdx: t.emojiIdx, number: t.number });
-        } else {
-          // Already tapped — show as regular emoji
+        } else if (currentEmojis[t.emojiIdx] !== null && currentEmojis[t.emojiIdx] !== undefined) {
+          // Already tapped and still present — show as regular emoji
           result.push({ type: 'emoji', value: currentEmojis[t.emojiIdx], emojiIdx: t.emojiIdx });
         }
+        // If solved and then merged away (null + in solvedExponents), show nothing
       } else if (t.type === 'paren') {
         // Show paren only if its group still has unsolved ops
         const group = levelData.parenGroups[t.groupId];
@@ -712,7 +776,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       }
     }
     return result;
-  }, [currentEmojis, solvedOps, levelData]);
+  }, [currentEmojis, solvedOps, solvedExponents, levelData]);
 
   const resetGame = () => {
     setLevel(0);
@@ -724,6 +788,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setShowNextBtn(false);
     setLevelSolved(false);
     setSolvedOps(new Set());
+    setSolvedExponents(new Set());
     setMerging(null);
     setNoteIndex(0);
     setWrongIdx(null);
@@ -754,6 +819,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             setLevelKey(prev => prev + 1);
             setSeenLevels(new Set());
             setSolvedOps(new Set());
+            setSolvedExponents(new Set());
             setWrongIdx(null);
             setFlashCorrectIdx(null);
             setFlashExponentIdx(null);
