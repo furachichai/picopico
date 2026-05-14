@@ -190,7 +190,7 @@ function isExponent(op) {
 }
 
 // ─── Main Component ───────────────────────────────────────────
-export default function Potiondas({ config = {}, isAlreadySolved = false, onComplete, onNextSlide }) {
+export default function Potiondas({ config = {}, isAlreadySolved = false, onComplete, onRestart, onNextSlide }) {
   // Initialize levels from config or use defaults
   const [levels, setLevels] = useState(() => {
     if (config.levelsText) {
@@ -437,7 +437,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         setShowRestart(true);
       }
     }
-  }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
+  }, [correctOpIdx, levelSolved, gameOver, merging, showRestart, solvedOps, step, noteIndex, lives, levelData, getSamePriorityGroup, computeArrowFromRefs, onComplete, wrongIdx]);
 
   const handleRestart = useCallback(() => {
     setLevelKey(prev => prev + 1);
@@ -489,6 +489,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setShowNewBalloon(false);
     setSeenLevels(new Set());
     setArrowStyle(null);
+    if (onRestart) onRestart();
   };
 
   if (gameOver) {
@@ -590,7 +591,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
               <span
                 key={`op-${opIdx}-${levelKey}`}
                 ref={(el) => opRefs.current[opIdx] = el}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levelData.ops === 'x' && !levelSolved && !merging && opIdx === correctOpIdx ? 'pot-hint-pulse' : ''}`}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levels[level]?.ops === 'x' && !levelSolved && !merging && opIdx === correctOpIdx ? 'pot-hint-pulse' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
                 style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >

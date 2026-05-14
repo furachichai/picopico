@@ -551,6 +551,14 @@ const Player = () => {
                                                     markSlideSolved(index);
                                                     setIsGameActive(false);
                                                 }}
+                                                onRestart={() => {
+                                                    setSolvedSlides(prev => {
+                                                        const next = new Set(prev);
+                                                        next.delete(index);
+                                                        return next;
+                                                    });
+                                                    setIsGameActive(true);
+                                                }}
                                                 onNextSlide={() => nextSlide(true)}
                                             />
                                         </ErrorBoundary>
