@@ -189,6 +189,17 @@ function isExponent(op) {
   return op === '★';
 }
 
+function getOpImage(op) {
+  switch (op) {
+    case '+': return 'potiondas_symbol_addition.png';
+    case '-': return 'potiondas_symbol_minus.png';
+    case '×': 
+    case 'x': return 'potiondas_symbol_multiplication.png';
+    case '÷': return 'potiondas_symbol_division.png';
+    default: return null;
+  }
+}
+
 // ─── Main Component ───────────────────────────────────────────
 export default function Potiondas({ config = {}, isAlreadySolved = false, onComplete, onRestart, onNextSlide }) {
   // Initialize levels from config or use defaults
@@ -598,12 +609,18 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
                 {showNewBalloon && newOpIdx === opIdx && (
                   <div className="pot-new-balloon">NEW</div>
                 )}
-                <span className={`pot-op-circle`}>
+                <span className={`pot-op-circle ${getOpImage(token.value) ? 'pot-op-circle-image' : ''}`}>
                   {isExponent(token.value) ? (
                     <>
                       <span className="pot-exp-star">e</span>
                       <span className="pot-exp-number">{levelData.exponents[opIdx]}</span>
                     </>
+                  ) : getOpImage(token.value) ? (
+                    <img 
+                      src={`/assets/potiondas/${getOpImage(token.value)}`} 
+                      alt={token.value} 
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                    />
                   ) : (
                     token.value === '÷' ? <span style={{ fontFamily: 'Verdana, Arial, sans-serif', fontSize: '1.1em' }}>÷</span> : token.value
                   )}

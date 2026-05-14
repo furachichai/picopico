@@ -143,6 +143,21 @@
   line-height: 1;
 }
 
+/* ─── Image Operator Overrides ──────────────────────── */
+.pot-op-circle.pot-op-circle-image {
+  background: transparent !important;
+  border: none !important;
+  padding-bottom: 0;
+}
+
+.pot-wrong .pot-op-circle.pot-op-circle-image img {
+  filter: hue-rotate(80deg) brightness(1.2) drop-shadow(0 0 4px rgba(239, 68, 68, 0.8));
+}
+
+.pot-flash-correct .pot-op-circle.pot-op-circle-image img {
+  filter: hue-rotate(210deg) brightness(1.2) drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+}
+
 .pot-exp-number {
   position: absolute;
   top: -2px;
