@@ -239,6 +239,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   const [newOpIdx, setNewOpIdx] = useState(null);
   const [seenLevels, setSeenLevels] = useState(new Set());
   const [expressionWidth, setExpressionWidth] = useState(0);
+  const [winFadeOut, setWinFadeOut] = useState(false);
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -271,8 +272,10 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setFadedOps(false);
     setMerging(null);
     setShowRestart(false);
-    setLevelSolved(false);
-    setShowGoodJob(false);
+    if (!isAlreadySolved) {
+      setLevelSolved(false);
+      setShowGoodJob(false);
+    }
     setArrowStyle(null);
 
     if (levelData.newOp && !seenLevels.has(level)) {
@@ -406,12 +409,15 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           
           if (level + 1 >= totalLevels) {
             setTimeout(() => {
-              setShowGoodJob(true);
-              if (onComplete) onComplete();
+              setWinFadeOut(true);
               setTimeout(() => {
-                setShowNextBtn(true);
-              }, 1000); // Wait 1s for the wizard animation to finish
-            }, 1000);
+                setShowGoodJob(true);
+                if (onComplete) onComplete();
+                setTimeout(() => {
+                  setShowNextBtn(true);
+                }, 1500);
+              }, 800);
+            }, 600);
           }
         }
       }, 200);
@@ -501,6 +507,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setShowNewBalloon(false);
     setSeenLevels(new Set());
     setArrowStyle(null);
+    setWinFadeOut(false);
     if (onRestart) onRestart();
   };
 
@@ -520,6 +527,66 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             PLAY AGAIN
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // ─── Completed Screen (when revisiting a solved game or after win) ───
+  if (showGoodJob) {
+    const monsterPrefix = config.monsterType === 'forest' ? 'monster_forest' : 'monster_plant';
+    const isRevisit = isAlreadySolved;
+    return (
+      <div className="pot-cartridge" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Header with Play Again */}
+        <div className="pot-header" style={{ position: 'relative', zIndex: 55 }}>
+          <div className="pot-hearts" style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px' }}>
+            <button 
+              className="pot-btn" 
+              style={{ padding: '6px 12px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
+              onClick={resetGame}
+            >
+              Play Again
+            </button>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i} className={`pot-heart ${i < lives ? '' : 'pot-heart-lost'}`}>
+                  {i < lives ? '❤️' : '🖤'}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* GOOD JOB text - upper center below header */}
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '20px 0 10px',
+          animation: isRevisit ? 'none' : 'potGoodJobFadeIn 0.6s ease-out 0.8s both'
+        }}>
+          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)' }}>
+            GOOD JOB! ✨
+          </div>
+        </div>
+
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
+
+        {/* Wizard */}
+        <img 
+          src="/assets/characters/wizard party blower.png" 
+          alt="Wizard"
+          className={isRevisit ? '' : 'pot-wizard-win'}
+          style={isRevisit ? { position: 'absolute', left: '50%', bottom: 0, width: '50%', transform: 'translateX(-50%)', zIndex: 50, pointerEvents: 'none' } : {}}
+        />
+
+        {/* Next Slide Button */}
+        {showNextBtn && (
+          <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
       </div>
     );
   }
@@ -555,7 +622,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       </div>
 
       {/* Evolution Monster Area */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', minHeight: 0, margin: '10px 0', transition: 'opacity 0.5s', opacity: showGoodJob ? 0 : 1 }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', minHeight: 0, margin: '10px 0', transition: 'opacity 0.6s ease-out', opacity: winFadeOut ? 0 : 1 }}>
         <img 
           src={`/assets/characters/evolution monsters/${config.monsterType === 'forest' ? 'monster_forest' : 'monster_plant'}_0${Math.min(level + 1 + (levelSolved ? 1 : 0), 9)}.png`} 
           alt={`Monster Evolution Stage ${Math.min(level + 1 + (levelSolved ? 1 : 0), 9)}`}
@@ -570,7 +637,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       </div>
 
       {/* Expression Area */}
-      <div className="pot-expression-area" style={{ transition: 'opacity 0.5s', opacity: showGoodJob ? 0 : 1 }}>
+      <div className="pot-expression-area" style={{ transition: 'opacity 0.6s ease-out', opacity: winFadeOut ? 0 : 1 }}>
         <div className="pot-expression" ref={expressionRef}>
           {tokens.map((token, i) => {
             if (token.type === 'emoji') {
@@ -667,26 +734,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         )}
       </div>
 
-      {/* GOOD JOB Overlay */}
-      {showGoodJob && (
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, overflow: 'hidden' }}>
-          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51, marginBottom: '10vh' }}>
-            GOOD JOB! ✨
-          </div>
-          <img 
-            src="/assets/characters/wizard party blower.png" 
-            alt="Wizard"
-            className="pot-wizard-win"
-          />
-          {showNextBtn && (
-            <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-        </div>
-      )}
+
     </div>
   );
 }
