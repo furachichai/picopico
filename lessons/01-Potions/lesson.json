@@ -521,7 +521,7 @@
       "cartridge": {
         "type": "Potiondas",
         "config": {
-          "levelsText": "-/e ne\neeee>\n+/-e\nxe/e\n-+e/ee\n-/ex-e"
+          "levelsText": "-/e ne\ne+e+e\n+/-e\nxe/e\n-+e/ee\n-/ex-e"
         }
       }
     },
@@ -594,11 +594,23 @@
       ],
       "order": 12,
       "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1778775982680",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 13,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {
+          "levelsText": "(x+-)\nx(e-)\n(/+)+(x-)"
+        }
+      }
     }
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-05-14T11:32:23.913Z",
+  "updatedAt": "2026-05-14T16:27:50.493Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",
@@ -756,7 +768,8 @@
         "cartridge": {
           "type": "Potiondas",
           "config": {
-            "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//"
+            "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//",
+            "monsterType": "plant"
           }
         }
       },
@@ -975,7 +988,7 @@
         "cartridge": {
           "type": "Potiondas",
           "config": {
-            "levelsText": "-+ n-\n+->\n-+-\n+-++-+\n+-x+-\n-/+\n+-//\n+/x-/-\n-x-/x-"
+            "levelsText": "-+ n-\n+->\n-+->\n+-++-+\n+-x+-\n-/+\n+-//\n+/x-/-\n-x-/x-"
           }
         }
       },
@@ -1133,7 +1146,7 @@
         "cartridge": {
           "type": "Potiondas",
           "config": {
-            "levelsText": "-/e ne\n+/-e\nxe/e\n-+e/ee\n-/ex-e"
+            "levelsText": "-/e ne\neeee>\n+/-e\nxe/e\n-+e/ee\n-/ex-e"
           }
         }
       },
@@ -1210,7 +1223,7 @@
     ],
     "author": "User",
     "createdAt": "2026-05-12T21:25:39.254Z",
-    "updatedAt": "2026-05-13T21:26:36.734Z",
+    "updatedAt": "2026-05-14T11:32:23.913Z",
     "path": "lessons/01-Potions/lesson.json",
     "textPreset": null,
     "subject": "Math",
@@ -1422,8 +1435,7 @@
                 "options": [
                   "Primero x",
                   "<b>Primero <font face=\"Verdana, Arial, sans-serif\">÷</font></b>",
-                  "Cualquiera (de izquierda a derecha)",
-                  "No importa el orden"
+                  "Cualquiera (si es de izquierda a derecha)"
                 ],
                 "correctIndex": 2,
                 "correctIndices": [
@@ -1486,7 +1498,7 @@
               "type": "text",
               "content": "<font color=\"#ce82ff\">+</font>",
               "x": 50.63815284243228,
-              "y": 80,
+              "y": 78.90625,
               "width": 13.88888888888889,
               "height": 10,
               "rotation": 0,
@@ -1509,7 +1521,7 @@
           "cartridge": {
             "type": "Potiondas",
             "config": {
-              "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+",
+              "levelsText": "+x n+\nx+\n/+\n/+/\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+",
               "monsterType": "forest"
             }
           }
@@ -1563,7 +1575,7 @@
             {
               "id": "el-1778635733563",
               "type": "text",
-              "content": "Primero <font color=\"#ffffff\">÷ </font>o<font color=\"#ffffff\"> x</font><div><font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255);\"><br></span></font><div>Luego <font color=\"#ffffff\">+</font></div></div>",
+              "content": "Primero <font color=\"#ffffff\">÷ </font>ó<font color=\"#ffffff\"> x</font><div><font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255);\"><br></span></font><div>Luego <font color=\"#ffffff\">+</font></div></div>",
               "x": 50.55555555555556,
               "y": 59.0625,
               "width": 71.66666666666667,
@@ -1588,7 +1600,7 @@
           "cartridge": {
             "type": "Potiondas",
             "config": {
-              "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-/+\n+/x-/=\n-x-/x-"
+              "levelsText": "-+ n-\n+->\n-+-\n+-++-+\n+-x+-\n-/+\n+-//\n+/x-/-\n-x-/x-"
             }
           }
         },
@@ -1625,8 +1637,7 @@
                 "options": [
                   "<font face=\"Verdana, Arial, sans-serif\">+ </font>",
                   "<font face=\"Verdana, Arial, sans-serif\">-</font>",
-                  "<font face=\"Verdana, Arial, sans-serif\">Cualquiera</font><div><font face=\"Verdana, Arial, sans-serif\">(de izquierda a derecha)</font></div>",
-                  "No importa el orden"
+                  "<font face=\"Verdana, Arial, sans-serif\">Cualquiera</font><div><font face=\"Verdana, Arial, sans-serif\">(de izquierda a derecha)</font></div>"
                 ],
                 "correctIndex": 2,
                 "correctIndices": [
@@ -1747,7 +1758,7 @@
           "cartridge": {
             "type": "Potiondas",
             "config": {
-              "levelsText": "-/e ne\n+/-e\nxe/e\n-+e/ee\n=/ex=e"
+              "levelsText": "-/e ne\n+/-e\nxe/e\n-+e/ee\n-/ex-e"
             }
           }
         },
@@ -1824,7 +1835,7 @@
       ],
       "author": "User",
       "createdAt": "2026-05-12T21:25:39.254Z",
-      "updatedAt": "2026-05-13T21:14:53.393Z",
+      "updatedAt": "2026-05-13T21:26:36.734Z",
       "path": "lessons/01-Potions/lesson.json",
       "textPreset": null,
       "subject": "Math",
@@ -2123,7 +2134,8 @@
             "cartridge": {
               "type": "Potiondas",
               "config": {
-                "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+                "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+",
+                "monsterType": "forest"
               }
             }
           },
@@ -2295,36 +2307,6 @@
                 }
               },
               {
-                "id": "el-1778704263274-qnhyqw50q",
-                "type": "text",
-                "content": "<font color=\"#ce82ff\">e</font>",
-                "x": 68.05555555555557,
-                "y": 77.65625,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 3.663395475705106,
-                "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
-                  "fontSize": 19
-                }
-              },
-              {
-                "id": "el-1778704297994",
-                "type": "text",
-                "content": "2",
-                "x": 60,
-                "y": 74.0625,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 1,
-                "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
-                  "fontSize": 23
-                }
-              },
-              {
                 "id": "el-1778704263274-e6knv0ffe",
                 "type": "balloon",
                 "content": "<div>Nuevo símbolo.</div><div>¡CUIDADO!</div>",
@@ -2343,6 +2325,38 @@
                     "x": 19,
                     "y": 79
                   }
+                }
+              },
+              {
+                "id": "el-1778704263274-qnhyqw50q",
+                "type": "text",
+                "content": "<font color=\"#ce82ff\">e</font>",
+                "x": 47.69518049090108,
+                "y": 77.5,
+                "width": 13.88888888888889,
+                "height": 10,
+                "rotation": 0,
+                "scale": 3.663395475705106,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "fontSize": 19,
+                  "textAlign": "center"
+                }
+              },
+              {
+                "id": "el-1778704297994",
+                "type": "text",
+                "content": "2",
+                "x": 54.72222222222223,
+                "y": 74.375,
+                "width": 13.88888888888889,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "fontSize": 23,
+                  "textAlign": "center"
                 }
               }
             ],
@@ -2413,12 +2427,12 @@
                 "rotation": 0,
                 "scale": 1,
                 "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
+                  "fontFamily": "Verdana, Arial, sans-serif",
                   "options": [
                     "Analiza toda la serie",
                     "Pulsa e!2",
-                    "Pulsa x o /",
-                    "Pulsa + o -"
+                    "Pulsa x ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+                    "Pulsa + ó -"
                   ],
                   "correctIndex": 0,
                   "correctIndices": [
@@ -2435,7 +2449,7 @@
         ],
         "author": "User",
         "createdAt": "2026-05-12T21:25:39.254Z",
-        "updatedAt": "2026-05-13T21:04:17.703Z",
+        "updatedAt": "2026-05-13T21:14:53.393Z",
         "path": "lessons/01-Potions/lesson.json",
         "textPreset": null,
         "subject": "Math",
@@ -2593,7 +2607,7 @@
               "cartridge": {
                 "type": "Potiondas",
                 "config": {
-                  "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//\n+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+                  "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//"
                 }
               }
             },
@@ -2619,7 +2633,7 @@
                 {
                   "id": "el-1778621596290",
                   "type": "text",
-                  "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+                  "content": "¿Cuál va primero?",
                   "x": 50.69444444444445,
                   "y": 20.312500000000014,
                   "width": 79.16666666666666,
@@ -2645,9 +2659,9 @@
                   "scale": 1,
                   "metadata": {
                     "options": [
-                      "x",
-                      "<b>÷</b>",
-                      "Cualquiera, pero de izquierda a derecha",
+                      "Primero x",
+                      "<b>Primero <font face=\"Verdana, Arial, sans-serif\">÷</font></b>",
+                      "Cualquiera (de izquierda a derecha)",
                       "No importa el orden"
                     ],
                     "correctIndex": 2,
@@ -2662,8 +2676,81 @@
                   }
                 }
               ],
+              "order": 4,
+              "backgroundSettings": {}
+            },
+            {
+              "id": "slide-1778636034579",
+              "background": "#ffffff",
+              "elements": [
+                {
+                  "id": "el-1778686426188",
+                  "type": "image",
+                  "content": "/src/assets/characters/wizard%20crystal%20ball.jpg",
+                  "x": 50.55555555555554,
+                  "y": 67.03125,
+                  "width": 40,
+                  "height": 33.5377358490566,
+                  "rotation": 0,
+                  "scale": 2.7105907383126553,
+                  "metadata": {
+                    "width": 40,
+                    "height": 33.5377358490566,
+                    "locked": false
+                  }
+                },
+                {
+                  "id": "el-1778636057286",
+                  "type": "balloon",
+                  "content": "<div>Nuevo símbolo.</div><div>¡Ahora se COMPLICA!</div>",
+                  "x": 38.33333333333334,
+                  "y": 22.8125,
+                  "width": 76.66666666666667,
+                  "height": 15,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 19,
+                    "tailPos": {
+                      "x": 19,
+                      "y": 79
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778704067171",
+                  "type": "text",
+                  "content": "<font color=\"#ce82ff\">+</font>",
+                  "x": 50.63815284243228,
+                  "y": 80,
+                  "width": 13.88888888888889,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 3.6666686979489573,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "fontSize": 26,
+                    "textAlign": "center"
+                  }
+                }
+              ],
               "order": 5,
               "backgroundSettings": {}
+            },
+            {
+              "id": "slide-1778703957916",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 6,
+              "cartridge": {
+                "type": "Potiondas",
+                "config": {
+                  "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+                }
+              }
             },
             {
               "id": "slide-1778635668005",
@@ -2723,52 +2810,8 @@
                   "scale": 1,
                   "metadata": {
                     "backgroundColor": "#1cb0f6",
-                    "fontFamily": "monospace",
+                    "fontFamily": "Verdana, Arial, sans-serif",
                     "fontSize": 24
-                  }
-                }
-              ],
-              "order": 6,
-              "backgroundSettings": {}
-            },
-            {
-              "id": "slide-1778636034579",
-              "background": "#ffffff",
-              "elements": [
-                {
-                  "id": "el-1778686426188",
-                  "type": "image",
-                  "content": "/src/assets/characters/wizard%20crystal%20ball.jpg",
-                  "x": 50.27777777777778,
-                  "y": 58.75,
-                  "width": 40,
-                  "height": 33.5377358490566,
-                  "rotation": 0,
-                  "scale": 2.7105907383126553,
-                  "metadata": {
-                    "width": 40,
-                    "height": 33.5377358490566
-                  }
-                },
-                {
-                  "id": "el-1778636057286",
-                  "type": "balloon",
-                  "content": "Pon atención.<div>¡Ahora se COMPLICA!</div>",
-                  "x": 62.22222222222222,
-                  "y": 20.3125,
-                  "width": 76.66666666666667,
-                  "height": 15,
-                  "rotation": 0,
-                  "scale": 1,
-                  "metadata": {
-                    "backgroundColor": "#ffffff",
-                    "color": "#000000",
-                    "fontFamily": "monospace",
-                    "fontSize": 19,
-                    "tailPos": {
-                      "x": -20,
-                      "y": 81
-                    }
                   }
                 }
               ],
@@ -2783,7 +2826,7 @@
               "cartridge": {
                 "type": "Potiondas",
                 "config": {
-                  "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-x-+x-"
+                  "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-/+\n+/x-/=\n-x-/x-"
                 }
               }
             },
@@ -2807,37 +2850,20 @@
                   }
                 },
                 {
-                  "id": "el-1778622411989-jh9v1t4ld",
-                  "type": "text",
-                  "content": "¿Cuál va primero:<div> + o - ?</div>",
-                  "x": 49.02777777777777,
-                  "y": 21.093750000000004,
-                  "width": 79.16666666666666,
-                  "height": 10,
-                  "rotation": -8.007086120649006,
-                  "scale": 1,
-                  "metadata": {
-                    "fontFamily": "monospace",
-                    "fontSize": 25,
-                    "backgroundColor": "#58cc02",
-                    "color": "#ffffff"
-                  }
-                },
-                {
                   "id": "el-1778622411989-exfhk6bh3",
                   "type": "quiz",
                   "content": "Quiz",
                   "x": 50,
-                  "y": 84.53125,
+                  "y": 78.75,
                   "width": 20,
                   "height": 10,
                   "rotation": 0,
                   "scale": 1,
                   "metadata": {
                     "options": [
-                      "+ ",
-                      "-",
-                      "Cualquiera, pero de izquierda a derecha",
+                      "<font face=\"Verdana, Arial, sans-serif\">+ </font>",
+                      "<font face=\"Verdana, Arial, sans-serif\">-</font>",
+                      "<font face=\"Verdana, Arial, sans-serif\">Cualquiera</font><div><font face=\"Verdana, Arial, sans-serif\">(de izquierda a derecha)</font></div>",
                       "No importa el orden"
                     ],
                     "correctIndex": 2,
@@ -2848,13 +2874,118 @@
                     "visualMode": false,
                     "fontFamily": "\"Fira Sans\"",
                     "fontWeight": "bold",
-                    "fontSize": 18
+                    "fontSize": 14
+                  }
+                },
+                {
+                  "id": "el-1778622411989-jh9v1t4ld",
+                  "type": "text",
+                  "content": "¿Cuál va primero:<div> + ó - ?</div>",
+                  "x": 49.02777777777777,
+                  "y": 21.093750000000004,
+                  "width": 79.16666666666666,
+                  "height": 10,
+                  "rotation": -8.007086120649006,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "monospace",
+                    "fontSize": 25,
+                    "backgroundColor": "#ce82ff",
+                    "color": "#ffffff"
                   }
                 }
               ],
               "order": 9,
               "backgroundSettings": {},
               "cartridge": null
+            },
+            {
+              "id": "slide-1778704263274",
+              "background": "#ffffff",
+              "elements": [
+                {
+                  "id": "el-1778704263274-oj2rcjq55",
+                  "type": "image",
+                  "content": "/src/assets/characters/wizard%20crystal%20ball.jpg",
+                  "x": 48.6111111111111,
+                  "y": 65.78125,
+                  "width": 40,
+                  "height": 33.5377358490566,
+                  "rotation": 0,
+                  "scale": 2.7105907383126553,
+                  "metadata": {
+                    "width": 40,
+                    "height": 33.5377358490566,
+                    "locked": false
+                  }
+                },
+                {
+                  "id": "el-1778704263274-qnhyqw50q",
+                  "type": "text",
+                  "content": "<font color=\"#ce82ff\">e</font>",
+                  "x": 68.05555555555557,
+                  "y": 77.65625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 3.663395475705106,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "fontSize": 19
+                  }
+                },
+                {
+                  "id": "el-1778704297994",
+                  "type": "text",
+                  "content": "2",
+                  "x": 60,
+                  "y": 74.0625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "fontSize": 23
+                  }
+                },
+                {
+                  "id": "el-1778704263274-e6knv0ffe",
+                  "type": "balloon",
+                  "content": "<div>Nuevo símbolo.</div><div>¡CUIDADO!</div>",
+                  "x": 38.055555555555564,
+                  "y": 24.53125,
+                  "width": 76.66666666666667,
+                  "height": 15,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 19,
+                    "tailPos": {
+                      "x": 19,
+                      "y": 79
+                    }
+                  }
+                }
+              ],
+              "order": 10,
+              "backgroundSettings": {},
+              "cartridge": null
+            },
+            {
+              "id": "slide-1778705953154",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 11,
+              "cartridge": {
+                "type": "Potiondas",
+                "config": {
+                  "levelsText": "-/e ne\n+/-e\nxe/e\n-+e/ee\n=/ex=e"
+                }
+              }
             },
             {
               "id": "slide-1778687264485",
@@ -2909,8 +3040,8 @@
                   "metadata": {
                     "fontFamily": "\"Fira Sans\"",
                     "options": [
-                      "Analiza bien toda la serie",
-                      "Pulsa exponente",
+                      "Analiza toda la serie",
+                      "Pulsa e!2",
                       "Pulsa x o /",
                       "Pulsa + o -"
                     ],
@@ -2923,13 +3054,13 @@
                   }
                 }
               ],
-              "order": 10,
+              "order": 12,
               "backgroundSettings": {}
             }
           ],
           "author": "User",
           "createdAt": "2026-05-12T21:25:39.254Z",
-          "updatedAt": "2026-05-13T18:45:27.155Z",
+          "updatedAt": "2026-05-13T21:04:17.703Z",
           "path": "lessons/01-Potions/lesson.json",
           "textPreset": null,
           "subject": "Math",
@@ -3057,7 +3188,7 @@
                   {
                     "id": "el-1778621356990",
                     "type": "balloon",
-                    "content": "¡Es MUY importante que descubras el ORDEN CORRECTO!",
+                    "content": "¡Descubre el<div>ORDEN CORRECTO</div><div>de la receta!</div>",
                     "x": 41.80555555555556,
                     "y": 55.78125,
                     "width": 66.94444444444444,
@@ -3092,28 +3223,6 @@
                 }
               },
               {
-                "id": "slide-1778642357631",
-                "background": "#E1F5FE",
-                "elements": [
-                  {
-                    "id": "el-1778642424375",
-                    "type": "image",
-                    "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png",
-                    "x": 50,
-                    "y": 50,
-                    "width": 40,
-                    "height": 39.97874601487779,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "width": 40,
-                      "height": 39.97874601487779
-                    }
-                  }
-                ],
-                "order": 4
-              },
-              {
                 "id": "slide-1778621187219",
                 "background": "#ffffff",
                 "elements": [
@@ -3133,11 +3242,28 @@
                     }
                   },
                   {
+                    "id": "el-1778621596290",
+                    "type": "text",
+                    "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+                    "x": 50.69444444444445,
+                    "y": 20.312500000000014,
+                    "width": 79.16666666666666,
+                    "height": 10,
+                    "rotation": -8.007086120649006,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "monospace",
+                      "fontSize": 25,
+                      "backgroundColor": "#58cc02",
+                      "color": "#ffffff"
+                    }
+                  },
+                  {
                     "id": "el-1778622334897",
                     "type": "quiz",
                     "content": "Quiz",
                     "x": 50,
-                    "y": 83.59375,
+                    "y": 81.40625,
                     "width": 20,
                     "height": 10,
                     "rotation": 0,
@@ -3158,23 +3284,6 @@
                       "fontSize": 18,
                       "fontFamily": "\"Atkinson Hyperlegible Next\"",
                       "fontWeight": "bold"
-                    }
-                  },
-                  {
-                    "id": "el-1778621596290",
-                    "type": "text",
-                    "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
-                    "x": 50.69444444444445,
-                    "y": 20.312500000000014,
-                    "width": 79.16666666666666,
-                    "height": 10,
-                    "rotation": -8.007086120649006,
-                    "scale": 1,
-                    "metadata": {
-                      "fontFamily": "monospace",
-                      "fontSize": 25,
-                      "backgroundColor": "#58cc02",
-                      "color": "#ffffff"
                     }
                   }
                 ],
@@ -3202,22 +3311,6 @@
                     }
                   },
                   {
-                    "id": "el-1778635733563",
-                    "type": "text",
-                    "content": "Primero hacemos <font color=\"#ffffff\">x ÷</font><div>y luego <font color=\"#ffffff\">+</font></div>",
-                    "x": 50.55555555555556,
-                    "y": 59.0625,
-                    "width": 71.66666666666667,
-                    "height": 10,
-                    "rotation": -6.166774562527806,
-                    "scale": 1,
-                    "metadata": {
-                      "backgroundColor": "#1cb0f6",
-                      "fontFamily": "monospace",
-                      "fontSize": 28
-                    }
-                  },
-                  {
                     "id": "el-1778635709005",
                     "type": "quiz",
                     "content": "Quiz",
@@ -3241,6 +3334,22 @@
                       "fontSize": 23,
                       "fontFamily": "monospace",
                       "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "id": "el-1778635733563",
+                    "type": "text",
+                    "content": "Primero <font color=\"#ffffff\">÷ </font>o<font color=\"#ffffff\"> x</font><div><font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255);\"><br></span></font><div>Luego <font color=\"#ffffff\">+</font></div></div>",
+                    "x": 50.55555555555556,
+                    "y": 59.0625,
+                    "width": 71.66666666666667,
+                    "height": 10,
+                    "rotation": -6.166774562527806,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#1cb0f6",
+                      "fontFamily": "monospace",
+                      "fontSize": 24
                     }
                   }
                 ],
@@ -3445,7 +3554,7 @@
             ],
             "author": "User",
             "createdAt": "2026-05-12T21:25:39.254Z",
-            "updatedAt": "2026-05-13T16:18:33.119Z",
+            "updatedAt": "2026-05-13T18:45:27.155Z",
             "path": "lessons/01-Potions/lesson.json",
             "textPreset": null,
             "subject": "Math",
@@ -3908,32 +4017,6 @@
                       }
                     },
                     {
-                      "id": "el-1778687334221",
-                      "type": "quiz",
-                      "content": "Quiz",
-                      "x": 50,
-                      "y": 84.6875,
-                      "width": 20,
-                      "height": 10,
-                      "rotation": 0,
-                      "scale": 1,
-                      "metadata": {
-                        "fontFamily": "\"Fira Sans\"",
-                        "options": [
-                          "Analiza bien toda la serie",
-                          "Pulsa exponente",
-                          "Pulsa x o /",
-                          "Pulsa + o -"
-                        ],
-                        "correctIndex": 0,
-                        "correctIndices": [
-                          0
-                        ],
-                        "quizType": "reorder",
-                        "visualMode": false
-                      }
-                    },
-                    {
                       "id": "el-1778687282162",
                       "type": "balloon",
                       "content": "<div>¿Qué orden debes seguir?</div>",
@@ -3953,6 +4036,32 @@
                           "y": 67
                         }
                       }
+                    },
+                    {
+                      "id": "el-1778687334221",
+                      "type": "quiz",
+                      "content": "Quiz",
+                      "x": 50,
+                      "y": 76.71875,
+                      "width": 20,
+                      "height": 10,
+                      "rotation": 0,
+                      "scale": 1,
+                      "metadata": {
+                        "fontFamily": "\"Fira Sans\"",
+                        "options": [
+                          "Analiza bien toda la serie",
+                          "Pulsa exponente",
+                          "Pulsa x o /",
+                          "Pulsa + o -"
+                        ],
+                        "correctIndex": 0,
+                        "correctIndices": [
+                          0
+                        ],
+                        "quizType": "reorder",
+                        "visualMode": false
+                      }
                     }
                   ],
                   "order": 10,
@@ -3961,7 +4070,7 @@
               ],
               "author": "User",
               "createdAt": "2026-05-12T21:25:39.254Z",
-              "updatedAt": "2026-05-13T15:52:13.396Z",
+              "updatedAt": "2026-05-13T16:18:33.119Z",
               "path": "lessons/01-Potions/lesson.json",
               "textPreset": null,
               "subject": "Math",
@@ -4165,23 +4274,6 @@
                         }
                       },
                       {
-                        "id": "el-1778621596290",
-                        "type": "text",
-                        "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
-                        "x": 50.69444444444445,
-                        "y": 20.312500000000014,
-                        "width": 79.16666666666666,
-                        "height": 10,
-                        "rotation": -8.007086120649006,
-                        "scale": 1,
-                        "metadata": {
-                          "fontFamily": "monospace",
-                          "fontSize": 25,
-                          "backgroundColor": "#58cc02",
-                          "color": "#ffffff"
-                        }
-                      },
-                      {
                         "id": "el-1778622334897",
                         "type": "quiz",
                         "content": "Quiz",
@@ -4204,9 +4296,26 @@
                           ],
                           "quizType": "classic",
                           "visualMode": false,
-                          "fontSize": 16,
-                          "fontFamily": "\"Fira Sans\"",
+                          "fontSize": 18,
+                          "fontFamily": "\"Atkinson Hyperlegible Next\"",
                           "fontWeight": "bold"
+                        }
+                      },
+                      {
+                        "id": "el-1778621596290",
+                        "type": "text",
+                        "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+                        "x": 50.69444444444445,
+                        "y": 20.312500000000014,
+                        "width": 79.16666666666666,
+                        "height": 10,
+                        "rotation": -8.007086120649006,
+                        "scale": 1,
+                        "metadata": {
+                          "fontFamily": "monospace",
+                          "fontSize": 25,
+                          "backgroundColor": "#58cc02",
+                          "color": "#ffffff"
                         }
                       }
                     ],
@@ -4355,33 +4464,6 @@
                         }
                       },
                       {
-                        "id": "el-1778622411989-exfhk6bh3",
-                        "type": "quiz",
-                        "content": "Quiz",
-                        "x": 50,
-                        "y": 84.375,
-                        "width": 20,
-                        "height": 10,
-                        "rotation": 0,
-                        "scale": 1,
-                        "metadata": {
-                          "options": [
-                            "+",
-                            "-",
-                            "Cualquiera, pero de izquierda a derecha",
-                            "No importa el orden"
-                          ],
-                          "correctIndex": 2,
-                          "correctIndices": [
-                            0
-                          ],
-                          "quizType": "classic",
-                          "visualMode": false,
-                          "fontFamily": "\"Fira Sans\"",
-                          "fontWeight": "bold"
-                        }
-                      },
-                      {
                         "id": "el-1778622411989-jh9v1t4ld",
                         "type": "text",
                         "content": "¿Cuál va primero:<div> + o - ?</div>",
@@ -4397,16 +4479,114 @@
                           "backgroundColor": "#58cc02",
                           "color": "#ffffff"
                         }
+                      },
+                      {
+                        "id": "el-1778622411989-exfhk6bh3",
+                        "type": "quiz",
+                        "content": "Quiz",
+                        "x": 50,
+                        "y": 84.53125,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "options": [
+                            "+ ",
+                            "-",
+                            "Cualquiera, pero de izquierda a derecha",
+                            "No importa el orden"
+                          ],
+                          "correctIndex": 2,
+                          "correctIndices": [
+                            0
+                          ],
+                          "quizType": "classic",
+                          "visualMode": false,
+                          "fontFamily": "\"Fira Sans\"",
+                          "fontWeight": "bold",
+                          "fontSize": 18
+                        }
                       }
                     ],
                     "order": 9,
                     "backgroundSettings": {},
                     "cartridge": null
+                  },
+                  {
+                    "id": "slide-1778687264485",
+                    "background": "#ffffff",
+                    "elements": [
+                      {
+                        "id": "el-1778687267692",
+                        "type": "image",
+                        "content": "/src/assets/characters/wizard%20sipping.jpg",
+                        "x": 49.72222222222222,
+                        "y": 54.84375,
+                        "width": 40,
+                        "height": 33.5377358490566,
+                        "rotation": 0,
+                        "scale": 2.7299160518417924,
+                        "metadata": {
+                          "width": 40,
+                          "height": 33.5377358490566
+                        }
+                      },
+                      {
+                        "id": "el-1778687334221",
+                        "type": "quiz",
+                        "content": "Quiz",
+                        "x": 50,
+                        "y": 84.6875,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "options": [
+                            "Analiza bien toda la serie",
+                            "Pulsa exponente",
+                            "Pulsa x o /",
+                            "Pulsa + o -"
+                          ],
+                          "correctIndex": 0,
+                          "correctIndices": [
+                            0
+                          ],
+                          "quizType": "reorder",
+                          "visualMode": false
+                        }
+                      },
+                      {
+                        "id": "el-1778687282162",
+                        "type": "balloon",
+                        "content": "<div>¿Qué orden debes seguir?</div>",
+                        "x": 25.694444444444446,
+                        "y": 18.90625,
+                        "width": 43.05555555555556,
+                        "height": 14.6875,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": 39,
+                            "y": 67
+                          }
+                        }
+                      }
+                    ],
+                    "order": 10,
+                    "backgroundSettings": {}
                   }
                 ],
                 "author": "User",
                 "createdAt": "2026-05-12T21:25:39.254Z",
-                "updatedAt": "2026-05-13T15:35:59.268Z",
+                "updatedAt": "2026-05-13T15:52:13.396Z",
                 "path": "lessons/01-Potions/lesson.json",
                 "textPreset": null,
                 "subject": "Math",
@@ -4595,27 +4775,26 @@
                       "background": "#ffffff",
                       "elements": [
                         {
-                          "id": "el-1778621191823",
+                          "id": "el-1778686377401",
                           "type": "image",
-                          "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
-                          "x": 47.49999999999999,
-                          "y": 47.03125,
+                          "content": "/src/assets/characters/wizard%20thinking.jpg",
+                          "x": 49.44444444444444,
+                          "y": 54.84375,
                           "width": 40,
-                          "height": 16.8561872909699,
+                          "height": 33.5377358490566,
                           "rotation": 0,
-                          "scale": 2.7296649637208925,
+                          "scale": 2.008362813417761,
                           "metadata": {
                             "width": 40,
-                            "height": 16.8561872909699,
-                            "locked": true
+                            "height": 33.5377358490566
                           }
                         },
                         {
                           "id": "el-1778621596290",
                           "type": "text",
                           "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
-                          "x": 49.30555555555555,
-                          "y": 20.625000000000004,
+                          "x": 50.69444444444445,
+                          "y": 20.312500000000014,
                           "width": 79.16666666666666,
                           "height": 10,
                           "rotation": -8.007086120649006,
@@ -4632,7 +4811,7 @@
                           "type": "quiz",
                           "content": "Quiz",
                           "x": 50,
-                          "y": 83.125,
+                          "y": 83.59375,
                           "width": 20,
                           "height": 10,
                           "rotation": 0,
@@ -4651,7 +4830,8 @@
                             "quizType": "classic",
                             "visualMode": false,
                             "fontSize": 16,
-                            "fontFamily": "monospace"
+                            "fontFamily": "\"Fira Sans\"",
+                            "fontWeight": "bold"
                           }
                         }
                       ],
@@ -4729,39 +4909,38 @@
                       "background": "#ffffff",
                       "elements": [
                         {
-                          "id": "el-1778636042185",
+                          "id": "el-1778686426188",
                           "type": "image",
-                          "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
-                          "x": 50.55555555555556,
-                          "y": 68.59375,
+                          "content": "/src/assets/characters/wizard%20crystal%20ball.jpg",
+                          "x": 50.27777777777778,
+                          "y": 58.75,
                           "width": 40,
-                          "height": 16.8561872909699,
+                          "height": 33.5377358490566,
                           "rotation": 0,
-                          "scale": 3.777594064980375,
+                          "scale": 2.7105907383126553,
                           "metadata": {
                             "width": 40,
-                            "height": 16.8561872909699,
-                            "locked": true
+                            "height": 33.5377358490566
                           }
                         },
                         {
                           "id": "el-1778636057286",
                           "type": "balloon",
-                          "content": "Prestá atención.<div>¡Ahora se COMPLICA!</div>",
-                          "x": 45,
-                          "y": 25,
+                          "content": "Pon atención.<div>¡Ahora se COMPLICA!</div>",
+                          "x": 62.22222222222222,
+                          "y": 20.3125,
                           "width": 76.66666666666667,
-                          "height": 20,
+                          "height": 15,
                           "rotation": 0,
                           "scale": 1,
                           "metadata": {
                             "backgroundColor": "#ffffff",
                             "color": "#000000",
                             "fontFamily": "monospace",
-                            "fontSize": 22,
+                            "fontSize": 19,
                             "tailPos": {
-                              "x": 42,
-                              "y": 91
+                              "x": -20,
+                              "y": 81
                             }
                           }
                         }
@@ -4786,19 +4965,18 @@
                       "background": "#ffffff",
                       "elements": [
                         {
-                          "id": "el-1778622411989-wwsm0aol9",
+                          "id": "el-1778686505313",
                           "type": "image",
-                          "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
-                          "x": 47.49999999999999,
-                          "y": 47.03125,
+                          "content": "/src/assets/characters/wizard%20thinking.jpg",
+                          "x": 49.72222222222222,
+                          "y": 56.71875,
                           "width": 40,
-                          "height": 16.8561872909699,
+                          "height": 33.5377358490566,
                           "rotation": 0,
-                          "scale": 2.7296649637208925,
+                          "scale": 2.265142351134189,
                           "metadata": {
                             "width": 40,
-                            "height": 16.8561872909699,
-                            "locked": true
+                            "height": 33.5377358490566
                           }
                         },
                         {
@@ -4806,7 +4984,7 @@
                           "type": "quiz",
                           "content": "Quiz",
                           "x": 50,
-                          "y": 80.46875,
+                          "y": 84.375,
                           "width": 20,
                           "height": 10,
                           "rotation": 0,
@@ -4823,15 +5001,17 @@
                               0
                             ],
                             "quizType": "classic",
-                            "visualMode": false
+                            "visualMode": false,
+                            "fontFamily": "\"Fira Sans\"",
+                            "fontWeight": "bold"
                           }
                         },
                         {
                           "id": "el-1778622411989-jh9v1t4ld",
                           "type": "text",
                           "content": "¿Cuál va primero:<div> + o - ?</div>",
-                          "x": 49.30555555555555,
-                          "y": 20.625000000000004,
+                          "x": 49.02777777777777,
+                          "y": 21.093750000000004,
                           "width": 79.16666666666666,
                           "height": 10,
                           "rotation": -8.007086120649006,
@@ -4851,7 +5031,7 @@
                   ],
                   "author": "User",
                   "createdAt": "2026-05-12T21:25:39.254Z",
-                  "updatedAt": "2026-05-13T03:20:45.338Z",
+                  "updatedAt": "2026-05-13T15:35:59.268Z",
                   "path": "lessons/01-Potions/lesson.json",
                   "textPreset": null,
                   "subject": "Math",
@@ -4865,7 +5045,7 @@
                   "description": "",
                   "order": 1,
                   "content": {
-                    "id": "draft-1",
+                    "id": "lessons/01-Potions/lesson.json",
                     "title": "Potions",
                     "slides": [
                       {
@@ -5014,6 +5194,28 @@
                         }
                       },
                       {
+                        "id": "slide-1778642357631",
+                        "background": "#E1F5FE",
+                        "elements": [
+                          {
+                            "id": "el-1778642424375",
+                            "type": "image",
+                            "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png",
+                            "x": 50,
+                            "y": 50,
+                            "width": 40,
+                            "height": 39.97874601487779,
+                            "rotation": 0,
+                            "scale": 1,
+                            "metadata": {
+                              "width": 40,
+                              "height": 39.97874601487779
+                            }
+                          }
+                        ],
+                        "order": 4
+                      },
+                      {
                         "id": "slide-1778621187219",
                         "background": "#ffffff",
                         "elements": [
@@ -5055,7 +5257,7 @@
                             "type": "quiz",
                             "content": "Quiz",
                             "x": 50,
-                            "y": 80.46875,
+                            "y": 83.125,
                             "width": 20,
                             "height": 10,
                             "rotation": 0,
@@ -5063,7 +5265,7 @@
                             "metadata": {
                               "options": [
                                 "x",
-                                "÷",
+                                "<b>÷</b>",
                                 "Cualquiera, pero de izquierda a derecha",
                                 "No importa el orden"
                               ],
@@ -5072,18 +5274,131 @@
                                 0
                               ],
                               "quizType": "classic",
-                              "visualMode": false
+                              "visualMode": false,
+                              "fontSize": 16,
+                              "fontFamily": "monospace"
                             }
                           }
                         ],
-                        "order": 4,
+                        "order": 5,
+                        "backgroundSettings": {}
+                      },
+                      {
+                        "id": "slide-1778635668005",
+                        "background": "#ffffff",
+                        "elements": [
+                          {
+                            "id": "el-1778635674672",
+                            "type": "image",
+                            "content": "/src/assets/characters/wizard%20with%20jacko%20no%20lightning.jpg",
+                            "x": 45.55555555555556,
+                            "y": 48.28125,
+                            "width": 40,
+                            "height": 25.10502049180328,
+                            "rotation": 0,
+                            "scale": 3.171407370130016,
+                            "metadata": {
+                              "width": 40,
+                              "height": 25.10502049180328,
+                              "locked": true
+                            }
+                          },
+                          {
+                            "id": "el-1778635733563",
+                            "type": "text",
+                            "content": "Primero hacemos <font color=\"#ffffff\">x ÷</font><div>y luego <font color=\"#ffffff\">+</font></div>",
+                            "x": 50.55555555555556,
+                            "y": 59.0625,
+                            "width": 71.66666666666667,
+                            "height": 10,
+                            "rotation": -6.166774562527806,
+                            "scale": 1,
+                            "metadata": {
+                              "backgroundColor": "#1cb0f6",
+                              "fontFamily": "monospace",
+                              "fontSize": 28
+                            }
+                          },
+                          {
+                            "id": "el-1778635709005",
+                            "type": "quiz",
+                            "content": "Quiz",
+                            "x": 50,
+                            "y": 87.03125,
+                            "width": 20,
+                            "height": 10,
+                            "rotation": 0,
+                            "scale": 1,
+                            "metadata": {
+                              "options": [
+                                "Verdadero",
+                                "Falso"
+                              ],
+                              "correctIndex": 0,
+                              "correctIndices": [
+                                0
+                              ],
+                              "quizType": "tf",
+                              "visualMode": false,
+                              "fontSize": 23,
+                              "fontFamily": "monospace",
+                              "fontWeight": "bold"
+                            }
+                          }
+                        ],
+                        "order": 6,
+                        "backgroundSettings": {}
+                      },
+                      {
+                        "id": "slide-1778636034579",
+                        "background": "#ffffff",
+                        "elements": [
+                          {
+                            "id": "el-1778636042185",
+                            "type": "image",
+                            "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
+                            "x": 50.55555555555556,
+                            "y": 68.59375,
+                            "width": 40,
+                            "height": 16.8561872909699,
+                            "rotation": 0,
+                            "scale": 3.777594064980375,
+                            "metadata": {
+                              "width": 40,
+                              "height": 16.8561872909699,
+                              "locked": true
+                            }
+                          },
+                          {
+                            "id": "el-1778636057286",
+                            "type": "balloon",
+                            "content": "Prestá atención.<div>¡Ahora se COMPLICA!</div>",
+                            "x": 45,
+                            "y": 25,
+                            "width": 76.66666666666667,
+                            "height": 20,
+                            "rotation": 0,
+                            "scale": 1,
+                            "metadata": {
+                              "backgroundColor": "#ffffff",
+                              "color": "#000000",
+                              "fontFamily": "monospace",
+                              "fontSize": 22,
+                              "tailPos": {
+                                "x": 42,
+                                "y": 91
+                              }
+                            }
+                          }
+                        ],
+                        "order": 7,
                         "backgroundSettings": {}
                       },
                       {
                         "id": "slide-1778622262960",
                         "background": "#E1F5FE",
                         "elements": [],
-                        "order": 7,
+                        "order": 8,
                         "cartridge": {
                           "type": "Potiondas",
                           "config": {
@@ -5154,22 +5469,348 @@
                             }
                           }
                         ],
-                        "order": 8,
+                        "order": 9,
                         "backgroundSettings": {},
                         "cartridge": null
                       }
                     ],
                     "author": "User",
                     "createdAt": "2026-05-12T21:25:39.254Z",
-                    "updatedAt": "2026-05-12T21:47:25.574Z",
-                    "path": "lessons/Math/PEMDAS/01-Magic/01-Potions/lesson.json",
+                    "updatedAt": "2026-05-13T03:20:45.338Z",
+                    "path": "lessons/01-Potions/lesson.json",
                     "textPreset": null,
                     "subject": "Math",
                     "topic": "PEMDAS",
                     "chapterId": "01",
                     "chapterName": "Magic",
                     "lessonId": "01",
-                    "visible": true
+                    "visible": true,
+                    "name": "01-Potions",
+                    "type": "file",
+                    "description": "",
+                    "order": 1,
+                    "content": {
+                      "id": "draft-1",
+                      "title": "Potions",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#ffffff",
+                          "elements": [
+                            {
+                              "id": "el-1778621155899",
+                              "type": "image",
+                              "content": "/src/assets/characters/wizard%20tells%20you%20a%20secret.jpg",
+                              "x": 46.94444444444445,
+                              "y": 51.71875,
+                              "width": 40,
+                              "height": 33.5377358490566,
+                              "rotation": 0,
+                              "scale": 2.9147329960692745,
+                              "metadata": {
+                                "width": 40,
+                                "height": 33.5377358490566,
+                                "locked": true
+                              }
+                            },
+                            {
+                              "id": "el-1778621246924",
+                              "type": "balloon",
+                              "content": "Necesito tu ayuda...",
+                              "x": 56.25000000000001,
+                              "y": 69.21875,
+                              "width": 53.61111111111111,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "monospace",
+                                "fontSize": 21,
+                                "tailPos": {
+                                  "x": -9,
+                                  "y": -85
+                                }
+                              }
+                            }
+                          ],
+                          "order": 0,
+                          "backgroundSettings": {}
+                        },
+                        {
+                          "id": "slide-1778621173532",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1778621177838",
+                              "type": "image",
+                              "content": "/src/assets/characters/wizard%20making%20natural%20potions.jpg",
+                              "x": 50,
+                              "y": 50,
+                              "width": 40,
+                              "height": 33.5377358490566,
+                              "rotation": 0,
+                              "scale": 2.9862066212476392,
+                              "metadata": {
+                                "width": 40,
+                                "height": 33.5377358490566
+                              }
+                            },
+                            {
+                              "id": "el-1778621311270",
+                              "type": "balloon",
+                              "content": "...para crear mis pociones.",
+                              "x": 24.72222222222222,
+                              "y": 61.5625,
+                              "width": 46.666666666666664,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "monospace",
+                                "fontSize": 21,
+                                "tailPos": {
+                                  "x": 48,
+                                  "y": -93
+                                }
+                              }
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1778621288245",
+                          "background": "#ffffff",
+                          "elements": [
+                            {
+                              "id": "el-1778621293082",
+                              "type": "image",
+                              "content": "/src/assets/characters/wizard%20with%20jacko%20no%20lightning.jpg",
+                              "x": 43.055555555555564,
+                              "y": 56.25,
+                              "width": 40,
+                              "height": 25.10502049180328,
+                              "rotation": 0,
+                              "scale": 3.46529665124954,
+                              "metadata": {
+                                "width": 40,
+                                "height": 25.10502049180328,
+                                "locked": true
+                              }
+                            },
+                            {
+                              "id": "el-1778621356990",
+                              "type": "balloon",
+                              "content": "¡Es MUY importante que descubras el ORDEN CORRECTO!",
+                              "x": 41.80555555555556,
+                              "y": 55.78125,
+                              "width": 66.94444444444444,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "monospace",
+                                "fontSize": 18,
+                                "tailPos": {
+                                  "x": 18,
+                                  "y": -89
+                                }
+                              }
+                            }
+                          ],
+                          "order": 2,
+                          "backgroundSettings": {}
+                        },
+                        {
+                          "id": "slide-1778621428728",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 3,
+                          "cartridge": {
+                            "type": "Potiondas",
+                            "config": {
+                              "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//\n+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1778621187219",
+                          "background": "#ffffff",
+                          "elements": [
+                            {
+                              "id": "el-1778621191823",
+                              "type": "image",
+                              "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
+                              "x": 47.49999999999999,
+                              "y": 47.03125,
+                              "width": 40,
+                              "height": 16.8561872909699,
+                              "rotation": 0,
+                              "scale": 2.7296649637208925,
+                              "metadata": {
+                                "width": 40,
+                                "height": 16.8561872909699,
+                                "locked": true
+                              }
+                            },
+                            {
+                              "id": "el-1778621596290",
+                              "type": "text",
+                              "content": "¿Cuál va primero:<div> x o ÷ ?</div>",
+                              "x": 49.30555555555555,
+                              "y": 20.625000000000004,
+                              "width": 79.16666666666666,
+                              "height": 10,
+                              "rotation": -8.007086120649006,
+                              "scale": 1,
+                              "metadata": {
+                                "fontFamily": "monospace",
+                                "fontSize": 25,
+                                "backgroundColor": "#58cc02",
+                                "color": "#ffffff"
+                              }
+                            },
+                            {
+                              "id": "el-1778622334897",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 80.46875,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "x",
+                                  "÷",
+                                  "Cualquiera, pero de izquierda a derecha",
+                                  "No importa el orden"
+                                ],
+                                "correctIndex": 2,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "classic",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 4,
+                          "backgroundSettings": {}
+                        },
+                        {
+                          "id": "slide-1778622262960",
+                          "background": "#E1F5FE",
+                          "elements": [],
+                          "order": 7,
+                          "cartridge": {
+                            "type": "Potiondas",
+                            "config": {
+                              "levelsText": "+- n-\n-+>\n+-++-+\n+-x+-+\n-x-+x-"
+                            }
+                          }
+                        },
+                        {
+                          "id": "slide-1778622411989",
+                          "background": "#ffffff",
+                          "elements": [
+                            {
+                              "id": "el-1778622411989-wwsm0aol9",
+                              "type": "image",
+                              "content": "/src/assets/characters/wizard%20stirs%20cauldron.jpg",
+                              "x": 47.49999999999999,
+                              "y": 47.03125,
+                              "width": 40,
+                              "height": 16.8561872909699,
+                              "rotation": 0,
+                              "scale": 2.7296649637208925,
+                              "metadata": {
+                                "width": 40,
+                                "height": 16.8561872909699,
+                                "locked": true
+                              }
+                            },
+                            {
+                              "id": "el-1778622411989-exfhk6bh3",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 80.46875,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "options": [
+                                  "+",
+                                  "-",
+                                  "Cualquiera, pero de izquierda a derecha",
+                                  "No importa el orden"
+                                ],
+                                "correctIndex": 2,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "classic",
+                                "visualMode": false
+                              }
+                            },
+                            {
+                              "id": "el-1778622411989-jh9v1t4ld",
+                              "type": "text",
+                              "content": "¿Cuál va primero:<div> + o - ?</div>",
+                              "x": 49.30555555555555,
+                              "y": 20.625000000000004,
+                              "width": 79.16666666666666,
+                              "height": 10,
+                              "rotation": -8.007086120649006,
+                              "scale": 1,
+                              "metadata": {
+                                "fontFamily": "monospace",
+                                "fontSize": 25,
+                                "backgroundColor": "#58cc02",
+                                "color": "#ffffff"
+                              }
+                            }
+                          ],
+                          "order": 8,
+                          "backgroundSettings": {},
+                          "cartridge": null
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2026-05-12T21:25:39.254Z",
+                      "updatedAt": "2026-05-12T21:47:25.574Z",
+                      "path": "lessons/Math/PEMDAS/01-Magic/01-Potions/lesson.json",
+                      "textPreset": null,
+                      "subject": "Math",
+                      "topic": "PEMDAS",
+                      "chapterId": "01",
+                      "chapterName": "Magic",
+                      "lessonId": "01",
+                      "visible": true
+                    },
+                    "status": "active",
+                    "icon": {
+                      "type": {},
+                      "key": null,
+                      "props": {
+                        "size": 24
+                      },
+                      "_owner": null,
+                      "_store": {}
+                    },
+                    "progress": {
+                      "lastSlideIndex": 0,
+                      "completed": false,
+                      "lastPlayed": 1778634830453
+                    }
                   },
                   "status": "active",
                   "icon": {
@@ -5184,7 +5825,7 @@
                   "progress": {
                     "lastSlideIndex": 0,
                     "completed": false,
-                    "lastPlayed": 1778634830453
+                    "lastPlayed": 1778640700764
                   }
                 },
                 "status": "active",
@@ -5200,10 +5841,10 @@
                 "progress": {
                   "lastSlideIndex": 0,
                   "completed": false,
-                  "lastPlayed": 1778640700764
+                  "lastPlayed": 1778687076231
                 }
               },
-              "status": "active",
+              "status": "completed",
               "icon": {
                 "type": {},
                 "key": null,
@@ -5214,9 +5855,9 @@
                 "_store": {}
               },
               "progress": {
-                "lastSlideIndex": 0,
-                "completed": false,
-                "lastPlayed": 1778687076231
+                "lastSlideIndex": 10,
+                "completed": true,
+                "lastPlayed": 1778688742474
               }
             },
             "status": "completed",
@@ -5232,10 +5873,10 @@
             "progress": {
               "lastSlideIndex": 10,
               "completed": true,
-              "lastPlayed": 1778688742474
+              "lastPlayed": 1778689165391
             }
           },
-          "status": "completed",
+          "status": "active",
           "icon": {
             "type": {},
             "key": null,
@@ -5246,12 +5887,12 @@
             "_store": {}
           },
           "progress": {
-            "lastSlideIndex": 10,
-            "completed": true,
-            "lastPlayed": 1778689165391
+            "lastSlideIndex": 0,
+            "completed": false,
+            "lastPlayed": 1778700950893
           }
         },
-        "status": "active",
+        "status": "completed",
         "icon": {
           "type": {},
           "key": null,
@@ -5262,12 +5903,12 @@
           "_store": {}
         },
         "progress": {
-          "lastSlideIndex": 0,
-          "completed": false,
-          "lastPlayed": 1778700950893
+          "lastSlideIndex": 12,
+          "completed": true,
+          "lastPlayed": 1778706433505
         }
       },
-      "status": "completed",
+      "status": "active",
       "icon": {
         "type": {},
         "key": null,
@@ -5278,9 +5919,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 12,
-        "completed": true,
-        "lastPlayed": 1778706433505
+        "lastSlideIndex": 11,
+        "completed": false,
+        "lastPlayed": 1778706804213
       }
     },
     "status": "active",
@@ -5294,9 +5935,9 @@
       "_store": {}
     },
     "progress": {
-      "lastSlideIndex": 11,
+      "lastSlideIndex": 0,
       "completed": false,
-      "lastPlayed": 1778706804213
+      "lastPlayed": 1778757748849
     }
   },
   "status": "active",
@@ -5310,8 +5951,8 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 0,
+    "lastSlideIndex": 11,
     "completed": false,
-    "lastPlayed": 1778757748849
+    "lastPlayed": 1778775611957
   }
 }

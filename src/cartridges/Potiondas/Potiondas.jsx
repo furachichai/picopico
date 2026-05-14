@@ -525,27 +525,31 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       
       setWrongIdx(opIdx);
       setFadedOps(true);
-      setFlashCorrectIdx(correctOpIdx);
       setNoteIndex(0);
 
-      // Only show arrow if there are >1 buttons in the correct priority group
-      const group = getSamePriorityGroup(correctOpIdx);
-      if (group.length > 1) {
-        // Delay slightly so DOM refs are up to date
-        requestAnimationFrame(() => computeArrowFromRefs(group));
-      } else {
-        setArrowStyle(null);
-      }
-
-      // Pulse parens if correct op is deeper inside a paren group
+      // Check if the correct op is deeper inside a paren group
       const correctDepth = levelData.parenDepths?.[correctOpIdx] || 0;
       const tappedDepth = levelData.parenDepths?.[opIdx] || 0;
-      if (correctDepth > tappedDepth && levelData.parenGroups) {
+      const isParenHint = correctDepth > tappedDepth && levelData.parenGroups;
+
+      if (isParenHint) {
+        // Only pulse the parens — don't flash the correct op
         const relevantGroups = Object.entries(levelData.parenGroups)
           .filter(([, g]) => g.opIndices.includes(correctOpIdx) && !g.opIndices.includes(opIdx))
           .map(([gid]) => parseInt(gid));
         if (relevantGroups.length > 0) {
           setPulsingParens(relevantGroups);
+        }
+        setFlashCorrectIdx(null);
+        setArrowStyle(null);
+      } else {
+        // Standard wrong feedback — flash correct op and show arrow
+        setFlashCorrectIdx(correctOpIdx);
+        const group = getSamePriorityGroup(correctOpIdx);
+        if (group.length > 1) {
+          requestAnimationFrame(() => computeArrowFromRefs(group));
+        } else {
+          setArrowStyle(null);
         }
       }
 
