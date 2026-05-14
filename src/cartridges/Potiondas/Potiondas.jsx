@@ -27,7 +27,7 @@ function generateEmojis(count, exclude = []) {
 }
 
 // ─── Level Definitions ────────────────────────────────────────
-const DEFAULT_LEVELS = [
+export const DEFAULT_LEVELS = [
   { ops: 'x',              arrow: false },
   { ops: 'xx',             arrow: true  },
   { ops: 'xxx',            arrow: true  },
@@ -662,7 +662,6 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     if (newLives <= 0) {
       setTimeout(() => {
         setGameOver(true);
-        setTimeout(() => { if (onComplete) onComplete(); }, 2000);
       }, 1500);
     } else {
       setShowRestart(true);
@@ -811,26 +810,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           <div style={{ color: 'white', fontWeight: '900', fontSize: '2.5rem', letterSpacing: '4px', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>GAME OVER</div>
         </div>
         <div className="pot-bottom">
-          <button className="pot-btn pot-btn-restart" onClick={() => {
-            setGameOver(false);
-            setLives(5);
-            setLevel(0);
-            setStep(0);
-            setLevelKey(prev => prev + 1);
-            setSeenLevels(new Set());
-            setSolvedOps(new Set());
-            setSolvedExponents(new Set());
-            setWrongIdx(null);
-            setFlashCorrectIdx(null);
-            setFlashExponentIdx(null);
-            setFadedOps(false);
-            setShowRestart(false);
-            setArrowStyle(null);
-            setPulsingParens(null);
-            setLevelSolved(false);
-            setMerging(null);
-            setNoteIndex(0);
-          }}>
+          <button className="pot-btn pot-btn-restart" onClick={resetGame}>
             PLAY AGAIN
           </button>
         </div>

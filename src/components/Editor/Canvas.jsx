@@ -6,6 +6,7 @@ import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
+import { PotiondasThumbnail } from './SlideThumbnail';
 
 /**
  * Canvas Component
@@ -169,11 +170,7 @@ const Canvas = (props) => {
                 <PEMDASCartridge config={currentSlide.cartridge.config} preview={true} />
               )}
               {currentSlide.cartridge.type === 'Potiondas' && (
-                <div className="pot-editor-preview">
-                  <div className="pot-editor-icon">🧪</div>
-                  <div className="pot-editor-title">POTIONDAS</div>
-                  <div className="pot-editor-subtitle">PEMDAS Order Game</div>
-                </div>
+                <PotiondasThumbnail config={currentSlide.cartridge.config} />
               )}
             </div>
           )}
