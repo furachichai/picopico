@@ -8,11 +8,6 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) =
 
     const toggleMenu = () => { if (!disabled) setIsOpen(!isOpen); };
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-        setIsOpen(false);
-    };
-
     const handleSave = () => {
         onSave();
         setIsOpen(false);
@@ -64,23 +59,6 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) =
                         </button>
                     </div>
 
-                    <div className="language-section">
-                        <div className="language-label">{t('editor.language')}</div>
-                        <div className="language-buttons">
-                            <button className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`} onClick={() => changeLanguage('en')}>
-                                <span className="lang-flag">🇬🇧</span>
-                                <span className="lang-text">EN</span>
-                            </button>
-                            <button className={`lang-btn ${i18n.language === 'es' ? 'active' : ''}`} onClick={() => changeLanguage('es')}>
-                                <span className="lang-flag">🇪🇸</span>
-                                <span className="lang-text">ES</span>
-                            </button>
-                            <button className={`lang-btn ${i18n.language === 'fr' ? 'active' : ''}`} onClick={() => changeLanguage('fr')}>
-                                <span className="lang-flag">🇫🇷</span>
-                                <span className="lang-text">FR</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             )}
             {/* Overlay to close menu when clicking outside */}
