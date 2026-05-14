@@ -69,7 +69,7 @@ const Canvas = (props) => {
     if (state.translationMode) {
       const el = currentSlide?.elements.find(e => e.id === id);
       if (!el) return;
-      // Only text/balloon content or quiz options are translatable
+      // Text/balloon content is translatable
       if ((el.type === 'text' || el.type === 'balloon') && 'content' in updates) {
         dispatch({
           type: 'UPDATE_TRANSLATION',
@@ -77,6 +77,17 @@ const Canvas = (props) => {
             slideId: currentSlide.id,
             elementId: id,
             value: { content: updates.content }
+          }
+        });
+      }
+      // Quiz options are translatable (Sticker wraps as { metadata: { ...existing, options } })
+      if (el.type === 'quiz' && updates.metadata?.options) {
+        dispatch({
+          type: 'UPDATE_TRANSLATION',
+          payload: {
+            slideId: currentSlide.id,
+            elementId: id,
+            value: { options: updates.metadata.options }
           }
         });
       }
@@ -195,12 +206,18 @@ const Canvas = (props) => {
         </div>
 
         {currentSlide.elements.map(element => {
-          // In translation mode, show draft content for text/balloon elements
+          // In translation mode, show draft content for text/balloon/quiz elements
           let displayElement = element;
           if (state.translationMode) {
             const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
             if (draft && (element.type === 'text' || element.type === 'balloon')) {
               displayElement = { ...element, content: draft.content };
+            }
+            if (draft && element.type === 'quiz' && draft.options) {
+              displayElement = {
+                ...element,
+                metadata: { ...element.metadata, options: draft.options }
+              };
             }
           }
           return (
