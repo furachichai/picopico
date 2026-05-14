@@ -728,14 +728,23 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         <>
                             <div className="menu-group">
                                 <label>Monster</label>
-                                <select 
-                                    value={element.config?.monsterType || 'plant'}
-                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, monsterType: e.target.value } })}
-                                    style={{ fontSize: '0.8rem' }}
-                                >
-                                    <option value="plant">Plant</option>
-                                    <option value="forest">Forest</option>
-                                </select>
+                                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                    {['plant', 'forest'].map(mType => (
+                                        <button
+                                            key={mType}
+                                            className={`btn-icon ${element.config?.monsterType === mType || (!element.config?.monsterType && mType === 'plant') ? 'active' : ''}`}
+                                            onClick={() => onChange('cartridge', { config: { ...element.config, monsterType: mType } })}
+                                            title={`Select ${mType} monster`}
+                                            style={{ width: '40px', height: '40px', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.1)' }}
+                                        >
+                                            <img 
+                                                src={`/assets/characters/evolution monsters/monster_${mType}_09.png`} 
+                                                alt={mType} 
+                                                style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                             <div className="menu-group">
                                 <button
