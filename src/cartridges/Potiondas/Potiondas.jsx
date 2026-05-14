@@ -542,7 +542,8 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             maxHeight: '180px', // Scaling down to ~29% of its original 622px height
             maxWidth: '100%',
             objectFit: 'contain',
-            filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.5))'
+            filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.5))',
+            transform: 'translateY(15px)'
           }}
         />
       </div>
@@ -642,7 +643,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       {/* GOOD JOB Overlay */}
       {showGoodJob && (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, overflow: 'hidden' }}>
-          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51, marginBottom: '20vh' }}>
+          <div style={{ color: '#fff', fontSize: '3rem', fontWeight: 900, textShadow: '0 4px 15px rgba(0,0,0,0.5)', animation: 'potBtnAppear 0.5s ease-out', zIndex: 51, marginBottom: '10vh' }}>
             GOOD JOB! ✨
           </div>
           <img 
