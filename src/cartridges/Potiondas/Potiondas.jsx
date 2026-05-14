@@ -217,97 +217,86 @@ function parseOpsString(opsStr) {
   let emojiIdx = 0, opIdx = 0, depth = 0, parenId = 0;
   const parenStack = [];
 
-  let i = 0;
-  // Handle leading parens
-  while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
-    if (opsStr[i] === '(') {
-      const gid = parenId++;
-      parenStack.push(gid);
-      parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
-      template.push({ type: 'paren', value: '(', groupId: gid });
-      depth++;
-    } else {
-      const gid = parenStack.pop();
-      if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
-      template.push({ type: 'paren', value: ')', groupId: gid });
-      depth--;
-    }
-    i++;
-  }
-
-  // First emoji
-  template.push({ type: 'emoji', emojiIdx: emojiIdx++ });
-
-  while (i < opsStr.length) {
-    const ch = opsStr[i];
-    if (ch === '(' || ch === ')') {
-      if (ch === '(') {
-        const gid = parenId++;
-        parenStack.push(gid);
-        parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
-        template.push({ type: 'paren', value: '(', groupId: gid });
-        depth++;
-      } else {
-        const gid = parenStack.pop();
-        if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
-        template.push({ type: 'paren', value: ')', groupId: gid });
-        depth--;
-      }
-      i++;
-    } else if (ch === 'e') {
-      // Exponent occupies an emoji slot — it's a value, not an operator
+  // Helper: push a value (emoji or exponent) at current position
+  function pushValue() {
+    if (i < opsStr.length && opsStr[i] === 'e') {
       const expNum = Math.floor(Math.random() * 8) + 2;
       template.push({ type: 'exponent', emojiIdx: emojiIdx, number: expNum });
       emojiIdx++;
       i++;
-      // Handle parens after exponent
-      while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
-        if (opsStr[i] === '(') {
-          const gid = parenId++;
-          parenStack.push(gid);
-          parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
-          template.push({ type: 'paren', value: '(', groupId: gid });
-          depth++;
-        } else {
-          const gid = parenStack.pop();
-          if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
-          template.push({ type: 'paren', value: ')', groupId: gid });
-          depth--;
-        }
-        i++;
-      }
     } else {
-      const sym = charToSymbol(ch);
-      parenDepths[opIdx] = depth;
-      for (const gid of parenStack) {
-        parenGroups[gid].opIndices.push(opIdx);
-      }
-      operators.push(sym);
-      template.push({ type: 'op', opIdx: opIdx });
-      opIdx++;
-      i++;
-      // Parens after operator, before next emoji
-      while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
-        if (opsStr[i] === '(') {
-          const gid = parenId++;
-          parenStack.push(gid);
-          parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
-          template.push({ type: 'paren', value: '(', groupId: gid });
-          depth++;
-        } else {
-          const gid = parenStack.pop();
-          if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
-          template.push({ type: 'paren', value: ')', groupId: gid });
-          depth--;
-        }
-        i++;
-      }
-      // Next emoji
       template.push({ type: 'emoji', emojiIdx: emojiIdx++ });
     }
   }
 
-  // Collect exponent indices for solve order
+  let i = 0;
+
+  // Handle leading open parens
+  while (i < opsStr.length && opsStr[i] === '(') {
+    const gid = parenId++;
+    parenStack.push(gid);
+    parenGroups[gid] = { opIndices: [], openTokenIdx: template.length };
+    template.push({ type: 'paren', value: '(', groupId: gid });
+    depth++;
+    i++;
+  }
+
+  // First value
+  pushValue();
+
+  // Main loop: process operators
+  while (i < opsStr.length) {
+    const ch = opsStr[i];
+    if (ch === '(' || ch === ')' || ch === 'e') {
+      i++; // skip stray chars (shouldn't happen in well-formed input)
+      continue;
+    }
+
+    // Process operator
+    const sym = charToSymbol(ch);
+    parenDepths[opIdx] = depth;
+    for (const gid of parenStack) {
+      parenGroups[gid].opIndices.push(opIdx);
+    }
+    operators.push(sym);
+    template.push({ type: 'op', opIdx: opIdx });
+    opIdx++;
+    i++;
+
+    // Collect parens after operator — separate into closes and opens
+    const closeParens = [];
+    const openParens = [];
+    while (i < opsStr.length && (opsStr[i] === '(' || opsStr[i] === ')')) {
+      if (opsStr[i] === ')') {
+        const gid = parenStack.pop();
+        closeParens.push(gid);
+        depth--;
+      } else {
+        const gid = parenId++;
+        parenStack.push(gid);
+        parenGroups[gid] = { opIndices: [] };
+        openParens.push(gid);
+        depth++;
+      }
+      i++;
+    }
+
+    // Push open parens BEFORE the value
+    for (const gid of openParens) {
+      parenGroups[gid].openTokenIdx = template.length;
+      template.push({ type: 'paren', value: '(', groupId: gid });
+    }
+
+    // Push the value (emoji or exponent)
+    pushValue();
+
+    // Push close parens AFTER the value
+    for (const gid of closeParens) {
+      if (gid !== undefined) parenGroups[gid].closeTokenIdx = template.length;
+      template.push({ type: 'paren', value: ')', groupId: gid });
+    }
+  }
+
   const exponentSlots = template.filter(t => t.type === 'exponent').map(t => ({ type: 'exponent', emojiIdx: t.emojiIdx, number: t.number }));
 
   return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx, exponentSlots };
