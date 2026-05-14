@@ -92,14 +92,15 @@ function getOpPriority(op) {
   return 2;
 }
 
-function getPemdasOrder(operators, parenDepths = {}) {
+function getPemdasOrder(operators, parenDepths = {}, innerGroupOf = {}, parenGroups = {}) {
   const indexed = operators.map((op, idx) => ({
     op, idx,
     priority: getOpPriority(op),
-    depth: parenDepths[idx] || 0
+    depth: parenDepths[idx] || 0,
+    groupPos: innerGroupOf[idx] >= 0 ? (parenGroups[innerGroupOf[idx]]?.openTokenIdx ?? 0) : Infinity
   }));
-  // Sort: deepest parens first, then by priority, then left-to-right
-  indexed.sort((a, b) => b.depth - a.depth || a.priority - b.priority || a.idx - b.idx);
+  // Sort: deepest first, then leftmost group first, then PEMDAS priority, then left-to-right
+  indexed.sort((a, b) => b.depth - a.depth || a.groupPos - b.groupPos || a.priority - b.priority || a.idx - b.idx);
   return indexed.map(o => o.idx);
 }
 
@@ -216,12 +217,15 @@ function parseOpsString(opsStr) {
   const parenGroups = {};
   let emojiIdx = 0, opIdx = 0, depth = 0, parenId = 0;
   const parenStack = [];
+  const innerGroupOf = {}; // opIdx -> innermost groupId (-1 if none)
+  const exponentGroups = {}; // emojiIdx -> list of groupIds containing this exponent
 
   // Helper: push a value (emoji or exponent) at current position
   function pushValue() {
     if (i < opsStr.length && opsStr[i] === 'e') {
       const expNum = Math.floor(Math.random() * 8) + 2;
       template.push({ type: 'exponent', emojiIdx: emojiIdx, number: expNum });
+      exponentGroups[emojiIdx] = [...parenStack];
       emojiIdx++;
       i++;
     } else {
@@ -255,6 +259,7 @@ function parseOpsString(opsStr) {
     // Process operator
     const sym = charToSymbol(ch);
     parenDepths[opIdx] = depth;
+    innerGroupOf[opIdx] = parenStack.length > 0 ? parenStack[parenStack.length - 1] : -1;
     for (const gid of parenStack) {
       parenGroups[gid].opIndices.push(opIdx);
     }
@@ -299,7 +304,7 @@ function parseOpsString(opsStr) {
 
   const exponentSlots = template.filter(t => t.type === 'exponent').map(t => ({ type: 'exponent', emojiIdx: t.emojiIdx, number: t.number }));
 
-  return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx, exponentSlots };
+  return { operators, parenDepths, template, parenGroups, emojiCount: emojiIdx, exponentSlots, innerGroupOf, exponentGroups };
 }
 
 // ─── Main Component ───────────────────────────────────────────
@@ -347,16 +352,14 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   const levelData = useMemo(() => {
     const def = levels[Math.min(level, totalLevels - 1)];
     const parsed = parseOpsString(def.ops);
-    const { operators, parenDepths, template, parenGroups, exponentSlots } = parsed;
+    const { operators, parenDepths, template, parenGroups, exponentSlots, innerGroupOf, exponentGroups } = parsed;
     const emojis = generateEmojis(parsed.emojiCount);
-    // Mark exponent emoji slots as null (they show as exponent tiles until tapped)
     exponentSlots.forEach(exp => { emojis[exp.emojiIdx] = null; });
-    const order = getPemdasOrder(operators, parenDepths);
-    // Build combined solve order: exponents first (left to right), then operators by PEMDAS
+    const order = getPemdasOrder(operators, parenDepths, innerGroupOf, parenGroups);
     const exponentActions = exponentSlots.map(exp => ({ type: 'exponent', emojiIdx: exp.emojiIdx, number: exp.number }));
     const operatorActions = order.map(idx => ({ type: 'op', opIdx: idx }));
     const combinedOrder = [...exponentActions, ...operatorActions];
-    return { operators, emojis, order: combinedOrder, arrow: def.arrow, newOp: def.newOp, parenDepths, template, parenGroups, exponentSlots };
+    return { operators, emojis, order: combinedOrder, arrow: def.arrow, newOp: def.newOp, parenDepths, template, parenGroups, exponentSlots, exponentGroups };
   }, [level, levelKey]);
 
   const [currentEmojis, setCurrentEmojis] = useState(levelData.emojis);
@@ -506,7 +509,11 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     const correctOpIdx = correctAction?.type === 'op' ? correctAction.opIdx : null;
 
     if (correctAction?.type === 'exponent') {
-      // Should have tapped an exponent first — no specific hint
+      // Exponent is inside paren groups — pulse those parens
+      const expGroups = levelData.exponentGroups?.[correctAction.emojiIdx] || [];
+      if (expGroups.length > 0) {
+        setPulsingParens([...expGroups]);
+      }
       setFlashCorrectIdx(null);
       setArrowStyle(null);
     } else if (correctOpIdx !== null) {
