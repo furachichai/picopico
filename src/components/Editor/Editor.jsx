@@ -357,7 +357,7 @@ const Editor = () => {
         dispatch({ type: 'ADD_SLIDE' });
     };
 
-    // Delete key handler for selected elements
+    // Keyboard handler for selected elements and slide navigation
     React.useEffect(() => {
         const handleKeyDown = (e) => {
             // Don't intercept if user is typing in an input, textarea, or contentEditable
@@ -373,11 +373,20 @@ const Editor = () => {
                 e.preventDefault();
                 handleContextMenuDelete(state.selectedElementId);
             }
+
+            // Arrow key slide navigation
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                handlePrevSlide();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                handleNextSlide();
+            }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [state.selectedElementId]);
+    }, [state.selectedElementId, handlePrevSlide, handleNextSlide]);
 
     return (
         <div className="editor-layout" onClick={handleGlobalClick}>

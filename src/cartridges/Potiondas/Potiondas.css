@@ -92,6 +92,11 @@
   font-size: 1.5rem; /* 25% smaller than previous 2.04rem */
 }
 
+/* Extra spacing for exponent tiles to avoid tap overlap */
+.pot-token-exponent {
+  margin: 0 6px;
+}
+
 /* Invisible larger tap area (minimum 48x48px for touch UI standards) */
 .pot-token-op::before {
   content: '';
