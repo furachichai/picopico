@@ -727,6 +727,17 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     {element.cartridgeType === 'Potiondas' && (
                         <>
                             <div className="menu-group">
+                                <label>Monster</label>
+                                <select 
+                                    value={element.config?.monsterType || 'plant'}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, monsterType: e.target.value } })}
+                                    style={{ fontSize: '0.8rem' }}
+                                >
+                                    <option value="plant">Plant</option>
+                                    <option value="forest">Forest</option>
+                                </select>
+                            </div>
+                            <div className="menu-group">
                                 <button
                                     className="btn-secondary"
                                     style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}

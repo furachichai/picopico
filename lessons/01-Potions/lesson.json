@@ -283,7 +283,8 @@
       "cartridge": {
         "type": "Potiondas",
         "config": {
-          "levelsText": "+x n+\nx+\n/+\n/+/\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+          "levelsText": "+x n+\nx+\n/+\n/+/\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+",
+          "monsterType": "forest"
         }
       }
     },
@@ -895,7 +896,8 @@
         "cartridge": {
           "type": "Potiondas",
           "config": {
-            "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+"
+            "levelsText": "+x n+\nx+x\nx+xx+\n+x++x+\nx/x\n+x/+\n/++x/+",
+            "monsterType": "forest"
           }
         }
       },

@@ -536,7 +536,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       {/* Evolution Monster Area */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', minHeight: 0, margin: '10px 0', transition: 'opacity 0.5s', opacity: showGoodJob ? 0 : 1 }}>
         <img 
-          src={`/assets/characters/evolution monsters/monster_plant_0${Math.min(level + 1 + (levelSolved ? 1 : 0), 9)}.png`} 
+          src={`/assets/characters/evolution monsters/${config.monsterType === 'forest' ? 'monster_forest' : 'monster_plant'}_0${Math.min(level + 1 + (levelSolved ? 1 : 0), 9)}.png`} 
           alt={`Monster Evolution Stage ${Math.min(level + 1 + (levelSolved ? 1 : 0), 9)}`}
           style={{ 
             maxHeight: '180px', // Scaling down to ~29% of its original 622px height
