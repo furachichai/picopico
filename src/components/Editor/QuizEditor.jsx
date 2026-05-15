@@ -139,6 +139,10 @@ const QuizEditor = ({ element, onChange }) => {
             updateChatNodes([...chatNodes, { type: 'message', text: 'New message...' }]);
         };
 
+        const addNarratorNode = () => {
+            updateChatNodes([...chatNodes, { type: 'message', text: 'Narrator text...', style: 'narrator' }]);
+        };
+
         const addQuizNode = () => {
             updateChatNodes([...chatNodes, { type: 'quiz', options: ['Option A', 'Option B'], correctIndex: 0 }]);
         };
@@ -193,7 +197,7 @@ const QuizEditor = ({ element, onChange }) => {
         const removeQuizOption = (nodeIndex, optIndex) => {
             const newNodes = [...chatNodes];
             const opts = newNodes[nodeIndex].options;
-            if (opts.length <= 2) return;
+            if (opts.length <= 1) return;
             const newOpts = opts.filter((_, i) => i !== optIndex);
             let newCorrect = newNodes[nodeIndex].correctIndex;
             if (optIndex === newCorrect) newCorrect = 0;
@@ -279,7 +283,7 @@ const QuizEditor = ({ element, onChange }) => {
                                                 className="correct-radio-2"
                                                 title="Mark as correct"
                                             />
-                                            {node.options.length > 2 && (
+                                            {node.options.length > 1 && (
                                                 <button className="chatquiz-opt-delete" onClick={() => removeQuizOption(index, optIdx)}>×</button>
                                             )}
                                         </div>
@@ -295,6 +299,7 @@ const QuizEditor = ({ element, onChange }) => {
 
                 <div className="chatquiz-add-buttons">
                     <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Message</button>
+                    <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
                     <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
                 </div>
             </div>

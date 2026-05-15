@@ -1,0 +1,33 @@
+{
+  "id": "draft-1778869161767",
+  "title": "First Steps",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778869184398",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20shopping%20cart.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 22.5,
+          "rotation": 0,
+          "scale": 2.6001117518166086,
+          "metadata": {
+            "width": 40,
+            "height": 22.5
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-15T18:19:21.767Z",
+  "updatedAt": "2026-05-15T18:20:19.942Z",
+  "path": "lessons/9941-First Steps/lesson.json",
+  "textPreset": null
+}
