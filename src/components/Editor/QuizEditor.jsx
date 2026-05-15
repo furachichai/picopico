@@ -227,7 +227,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
         };
 
         return (
-            <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => { if (onSelect) onSelect(); e.stopPropagation(); }}>
+            <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => { if (onSelect) onSelect(element.id); e.stopPropagation(); }}>
                 <div className="chatquiz-timeline">
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>

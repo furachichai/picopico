@@ -53,7 +53,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
         const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
-            if (!isSelected) onSelect();
+            if (!isSelected) onSelect(element.id);
             return;
         }
 
@@ -345,7 +345,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                             const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
                             if (isLockedQuiz && !isSelected) {
                                 e.stopPropagation();
-                                onSelect();
+                                onSelect(element.id);
                             }
                         }}
                     >
