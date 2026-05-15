@@ -503,11 +503,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             const isLeft = node.side === 'left';
                             return (
                                 <div key={idx} className={`chat-bubble-row ${isLeft ? 'chat-row-tutor' : 'chat-row-reply'}`}>
-                                    {isLeft && <div className="chat-avatar"><img src="/assets/characters/avatar_chef.png" alt="Chef" className="chat-avatar-img" /></div>}
                                     <div className={`chat-sticker-bubble ${isLeft ? 'chat-sticker-left' : 'chat-sticker-right'}`}>
                                         <img src={node.src} alt="sticker" className="chat-sticker-img" />
                                     </div>
-                                    {!isLeft && <div className="chat-avatar chat-avatar-user"><img src="/assets/characters/avatar_pesto.png" alt="Pesto" className="chat-avatar-img" /></div>}
                                 </div>
                             );
                         }

@@ -831,6 +831,7 @@
     gap: 12px;
     padding: 8px 14px 12px;
     -webkit-overflow-scrolling: touch;
+    font-family: 'Nunito Sans', 'Nunito', sans-serif;
 }
 
 /* Spacer pushes initial content to bottom of container */

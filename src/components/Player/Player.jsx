@@ -635,16 +635,21 @@ const Player = () => {
                                             {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" />}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
-                                                    data={language !== 'es' && element.metadata?.translations?.[language]?.options
-                                                        ? {
-                                                            ...element,
-                                                            metadata: {
-                                                                ...element.metadata,
-                                                                options: element.metadata.translations[language].options
-                                                            }
+                                                    data={(() => {
+                                                        let d = element;
+                                                        const trans = element.metadata?.translations?.[language];
+                                                        if (language !== 'es' && trans) {
+                                                            d = {
+                                                                ...element,
+                                                                metadata: {
+                                                                    ...element.metadata,
+                                                                    ...(trans.options && { options: trans.options }),
+                                                                    ...(trans.chatNodes && { chatNodes: trans.chatNodes }),
+                                                                }
+                                                            };
                                                         }
-                                                        : element
-                                                    }
+                                                        return d;
+                                                    })()}
                                                     onNext={() => {
                                                         markSlideSolved(currentSlideIndex);
                                                         nextSlide(true);

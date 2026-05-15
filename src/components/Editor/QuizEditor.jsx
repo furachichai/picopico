@@ -11,7 +11,7 @@ import { parseFraction, formatFraction, FractionComponent } from '../../utils/Fr
  */
 const STICKER_DIR = '/assets/images/stickers/';
 
-const QuizEditor = ({ element, onChange, onSelect }) => {
+const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
     // For 4sq, we use correctIndices. Fallback to correctIndex if missing.
@@ -132,7 +132,12 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
     // CHATQUIZ RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'chatquiz') {
-        const chatNodes = element.metadata?.chatNodes || [];
+        // In translation mode, use translated chatNodes (or clone from original for first-time translation)
+        const originalChatNodes = element.metadata?.chatNodes || [];
+        const translatedChatNodes = translationMode
+            ? (element.metadata?.translations?.[translationMode.lang]?.chatNodes || originalChatNodes.map(n => ({ ...n })))
+            : null;
+        const chatNodes = translationMode ? translatedChatNodes : originalChatNodes;
 
         const updateChatNodes = (newNodes) => {
             onChange(element.id, { chatNodes: newNodes });
@@ -279,6 +284,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                         {node.style === 'narrator' ? '💬' : '📢'}
                                     </button>
                                 )}
+                                {!translationMode && (
                                 <div className="chatquiz-node-actions">
                                     <button className="chatquiz-arrow" onClick={() => moveToTop(index)} disabled={index === 0} title="Move to top">⏫</button>
                                     <button className="chatquiz-arrow" onClick={() => moveNode(index, -1)} disabled={index === 0} title="Move up">▲</button>
@@ -288,6 +294,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                         <button className="chatquiz-delete" onClick={() => deleteNode(index)}>×</button>
                                     )}
                                 </div>
+                                )}
                             </div>
 
                             {(node.type === 'message' || node.type === 'reply') && (
@@ -373,6 +380,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     ))}
                 </div>
 
+                {!translationMode && (
                 <div className="chatquiz-add-buttons">
                     <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Chef</button>
                     <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Pesto</button>
@@ -380,6 +388,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
                     <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
                 </div>
+                )}
 
                 {showStickerPicker && ReactDOM.createPortal(
                     <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>

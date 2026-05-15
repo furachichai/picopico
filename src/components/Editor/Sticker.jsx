@@ -353,6 +353,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                             element={element}
                             onChange={(id, updates) => onChange(id, { metadata: { ...element.metadata, ...updates } })}
                             onSelect={onSelect}
+                            translationMode={translationMode}
                         />
                     </div>
                 )}

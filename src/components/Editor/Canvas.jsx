@@ -91,6 +91,17 @@ const Canvas = (props) => {
           }
         });
       }
+      // ChatQuiz chatNodes are translatable
+      if (el.type === 'quiz' && updates.metadata?.chatNodes) {
+        dispatch({
+          type: 'UPDATE_TRANSLATION',
+          payload: {
+            slideId: currentSlide.id,
+            elementId: id,
+            value: { chatNodes: updates.metadata.chatNodes }
+          }
+        });
+      }
       // Block all other changes (position, scale, rotation, etc.)
       return;
     }

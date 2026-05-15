@@ -641,13 +641,19 @@ const editorReducer = (state, action) => {
                         };
                     }
                     if (el.type === 'quiz') {
+                        const translationValue = {};
+                        if (draftEntry.options) translationValue.options = draftEntry.options;
+                        if (draftEntry.chatNodes) translationValue.chatNodes = draftEntry.chatNodes;
                         return {
                             ...el,
                             metadata: {
                                 ...el.metadata,
                                 translations: {
                                     ...el.metadata?.translations,
-                                    [lang]: { options: draftEntry.options }
+                                    [lang]: {
+                                        ...el.metadata?.translations?.[lang],
+                                        ...translationValue
+                                    }
                                 }
                             }
                         };
