@@ -888,6 +888,14 @@
     font-size: 0.9rem;
     flex-shrink: 0;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    overflow: hidden;
+}
+
+.chat-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .chat-avatar-user {

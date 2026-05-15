@@ -268,8 +268,8 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>
                             <div className="chatquiz-node-header">
-                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : node.type === 'reply' ? '🧑' : node.type === 'sticker' ? '🌟' : '🧩'}</span>
-                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : node.type === 'reply' ? 'Reply' : node.type === 'sticker' ? 'Sticker' : 'Quiz'}</span>
+                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '👨‍🍳') : node.type === 'reply' ? '🤖' : node.type === 'sticker' ? '🌟' : '🧩'}</span>
+                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Chef') : node.type === 'reply' ? 'Pesto' : node.type === 'sticker' ? 'Sticker' : 'Quiz'}</span>
                                 {node.type === 'message' && (
                                     <button
                                         className={`chatquiz-style-toggle ${node.style === 'narrator' ? 'active' : ''}`}
@@ -321,9 +321,9 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                     <button
                                         className={`chatquiz-side-toggle ${node.side === 'right' ? 'side-right' : 'side-left'}`}
                                         onClick={() => toggleStickerSide(index)}
-                                        title={node.side === 'left' ? 'Sent by 🤖 (left)' : 'Sent by 🧑 (right)'}
+                                        title={node.side === 'left' ? 'Sent by Chef (left)' : 'Sent by Pesto (right)'}
                                     >
-                                        {node.side === 'left' ? '🤖 Left' : '🧑 Right'}
+                                        {node.side === 'left' ? '👨‍🍳 Chef' : '🤖 Pesto'}
                                     </button>
                                 </div>
                             )}
@@ -374,8 +374,8 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                 </div>
 
                 <div className="chatquiz-add-buttons">
-                    <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Message</button>
-                    <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Reply</button>
+                    <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Chef</button>
+                    <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Pesto</button>
                     <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
                     <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
                     <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
@@ -390,11 +390,11 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                     <button
                                         className={`chatquiz-side-btn ${stickerPickerSide === 'left' ? 'active' : ''}`}
                                         onClick={() => setStickerPickerSide('left')}
-                                    >🤖 Left</button>
+                                    >👨‍🍳 Chef</button>
                                     <button
                                         className={`chatquiz-side-btn ${stickerPickerSide === 'right' ? 'active' : ''}`}
                                         onClick={() => setStickerPickerSide('right')}
-                                    >🧑 Right</button>
+                                    >🤖 Pesto</button>
                                 </div>
                             </div>
                             <div className="chatquiz-sticker-grid">
