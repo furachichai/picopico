@@ -164,9 +164,7 @@ const AppContent = () => {
 
 // PIN Gate Component
 const PinGate = ({ children }) => {
-  const [isUnlocked, setIsUnlocked] = React.useState(() => {
-    return localStorage.getItem('pico_app_unlocked') === 'true';
-  });
+  const [isUnlocked, setIsUnlocked] = React.useState(false);
   const [pinValue, setPinValue] = React.useState('');
   const [error, setError] = React.useState('');
   const [selectedLang, setSelectedLang] = React.useState(() => {
