@@ -414,9 +414,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const handleChatDone = () => {
             if (chatFinished) return;
             setChatFinished(true);
-            playSound('correct');
-            if (onBanner) onBanner('correct', 'Topo!');
-            setTimeout(() => { if (onNext) onNext(); }, 2000);
+            // Go directly to next slide — no banner
+            if (onNext) onNext();
         };
 
         const handleChatOptionClick = (nodeIdx, optIdx) => {

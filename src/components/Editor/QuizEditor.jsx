@@ -164,6 +164,22 @@ const QuizEditor = ({ element, onChange }) => {
             updateChatNodes(newNodes);
         };
 
+        const moveToTop = (index) => {
+            if (index === 0) return;
+            const newNodes = [...chatNodes];
+            const [node] = newNodes.splice(index, 1);
+            newNodes.unshift(node);
+            updateChatNodes(newNodes);
+        };
+
+        const moveToBottom = (index) => {
+            if (index === chatNodes.length - 1) return;
+            const newNodes = [...chatNodes];
+            const [node] = newNodes.splice(index, 1);
+            newNodes.push(node);
+            updateChatNodes(newNodes);
+        };
+
         const updateNodeText = (index, text) => {
             const newNodes = [...chatNodes];
             newNodes[index] = { ...newNodes[index], text };
@@ -228,8 +244,10 @@ const QuizEditor = ({ element, onChange }) => {
                                     </button>
                                 )}
                                 <div className="chatquiz-node-actions">
-                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, -1)} disabled={index === 0}>▲</button>
-                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, 1)} disabled={index === chatNodes.length - 1}>▼</button>
+                                    <button className="chatquiz-arrow" onClick={() => moveToTop(index)} disabled={index === 0} title="Move to top">⏫</button>
+                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, -1)} disabled={index === 0} title="Move up">▲</button>
+                                    <button className="chatquiz-arrow" onClick={() => moveNode(index, 1)} disabled={index === chatNodes.length - 1} title="Move down">▼</button>
+                                    <button className="chatquiz-arrow" onClick={() => moveToBottom(index)} disabled={index === chatNodes.length - 1} title="Move to bottom">⏬</button>
                                     {chatNodes.length > 1 && (
                                         <button className="chatquiz-delete" onClick={() => deleteNode(index)}>×</button>
                                     )}
@@ -241,6 +259,11 @@ const QuizEditor = ({ element, onChange }) => {
                                     contentEditable
                                     suppressContentEditableWarning
                                     className="chatquiz-message-input"
+                                    style={{
+                                        ...(element.metadata?.fontFamily && { fontFamily: element.metadata.fontFamily }),
+                                        ...(element.metadata?.fontSize && { fontSize: `${element.metadata.fontSize}px` }),
+                                        ...(element.metadata?.color && { color: element.metadata.color }),
+                                    }}
                                     onInput={(e) => updateNodeText(index, e.currentTarget.textContent)}
                                     onPaste={(e) => {
                                         e.preventDefault();
