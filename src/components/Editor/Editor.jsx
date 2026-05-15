@@ -32,6 +32,15 @@ const Editor = () => {
     });
 
     const isTranslating = !!state.translationMode;
+    const pendingSaveRef = useRef(false);
+
+    // Auto-save to disk after SAVE_TRANSLATION commits translations to state
+    useEffect(() => {
+        if (pendingSaveRef.current && !state.translationMode && state.lesson.path) {
+            pendingSaveRef.current = false;
+            performSave();
+        }
+    }, [state.translationMode]);
 
     const TRANSLATE_LANGUAGES = [
         { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -711,6 +720,8 @@ const Editor = () => {
                 onConfirm={() => {
                     dispatch({ type: 'SAVE_TRANSLATION' });
                     setShowTranslateConfirm(false);
+                    // Flag for auto-save on next render (after state updates)
+                    pendingSaveRef.current = true;
                 }}
                 onCancel={() => {
                     dispatch({ type: 'DISCARD_TRANSLATION' });
