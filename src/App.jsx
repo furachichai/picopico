@@ -176,7 +176,6 @@ const PinGate = ({ children }) => {
   const languages = [
     { code: 'es', flag: '🇪🇸' },
     { code: 'en', flag: '🇺🇸' },
-    { code: 'pt', flag: '🇧🇷' },
   ];
 
   const handleSubmit = (e) => {

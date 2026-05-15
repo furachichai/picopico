@@ -1028,7 +1028,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             </div>
           )}
           {/* Level hint arrow — inside expression, positioned under tokens */}
-          {levelData.arrow && step === 0 && !wrongIdx && !levelSolved && expressionWidth && (
+          {levelData.arrow && step === 0 && !wrongIdx && !levelSolved && solvedOps.size === 0 && solvedExponents.size === 0 && expressionWidth && (
             <div className="pot-arrow-hint" style={{
               left: expressionWidth.left,
               width: expressionWidth.arrowWidth,
