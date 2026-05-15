@@ -155,7 +155,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
         };
 
         const [showStickerPicker, setShowStickerPicker] = useState(false);
-        const [stickerPickerSide, setStickerPickerSide] = useState('left');
+        const [stickerPickerSide, setStickerPickerSide] = useState('right');
         const [availableStickers, setAvailableStickers] = useState([]);
 
         const openStickerPicker = () => {
@@ -172,7 +172,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                 'cat_helpme_sticker.png',
                 'pesto_rock_sticker.png',
             ]);
-            setStickerPickerSide('left');
+            setStickerPickerSide('right');
             setShowStickerPicker(true);
         };
 
@@ -300,15 +300,15 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                         ...(element.metadata?.fontSize && { fontSize: `${element.metadata.fontSize}px` }),
                                         ...(element.metadata?.color && { color: element.metadata.color }),
                                     }}
-                                    onInput={(e) => updateNodeText(index, e.currentTarget.textContent)}
+                                    onInput={(e) => updateNodeText(index, e.currentTarget.innerHTML)}
                                     onPaste={(e) => {
                                         e.preventDefault();
                                         const text = e.clipboardData.getData('text/plain');
                                         document.execCommand('insertText', false, text);
                                     }}
                                     ref={(el) => {
-                                        if (el && el.textContent !== node.text && document.activeElement !== el) {
-                                            el.textContent = node.text;
+                                        if (el && el.innerHTML !== node.text && document.activeElement !== el) {
+                                            el.innerHTML = node.text || '';
                                         }
                                     }}
                                     data-placeholder={node.type === 'reply' ? 'Type a reply...' : 'Type a message...'}

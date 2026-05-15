@@ -647,6 +647,7 @@ const Player = () => {
                                                     }
                                                     onNext={() => {
                                                         markSlideSolved(currentSlideIndex);
+                                                        nextSlide(true);
                                                     }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
