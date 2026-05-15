@@ -674,6 +674,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     const isValid = validActions.some(a => a.type === 'exponent' && a.emojiIdx === emojiIdx);
     if (isValid) {
       // Correct! Transform exponent into an emoji
+      setArrowStyle(null);
       playNote(noteIndex);
       setNoteIndex(prev => prev + 1);
       setSolvedExponents(prev => new Set(prev).add(emojiIdx));
@@ -694,6 +695,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
 
     if (isCorrect) {
       // ─── Correct! ───
+      setArrowStyle(null);
       playNote(noteIndex);
       setNoteIndex(prev => prev + 1);
 

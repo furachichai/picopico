@@ -391,7 +391,9 @@ const Player = () => {
                                 const codes = SUPPORTED_LANGUAGES.map(l => l.code);
                                 const idx = codes.indexOf(language);
                                 const nextLang = codes[(idx + 1) % codes.length];
-                                setLanguage(nextLang);
+                                // Save to localStorage and reload to ensure all content re-renders
+                                localStorage.setItem('pico_language', nextLang);
+                                window.location.reload();
                             }}
                             title={`Language: ${SUPPORTED_LANGUAGES.find(l => l.code === language)?.label}`}
                             style={{
