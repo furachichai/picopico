@@ -1019,6 +1019,28 @@
     border-bottom: 8px solid transparent;
 }
 
+/* ---------- Sticker Bubble ---------- */
+.chat-sticker-bubble {
+    padding: 4px;
+    border-radius: 12px;
+    max-width: 55%;
+}
+
+.chat-sticker-left {
+    margin-left: 0;
+}
+
+.chat-sticker-right {
+    margin-right: 0;
+}
+
+.chat-sticker-img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    display: block;
+}
+
 /* Option tail (right side, pointing to user avatar) */
 .chat-bubble-option::after {
     content: '';

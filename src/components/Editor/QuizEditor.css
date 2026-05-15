@@ -662,3 +662,156 @@ input:checked+.toggle-slider:before {
 .chatquiz-add-btn:hover {
     background: #E2E8F0;
 }
+
+/* ============================================================
+   STICKER NODE EDITOR
+   ============================================================ */
+.chatquiz-node-sticker {
+    background: #FFF0F5;
+    border-left: 4px solid #F472B6;
+}
+
+.chatquiz-sticker-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.chatquiz-sticker-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+.chatquiz-side-toggle {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid #CBD5E1;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    text-transform: none;
+}
+
+.chatquiz-side-toggle.side-left {
+    color: #6366F1;
+    border-color: #C7D2FE;
+}
+
+.chatquiz-side-toggle.side-right {
+    color: #14B8A6;
+    border-color: #99F6E4;
+}
+
+.chatquiz-add-sticker {
+    background: #FFF0F5;
+    border-color: #F9A8D4;
+    color: #BE185D;
+}
+
+.chatquiz-add-sticker:hover {
+    background: #FCE7F3;
+}
+
+/* ============================================================
+   STICKER PICKER MODAL
+   ============================================================ */
+.chatquiz-sticker-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.chatquiz-sticker-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    width: 100%;
+    max-width: 320px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+.chatquiz-sticker-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1E293B;
+}
+
+.chatquiz-sticker-side-picker {
+    display: flex;
+    gap: 4px;
+}
+
+.chatquiz-side-btn {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 2px solid #E2E8F0;
+    cursor: pointer;
+    background: white;
+    color: #64748B;
+    transition: all 0.15s;
+    text-transform: none;
+}
+
+.chatquiz-side-btn.active {
+    border-color: #6366F1;
+    background: #EEF2FF;
+    color: #4F46E5;
+}
+
+.chatquiz-sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.chatquiz-sticker-item {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8FAFC;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.chatquiz-sticker-item:hover {
+    border-color: #6366F1;
+    background: #EEF2FF;
+    transform: scale(1.05);
+}
+
+.chatquiz-sticker-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

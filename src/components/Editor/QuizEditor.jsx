@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './QuizEditor.css';
 import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 
@@ -8,6 +8,8 @@ import { parseFraction, formatFraction, FractionComponent } from '../../utils/Fr
  * Allows the user to edit the options and correct answer for a quiz sticker.
  * Rendered directly inside the Sticker component when in edit mode.
  */
+const STICKER_DIR = '/assets/images/stickers/';
+
 const QuizEditor = ({ element, onChange, onSelect }) => {
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
@@ -151,6 +153,39 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
             updateChatNodes([...chatNodes, { type: 'quiz', options: ['', ''], correctIndex: 0 }]);
         };
 
+        const [showStickerPicker, setShowStickerPicker] = useState(false);
+        const [stickerPickerSide, setStickerPickerSide] = useState('left');
+        const [availableStickers, setAvailableStickers] = useState([]);
+
+        const openStickerPicker = () => {
+            // Dynamically load sticker list
+            fetch('/assets/images/stickers/')
+                .then(() => {
+                    // We can't list a directory from fetch, so we use a hardcoded list
+                    // that we maintain. Users add files to the folder and update this.
+                })
+                .catch(() => {});
+            // Use import.meta.glob or a known list - simplest: scan at build or hardcode
+            // For now, we'll use a manifest approach: load a known list
+            setAvailableStickers([
+                'cat_helpme_sticker.png',
+                'pesto_rock_sticker.png',
+            ]);
+            setStickerPickerSide('left');
+            setShowStickerPicker(true);
+        };
+
+        const selectSticker = (filename) => {
+            updateChatNodes([...chatNodes, { type: 'sticker', src: `${STICKER_DIR}${filename}`, side: stickerPickerSide }]);
+            setShowStickerPicker(false);
+        };
+
+        const toggleStickerSide = (index) => {
+            const newNodes = [...chatNodes];
+            newNodes[index] = { ...newNodes[index], side: newNodes[index].side === 'left' ? 'right' : 'left' };
+            updateChatNodes(newNodes);
+        };
+
         const deleteNode = (index) => {
             if (chatNodes.length <= 1) return;
             updateChatNodes(chatNodes.filter((_, i) => i !== index));
@@ -232,8 +267,8 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>
                             <div className="chatquiz-node-header">
-                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : node.type === 'reply' ? '🧑' : '🧩'}</span>
-                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : node.type === 'reply' ? 'Reply' : 'Quiz'}</span>
+                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : node.type === 'reply' ? '🧑' : node.type === 'sticker' ? '🌟' : '🧩'}</span>
+                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : node.type === 'reply' ? 'Reply' : node.type === 'sticker' ? 'Sticker' : 'Quiz'}</span>
                                 {node.type === 'message' && (
                                     <button
                                         className={`chatquiz-style-toggle ${node.style === 'narrator' ? 'active' : ''}`}
@@ -277,6 +312,19 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                     }}
                                     data-placeholder={node.type === 'reply' ? 'Type a reply...' : 'Type a message...'}
                                 />
+                            )}
+
+                            {node.type === 'sticker' && (
+                                <div className="chatquiz-sticker-preview">
+                                    <img src={node.src} alt="sticker" className="chatquiz-sticker-thumb" />
+                                    <button
+                                        className={`chatquiz-side-toggle ${node.side === 'right' ? 'side-right' : 'side-left'}`}
+                                        onClick={() => toggleStickerSide(index)}
+                                        title={node.side === 'left' ? 'Sent by 🤖 (left)' : 'Sent by 🧑 (right)'}
+                                    >
+                                        {node.side === 'left' ? '🤖 Left' : '🧑 Right'}
+                                    </button>
+                                </div>
                             )}
 
                             {node.type === 'quiz' && (
@@ -329,7 +377,35 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Reply</button>
                     <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
                     <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
+                    <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
                 </div>
+
+                {showStickerPicker && (
+                    <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>
+                        <div className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <div className="chatquiz-sticker-modal-header">
+                                <span>Pick a Sticker</span>
+                                <div className="chatquiz-sticker-side-picker">
+                                    <button
+                                        className={`chatquiz-side-btn ${stickerPickerSide === 'left' ? 'active' : ''}`}
+                                        onClick={() => setStickerPickerSide('left')}
+                                    >🤖 Left</button>
+                                    <button
+                                        className={`chatquiz-side-btn ${stickerPickerSide === 'right' ? 'active' : ''}`}
+                                        onClick={() => setStickerPickerSide('right')}
+                                    >🧑 Right</button>
+                                </div>
+                            </div>
+                            <div className="chatquiz-sticker-grid">
+                                {availableStickers.map((filename) => (
+                                    <div key={filename} className="chatquiz-sticker-item" onClick={() => selectSticker(filename)}>
+                                        <img src={`${STICKER_DIR}${filename}`} alt={filename} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

@@ -109,7 +109,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         // Clear any previous timer
         if (chatAdvanceTimer.current) clearTimeout(chatAdvanceTimer.current);
 
-        if (currentNode.type === 'message' || currentNode.type === 'reply') {
+        if (currentNode.type === 'message' || currentNode.type === 'reply' || currentNode.type === 'sticker') {
             // Auto-advance after pause
             setChatOptionsVisible(false);
             const isLast = currentNodeIndex >= chatNodes.length - 1;
@@ -405,7 +405,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const lastNodeResolved = (() => {
             const last = chatNodes[chatNodes.length - 1];
             if (!last) return true;
-            if (last.type === 'message' || last.type === 'reply') return true;
+            if (last.type === 'message' || last.type === 'reply' || last.type === 'sticker') return true;
             if (last.type === 'quiz') return chatSolvedSet.has(chatNodes.length - 1);
             return true;
         })();
@@ -496,6 +496,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         }}
                                         dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                     <div className="chat-avatar chat-avatar-user">🧑</div>
+                                </div>
+                            );
+                        }
+                        if (node.type === 'sticker') {
+                            const isLeft = node.side === 'left';
+                            return (
+                                <div key={idx} className={`chat-bubble-row ${isLeft ? 'chat-row-tutor' : 'chat-row-reply'}`}>
+                                    {isLeft && <div className="chat-avatar">🤖</div>}
+                                    <div className={`chat-sticker-bubble ${isLeft ? 'chat-sticker-left' : 'chat-sticker-right'}`}>
+                                        <img src={node.src} alt="sticker" className="chat-sticker-img" />
+                                    </div>
+                                    {!isLeft && <div className="chat-avatar chat-avatar-user">🧑</div>}
                                 </div>
                             );
                         }
