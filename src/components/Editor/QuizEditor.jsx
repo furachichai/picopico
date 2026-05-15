@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import './QuizEditor.css';
 import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 
@@ -380,7 +381,7 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                     <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
                 </div>
 
-                {showStickerPicker && (
+                {showStickerPicker && ReactDOM.createPortal(
                     <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>
                         <div className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
                             <div className="chatquiz-sticker-modal-header">
@@ -404,7 +405,8 @@ const QuizEditor = ({ element, onChange, onSelect }) => {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </div>
         );
