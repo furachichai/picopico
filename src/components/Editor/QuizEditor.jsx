@@ -8,7 +8,7 @@ import { parseFraction, formatFraction, FractionComponent } from '../../utils/Fr
  * Allows the user to edit the options and correct answer for a quiz sticker.
  * Rendered directly inside the Sticker component when in edit mode.
  */
-const QuizEditor = ({ element, onChange }) => {
+const QuizEditor = ({ element, onChange, onSelect }) => {
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
     // For 4sq, we use correctIndices. Fallback to correctIndex if missing.
@@ -227,7 +227,7 @@ const QuizEditor = ({ element, onChange }) => {
         };
 
         return (
-            <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="quiz-editor-2 chatquiz-mode" onMouseDown={(e) => { if (onSelect) onSelect(); e.stopPropagation(); }}>
                 <div className="chatquiz-timeline">
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>

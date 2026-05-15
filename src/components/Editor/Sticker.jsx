@@ -352,6 +352,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         <QuizEditor
                             element={element}
                             onChange={(id, updates) => onChange(id, { metadata: { ...element.metadata, ...updates } })}
+                            onSelect={onSelect}
                         />
                     </div>
                 )}
