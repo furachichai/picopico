@@ -50,16 +50,16 @@
             "chatNodes": [
               {
                 "type": "reply",
-                "text": "<font face=\"Nunito\">Hola Che. Necesito ayuda...</font>"
+                "text": "<font face=\"Nunito\">Hola Chef. Necesito ayuda...</font>"
               },
               {
                 "type": "reply",
-                "text": "2+3×2"
+                "text": "2+3×2 = ?"
               },
               {
                 "type": "sticker",
                 "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                "side": "left"
+                "side": "right"
               },
               {
                 "type": "message",
@@ -67,19 +67,19 @@
               },
               {
                 "type": "message",
-                "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                "text": "<font face=\"Noto Sans\">Primero, recuerda que + y - funcionan como...</font>"
               },
               {
                 "type": "quiz",
                 "options": [
-                  "Separators",
-                  "Terminators"
+                  "Separadores",
+                  "Tenedores"
                 ],
                 "correctIndex": 0
               },
               {
                 "type": "message",
-                "text": "So this is how the operation looks separated:"
+                "text": "Así queda la operación separada:"
               },
               {
                 "type": "message",
@@ -88,19 +88,19 @@
               },
               {
                 "type": "message",
-                "text": "Now, what's the order of operations?"
+                "text": "¿Cuál es el orden de las operaciones?"
               },
               {
                 "type": "quiz",
                 "options": [
-                  "+ and - FIRST!",
-                  "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
+                  "Primero + y -",
+                  "Primero × and ÷"
                 ],
                 "correctIndex": 1
               },
               {
                 "type": "message",
-                "text": "Let's do × and ÷ then."
+                "text": "Ok, hagamos × y ÷"
               },
               {
                 "type": "message",
@@ -114,19 +114,19 @@
               },
               {
                 "type": "message",
-                "text": "What we do next?"
+                "text": "<span style=\"font-weight: normal;\">¿Qué hacemos ahora?</span>"
               },
               {
                 "type": "quiz",
                 "options": [
-                  "Division and Multiplication",
-                  "Subtraction and Addition"
+                  "División and Multiplicación",
+                  "Sustracción y Adición"
                 ],
                 "correctIndex": 1
               },
               {
                 "type": "message",
-                "text": "Go for it!"
+                "text": "<span style=\"font-weight: normal;\">¡Vamos!</span>"
               },
               {
                 "type": "message",
@@ -144,7 +144,7 @@
               },
               {
                 "type": "message",
-                "text": "You got it!"
+                "text": "¡Lo lograste!"
               },
               {
                 "type": "sticker",
@@ -153,7 +153,7 @@
               },
               {
                 "type": "reply",
-                "text": "Thanks!"
+                "text": "¡Muchas gracias!"
               }
             ],
             "translations": {
@@ -175,11 +175,11 @@
                   },
                   {
                     "type": "message",
-                    "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
+                    "text": "<font face=\"Nunito Sans\">Of course!</font>"
                   },
                   {
                     "type": "message",
-                    "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                    "text": "<font face=\"Noto Sans\">First, remember that + and - work as...</font>"
                   },
                   {
                     "type": "quiz",
@@ -191,7 +191,7 @@
                   },
                   {
                     "type": "message",
-                    "text": "So this is how the operation looks separated:"
+                    "text": "This is how the operation looks separated:"
                   },
                   {
                     "type": "message",
@@ -287,7 +287,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-15T20:01:47.464Z",
+  "updatedAt": "2026-05-15T20:16:25.342Z",
   "path": "lessons/9941-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",
@@ -455,7 +455,116 @@
               ],
               "translations": {
                 "en": {
-                  "options": []
+                  "options": [],
+                  "chatNodes": [
+                    {
+                      "type": "reply",
+                      "text": "<font face=\"Nunito\">Hey Chef! I need your help.</font>"
+                    },
+                    {
+                      "type": "reply",
+                      "text": "2+3×2"
+                    },
+                    {
+                      "type": "sticker",
+                      "src": "/assets/images/stickers/cat_helpme_sticker.png",
+                      "side": "left"
+                    },
+                    {
+                      "type": "message",
+                      "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
+                    },
+                    {
+                      "type": "message",
+                      "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                    },
+                    {
+                      "type": "quiz",
+                      "options": [
+                        "Separators",
+                        "Terminators"
+                      ],
+                      "correctIndex": 0
+                    },
+                    {
+                      "type": "message",
+                      "text": "So this is how the operation looks separated:"
+                    },
+                    {
+                      "type": "message",
+                      "text": "2    +   3×2",
+                      "style": "narrator"
+                    },
+                    {
+                      "type": "message",
+                      "text": "Now, what's the order of operations?"
+                    },
+                    {
+                      "type": "quiz",
+                      "options": [
+                        "+ and - FIRST!",
+                        "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
+                      ],
+                      "correctIndex": 1
+                    },
+                    {
+                      "type": "message",
+                      "text": "Let's do × and ÷ then."
+                    },
+                    {
+                      "type": "message",
+                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; <font color=\"#1cb0f6\">3×2</font>",
+                      "style": "narrator"
+                    },
+                    {
+                      "type": "message",
+                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; &nbsp;<font color=\"#1cb0f6\">6</font>",
+                      "style": "narrator"
+                    },
+                    {
+                      "type": "message",
+                      "text": "What we do next?"
+                    },
+                    {
+                      "type": "quiz",
+                      "options": [
+                        "Division and Multiplication",
+                        "Subtraction and Addition"
+                      ],
+                      "correctIndex": 1
+                    },
+                    {
+                      "type": "message",
+                      "text": "Go for it!"
+                    },
+                    {
+                      "type": "message",
+                      "text": "2   +   6",
+                      "style": "narrator"
+                    },
+                    {
+                      "type": "quiz",
+                      "options": [
+                        "4",
+                        "8",
+                        "12"
+                      ],
+                      "correctIndex": 1
+                    },
+                    {
+                      "type": "message",
+                      "text": "You got it!"
+                    },
+                    {
+                      "type": "sticker",
+                      "src": "/assets/images/stickers/pesto_rock_sticker.png",
+                      "side": "right"
+                    },
+                    {
+                      "type": "reply",
+                      "text": "Thanks!"
+                    }
+                  ]
                 }
               }
             }
@@ -475,7 +584,7 @@
     ],
     "author": "User",
     "createdAt": "2026-05-15T18:19:21.767Z",
-    "updatedAt": "2026-05-15T19:55:01.331Z",
+    "updatedAt": "2026-05-15T20:01:47.464Z",
     "path": "lessons/9941-First Steps/lesson.json",
     "textPreset": null,
     "name": "9941-First Steps",
@@ -535,7 +644,7 @@
                 "chatNodes": [
                   {
                     "type": "reply",
-                    "text": "Hey Chef, I'm stuck with this operation..."
+                    "text": "<font face=\"Nunito\">Hola Che. Necesito ayuda...</font>"
                   },
                   {
                     "type": "reply",
@@ -544,15 +653,15 @@
                   {
                     "type": "sticker",
                     "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                    "side": "right"
+                    "side": "left"
                   },
                   {
                     "type": "message",
-                    "text": "Sure, let's take a look at it."
+                    "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
                   },
                   {
                     "type": "message",
-                    "text": "First, it's always useful to remember that + and - work as..."
+                    "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
                   },
                   {
                     "type": "quiz",
@@ -640,7 +749,12 @@
                     "type": "reply",
                     "text": "Thanks!"
                   }
-                ]
+                ],
+                "translations": {
+                  "en": {
+                    "options": []
+                  }
+                }
               }
             }
           ],
@@ -658,7 +772,7 @@
       ],
       "author": "User",
       "createdAt": "2026-05-15T18:19:21.767Z",
-      "updatedAt": "2026-05-15T19:41:16.614Z",
+      "updatedAt": "2026-05-15T19:55:01.331Z",
       "path": "lessons/9941-First Steps/lesson.json",
       "textPreset": null,
       "name": "9941-First Steps",
@@ -772,12 +886,12 @@
                     },
                     {
                       "type": "message",
-                      "text": "2    +   3×2",
+                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; <font color=\"#1cb0f6\">3×2</font>",
                       "style": "narrator"
                     },
                     {
                       "type": "message",
-                      "text": "2    +    6",
+                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; &nbsp;<font color=\"#1cb0f6\">6</font>",
                       "style": "narrator"
                     },
                     {
@@ -841,7 +955,7 @@
         ],
         "author": "User",
         "createdAt": "2026-05-15T18:19:21.767Z",
-        "updatedAt": "2026-05-15T19:32:33.112Z",
+        "updatedAt": "2026-05-15T19:41:16.614Z",
         "path": "lessons/9941-First Steps/lesson.json",
         "textPreset": null,
         "name": "9941-First Steps",
@@ -906,6 +1020,11 @@
                       {
                         "type": "reply",
                         "text": "2+3×2"
+                      },
+                      {
+                        "type": "sticker",
+                        "src": "/assets/images/stickers/cat_helpme_sticker.png",
+                        "side": "right"
                       },
                       {
                         "type": "message",
@@ -993,6 +1112,11 @@
                         "text": "You got it!"
                       },
                       {
+                        "type": "sticker",
+                        "src": "/assets/images/stickers/pesto_rock_sticker.png",
+                        "side": "right"
+                      },
+                      {
                         "type": "reply",
                         "text": "Thanks!"
                       }
@@ -1014,7 +1138,7 @@
           ],
           "author": "User",
           "createdAt": "2026-05-15T18:19:21.767Z",
-          "updatedAt": "2026-05-15T19:06:06.002Z",
+          "updatedAt": "2026-05-15T19:32:33.112Z",
           "path": "lessons/9941-First Steps/lesson.json",
           "textPreset": null,
           "name": "9941-First Steps",
@@ -1050,7 +1174,7 @@
               },
               {
                 "id": "slide-1778869678677",
-                "background": "#E1F5FE",
+                "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
                 "elements": [
                   {
                     "id": "el-1778869681360",
@@ -1078,7 +1202,7 @@
                         },
                         {
                           "type": "reply",
-                          "text": "2+3x2"
+                          "text": "2+3×2"
                         },
                         {
                           "type": "message",
@@ -1102,7 +1226,7 @@
                         },
                         {
                           "type": "message",
-                          "text": "2    +   3x2",
+                          "text": "2    +   3×2",
                           "style": "narrator"
                         },
                         {
@@ -1113,17 +1237,17 @@
                           "type": "quiz",
                           "options": [
                             "+ and - FIRST!",
-                            "x and / FIRST!"
+                            "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
                           ],
                           "correctIndex": 1
                         },
                         {
                           "type": "message",
-                          "text": "Let's do x and / first then."
+                          "text": "Let's do × and ÷ then."
                         },
                         {
                           "type": "message",
-                          "text": "2    +   3x2",
+                          "text": "2    +   3×2",
                           "style": "narrator"
                         },
                         {
@@ -1173,7 +1297,10 @@
                     }
                   }
                 ],
-                "order": 1
+                "order": 1,
+                "backgroundSettings": {
+                  "opacity": 0.31
+                }
               },
               {
                 "id": "slide-1778870712150",
@@ -1184,7 +1311,7 @@
             ],
             "author": "User",
             "createdAt": "2026-05-15T18:19:21.767Z",
-            "updatedAt": "2026-05-15T18:50:24.482Z",
+            "updatedAt": "2026-05-15T19:06:06.002Z",
             "path": "lessons/9941-First Steps/lesson.json",
             "textPreset": null,
             "name": "9941-First Steps",
@@ -1243,11 +1370,12 @@
                         "visualMode": false,
                         "chatNodes": [
                           {
-                            "type": "quiz",
-                            "options": [
-                              "Hey Chef, I'm stuck with this operation...<div>2+3x5</div>"
-                            ],
-                            "correctIndex": 0
+                            "type": "reply",
+                            "text": "Hey Chef, I'm stuck with this operation..."
+                          },
+                          {
+                            "type": "reply",
+                            "text": "2+3x2"
                           },
                           {
                             "type": "message",
@@ -1255,7 +1383,7 @@
                           },
                           {
                             "type": "message",
-                            "text": "First, it's always useful to remember than + and - work as..."
+                            "text": "First, it's always useful to remember that + and - work as..."
                           },
                           {
                             "type": "quiz",
@@ -1314,7 +1442,7 @@
                           },
                           {
                             "type": "message",
-                            "text": "There's only one addition, so let's try that:"
+                            "text": "Go for it!"
                           },
                           {
                             "type": "message",
@@ -1335,22 +1463,25 @@
                             "text": "You got it!"
                           },
                           {
-                            "type": "quiz",
-                            "options": [
-                              "Thanks!"
-                            ],
-                            "correctIndex": 0
+                            "type": "reply",
+                            "text": "Thanks!"
                           }
                         ]
                       }
                     }
                   ],
                   "order": 1
+                },
+                {
+                  "id": "slide-1778870712150",
+                  "background": "#E1F5FE",
+                  "elements": [],
+                  "order": 2
                 }
               ],
               "author": "User",
               "createdAt": "2026-05-15T18:19:21.767Z",
-              "updatedAt": "2026-05-15T18:35:31.829Z",
+              "updatedAt": "2026-05-15T18:50:24.482Z",
               "path": "lessons/9941-First Steps/lesson.json",
               "textPreset": null,
               "name": "9941-First Steps",
@@ -1359,7 +1490,7 @@
               "visible": true,
               "order": 9941,
               "content": {
-                "id": "draft-1778869161767",
+                "id": "lessons/9941-First Steps/lesson.json",
                 "title": "First Steps",
                 "slides": [
                   {
@@ -1383,13 +1514,195 @@
                       }
                     ],
                     "order": 0
+                  },
+                  {
+                    "id": "slide-1778869678677",
+                    "background": "#E1F5FE",
+                    "elements": [
+                      {
+                        "id": "el-1778869681360",
+                        "type": "quiz",
+                        "content": "Quiz",
+                        "x": 50,
+                        "y": 75,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "options": [],
+                          "correctIndex": 0,
+                          "correctIndices": [
+                            0
+                          ],
+                          "quizType": "chatquiz",
+                          "visualMode": false,
+                          "chatNodes": [
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "Hey Chef, I'm stuck with this operation...<div>2+3x5</div>"
+                              ],
+                              "correctIndex": 0
+                            },
+                            {
+                              "type": "message",
+                              "text": "Sure, let's take a look at it."
+                            },
+                            {
+                              "type": "message",
+                              "text": "First, it's always useful to remember than + and - work as..."
+                            },
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "Separators",
+                                "Terminators"
+                              ],
+                              "correctIndex": 0
+                            },
+                            {
+                              "type": "message",
+                              "text": "So this is how the operation looks separated:"
+                            },
+                            {
+                              "type": "message",
+                              "text": "2    +   3x2",
+                              "style": "narrator"
+                            },
+                            {
+                              "type": "message",
+                              "text": "Now, what's the order of operations?"
+                            },
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "+ and - FIRST!",
+                                "x and / FIRST!"
+                              ],
+                              "correctIndex": 1
+                            },
+                            {
+                              "type": "message",
+                              "text": "Let's do x and / first then."
+                            },
+                            {
+                              "type": "message",
+                              "text": "2    +   3x2",
+                              "style": "narrator"
+                            },
+                            {
+                              "type": "message",
+                              "text": "2    +    6",
+                              "style": "narrator"
+                            },
+                            {
+                              "type": "message",
+                              "text": "What we do next?"
+                            },
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "Division and Multiplication",
+                                "Subtraction and Addition"
+                              ],
+                              "correctIndex": 1
+                            },
+                            {
+                              "type": "message",
+                              "text": "There's only one addition, so let's try that:"
+                            },
+                            {
+                              "type": "message",
+                              "text": "2   +   6",
+                              "style": "narrator"
+                            },
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "4",
+                                "8",
+                                "12"
+                              ],
+                              "correctIndex": 1
+                            },
+                            {
+                              "type": "message",
+                              "text": "You got it!"
+                            },
+                            {
+                              "type": "quiz",
+                              "options": [
+                                "Thanks!"
+                              ],
+                              "correctIndex": 0
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "order": 1
                   }
                 ],
                 "author": "User",
                 "createdAt": "2026-05-15T18:19:21.767Z",
-                "updatedAt": "2026-05-15T18:20:19.942Z",
+                "updatedAt": "2026-05-15T18:35:31.829Z",
                 "path": "lessons/9941-First Steps/lesson.json",
-                "textPreset": null
+                "textPreset": null,
+                "name": "9941-First Steps",
+                "type": "file",
+                "description": "",
+                "visible": true,
+                "order": 9941,
+                "content": {
+                  "id": "draft-1778869161767",
+                  "title": "First Steps",
+                  "slides": [
+                    {
+                      "id": "slide-1",
+                      "background": "#E1F5FE",
+                      "elements": [
+                        {
+                          "id": "el-1778869184398",
+                          "type": "image",
+                          "content": "/src/assets/characters/chef%20shopping%20cart.png",
+                          "x": 50,
+                          "y": 50,
+                          "width": 40,
+                          "height": 22.5,
+                          "rotation": 0,
+                          "scale": 2.6001117518166086,
+                          "metadata": {
+                            "width": 40,
+                            "height": 22.5
+                          }
+                        }
+                      ],
+                      "order": 0
+                    }
+                  ],
+                  "author": "User",
+                  "createdAt": "2026-05-15T18:19:21.767Z",
+                  "updatedAt": "2026-05-15T18:20:19.942Z",
+                  "path": "lessons/9941-First Steps/lesson.json",
+                  "textPreset": null
+                },
+                "status": "completed",
+                "icon": {
+                  "type": {},
+                  "key": null,
+                  "props": {
+                    "size": 24
+                  },
+                  "_owner": null,
+                  "_store": {}
+                },
+                "progress": {
+                  "lastSlideIndex": 1,
+                  "completed": true,
+                  "lastPlayed": 1778869523349
+                }
               },
               "status": "completed",
               "icon": {
@@ -1404,10 +1717,10 @@
               "progress": {
                 "lastSlideIndex": 1,
                 "completed": true,
-                "lastPlayed": 1778869523349
+                "lastPlayed": 1778870537774
               }
             },
-            "status": "completed",
+            "status": "active",
             "icon": {
               "type": {},
               "key": null,
@@ -1419,8 +1732,8 @@
             },
             "progress": {
               "lastSlideIndex": 1,
-              "completed": true,
-              "lastPlayed": 1778870537774
+              "completed": false,
+              "lastPlayed": 1778871478065
             }
           },
           "status": "active",
@@ -1436,7 +1749,7 @@
           "progress": {
             "lastSlideIndex": 1,
             "completed": false,
-            "lastPlayed": 1778871478065
+            "lastPlayed": 1778873259443
           }
         },
         "status": "active",
@@ -1450,9 +1763,9 @@
           "_store": {}
         },
         "progress": {
-          "lastSlideIndex": 1,
+          "lastSlideIndex": 0,
           "completed": false,
-          "lastPlayed": 1778873259443
+          "lastPlayed": 1778873662196
         }
       },
       "status": "active",
@@ -1466,9 +1779,15 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 0,
+        "lastSlideIndex": 1,
         "completed": false,
-        "lastPlayed": 1778873662196
+        "lastPlayed": 1778874409080
+      },
+      "translations": {
+        "en": {
+          "title": "First Steps",
+          "description": ""
+        }
       }
     },
     "status": "active",
@@ -1484,7 +1803,7 @@
     "progress": {
       "lastSlideIndex": 1,
       "completed": false,
-      "lastPlayed": 1778874409080
+      "lastPlayed": 1778874814643
     },
     "translations": {
       "en": {
@@ -1504,9 +1823,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 1,
+    "lastSlideIndex": 0,
     "completed": false,
-    "lastPlayed": 1778874814643
+    "lastPlayed": 1778875283246
   },
   "translations": {
     "en": {
