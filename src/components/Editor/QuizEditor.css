@@ -488,6 +488,11 @@ input:checked+.toggle-slider:before {
     border-left: 4px solid #ffc800;
 }
 
+.chatquiz-node-reply {
+    background: #E6FFFA;
+    border-left: 4px solid #14B8A6;
+}
+
 .chatquiz-node-header {
     display: flex;
     align-items: center;

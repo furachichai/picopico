@@ -1,5 +1,5 @@
 {
-  "id": "draft-1778869161767",
+  "id": "lessons/9941-First Steps/lesson.json",
   "title": "First Steps",
   "slides": [
     {
@@ -23,11 +23,193 @@
         }
       ],
       "order": 0
+    },
+    {
+      "id": "slide-1778869678677",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778869681360",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "chatquiz",
+            "visualMode": false,
+            "chatNodes": [
+              {
+                "type": "quiz",
+                "options": [
+                  "Hey Chef, I'm stuck with this operation...<div>2+3x5</div>"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "Sure, let's take a look at it."
+              },
+              {
+                "type": "message",
+                "text": "First, it's always useful to remember than + and - work as..."
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Separators",
+                  "Terminators"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "So this is how the operation looks separated:"
+              },
+              {
+                "type": "message",
+                "text": "2    +   3x2",
+                "style": "narrator"
+              },
+              {
+                "type": "message",
+                "text": "Now, what's the order of operations?"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "+ and - FIRST!",
+                  "x and / FIRST!"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "type": "message",
+                "text": "Let's do x and / first then."
+              },
+              {
+                "type": "message",
+                "text": "2    +   3x2",
+                "style": "narrator"
+              },
+              {
+                "type": "message",
+                "text": "2    +    6",
+                "style": "narrator"
+              },
+              {
+                "type": "message",
+                "text": "What we do next?"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Division and Multiplication",
+                  "Subtraction and Addition"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "type": "message",
+                "text": "There's only one addition, so let's try that:"
+              },
+              {
+                "type": "message",
+                "text": "2   +   6",
+                "style": "narrator"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "4",
+                  "8",
+                  "12"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "type": "message",
+                "text": "You got it!"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "Thanks!"
+                ],
+                "correctIndex": 0
+              }
+            ]
+          }
+        }
+      ],
+      "order": 1
     }
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-15T18:20:19.942Z",
+  "updatedAt": "2026-05-15T18:35:31.829Z",
   "path": "lessons/9941-First Steps/lesson.json",
-  "textPreset": null
+  "textPreset": null,
+  "name": "9941-First Steps",
+  "type": "file",
+  "description": "",
+  "visible": true,
+  "order": 9941,
+  "content": {
+    "id": "draft-1778869161767",
+    "title": "First Steps",
+    "slides": [
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1778869184398",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20shopping%20cart.png",
+            "x": 50,
+            "y": 50,
+            "width": 40,
+            "height": 22.5,
+            "rotation": 0,
+            "scale": 2.6001117518166086,
+            "metadata": {
+              "width": 40,
+              "height": 22.5
+            }
+          }
+        ],
+        "order": 0
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-05-15T18:19:21.767Z",
+    "updatedAt": "2026-05-15T18:20:19.942Z",
+    "path": "lessons/9941-First Steps/lesson.json",
+    "textPreset": null
+  },
+  "status": "completed",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 1,
+    "completed": true,
+    "lastPlayed": 1778869523349
+  }
 }

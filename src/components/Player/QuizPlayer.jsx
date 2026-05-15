@@ -109,7 +109,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         // Clear any previous timer
         if (chatAdvanceTimer.current) clearTimeout(chatAdvanceTimer.current);
 
-        if (currentNode.type === 'message') {
+        if (currentNode.type === 'message' || currentNode.type === 'reply') {
             // Auto-advance after pause
             setChatOptionsVisible(false);
             const isLast = currentNodeIndex >= chatNodes.length - 1;
@@ -405,7 +405,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const lastNodeResolved = (() => {
             const last = chatNodes[chatNodes.length - 1];
             if (!last) return true;
-            if (last.type === 'message') return true;
+            if (last.type === 'message' || last.type === 'reply') return true;
             if (last.type === 'quiz') return chatSolvedSet.has(chatNodes.length - 1);
             return true;
         })();
@@ -464,14 +464,39 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             if (node.style === 'narrator') {
                                 return (
                                     <div key={idx} className="chat-narrator-row">
-                                        <div className="chat-narrator-text" dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
+                                        <div className="chat-narrator-text"
+                                            style={{
+                                                ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
+                                                ...(data.metadata?.fontSize && { fontSize: `${data.metadata.fontSize}px` }),
+                                                ...(data.metadata?.color && { color: data.metadata.color }),
+                                            }}
+                                            dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                     </div>
                                 );
                             }
                             return (
                                 <div key={idx} className="chat-bubble-row chat-row-tutor">
                                     <div className="chat-avatar">🤖</div>
-                                    <div className="chat-bubble chat-bubble-tutor" dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
+                                    <div className="chat-bubble chat-bubble-tutor"
+                                        style={{
+                                            ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
+                                            ...(data.metadata?.fontSize && { fontSize: `${data.metadata.fontSize}px` }),
+                                            ...(data.metadata?.color && { color: data.metadata.color }),
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
+                                </div>
+                            );
+                        }
+                        if (node.type === 'reply') {
+                            return (
+                                <div key={idx} className="chat-bubble-row chat-row-reply">
+                                    <div className="chat-bubble chat-bubble-reply"
+                                        style={{
+                                            ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
+                                            ...(data.metadata?.fontSize && { fontSize: `${data.metadata.fontSize}px` }),
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
+                                    <div className="chat-avatar chat-avatar-user">🧑</div>
                                 </div>
                             );
                         }

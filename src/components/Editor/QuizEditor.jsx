@@ -136,15 +136,19 @@ const QuizEditor = ({ element, onChange }) => {
         };
 
         const addMessageNode = () => {
-            updateChatNodes([...chatNodes, { type: 'message', text: 'New message...' }]);
+            updateChatNodes([...chatNodes, { type: 'message', text: '' }]);
         };
 
         const addNarratorNode = () => {
-            updateChatNodes([...chatNodes, { type: 'message', text: 'Narrator text...', style: 'narrator' }]);
+            updateChatNodes([...chatNodes, { type: 'message', text: '', style: 'narrator' }]);
+        };
+
+        const addReplyNode = () => {
+            updateChatNodes([...chatNodes, { type: 'reply', text: '' }]);
         };
 
         const addQuizNode = () => {
-            updateChatNodes([...chatNodes, { type: 'quiz', options: ['Option A', 'Option B'], correctIndex: 0 }]);
+            updateChatNodes([...chatNodes, { type: 'quiz', options: ['', ''], correctIndex: 0 }]);
         };
 
         const deleteNode = (index) => {
@@ -212,8 +216,8 @@ const QuizEditor = ({ element, onChange }) => {
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>
                             <div className="chatquiz-node-header">
-                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : '🧩'}</span>
-                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : 'Quiz'}</span>
+                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '🤖') : node.type === 'reply' ? '🧑' : '🧩'}</span>
+                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Message') : node.type === 'reply' ? 'Reply' : 'Quiz'}</span>
                                 {node.type === 'message' && (
                                     <button
                                         className={`chatquiz-style-toggle ${node.style === 'narrator' ? 'active' : ''}`}
@@ -232,7 +236,7 @@ const QuizEditor = ({ element, onChange }) => {
                                 </div>
                             </div>
 
-                            {node.type === 'message' && (
+                            {(node.type === 'message' || node.type === 'reply') && (
                                 <div
                                     contentEditable
                                     suppressContentEditableWarning
@@ -248,7 +252,7 @@ const QuizEditor = ({ element, onChange }) => {
                                             el.textContent = node.text;
                                         }
                                     }}
-                                    data-placeholder="Type a message..."
+                                    data-placeholder={node.type === 'reply' ? 'Type a reply...' : 'Type a message...'}
                                 />
                             )}
 
@@ -299,6 +303,7 @@ const QuizEditor = ({ element, onChange }) => {
 
                 <div className="chatquiz-add-buttons">
                     <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Message</button>
+                    <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Reply</button>
                     <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
                     <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
                 </div>
