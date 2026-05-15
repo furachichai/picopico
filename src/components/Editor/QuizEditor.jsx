@@ -132,12 +132,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     // CHATQUIZ RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'chatquiz') {
-        // In translation mode, use translated chatNodes (or clone from original for first-time translation)
-        const originalChatNodes = element.metadata?.chatNodes || [];
-        const translatedChatNodes = translationMode
-            ? (element.metadata?.translations?.[translationMode.lang]?.chatNodes || originalChatNodes.map(n => ({ ...n })))
-            : null;
-        const chatNodes = translationMode ? translatedChatNodes : originalChatNodes;
+        // Canvas merges draft translations into element.metadata.chatNodes when translating
+        const chatNodes = element.metadata?.chatNodes || [];
 
         const updateChatNodes = (newNodes) => {
             onChange(element.id, { chatNodes: newNodes });

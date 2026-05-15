@@ -582,7 +582,8 @@ const editorReducer = (state, action) => {
                         };
                     } else if (el.type === 'quiz') {
                         draft[slide.id][el.id] = {
-                            options: el.metadata?.translations?.[lang]?.options || [...(el.metadata?.options || [])]
+                            options: el.metadata?.translations?.[lang]?.options || [...(el.metadata?.options || [])],
+                            chatNodes: el.metadata?.translations?.[lang]?.chatNodes || (el.metadata?.chatNodes ? el.metadata.chatNodes.map(n => ({...n})) : [])
                         };
                     }
                 });

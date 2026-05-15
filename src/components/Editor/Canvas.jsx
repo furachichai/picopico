@@ -80,27 +80,22 @@ const Canvas = (props) => {
           }
         });
       }
-      // Quiz options are translatable (Sticker wraps as { metadata: { ...existing, options } })
-      if (el.type === 'quiz' && updates.metadata?.options) {
-        dispatch({
-          type: 'UPDATE_TRANSLATION',
-          payload: {
-            slideId: currentSlide.id,
-            elementId: id,
-            value: { options: updates.metadata.options }
-          }
-        });
-      }
-      // ChatQuiz chatNodes are translatable
-      if (el.type === 'quiz' && updates.metadata?.chatNodes) {
-        dispatch({
-          type: 'UPDATE_TRANSLATION',
-          payload: {
-            slideId: currentSlide.id,
-            elementId: id,
-            value: { chatNodes: updates.metadata.chatNodes }
-          }
-        });
+      if (el.type === 'quiz') {
+        const transValue = {};
+        if (updates.metadata?.options) transValue.options = updates.metadata.options;
+        if (updates.metadata?.chatNodes) transValue.chatNodes = updates.metadata.chatNodes;
+        
+        if (Object.keys(transValue).length > 0) {
+          dispatch({
+            type: 'UPDATE_TRANSLATION',
+            payload: {
+              slideId: currentSlide.id,
+              elementId: id,
+              value: transValue
+            }
+          });
+        }
+        return;
       }
       // Block all other changes (position, scale, rotation, etc.)
       return;
@@ -230,6 +225,12 @@ const Canvas = (props) => {
                 metadata: { ...element.metadata, options: draft.options }
               };
             }
+            if (draft && element.type === 'quiz' && draft.chatNodes) {
+              displayElement = {
+                ...displayElement,
+                metadata: { ...displayElement.metadata, chatNodes: draft.chatNodes }
+              };
+            }
           }
           return (
             <Sticker
@@ -240,7 +241,7 @@ const Canvas = (props) => {
               onChange={handleChange}
               onEdit={() => handleEdit(element.id)}
               onDelete={handleDelete}
-              translationMode={!!state.translationMode}
+              translationMode={state.translationMode || false}
             />
           );
         })}
