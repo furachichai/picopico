@@ -82,7 +82,7 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
     );
 };
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, showGuides, onToggleGuides }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -1349,6 +1349,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
+                    {onToggleGuides && (
+                        <button 
+                            className={`btn-icon ${showGuides ? 'active' : ''}`} 
+                            onClick={onToggleGuides} 
+                            title={showGuides ? "Hide Guides" : "Show Guides"}
+                        >
+                            ⊞
+                        </button>
+                    )}
                     {onUndo && element.type !== 'cartridge' && element.type !== 'background' && (
                         <button className="btn-icon" onClick={onUndo} title="Undo Changes">
                             ↩️

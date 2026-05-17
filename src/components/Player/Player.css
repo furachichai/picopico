@@ -296,3 +296,30 @@
     /* Violet */
     box-shadow: 0 2px 0 rgba(138, 43, 226, 0.4) inset;
 }
+
+/* ─── Stripper Strip Visibility ─────────────────────── */
+.stripper-strip-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform-origin: center top;
+}
+
+.stripper-strip-visible {
+    opacity: 1;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.stripper-strip-revealing {
+    animation: stripReveal 0.45s ease-out forwards;
+}
+
+@keyframes stripReveal {
+    0% {
+        opacity: 0;
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+    }
+}

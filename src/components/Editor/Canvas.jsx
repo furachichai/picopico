@@ -133,118 +133,221 @@ const Canvas = (props) => {
 
   return (
     <div className="canvas-container" ref={containerRef}>
-      <div
-        className="slide-canvas"
-        style={{
-          width: '360px',
-          height: '640px',
-          overflow: 'hidden', // Added to contain background
-          position: 'relative'
-        }}
-        onClick={handleCanvasClick}
-      >
-        {/* Background Layer */}
-        {currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient')) && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: currentSlide.background,
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              zIndex: 0, // Behind content
-              opacity: currentSlide.backgroundSettings?.opacity ?? 1,
-              filter: `brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
-              transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`,
-              pointerEvents: 'none' // Click-through
-            }}
-          />
-        )}
-        {currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient') && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundColor: currentSlide.background,
-              zIndex: 0
-            }}
-          />
-        )}
-        {/* Progress Bar */}
-        <div className="editor-progress-bar">
-          {Array.from({ length: props.totalSlides }).map((_, index) => (
+      {/* Wrapper: position:relative so pointers can sit outside the overflow:hidden canvas */}
+      <div style={{ position: 'relative', width: '360px', height: '640px', flexShrink: 0 }}>
+        <div
+          className="slide-canvas"
+          style={{
+            width: '360px',
+            height: '640px',
+            overflow: 'hidden',
+            position: 'relative'
+          }}
+          onClick={handleCanvasClick}
+        >
+          {/* Background Layer */}
+          {currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient')) && (
             <div
-              key={index}
-              className={`progress-segment ${index <= props.currentSlideIndex ? 'active' : ''}`}
+              style={{
+                position: 'absolute',
+                top: 0, left: 0, width: '100%', height: '100%',
+                backgroundImage: currentSlide.background,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                zIndex: 0,
+                opacity: currentSlide.backgroundSettings?.opacity ?? 1,
+                filter: `brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
+                transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`,
+                pointerEvents: 'none'
+              }}
             />
-          ))}
-        </div>
+          )}
+          {currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient') && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0, left: 0, width: '100%', height: '100%',
+                backgroundColor: currentSlide.background,
+                zIndex: 0
+              }}
+            />
+          )}
 
-        {/* Cartridge Container - Lower layer */}
-        {/* Cartridge Container - Lower layer */}
-        <div className="cartridge-container">
-          {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas') && (
-            <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
-              {currentSlide.cartridge.type === 'FractionAlpha' && (
-                <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
-              )}
-              {currentSlide.cartridge.type === 'FractionSlicer' && (
-                <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
-              )}
-              {currentSlide.cartridge.type === 'SwipeSorter' && (
-                <SwipeSorter config={currentSlide.cartridge.config} preview={true} />
-              )}
-              {currentSlide.cartridge.type === 'PEMDAS' && (
-                <PEMDASCartridge config={currentSlide.cartridge.config} preview={true} />
-              )}
-              {currentSlide.cartridge.type === 'Potiondas' && (
-                <PotiondasThumbnail config={currentSlide.cartridge.config} />
-              )}
+          {/* Alignment Guides */}
+          {state.showGuides && (
+            <div className="editor-guides" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+              <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '1px', backgroundColor: 'rgba(255, 100, 100, 0.5)' }} />
+              <div style={{ position: 'absolute', top: 0, left: '50%', width: '1px', height: '100%', backgroundColor: 'rgba(255, 100, 100, 0.5)' }} />
+              {[20, 40, 60, 80].map(percent => (
+                <React.Fragment key={percent}>
+                  <div style={{ position: 'absolute', top: `${percent}%`, left: 0, width: '100%', height: '1px', borderTop: '1px dashed rgba(255, 100, 100, 0.3)' }} />
+                  <div style={{ position: 'absolute', top: 0, left: `${percent}%`, width: '1px', height: '100%', borderLeft: '1px dashed rgba(255, 100, 100, 0.3)' }} />
+                </React.Fragment>
+              ))}
             </div>
           )}
+
+          {/* Stripper Divider Lines (inside canvas) */}
+          {currentSlide?.stripper?.enabled && currentSlide.stripper.dividers?.map((divY, idx) => (
+            <div key={`stripper-line-${idx}`} style={{
+              position: 'absolute',
+              top: `${divY}%`,
+              left: 0,
+              width: '100%',
+              height: '0',
+              borderTop: '2.5px dashed rgba(30, 144, 255, 0.7)',
+              zIndex: 900,
+              pointerEvents: 'none',
+            }} />
+          ))}
+
+          {/* Progress Bar */}
+          <div className="editor-progress-bar">
+            {Array.from({ length: props.totalSlides }).map((_, index) => (
+              <div
+                key={index}
+                className={`progress-segment ${index <= props.currentSlideIndex ? 'active' : ''}`}
+              />
+            ))}
+          </div>
+
+          {/* Cartridge Container */}
+          <div className="cartridge-container">
+            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas') && (
+              <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
+                {currentSlide.cartridge.type === 'FractionAlpha' && (
+                  <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'FractionSlicer' && (
+                  <FractionSlicer config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'SwipeSorter' && (
+                  <SwipeSorter config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'PEMDAS' && (
+                  <PEMDASCartridge config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'Potiondas' && (
+                  <PotiondasThumbnail config={currentSlide.cartridge.config} />
+                )}
+              </div>
+            )}
+          </div>
+
+          {currentSlide.elements.map(element => {
+            // In translation mode, show draft content for text/balloon/quiz elements
+            let displayElement = element;
+            if (state.translationMode) {
+              const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
+              if (draft && (element.type === 'text' || element.type === 'balloon')) {
+                displayElement = { ...element, content: draft.content };
+              }
+              if (draft && element.type === 'quiz' && draft.options) {
+                displayElement = {
+                  ...element,
+                  metadata: { ...element.metadata, options: draft.options }
+                };
+              }
+              if (draft && element.type === 'quiz' && draft.chatNodes) {
+                displayElement = {
+                  ...displayElement,
+                  metadata: { ...displayElement.metadata, chatNodes: draft.chatNodes }
+                };
+              }
+            }
+            return (
+              <Sticker
+                key={element.id}
+                element={displayElement}
+                isSelected={element.id === selectedElementId}
+                onSelect={handleSelect}
+                onChange={handleChange}
+                onEdit={() => handleEdit(element.id)}
+                onDelete={handleDelete}
+                translationMode={state.translationMode || false}
+              />
+            );
+          })}
         </div>
 
-        {currentSlide.elements.map(element => {
-          // In translation mode, show draft content for text/balloon/quiz elements
-          let displayElement = element;
-          if (state.translationMode) {
-            const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
-            if (draft && (element.type === 'text' || element.type === 'balloon')) {
-              displayElement = { ...element, content: draft.content };
-            }
-            if (draft && element.type === 'quiz' && draft.options) {
-              displayElement = {
-                ...element,
-                metadata: { ...element.metadata, options: draft.options }
+        {/* Stripper Draggable Pointers (OUTSIDE slide-canvas, inside relative wrapper) */}
+        {currentSlide?.stripper?.enabled && currentSlide.stripper.dividers?.map((divY, idx) => (
+          <div
+            key={`stripper-ptr-${idx}`}
+            style={{
+              position: 'absolute',
+              top: `${divY}%`,
+              right: '-32px',
+              transform: 'translateY(-50%)',
+              width: '28px',
+              height: '28px',
+              cursor: 'ns-resize',
+              zIndex: 901,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const canvasEl = containerRef.current?.querySelector('.slide-canvas');
+              if (!canvasEl) return;
+              const rect = canvasEl.getBoundingClientRect();
+
+              const onMove = (ev) => {
+                const rawY = ((ev.clientY - rect.top) / rect.height) * 100;
+                const clampedY = Math.max(5, Math.min(95, Math.round(rawY)));
+                const newDividers = [...currentSlide.stripper.dividers];
+                newDividers[idx] = clampedY;
+                newDividers.sort((a, b) => a - b);
+                dispatch({
+                  type: 'UPDATE_SLIDE',
+                  payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                });
               };
-            }
-            if (draft && element.type === 'quiz' && draft.chatNodes) {
-              displayElement = {
-                ...displayElement,
-                metadata: { ...displayElement.metadata, chatNodes: draft.chatNodes }
+
+              const onUp = () => {
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onUp);
               };
-            }
-          }
-          return (
-            <Sticker
-              key={element.id}
-              element={displayElement}
-              isSelected={element.id === selectedElementId}
-              onSelect={handleSelect}
-              onChange={handleChange}
-              onEdit={() => handleEdit(element.id)}
-              onDelete={handleDelete}
-              translationMode={state.translationMode || false}
-            />
-          );
-        })}
+
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              const canvasEl = containerRef.current?.querySelector('.slide-canvas');
+              if (!canvasEl) return;
+              const rect = canvasEl.getBoundingClientRect();
+
+              const onMove = (ev) => {
+                const touch = ev.touches[0];
+                const rawY = ((touch.clientY - rect.top) / rect.height) * 100;
+                const clampedY = Math.max(5, Math.min(95, Math.round(rawY)));
+                const newDividers = [...currentSlide.stripper.dividers];
+                newDividers[idx] = clampedY;
+                newDividers.sort((a, b) => a - b);
+                dispatch({
+                  type: 'UPDATE_SLIDE',
+                  payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                });
+              };
+
+              const onEnd = () => {
+                window.removeEventListener('touchmove', onMove);
+                window.removeEventListener('touchend', onEnd);
+              };
+
+              window.addEventListener('touchmove', onMove, { passive: false });
+              window.addEventListener('touchend', onEnd);
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}>
+              <path d="M4,12 L16,4 L16,20 Z" fill="rgba(80,80,100,0.75)" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            </svg>
+          </div>
+        ))}
       </div>
     </div>
   );

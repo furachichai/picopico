@@ -28,10 +28,13 @@ const initialState = {
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
     readOnly: false, // Default to false, will be set on mount
     translationMode: null, // null | { lang: 'en' | 'pt', draft: { [slideId]: { [elementId]: { content } }, lessonTitle: '', lessonDescription: '' } }
+    showGuides: true, // Grid guides in editor
 };
 
 const editorReducer = (state, action) => {
     switch (action.type) {
+        case 'TOGGLE_GUIDES':
+            return { ...state, showGuides: !state.showGuides };
         case 'SET_VIEW':
             return { ...state, view: action.payload };
 

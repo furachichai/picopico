@@ -372,28 +372,12 @@
           }
         },
         {
-          "id": "el-1778989335218",
-          "type": "text",
-          "content": "-   +   -",
-          "x": 54.72222222222222,
-          "y": 83.59375,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 5.5926401579633,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "color": "#e11d48",
-            "fontWeight": "bold"
-          }
-        },
-        {
           "id": "el-1778989454982",
           "type": "balloon",
           "content": "REMEMBER:<div><b>+</b> and <b>-</b> are&nbsp;</div><div><b>TERM SEPARATORS</b></div>",
-          "x": 73.05555555555556,
-          "y": 49.21875,
-          "width": 52.2222222222222,
+          "x": 80.27777777777777,
+          "y": 55,
+          "width": 40.555555555555536,
           "height": 20,
           "rotation": 0,
           "scale": 1,
@@ -403,18 +387,108 @@
             "fontFamily": "\"Noto Sans\"",
             "fontSize": 16,
             "tailPos": {
-              "x": -22,
-              "y": 77
+              "x": -82,
+              "y": 20
             }
+          }
+        },
+        {
+          "id": "el-1779023208581",
+          "type": "isticker",
+          "content": "iSticker",
+          "x": 51.38888888888889,
+          "y": 37.03125,
+          "width": 80,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "stickerType": "pemdas_term_separator",
+            "expression": "2 * 3 + 3 × 4 - 6 / 2"
+          }
+        },
+        {
+          "id": "el-1778989335218",
+          "type": "text",
+          "content": "-   +   -",
+          "x": 51.94444444444444,
+          "y": 83.28125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 5.5926401579633,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "color": "#e11d48",
+            "fontWeight": "bold"
           }
         }
       ],
       "order": 2
+    },
+    {
+      "id": "slide-1779023404207",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779023417786",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+          "x": 30.833333333333332,
+          "y": 77.1875,
+          "width": 40,
+          "height": 33.30223880597015,
+          "rotation": 0,
+          "scale": 1.6639856776696842,
+          "metadata": {
+            "width": 40,
+            "height": 33.30223880597015
+          }
+        },
+        {
+          "id": "el-1779023404207-jb9h2hvtt",
+          "type": "isticker",
+          "content": "iSticker",
+          "x": 50.27777777777778,
+          "y": 23.59375,
+          "width": 80,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "stickerType": "pemdas_term_separator",
+            "expression": "9 / 3 - 5 × 5 - 6 * 2"
+          }
+        },
+        {
+          "id": "el-1779023404207-zov8f035s",
+          "type": "balloon",
+          "content": "This is a good way to see why we do */ first and +- after.",
+          "x": 71.94444444444443,
+          "y": 83.59375,
+          "width": 53.33333333333332,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -112,
+              "y": -28
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "cartridge": null
     }
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-17T03:45:33.676Z",
+  "updatedAt": "2026-05-17T13:14:01.212Z",
   "path": "lessons/9941-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",

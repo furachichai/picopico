@@ -227,7 +227,7 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
     const [isSeparating, setIsSeparating] = useState(false);
     const audioCtxRef = useRef(null);
 
-    // Heavy drag sound (same as Potiondas powerup)
+    // Expanding sound (growing chime)
     const playSeparateSound = useCallback(() => {
         try {
             if (!audioCtxRef.current) {
@@ -237,23 +237,18 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
             if (ctx.state === 'suspended') ctx.resume();
 
             const osc = ctx.createOscillator();
-            const filter = ctx.createBiquadFilter();
             const gain = ctx.createGain();
             
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(40, ctx.currentTime);
-            
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(200, ctx.currentTime);
-            filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.5);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 1.5);
             
             gain.gain.setValueAtTime(0, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.2);
-            gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 1.2);
+            gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.3);
+            gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 1.2);
             gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
             
-            osc.connect(filter);
-            filter.connect(gain);
+            osc.connect(gain);
             gain.connect(ctx.destination);
             
             osc.start(ctx.currentTime);

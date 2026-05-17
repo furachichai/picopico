@@ -43,6 +43,10 @@ const Player = () => {
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
     const [solvedSlides, setSolvedSlides] = useState(new Set()); // Track slides whose quiz/cartridge is complete
 
+    // Stripper state
+    const [stripperStep, setStripperStep] = useState(0); // Current revealed strip index
+    const [visitedStripperSlides, setVisitedStripperSlides] = useState(new Set()); // Slides fully stepped through
+
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
@@ -81,6 +85,39 @@ const Player = () => {
             osc.start(ctx.currentTime);
             osc.stop(ctx.currentTime + 0.12);
         } catch (e) { /* ignore */ }
+    };
+
+    // Stripper reveal SFX (gentle ascending chime)
+    const playStripRevealSfx = () => {
+        try {
+            if (!window._slideAudioCtx) {
+                window._slideAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const ctx = window._slideAudioCtx;
+            if (ctx.state === 'suspended') ctx.resume();
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(500, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.2);
+        } catch (e) { /* ignore */ }
+    };
+
+    // Determine which strip an element belongs to (0-based)
+    const getElementStrip = (elementY, dividers) => {
+        if (!dividers || dividers.length === 0) return 0;
+        const sorted = [...dividers].sort((a, b) => a - b);
+        for (let i = 0; i < sorted.length; i++) {
+            if (elementY < sorted[i]) return i;
+        }
+        return sorted.length; // Last strip
     };
 
     useEffect(() => {
@@ -126,9 +163,39 @@ const Player = () => {
     };
 
     const nextSlide = (force = false) => {
+        const slide = slides[currentSlideIndex];
+        const stripper = slide?.stripper;
+        const stripperActive = stripper?.enabled && stripper?.dividers?.length > 0;
+
+        // Stripper interception: reveal next strip instead of advancing slide
+        if (!force && stripperActive && !visitedStripperSlides.has(currentSlideIndex)) {
+            const totalStrips = stripper.dividers.length; // number of dividers = number of additional strips
+            if (stripperStep < totalStrips) {
+                // Check if any iSticker in the CURRENT strip needs solving first
+                const currentStripElements = slide.elements?.filter(el => {
+                    const strip = getElementStrip(el.y, stripper.dividers);
+                    return strip === stripperStep;
+                });
+                const unsolvedInStrip = currentStripElements?.find(
+                    el => el.type === 'isticker' && !solvedSlides.has(currentSlideIndex)
+                );
+                if (unsolvedInStrip) {
+                    setWiggleIStickerId(unsolvedInStrip.id);
+                    playTone('fail');
+                    setTimeout(() => setWiggleIStickerId(null), 500);
+                    return;
+                }
+
+                playStripRevealSfx();
+                setStripperStep(prev => prev + 1);
+                return;
+            }
+            // All strips revealed — mark as visited, then check for blocking interactives
+            setVisitedStripperSlides(prev => new Set(prev).add(currentSlideIndex));
+        }
+
         // Block if current slide has unsolved quiz/cartridge/isticker
         if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) {
-            const slide = slides[currentSlideIndex];
             const isticker = slide?.elements?.find(el => el.type === 'isticker');
             if (isticker) {
                 setWiggleIStickerId(isticker.id);
@@ -203,9 +270,20 @@ const Player = () => {
         setBanner({ type, text });
     };
 
-    // Clear banner when slide changes
+    // Clear banner and reset stripper step when slide changes
     useEffect(() => {
         setBanner(null);
+        // When entering a stripper slide: if already visited, show all; else start at 0
+        const slide = slides[currentSlideIndex];
+        if (slide?.stripper?.enabled && slide.stripper.dividers?.length > 0) {
+            if (visitedStripperSlides.has(currentSlideIndex)) {
+                setStripperStep(slide.stripper.dividers.length); // all revealed
+            } else {
+                setStripperStep(0);
+            }
+        } else {
+            setStripperStep(0);
+        }
     }, [currentSlideIndex]);
 
     // Handle responsive scaling
@@ -615,11 +693,18 @@ const Player = () => {
                             )}
 
                             {slide.elements.map(element => {
+                                // Stripper: determine strip and visibility
+                                const stripperActive = slide.stripper?.enabled && slide.stripper?.dividers?.length > 0;
+                                const elementStrip = stripperActive ? getElementStrip(element.y, slide.stripper.dividers) : 0;
+                                const currentStep = index === currentSlideIndex ? stripperStep : (visitedStripperSlides.has(index) ? (slide.stripper?.dividers?.length || 0) : 0);
+                                const isStripVisible = !stripperActive || elementStrip <= currentStep;
+                                const isStripRevealing = stripperActive && elementStrip === currentStep && elementStrip > 0 && index === currentSlideIndex && !visitedStripperSlides.has(index);
+
                                 try {
                                     return (
                                         <div
                                             key={element.id}
-                                            className={`player-element ${(element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'player-element-chatquiz' : ''}`}
+                                            className={`player-element ${(element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
                                             style={{
                                                 left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '50%' : `${element.x}%`,
                                                 top: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '55%' : `${element.y}%`,

@@ -320,6 +320,69 @@ const Toolbar = ({ onOpenLibrary }) => {
                     <button className="btn-primary" onClick={() => onOpenLibrary('custom')} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <button className="btn-secondary" onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'background' })} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
                 </div>
+                {/* Stripper Controls */}
+                <div className="toolbar-section" style={{ display: 'flex', gap: '6px', alignItems: 'center', borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '8px' }}>
+                    <button
+                        className={`btn-icon ${currentSlide?.stripper?.enabled ? 'active' : ''}`}
+                        onClick={() => {
+                            const current = currentSlide?.stripper || { enabled: false, dividers: [50] };
+                            dispatch({
+                                type: 'UPDATE_SLIDE',
+                                payload: {
+                                    stripper: { ...current, enabled: !current.enabled }
+                                }
+                            });
+                        }}
+                        title={currentSlide?.stripper?.enabled ? 'Disable Stripper' : 'Enable Stripper'}
+                        style={{ fontSize: '0.7rem', fontWeight: 700, padding: '4px 6px', minWidth: '44px', letterSpacing: '0.5px' }}
+                    >
+                        ✂️
+                    </button>
+                    {currentSlide?.stripper?.enabled && (
+                        <>
+                            <button
+                                className="btn-icon"
+                                onClick={() => {
+                                    const dividers = [...(currentSlide.stripper.dividers || [50])];
+                                    if (dividers.length >= 4) return;
+                                    // Add a new divider evenly distributed
+                                    const count = dividers.length + 1;
+                                    const newDividers = Array.from({ length: count }, (_, i) => Math.round(((i + 1) / (count + 1)) * 100));
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                                    });
+                                }}
+                                title="Add Divider"
+                                style={{ fontSize: '1rem', padding: '2px 6px' }}
+                                disabled={(currentSlide?.stripper?.dividers?.length || 1) >= 4}
+                            >
+                                +
+                            </button>
+                            <span style={{ fontSize: '0.75rem', color: '#555', fontWeight: 600 }}>
+                                {currentSlide?.stripper?.dividers?.length || 1}
+                            </span>
+                            <button
+                                className="btn-icon"
+                                onClick={() => {
+                                    const dividers = [...(currentSlide.stripper.dividers || [50])];
+                                    if (dividers.length <= 1) return;
+                                    const count = dividers.length - 1;
+                                    const newDividers = Array.from({ length: count }, (_, i) => Math.round(((i + 1) / (count + 1)) * 100));
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                                    });
+                                }}
+                                title="Remove Divider"
+                                style={{ fontSize: '1rem', padding: '2px 6px' }}
+                                disabled={(currentSlide?.stripper?.dividers?.length || 1) <= 1}
+                            >
+                                −
+                            </button>
+                        </>
+                    )}
+                </div>
                 <div className="toolbar-section">
                     {/* Add Slide button moved back to SlideStrip */}
                 </div>

@@ -702,6 +702,8 @@ const Editor = () => {
                                 onOpenPresets={() => setShowPresetPanel(true)}
                                 onReorderElement={handleReorderElement}
                                 onUndo={handleUndo}
+                                showGuides={state.showGuides}
+                                onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
                             />
                         </div>
                     )}
@@ -720,6 +722,8 @@ const Editor = () => {
                             onOpenPresets={() => setShowPresetPanel(true)}
                             onReorderElement={handleReorderElement}
                             onUndo={handleUndo}
+                            showGuides={state.showGuides}
+                            onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
                         />
                     ) : (
                         <Toolbar
