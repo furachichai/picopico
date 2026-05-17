@@ -299,6 +299,20 @@ const Toolbar = ({ onOpenLibrary }) => {
                                     });
                                     setShowIStickerMenu(false);
                                 }}>Expression Scanner</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'ADD_ELEMENT',
+                                        payload: {
+                                            type: ELEMENT_TYPES.ISTICKER,
+                                            content: 'iSticker',
+                                            metadata: {
+                                                stickerType: 'pemdas_term_separator',
+                                                expression: '2 + 3 × 4 - 5',
+                                            }
+                                        }
+                                    });
+                                    setShowIStickerMenu(false);
+                                }}>Term Separator</button>
                             </div>
                         )}
                     </div>

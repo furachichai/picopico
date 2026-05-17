@@ -205,6 +205,112 @@ const ExpressionScanner001 = ({ expression, isActive = true, onComplete, isWiggl
 };
 
 /**
+ * PEMDAS Term Separator
+ * 
+ * Displays a math expression. When the user presses the play button,
+ * terms animate apart at + and - operators (like the Potiondas powerup).
+ * Operators are static (not buttons). Play button greys out after use.
+ */
+const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggling = false }) => {
+    const SEPARATORS = new Set(['+', '-', '−']);
+
+    // Tokenize — split on spaces
+    const raw = (expression || '2 + 3 × 4 - 5').replace(/\s+/g, ' ').trim();
+    const tokens = raw.split(' ').map((part, i) => ({
+        value: part,
+        isSeparator: SEPARATORS.has(part),
+        display: part === '*' ? '×' : part === '/' ? '÷' : part === '-' ? '−' : part,
+        id: i,
+    }));
+
+    const [hasPlayed, setHasPlayed] = useState(false);
+    const [isSeparating, setIsSeparating] = useState(false);
+    const audioCtxRef = useRef(null);
+
+    // Heavy drag sound (same as Potiondas powerup)
+    const playSeparateSound = useCallback(() => {
+        try {
+            if (!audioCtxRef.current) {
+                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const ctx = audioCtxRef.current;
+            if (ctx.state === 'suspended') ctx.resume();
+
+            const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(40, ctx.currentTime);
+            
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(200, ctx.currentTime);
+            filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.5);
+            
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.2);
+            gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 1.2);
+            gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 1.5);
+        } catch (e) { /* ignore */ }
+    }, []);
+
+    const handlePlay = useCallback(() => {
+        if (hasPlayed || isSeparating) return;
+        setIsSeparating(true);
+        playSeparateSound();
+        setTimeout(() => {
+            setHasPlayed(true);
+            setIsSeparating(false);
+            if (onComplete) onComplete();
+        }, 1500);
+    }, [hasPlayed, isSeparating, playSeparateSound, onComplete]);
+
+    // Reset when slide becomes inactive (navigating away and back)
+    useEffect(() => {
+        if (!isActive) {
+            setHasPlayed(false);
+            setIsSeparating(false);
+        }
+    }, [isActive]);
+
+    return (
+        <div className={`isticker-termsep ${isWiggling ? 'wiggle' : ''}`}>
+            <div className="isticker-termsep-inner">
+                <div className={`isticker-termsep-expression ${isSeparating || hasPlayed ? 'separated' : ''}`}>
+                    {tokens.map((token) => (
+                        <span
+                            key={token.id}
+                            className={`isticker-termsep-token ${token.isSeparator ? 'is-separator' : ''}`}
+                        >
+                            {token.display}
+                        </span>
+                    ))}
+                </div>
+                <button
+                    className={`isticker-termsep-play ${hasPlayed ? 'played' : ''} ${isSeparating ? 'separating' : ''}`}
+                    onClick={handlePlay}
+                    disabled={hasPlayed || isSeparating}
+                    aria-label="Play animation"
+                >
+                    <svg viewBox="0 0 48 48" width="32" height="32">
+                        <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" strokeWidth="2.5" />
+                        <path d="M18,14 L36,24 L18,34 Z" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    );
+};
+
+
+/**
  * IStickerPlayer — Dispatcher component
  */
 const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false }) => {
@@ -216,6 +322,15 @@ const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false 
                 <ExpressionScanner001
                     expression={metadata.expression}
                     scanDuration={metadata.scanDuration}
+                    isActive={isActive}
+                    onComplete={onComplete}
+                    isWiggling={isWiggling}
+                />
+            );
+        case 'pemdas_term_separator':
+            return (
+                <PemdasTermSeparator
+                    expression={metadata.expression}
                     isActive={isActive}
                     onComplete={onComplete}
                     isWiggling={isWiggling}

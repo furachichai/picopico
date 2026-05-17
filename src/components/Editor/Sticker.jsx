@@ -379,7 +379,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         height: '100%',
                         boxSizing: 'border-box',
                     }}>
-                        <div style={{ fontSize: '0.65rem', opacity: 0.6, letterSpacing: '1px' }}>🧩 {element.metadata?.stickerType === 'expression_scanner_001' ? 'EXPRESSION SCANNER' : 'iSTICKER'}</div>
+                        <div style={{ fontSize: '0.65rem', opacity: 0.6, letterSpacing: '1px' }}>🧩 {element.metadata?.stickerType === 'expression_scanner_001' ? 'EXPRESSION SCANNER' : element.metadata?.stickerType === 'pemdas_term_separator' ? 'TERM SEPARATOR' : 'iSTICKER'}</div>
                         <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '2px', fontFamily: 'monospace' }}>
                             {element.metadata?.expression || '2 + 3 * 4'}
                         </div>

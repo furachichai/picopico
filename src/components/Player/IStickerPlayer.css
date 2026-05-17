@@ -172,3 +172,117 @@
 }
 
 
+/* ─── PEMDAS Term Separator ─────────────────────────────────── */
+.isticker-termsep {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
+    border-radius: 14px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.isticker-termsep.wiggle {
+    animation: istickerWiggle 0.4s ease-in-out;
+}
+
+.isticker-termsep-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.isticker-termsep-expression {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    position: relative;
+    padding: 0;
+    flex: 1;
+}
+
+.isticker-termsep-token {
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Separator tokens (+, −) get extra margin via transition */
+.isticker-termsep-token.is-separator {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    transition: margin 1.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                color 1.5s ease,
+                text-shadow 1.5s ease;
+}
+
+/* When separated, push terms apart at +/- boundaries */
+.isticker-termsep-expression.separated .isticker-termsep-token.is-separator {
+    margin: 0 14px;
+    color: #F59E0B;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5), 0 0 20px rgba(245, 158, 11, 0.25);
+}
+
+/* ─── Play Button ───────────────────────────────────── */
+.isticker-termsep-play {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #34D399;
+    transition: color 0.3s, opacity 0.3s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.isticker-termsep-play:hover:not(:disabled) {
+    transform: scale(1.1);
+    color: #6EE7B7;
+}
+
+.isticker-termsep-play:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* Pulsing hint before play */
+.isticker-termsep-play:not(.played):not(.separating) {
+    animation: termsepPlayPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes termsepPlayPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.3)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.6)); }
+}
+
+/* Greyed out after played */
+.isticker-termsep-play.played {
+    color: rgba(255, 255, 255, 0.25);
+    cursor: default;
+    pointer-events: none;
+    animation: none;
+}
+
+/* During separation animation */
+.isticker-termsep-play.separating {
+    color: rgba(245, 158, 11, 0.6);
+    animation: none;
+    pointer-events: none;
+}

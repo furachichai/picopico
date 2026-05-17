@@ -1315,9 +1315,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             {element.type === 'isticker' && (
                 <>
                     <div className="menu-group">
-                        <label>🧩 {metadata.stickerType === 'expression_scanner_001' ? 'Expression Scanner' : 'iSticker'}</label>
+                        <label>🧩 {metadata.stickerType === 'expression_scanner_001' ? 'Expression Scanner' : metadata.stickerType === 'pemdas_term_separator' ? 'Term Separator' : 'iSticker'}</label>
                     </div>
-                    {metadata.stickerType === 'expression_scanner_001' && (
+                    {(metadata.stickerType === 'expression_scanner_001' || metadata.stickerType === 'pemdas_term_separator') && (
                         <>
                             <div className="menu-group">
                                 <label>Expression</label>
@@ -1325,20 +1325,22 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     type="text"
                                     value={metadata.expression || ''}
                                     onChange={(e) => updateMetadata({ expression: e.target.value })}
-                                    placeholder="e.g. 2 + 3 * 4 - 5"
+                                    placeholder="e.g. 2 + 3 × 4 - 5"
                                     style={{ flex: 1, padding: '5px', fontFamily: 'monospace' }}
                                 />
                             </div>
-                            <div className="menu-group">
-                                <label>Scan Speed ({metadata.scanDuration || 3}s)</label>
-                                <input
-                                    type="range"
-                                    min="1" max="6" step="0.5"
-                                    value={metadata.scanDuration || 3}
-                                    onChange={(e) => updateMetadata({ scanDuration: parseFloat(e.target.value) })}
-                                    style={{ flex: 1 }}
-                                />
-                            </div>
+                            {metadata.stickerType === 'expression_scanner_001' && (
+                                <div className="menu-group">
+                                    <label>Scan Speed ({metadata.scanDuration || 3}s)</label>
+                                    <input
+                                        type="range"
+                                        min="1" max="6" step="0.5"
+                                        value={metadata.scanDuration || 3}
+                                        onChange={(e) => updateMetadata({ scanDuration: parseFloat(e.target.value) })}
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                 </>
