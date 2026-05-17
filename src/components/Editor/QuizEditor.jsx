@@ -302,6 +302,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                         ...(element.metadata?.fontFamily && { fontFamily: element.metadata.fontFamily }),
                                         ...(element.metadata?.fontSize && { fontSize: `${element.metadata.fontSize}px` }),
                                         ...(element.metadata?.color && { color: element.metadata.color }),
+                                        ...(node.type === 'message' && node.style !== 'narrator' && element.metadata?.leftBubbleColor && { backgroundColor: element.metadata.leftBubbleColor }),
+                                        ...(node.type === 'reply' && element.metadata?.rightBubbleColor && { backgroundColor: element.metadata.rightBubbleColor }),
                                     }}
                                     onInput={(e) => updateNodeText(index, e.currentTarget.innerHTML)}
                                     onPaste={(e) => {
@@ -594,7 +596,9 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
                                     fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    fontWeight: element.metadata?.fontWeight || 'normal'
+                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontStyle: element.metadata?.fontStyle || 'normal',
+                                    textDecoration: element.metadata?.textDecoration || 'none'
                                 }}
                                 data-placeholder={`Option ${index + 1}`}
                             />

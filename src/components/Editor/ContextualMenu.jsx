@@ -18,8 +18,69 @@ const FONTS = [
 ];
 
 const COLORS = [
-    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff'
+    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff',
+    '#9333ea', '#e11d48', '#f97316', '#0d9488', '#475569', '#8b4513', '#ec4899'
 ];
+
+const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    
+    return (
+        <div className="menu-group" style={{ position: 'relative' }}>
+            {label && <label>{label}</label>}
+            <div
+                className="color-swatch-trigger"
+                style={{
+                    width: '24px', height: '24px', borderRadius: '50%',
+                    backgroundColor: color || '#ffffff',
+                    border: '2px solid rgba(0,0,0,0.1)', cursor: 'pointer',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                    transition: 'transform 0.1s',
+                    position: 'relative',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}
+                onClick={() => setIsOpen(!isOpen)}
+                onMouseDown={(e) => {
+                    // Prevent blur if it's a highlighter
+                    if (onMouseDownItem) e.preventDefault();
+                }}
+            >
+                {children}
+            </div>
+            {isOpen && (
+                <>
+                    <div 
+                        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 99 }}
+                        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                        onMouseDown={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                    />
+                    <div className="color-picker-submenu" style={{
+                        position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+                        background: 'white', padding: '10px', borderRadius: '12px',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.2)', display: 'grid',
+                        gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', zIndex: 100,
+                        marginBottom: '10px'
+                    }}>
+                        {COLORS.map(c => (
+                            <div
+                                key={c}
+                                className={`color-swatch ${color === c ? 'active' : ''}`}
+                                style={{ backgroundColor: c }}
+                                onMouseDown={(e) => {
+                                    if (onMouseDownItem) onMouseDownItem(e, c);
+                                }}
+                                onClick={(e) => {
+                                    if (onSelect) onSelect(c, e);
+                                    setIsOpen(false);
+                                }}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
 
 const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo }) => {
     if (!element) return null;
@@ -81,6 +142,25 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
         onChange(element.id, { metadata: { ...metadata, ...updates } });
     };
 
+    const handleFormatCommand = (e, cmd, metaProp, activeValue, inactiveValue = 'normal') => {
+        e.preventDefault();
+        const sel = window.getSelection();
+        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+            document.execCommand(cmd, false, null);
+            const editableEl = getEditableFromSelection();
+            if (editableEl) {
+                const optionIndex = editableEl.dataset.optionIndex;
+                if (optionIndex !== undefined) {
+                    saveQuizOption(editableEl);
+                } else {
+                    onChange(element.id, { content: editableEl.innerHTML });
+                }
+            }
+        } else {
+            updateMetadata({ [metaProp]: metadata[metaProp] === activeValue ? inactiveValue : activeValue });
+        }
+    };
+
     const handleFileUpload = (e, cardIndex) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -119,53 +199,102 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     style={{ width: '70px' }}
                                 />
                             </div>
+
+                            <div className="menu-group" style={{ flexDirection: 'row', gap: '4px' }}>
+                                <button
+                                    className={`btn-icon ${metadata.fontWeight === 'bold' ? 'active' : ''}`}
+                                    onMouseDown={(e) => handleFormatCommand(e, 'bold', 'fontWeight', 'bold')}
+                                    title="Bold"
+                                    style={{ fontWeight: 'bold', fontSize: '1rem' }}
+                                >B</button>
+                                <button
+                                    className={`btn-icon ${metadata.fontStyle === 'italic' ? 'active' : ''}`}
+                                    onMouseDown={(e) => handleFormatCommand(e, 'italic', 'fontStyle', 'italic')}
+                                    title="Italic"
+                                    style={{ fontStyle: 'italic', fontSize: '1rem' }}
+                                >I</button>
+                                <button
+                                    className={`btn-icon ${metadata.textDecoration === 'underline' ? 'active' : ''}`}
+                                    onMouseDown={(e) => handleFormatCommand(e, 'underline', 'textDecoration', 'underline', 'none')}
+                                    title="Underline"
+                                    style={{ textDecoration: 'underline', fontSize: '1rem' }}
+                                >U</button>
+                            </div>
                         </div>
                     )}
 
                     {element.type !== 'background' && (
-                        <div className="menu-group">
-                            <label>Text</label>
-                            <div className="color-picker-mini">
-                                {COLORS.map(c => (
-                                    <div
-                                        key={c}
-                                        className={`color-swatch ${metadata.color === c ? 'active' : ''}`}
-                                        style={{ backgroundColor: c }}
-                                        onMouseDown={(e) => {
-                                            e.preventDefault(); // Prevent losing selection
-                                            // Check if there's a text selection inside a contentEditable
-                                            const sel = window.getSelection();
-                                            if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                                                const range = sel.getRangeAt(0);
-                                                const container = range.commonAncestorContainer;
-                                                const editableEl = container.nodeType === 3
-                                                    ? container.parentElement?.closest('[contenteditable="true"]')
-                                                    : container.closest?.('[contenteditable="true"]');
-                                                if (editableEl) {
-                                                    // Apply color to selection only
-                                                    document.execCommand('foreColor', false, c);
-                                                    
-                                                    // Check if this is a quiz option (has data-option-index)
-                                                    const optionIndex = editableEl.dataset.optionIndex;
-                                                    if (optionIndex !== undefined) {
-                                                        // Update the specific option in the options array
-                                                        const currentOptions = [...(element.metadata?.options || [])];
-                                                        currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
-                                                        onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
-                                                    } else {
-                                                        // Regular text sticker
-                                                        onChange(element.id, { content: editableEl.innerHTML });
-                                                    }
-                                                    return;
-                                                }
-                                            }
-                                            // Fallback: apply to whole element
-                                            updateMetadata({ color: c });
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        </div>
+                        <ColorPickerDropdown
+                            label="Text"
+                            color={metadata.color || '#000000'}
+                            onMouseDownItem={(e, c) => {
+                                e.preventDefault(); // Prevent losing selection
+                                // Check if there's a text selection inside a contentEditable
+                                const sel = window.getSelection();
+                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                                    const range = sel.getRangeAt(0);
+                                    const container = range.commonAncestorContainer;
+                                    const editableEl = container.nodeType === 3
+                                        ? container.parentElement?.closest('[contenteditable="true"]')
+                                        : container.closest?.('[contenteditable="true"]');
+                                    if (editableEl) {
+                                        // Apply color to selection only
+                                        document.execCommand('foreColor', false, c);
+                                        
+                                        // Check if this is a quiz option (has data-option-index)
+                                        const optionIndex = editableEl.dataset.optionIndex;
+                                        if (optionIndex !== undefined) {
+                                            // Update the specific option in the options array
+                                            const currentOptions = [...(element.metadata?.options || [])];
+                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                        } else {
+                                            // Regular text sticker
+                                            onChange(element.id, { content: editableEl.innerHTML });
+                                        }
+                                        return;
+                                    }
+                                }
+                                // Fallback: apply to whole element
+                                updateMetadata({ color: c });
+                            }}
+                            onSelect={(c) => {
+                                const sel = window.getSelection();
+                                if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+                                    updateMetadata({ color: c });
+                                }
+                            }}
+                        />
+                    )}
+
+                    {element.type !== 'background' && (
+                        <ColorPickerDropdown
+                            label="Text BG"
+                            color="#ffc800"
+                            children={<span style={{fontSize:'12px'}}>A</span>}
+                            onMouseDownItem={(e, c) => {
+                                e.preventDefault();
+                                const sel = window.getSelection();
+                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                                    const range = sel.getRangeAt(0);
+                                    const container = range.commonAncestorContainer;
+                                    const editableEl = container.nodeType === 3
+                                        ? container.parentElement?.closest('[contenteditable="true"]')
+                                        : container.closest?.('[contenteditable="true"]');
+                                    if (editableEl) {
+                                        document.execCommand('hiliteColor', false, c);
+                                        const optionIndex = editableEl.dataset.optionIndex;
+                                        if (optionIndex !== undefined) {
+                                            const currentOptions = [...(element.metadata?.options || [])];
+                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                        } else {
+                                            onChange(element.id, { content: editableEl.innerHTML });
+                                        }
+                                    }
+                                }
+                            }}
+                        />
                     )}
 
                     {element.type !== 'background' && (
@@ -186,24 +315,18 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </div>
                     )}
 
-                    <div className="menu-group">
-                        <label>{element.type === 'balloon' ? 'Bubble' : 'Background'}</label>
-                        <div className="color-picker-mini">
-                            {COLORS.map(c => (
-                                <div
-                                    key={c}
-                                    className={`color-swatch ${metadata.backgroundColor === c ? 'active' : ''}`}
-                                    style={{ backgroundColor: c }}
-                                    onClick={() => updateMetadata({ backgroundColor: c })}
-                                />
-                            ))}
-                        </div>
+                    <div className="menu-group" style={{ flexDirection: 'row', alignItems: 'flex-end', gap: '10px' }}>
+                        <ColorPickerDropdown
+                            label={element.type === 'balloon' ? 'Bubble' : 'Background'}
+                            color={metadata.backgroundColor || '#ffffff'}
+                            onSelect={(c) => updateMetadata({ backgroundColor: c })}
+                        />
                         {element.type === 'background' && (
                             <button
                                 className="btn-secondary"
                                 onClick={() => onOpenLibrary('custom-bg')}
                                 title="Open Background Library"
-                                style={{ marginLeft: '10px', fontSize: '0.8rem', padding: '4px 8px' }}
+                                style={{ fontSize: '0.8rem', padding: '4px 8px', marginBottom: '2px' }}
                             >
                                 LIBRARY
                             </button>
@@ -747,6 +870,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 </div>
                             </div>
                             <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.enablePowerup || false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, enablePowerup: e.target.checked } })}
+                                    />
+                                    Enable Separator Powerup (↔)
+                                </label>
+                            </div>
+                            <div className="menu-group">
                                 <button
                                     className="btn-secondary"
                                     style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}
@@ -907,72 +1040,104 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
 
-                    <div className="menu-group">
-                        <label>Bold</label>
+                    <div className="menu-group" style={{ flexDirection: 'row', gap: '4px' }}>
                         <button
                             className={`btn-icon ${metadata.fontWeight === 'bold' ? 'active' : ''}`}
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                const sel = window.getSelection();
-                                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                                    document.execCommand('bold', false, null);
-                                    const container = sel.getRangeAt(0).commonAncestorContainer;
-                                    const editableEl = container.nodeType === 3
-                                        ? container.parentElement?.closest('[contenteditable="true"]')
-                                        : container.closest?.('[contenteditable="true"]');
-                                    if (editableEl) {
-                                        const optionIndex = editableEl.dataset.optionIndex;
-                                        if (optionIndex !== undefined) {
-                                            const currentOptions = [...(element.metadata?.options || [])];
-                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
-                                            onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
-                                        }
-                                    }
-                                } else {
-                                    updateMetadata({ fontWeight: metadata.fontWeight === 'bold' ? 'normal' : 'bold' });
-                                }
-                            }}
+                            onMouseDown={(e) => handleFormatCommand(e, 'bold', 'fontWeight', 'bold')}
                             title="Bold"
                             style={{ fontWeight: 'bold', fontSize: '1rem' }}
-                        >
-                            B
-                        </button>
+                        >B</button>
+                        <button
+                            className={`btn-icon ${metadata.fontStyle === 'italic' ? 'active' : ''}`}
+                            onMouseDown={(e) => handleFormatCommand(e, 'italic', 'fontStyle', 'italic')}
+                            title="Italic"
+                            style={{ fontStyle: 'italic', fontSize: '1rem' }}
+                        >I</button>
+                        <button
+                            className={`btn-icon ${metadata.textDecoration === 'underline' ? 'active' : ''}`}
+                            onMouseDown={(e) => handleFormatCommand(e, 'underline', 'textDecoration', 'underline', 'none')}
+                            title="Underline"
+                            style={{ textDecoration: 'underline', fontSize: '1rem' }}
+                        >U</button>
                     </div>
                 </div>
 
                 {/* Quiz Text Color */}
-                <div className="menu-group">
-                    <label>Text Color</label>
-                    <div className="color-picker-mini">
-                        {COLORS.map(c => (
-                            <div
-                                key={c}
-                                className={`color-swatch`}
-                                style={{ backgroundColor: c }}
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    const sel = window.getSelection();
-                                    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                                        const range = sel.getRangeAt(0);
-                                        const container = range.commonAncestorContainer;
-                                        const editableEl = container.nodeType === 3
-                                            ? container.parentElement?.closest('[contenteditable="true"]')
-                                            : container.closest?.('[contenteditable="true"]');
-                                        if (editableEl) {
-                                            document.execCommand('foreColor', false, c);
-                                            const optionIndex = editableEl.dataset.optionIndex;
-                                            if (optionIndex !== undefined) {
-                                                const currentOptions = [...(element.metadata?.options || [])];
-                                                currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
-                                                onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
-                                            }
-                                        }
-                                    }
-                                }}
-                            />
-                        ))}
+                <ColorPickerDropdown
+                    label="Text Color"
+                    color={metadata.color || '#000000'}
+                    onMouseDownItem={(e, c) => {
+                        e.preventDefault();
+                        const sel = window.getSelection();
+                        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                            const range = sel.getRangeAt(0);
+                            const container = range.commonAncestorContainer;
+                            const editableEl = container.nodeType === 3
+                                ? container.parentElement?.closest('[contenteditable="true"]')
+                                : container.closest?.('[contenteditable="true"]');
+                            if (editableEl) {
+                                document.execCommand('foreColor', false, c);
+                                const optionIndex = editableEl.dataset.optionIndex;
+                                if (optionIndex !== undefined) {
+                                    const currentOptions = [...(element.metadata?.options || [])];
+                                    currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                    onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                }
+                            }
+                        } else {
+                            updateMetadata({ color: c });
+                        }
+                    }}
+                    onSelect={(c) => {
+                        const sel = window.getSelection();
+                        if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+                            updateMetadata({ color: c });
+                        }
+                    }}
+                />
+
+                {/* Quiz Text BG Color */}
+                <ColorPickerDropdown
+                    label="Text BG"
+                    color="#ffc800"
+                    children={<span style={{fontSize:'12px'}}>A</span>}
+                    onMouseDownItem={(e, c) => {
+                        e.preventDefault();
+                        const sel = window.getSelection();
+                        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                            const range = sel.getRangeAt(0);
+                            const container = range.commonAncestorContainer;
+                            const editableEl = container.nodeType === 3
+                                ? container.parentElement?.closest('[contenteditable="true"]')
+                                : container.closest?.('[contenteditable="true"]');
+                            if (editableEl) {
+                                document.execCommand('hiliteColor', false, c);
+                                const optionIndex = editableEl.dataset.optionIndex;
+                                if (optionIndex !== undefined) {
+                                    const currentOptions = [...(element.metadata?.options || [])];
+                                    currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                    onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                }
+                            }
+                        }
+                    }}
+                />
+
+                {/* Chat Bubble BG Colors */}
+                {metadata.quizType === 'chatquiz' && (
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <ColorPickerDropdown
+                            label="Left Bubble"
+                            color={metadata.leftBubbleColor || '#ffffff'}
+                            onSelect={(c) => updateMetadata({ leftBubbleColor: c })}
+                        />
+                        <ColorPickerDropdown
+                            label="Right Bubble"
+                            color={metadata.rightBubbleColor || '#14B8A6'}
+                            onSelect={(c) => updateMetadata({ rightBubbleColor: c })}
+                        />
                     </div>
-                </div>
+                )}
                 {onOpenPresets && (
                     <button
                         className="btn-secondary"
@@ -1143,6 +1308,39 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {metadata.nlConfig?.hideLabels ? 'Ends' : 'All'}
                         </button>
                     </div>
+                </>
+            )}
+
+            {/* iSticker Settings */}
+            {element.type === 'isticker' && (
+                <>
+                    <div className="menu-group">
+                        <label>🧩 {metadata.stickerType === 'expression_scanner_001' ? 'Expression Scanner' : 'iSticker'}</label>
+                    </div>
+                    {metadata.stickerType === 'expression_scanner_001' && (
+                        <>
+                            <div className="menu-group">
+                                <label>Expression</label>
+                                <input
+                                    type="text"
+                                    value={metadata.expression || ''}
+                                    onChange={(e) => updateMetadata({ expression: e.target.value })}
+                                    placeholder="e.g. 2 + 3 * 4 - 5"
+                                    style={{ flex: 1, padding: '5px', fontFamily: 'monospace' }}
+                                />
+                            </div>
+                            <div className="menu-group">
+                                <label>Scan Speed ({metadata.scanDuration || 3}s)</label>
+                                <input
+                                    type="range"
+                                    min="1" max="6" step="0.5"
+                                    value={metadata.scanDuration || 3}
+                                    onChange={(e) => updateMetadata({ scanDuration: parseFloat(e.target.value) })}
+                                    style={{ flex: 1 }}
+                                />
+                            </div>
+                        </>
+                    )}
                 </>
             )}
 

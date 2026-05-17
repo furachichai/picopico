@@ -11,7 +11,7 @@ import { getExpression, editorToEngine } from './PEMExpressionPool';
  * QuizPlayer Component
  * ...
  */
-const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false }) => {
+const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true }) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
     // -------------------------------------------------------------------------
@@ -76,6 +76,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemExprStr, setPemExprStr] = useState(null);
     const [pemArrow, setPemArrow] = useState(false);
     const [pemGameLevel, setPemGameLevel] = useState(0);
+    const [isPemPowerupActive, setIsPemPowerupActive] = useState(false);
     const pemAudioCtx = React.useRef(null);
 
     const attemptsUsed = wrongIndices.size;
@@ -101,7 +102,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     // ChatQuiz auto-advance: message nodes auto-advance; quiz nodes show options after delay
     useEffect(() => {
-        if (quizType !== 'chatquiz') return;
+        if (quizType !== 'chatquiz' || !isActive) return;
         const chatNodes = data.metadata?.chatNodes || [];
         const currentNode = chatNodes[currentNodeIndex];
         if (!currentNode || chatFinished) return;
@@ -129,7 +130,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         return () => {
             if (chatAdvanceTimer.current) clearTimeout(chatAdvanceTimer.current);
         };
-    }, [quizType, currentNodeIndex, chatFinished]);
+    }, [quizType, currentNodeIndex, chatFinished, isActive]);
 
     useEffect(() => {
         if (quizType === 'pem' && !pemAst && !pemSolved && !pemFailed) {
@@ -481,6 +482,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                             ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
                                             ...(data.metadata?.fontSize && { fontSize: `${data.metadata.fontSize}px` }),
                                             ...(data.metadata?.color && { color: data.metadata.color }),
+                                            ...(data.metadata?.leftBubbleColor && { 
+                                                '--bubble-bg': data.metadata.leftBubbleColor,
+                                                '--bubble-border': data.metadata.leftBubbleColor 
+                                            }),
                                         }}
                                         dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                 </div>
@@ -493,6 +498,11 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         style={{
                                             ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
                                             ...(data.metadata?.fontSize && { fontSize: `${data.metadata.fontSize}px` }),
+                                            ...(data.metadata?.rightBubbleColor && { 
+                                                '--bubble-bg': data.metadata.rightBubbleColor,
+                                                '--bubble-border': data.metadata.rightBubbleColor,
+                                                '--bubble-tail-bg': data.metadata.rightBubbleColor 
+                                            }),
                                         }}
                                         dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
                                     <div className="chat-avatar chat-avatar-user"><img src="/assets/characters/avatar_pesto.png" alt="Pesto" className="chat-avatar-img" /></div>
@@ -598,7 +608,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const flashIds = pemFlash ? new Set(pemFlash.ids) : new Set();
 
         const handlePemOperatorClick = (token) => {
-            if (pemSolved || pemFailed || disabled || pemMerge) return;
+            if (pemSolved || pemFailed || disabled || pemMerge || isPemPowerupActive) return;
             const opMap = { '+': 'A', '-': 'S', '*': 'M', '/': 'D', '^': 'E' };
             const pemKey = opMap[token.value];
             if (!pemKey) return;
@@ -705,7 +715,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         };
 
         const handleParenClick = (token) => {
-            if (pemSolved || pemFailed || disabled) return;
+            if (pemSolved || pemFailed || disabled || isPemPowerupActive) return;
             // Find paren groups, set scope to the clicked one
             const groups = getParenGroups(pemAst);
             const match = groups.find(g => g.id === token.nodeId);
@@ -719,10 +729,50 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             if (pemScopeId) setPemScopeId(null);
         };
 
+        const playHeavyDragSound = () => {
+            try {
+                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = pemAudioCtx.current;
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const filter = ctx.createBiquadFilter();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(40, ctx.currentTime);
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(200, ctx.currentTime);
+                filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.5);
+                
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.2);
+                gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 1.2);
+                gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 1.5);
+            } catch(e) {}
+        };
+
+        const handlePowerupClick = (e) => {
+            e.stopPropagation();
+            if (isPemPowerupActive || pemSolved || pemFailed || disabled) return;
+            setIsPemPowerupActive(true);
+            playHeavyDragSound();
+            setTimeout(() => {
+                setIsPemPowerupActive(false);
+            }, 1500);
+        };
+
         return (
             <div className={`quiz-player-2 pem-player-mode ${pemFailed ? 'pem-failed' : ''}`}
                  onClick={handlePemOutsideClick}>
-                <div className="pem-expression" onClick={(e) => e.stopPropagation()}>
+                <div className={`pem-expression ${isPemPowerupActive ? 'pem-powerup-active' : ''}`} onClick={(e) => e.stopPropagation()}>
                     {tokens.map((token, i) => {
                         if (token.hidden) return null;
                         const isInScope = !scopeNodeIds || scopeNodeIds.has(token.nodeId);
@@ -752,9 +802,35 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         }
                         if (token.type === 'op' || token.isExponentOp) {
                             if (token.hidden) return null;
+                            const isSeparator = token.value === '+' || token.value === '-';
+                            let sepLeftClass = '';
+                            let sepRightClass = '';
+                            if (isSeparator) {
+                                let leftHasComplex = false;
+                                for (let j = i - 1; j >= 0; j--) {
+                                    const t = tokens[j];
+                                    if (t.type === 'op' && (t.value === '+' || t.value === '-')) break;
+                                    if ((t.type === 'op' && (t.value === '*' || t.value === '/' || t.value === '^')) || t.isExponentOp) {
+                                        leftHasComplex = true;
+                                        break;
+                                    }
+                                }
+                                let rightHasComplex = false;
+                                for (let j = i + 1; j < tokens.length; j++) {
+                                    const t = tokens[j];
+                                    if (t.type === 'op' && (t.value === '+' || t.value === '-')) break;
+                                    if ((t.type === 'op' && (t.value === '*' || t.value === '/' || t.value === '^')) || t.isExponentOp) {
+                                        rightHasComplex = true;
+                                        break;
+                                    }
+                                }
+                                if (leftHasComplex) sepLeftClass = 'pem-token-separator-left';
+                                if (rightHasComplex) sepRightClass = 'pem-token-separator-right';
+                            }
+
                             return (
                                 <span key={`${token.nodeId}-${token.type}-${token.value}`}
-                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript && !isMergePop ? 'pem-token-superscript' : ''}`}
+                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript && !isMergePop ? 'pem-token-superscript' : ''} ${isSeparator ? 'pem-token-separator' : ''} ${sepLeftClass} ${sepRightClass}`}
                                     onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token.isExponentOp ? { value: '^', nodeId: mergeTargetId } : token); }}
                                     data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
@@ -783,6 +859,15 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 </div>
                 {pemFailed && !disabled && (
                     <button className="pem-continue-btn" onClick={(e) => { e.stopPropagation(); if (onNext) onNext(); }}>Continue</button>
+                )}
+                {!pemFailed && (
+                    <button 
+                        className={`pem-powerup-btn ${isPemPowerupActive ? 'disabled' : ''}`} 
+                        onClick={handlePowerupClick}
+                        title="Visualize terms"
+                    >
+                        ↔
+                    </button>
                 )}
             </div>
         );
@@ -915,7 +1000,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto',
                                     fontFamily: data.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                                     fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
-                                    fontWeight: data.metadata?.fontWeight || undefined
+                                    fontWeight: data.metadata?.fontWeight || undefined,
+                                    fontStyle: data.metadata?.fontStyle || undefined,
+                                    textDecoration: data.metadata?.textDecoration || undefined
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();

@@ -188,6 +188,34 @@ function playGrowingSound() {
   } catch(e) {}
 }
 
+function playHeavyDragSound() {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(40, ctx.currentTime);
+    
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(200, ctx.currentTime);
+    filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.5);
+    
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.2);
+    gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 1.2);
+    gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 1.5);
+  } catch(e) {}
+}
+
 // Check if an operator is high priority (× ÷) — used for arrow grouping
 function isHighPriority(op) {
   return op === '×' || op === '÷';
@@ -348,6 +376,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   const [expressionWidth, setExpressionWidth] = useState(0);
   const [winFadeOut, setWinFadeOut] = useState(false);
   const [pulsingParens, setPulsingParens] = useState(null); // array of groupIds to pulse
+  const [isPowerupActive, setIsPowerupActive] = useState(false);
 
   // Build the current level's data
   const levelData = useMemo(() => {
@@ -669,7 +698,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   }, [validActions, levelData, lives, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
 
   const handleExponentClick = useCallback((emojiIdx) => {
-    if (levelSolved || gameOver || merging || showRestart || wrongIdx !== null) return;
+    if (isPowerupActive || levelSolved || gameOver || merging || showRestart || wrongIdx !== null) return;
     // Check if this exponent is in the valid actions
     const isValid = validActions.some(a => a.type === 'exponent' && a.emojiIdx === emojiIdx);
     if (isValid) {
@@ -689,7 +718,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   }, [validActions, levelSolved, gameOver, merging, showRestart, wrongIdx, noteIndex, advanceStep]);
 
   const handleOpClick = useCallback((opIdx) => {
-    if (levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx) || wrongIdx !== null) return;
+    if (isPowerupActive || levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx) || wrongIdx !== null) return;
 
     const isCorrect = validActions.some(a => a.type === 'op' && a.opIdx === opIdx);
 
@@ -745,6 +774,15 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       setLevelKey(prev => prev + 1);
     }
   }, [level, totalLevels, onComplete]);
+
+  const handlePowerupClick = useCallback(() => {
+    if (isPowerupActive || levelSolved || gameOver || merging || showRestart) return;
+    setIsPowerupActive(true);
+    playHeavyDragSound();
+    setTimeout(() => {
+      setIsPowerupActive(false);
+    }, 1500); // Wait for the animation to finish
+  }, [isPowerupActive, levelSolved, gameOver, merging, showRestart]);
 
   // Build visible tokens from template
   const tokens = useMemo(() => {
@@ -802,6 +840,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     setArrowStyle(null);
     setWinFadeOut(false);
     setPulsingParens(null);
+    setIsPowerupActive(false);
     if (onRestart) onRestart();
   };
 
@@ -927,7 +966,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
 
       {/* Expression Area */}
       <div className="pot-expression-area" style={{ transition: 'opacity 0.6s ease-out', opacity: winFadeOut ? 0 : 1 }}>
-        <div className="pot-expression" ref={expressionRef}>
+        <div className={`pot-expression ${isPowerupActive ? 'pot-powerup-active' : ''}`} ref={expressionRef}>
           {tokens.map((token, i) => {
             if (token.type === 'emoji') {
               const isMergeLeft = merging?.phase === 'slide' && token.emojiIdx === merging.leftIdx;
@@ -992,12 +1031,13 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             const isMergeOp = merging?.phase === 'slide' && merging.opIdx === opIdx;
             const isMergeOpPop = merging?.phase === 'pop' && merging.opIdx === opIdx;
             const isHigh = isHighPriority(token.value);
+            const isSeparator = token.value === '+' || token.value === '−' || token.value === '-';
 
             return (
               <span
                 key={`op-${opIdx}-${levelKey}`}
                 ref={(el) => opRefs.current[opIdx] = el}
-                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${level === 0 && step === 0 && levels[level]?.ops === 'x' && !levelSolved && !merging && validActions.some(a => a.type === 'op' && a.opIdx === opIdx) ? 'pot-hint-pulse' : ''}`}
+                className={`pot-token pot-token-op ${isWrong ? 'pot-wrong' : ''} ${isFlashing ? 'pot-flash-correct' : ''} ${isFaded ? 'pot-faded' : ''} ${isMergeOp ? 'pot-merge-op' : ''} ${isMergeOpPop ? 'pot-merge-fade' : ''} ${isHigh ? 'pot-token-high' : ''} ${isSeparator ? 'pot-token-separator' : ''} ${level === 0 && step === 0 && levels[level]?.ops === 'x' && !levelSolved && !merging && validActions.some(a => a.type === 'op' && a.opIdx === opIdx) ? 'pot-hint-pulse' : ''}`}
                 onClick={() => handleOpClick(opIdx)}
                 style={{ visibility: isMergeOpPop ? 'hidden' : 'visible' }}
               >
@@ -1040,6 +1080,17 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
             </div>
           )}
         </div>
+
+        {/* Powerup Button below expression */}
+        {config.enablePowerup && (
+          <button 
+            className={`pot-powerup-btn ${isPowerupActive ? 'disabled' : ''}`} 
+            onClick={handlePowerupClick}
+            title="Visualize terms"
+          >
+            ↔
+          </button>
+        )}
       </div>
 
       {/* Bottom Buttons */}

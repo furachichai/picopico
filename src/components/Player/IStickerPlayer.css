@@ -1,0 +1,174 @@
+/* ================================================================
+   iSticker Player Styles
+   ================================================================ */
+
+/* ─── Expression Scanner 001 ────────────────────────────────── */
+.isticker-scanner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
+    border-radius: 14px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@keyframes istickerWiggle {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.isticker-scanner.wiggle {
+    animation: istickerWiggle 0.4s ease-in-out;
+}
+
+.isticker-scanner-inner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    width: max-content;
+    position: relative;
+}
+
+.isticker-scanner-expression {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    position: relative;
+    padding: 8px 0px 6px 0px;
+    width: 100%;
+}
+
+.isticker-scanner-token {
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Operators are white by default, with fixed margin to prevent layout shift */
+.isticker-scanner-token.is-op {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    margin: 0 12px;
+}
+
+/* Scanned operators turn light green and stay large */
+.isticker-scanner-token.is-op.scanned {
+    color: #6EE7B7;
+    text-shadow: 0 0 10px rgba(110, 231, 183, 0.5), 0 0 20px rgba(110, 231, 183, 0.25);
+    transform: scale(2.5);
+    animation: scannerPulse 0.4s ease-out;
+}
+
+@keyframes scannerPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(3.0); text-shadow: 0 0 20px rgba(110, 231, 183, 1), 0 0 40px rgba(110, 231, 183, 0.8); }
+    100% { transform: scale(2.5); }
+}
+
+.isticker-scanner-track-area {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+    cursor: pointer;
+}
+
+/* Drastically expand the touch/click hotspot of the track without altering visual layout */
+.isticker-scanner-track-area::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    bottom: -40px;
+    left: -40px;
+    right: -40px;
+    z-index: 0;
+}
+
+.isticker-scanner-rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 6px;
+    margin-top: -3px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Trail fill */
+.isticker-scanner-trail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(110, 231, 183, 0.15), rgba(110, 231, 183, 0.45));
+}
+
+.isticker-scanner-trail.finished {
+    width: 100% !important;
+    transition: width 0.3s ease-out;
+}
+
+/* ─── Draggable Pointer (playhead) ──────────────────────────── */
+.isticker-scanner-pointer {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* track-area handles all pointer events */
+    z-index: 10;
+}
+
+.isticker-scanner-pointer svg {
+    filter: drop-shadow(0 2px 6px rgba(52, 211, 153, 0.5));
+    transition: filter 0.15s, transform 0.15s;
+}
+
+.isticker-scanner-pointer.dragging svg {
+    filter: drop-shadow(0 3px 10px rgba(52, 211, 153, 0.8));
+    transform: scale(1.15);
+}
+
+/* Hide when reaches the end */
+.isticker-scanner-pointer.finished {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+/* Pulsing hint animation before user starts dragging */
+.isticker-scanner-pointer.hint svg {
+    animation: pointerHintPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pointerHintPulse {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(6px); opacity: 0.7; }
+}
+
+

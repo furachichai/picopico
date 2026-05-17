@@ -139,6 +139,12 @@ const editorReducer = (state, action) => {
                 baseElement.height = 20;
             }
 
+            if (action.payload.type === 'isticker') {
+                baseElement.width = 80;
+                baseElement.height = 15;
+                baseElement.y = 50;
+            }
+
             const newElement = {
                 ...baseElement,
                 metadata: elementMetadata

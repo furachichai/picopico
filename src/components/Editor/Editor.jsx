@@ -389,6 +389,27 @@ const Editor = () => {
                 e.target.tagName === 'SELECT'
             ) return;
 
+            // Text Formatting Shortcuts (Cmd+B, Cmd+I, Cmd+U)
+            if ((e.metaKey || e.ctrlKey) && state.selectedElementId && ['b', 'i', 'u'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+                const key = e.key.toLowerCase();
+                const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                const el = slide?.elements.find(el => el.id === state.selectedElementId);
+                if (el && (el.type === 'text' || el.type === 'balloon' || el.type === 'quiz')) {
+                    if (key === 'b') {
+                        const val = el.metadata?.fontWeight === 'bold' ? 'normal' : 'bold';
+                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontWeight: val } });
+                    } else if (key === 'i') {
+                        const val = el.metadata?.fontStyle === 'italic' ? 'normal' : 'italic';
+                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontStyle: val } });
+                    } else if (key === 'u') {
+                        const val = el.metadata?.textDecoration === 'underline' ? 'none' : 'underline';
+                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, textDecoration: val } });
+                    }
+                }
+                return;
+            }
+
             if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedElementId) {
                 e.preventDefault();
                 handleContextMenuDelete(state.selectedElementId);

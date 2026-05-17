@@ -10,6 +10,7 @@ const Toolbar = ({ onOpenLibrary }) => {
     const [showQuizMenu, setShowQuizMenu] = useState(false);
     const [showQ2Menu, setShowQ2Menu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
+    const [showIStickerMenu, setShowIStickerMenu] = useState(false);
 
     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
@@ -132,6 +133,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 setShowQuizMenu(!showQuizMenu);
                                 setShowQ2Menu(false);
                                 setShowGameMenu(false);
+                                setShowIStickerMenu(false);
                             }}
                             title={t('editor.addQuiz')}
                         >
@@ -156,6 +158,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 setShowQ2Menu(!showQ2Menu);
                                 setShowQuizMenu(false);
                                 setShowGameMenu(false);
+                                setShowIStickerMenu(false);
                             }}
                             title="Interactive Q2"
                         >
@@ -187,6 +190,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 setShowGameMenu(!showGameMenu);
                                 setShowQuizMenu(false);
                                 setShowQ2Menu(false);
+                                setShowIStickerMenu(false);
                             }}
                             title={t('editor.addGame')}
                         >
@@ -262,6 +266,39 @@ const Toolbar = ({ onOpenLibrary }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>PEMDAS</button>
+                            </div>
+                        )}
+                    </div>
+                    <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
+                        <button
+                            className={`btn-secondary ${showIStickerMenu ? 'active' : ''}`}
+                            onClick={() => {
+                                setShowIStickerMenu(!showIStickerMenu);
+                                setShowQuizMenu(false);
+                                setShowQ2Menu(false);
+                                setShowGameMenu(false);
+                            }}
+                            title="Interactive Stickers"
+                        >
+                            🧩
+                        </button>
+                        {showIStickerMenu && (
+                            <div className="toolbar-submenu">
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'ADD_ELEMENT',
+                                        payload: {
+                                            type: ELEMENT_TYPES.ISTICKER,
+                                            content: 'iSticker',
+                                            metadata: {
+                                                stickerType: 'expression_scanner_001',
+                                                expression: '2 + 3 * 4 - 5',
+                                                scanDuration: 3,
+                                            }
+                                        }
+                                    });
+                                    setShowIStickerMenu(false);
+                                }}>Expression Scanner</button>
                             </div>
                         )}
                     </div>

@@ -33,9 +33,16 @@ const ASSETS = {
 };
 
 // Load custom characters from src/assets/characters
-// Force HMR reload
+// Load custom characters from src/assets/characters
+// Force HMR reload - triggering glob re-eval
 const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customCharacterList = Object.values(customCharacters).map(mod => mod.default);
+
+// Load custom images from src/assets/images
+const customImages = import.meta.glob('../../assets/images/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customImageList = Object.values(customImages);
+
+const combinedImageList = [...customCharacterList, ...customImageList];
 
 // Load custom backgrounds from src/assets/backgrounds
 const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
@@ -157,8 +164,8 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             <div className="library-content">
                 <div className="assets-grid">
                     {activeTab === 'custom' && (
-                        customCharacterList.length > 0 ? (
-                            customCharacterList.map((src, index) => (
+                        combinedImageList.length > 0 ? (
+                            combinedImageList.map((src, index) => (
                                 <div
                                     key={index}
                                     className="asset-item custom"
@@ -170,7 +177,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
                                 {t('library.noCharacters')} <br />
-                                {t('library.addCharacters')} <code>src/assets/characters</code>
+                                {t('library.addCharacters')} <code>src/assets/characters</code> or <code>src/assets/images</code>
                             </div>
                         )
                     )}

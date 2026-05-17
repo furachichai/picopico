@@ -1,0 +1,81 @@
+{
+  "id": "draft-1",
+  "title": "Untitled Lesson",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778987227535",
+          "type": "text",
+          "content": "New Text",
+          "x": 50,
+          "y": 50,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "fontWeight": "bold",
+            "fontStyle": "italic",
+            "textDecoration": "underline"
+          }
+        },
+        {
+          "id": "el-1778987365146",
+          "type": "balloon",
+          "content": "Hello!",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 20,
+              "y": 50
+            },
+            "fontWeight": "bold",
+            "fontStyle": "italic",
+            "textDecoration": "underline"
+          }
+        },
+        {
+          "id": "el-1778988772687",
+          "type": "isticker",
+          "content": "iSticker",
+          "x": 50,
+          "y": 50,
+          "width": 80,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "stickerType": "expression_scanner_001",
+            "expression": "2 + 3 * 4 - 5",
+            "scanDuration": 3
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1778988753116",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 1
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-17T02:45:51.614Z",
+  "updatedAt": "2026-05-17T03:33:00.985Z",
+  "path": "lessons/1718-Untitled Lesson/lesson.json",
+  "textPreset": null
+}

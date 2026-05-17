@@ -916,9 +916,9 @@
 
 /* ---------- Tutor Bubble ---------- */
 .chat-bubble-tutor {
-    background: white;
-    color: #1E293B;
-    border: 2px solid #C7D2FE;
+    background: var(--bubble-bg, white);
+    color: var(--bubble-color, #1E293B);
+    border: 2px solid var(--bubble-border, #C7D2FE);
     max-width: 75%;
 }
 
@@ -930,7 +930,7 @@
     left: -8px;
     width: 0;
     height: 0;
-    border-right: 8px solid white;
+    border-right: 8px solid var(--bubble-bg, white);
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
 }
@@ -942,7 +942,7 @@
     left: -11px;
     width: 0;
     height: 0;
-    border-right: 10px solid #C7D2FE;
+    border-right: 10px solid var(--bubble-border, #C7D2FE);
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
 }
@@ -995,9 +995,9 @@
 }
 
 .chat-bubble-reply {
-    background: linear-gradient(135deg, #14B8A6, #0D9488);
-    color: white;
-    border: 2px solid rgba(255,255,255,0.2);
+    background: var(--bubble-bg, linear-gradient(135deg, #14B8A6, #0D9488));
+    color: var(--bubble-color, white);
+    border: 2px solid var(--bubble-border, rgba(255,255,255,0.2));
     max-width: 75%;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -1011,7 +1011,7 @@
     right: -8px;
     width: 0;
     height: 0;
-    border-left: 8px solid #0D9488;
+    border-left: 8px solid var(--bubble-tail-bg, #0D9488);
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
 }
@@ -1023,7 +1023,7 @@
     right: -11px;
     width: 0;
     height: 0;
-    border-left: 10px solid rgba(255,255,255,0.2);
+    border-left: 10px solid var(--bubble-border, rgba(255,255,255,0.2));
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
 }
@@ -1195,7 +1195,7 @@
     position: relative;
     display: flex;
     flex-wrap: nowrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: center;
     gap: 4px;
     padding: 20px 10px 40px 10px;
@@ -1213,6 +1213,7 @@
 
 .pem-token-number {
     color: #FFFFFF;
+    font-size: 0.85rem;
 }
 
 .pem-token-op {
@@ -1454,4 +1455,57 @@
     20% { opacity: 1; }
     80% { opacity: 1; }
     100% { transform: translateX(100%); opacity: 0; }
+}
+
+/* ─── MEP Powerup Button & Animation ─────────────────────── */
+.pem-powerup-btn {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 50;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pem-powerup-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+.pem-powerup-btn:active {
+    transform: scale(0.9);
+}
+
+.pem-powerup-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(1);
+}
+
+.pem-token-separator {
+    transition: margin 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pem-powerup-active .pem-token-separator-left {
+    margin-left: 12px !important;
+}
+
+.pem-powerup-active .pem-token-separator-right {
+    margin-right: 12px !important;
+}
+
+.pem-powerup-active .pem-token-op:not(.pem-token-separator) .pem-op-circle {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.6);
+    color: #F59E0B;
 }

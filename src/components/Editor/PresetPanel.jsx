@@ -10,7 +10,8 @@ const FONTS = [
 ];
 
 const COLORS = [
-    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff', '#ff9600'
+    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff',
+    '#9333ea', '#e11d48', '#f97316', '#0d9488', '#475569', '#8b4513', '#ec4899'
 ];
 
 const PresetPanel = ({ onClose }) => {

@@ -277,6 +277,9 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         style={{
                             fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                             fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                            fontWeight: element.metadata?.fontWeight || 'normal',
+                            fontStyle: element.metadata?.fontStyle || 'normal',
+                            textDecoration: element.metadata?.textDecoration || 'none',
                             color: element.metadata?.color || 'black',
                             backgroundColor: element.metadata?.backgroundColor || 'transparent',
                             padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
@@ -360,6 +363,29 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 {element.type === 'game' && (
                     <div className="sticker-game-preview">
                         🎮 Minigame: {element.metadata?.gameId}
+                    </div>
+                )}
+                {element.type === 'isticker' && (
+                    <div className="sticker-isticker-preview" style={{
+                        background: 'linear-gradient(135deg, #0F0A2E, #1E1B4B)',
+                        borderRadius: '12px',
+                        padding: '12px 16px',
+                        color: 'white',
+                        fontFamily: '"Outfit", sans-serif',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        width: '100%',
+                        height: '100%',
+                        boxSizing: 'border-box',
+                    }}>
+                        <div style={{ fontSize: '0.65rem', opacity: 0.6, letterSpacing: '1px' }}>🧩 {element.metadata?.stickerType === 'expression_scanner_001' ? 'EXPRESSION SCANNER' : 'iSTICKER'}</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '2px', fontFamily: 'monospace' }}>
+                            {element.metadata?.expression || '2 + 3 * 4'}
+                        </div>
+                        <div style={{ height: '4px', borderRadius: '2px', background: 'rgba(52, 211, 153, 0.3)', marginTop: '4px' }}>
+                            <div style={{ width: '30%', height: '100%', borderRadius: '2px', background: '#34D399' }} />
+                        </div>
                     </div>
                 )}
             </div>

@@ -9,6 +9,7 @@ import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
+import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
 import Balloon from '../Editor/Balloon';
 import ErrorBoundary from '../ErrorBoundary';
@@ -104,6 +105,8 @@ const Player = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [currentSlideIndex, isGameActive, currentSlide]);
 
+    const [wiggleIStickerId, setWiggleIStickerId] = useState(null);
+
     // Check if a slide has an unsolved interactive (quiz or cartridge)
     const slideHasUnsolvedInteractive = (slideIndex) => {
         const slide = slides[slideIndex];
@@ -113,7 +116,9 @@ const Player = () => {
         const hasQuiz = slide.elements?.some(el => el.type === 'quiz');
         // Check for cartridge (game)
         const hasCartridge = !!slide.cartridge;
-        return hasQuiz || hasCartridge;
+        // Check for isticker
+        const hasISticker = slide.elements?.some(el => el.type === 'isticker');
+        return hasQuiz || hasCartridge || hasISticker;
     };
 
     const markSlideSolved = (slideIndex) => {
@@ -121,8 +126,20 @@ const Player = () => {
     };
 
     const nextSlide = (force = false) => {
-        // Block if current slide has unsolved quiz/cartridge
-        if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) return;
+        // Block if current slide has unsolved quiz/cartridge/isticker
+        if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) {
+            const slide = slides[currentSlideIndex];
+            const isticker = slide?.elements?.find(el => el.type === 'isticker');
+            if (isticker) {
+                setWiggleIStickerId(isticker.id);
+                playTone('fail');
+                setTimeout(() => setWiggleIStickerId(null), 500);
+            } else {
+                // If it's a quiz or cartridge blocking
+                playTone('fail');
+            }
+            return;
+        }
         if (currentSlideIndex < slides.length - 1) {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev + 1);
@@ -610,7 +627,7 @@ const Player = () => {
                                                 height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
                                                 transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
                                                 zIndex: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 100 : 10,
-                                                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'auto' : undefined,
+                                                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem' || element.type === 'isticker') ? 'auto' : undefined,
                                             }}
                                         >
                                             {element.type === 'text' && (
@@ -619,6 +636,9 @@ const Player = () => {
                                                     style={{
                                                         fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
                                                         fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                                        fontWeight: element.metadata?.fontWeight || 'normal',
+                                                        fontStyle: element.metadata?.fontStyle || 'normal',
+                                                        textDecoration: element.metadata?.textDecoration || 'none',
                                                         color: element.metadata?.color || 'black',
                                                         backgroundColor: element.metadata?.backgroundColor || 'transparent',
                                                         padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
@@ -657,6 +677,7 @@ const Player = () => {
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
                                                     debugMode={debugMode}
+                                                    isActive={index === currentSlideIndex}
                                                 />
                                             )}
                                             {element.type === 'game' && <MinigamePlayer data={element} />}
@@ -667,6 +688,14 @@ const Player = () => {
                                                         : element
                                                     }
                                                     readOnly={true}
+                                                />
+                                            )}
+                                            {element.type === 'isticker' && (
+                                                <IStickerPlayer
+                                                    data={element}
+                                                    isActive={index === currentSlideIndex}
+                                                    onComplete={() => markSlideSolved(index)}
+                                                    isWiggling={wiggleIStickerId === element.id}
                                                 />
                                             )}
                                         </div>
