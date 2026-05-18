@@ -236,6 +236,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: isSelected ? 100 : (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? 50 : 1)),
+                pointerEvents: (element.metadata?.locked && !isSelected) ? 'none' : undefined,
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
@@ -389,6 +390,36 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                     </div>
                 )}
             </div>
+
+            {/* Lock icon for locked elements — always clickable so user can select them */}
+            {element.metadata?.locked && !isSelected && (
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onSelect(element.id);
+                    }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '22px',
+                        height: '22px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        background: 'rgba(0,0,0,0.45)',
+                        borderRadius: '0 0 6px 0',
+                        pointerEvents: 'auto',
+                        cursor: 'pointer',
+                        opacity: 0.7,
+                        zIndex: 2,
+                    }}
+                    title="Locked — click to select"
+                >
+                    🔒
+                </div>
+            )}
 
             {isSelected && !translationMode && element.type !== 'quiz' && element.type !== 'balloon' && !element.metadata?.locked && (
                 <div className="sticker-controls">

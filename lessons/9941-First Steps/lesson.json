@@ -122,7 +122,7 @@
               {
                 "type": "sticker",
                 "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                "side": "left"
+                "side": "right"
               },
               {
                 "type": "message",
@@ -811,7 +811,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-17T22:49:18.798Z",
+  "updatedAt": "2026-05-18T19:58:26.136Z",
   "path": "lessons/9941-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",
@@ -844,26 +844,11 @@
             }
           },
           {
-            "id": "el-1778986137468",
-            "type": "image",
-            "content": "/src/assets/images/robot_scanner.png?t=1778985951271",
-            "x": 60.27777777777778,
-            "y": 53.90625,
-            "width": 40,
-            "height": 11.865234375,
-            "rotation": 0,
-            "scale": 3.461637014386803,
-            "metadata": {
-              "width": 40,
-              "height": 11.865234375
-            }
-          },
-          {
             "id": "el-1778986327533",
             "type": "balloon",
-            "content": "When facing an expression, first <b>SCAN</b> to identify <b>ALL</b> the <b>OPERATORS</b>.",
+            "content": "Antes de empezar, <b>ESCANEAMOS </b>para<b> IDENTIFICAR </b>los operadores.",
             "x": 40.27777777777777,
-            "y": 30.9375,
+            "y": 30.78125,
             "width": 78.88888888888889,
             "height": 20,
             "rotation": 0,
@@ -900,6 +885,21 @@
             "metadata": {
               "width": 40,
               "height": 13.325242718446601
+            }
+          },
+          {
+            "id": "el-1778986137468",
+            "type": "image",
+            "content": "/src/assets/images/robot_scanner.png?t=1778985951271",
+            "x": 60.27777777777778,
+            "y": 53.90625,
+            "width": 40,
+            "height": 11.865234375,
+            "rotation": 0,
+            "scale": 3.461637014386803,
+            "metadata": {
+              "width": 40,
+              "height": 11.865234375
             }
           }
         ],
@@ -1297,7 +1297,7 @@
             },
             "translations": {
               "en": {
-                "content": "<div><b>+</b> <b>-</b> are</div><div>SEPARADORES</div><div>DE TERMINOS</div>"
+                "content": "<div><b>+</b> <b>-</b> are</div><div>TERM</div><div>SEPARATORS</div>"
               }
             }
           }
@@ -1622,7 +1622,7 @@
             },
             "translations": {
               "en": {
-                "content": "Hello!"
+                "content": "Hello"
               }
             }
           }
@@ -1632,7 +1632,7 @@
     ],
     "author": "User",
     "createdAt": "2026-05-15T18:19:21.767Z",
-    "updatedAt": "2026-05-17T22:33:12.261Z",
+    "updatedAt": "2026-05-17T22:49:18.798Z",
     "path": "lessons/9941-First Steps/lesson.json",
     "textPreset": null,
     "name": "9941-First Steps",
@@ -2218,37 +2218,6 @@
               }
             },
             {
-              "id": "el-1779054278960",
-              "type": "image",
-              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E2%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
-              "x": 9.722222222222221,
-              "y": 63.75,
-              "width": 50,
-              "height": 50,
-              "rotation": 0,
-              "scale": 0.22487567592150123,
-              "metadata": {
-                "width": 50,
-                "height": 50
-              }
-            },
-            {
-              "id": "el-1779051999444-9iudouj26",
-              "type": "image",
-              "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
-              "x": 48.61111111111111,
-              "y": 89.375,
-              "width": 40,
-              "height": 13.660714285714286,
-              "rotation": 0,
-              "scale": 3.6926268573355103,
-              "metadata": {
-                "width": 40,
-                "height": 13.660714285714286,
-                "locked": false
-              }
-            },
-            {
               "id": "el-1779054265192",
               "type": "image",
               "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E1%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
@@ -2261,27 +2230,6 @@
               "metadata": {
                 "width": 50,
                 "height": 50
-              }
-            },
-            {
-              "id": "el-1779054288006",
-              "type": "text",
-              "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>",
-              "x": 82.22222222222223,
-              "y": 63.59375,
-              "width": 20,
-              "height": 10,
-              "rotation": 0,
-              "scale": 1.297816432967508,
-              "metadata": {
-                "fontFamily": "\"Fira Sans\"",
-                "backgroundColor": "#475569",
-                "textAlign": "center"
-              },
-              "translations": {
-                "en": {
-                  "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>"
-                }
               }
             },
             {
@@ -2306,11 +2254,26 @@
               }
             },
             {
+              "id": "el-1779056182257",
+              "type": "image",
+              "content": "/src/assets/characters/chef_scary_knife.png",
+              "x": 10.277777777777779,
+              "y": 20.625,
+              "width": 40,
+              "height": 26.688493919550982,
+              "rotation": 0,
+              "scale": 0.45819795305696026,
+              "metadata": {
+                "width": 40,
+                "height": 26.688493919550982
+              }
+            },
+            {
               "id": "el-1779053693144",
               "type": "text",
               "content": "y finalmente:",
               "x": 36.24999999999999,
-              "y": 63.28125,
+              "y": 61.71875,
               "width": 28.995467710378463,
               "height": 10,
               "rotation": 0,
@@ -2326,18 +2289,55 @@
               }
             },
             {
-              "id": "el-1779056182257",
-              "type": "image",
-              "content": "/src/assets/characters/chef_scary_knife.png",
-              "x": 10.277777777777779,
-              "y": 20.625,
-              "width": 40,
-              "height": 26.688493919550982,
+              "id": "el-1779054288006",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>",
+              "x": 82.22222222222223,
+              "y": 62.03125,
+              "width": 20,
+              "height": 10,
               "rotation": 0,
-              "scale": 0.45819795305696026,
+              "scale": 1.297816432967508,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#475569",
+                "textAlign": "center"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>"
+                }
+              }
+            },
+            {
+              "id": "el-1779051999444-9iudouj26",
+              "type": "image",
+              "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
+              "x": 48.61111111111111,
+              "y": 89.375,
+              "width": 40,
+              "height": 13.660714285714286,
+              "rotation": 0,
+              "scale": 3.6926268573355103,
               "metadata": {
                 "width": 40,
-                "height": 26.688493919550982
+                "height": 13.660714285714286,
+                "locked": false
+              }
+            },
+            {
+              "id": "el-1779054278960",
+              "type": "image",
+              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E2%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+              "x": 9.722222222222221,
+              "y": 62.03125,
+              "width": 50,
+              "height": 50,
+              "rotation": 0,
+              "scale": 0.22487567592150123,
+              "metadata": {
+                "width": 50,
+                "height": 50
               }
             }
           ],
@@ -2347,7 +2347,7 @@
             "dividers": [
               27,
               45,
-              58,
+              57,
               68
             ]
           },
@@ -2422,9 +2422,9 @@
           "background": "#E1F5FE",
           "elements": [
             {
-              "id": "el-1779057001165",
+              "id": "el-1779057063318",
               "type": "balloon",
-              "content": "Hola",
+              "content": "Hola!",
               "x": 50,
               "y": 50,
               "width": 40,
@@ -2443,7 +2443,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "Hello"
+                  "content": "Hello!"
                 }
               }
             }
@@ -2453,7 +2453,7 @@
       ],
       "author": "User",
       "createdAt": "2026-05-15T18:19:21.767Z",
-      "updatedAt": "2026-05-17T22:30:28.488Z",
+      "updatedAt": "2026-05-17T22:33:12.261Z",
       "path": "lessons/9941-First Steps/lesson.json",
       "textPreset": null,
       "name": "9941-First Steps",
@@ -2825,47 +2825,6 @@
                 }
               },
               {
-                "id": "el-1778989395834",
-                "type": "image",
-                "content": "/src/assets/images/pro_tip.png?t=1778985951268",
-                "x": 78.88888888888889,
-                "y": 19.84375,
-                "width": 40,
-                "height": 13.325242718446601,
-                "rotation": 0,
-                "scale": 1.2215227442779293,
-                "metadata": {
-                  "width": 40,
-                  "height": 13.325242718446601
-                }
-              },
-              {
-                "id": "el-1778989454982",
-                "type": "balloon",
-                "content": "REMEMBER:<div><b>+</b> and <b>-</b> are&nbsp;</div><div><b>TERM SEPARATORS</b></div>",
-                "x": 80.27777777777777,
-                "y": 55,
-                "width": 40.555555555555536,
-                "height": 20,
-                "rotation": 0,
-                "scale": 1,
-                "metadata": {
-                  "backgroundColor": "#ffffff",
-                  "color": "#000000",
-                  "fontFamily": "\"Noto Sans\"",
-                  "fontSize": 16,
-                  "tailPos": {
-                    "x": -82,
-                    "y": 20
-                  }
-                },
-                "translations": {
-                  "en": {
-                    "content": "REMEMBER:<div><b>+</b> and <b>-</b> are&nbsp;</div><div><b>TERM SEPARATORS</b></div>"
-                  }
-                }
-              },
-              {
                 "id": "el-1779023208581",
                 "type": "isticker",
                 "content": "iSticker",
@@ -2881,11 +2840,11 @@
                 }
               },
               {
-                "id": "el-1779054559822",
+                "id": "el-1779054604126",
                 "type": "text",
-                "content": "<font color=\"#e11d48\"><b>-</b></font>",
-                "x": 21.666666666666664,
-                "y": 82.65625,
+                "content": "<span style=\"caret-color: rgb(225, 29, 72);\"><b><font color=\"#f97316\">+</font></b></span>",
+                "x": 50.83333333333333,
+                "y": 82.5,
                 "width": 20,
                 "height": 10,
                 "rotation": 0,
@@ -2897,14 +2856,14 @@
                 },
                 "translations": {
                   "en": {
-                    "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                    "content": "<font color=\"#e11d48\"><span style=\"caret-color: rgb(225, 29, 72);\"><b>+</b></span></font>"
                   }
                 }
               },
               {
                 "id": "el-1779054592430",
                 "type": "text",
-                "content": "<font color=\"#e11d48\"><b>-</b></font>",
+                "content": "<b><font color=\"#f97316\">-</font></b>",
                 "x": 79.16666666666666,
                 "y": 82.34375,
                 "width": 20,
@@ -2923,11 +2882,11 @@
                 }
               },
               {
-                "id": "el-1779054604126",
+                "id": "el-1779054559822",
                 "type": "text",
-                "content": "<font color=\"#e11d48\"><span style=\"caret-color: rgb(225, 29, 72);\"><b>+</b></span></font>",
-                "x": 50.83333333333333,
-                "y": 82.5,
+                "content": "<b><font color=\"#f97316\">-</font></b>",
+                "x": 21.666666666666664,
+                "y": 82.65625,
                 "width": 20,
                 "height": 10,
                 "rotation": 0,
@@ -2939,7 +2898,48 @@
                 },
                 "translations": {
                   "en": {
-                    "content": "<font color=\"#e11d48\"><span style=\"caret-color: rgb(225, 29, 72);\"><b>+</b></span></font>"
+                    "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                  }
+                }
+              },
+              {
+                "id": "el-1778989395834",
+                "type": "image",
+                "content": "/src/assets/images/pro_tip.png?t=1778985951268",
+                "x": 78.88888888888889,
+                "y": 19.84375,
+                "width": 40,
+                "height": 13.325242718446601,
+                "rotation": 0,
+                "scale": 1.2215227442779293,
+                "metadata": {
+                  "width": 40,
+                  "height": 13.325242718446601
+                }
+              },
+              {
+                "id": "el-1778989454982",
+                "type": "balloon",
+                "content": "<div><b>+</b> <b>-</b> son</div><div>SEPARADORES</div><div>DE TERMINOS</div>",
+                "x": 78.75,
+                "y": 55,
+                "width": 43.611111111111086,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -82,
+                    "y": 20
+                  }
+                },
+                "translations": {
+                  "en": {
+                    "content": "<div><b>+</b> <b>-</b> are</div><div>SEPARADORES</div><div>DE TERMINOS</div>"
                   }
                 }
               }
@@ -2957,42 +2957,6 @@
             "background": "#E1F5FE",
             "elements": [
               {
-                "id": "el-1779054265192",
-                "type": "image",
-                "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E1%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
-                "x": 9.166666666666664,
-                "y": 53.59375,
-                "width": 50,
-                "height": 50,
-                "rotation": 0,
-                "scale": 0.2152698729229242,
-                "metadata": {
-                  "width": 50,
-                  "height": 50
-                }
-              },
-              {
-                "id": "el-1779054288006",
-                "type": "text",
-                "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>",
-                "x": 82.22222222222223,
-                "y": 63.59375,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 1.297816432967508,
-                "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
-                  "backgroundColor": "#475569",
-                  "textAlign": "center"
-                },
-                "translations": {
-                  "en": {
-                    "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>"
-                  }
-                }
-              },
-              {
                 "id": "el-1779051999444-58tt2mynj",
                 "type": "isticker",
                 "content": "iSticker",
@@ -3005,27 +2969,6 @@
                 "metadata": {
                   "stickerType": "pemdas_term_separator",
                   "expression": "2 * 3 + 3 × 4 - 6 / 2"
-                }
-              },
-              {
-                "id": "el-1779054173733",
-                "type": "text",
-                "content": "<font color=\"#ffffff\"><b>×  ÷</b></font>",
-                "x": 81.66666666666666,
-                "y": 51.71875,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 1.297816432967508,
-                "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
-                  "backgroundColor": "#475569",
-                  "textAlign": "center"
-                },
-                "translations": {
-                  "en": {
-                    "content": "<font color=\"#ffffff\"><b>×  ÷</b></font>"
-                  }
                 }
               },
               {
@@ -3111,10 +3054,83 @@
                 }
               },
               {
+                "id": "el-1779051999444-9iudouj26",
+                "type": "image",
+                "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
+                "x": 48.61111111111111,
+                "y": 89.375,
+                "width": 40,
+                "height": 13.660714285714286,
+                "rotation": 0,
+                "scale": 3.6926268573355103,
+                "metadata": {
+                  "width": 40,
+                  "height": 13.660714285714286,
+                  "locked": false
+                }
+              },
+              {
+                "id": "el-1779054265192",
+                "type": "image",
+                "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E1%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+                "x": 9.72222222222222,
+                "y": 52.03125,
+                "width": 50,
+                "height": 50,
+                "rotation": 0,
+                "scale": 0.2152698729229242,
+                "metadata": {
+                  "width": 50,
+                  "height": 50
+                }
+              },
+              {
+                "id": "el-1779054288006",
+                "type": "text",
+                "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>",
+                "x": 82.22222222222223,
+                "y": 63.59375,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.297816432967508,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569",
+                  "textAlign": "center"
+                },
+                "translations": {
+                  "en": {
+                    "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>"
+                  }
+                }
+              },
+              {
+                "id": "el-1779054173733",
+                "type": "text",
+                "content": "<b><font color=\"#58cc02\">×  ÷</font></b>",
+                "x": 81.66666666666666,
+                "y": 51.71875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.297816432967508,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569",
+                  "textAlign": "center"
+                },
+                "translations": {
+                  "en": {
+                    "content": "<font color=\"#ffffff\"><b>×  ÷</b></font>"
+                  }
+                }
+              },
+              {
                 "id": "el-1779053693144",
                 "type": "text",
                 "content": "y finalmente:",
-                "x": 38.74999999999999,
+                "x": 36.24999999999999,
                 "y": 63.28125,
                 "width": 28.995467710378463,
                 "height": 10,
@@ -3131,19 +3147,18 @@
                 }
               },
               {
-                "id": "el-1779051999444-9iudouj26",
+                "id": "el-1779056182257",
                 "type": "image",
-                "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
-                "x": 50.27777777777777,
-                "y": 90.15625,
+                "content": "/src/assets/characters/chef_scary_knife.png",
+                "x": 10.277777777777779,
+                "y": 20.625,
                 "width": 40,
-                "height": 13.660714285714286,
+                "height": 26.688493919550982,
                 "rotation": 0,
-                "scale": 3.6926268573355103,
+                "scale": 0.45819795305696026,
                 "metadata": {
                   "width": 40,
-                  "height": 13.660714285714286,
-                  "locked": false
+                  "height": 26.688493919550982
                 }
               }
             ],
@@ -3196,7 +3211,7 @@
               {
                 "id": "el-1779023404207-zov8f035s",
                 "type": "balloon",
-                "content": "This is a good way to see why we do */ first and +- after.",
+                "content": "Esto<div><br></div>",
                 "x": 71.94444444444443,
                 "y": 83.59375,
                 "width": 53.33333333333332,
@@ -3215,18 +3230,51 @@
                 },
                 "translations": {
                   "en": {
-                    "content": "This is a good way to see why we do */ first and +- after."
+                    "content": "This<div><br></div>"
                   }
                 }
               }
             ],
             "order": 4,
             "cartridge": null
+          },
+          {
+            "id": "slide-1779056999000",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779057001165",
+                "type": "balloon",
+                "content": "Hola",
+                "x": 50,
+                "y": 50,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 20,
+                    "y": 50
+                  }
+                },
+                "translations": {
+                  "en": {
+                    "content": "Hello"
+                  }
+                }
+              }
+            ],
+            "order": 5
           }
         ],
         "author": "User",
         "createdAt": "2026-05-15T18:19:21.767Z",
-        "updatedAt": "2026-05-17T21:59:14.813Z",
+        "updatedAt": "2026-05-17T22:30:28.488Z",
         "path": "lessons/9941-First Steps/lesson.json",
         "textPreset": null,
         "name": "9941-First Steps",
@@ -3295,6 +3343,11 @@
                     "fontWeight": "normal",
                     "textDecoration": "none",
                     "textAlign": "center"
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "When facing an expression, first <b>SCAN</b> to identify <b>ALL</b> the <b>OPERATORS</b>."
+                    }
                   }
                 },
                 {
@@ -3353,7 +3406,7 @@
                       {
                         "type": "sticker",
                         "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                        "side": "right"
+                        "side": "left"
                       },
                       {
                         "type": "message",
@@ -3575,13 +3628,426 @@
             {
               "id": "slide-1778870712150",
               "background": "#E1F5FE",
-              "elements": [],
-              "order": 2
+              "elements": [
+                {
+                  "id": "el-1778989240723",
+                  "type": "image",
+                  "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
+                  "x": 50.833333333333336,
+                  "y": 76.09375,
+                  "width": 40,
+                  "height": 13.660714285714286,
+                  "rotation": 0,
+                  "scale": 3.6926268573355103,
+                  "metadata": {
+                    "width": 40,
+                    "height": 13.660714285714286,
+                    "locked": true
+                  }
+                },
+                {
+                  "id": "el-1778989395834",
+                  "type": "image",
+                  "content": "/src/assets/images/pro_tip.png?t=1778985951268",
+                  "x": 78.88888888888889,
+                  "y": 19.84375,
+                  "width": 40,
+                  "height": 13.325242718446601,
+                  "rotation": 0,
+                  "scale": 1.2215227442779293,
+                  "metadata": {
+                    "width": 40,
+                    "height": 13.325242718446601
+                  }
+                },
+                {
+                  "id": "el-1778989454982",
+                  "type": "balloon",
+                  "content": "REMEMBER:<div><b>+</b> and <b>-</b> are&nbsp;</div><div><b>TERM SEPARATORS</b></div>",
+                  "x": 80.27777777777777,
+                  "y": 55,
+                  "width": 40.555555555555536,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -82,
+                      "y": 20
+                    }
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "REMEMBER:<div><b>+</b> and <b>-</b> are&nbsp;</div><div><b>TERM SEPARATORS</b></div>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779023208581",
+                  "type": "isticker",
+                  "content": "iSticker",
+                  "x": 51.38888888888889,
+                  "y": 37.03125,
+                  "width": 80,
+                  "height": 15,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "stickerType": "pemdas_term_separator",
+                    "expression": "2 * 3 + 3 × 4 - 6 / 2"
+                  }
+                },
+                {
+                  "id": "el-1779054559822",
+                  "type": "text",
+                  "content": "<font color=\"#e11d48\"><b>-</b></font>",
+                  "x": 21.666666666666664,
+                  "y": 82.65625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 2.298441830992278,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "textAlign": "center",
+                    "fontSize": 43
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779054592430",
+                  "type": "text",
+                  "content": "<font color=\"#e11d48\"><b>-</b></font>",
+                  "x": 79.16666666666666,
+                  "y": 82.34375,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 2.298441830992278,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "textAlign": "center",
+                    "fontSize": 43
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779054604126",
+                  "type": "text",
+                  "content": "<font color=\"#e11d48\"><span style=\"caret-color: rgb(225, 29, 72);\"><b>+</b></span></font>",
+                  "x": 50.83333333333333,
+                  "y": 82.5,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 2.298441830992278,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "textAlign": "center",
+                    "fontSize": 43
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#e11d48\"><span style=\"caret-color: rgb(225, 29, 72);\"><b>+</b></span></font>"
+                    }
+                  }
+                }
+              ],
+              "order": 2,
+              "stripper": {
+                "enabled": false,
+                "dividers": [
+                  50
+                ]
+              }
+            },
+            {
+              "id": "slide-1779051999444",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779054265192",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E1%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+                  "x": 9.166666666666664,
+                  "y": 53.59375,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.2152698729229242,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50
+                  }
+                },
+                {
+                  "id": "el-1779054288006",
+                  "type": "text",
+                  "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>",
+                  "x": 82.22222222222223,
+                  "y": 63.59375,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.297816432967508,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#475569",
+                    "textAlign": "center"
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<span style=\"caret-color: rgb(255, 255, 255);\"><b><font color=\"#f97316\">+ -</font></b></span>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779051999444-58tt2mynj",
+                  "type": "isticker",
+                  "content": "iSticker",
+                  "x": 50.83333333333333,
+                  "y": 37.03125,
+                  "width": 80,
+                  "height": 15,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "stickerType": "pemdas_term_separator",
+                    "expression": "2 * 3 + 3 × 4 - 6 / 2"
+                  }
+                },
+                {
+                  "id": "el-1779054173733",
+                  "type": "text",
+                  "content": "<font color=\"#ffffff\"><b>×  ÷</b></font>",
+                  "x": 81.66666666666666,
+                  "y": 51.71875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.297816432967508,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#475569",
+                    "textAlign": "center"
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#ffffff\"><b>×  ÷</b></font>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779053480232",
+                  "type": "balloon",
+                  "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>cortan los términos!</div>",
+                  "x": 82.36111111111113,
+                  "y": 77.421875,
+                  "width": 39.72222222222222,
+                  "height": 18.59375,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 21,
+                    "tailPos": {
+                      "x": -88,
+                      "y": 14
+                    }
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>slice the terms!</div>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779052317040",
+                  "type": "text",
+                  "content": "<font color=\"#f97316\"><b>+ -</b></font> son <b>cuchillos que cortan la expresión.</b>",
+                  "x": 53.19444444444444,
+                  "y": 19.84375,
+                  "width": 28.995467710378463,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 2.810057085593638,
+                  "metadata": {
+                    "fontFamily": "\"Nunito Sans\"",
+                    "fontSize": 10,
+                    "textAlign": "center"
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "<font color=\"#f97316\">+ -</font> work as knives..."
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779054145865",
+                  "type": "text",
+                  "content": "Primero hacemos<div>estos trozos:</div>",
+                  "x": 44.86111111111111,
+                  "y": 52.03125,
+                  "width": 32.28038606261948,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.949863266118165,
+                  "metadata": {
+                    "fontFamily": "\"Nunito Sans\"",
+                    "fontSize": 12
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "We first deal with<div>these chunks:</div>"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779054278960",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%20%20%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Outfit%2C%20Inter%2C%20sans-serif%22%20font-size%3D%2260%22%20font-weight%3D%22900%22%3E2%3C%2Ftext%3E%0A%3C%2Fsvg%3E",
+                  "x": 9.722222222222221,
+                  "y": 63.75,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.22487567592150123,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50
+                  }
+                },
+                {
+                  "id": "el-1779053693144",
+                  "type": "text",
+                  "content": "y finalmente:",
+                  "x": 38.74999999999999,
+                  "y": 63.28125,
+                  "width": 28.995467710378463,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.8020822252194977,
+                  "metadata": {
+                    "fontFamily": "\"Nunito Sans\"",
+                    "fontSize": 12
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "and finally:"
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779051999444-9iudouj26",
+                  "type": "image",
+                  "content": "/src/assets/images/chef_sandwiches.png?t=1778985951265",
+                  "x": 50.27777777777777,
+                  "y": 90.15625,
+                  "width": 40,
+                  "height": 13.660714285714286,
+                  "rotation": 0,
+                  "scale": 3.6926268573355103,
+                  "metadata": {
+                    "width": 40,
+                    "height": 13.660714285714286,
+                    "locked": false
+                  }
+                }
+              ],
+              "order": 3,
+              "stripper": {
+                "enabled": true,
+                "dividers": [
+                  27,
+                  45,
+                  58,
+                  68
+                ]
+              },
+              "cartridge": null
+            },
+            {
+              "id": "slide-1779023404207",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779023417786",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+                  "x": 30.833333333333332,
+                  "y": 77.1875,
+                  "width": 40,
+                  "height": 33.30223880597015,
+                  "rotation": 0,
+                  "scale": 1.6639856776696842,
+                  "metadata": {
+                    "width": 40,
+                    "height": 33.30223880597015
+                  }
+                },
+                {
+                  "id": "el-1779023404207-jb9h2hvtt",
+                  "type": "isticker",
+                  "content": "iSticker",
+                  "x": 50.27777777777778,
+                  "y": 23.59375,
+                  "width": 80,
+                  "height": 15,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "stickerType": "pemdas_term_separator",
+                    "expression": "9 / 3 - 5 × 5 - 6 * 2"
+                  }
+                },
+                {
+                  "id": "el-1779023404207-zov8f035s",
+                  "type": "balloon",
+                  "content": "This is a good way to see why we do */ first and +- after.",
+                  "x": 71.94444444444443,
+                  "y": 83.59375,
+                  "width": 53.33333333333332,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -112,
+                      "y": -28
+                    }
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "This is a good way to see why we do */ first and +- after."
+                    }
+                  }
+                }
+              ],
+              "order": 4,
+              "cartridge": null
             }
           ],
           "author": "User",
           "createdAt": "2026-05-15T18:19:21.767Z",
-          "updatedAt": "2026-05-17T03:26:55.999Z",
+          "updatedAt": "2026-05-17T21:59:14.813Z",
           "path": "lessons/9941-First Steps/lesson.json",
           "textPreset": null,
           "name": "9941-First Steps",
@@ -3595,58 +4061,22 @@
             "slides": [
               {
                 "id": "slide-1",
-                "background": "#E1F5FE",
+                "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
                 "elements": [
                   {
                     "id": "el-1778986145011",
                     "type": "isticker",
                     "content": "iSticker",
-                    "x": 53.05555555555556,
-                    "y": 83.4375,
+                    "x": 51.111111111111114,
+                    "y": 82.65625,
                     "width": 80,
                     "height": 15,
                     "rotation": 0,
-                    "scale": 1,
+                    "scale": 0.9199950584653579,
                     "metadata": {
                       "stickerType": "expression_scanner_001",
                       "expression": "2 + 3 * 4 - 6 / 2",
                       "scanDuration": 3
-                    }
-                  },
-                  {
-                    "id": "el-1778986327533",
-                    "type": "balloon",
-                    "content": "When facing an expression, first SCAN to identify ALL the OPERATORS.",
-                    "x": 40.27777777777777,
-                    "y": 30.9375,
-                    "width": 78.88888888888889,
-                    "height": 20,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "backgroundColor": "#ffffff",
-                      "color": "#000000",
-                      "fontFamily": "\"Nunito Sans\"",
-                      "fontSize": 16,
-                      "tailPos": {
-                        "x": 43,
-                        "y": 79
-                      }
-                    }
-                  },
-                  {
-                    "id": "el-1778986130275",
-                    "type": "image",
-                    "content": "/src/assets/images/pro_tip.png?t=1778985951268",
-                    "x": 75.27777777777779,
-                    "y": 19.0625,
-                    "width": 40,
-                    "height": 13.325242718446601,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "width": 40,
-                      "height": 13.325242718446601
                     }
                   },
                   {
@@ -3663,9 +4093,51 @@
                       "width": 40,
                       "height": 11.865234375
                     }
+                  },
+                  {
+                    "id": "el-1778986327533",
+                    "type": "balloon",
+                    "content": "When facing an expression, first <b>SCAN</b> to identify <b>ALL</b> the <b>OPERATORS</b>.",
+                    "x": 40.27777777777777,
+                    "y": 30.9375,
+                    "width": 78.88888888888889,
+                    "height": 20,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Nunito Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": 43,
+                        "y": 79
+                      },
+                      "fontWeight": "normal",
+                      "textDecoration": "none",
+                      "textAlign": "center"
+                    }
+                  },
+                  {
+                    "id": "el-1778986130275",
+                    "type": "image",
+                    "content": "/src/assets/images/pro_tip.png?t=1778985951268",
+                    "x": 75.27777777777779,
+                    "y": 19.0625,
+                    "width": 40,
+                    "height": 13.325242718446601,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "width": 40,
+                      "height": 13.325242718446601
+                    }
                   }
                 ],
-                "order": 0
+                "order": 0,
+                "backgroundSettings": {
+                  "opacity": 0.21
+                }
               },
               {
                 "id": "slide-1778869678677",
@@ -3930,7 +4402,7 @@
             ],
             "author": "User",
             "createdAt": "2026-05-15T18:19:21.767Z",
-            "updatedAt": "2026-05-17T02:53:55.721Z",
+            "updatedAt": "2026-05-17T03:26:55.999Z",
             "path": "lessons/9941-First Steps/lesson.json",
             "textPreset": null,
             "name": "9941-First Steps",
@@ -3947,36 +4419,6 @@
                   "background": "#E1F5FE",
                   "elements": [
                     {
-                      "id": "el-1778986130275",
-                      "type": "image",
-                      "content": "/src/assets/images/pro_tip.png?t=1778985951268",
-                      "x": 76.94444444444444,
-                      "y": 20,
-                      "width": 40,
-                      "height": 13.325242718446601,
-                      "rotation": 0,
-                      "scale": 1,
-                      "metadata": {
-                        "width": 40,
-                        "height": 13.325242718446601
-                      }
-                    },
-                    {
-                      "id": "el-1778986137468",
-                      "type": "image",
-                      "content": "/src/assets/images/robot_scanner.png?t=1778985951271",
-                      "x": 61.111111111111114,
-                      "y": 44.6875,
-                      "width": 40,
-                      "height": 11.865234375,
-                      "rotation": 0,
-                      "scale": 2.7577035458160255,
-                      "metadata": {
-                        "width": 40,
-                        "height": 11.865234375
-                      }
-                    },
-                    {
                       "id": "el-1778986145011",
                       "type": "isticker",
                       "content": "iSticker",
@@ -3990,6 +4432,57 @@
                         "stickerType": "expression_scanner_001",
                         "expression": "2 + 3 * 4 - 6 / 2",
                         "scanDuration": 3
+                      }
+                    },
+                    {
+                      "id": "el-1778986327533",
+                      "type": "balloon",
+                      "content": "When facing an expression, first SCAN to identify ALL the OPERATORS.",
+                      "x": 40.27777777777777,
+                      "y": 30.9375,
+                      "width": 78.88888888888889,
+                      "height": 20,
+                      "rotation": 0,
+                      "scale": 1,
+                      "metadata": {
+                        "backgroundColor": "#ffffff",
+                        "color": "#000000",
+                        "fontFamily": "\"Nunito Sans\"",
+                        "fontSize": 16,
+                        "tailPos": {
+                          "x": 43,
+                          "y": 79
+                        }
+                      }
+                    },
+                    {
+                      "id": "el-1778986130275",
+                      "type": "image",
+                      "content": "/src/assets/images/pro_tip.png?t=1778985951268",
+                      "x": 75.27777777777779,
+                      "y": 19.0625,
+                      "width": 40,
+                      "height": 13.325242718446601,
+                      "rotation": 0,
+                      "scale": 1,
+                      "metadata": {
+                        "width": 40,
+                        "height": 13.325242718446601
+                      }
+                    },
+                    {
+                      "id": "el-1778986137468",
+                      "type": "image",
+                      "content": "/src/assets/images/robot_scanner.png?t=1778985951271",
+                      "x": 60.27777777777778,
+                      "y": 53.90625,
+                      "width": 40,
+                      "height": 11.865234375,
+                      "rotation": 0,
+                      "scale": 3.461637014386803,
+                      "metadata": {
+                        "width": 40,
+                        "height": 11.865234375
                       }
                     }
                   ],
@@ -4258,7 +4751,7 @@
               ],
               "author": "User",
               "createdAt": "2026-05-15T18:19:21.767Z",
-              "updatedAt": "2026-05-17T02:49:35.374Z",
+              "updatedAt": "2026-05-17T02:53:55.721Z",
               "path": "lessons/9941-First Steps/lesson.json",
               "textPreset": null,
               "name": "9941-First Steps",
@@ -4275,18 +4768,49 @@
                     "background": "#E1F5FE",
                     "elements": [
                       {
-                        "id": "el-1778869184398",
+                        "id": "el-1778986130275",
                         "type": "image",
-                        "content": "/src/assets/characters/chef%20shopping%20cart.png",
-                        "x": 50,
-                        "y": 50,
+                        "content": "/src/assets/images/pro_tip.png?t=1778985951268",
+                        "x": 76.94444444444444,
+                        "y": 20,
                         "width": 40,
-                        "height": 22.5,
+                        "height": 13.325242718446601,
                         "rotation": 0,
-                        "scale": 2.6001117518166086,
+                        "scale": 1,
                         "metadata": {
                           "width": 40,
-                          "height": 22.5
+                          "height": 13.325242718446601
+                        }
+                      },
+                      {
+                        "id": "el-1778986137468",
+                        "type": "image",
+                        "content": "/src/assets/images/robot_scanner.png?t=1778985951271",
+                        "x": 61.111111111111114,
+                        "y": 44.6875,
+                        "width": 40,
+                        "height": 11.865234375,
+                        "rotation": 0,
+                        "scale": 2.7577035458160255,
+                        "metadata": {
+                          "width": 40,
+                          "height": 11.865234375
+                        }
+                      },
+                      {
+                        "id": "el-1778986145011",
+                        "type": "isticker",
+                        "content": "iSticker",
+                        "x": 53.05555555555556,
+                        "y": 83.4375,
+                        "width": 80,
+                        "height": 15,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "stickerType": "expression_scanner_001",
+                          "expression": "2 + 3 * 4 - 6 / 2",
+                          "scanDuration": 3
                         }
                       }
                     ],
@@ -4555,7 +5079,7 @@
                 ],
                 "author": "User",
                 "createdAt": "2026-05-15T18:19:21.767Z",
-                "updatedAt": "2026-05-15T20:17:38.772Z",
+                "updatedAt": "2026-05-17T02:49:35.374Z",
                 "path": "lessons/9941-First Steps/lesson.json",
                 "textPreset": null,
                 "name": "9941-First Steps",
@@ -4615,16 +5139,16 @@
                             "chatNodes": [
                               {
                                 "type": "reply",
-                                "text": "<font face=\"Nunito\">Hola Che. Necesito ayuda...</font>"
+                                "text": "<font face=\"Nunito\">Hola Chef. Necesito ayuda...</font>"
                               },
                               {
                                 "type": "reply",
-                                "text": "2+3×2"
+                                "text": "2+3×2 = ?"
                               },
                               {
                                 "type": "sticker",
                                 "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                                "side": "left"
+                                "side": "right"
                               },
                               {
                                 "type": "message",
@@ -4632,19 +5156,19 @@
                               },
                               {
                                 "type": "message",
-                                "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                                "text": "<font face=\"Noto Sans\">Primero, recuerda que + y - funcionan como...</font>"
                               },
                               {
                                 "type": "quiz",
                                 "options": [
-                                  "Separators",
-                                  "Terminators"
+                                  "Separadores",
+                                  "Tenedores"
                                 ],
                                 "correctIndex": 0
                               },
                               {
                                 "type": "message",
-                                "text": "So this is how the operation looks separated:"
+                                "text": "Así queda la operación separada:"
                               },
                               {
                                 "type": "message",
@@ -4653,19 +5177,19 @@
                               },
                               {
                                 "type": "message",
-                                "text": "Now, what's the order of operations?"
+                                "text": "¿Cuál es el orden de las operaciones?"
                               },
                               {
                                 "type": "quiz",
                                 "options": [
-                                  "+ and - FIRST!",
-                                  "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
+                                  "Primero + <span style=\"font-size: 0.8rem;\">&nbsp;-</span>",
+                                  "Primero × ÷"
                                 ],
                                 "correctIndex": 1
                               },
                               {
                                 "type": "message",
-                                "text": "Let's do × and ÷ then."
+                                "text": "Ok, hagamos × &nbsp;÷"
                               },
                               {
                                 "type": "message",
@@ -4679,19 +5203,19 @@
                               },
                               {
                                 "type": "message",
-                                "text": "What we do next?"
+                                "text": "<span style=\"font-weight: normal;\">¿Qué hacemos ahora?</span>"
                               },
                               {
                                 "type": "quiz",
                                 "options": [
-                                  "Division and Multiplication",
-                                  "Subtraction and Addition"
+                                  "División and Multiplicación",
+                                  "Sustracción y Adición"
                                 ],
                                 "correctIndex": 1
                               },
                               {
                                 "type": "message",
-                                "text": "Go for it!"
+                                "text": "<span style=\"font-weight: normal;\">¡Vamos!</span>"
                               },
                               {
                                 "type": "message",
@@ -4709,7 +5233,7 @@
                               },
                               {
                                 "type": "message",
-                                "text": "You got it!"
+                                "text": "¡Lo lograste!"
                               },
                               {
                                 "type": "sticker",
@@ -4718,7 +5242,7 @@
                               },
                               {
                                 "type": "reply",
-                                "text": "Thanks!"
+                                "text": "¡Muchas gracias!"
                               }
                             ],
                             "translations": {
@@ -4740,11 +5264,11 @@
                                   },
                                   {
                                     "type": "message",
-                                    "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
+                                    "text": "<font face=\"Nunito Sans\">Of course!</font>"
                                   },
                                   {
                                     "type": "message",
-                                    "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                                    "text": "<font face=\"Noto Sans\">First, remember that + and - work as...</font>"
                                   },
                                   {
                                     "type": "quiz",
@@ -4756,7 +5280,7 @@
                                   },
                                   {
                                     "type": "message",
-                                    "text": "So this is how the operation looks separated:"
+                                    "text": "This is how the operation looks separated:"
                                   },
                                   {
                                     "type": "message",
@@ -4852,7 +5376,7 @@
                   ],
                   "author": "User",
                   "createdAt": "2026-05-15T18:19:21.767Z",
-                  "updatedAt": "2026-05-15T20:01:47.464Z",
+                  "updatedAt": "2026-05-15T20:17:38.772Z",
                   "path": "lessons/9941-First Steps/lesson.json",
                   "textPreset": null,
                   "name": "9941-First Steps",
@@ -5020,7 +5544,116 @@
                               ],
                               "translations": {
                                 "en": {
-                                  "options": []
+                                  "options": [],
+                                  "chatNodes": [
+                                    {
+                                      "type": "reply",
+                                      "text": "<font face=\"Nunito\">Hey Chef! I need your help.</font>"
+                                    },
+                                    {
+                                      "type": "reply",
+                                      "text": "2+3×2"
+                                    },
+                                    {
+                                      "type": "sticker",
+                                      "src": "/assets/images/stickers/cat_helpme_sticker.png",
+                                      "side": "left"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
+                                    },
+                                    {
+                                      "type": "quiz",
+                                      "options": [
+                                        "Separators",
+                                        "Terminators"
+                                      ],
+                                      "correctIndex": 0
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "So this is how the operation looks separated:"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "2    +   3×2",
+                                      "style": "narrator"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "Now, what's the order of operations?"
+                                    },
+                                    {
+                                      "type": "quiz",
+                                      "options": [
+                                        "+ and - FIRST!",
+                                        "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
+                                      ],
+                                      "correctIndex": 1
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "Let's do × and ÷ then."
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; <font color=\"#1cb0f6\">3×2</font>",
+                                      "style": "narrator"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; &nbsp;<font color=\"#1cb0f6\">6</font>",
+                                      "style": "narrator"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "What we do next?"
+                                    },
+                                    {
+                                      "type": "quiz",
+                                      "options": [
+                                        "Division and Multiplication",
+                                        "Subtraction and Addition"
+                                      ],
+                                      "correctIndex": 1
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "Go for it!"
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "2   +   6",
+                                      "style": "narrator"
+                                    },
+                                    {
+                                      "type": "quiz",
+                                      "options": [
+                                        "4",
+                                        "8",
+                                        "12"
+                                      ],
+                                      "correctIndex": 1
+                                    },
+                                    {
+                                      "type": "message",
+                                      "text": "You got it!"
+                                    },
+                                    {
+                                      "type": "sticker",
+                                      "src": "/assets/images/stickers/pesto_rock_sticker.png",
+                                      "side": "right"
+                                    },
+                                    {
+                                      "type": "reply",
+                                      "text": "Thanks!"
+                                    }
+                                  ]
                                 }
                               }
                             }
@@ -5040,7 +5673,7 @@
                     ],
                     "author": "User",
                     "createdAt": "2026-05-15T18:19:21.767Z",
-                    "updatedAt": "2026-05-15T19:55:01.331Z",
+                    "updatedAt": "2026-05-15T20:01:47.464Z",
                     "path": "lessons/9941-First Steps/lesson.json",
                     "textPreset": null,
                     "name": "9941-First Steps",
@@ -5100,7 +5733,7 @@
                                 "chatNodes": [
                                   {
                                     "type": "reply",
-                                    "text": "Hey Chef, I'm stuck with this operation..."
+                                    "text": "<font face=\"Nunito\">Hola Che. Necesito ayuda...</font>"
                                   },
                                   {
                                     "type": "reply",
@@ -5109,15 +5742,15 @@
                                   {
                                     "type": "sticker",
                                     "src": "/assets/images/stickers/cat_helpme_sticker.png",
-                                    "side": "right"
+                                    "side": "left"
                                   },
                                   {
                                     "type": "message",
-                                    "text": "Sure, let's take a look at it."
+                                    "text": "<font face=\"Nunito Sans\">¡Claro!</font>"
                                   },
                                   {
                                     "type": "message",
-                                    "text": "First, it's always useful to remember that + and - work as..."
+                                    "text": "<font face=\"Noto Sans\">First, it's always useful to remember that + and - work as...</font>"
                                   },
                                   {
                                     "type": "quiz",
@@ -5205,7 +5838,12 @@
                                     "type": "reply",
                                     "text": "Thanks!"
                                   }
-                                ]
+                                ],
+                                "translations": {
+                                  "en": {
+                                    "options": []
+                                  }
+                                }
                               }
                             }
                           ],
@@ -5223,7 +5861,7 @@
                       ],
                       "author": "User",
                       "createdAt": "2026-05-15T18:19:21.767Z",
-                      "updatedAt": "2026-05-15T19:41:16.614Z",
+                      "updatedAt": "2026-05-15T19:55:01.331Z",
                       "path": "lessons/9941-First Steps/lesson.json",
                       "textPreset": null,
                       "name": "9941-First Steps",
@@ -5337,12 +5975,12 @@
                                     },
                                     {
                                       "type": "message",
-                                      "text": "2    +   3×2",
+                                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; <font color=\"#1cb0f6\">3×2</font>",
                                       "style": "narrator"
                                     },
                                     {
                                       "type": "message",
-                                      "text": "2    +    6",
+                                      "text": "<span style=\"font-weight: normal;\">2 &nbsp; &nbsp;</span>+ &nbsp; &nbsp;<font color=\"#1cb0f6\">6</font>",
                                       "style": "narrator"
                                     },
                                     {
@@ -5406,7 +6044,7 @@
                         ],
                         "author": "User",
                         "createdAt": "2026-05-15T18:19:21.767Z",
-                        "updatedAt": "2026-05-15T19:32:33.112Z",
+                        "updatedAt": "2026-05-15T19:41:16.614Z",
                         "path": "lessons/9941-First Steps/lesson.json",
                         "textPreset": null,
                         "name": "9941-First Steps",
@@ -5471,6 +6109,11 @@
                                       {
                                         "type": "reply",
                                         "text": "2+3×2"
+                                      },
+                                      {
+                                        "type": "sticker",
+                                        "src": "/assets/images/stickers/cat_helpme_sticker.png",
+                                        "side": "right"
                                       },
                                       {
                                         "type": "message",
@@ -5558,6 +6201,11 @@
                                         "text": "You got it!"
                                       },
                                       {
+                                        "type": "sticker",
+                                        "src": "/assets/images/stickers/pesto_rock_sticker.png",
+                                        "side": "right"
+                                      },
+                                      {
                                         "type": "reply",
                                         "text": "Thanks!"
                                       }
@@ -5579,7 +6227,7 @@
                           ],
                           "author": "User",
                           "createdAt": "2026-05-15T18:19:21.767Z",
-                          "updatedAt": "2026-05-15T19:06:06.002Z",
+                          "updatedAt": "2026-05-15T19:32:33.112Z",
                           "path": "lessons/9941-First Steps/lesson.json",
                           "textPreset": null,
                           "name": "9941-First Steps",
@@ -5615,7 +6263,7 @@
                               },
                               {
                                 "id": "slide-1778869678677",
-                                "background": "#E1F5FE",
+                                "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
                                 "elements": [
                                   {
                                     "id": "el-1778869681360",
@@ -5643,7 +6291,7 @@
                                         },
                                         {
                                           "type": "reply",
-                                          "text": "2+3x2"
+                                          "text": "2+3×2"
                                         },
                                         {
                                           "type": "message",
@@ -5667,7 +6315,7 @@
                                         },
                                         {
                                           "type": "message",
-                                          "text": "2    +   3x2",
+                                          "text": "2    +   3×2",
                                           "style": "narrator"
                                         },
                                         {
@@ -5678,17 +6326,17 @@
                                           "type": "quiz",
                                           "options": [
                                             "+ and - FIRST!",
-                                            "x and / FIRST!"
+                                            "× and ÷<span style=\"font-size: 0.8rem;\">&nbsp;FIRST!</span>"
                                           ],
                                           "correctIndex": 1
                                         },
                                         {
                                           "type": "message",
-                                          "text": "Let's do x and / first then."
+                                          "text": "Let's do × and ÷ then."
                                         },
                                         {
                                           "type": "message",
-                                          "text": "2    +   3x2",
+                                          "text": "2    +   3×2",
                                           "style": "narrator"
                                         },
                                         {
@@ -5738,7 +6386,10 @@
                                     }
                                   }
                                 ],
-                                "order": 1
+                                "order": 1,
+                                "backgroundSettings": {
+                                  "opacity": 0.31
+                                }
                               },
                               {
                                 "id": "slide-1778870712150",
@@ -5749,7 +6400,7 @@
                             ],
                             "author": "User",
                             "createdAt": "2026-05-15T18:19:21.767Z",
-                            "updatedAt": "2026-05-15T18:50:24.482Z",
+                            "updatedAt": "2026-05-15T19:06:06.002Z",
                             "path": "lessons/9941-First Steps/lesson.json",
                             "textPreset": null,
                             "name": "9941-First Steps",
@@ -5808,11 +6459,12 @@
                                         "visualMode": false,
                                         "chatNodes": [
                                           {
-                                            "type": "quiz",
-                                            "options": [
-                                              "Hey Chef, I'm stuck with this operation...<div>2+3x5</div>"
-                                            ],
-                                            "correctIndex": 0
+                                            "type": "reply",
+                                            "text": "Hey Chef, I'm stuck with this operation..."
+                                          },
+                                          {
+                                            "type": "reply",
+                                            "text": "2+3x2"
                                           },
                                           {
                                             "type": "message",
@@ -5820,7 +6472,7 @@
                                           },
                                           {
                                             "type": "message",
-                                            "text": "First, it's always useful to remember than + and - work as..."
+                                            "text": "First, it's always useful to remember that + and - work as..."
                                           },
                                           {
                                             "type": "quiz",
@@ -5879,7 +6531,7 @@
                                           },
                                           {
                                             "type": "message",
-                                            "text": "There's only one addition, so let's try that:"
+                                            "text": "Go for it!"
                                           },
                                           {
                                             "type": "message",
@@ -5900,22 +6552,25 @@
                                             "text": "You got it!"
                                           },
                                           {
-                                            "type": "quiz",
-                                            "options": [
-                                              "Thanks!"
-                                            ],
-                                            "correctIndex": 0
+                                            "type": "reply",
+                                            "text": "Thanks!"
                                           }
                                         ]
                                       }
                                     }
                                   ],
                                   "order": 1
+                                },
+                                {
+                                  "id": "slide-1778870712150",
+                                  "background": "#E1F5FE",
+                                  "elements": [],
+                                  "order": 2
                                 }
                               ],
                               "author": "User",
                               "createdAt": "2026-05-15T18:19:21.767Z",
-                              "updatedAt": "2026-05-15T18:35:31.829Z",
+                              "updatedAt": "2026-05-15T18:50:24.482Z",
                               "path": "lessons/9941-First Steps/lesson.json",
                               "textPreset": null,
                               "name": "9941-First Steps",
@@ -5924,7 +6579,7 @@
                               "visible": true,
                               "order": 9941,
                               "content": {
-                                "id": "draft-1778869161767",
+                                "id": "lessons/9941-First Steps/lesson.json",
                                 "title": "First Steps",
                                 "slides": [
                                   {
@@ -5948,13 +6603,195 @@
                                       }
                                     ],
                                     "order": 0
+                                  },
+                                  {
+                                    "id": "slide-1778869678677",
+                                    "background": "#E1F5FE",
+                                    "elements": [
+                                      {
+                                        "id": "el-1778869681360",
+                                        "type": "quiz",
+                                        "content": "Quiz",
+                                        "x": 50,
+                                        "y": 75,
+                                        "width": 20,
+                                        "height": 10,
+                                        "rotation": 0,
+                                        "scale": 1,
+                                        "metadata": {
+                                          "fontFamily": "\"Fira Sans\"",
+                                          "options": [],
+                                          "correctIndex": 0,
+                                          "correctIndices": [
+                                            0
+                                          ],
+                                          "quizType": "chatquiz",
+                                          "visualMode": false,
+                                          "chatNodes": [
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "Hey Chef, I'm stuck with this operation...<div>2+3x5</div>"
+                                              ],
+                                              "correctIndex": 0
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "Sure, let's take a look at it."
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "First, it's always useful to remember than + and - work as..."
+                                            },
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "Separators",
+                                                "Terminators"
+                                              ],
+                                              "correctIndex": 0
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "So this is how the operation looks separated:"
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "2    +   3x2",
+                                              "style": "narrator"
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "Now, what's the order of operations?"
+                                            },
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "+ and - FIRST!",
+                                                "x and / FIRST!"
+                                              ],
+                                              "correctIndex": 1
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "Let's do x and / first then."
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "2    +   3x2",
+                                              "style": "narrator"
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "2    +    6",
+                                              "style": "narrator"
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "What we do next?"
+                                            },
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "Division and Multiplication",
+                                                "Subtraction and Addition"
+                                              ],
+                                              "correctIndex": 1
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "There's only one addition, so let's try that:"
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "2   +   6",
+                                              "style": "narrator"
+                                            },
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "4",
+                                                "8",
+                                                "12"
+                                              ],
+                                              "correctIndex": 1
+                                            },
+                                            {
+                                              "type": "message",
+                                              "text": "You got it!"
+                                            },
+                                            {
+                                              "type": "quiz",
+                                              "options": [
+                                                "Thanks!"
+                                              ],
+                                              "correctIndex": 0
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    "order": 1
                                   }
                                 ],
                                 "author": "User",
                                 "createdAt": "2026-05-15T18:19:21.767Z",
-                                "updatedAt": "2026-05-15T18:20:19.942Z",
+                                "updatedAt": "2026-05-15T18:35:31.829Z",
                                 "path": "lessons/9941-First Steps/lesson.json",
-                                "textPreset": null
+                                "textPreset": null,
+                                "name": "9941-First Steps",
+                                "type": "file",
+                                "description": "",
+                                "visible": true,
+                                "order": 9941,
+                                "content": {
+                                  "id": "draft-1778869161767",
+                                  "title": "First Steps",
+                                  "slides": [
+                                    {
+                                      "id": "slide-1",
+                                      "background": "#E1F5FE",
+                                      "elements": [
+                                        {
+                                          "id": "el-1778869184398",
+                                          "type": "image",
+                                          "content": "/src/assets/characters/chef%20shopping%20cart.png",
+                                          "x": 50,
+                                          "y": 50,
+                                          "width": 40,
+                                          "height": 22.5,
+                                          "rotation": 0,
+                                          "scale": 2.6001117518166086,
+                                          "metadata": {
+                                            "width": 40,
+                                            "height": 22.5
+                                          }
+                                        }
+                                      ],
+                                      "order": 0
+                                    }
+                                  ],
+                                  "author": "User",
+                                  "createdAt": "2026-05-15T18:19:21.767Z",
+                                  "updatedAt": "2026-05-15T18:20:19.942Z",
+                                  "path": "lessons/9941-First Steps/lesson.json",
+                                  "textPreset": null
+                                },
+                                "status": "completed",
+                                "icon": {
+                                  "type": {},
+                                  "key": null,
+                                  "props": {
+                                    "size": 24
+                                  },
+                                  "_owner": null,
+                                  "_store": {}
+                                },
+                                "progress": {
+                                  "lastSlideIndex": 1,
+                                  "completed": true,
+                                  "lastPlayed": 1778869523349
+                                }
                               },
                               "status": "completed",
                               "icon": {
@@ -5969,10 +6806,10 @@
                               "progress": {
                                 "lastSlideIndex": 1,
                                 "completed": true,
-                                "lastPlayed": 1778869523349
+                                "lastPlayed": 1778870537774
                               }
                             },
-                            "status": "completed",
+                            "status": "active",
                             "icon": {
                               "type": {},
                               "key": null,
@@ -5984,8 +6821,8 @@
                             },
                             "progress": {
                               "lastSlideIndex": 1,
-                              "completed": true,
-                              "lastPlayed": 1778870537774
+                              "completed": false,
+                              "lastPlayed": 1778871478065
                             }
                           },
                           "status": "active",
@@ -6001,7 +6838,7 @@
                           "progress": {
                             "lastSlideIndex": 1,
                             "completed": false,
-                            "lastPlayed": 1778871478065
+                            "lastPlayed": 1778873259443
                           }
                         },
                         "status": "active",
@@ -6015,9 +6852,9 @@
                           "_store": {}
                         },
                         "progress": {
-                          "lastSlideIndex": 1,
+                          "lastSlideIndex": 0,
                           "completed": false,
-                          "lastPlayed": 1778873259443
+                          "lastPlayed": 1778873662196
                         }
                       },
                       "status": "active",
@@ -6031,9 +6868,15 @@
                         "_store": {}
                       },
                       "progress": {
-                        "lastSlideIndex": 0,
+                        "lastSlideIndex": 1,
                         "completed": false,
-                        "lastPlayed": 1778873662196
+                        "lastPlayed": 1778874409080
+                      },
+                      "translations": {
+                        "en": {
+                          "title": "First Steps",
+                          "description": ""
+                        }
                       }
                     },
                     "status": "active",
@@ -6049,7 +6892,7 @@
                     "progress": {
                       "lastSlideIndex": 1,
                       "completed": false,
-                      "lastPlayed": 1778874409080
+                      "lastPlayed": 1778874814643
                     },
                     "translations": {
                       "en": {
@@ -6069,9 +6912,9 @@
                     "_store": {}
                   },
                   "progress": {
-                    "lastSlideIndex": 1,
+                    "lastSlideIndex": 0,
                     "completed": false,
-                    "lastPlayed": 1778874814643
+                    "lastPlayed": 1778875283246
                   },
                   "translations": {
                     "en": {
@@ -6093,7 +6936,7 @@
                 "progress": {
                   "lastSlideIndex": 0,
                   "completed": false,
-                  "lastPlayed": 1778875283246
+                  "lastPlayed": 1778986108630
                 },
                 "translations": {
                   "en": {
@@ -6115,7 +6958,7 @@
               "progress": {
                 "lastSlideIndex": 0,
                 "completed": false,
-                "lastPlayed": 1778986108630
+                "lastPlayed": 1778986178024
               },
               "translations": {
                 "en": {
@@ -6137,7 +6980,7 @@
             "progress": {
               "lastSlideIndex": 0,
               "completed": false,
-              "lastPlayed": 1778986178024
+              "lastPlayed": 1778986461422
             },
             "translations": {
               "en": {
@@ -6159,7 +7002,7 @@
           "progress": {
             "lastSlideIndex": 0,
             "completed": false,
-            "lastPlayed": 1778986461422
+            "lastPlayed": 1778989188741
           },
           "translations": {
             "en": {
@@ -6179,9 +7022,9 @@
           "_store": {}
         },
         "progress": {
-          "lastSlideIndex": 0,
+          "lastSlideIndex": 3,
           "completed": false,
-          "lastPlayed": 1778989188741
+          "lastPlayed": 1779054954527
         },
         "translations": {
           "en": {
@@ -6201,9 +7044,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 3,
+        "lastSlideIndex": 2,
         "completed": false,
-        "lastPlayed": 1779054954527
+        "lastPlayed": 1779056564248
       },
       "translations": {
         "en": {
@@ -6223,9 +7066,9 @@
       "_store": {}
     },
     "progress": {
-      "lastSlideIndex": 2,
+      "lastSlideIndex": 3,
       "completed": false,
-      "lastPlayed": 1779056564248
+      "lastPlayed": 1779057399214
     },
     "translations": {
       "en": {
@@ -6245,9 +7088,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 3,
+    "lastSlideIndex": 0,
     "completed": false,
-    "lastPlayed": 1779057399214
+    "lastPlayed": 1778941825966
   },
   "translations": {
     "en": {
