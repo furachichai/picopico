@@ -11,6 +11,15 @@ const Toolbar = ({ onOpenLibrary }) => {
     const [showQ2Menu, setShowQ2Menu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
     const [showIStickerMenu, setShowIStickerMenu] = useState(false);
+    const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);
+
+    const getSymbolSvg = (number) => {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="50" fill="#8B5CF6" />
+  <text x="50" y="55" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="Outfit, Inter, sans-serif" font-size="60" font-weight="900">${number}</text>
+</svg>`;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    };
 
     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
@@ -191,6 +200,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 setShowQuizMenu(false);
                                 setShowQ2Menu(false);
                                 setShowIStickerMenu(false);
+                                setShowSymbolsMenu(false);
                             }}
                             title={t('editor.addGame')}
                         >
@@ -277,6 +287,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 setShowQuizMenu(false);
                                 setShowQ2Menu(false);
                                 setShowGameMenu(false);
+                                setShowSymbolsMenu(false);
                             }}
                             title="Interactive Stickers"
                         >
@@ -316,6 +327,48 @@ const Toolbar = ({ onOpenLibrary }) => {
                             </div>
                         )}
                     </div>
+                    <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
+                        <button
+                            className={`btn-secondary ${showSymbolsMenu ? 'active' : ''}`}
+                            onClick={() => {
+                                setShowSymbolsMenu(!showSymbolsMenu);
+                                setShowQuizMenu(false);
+                                setShowQ2Menu(false);
+                                setShowGameMenu(false);
+                                setShowIStickerMenu(false);
+                            }}
+                            title="Symbols"
+                            style={{ fontSize: '1.2rem' }}
+                        >
+                            #️⃣
+                        </button>
+                        {showSymbolsMenu && (
+                            <div className="toolbar-submenu" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', padding: '12px' }}>
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                    <button 
+                                        key={`symbol-${num}`}
+                                        onClick={() => {
+                                            dispatch({
+                                                type: 'ADD_ELEMENT',
+                                                payload: {
+                                                    type: ELEMENT_TYPES.IMAGE,
+                                                    content: getSymbolSvg(num),
+                                                    metadata: {
+                                                        width: 50,
+                                                        height: 50
+                                                    }
+                                                }
+                                            });
+                                            setShowSymbolsMenu(false);
+                                        }}
+                                        style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#8B5CF6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold', padding: 0, border: 'none' }}
+                                    >
+                                        {num}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => onOpenLibrary('custom')} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
                     <button className="btn-secondary" onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'background' })} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
@@ -345,12 +398,12 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 onClick={() => {
                                     const dividers = [...(currentSlide.stripper.dividers || [50])];
                                     if (dividers.length >= 4) return;
-                                    // Add a new divider evenly distributed
-                                    const count = dividers.length + 1;
-                                    const newDividers = Array.from({ length: count }, (_, i) => Math.round(((i + 1) / (count + 1)) * 100));
+                                    const lastDivider = dividers[dividers.length - 1] || 50;
+                                    const newDivider = Math.min(95, lastDivider + 15);
+                                    dividers.push(newDivider);
                                     dispatch({
                                         type: 'UPDATE_SLIDE',
-                                        payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                                        payload: { stripper: { ...currentSlide.stripper, dividers: dividers } }
                                     });
                                 }}
                                 title="Add Divider"
@@ -367,11 +420,10 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 onClick={() => {
                                     const dividers = [...(currentSlide.stripper.dividers || [50])];
                                     if (dividers.length <= 1) return;
-                                    const count = dividers.length - 1;
-                                    const newDividers = Array.from({ length: count }, (_, i) => Math.round(((i + 1) / (count + 1)) * 100));
+                                    dividers.pop(); // Remove the last divider
                                     dispatch({
                                         type: 'UPDATE_SLIDE',
-                                        payload: { stripper: { ...currentSlide.stripper, dividers: newDividers } }
+                                        payload: { stripper: { ...currentSlide.stripper, dividers: dividers } }
                                     });
                                 }}
                                 title="Remove Divider"

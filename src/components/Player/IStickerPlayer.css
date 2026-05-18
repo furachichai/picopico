@@ -273,17 +273,11 @@
     50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.6)); }
 }
 
-/* Greyed out after played */
-.isticker-termsep-play.played {
+/* Greyed out after played or during separation */
+.isticker-termsep-play.played,
+.isticker-termsep-play.separating {
     color: rgba(255, 255, 255, 0.25);
     cursor: default;
     pointer-events: none;
     animation: none;
-}
-
-/* During separation animation */
-.isticker-termsep-play.separating {
-    color: rgba(245, 158, 11, 0.6);
-    animation: none;
-    pointer-events: none;
 }

@@ -258,7 +258,7 @@ const Canvas = (props) => {
             }
             return (
               <Sticker
-                key={element.id}
+                key={`${element.id}-${state.translationMode ? state.translationMode.lang : 'base'}`}
                 element={displayElement}
                 isSelected={element.id === selectedElementId}
                 onSelect={handleSelect}

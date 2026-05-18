@@ -283,6 +283,7 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
                         <span
                             key={token.id}
                             className={`isticker-termsep-token ${token.isSeparator ? 'is-separator' : ''}`}
+                            style={(token.display === '×' || token.display === '÷') ? { color: '#6EE7B7' } : {}}
                         >
                             {token.display}
                         </span>

@@ -120,6 +120,15 @@
     /* Styles are now handled inline to match Editor */
 }
 
+/* Style for inline text background highlights to look like rounded pill frames */
+.player-text span[style*="background-color"],
+.sticker-content span[style*="background-color"] {
+    border-radius: 6px;
+    padding: 2px 6px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
 .player-element img {
     width: 100%;
     height: 100%;

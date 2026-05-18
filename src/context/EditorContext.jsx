@@ -184,21 +184,32 @@ const editorReducer = (state, action) => {
         }
 
         case 'UPDATE_ELEMENT': {
+            const { id, updates } = action.payload;
             return {
                 ...state,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
-                    slides: state.lesson.slides.map((slide) =>
-                        slide.id === state.currentSlideId
-                            ? {
-                                ...slide,
-                                elements: slide.elements.map((el) =>
-                                    el.id === action.payload.id ? { ...el, ...action.payload.updates } : el
-                                ),
-                            }
-                            : slide
-                    ),
+                    slides: state.lesson.slides.map((slide) => {
+                        if (slide.id !== state.currentSlideId) return slide;
+
+                        const oldElement = slide.elements.find(el => el.id === id);
+                        let newElements = slide.elements.map((el) =>
+                            el.id === id ? { ...el, ...updates, metadata: { ...el.metadata, ...updates.metadata } } : el
+                        );
+
+                        // If element was just locked, move it to the beginning of the array (lowest z-sort)
+                        const wasLocked = oldElement?.metadata?.locked;
+                        const isNowLocked = updates.metadata?.locked;
+                        
+                        if (!wasLocked && isNowLocked) {
+                            const updatedElement = newElements.find(el => el.id === id);
+                            newElements = newElements.filter(el => el.id !== id);
+                            newElements.unshift(updatedElement);
+                        }
+
+                        return { ...slide, elements: newElements };
+                    }),
                 },
             };
         }
@@ -675,6 +686,7 @@ const editorReducer = (state, action) => {
                 ...state,
                 isDirty: true,
                 translationMode: null,
+                selectedElementId: null, // Deselect so contentEditable DOM resets to base language
                 lesson: {
                     ...state.lesson,
                     slides: newSlides,
@@ -690,7 +702,7 @@ const editorReducer = (state, action) => {
         }
 
         case 'DISCARD_TRANSLATION':
-            return { ...state, translationMode: null };
+            return { ...state, translationMode: null, selectedElementId: null };
 
         default:
             return state;
