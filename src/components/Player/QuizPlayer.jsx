@@ -632,7 +632,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const W_s = 100;
         const H_s = 100;
-        const margin = 12;
+        const margin = 22;
         const containerW = el.clientWidth || 360;
         const containerH = el.clientHeight || 540;
 
@@ -691,7 +691,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const W_s = 100;
         const H_s = 100;
-        const margin = 12;
+        const margin = 22;
         const gap = 10; // minimum gap between cards
 
         // Calculate grid dimensions to fit all cards without overlap
@@ -855,7 +855,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
                 const W_s = 100;
                 const H_s = 100;
-                const margin = 12;
+                const margin = 22;
                 let adjusted = false;
                 matchStateRef.current.squares.forEach(sq => {
                     const newX = Math.max(margin, Math.min(newW - W_s - margin, sq.x));
@@ -886,7 +886,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const elasticity = 0.3;
         const W_s = 100;
         const H_s = 100;
-        const margin = 12;
+        const margin = 22;
 
         const loop = () => {
             const state = matchStateRef.current;
