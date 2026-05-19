@@ -731,19 +731,25 @@ const Player = () => {
                                 const isStripVisible = !stripperActive || elementStrip <= currentStep;
                                 const isStripRevealing = stripperActive && elementStrip === currentStep && elementStrip > 0 && index === currentSlideIndex && !visitedStripperSlides.has(index);
 
+                                const isFullScreenQuiz = element.type === 'quiz' && (
+                                    element.metadata?.quizType === 'chatquiz' || 
+                                    element.metadata?.quizType === 'pem' || 
+                                    element.metadata?.quizType === 'match'
+                                );
+
                                 try {
                                     return (
                                         <div
                                             key={element.id}
-                                            className={`player-element ${(element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
+                                            className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
                                             style={{
-                                                left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '50%' : `${element.x}%`,
-                                                top: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '55%' : `${element.y}%`,
-                                                width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
-                                                height: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
-                                                transform: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                                                zIndex: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem') ? 100 : 10,
-                                                pointerEvents: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem' || element.type === 'isticker') ? 'auto' : undefined,
+                                                left: isFullScreenQuiz ? '50%' : `${element.x}%`,
+                                                top: isFullScreenQuiz ? '55%' : `${element.y}%`,
+                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
+                                                height: isFullScreenQuiz ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
+                                                zIndex: isFullScreenQuiz ? 100 : 10,
+                                                pointerEvents: (isFullScreenQuiz || element.type === 'isticker') ? 'auto' : undefined,
                                             }}
                                         >
                                             {element.type === 'text' && (

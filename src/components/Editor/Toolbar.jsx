@@ -51,12 +51,14 @@ const Toolbar = ({ onOpenLibrary }) => {
         const isReorder = type === 'reorder';
         const isChatQuiz = type === 'chatquiz';
         const isPEM = type === 'pem';
+        const isMatch = type === 'match';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
         else if (isReorder) defaultOptions = ['First', 'Second', 'Third', 'Fourth'];
         else if (isChatQuiz) defaultOptions = [];
         else if (isPEM) defaultOptions = [];
+        else if (isMatch) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6', '5 + 3'];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -70,8 +72,9 @@ const Toolbar = ({ onOpenLibrary }) => {
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match'
                     visualMode: false,
+                    ...(isMatch && { matchAnswers: ['5', '6', '9', '7', '8'] }),
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
                     ...(preset?.quizAnswers?.fontSize && { answerFontSize: preset.quizAnswers.fontSize }),
                     ...(preset?.quizAnswers?.color && { answerColor: preset.quizAnswers.color }),
@@ -147,6 +150,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 <button onClick={() => handleAddQuiz('nl')}>Number Line</button>
                                 <button onClick={() => handleAddQuiz('reorder')}>Reorder</button>
                                 <button onClick={() => handleAddQuiz('chatquiz')}>Chat</button>
+                                <button onClick={() => handleAddQuiz('match')}>Match Drag</button>
                             </div>
                         )}
                     </div>

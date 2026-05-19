@@ -78,16 +78,157 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemGameLevel, setPemGameLevel] = useState(0);
     const [isPemPowerupActive, setIsPemPowerupActive] = useState(false);
     const pemAudioCtx = React.useRef(null);
+    const globalAudioCtx = React.useRef(null);
+
+    // Match Quiz State and Refs
+    const [matchSquares, setMatchSquares] = useState([]);
+    const [activeMatchDragId, setActiveMatchDragId] = useState(null);
+    const matchContainerRef = React.useRef(null);
+    const matchStateRef = React.useRef({ squares: [], draggedId: null, pointer: { x: 0, y: 0, startX: 0, startY: 0 }, dims: { w: 360, h: 540 } });
+
+    // Generate a fixed set of subtle rising bubbles for the Match Drag background
+    const matchBubbles = React.useMemo(() => {
+        const list = [];
+        for (let i = 0; i < 20; i++) {
+            const size = Math.random() * 15 + 8; // 8px to 23px
+            const left = Math.random() * 100; // 0% to 100%
+            const duration = Math.random() * 4 + 6; // 6s to 10s (slow, subtle)
+            const delay = Math.random() * 6; // 0s to 6s
+            const sway = (Math.random() - 0.5) * 40; // -20px to 20px
+            list.push({ id: i, size, left, duration, delay, sway });
+        }
+        return list;
+    }, []);
 
     const attemptsUsed = wrongIndices.size;
 
     // -------------------------------------------------------------------------
     // 3. HELPERS & EFFECTS
     // -------------------------------------------------------------------------
-    const playSound = (type) => {
-        const audio = new Audio(`/sounds/${type}.mp3`);
-        audio.play().catch(e => console.log('Audio play failed:', e));
+    const ensureAudioAuthorized = () => {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext && !globalAudioCtx.current) {
+                globalAudioCtx.current = new AudioContext();
+            }
+            if (globalAudioCtx.current && globalAudioCtx.current.state === 'suspended') {
+                globalAudioCtx.current.resume();
+            }
+        } catch (e) {
+            console.warn('Failed to pre-authorize AudioContext:', e);
+        }
     };
+
+    const playSound = (type) => {
+        try {
+            // Create context if needed
+            if (!globalAudioCtx.current) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                globalAudioCtx.current = new AC();
+            }
+            const ctx = globalAudioCtx.current;
+
+            // Schedule audio after ensuring context is running
+            const scheduleSound = () => {
+                const now = ctx.currentTime;
+                if (type === 'correct') {
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    const gain1 = ctx.createGain();
+                    const gain2 = ctx.createGain();
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(523.25, now);
+                    osc1.frequency.setValueAtTime(659.25, now + 0.1);
+                    gain1.gain.setValueAtTime(0.35, now);
+                    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc1.connect(gain1); gain1.connect(ctx.destination);
+                    osc1.start(now); osc1.stop(now + 0.3);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(783.99, now + 0.1);
+                    osc2.frequency.setValueAtTime(1046.50, now + 0.2);
+                    gain2.gain.setValueAtTime(0.35, now + 0.1);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc2.connect(gain2); gain2.connect(ctx.destination);
+                    osc2.start(now + 0.1); osc2.stop(now + 0.4);
+                } else if (type === 'wrong') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(120, now + 0.25);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.25);
+                } else if (type === 'fail') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.setValueAtTime(90, now + 0.15);
+                    gain.gain.setValueAtTime(0.35, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else if (type === 'attach') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.06);
+                } else if (type === 'detach') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(250, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.08);
+                }
+            };
+
+            // Always call resume — if already running it's a no-op.
+            // Schedule sound after resume promise resolves to guarantee context is active.
+            if (ctx.state !== 'running') {
+                ctx.resume().then(scheduleSound).catch(() => {});
+            } else {
+                scheduleSound();
+            }
+        } catch (err) {
+            console.warn('Sound playback failed:', err);
+        }
+    };
+
+    // Global click/touch unlocker for AudioContext — ensures audio works on first interaction
+    useEffect(() => {
+        const unlockAudio = () => {
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass && !globalAudioCtx.current) {
+                    globalAudioCtx.current = new AudioContextClass();
+                }
+                if (globalAudioCtx.current && globalAudioCtx.current.state === 'suspended') {
+                    globalAudioCtx.current.resume();
+                }
+                if (pemAudioCtx.current && pemAudioCtx.current.state === 'suspended') {
+                    pemAudioCtx.current.resume();
+                }
+            } catch (e) { /* silent */ }
+        };
+        window.addEventListener('click', unlockAudio);
+        window.addEventListener('touchstart', unlockAudio);
+        return () => {
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
+        };
+    }, []);
 
     // ChatQuiz auto-scroll
     useEffect(() => {
@@ -195,6 +336,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     };
 
     const handleSelect = (index) => {
+        ensureAudioAuthorized();
         if (isSolved || isFailed) return;
         if (isMultiSelect) {
             const newSelected = new Set(selectedIndices);
@@ -225,6 +367,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     };
 
     const handleDragStart = (e) => {
+        ensureAudioAuthorized();
         if (isSolved || isFailed || disabled) return;
         setIsDragging(true);
     };
@@ -266,11 +409,659 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         };
     }, [isDragging, handleDragMove, handleDragEnd]);
 
+    // -------------------------------------------------------------------------
+    // MATCH QUIZ HANDLERS & PHYSICS
+    // -------------------------------------------------------------------------
+    const handleMatchDragMove = useCallback((e) => {
+        const state = matchStateRef.current;
+        if (!state.draggedId || !matchContainerRef.current) return;
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const el = matchContainerRef.current;
+        const containerRect = el.getBoundingClientRect();
+        const scaleX = containerRect.width / el.clientWidth || 1;
+        const scaleY = containerRect.height / el.clientHeight || 1;
+
+        state.pointer.x = (clientX - containerRect.left) / scaleX;
+        state.pointer.y = (clientY - containerRect.top) / scaleY;
+    }, []);
+
+    const handleMatchDragEnd = useCallback(() => {
+        const state = matchStateRef.current;
+        const draggedId = state.draggedId;
+        if (!draggedId) return;
+
+        // Clear hover scaling classes directly on DOM elements
+        state.squares.forEach(sq => {
+            const el = document.getElementById(`sq-el-${sq.id}`);
+            if (el) el.classList.remove('drag-hover');
+        });
+
+        const sq1 = state.squares.find(s => s.id === draggedId);
+        state.draggedId = null;
+        state.hoveredId = null;
+        setActiveMatchDragId(null);
+
+        if (!sq1) return;
+
+        const W_s = 100;
+        const H_s = 100;
+        const c1x = sq1.x + W_s / 2;
+        const c1y = sq1.y + H_s / 2;
+
+        let bestMatch = null;
+        let maxOverlap = 0;
+
+        state.squares.forEach(sq2 => {
+            if (sq2.id === draggedId || sq2.matched) return;
+
+            const c2x = sq2.x + W_s / 2;
+            const c2y = sq2.y + H_s / 2;
+
+            const dx = c2x - c1x;
+            const dy = c2y - c1y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const activeRadius = 70;
+
+            if (dist < activeRadius) {
+                const overlap = activeRadius - dist;
+                if (overlap > maxOverlap) {
+                    maxOverlap = overlap;
+                    bestMatch = sq2;
+                }
+            }
+        });
+
+        if (bestMatch) {
+            if (sq1.pairIndex === bestMatch.pairIndex && sq1.type !== bestMatch.type) {
+                // Correct match! Two-stage premium animation
+                sq1.flashGreen = true;
+                bestMatch.flashGreen = true;
+                sq1.x = bestMatch.x;
+                sq1.y = bestMatch.y;
+                sq1.vx = 0;
+                sq1.vy = 0;
+                bestMatch.vx = 0;
+                bestMatch.vy = 0;
+                sq1.merging = false;
+                bestMatch.merging = false;
+
+                playSound('correct');
+                
+                // Immediately render snapped positions and green flash (cards stay at full scale)
+                setMatchSquares(state.squares.map(s => {
+                    if (s.id === sq1.id || s.id === bestMatch.id) {
+                        return { ...s, isDragging: false, merging: false, flashGreen: true, x: s.id === sq1.id ? bestMatch.x : s.x, y: s.id === sq1.id ? bestMatch.y : s.y };
+                    }
+                    return { ...s, isDragging: false };
+                }));
+
+                // Phase 2: After 375ms (25% shorter), start the merging shrink-fade animation
+                setTimeout(() => {
+                    sq1.merging = true;
+                    bestMatch.merging = true;
+
+                    setMatchSquares(state.squares.map(s => {
+                        if (s.id === sq1.id || s.id === bestMatch.id) {
+                            return { ...s, isDragging: false, merging: true, flashGreen: true };
+                        }
+                        return { ...s, isDragging: false };
+                    }));
+
+                    // Phase 3: After another 500ms, finalize matched states and check if quiz is solved
+                    setTimeout(() => {
+                        sq1.flashGreen = false;
+                        bestMatch.flashGreen = false;
+                        sq1.matched = true;
+                        bestMatch.matched = true;
+                        sq1.merging = false;
+                        bestMatch.merging = false;
+
+                        const allMatched = state.squares.every(s => s.matched);
+                        if (allMatched) {
+                            handleSuccess();
+                        } else {
+                            setMatchSquares(state.squares.map(s => ({ ...s, isDragging: false })));
+                        }
+                    }, 500);
+                }, 375);
+            } else {
+                // Wrong match! Snap together, turn solid red, freeze static for 500ms, then split.
+                // Calculate separation direction BEFORE snapping positions
+                const c2x = bestMatch.x + W_s / 2;
+                const c2y = bestMatch.y + H_s / 2;
+                const dx = c2x - c1x;
+                const dy = c2y - c1y;
+                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                // Snap sq1 on top of bestMatch and freeze both
+                sq1.x = bestMatch.x;
+                sq1.y = bestMatch.y;
+                sq1.vx = 0;
+                sq1.vy = 0;
+                bestMatch.vx = 0;
+                bestMatch.vy = 0;
+                sq1.flashRed = true;
+                bestMatch.flashRed = true;
+
+                playSound('wrong');
+
+                // Immediately render the solid red stacked cards
+                setMatchSquares(state.squares.map(s => {
+                    if (s.id === sq1.id) {
+                        return { ...s, isDragging: false, flashRed: true, x: bestMatch.x, y: bestMatch.y, vx: 0, vy: 0 };
+                    }
+                    if (s.id === bestMatch.id) {
+                        return { ...s, isDragging: false, flashRed: true, vx: 0, vy: 0 };
+                    }
+                    return { ...s, isDragging: false };
+                }));
+
+                // After 250ms static red, clear red state and split apart
+                setTimeout(() => {
+                    sq1.flashRed = false;
+                    bestMatch.flashRed = false;
+                    sq1.vx = -nx * 2.5;
+                    sq1.vy = -ny * 2.5;
+                    bestMatch.vx = nx * 2.5;
+                    bestMatch.vy = ny * 2.5;
+                    setMatchSquares(state.squares.map(s => ({ ...s, isDragging: false, flashRed: false })));
+                }, 250);
+            }
+        } else {
+            // Drop in empty space, float away
+            sq1.vx = (Math.random() - 0.5) * 0.4;
+            sq1.vy = (Math.random() - 0.5) * 0.4;
+            setMatchSquares(state.squares.map(s => ({ ...s, isDragging: false })));
+        }
+    }, [handleSuccess]);
+
+    const handleMatchDragStart = (e, sqId) => {
+        ensureAudioAuthorized();
+        if (isSolved || isFailed || disabled) return;
+        e.preventDefault();
+
+        const sq = matchStateRef.current.squares.find(s => s.id === sqId);
+        if (!sq || sq.matched) return;
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        matchStateRef.current.draggedId = sqId;
+        matchStateRef.current.hoveredId = null;
+        matchStateRef.current.hoverCandidateId = null;
+        matchStateRef.current.hoverCandidateStart = 0;
+        matchStateRef.current.lastX = undefined;
+        matchStateRef.current.lastY = undefined;
+        setActiveMatchDragId(sqId);
+
+        if (!matchContainerRef.current) return;
+        const el = matchContainerRef.current;
+        const containerRect = el.getBoundingClientRect();
+        const scaleX = containerRect.width / el.clientWidth || 1;
+        const scaleY = containerRect.height / el.clientHeight || 1;
+
+        const pointerX = (clientX - containerRect.left) / scaleX;
+        const pointerY = (clientY - containerRect.top) / scaleY;
+
+        const W_s = 100;
+        const H_s = 100;
+        const margin = 12;
+        const containerW = el.clientWidth || 360;
+        const containerH = el.clientHeight || 540;
+
+        // Auto-readjust card position so it centers exactly on the grab point
+        sq.x = pointerX - W_s / 2;
+        sq.y = pointerY - H_s / 2;
+
+        // Bounding limits enforcement
+        sq.x = Math.max(margin, Math.min(containerW - W_s - margin, sq.x));
+        sq.y = Math.max(margin, Math.min(containerH - H_s - margin, sq.y));
+
+        matchStateRef.current.pointer = {
+            x: pointerX,
+            y: pointerY,
+            startX: W_s / 2,
+            startY: H_s / 2
+        };
+
+        setMatchSquares(matchStateRef.current.squares.map(s => {
+            if (s.id === sqId) return { ...s, x: sq.x, y: sq.y, isDragging: true };
+            return s;
+        }));
+    };
+
+    useEffect(() => {
+        if (activeMatchDragId !== null) {
+            window.addEventListener('mousemove', handleMatchDragMove);
+            window.addEventListener('mouseup', handleMatchDragEnd);
+            window.addEventListener('touchmove', handleMatchDragMove, { passive: false });
+            window.addEventListener('touchend', handleMatchDragEnd);
+        }
+        return () => {
+            window.removeEventListener('mousemove', handleMatchDragMove);
+            window.removeEventListener('mouseup', handleMatchDragEnd);
+            window.removeEventListener('touchmove', handleMatchDragMove);
+            window.removeEventListener('touchend', handleMatchDragEnd);
+        };
+    }, [activeMatchDragId, handleMatchDragMove, handleMatchDragEnd]);
+
+    useEffect(() => {
+        if (quizType !== 'match') return;
+
+        const matchAnswers = data.metadata?.matchAnswers || ['5', '6', '9', '7', '8'];
+        const numPairs = options.length;
+
+        let containerW = 360;
+        let containerH = 540;
+        if (matchContainerRef.current) {
+            const el = matchContainerRef.current;
+            if (el.clientWidth > 0) containerW = el.clientWidth;
+            if (el.clientHeight > 0) containerH = el.clientHeight;
+        }
+        matchStateRef.current.dims = { w: containerW, h: containerH };
+
+        const W_s = 100;
+        const H_s = 100;
+        const margin = 12;
+        const slots = [];
+        const cols = numPairs <= 3 ? 3 : 4;
+        const rows = numPairs <= 3 ? 2 : 3;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                let x = (c * (containerW / cols)) + (containerW / cols - W_s) / 2;
+                let y = (r * (containerH / rows)) + (containerH / rows - H_s) / 2;
+                
+                // Clamp slot positions so they are completely inside the bounds from start
+                x = Math.max(margin, Math.min(containerW - W_s - margin, x));
+                y = Math.max(margin, Math.min(containerH - H_s - margin, y));
+
+                slots.push({ x, y });
+            }
+        }
+        
+        const shuffledSlots = [...slots].sort(() => Math.random() - 0.5);
+
+        const list = [];
+        for (let i = 0; i < numPairs; i++) {
+            const slotQ = shuffledSlots[i] || { x: margin + Math.random() * (containerW - W_s - 2 * margin), y: margin + Math.random() * (containerH - H_s - 2 * margin) };
+            list.push({
+                id: `q-${i}`,
+                type: 'question',
+                text: options[i],
+                pairIndex: i,
+                x: Math.max(margin, Math.min(containerW - W_s - margin, slotQ.x)),
+                y: Math.max(margin, Math.min(containerH - H_s - margin, slotQ.y)),
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                matched: false,
+                flashRed: false
+            });
+
+            const slotA = shuffledSlots[i + numPairs] || { x: margin + Math.random() * (containerW - W_s - 2 * margin), y: margin + Math.random() * (containerH - H_s - 2 * margin) };
+            list.push({
+                id: `a-${i}`,
+                type: 'answer',
+                text: matchAnswers[i] || '',
+                pairIndex: i,
+                x: Math.max(margin, Math.min(containerW - W_s - margin, slotA.x)),
+                y: Math.max(margin, Math.min(containerH - H_s - margin, slotA.y)),
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                matched: false,
+                flashRed: false
+            });
+        }
+
+        matchStateRef.current.squares = list;
+        setMatchSquares(list);
+    }, [quizType, data, options]);
+
+    useEffect(() => {
+        if (quizType !== 'match' || !matchContainerRef.current) return;
+
+        const measure = () => {
+            if (!matchContainerRef.current) return;
+            const el = matchContainerRef.current;
+            if (el.clientWidth > 0 && el.clientHeight > 0) {
+                const newW = el.clientWidth;
+                const newH = el.clientHeight;
+                matchStateRef.current.dims = { w: newW, h: newH };
+
+                const W_s = 100;
+                const H_s = 100;
+                const margin = 12;
+                let adjusted = false;
+                matchStateRef.current.squares.forEach(sq => {
+                    const newX = Math.max(margin, Math.min(newW - W_s - margin, sq.x));
+                    const newY = Math.max(margin, Math.min(newH - H_s - margin, sq.y));
+                    if (newX !== sq.x || newY !== sq.y) {
+                        sq.x = newX;
+                        sq.y = newY;
+                        adjusted = true;
+                    }
+                });
+
+                if (adjusted) {
+                    setMatchSquares([...matchStateRef.current.squares]);
+                }
+            }
+        };
+
+        measure();
+        const observer = new ResizeObserver(measure);
+        observer.observe(matchContainerRef.current);
+        return () => observer.disconnect();
+    }, [quizType, matchSquares.length]);
+
+    useEffect(() => {
+        if (quizType !== 'match' || !isActive || isSolved || isFailed || disabled) return;
+
+        let animFrameId;
+        const elasticity = 1.0;
+        const W_s = 100;
+        const H_s = 100;
+        const margin = 12;
+
+        const loop = () => {
+            const state = matchStateRef.current;
+            const { squares, draggedId, dims } = state;
+            if (!squares || squares.length === 0) {
+                animFrameId = requestAnimationFrame(loop);
+                return;
+            }
+
+            // Calculate dragged card velocity for brisk movement detection (shaking off/cancelling hover)
+            let dragSpeed = 0;
+            if (draggedId) {
+                const sq1 = squares.find(s => s.id === draggedId);
+                if (sq1) {
+                    const currentX = state.pointer.x - state.pointer.startX;
+                    const currentY = state.pointer.y - state.pointer.startY;
+                    
+                    if (state.lastX !== undefined && state.lastY !== undefined) {
+                        const dx = currentX - state.lastX;
+                        const dy = currentY - state.lastY;
+                        dragSpeed = Math.sqrt(dx * dx + dy * dy);
+                    }
+                    state.lastX = currentX;
+                    state.lastY = currentY;
+                }
+            } else {
+                state.lastX = undefined;
+                state.lastY = undefined;
+            }
+
+            // Grow hovered drop targets directly on DOM for premium performance
+            let currentHoveredId = null;
+            const briskThreshold = 7.0; // speed in layout pixels per frame above which hover breaks
+            if (draggedId && dragSpeed < briskThreshold) {
+                const sq1 = squares.find(s => s.id === draggedId);
+                if (sq1 && !sq1.merging) {
+                    const c1x = sq1.x + W_s / 2;
+                    const c1y = sq1.y + H_s / 2;                    // 1. If another card is already tagging along (state.hoveredId),
+                    // and we drag the pair over a third card, switch places!
+                    let switchTarget = null;
+                    let minSwitchDist = Infinity;
+
+                    if (state.hoveredId && dragSpeed <= 0.2) {
+                        // Dragged card is not moving, keep the currently attached card without allowing replacement!
+                        currentHoveredId = state.hoveredId;
+                        state.hoverCandidateId = null;
+                        state.hoverCandidateStart = 0;
+                    } else {
+                        if (state.hoveredId) {
+                            squares.forEach(sq3 => {
+                                if (sq3.id === draggedId || sq3.id === state.hoveredId || sq3.matched || sq3.merging) return;
+
+                                const c3x = sq3.x + W_s / 2;
+                                const c3y = sq3.y + H_s / 2;
+                                const dx = c3x - c1x;
+                                const dy = c3y - c1y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                                if (dist < 70 && dist < minSwitchDist) {
+                                    minSwitchDist = dist;
+                                    switchTarget = sq3;
+                                }
+                            });
+                        }
+
+                        if (switchTarget) {
+                            // Switch places!
+                            const sqB = squares.find(s => s.id === state.hoveredId);
+                            if (sqB) {
+                                // Teleport B to C's old position/velocity
+                                const tempX = switchTarget.x;
+                                const tempY = switchTarget.y;
+                                const tempVx = switchTarget.vx;
+                                const tempVy = switchTarget.vy;
+
+                                sqB.x = tempX;
+                                sqB.y = tempY;
+                                sqB.vx = tempVx;
+                                sqB.vy = tempVy;
+
+                                // Teleport C to B's position (which is tagging along under A)
+                                switchTarget.x = sq1.x;
+                                switchTarget.y = sq1.y;
+                                switchTarget.vx = 0;
+                                switchTarget.vy = 0;
+
+                                // Update hoveredId to the new card
+                                state.hoveredId = switchTarget.id;
+                                currentHoveredId = switchTarget.id;
+
+                                // Reset capture candidate
+                                state.hoverCandidateId = null;
+                                state.hoverCandidateStart = 0;
+                            }
+                        } else {
+                            // 2. Regular hover capture logic with Dwell Time constraint
+                            let candidateId = null;
+                            let maxOverlap = 0;
+
+                            squares.forEach(sq2 => {
+                                if (sq2.id === draggedId || sq2.matched || sq2.merging) return;
+
+                                const c2x = sq2.x + W_s / 2;
+                                const c2y = sq2.y + H_s / 2;
+
+                                const dx = c2x - c1x;
+                                const dy = c2y - c1y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+                                const activeRadius = 70;
+
+                                if (dist < activeRadius) {
+                                    const overlap = activeRadius - dist;
+                                    if (overlap > maxOverlap) {
+                                        maxOverlap = overlap;
+                                        candidateId = sq2.id;
+                                    }
+                                }
+                            });
+
+                            // If a card is already hovered (active tag-along), keep it hovered
+                            // until user shakes it off (briskThreshold) or switches places.
+                            if (state.hoveredId && state.hoveredId === candidateId) {
+                                currentHoveredId = state.hoveredId;
+                            } else if (candidateId) {
+                                // If we have a new candidate, or a candidate that is not yet fully captured/hovered
+                                if (state.hoverCandidateId !== candidateId) {
+                                    state.hoverCandidateId = candidateId;
+                                    state.hoverCandidateStart = performance.now();
+                                } else {
+                                    // Already tracking this candidate, check stop constraint (dwell time + slow speed)
+                                    const elapsed = performance.now() - state.hoverCandidateStart;
+                                    const stopCaptureThreshold = 2.0; // speed threshold below which capture triggers
+                                    if (elapsed >= 150 && dragSpeed < stopCaptureThreshold) {
+                                        currentHoveredId = candidateId;
+                                    }
+                                }
+                            } else {
+                                // No candidate in range, reset tracking
+                                state.hoverCandidateId = null;
+                                state.hoverCandidateStart = 0;
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Drag speed is too fast (briskThreshold), or no draggedId. Reset candidate.
+                state.hoverCandidateId = null;
+                state.hoverCandidateStart = 0;
+            }
+
+            // Save the active hovered target ID to state so it can be verified on drop
+            state.hoveredId = currentHoveredId;
+
+            // Track hover transitions for attach/detach sound events
+            const previousHoveredId = state.previousHoveredId || null;
+            if (currentHoveredId !== previousHoveredId) {
+                if (currentHoveredId && !previousHoveredId) {
+                    playSound('attach');
+                } else if (!currentHoveredId && previousHoveredId) {
+                    playSound('detach');
+                } else if (currentHoveredId && previousHoveredId && currentHoveredId !== previousHoveredId) {
+                    playSound('attach');
+                }
+            }
+            state.previousHoveredId = currentHoveredId;
+
+            squares.forEach(sq => {
+                if (sq.matched || sq.merging || sq.flashGreen || sq.flashRed) return;
+
+                if (sq.id === draggedId) {
+                    sq.x = state.pointer.x - state.pointer.startX;
+                    sq.y = state.pointer.y - state.pointer.startY;
+
+                    sq.x = Math.max(margin, Math.min(dims.w - W_s - margin, sq.x));
+                    sq.y = Math.max(margin, Math.min(dims.h - H_s - margin, sq.y));
+                } else if (sq.id === currentHoveredId) {
+                    // Hovered target card: stop moving / stop having physics, and smoothly lerp to be directly below the dragged card
+                    const draggedCard = squares.find(s => s.id === draggedId);
+                    if (draggedCard) {
+                        sq.x += (draggedCard.x - sq.x) * 0.25;
+                        sq.y += (draggedCard.y - sq.y) * 0.25;
+                    }
+                } else {
+                    // Limit speeds for extremely gentle and peaceful floating
+                    const targetMaxSpeed = 0.4;
+                    const minSpeed = 0.15;
+                    let speed = Math.sqrt(sq.vx * sq.vx + sq.vy * sq.vy);
+                    if (speed > targetMaxSpeed) {
+                        // Decelerate smoothly towards targetMaxSpeed (e.g. from mismatch bounce)
+                        const decay = 0.92;
+                        speed = speed * decay;
+                        if (speed < targetMaxSpeed) speed = targetMaxSpeed;
+                        sq.vx = (sq.vx / Math.max(0.001, speed)) * speed;
+                        sq.vy = (sq.vy / Math.max(0.001, speed)) * speed;
+                    } else if (speed < minSpeed) {
+                        if (speed === 0) {
+                            const angle = Math.random() * Math.PI * 2;
+                            sq.vx = Math.cos(angle) * 0.4;
+                            sq.vy = Math.sin(angle) * 0.4;
+                        } else {
+                            sq.vx = (sq.vx / speed) * minSpeed;
+                            sq.vy = (sq.vy / speed) * minSpeed;
+                        }
+                    }
+
+                    sq.x += sq.vx;
+                    sq.y += sq.vy;
+
+                    if (sq.x < margin) {
+                        sq.x = margin;
+                        sq.vx = Math.abs(sq.vx) * elasticity;
+                    } else if (sq.x > dims.w - W_s - margin) {
+                        sq.x = dims.w - W_s - margin;
+                        sq.vx = -Math.abs(sq.vx) * elasticity;
+                    }
+
+                    if (sq.y < margin) {
+                        sq.y = margin;
+                        sq.vy = Math.abs(sq.vy) * elasticity;
+                    } else if (sq.y > dims.h - H_s - margin) {
+                        sq.y = dims.h - H_s - margin;
+                        sq.vy = -Math.abs(sq.vy) * elasticity;
+                    }
+                }
+            });
+
+            // Box-to-Box AABB Collision Detection and Elastic Separation
+            for (let i = 0; i < squares.length; i++) {
+                const sq1 = squares[i];
+                if (sq1.matched || sq1.merging || sq1.flashGreen || sq1.flashRed) continue;
+
+                for (let j = i + 1; j < squares.length; j++) {
+                    const sq2 = squares[j];
+                    if (sq2.matched || sq2.merging || sq2.flashGreen || sq2.flashRed) continue;
+                    if (sq1.id === draggedId || sq2.id === draggedId) continue;
+                    if (sq1.id === currentHoveredId || sq2.id === currentHoveredId) continue; // Ignore hovered target collisions!
+
+                    // Calculate Box overlaps
+                    const overlapX = Math.min(sq1.x + W_s, sq2.x + W_s) - Math.max(sq1.x, sq2.x);
+                    const overlapY = Math.min(sq1.y + H_s, sq2.y + H_s) - Math.max(sq1.y, sq2.y);
+
+                    if (overlapX > 0 && overlapY > 0) {
+                        // Colliding! Separate along axis of minimum overlap
+                        if (overlapX < overlapY) {
+                            const sign = (sq1.x + W_s / 2) < (sq2.x + W_s / 2) ? -1 : 1;
+                            sq1.x += sign * overlapX * 0.5;
+                            sq2.x -= sign * overlapX * 0.5;
+
+                            const temp = sq1.vx;
+                            sq1.vx = sq2.vx * elasticity;
+                            sq2.vx = temp * elasticity;
+                        } else {
+                            const sign = (sq1.y + H_s / 2) < (sq2.y + H_s / 2) ? -1 : 1;
+                            sq1.y += sign * overlapY * 0.5;
+                            sq2.y -= sign * overlapY * 0.5;
+
+                            const temp = sq1.vy;
+                            sq1.vy = sq2.vy * elasticity;
+                            sq2.vy = temp * elasticity;
+                        }
+                    }
+                }
+            }
+
+            squares.forEach(sq => {
+                const el = document.getElementById(`sq-el-${sq.id}`);
+                if (el && !sq.matched) {
+                    // Strict bounding-box clamping right before rendering (except for merging elements)
+                    if (!sq.merging && !sq.flashGreen && !sq.flashRed) {
+                        sq.x = Math.max(margin, Math.min(dims.w - W_s - margin, sq.x));
+                        sq.y = Math.max(margin, Math.min(dims.h - H_s - margin, sq.y));
+                    }
+
+                    el.style.transform = `translate3d(${sq.x}px, ${sq.y}px, 0)`;
+
+                    if (sq.id === currentHoveredId) {
+                        el.classList.add('drag-hover');
+                    } else {
+                        el.classList.remove('drag-hover');
+                    }
+                }
+            });
+
+            animFrameId = requestAnimationFrame(loop);
+        };
+
+        animFrameId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(animFrameId);
+    }, [quizType, isActive, isSolved, isFailed, disabled]);
+
     const getContainerClass = () => {
         if (quizType === 'tf') return 'quiz-options-container-tf';
         if (quizType === '4sq') return 'quiz-options-container-4sq';
         if (quizType === 'nl') return 'quiz-options-container-nl';
         if (quizType === 'reorder') return 'quiz-options-container-reorder';
+        if (quizType === 'match') return 'quiz-options-container-match';
         return 'quiz-options-container-classic';
     };
 
@@ -316,6 +1107,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     }, [quizType]);
 
     const handleReorderDragStart = (e, index) => {
+        ensureAudioAuthorized();
         if (isShuffling || isSolved || isFailed || disabled) return;
         
         // Measure actual height + gap (approx 8px)
@@ -915,6 +1707,59 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 >
                     OK
                 </button>
+            </div>
+        );
+    }
+
+    // MATCH RENDER LOGIC
+    if (quizType === 'match') {
+        const enableBubbles = data.metadata?.enableBubbles !== false;
+        return (
+            <div className="quiz-player-2 match-mode">
+                <div className="quiz-options-container-match" ref={matchContainerRef}>
+                    {enableBubbles && (
+                        <div className="quiz-match-bubbles">
+                            {matchBubbles.map(b => (
+                                <div
+                                    key={b.id}
+                                    className="bubble"
+                                    style={{
+                                        width: `${b.size}px`,
+                                        height: `${b.size}px`,
+                                        left: `${b.left}%`,
+                                        animationDuration: `${b.duration}s`,
+                                        animationDelay: `${b.delay}s`,
+                                        '--sway-x': `${b.sway}px`
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    {matchSquares.map((sq) => {
+                        const isDragging = sq.isDragging;
+                        const isFlashing = sq.flashRed;
+                        const isMatched = sq.matched;
+
+                        return (
+                            <div
+                                key={sq.id}
+                                id={`sq-el-${sq.id}`}
+                                className={`quiz-option-match ${sq.type} ${isDragging ? 'dragging' : ''} ${isFlashing ? 'flash-red' : ''} ${sq.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''} ${sq.merging ? 'merging' : ''}`}
+                                style={{
+                                    pointerEvents: (isSolved || isFailed || disabled || isMatched || sq.merging) ? 'none' : 'auto',
+                                    transform: `translate3d(${sq.x}px, ${sq.y}px, 0)`,
+                                }}
+                                onMouseDown={(e) => handleMatchDragStart(e, sq.id)}
+                                onTouchStart={(e) => handleMatchDragStart(e, sq.id)}
+                            >
+                                <span 
+                                    className="quiz-option-text" 
+                                    dangerouslySetInnerHTML={{ __html: formatExponents(sq.text) }} 
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         );
     }

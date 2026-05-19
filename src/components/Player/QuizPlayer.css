@@ -1509,3 +1509,161 @@
     border-color: rgba(245, 158, 11, 0.6);
     color: #F59E0B;
 }
+
+/* ================================================================
+   MATCH DRAG PLAYER
+   ================================================================ */
+.quiz-player-2.match-mode {
+    height: 100%;
+    width: 100%;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+}
+
+.quiz-options-container-match {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 0;
+    box-sizing: border-box;
+    backdrop-filter: none;
+}
+
+.quiz-option-match {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    color: white;
+    cursor: grab;
+    text-align: center;
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+    transition: scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), rotate 0.25s, opacity 0.25s, box-shadow 0.25s;
+    box-sizing: border-box;
+    padding: 10px;
+    z-index: 10;
+}
+
+.quiz-option-match.question,
+.quiz-option-match.answer {
+    background: linear-gradient(135deg, #3A86FF, #00B4D8);
+    box-shadow: 0 8px 20px rgba(0, 180, 216, 0.25);
+}
+
+/* Hover effect */
+.quiz-option-match:hover {
+    scale: 1.05;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Dragging state */
+.quiz-option-match.dragging {
+    cursor: grabbing;
+    scale: 1.15;
+    rotate: -4deg;
+    z-index: 1000 !important;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Matched state (fade-out with bounce) */
+.quiz-option-match.matched {
+    opacity: 0;
+    scale: 0.1;
+    rotate: 15deg;
+    pointer-events: none !important;
+}
+
+/* Solid red mismatch state — cards freeze red for 250ms then split */
+.quiz-option-match.flash-red {
+    background: linear-gradient(135deg, #EF4444, #B91C1C) !important;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    rotate: -4deg;
+    scale: 1.1;
+    transition: background 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out !important;
+}
+
+/* Flashing green match state */
+.quiz-option-match.flash-green {
+    background: linear-gradient(135deg, #10B981, #059669) !important;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    rotate: -4deg;
+    scale: 1.1;
+    transition: background 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out !important;
+}
+
+/* Drag hover match target scaling state */
+.quiz-option-match.drag-hover {
+    scale: 1.25 !important;
+    rotate: -4deg !important; /* MATCH DRAGGED CARD ROTATION */
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.95) !important;
+    z-index: 999;
+}
+
+.quiz-option-match.merging {
+    scale: 0.1 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: scale 0.5s cubic-bezier(0.4, 0, 1, 1), opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    z-index: 1000 !important;
+}
+
+
+/* ================================================================
+   FLOATING BUBBLES BACKGROUND EFFECT
+   ================================================================ */
+.quiz-match-bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1; /* Below cards */
+}
+
+.quiz-match-bubbles .bubble {
+    position: absolute;
+    bottom: -30px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.05) 70%, rgba(255, 255, 255, 0.2) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: bubble-rise 8s infinite linear;
+}
+
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(0) translateX(0) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.5;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-580px) translateX(var(--sway-x, 20px)) scale(1.2);
+        opacity: 0;
+    }
+}

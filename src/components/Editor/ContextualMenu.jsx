@@ -1305,6 +1305,26 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 </>
             )}
 
+            {/* Match Quiz Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'match' && (
+                <>
+                    <div className="menu-group">
+                        <label>Floating Bubbles</label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', margin: '4px 0' }}>
+                            <input
+                                type="checkbox"
+                                id="enable-bubbles-checkbox"
+                                checked={metadata.enableBubbles !== false}
+                                onChange={(e) => updateMetadata({ enableBubbles: e.target.checked })}
+                                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#333' }}>On by default</span>
+                        </div>
+                    </div>
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
             {/* Quiz Settings */}
             {element.type === 'quiz' && metadata.quizType === 'tf' && metadata.quizType !== 'chatquiz' && (
                 <>

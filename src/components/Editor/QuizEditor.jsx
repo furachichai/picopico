@@ -19,6 +19,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
 
     const quizType = element.metadata?.quizType || 'classic';
     const visualMode = element.metadata?.visualMode || false;
+    const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7', '8'];
 
     const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
 
@@ -414,6 +415,101 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         </div>
                     </div>,
                     document.body
+                )}
+            </div>
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // MATCH RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'match') {
+        const handleMatchOptionChange = (idx, val) => {
+            const newOptions = [...options];
+            newOptions[idx] = val;
+            onChange(element.id, { options: newOptions });
+        };
+
+        const handleMatchAnswerChange = (idx, val) => {
+            const newAnswers = [...matchAnswers];
+            newAnswers[idx] = val;
+            onChange(element.id, { matchAnswers: newAnswers });
+        };
+
+        const addMatchPair = () => {
+            if (options.length >= 6) return;
+            const newOptions = [...options, 'New Q'];
+            const newAnswers = [...matchAnswers, 'New A'];
+            onChange(element.id, { options: newOptions, matchAnswers: newAnswers });
+        };
+
+        const removeMatchPair = (idx) => {
+            if (options.length <= 2) return;
+            const newOptions = options.filter((_, i) => i !== idx);
+            const newAnswers = matchAnswers.filter((_, i) => i !== idx);
+            onChange(element.id, { options: newOptions, matchAnswers: newAnswers });
+        };
+
+        return (
+            <div className="quiz-editor-2 match-editor-mode" onMouseDown={(e) => e.stopPropagation()}>
+                <div className="match-editor-header">
+                    <span>Question</span>
+                    <span></span>
+                    <span>Answer</span>
+                </div>
+                {options.map((option, index) => (
+                    <div key={index} className="quiz-option-row match-row">
+                        <div className="quiz-option-2 match-column question-col" style={{ backgroundColor: '#3A86FF' }}>
+                            <div
+                                contentEditable
+                                suppressContentEditableWarning
+                                className="option-input-2"
+                                data-option-index={index}
+                                onInput={(e) => handleMatchOptionChange(index, e.currentTarget.innerHTML)}
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const text = e.clipboardData.getData('text/plain');
+                                    document.execCommand('insertText', false, text);
+                                }}
+                                ref={(el) => {
+                                    if (el && el.innerHTML !== option && document.activeElement !== el) {
+                                        el.innerHTML = option;
+                                    }
+                                }}
+                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                data-placeholder={`Q ${index + 1}`}
+                            />
+                        </div>
+                        <div className="match-arrow-divider">↔</div>
+                        <div className="quiz-option-2 match-column answer-col" style={{ backgroundColor: '#9B72CF' }}>
+                            <div
+                                contentEditable
+                                suppressContentEditableWarning
+                                className="option-input-2"
+                                data-option-index={index}
+                                onInput={(e) => handleMatchAnswerChange(index, e.currentTarget.innerHTML)}
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const text = e.clipboardData.getData('text/plain');
+                                    document.execCommand('insertText', false, text);
+                                }}
+                                ref={(el) => {
+                                    const answerVal = matchAnswers[index] || '';
+                                    if (el && el.innerHTML !== answerVal && document.activeElement !== el) {
+                                        el.innerHTML = answerVal;
+                                    }
+                                }}
+                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                data-placeholder={`A ${index + 1}`}
+                            />
+                        </div>
+                        {options.length > 2 && (
+                            <button className="remove-btn-2" onClick={() => removeMatchPair(index)} title="Remove Pair">×</button>
+                        )}
+                    </div>
+                ))}
+                {options.length < 6 && (
+                    <button className="match-add-btn" onClick={addMatchPair}>+ Add Pair</button>
                 )}
             </div>
         );
