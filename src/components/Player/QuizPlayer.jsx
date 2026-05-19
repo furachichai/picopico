@@ -128,105 +128,115 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 globalAudioCtx.current = new AC();
             }
             const ctx = globalAudioCtx.current;
+            // Always try to resume — Safari needs this in the user gesture call stack.
+            // Do NOT defer to .then() — Safari drops the gesture authorization in async callbacks.
+            ctx.resume();
+            const now = ctx.currentTime;
 
-            // Schedule audio after ensuring context is running
-            const scheduleSound = () => {
-                const now = ctx.currentTime;
-                if (type === 'correct') {
-                    const osc1 = ctx.createOscillator();
-                    const osc2 = ctx.createOscillator();
-                    const gain1 = ctx.createGain();
-                    const gain2 = ctx.createGain();
-                    osc1.type = 'sine';
-                    osc1.frequency.setValueAtTime(523.25, now);
-                    osc1.frequency.setValueAtTime(659.25, now + 0.1);
-                    gain1.gain.setValueAtTime(0.35, now);
-                    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-                    osc1.connect(gain1); gain1.connect(ctx.destination);
-                    osc1.start(now); osc1.stop(now + 0.3);
-                    osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(783.99, now + 0.1);
-                    osc2.frequency.setValueAtTime(1046.50, now + 0.2);
-                    gain2.gain.setValueAtTime(0.35, now + 0.1);
-                    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                    osc2.connect(gain2); gain2.connect(ctx.destination);
-                    osc2.start(now + 0.1); osc2.stop(now + 0.4);
-                } else if (type === 'wrong') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(180, now);
-                    osc.frequency.linearRampToValueAtTime(120, now + 0.25);
-                    gain.gain.setValueAtTime(0.4, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(now); osc.stop(now + 0.25);
-                } else if (type === 'fail') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(120, now);
-                    osc.frequency.setValueAtTime(90, now + 0.15);
-                    gain.gain.setValueAtTime(0.35, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(now); osc.stop(now + 0.4);
-                } else if (type === 'attach') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
-                    gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(now); osc.stop(now + 0.06);
-                } else if (type === 'detach') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(250, now);
-                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(now); osc.stop(now + 0.08);
-                }
-            };
-
-            // Always call resume — if already running it's a no-op.
-            // Schedule sound after resume promise resolves to guarantee context is active.
-            if (ctx.state !== 'running') {
-                ctx.resume().then(scheduleSound).catch(() => {});
-            } else {
-                scheduleSound();
+            if (type === 'correct') {
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                const gain2 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(523.25, now);
+                osc1.frequency.setValueAtTime(659.25, now + 0.1);
+                gain1.gain.setValueAtTime(0.35, now);
+                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc1.connect(gain1); gain1.connect(ctx.destination);
+                osc1.start(now); osc1.stop(now + 0.35);
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(783.99, now + 0.1);
+                osc2.frequency.setValueAtTime(1046.50, now + 0.2);
+                gain2.gain.setValueAtTime(0.35, now + 0.1);
+                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc2.connect(gain2); gain2.connect(ctx.destination);
+                osc2.start(now + 0.1); osc2.stop(now + 0.45);
+            } else if (type === 'wrong') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(120, now + 0.25);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now); osc.stop(now + 0.35);
+            } else if (type === 'fail') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.setValueAtTime(90, now + 0.15);
+                gain.gain.setValueAtTime(0.35, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now); osc.stop(now + 0.45);
+            } else if (type === 'attach') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'detach') {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now); osc.stop(now + 0.12);
             }
         } catch (err) {
-            console.warn('Sound playback failed:', err);
+            // silent
         }
     };
 
-    // Global click/touch unlocker for AudioContext — ensures audio works on first interaction
+    // Global click/touch unlocker for AudioContext — ensures audio works on first interaction.
+    // Safari requires creating the context AND playing a buffer during a user gesture.
     useEffect(() => {
         const unlockAudio = () => {
             try {
-                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                if (AudioContextClass && !globalAudioCtx.current) {
-                    globalAudioCtx.current = new AudioContextClass();
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                // Create both audio contexts if they don't exist
+                if (!globalAudioCtx.current) {
+                    globalAudioCtx.current = new AC();
                 }
-                if (globalAudioCtx.current && globalAudioCtx.current.state === 'suspended') {
-                    globalAudioCtx.current.resume();
+                if (!pemAudioCtx.current) {
+                    pemAudioCtx.current = new AC();
                 }
-                if (pemAudioCtx.current && pemAudioCtx.current.state === 'suspended') {
-                    pemAudioCtx.current.resume();
-                }
+                // Resume both contexts
+                [globalAudioCtx.current, pemAudioCtx.current].forEach(ctx => {
+                    if (ctx && ctx.state === 'suspended') {
+                        ctx.resume();
+                    }
+                    // Safari trick: play a silent buffer to fully unlock the audio context
+                    if (ctx && ctx.state !== 'closed') {
+                        try {
+                            const silentBuffer = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
+                            const src = ctx.createBufferSource();
+                            src.buffer = silentBuffer;
+                            src.connect(ctx.destination);
+                            src.start(0);
+                        } catch(e) { /* ignore */ }
+                    }
+                });
             } catch (e) { /* silent */ }
         };
         window.addEventListener('click', unlockAudio);
         window.addEventListener('touchstart', unlockAudio);
+        window.addEventListener('touchend', unlockAudio);
         return () => {
             window.removeEventListener('click', unlockAudio);
             window.removeEventListener('touchstart', unlockAudio);
+            window.removeEventListener('touchend', unlockAudio);
         };
     }, []);
 
@@ -762,7 +772,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         if (quizType !== 'match' || !isActive || isSolved || isFailed || disabled) return;
 
         let animFrameId;
-        const elasticity = 1.0;
+        const elasticity = 0.3;
         const W_s = 100;
         const H_s = 100;
         const margin = 12;
@@ -992,7 +1002,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 }
             });
 
-            // Box-to-Box AABB Collision Detection and Elastic Separation
+            // Box-to-Box AABB Collision — push apart gently, no velocity swap (eliminates vibration)
+            const separationGap = 2; // extra pixels of clearance to prevent re-collision next frame
             for (let i = 0; i < squares.length; i++) {
                 const sq1 = squares[i];
                 if (sq1.matched || sq1.merging || sq1.flashGreen || sq1.flashRed) continue;
@@ -1001,30 +1012,38 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     const sq2 = squares[j];
                     if (sq2.matched || sq2.merging || sq2.flashGreen || sq2.flashRed) continue;
                     if (sq1.id === draggedId || sq2.id === draggedId) continue;
-                    if (sq1.id === currentHoveredId || sq2.id === currentHoveredId) continue; // Ignore hovered target collisions!
+                    if (sq1.id === currentHoveredId || sq2.id === currentHoveredId) continue;
 
-                    // Calculate Box overlaps
                     const overlapX = Math.min(sq1.x + W_s, sq2.x + W_s) - Math.max(sq1.x, sq2.x);
                     const overlapY = Math.min(sq1.y + H_s, sq2.y + H_s) - Math.max(sq1.y, sq2.y);
 
                     if (overlapX > 0 && overlapY > 0) {
-                        // Colliding! Separate along axis of minimum overlap
+                        // Push apart along the axis of minimum overlap, with extra gap
                         if (overlapX < overlapY) {
                             const sign = (sq1.x + W_s / 2) < (sq2.x + W_s / 2) ? -1 : 1;
-                            sq1.x += sign * overlapX * 0.5;
-                            sq2.x -= sign * overlapX * 0.5;
-
-                            const temp = sq1.vx;
-                            sq1.vx = sq2.vx * elasticity;
-                            sq2.vx = temp * elasticity;
+                            const push = (overlapX + separationGap) * 0.5;
+                            sq1.x += sign * push;
+                            sq2.x -= sign * push;
+                            // Deflect velocities away from each other (don't swap)
+                            if (sign < 0) {
+                                sq1.vx = -Math.abs(sq1.vx) * elasticity;
+                                sq2.vx = Math.abs(sq2.vx) * elasticity;
+                            } else {
+                                sq1.vx = Math.abs(sq1.vx) * elasticity;
+                                sq2.vx = -Math.abs(sq2.vx) * elasticity;
+                            }
                         } else {
                             const sign = (sq1.y + H_s / 2) < (sq2.y + H_s / 2) ? -1 : 1;
-                            sq1.y += sign * overlapY * 0.5;
-                            sq2.y -= sign * overlapY * 0.5;
-
-                            const temp = sq1.vy;
-                            sq1.vy = sq2.vy * elasticity;
-                            sq2.vy = temp * elasticity;
+                            const push = (overlapY + separationGap) * 0.5;
+                            sq1.y += sign * push;
+                            sq2.y -= sign * push;
+                            if (sign < 0) {
+                                sq1.vy = -Math.abs(sq1.vy) * elasticity;
+                                sq2.vy = Math.abs(sq2.vy) * elasticity;
+                            } else {
+                                sq1.vy = Math.abs(sq1.vy) * elasticity;
+                                sq2.vy = -Math.abs(sq2.vy) * elasticity;
+                            }
                         }
                     }
                 }
@@ -1368,15 +1387,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                if (ctx.state === 'suspended') ctx.resume();
+                ctx.resume(); // always resume synchronously for Safari
+                const now = ctx.currentTime;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], ctx.currentTime);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], now);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
                 osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+                osc.start(now); osc.stop(now + 0.45);
             } catch(e) {}
         };
 
@@ -1384,14 +1404,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
+                ctx.resume(); // always resume synchronously for Safari
+                const now = ctx.currentTime;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(180, ctx.currentTime);
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.frequency.setValueAtTime(180, now);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                 osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+                osc.start(now); osc.stop(now + 0.35);
             } catch(e) {}
         };
 
@@ -1494,15 +1516,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                if (ctx.state === 'suspended') ctx.resume();
+                ctx.resume(); // always resume synchronously for Safari
+                const now = ctx.currentTime;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.frequency.setValueAtTime(880, now);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
                 osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.12);
+                osc.start(now); osc.stop(now + 0.15);
             } catch(e) {}
         };
 
@@ -1525,29 +1548,30 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                if (ctx.state === 'suspended') ctx.resume();
+                ctx.resume(); // always resume synchronously for Safari
+                const now = ctx.currentTime;
                 const osc = ctx.createOscillator();
                 const filter = ctx.createBiquadFilter();
                 const gain = ctx.createGain();
                 
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(40, ctx.currentTime);
+                osc.frequency.setValueAtTime(40, now);
                 
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(200, ctx.currentTime);
-                filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.5);
+                filter.frequency.setValueAtTime(200, now);
+                filter.frequency.linearRampToValueAtTime(100, now + 1.5);
                 
-                gain.gain.setValueAtTime(0, ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.2);
-                gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 1.2);
-                gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.5, now + 0.2);
+                gain.gain.linearRampToValueAtTime(0.3, now + 1.2);
+                gain.gain.linearRampToValueAtTime(0.01, now + 1.5);
                 
                 osc.connect(filter);
                 filter.connect(gain);
                 gain.connect(ctx.destination);
                 
-                osc.start(ctx.currentTime);
-                osc.stop(ctx.currentTime + 1.5);
+                osc.start(now);
+                osc.stop(now + 1.55);
             } catch(e) {}
         };
 
