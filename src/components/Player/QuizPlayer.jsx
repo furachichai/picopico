@@ -818,13 +818,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     let switchTarget = null;
                     let minSwitchDist = Infinity;
 
-                    if (state.hoveredId && dragSpeed <= 0.2) {
-                        // Dragged card is not moving, keep the currently attached card without allowing replacement!
+                    if (state.hoveredId && dragSpeed < 1.5) {
+                        // Dragged card is barely moving — keep the currently attached card, no replacement allowed.
                         currentHoveredId = state.hoveredId;
                         state.hoverCandidateId = null;
                         state.hoverCandidateStart = 0;
                     } else {
-                        if (state.hoveredId) {
+                        if (state.hoveredId && dragSpeed >= 1.5) {
                             squares.forEach(sq3 => {
                                 if (sq3.id === draggedId || sq3.id === state.hoveredId || sq3.matched || sq3.merging) return;
 
