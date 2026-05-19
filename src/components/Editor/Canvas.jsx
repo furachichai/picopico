@@ -235,7 +235,7 @@ const Canvas = (props) => {
             )}
           </div>
 
-          {currentSlide.elements.map(element => {
+          {currentSlide.elements.map((element, elementIndex) => {
             // In translation mode, show draft content for text/balloon/quiz elements
             let displayElement = element;
             if (state.translationMode) {
@@ -260,6 +260,7 @@ const Canvas = (props) => {
               <Sticker
                 key={`${element.id}-${state.translationMode ? state.translationMode.lang : 'base'}`}
                 element={displayElement}
+                elementIndex={elementIndex}
                 isSelected={element.id === selectedElementId}
                 onSelect={handleSelect}
                 onChange={handleChange}

@@ -415,19 +415,40 @@ const Editor = () => {
                 handleContextMenuDelete(state.selectedElementId);
             }
 
-            // Arrow key slide navigation
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                handlePrevSlide();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                handleNextSlide();
+            // Arrow keys: move selected element, or navigate slides if nothing selected
+            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                if (state.selectedElementId && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge') {
+                    e.preventDefault();
+                    const canvas = document.querySelector('.slide-canvas');
+                    if (!canvas) return;
+                    const canvasW = canvas.offsetWidth;
+                    const canvasH = canvas.offsetHeight;
+                    const pxStep = e.shiftKey ? 10 : 1;
+                    const dxPct = (pxStep / canvasW) * 100;
+                    const dyPct = (pxStep / canvasH) * 100;
+
+                    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                    const el = currentSlide?.elements.find(el => el.id === state.selectedElementId);
+                    if (!el) return;
+
+                    let updates = {};
+                    if (e.key === 'ArrowLeft') updates = { x: el.x - dxPct };
+                    else if (e.key === 'ArrowRight') updates = { x: el.x + dxPct };
+                    else if (e.key === 'ArrowUp') updates = { y: el.y - dyPct };
+                    else if (e.key === 'ArrowDown') updates = { y: el.y + dyPct };
+
+                    handleContextMenuChange(el.id, updates);
+                } else {
+                    e.preventDefault();
+                    if (e.key === 'ArrowLeft') handlePrevSlide();
+                    else if (e.key === 'ArrowRight') handleNextSlide();
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [state.selectedElementId, handlePrevSlide, handleNextSlide]);
+    }, [state.selectedElementId, state.currentSlideId, state.lesson.slides, handlePrevSlide, handleNextSlide]);
 
     return (
         <div className="editor-layout" onClick={handleGlobalClick}>

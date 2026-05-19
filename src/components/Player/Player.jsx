@@ -372,6 +372,37 @@ const Player = () => {
     // Determine active interactive elements
     const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
     const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
+    const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
+
+    // ── Navigation Hint ──
+    // After 5s of inactivity on a slide, peek the next slide from the right as a navigation cue.
+    const [showNavHint, setShowNavHint] = useState(false);
+    const navHintTimerRef = useRef(null);
+
+    // Check if the stripper is still stepping (blocks forward nav)
+    const stripperBlocking = currentSlide?.stripper?.enabled
+        && currentSlide.stripper.dividers?.length > 0
+        && !visitedStripperSlides.has(currentSlideIndex);
+
+    const canNavigateForward = currentSlideIndex < slides.length - 1
+        && !hasCartridge && !hasQuiz && !hasISticker && !stripperBlocking;
+
+    useEffect(() => {
+        setShowNavHint(false);
+        if (navHintTimerRef.current) clearTimeout(navHintTimerRef.current);
+
+        if (!canNavigateForward) return;
+
+        navHintTimerRef.current = setTimeout(() => {
+            setShowNavHint(true);
+            // Stays true — CSS animation loops with built-in pause.
+            // Dismissed when currentSlideIndex changes or canNavigateForward becomes false.
+        }, 5000);
+
+        return () => {
+            if (navHintTimerRef.current) clearTimeout(navHintTimerRef.current);
+        };
+    }, [currentSlideIndex, canNavigateForward, solvedSlides, visitedStripperSlides]);
 
     return (
         <div className="player-container">
@@ -559,7 +590,7 @@ const Player = () => {
                     return (
                         <div
                             key={slide.id}
-                            className={`player-slide player-stage-scaled ${positionClass}`}
+                            className={`player-slide player-stage-scaled ${positionClass} ${showNavHint && positionClass === 'slide-active' ? 'nav-hint-nudge' : ''} ${showNavHint && positionClass === 'slide-next' ? 'nav-hint-peek' : ''}`}
                             style={{
                                 transformOrigin: 'center center',
                                 width: '360px',
@@ -737,7 +768,35 @@ const Player = () => {
                                                     ) }}
                                                 />
                                             )}
-                                            {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" />}
+                                            {element.type === 'line' && (
+                                                <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <div style={{ 
+                                                        width: '100%', 
+                                                        height: `${element.metadata?.height || 10}px`, 
+                                                        backgroundColor: element.metadata?.symbolColor || '#8B5CF6',
+                                                        borderRadius: `${(element.metadata?.height || 10) / 2}px` 
+                                                    }} />
+                                                    
+                                                    {element.metadata?.startCap === 'arrow' && (
+                                                        <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                                            <polygon points="100,0 0,50 100,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                                                        </svg>
+                                                    )}
+                                                    {element.metadata?.startCap === 'circle' && (
+                                                        <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                                                    )}
+
+                                                    {element.metadata?.endCap === 'arrow' && (
+                                                        <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                                            <polygon points="0,0 100,50 0,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                                                        </svg>
+                                                    )}
+                                                    {element.metadata?.endCap === 'circle' && (
+                                                        <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                                                    )}
+                                                </div>
+                                            )}
+                                            {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" style={(element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? { objectFit: 'fill' } : undefined} />}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
                                                     data={(() => {

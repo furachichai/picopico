@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import './ContextualMenu.css';
 import { PEM_MODES } from '../Player/PEMExpressionPool';
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
+import { getSymbolSvg } from '../../utils/symbols';
 
 const FONTS = [
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
@@ -478,6 +479,116 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
 
+                    {metadata.isSymbol && (
+                        <>
+                            <div className="menu-group">
+                                <label>Symbol Color</label>
+                                <ColorPickerDropdown
+                                    color={metadata.symbolColor || '#8B5CF6'}
+                                    onSelect={(c) => {
+                                        const newContent = getSymbolSvg(metadata.symbolType, metadata.symbolValue, c, metadata);
+                                        onChange(element.id, {
+                                            content: newContent,
+                                            metadata: { ...metadata, symbolColor: c }
+                                        });
+                                    }}
+                                />
+                            </div>
+
+                            {metadata.symbolType === 'shape-square' && (
+                                <div className="menu-group">
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={metadata.roundCorners || false}
+                                            onChange={(e) => {
+                                                const roundCorners = e.target.checked;
+                                                const newMetadata = { ...metadata, roundCorners };
+                                                const newContent = getSymbolSvg(metadata.symbolType, metadata.symbolValue, metadata.symbolColor || '#8B5CF6', newMetadata);
+                                                onChange(element.id, {
+                                                    content: newContent,
+                                                    metadata: newMetadata
+                                                });
+                                            }}
+                                        />
+                                        Round Corners
+                                    </label>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    <div className="menu-group">
+                        <label>Layer</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'backward')}
+                                title="Send Backward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬇️
+                            </button>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'forward')}
+                                title="Bring Forward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬆️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
+            {element.type === 'line' && (
+                <>
+                    <div className="menu-group">
+                        <label>Line Thickness</label>
+                        <input
+                            type="range"
+                            min="2"
+                            max="50"
+                            value={metadata.height || 10}
+                            onChange={(e) => updateMetadata({ height: parseInt(e.target.value) })}
+                            style={{ width: '80px' }}
+                        />
+                    </div>
+                    <div className="menu-group">
+                        <label>Start Cap</label>
+                        <select
+                            value={metadata.startCap || 'none'}
+                            onChange={(e) => updateMetadata({ startCap: e.target.value })}
+                            style={{ fontSize: '0.8rem', padding: '2px 4px' }}
+                        >
+                            <option value="none">None</option>
+                            <option value="arrow">Arrow</option>
+                            <option value="circle">Circle</option>
+                        </select>
+                    </div>
+                    <div className="menu-group">
+                        <label>End Cap</label>
+                        <select
+                            value={metadata.endCap || 'none'}
+                            onChange={(e) => updateMetadata({ endCap: e.target.value })}
+                            style={{ fontSize: '0.8rem', padding: '2px 4px' }}
+                        >
+                            <option value="none">None</option>
+                            <option value="arrow">Arrow</option>
+                            <option value="circle">Circle</option>
+                        </select>
+                    </div>
+                    <div className="menu-group">
+                        <label>Line Color</label>
+                        <ColorPickerDropdown
+                            color={metadata.symbolColor || '#8B5CF6'}
+                            onSelect={(c) => updateMetadata({ symbolColor: c })}
+                        />
+                    </div>
+                    
                     <div className="menu-group">
                         <label>Layer</label>
                         <div style={{ display: 'flex', gap: '5px' }}>

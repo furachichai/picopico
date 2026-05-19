@@ -1,0 +1,2985 @@
+{
+  "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+  "title": "Why LEFT to RIGHT?",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779144043763",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_front.png",
+          "x": 72.5,
+          "y": 75.625,
+          "width": 40,
+          "height": 23.677130044843047,
+          "rotation": 0,
+          "scale": 1.9543810434492883,
+          "metadata": {
+            "width": 40,
+            "height": 23.677130044843047,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1779144006220",
+          "type": "balloon",
+          "content": "Why must we do operations LEFT to RIGHT?",
+          "x": 45.27777777777778,
+          "y": 35.15625,
+          "width": 60,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 20,
+              "y": 93
+            }
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1779144057098",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779144079438",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+          "x": 33.333333333333336,
+          "y": 70,
+          "width": 40,
+          "height": 29.456289978678036,
+          "rotation": 0,
+          "scale": 1.9267473730710742,
+          "metadata": {
+            "width": 40,
+            "height": 29.456289978678036,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1779144092177",
+          "type": "balloon",
+          "content": "The direction operations can give different results.",
+          "x": 41.94444444444444,
+          "y": 24.375000000000004,
+          "width": 66.66666666666666,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -7,
+              "y": 86
+            }
+          }
+        },
+        {
+          "id": "el-1779144147881",
+          "type": "balloon",
+          "content": "For example,<div>10 - 4 + 2</div>",
+          "x": 75.83333333333334,
+          "y": 46.40625,
+          "width": 40,
+          "height": 14.374999999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -93,
+              "y": 24
+            }
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1779144192300",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779148516730",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 75.27777777777777,
+          "y": 32.578125,
+          "width": 40,
+          "height": 39.84375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#ffc800",
+            "roundCorners": true
+          }
+        },
+        {
+          "id": "el-1779148500492",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 28.055555555555557,
+          "y": 32.5,
+          "width": 40,
+          "height": 40,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#ffc800",
+            "roundCorners": true
+          }
+        },
+        {
+          "id": "el-1779144215775",
+          "type": "text",
+          "content": "<font color=\"#ffffff\">10 -</font> <font color=\"#1cb0f6\">4 + 2</font>",
+          "x": 75.27777777777779,
+          "y": 17.968750000000004,
+          "width": 22.378022216115532,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779144831001",
+          "type": "image",
+          "content": "/src/assets/characters/chef_scrathing.png",
+          "x": 21.944444444444443,
+          "y": 74.84375,
+          "width": 40,
+          "height": 34.59586466165413,
+          "rotation": 0,
+          "scale": 1.553217361782514,
+          "metadata": {
+            "width": 40,
+            "height": 34.59586466165413,
+            "flipX": false,
+            "locked": false
+          }
+        },
+        {
+          "id": "el-1779144705060",
+          "type": "text",
+          "content": "<font color=\"#ffffff\">10 -</font> 6 ",
+          "x": 76.38888888888889,
+          "y": 32.1875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "color": "#1cb0f6",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779144683739",
+          "type": "text",
+          "content": "<font color=\"#1cb0f6\">6</font> + 2",
+          "x": 27.222222222222225,
+          "y": 32.5,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "color": "#ffffff",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779148683882",
+          "type": "line",
+          "x": 27.638888888888886,
+          "y": 25.3125,
+          "width": 6.695042817333305,
+          "height": 37.5,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 5,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779148697671",
+          "type": "line",
+          "x": 77.08333333333331,
+          "y": 25,
+          "width": 6.13948726177775,
+          "height": 37.5,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 5,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779144861208",
+          "type": "balloon",
+          "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>",
+          "x": 69.30555555555556,
+          "y": 74.6875,
+          "width": 49.166666666666664,
+          "height": 28.125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -101,
+              "y": -32
+            },
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1779148705764",
+          "type": "line",
+          "x": 77.08333333333331,
+          "y": 39.140625,
+          "width": 6.417265039555526,
+          "height": 37.5,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 5,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779144197951",
+          "type": "text",
+          "content": "<font color=\"#1cb0f6\">10 - 4</font> <font color=\"#ffffff\">+ 2</font>",
+          "x": 27.916666666666668,
+          "y": 17.968750000000004,
+          "width": 22.547880945838074,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779144751518",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">8</font></span>",
+          "x": 27.22222222222221,
+          "y": 46.5625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "textAlign": "center",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779144775859",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">4</font></span>",
+          "x": 76.66666666666667,
+          "y": 46.5625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "textAlign": "center",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779148712538",
+          "type": "line",
+          "x": 27.361111111111114,
+          "y": 39.21875,
+          "width": 5.583931706222193,
+          "height": 37.5,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 5,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        }
+      ],
+      "order": 2,
+      "stripper": {
+        "enabled": true,
+        "dividers": [
+          23,
+          37,
+          51
+        ]
+      }
+    },
+    {
+      "id": "slide-1779144939174",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779147771098",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 76.66666666666666,
+          "y": 32.34375,
+          "width": 76.58213521951971,
+          "height": 65.71313308643496,
+          "rotation": 0,
+          "scale": 0.5966346716743186,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#ffc800",
+            "locked": true,
+            "roundCorners": true
+          }
+        },
+        {
+          "id": "el-1779147713722",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 28.055555555555554,
+          "y": 32.5,
+          "width": 76.58213521951971,
+          "height": 65.71313308643496,
+          "rotation": 0,
+          "scale": 0.5966346716743186,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#ffc800",
+            "locked": true,
+            "roundCorners": true
+          }
+        },
+        {
+          "id": "el-1779145121909",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+          "x": 22.77777777777778,
+          "y": 77.03125,
+          "width": 40,
+          "height": 33.30223880597015,
+          "rotation": 0,
+          "scale": 1.7488739267620383,
+          "metadata": {
+            "width": 40,
+            "height": 33.30223880597015,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1779144939174-cqdt7o0j8",
+          "type": "balloon",
+          "content": "Direction<span style=\"font-weight: 400;\"> also affects</span><div>division<span style=\"font-weight: 400;\"> and </span>multiplication<span style=\"font-weight: 400;\">.</span></div>",
+          "x": 73.75,
+          "y": 67.03125,
+          "width": 49.166666666666664,
+          "height": 28.125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -113,
+              "y": 3
+            },
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1779144939174-8txvrrx13",
+          "type": "text",
+          "content": "<font color=\"#1cb0f6\">12 ÷ 3</font> <font color=\"#ffffff\">× 2</font>",
+          "x": 29.027777777777782,
+          "y": 18.125000000000004,
+          "width": 22.547880945838074,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779146527014",
+          "type": "line",
+          "x": 28.194444444444443,
+          "y": 20.9375,
+          "width": 101.06551310186515,
+          "height": 50,
+          "rotation": 0,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 17,
+            "isSymbol": true,
+            "symbolColor": "#58cc02",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779144939174-bvoxicxf3",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">2</font></span>",
+          "x": 76.94444444444446,
+          "y": 46.25,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "textAlign": "center",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779144939174-p0uyev0i4",
+          "type": "text",
+          "content": "4 <font color=\"#ffffff\">× 2</font>",
+          "x": 27.777777777777782,
+          "y": 32.8125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569",
+            "color": "#1cb0f6"
+          }
+        },
+        {
+          "id": "el-1779144939174-u91gj06ix",
+          "type": "text",
+          "content": "<font color=\"#ffffff\">12 ÷</font> <font color=\"#1cb0f6\">3 × 2</font>",
+          "x": 78.19444444444446,
+          "y": 17.656250000000004,
+          "width": 23.567033324173302,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779147155814",
+          "type": "line",
+          "x": 27.63888888888888,
+          "y": 26.093750000000007,
+          "width": 20.829231547808927,
+          "height": 50,
+          "rotation": 90,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 15,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779147198713",
+          "type": "line",
+          "x": 27.63888888888888,
+          "y": 39.21875000000001,
+          "width": 20.829231547808927,
+          "height": 50,
+          "rotation": 90,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 16,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779147237338",
+          "type": "line",
+          "x": 77.91666666666666,
+          "y": 39.06250000000001,
+          "width": 20.829231547808927,
+          "height": 50,
+          "rotation": 90,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 15,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779144939174-oe2bob96l",
+          "type": "text",
+          "content": "<font color=\"#ffffff\">12 ÷</font> 6 ",
+          "x": 77.77777777777777,
+          "y": 32.34375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "color": "#1cb0f6",
+            "backgroundColor": "#475569"
+          }
+        },
+        {
+          "id": "el-1779146600879",
+          "type": "line",
+          "x": 78.8888888888889,
+          "y": 20.625,
+          "width": 97.94503861334962,
+          "height": 50,
+          "rotation": 0,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 17,
+            "isSymbol": true,
+            "symbolColor": "#58cc02",
+            "startCap": "arrow",
+            "endCap": "none"
+          }
+        },
+        {
+          "id": "el-1779147246238",
+          "type": "line",
+          "x": 79.02777777777777,
+          "y": 26.093750000000007,
+          "width": 18.748915222131917,
+          "height": 50,
+          "rotation": 90,
+          "scale": 0.26705340370520686,
+          "metadata": {
+            "width": 50,
+            "height": 16,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779144939174-yxrn3y0ds",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+          "x": 27.777777777777775,
+          "y": 45.78125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6353459032192443,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "textAlign": "center",
+            "backgroundColor": "#475569",
+            "color": "#ffffff"
+          }
+        }
+      ],
+      "order": 3,
+      "cartridge": null,
+      "stripper": {
+        "enabled": true,
+        "dividers": [
+          24,
+          37,
+          51
+        ]
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-18T22:39:48.732Z",
+  "updatedAt": "2026-05-19T00:10:59.971Z",
+  "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+  "textPreset": null,
+  "name": "0416-Why LEFT to RIGHT?",
+  "type": "file",
+  "description": "",
+  "visible": true,
+  "order": 416,
+  "content": {
+    "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+    "title": "Why LEFT to RIGHT?",
+    "slides": [
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779144043763",
+            "type": "image",
+            "content": "/src/assets/characters/pest_scratches%20head_front.png",
+            "x": 72.5,
+            "y": 75.625,
+            "width": 40,
+            "height": 23.677130044843047,
+            "rotation": 0,
+            "scale": 1.9543810434492883,
+            "metadata": {
+              "width": 40,
+              "height": 23.677130044843047,
+              "flipX": true
+            }
+          },
+          {
+            "id": "el-1779144006220",
+            "type": "balloon",
+            "content": "Why must we do operations LEFT to RIGHT?",
+            "x": 45.27777777777778,
+            "y": 35.15625,
+            "width": 60,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 20,
+                "y": 93
+              }
+            }
+          }
+        ],
+        "order": 0
+      },
+      {
+        "id": "slide-1779144057098",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779144079438",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+            "x": 33.333333333333336,
+            "y": 70,
+            "width": 40,
+            "height": 29.456289978678036,
+            "rotation": 0,
+            "scale": 1.9267473730710742,
+            "metadata": {
+              "width": 40,
+              "height": 29.456289978678036,
+              "locked": true
+            }
+          },
+          {
+            "id": "el-1779144092177",
+            "type": "balloon",
+            "content": "The direction operations can give different results.",
+            "x": 41.94444444444444,
+            "y": 24.375000000000004,
+            "width": 66.66666666666666,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -7,
+                "y": 86
+              }
+            }
+          },
+          {
+            "id": "el-1779144147881",
+            "type": "balloon",
+            "content": "For example,<div>10 - 4 + 2</div>",
+            "x": 75.83333333333334,
+            "y": 46.40625,
+            "width": 40,
+            "height": 14.374999999999998,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -93,
+                "y": 24
+              }
+            }
+          }
+        ],
+        "order": 1
+      },
+      {
+        "id": "slide-1779144192300",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779144636722",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+            "x": 85.27777777777779,
+            "y": 23.28125,
+            "width": 50,
+            "height": 50,
+            "rotation": 0,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 50,
+              "isSymbol": true,
+              "symbolType": "arrow-thin",
+              "symbolValue": "right",
+              "symbolColor": "#58cc02",
+              "flipX": true
+            }
+          },
+          {
+            "id": "el-1779144622004",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+            "x": 20.27777777777778,
+            "y": 22.96875,
+            "width": 50,
+            "height": 50,
+            "rotation": 0,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 50,
+              "isSymbol": true,
+              "symbolType": "arrow-thin",
+              "symbolValue": "right",
+              "symbolColor": "#58cc02"
+            }
+          },
+          {
+            "id": "el-1779144215775",
+            "type": "text",
+            "content": "10 - <font color=\"#ec4899\">4 + 2</font>",
+            "x": 77.22222222222223,
+            "y": 18.593750000000004,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779144197951",
+            "type": "text",
+            "content": "<font color=\"#ec4899\">10 - 4</font> + 2",
+            "x": 26.944444444444446,
+            "y": 18.125000000000004,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779144705060",
+            "type": "text",
+            "content": "<font color=\"#000000\">10 -</font> 6 ",
+            "x": 78.61111111111111,
+            "y": 33.90625,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "color": "#ec4899"
+            }
+          },
+          {
+            "id": "el-1779144683739",
+            "type": "text",
+            "content": "<font color=\"#ec4899\">6</font> + 2",
+            "x": 28.611111111111114,
+            "y": 34.0625,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779144751518",
+            "type": "text",
+            "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+            "x": 34.722222222222214,
+            "y": 44.6875,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779144775859",
+            "type": "text",
+            "content": "<span style=\"caret-color: rgb(236, 72, 153);\">4</span>",
+            "x": 86.66666666666667,
+            "y": 44.84375,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779144861208",
+            "type": "balloon",
+            "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>",
+            "x": 69.30555555555556,
+            "y": 74.6875,
+            "width": 49.166666666666664,
+            "height": 28.125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -101,
+                "y": -32
+              },
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "id": "el-1779144831001",
+            "type": "image",
+            "content": "/src/assets/characters/chef_scrathing.png",
+            "x": 21.944444444444443,
+            "y": 73.75,
+            "width": 40,
+            "height": 34.59586466165413,
+            "rotation": 0,
+            "scale": 1.553217361782514,
+            "metadata": {
+              "width": 40,
+              "height": 34.59586466165413,
+              "flipX": false
+            }
+          }
+        ],
+        "order": 2
+      },
+      {
+        "id": "slide-1779144939174",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779147713722",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+            "x": 30.277777777777775,
+            "y": 32.65625,
+            "width": 76.58213521951971,
+            "height": 65.71313308643496,
+            "rotation": 0,
+            "scale": 0.5966346716743186,
+            "metadata": {
+              "width": 40,
+              "height": 40,
+              "isSymbol": true,
+              "symbolType": "shape-square",
+              "symbolColor": "#ffc800"
+            }
+          },
+          {
+            "id": "el-1779147771098",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
+            "x": 76.66666666666666,
+            "y": 32.34375,
+            "width": 76.58213521951971,
+            "height": 65.71313308643496,
+            "rotation": 0,
+            "scale": 0.5966346716743186,
+            "metadata": {
+              "width": 40,
+              "height": 40,
+              "isSymbol": true,
+              "symbolType": "shape-square",
+              "symbolColor": "#ffc800"
+            }
+          },
+          {
+            "id": "el-1779145121909",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+            "x": 22.77777777777778,
+            "y": 77.03125,
+            "width": 40,
+            "height": 33.30223880597015,
+            "rotation": 0,
+            "scale": 1.7488739267620383,
+            "metadata": {
+              "width": 40,
+              "height": 33.30223880597015,
+              "locked": true
+            }
+          },
+          {
+            "id": "el-1779144939174-cqdt7o0j8",
+            "type": "balloon",
+            "content": "Direction<span style=\"font-weight: 400;\"> also affects</span><div>division<span style=\"font-weight: 400;\"> and </span>multiplication<span style=\"font-weight: 400;\">.</span></div>",
+            "x": 73.75,
+            "y": 67.03125,
+            "width": 49.166666666666664,
+            "height": 28.125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -113,
+                "y": 3
+              },
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "id": "el-1779144939174-8txvrrx13",
+            "type": "text",
+            "content": "<font color=\"#1cb0f6\">12 ÷ 3</font> <font color=\"#ffffff\">× 2</font>",
+            "x": 29.027777777777782,
+            "y": 18.125000000000004,
+            "width": 22.547880945838074,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#475569"
+            }
+          },
+          {
+            "id": "el-1779146527014",
+            "type": "line",
+            "x": 28.194444444444443,
+            "y": 20.9375,
+            "width": 101.06551310186515,
+            "height": 50,
+            "rotation": 0,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 17,
+              "isSymbol": true,
+              "symbolColor": "#58cc02",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779144939174-u91gj06ix",
+            "type": "text",
+            "content": "<font color=\"#ffffff\">12 ÷</font> <font color=\"#1cb0f6\">3 × 2</font>",
+            "x": 78.19444444444446,
+            "y": 18.593750000000004,
+            "width": 23.567033324173302,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#475569"
+            }
+          },
+          {
+            "id": "el-1779146600879",
+            "type": "line",
+            "x": 78.05555555555556,
+            "y": 21.40625,
+            "width": 97.94503861334962,
+            "height": 50,
+            "rotation": 0,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 17,
+              "isSymbol": true,
+              "symbolColor": "#58cc02",
+              "startCap": "arrow",
+              "endCap": "none"
+            }
+          },
+          {
+            "id": "el-1779144939174-bvoxicxf3",
+            "type": "text",
+            "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">2</font></span>",
+            "x": 76.94444444444446,
+            "y": 46.25,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "textAlign": "center",
+              "backgroundColor": "#475569"
+            }
+          },
+          {
+            "id": "el-1779147237338",
+            "type": "line",
+            "x": 77.91666666666666,
+            "y": 39.06250000000001,
+            "width": 20.829231547808927,
+            "height": 50,
+            "rotation": 90,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779144939174-oe2bob96l",
+            "type": "text",
+            "content": "<font color=\"#ffffff\">12 ÷</font> 6 ",
+            "x": 77.77777777777777,
+            "y": 32.65625,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "color": "#1cb0f6",
+              "backgroundColor": "#475569"
+            }
+          },
+          {
+            "id": "el-1779144939174-yxrn3y0ds",
+            "type": "text",
+            "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+            "x": 27.777777777777775,
+            "y": 45.78125,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "textAlign": "center",
+              "backgroundColor": "#475569",
+              "color": "#ffffff"
+            }
+          },
+          {
+            "id": "el-1779147198713",
+            "type": "line",
+            "x": 28.749999999999993,
+            "y": 39.21875000000001,
+            "width": 20.829231547808927,
+            "height": 50,
+            "rotation": 90,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779144939174-p0uyev0i4",
+            "type": "text",
+            "content": "4 <font color=\"#ffffff\">× 2</font>",
+            "x": 27.777777777777782,
+            "y": 32.8125,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6353459032192443,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#475569",
+              "color": "#1cb0f6"
+            }
+          },
+          {
+            "id": "el-1779147155814",
+            "type": "line",
+            "x": 28.749999999999993,
+            "y": 26.093750000000007,
+            "width": 20.829231547808927,
+            "height": 50,
+            "rotation": 90,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779147246238",
+            "type": "line",
+            "x": 79.02777777777777,
+            "y": 26.093750000000007,
+            "width": 18.748915222131917,
+            "height": 50,
+            "rotation": 90,
+            "scale": 0.26705340370520686,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          }
+        ],
+        "order": 3,
+        "cartridge": null,
+        "stripper": {
+          "enabled": true,
+          "dividers": [
+            24,
+            37,
+            51
+          ]
+        }
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-05-18T22:39:48.732Z",
+    "updatedAt": "2026-05-18T23:43:06.854Z",
+    "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+    "textPreset": null,
+    "name": "0416-Why LEFT to RIGHT?",
+    "type": "file",
+    "description": "",
+    "visible": true,
+    "order": 416,
+    "content": {
+      "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+      "title": "Why LEFT to RIGHT?",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779144043763",
+              "type": "image",
+              "content": "/src/assets/characters/pest_scratches%20head_front.png",
+              "x": 72.5,
+              "y": 75.625,
+              "width": 40,
+              "height": 23.677130044843047,
+              "rotation": 0,
+              "scale": 1.9543810434492883,
+              "metadata": {
+                "width": 40,
+                "height": 23.677130044843047,
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1779144006220",
+              "type": "balloon",
+              "content": "Why must we do operations LEFT to RIGHT?",
+              "x": 45.27777777777778,
+              "y": 35.15625,
+              "width": 60,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 20,
+                  "y": 93
+                }
+              }
+            }
+          ],
+          "order": 0
+        },
+        {
+          "id": "slide-1779144057098",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779144079438",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+              "x": 33.333333333333336,
+              "y": 70,
+              "width": 40,
+              "height": 29.456289978678036,
+              "rotation": 0,
+              "scale": 1.9267473730710742,
+              "metadata": {
+                "width": 40,
+                "height": 29.456289978678036,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1779144092177",
+              "type": "balloon",
+              "content": "The direction operations can give different results.",
+              "x": 41.94444444444444,
+              "y": 24.375000000000004,
+              "width": 66.66666666666666,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -7,
+                  "y": 86
+                }
+              }
+            },
+            {
+              "id": "el-1779144147881",
+              "type": "balloon",
+              "content": "For example,<div>10 - 4 + 2</div>",
+              "x": 75.83333333333334,
+              "y": 46.40625,
+              "width": 40,
+              "height": 14.374999999999998,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -93,
+                  "y": 24
+                }
+              }
+            }
+          ],
+          "order": 1
+        },
+        {
+          "id": "slide-1779144192300",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779144636722",
+              "type": "image",
+              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+              "x": 85.27777777777779,
+              "y": 23.28125,
+              "width": 50,
+              "height": 50,
+              "rotation": 0,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 50,
+                "isSymbol": true,
+                "symbolType": "arrow-thin",
+                "symbolValue": "right",
+                "symbolColor": "#58cc02",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1779144622004",
+              "type": "image",
+              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+              "x": 20.27777777777778,
+              "y": 22.96875,
+              "width": 50,
+              "height": 50,
+              "rotation": 0,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 50,
+                "isSymbol": true,
+                "symbolType": "arrow-thin",
+                "symbolValue": "right",
+                "symbolColor": "#58cc02"
+              }
+            },
+            {
+              "id": "el-1779144215775",
+              "type": "text",
+              "content": "10 - <font color=\"#ec4899\">4 + 2</font>",
+              "x": 77.22222222222223,
+              "y": 18.593750000000004,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779144197951",
+              "type": "text",
+              "content": "<font color=\"#ec4899\">10 - 4</font> + 2",
+              "x": 26.944444444444446,
+              "y": 18.125000000000004,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779144705060",
+              "type": "text",
+              "content": "<font color=\"#000000\">10 -</font> 6 ",
+              "x": 78.61111111111111,
+              "y": 33.90625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "color": "#ec4899"
+              }
+            },
+            {
+              "id": "el-1779144683739",
+              "type": "text",
+              "content": "<font color=\"#ec4899\">6</font> + 2",
+              "x": 28.611111111111114,
+              "y": 34.0625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779144751518",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+              "x": 34.722222222222214,
+              "y": 44.6875,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779144775859",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(236, 72, 153);\">4</span>",
+              "x": 86.66666666666667,
+              "y": 44.84375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779144861208",
+              "type": "balloon",
+              "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>",
+              "x": 69.30555555555556,
+              "y": 74.6875,
+              "width": 49.166666666666664,
+              "height": 28.125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -101,
+                  "y": -32
+                },
+                "fontWeight": "bold"
+              }
+            },
+            {
+              "id": "el-1779144831001",
+              "type": "image",
+              "content": "/src/assets/characters/chef_scrathing.png",
+              "x": 21.944444444444443,
+              "y": 73.75,
+              "width": 40,
+              "height": 34.59586466165413,
+              "rotation": 0,
+              "scale": 1.553217361782514,
+              "metadata": {
+                "width": 40,
+                "height": 34.59586466165413,
+                "flipX": false
+              }
+            }
+          ],
+          "order": 2
+        },
+        {
+          "id": "slide-1779144939174",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779145121909",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+              "x": 22.77777777777778,
+              "y": 77.03125,
+              "width": 40,
+              "height": 33.30223880597015,
+              "rotation": 0,
+              "scale": 1.7488739267620383,
+              "metadata": {
+                "width": 40,
+                "height": 33.30223880597015,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1779144939174-cqdt7o0j8",
+              "type": "balloon",
+              "content": "Direction<span style=\"font-weight: 400;\"> also affects</span><div>division<span style=\"font-weight: 400;\"> and </span>multiplication<span style=\"font-weight: 400;\">.</span></div>",
+              "x": 73.75,
+              "y": 67.03125,
+              "width": 49.166666666666664,
+              "height": 28.125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -113,
+                  "y": 3
+                },
+                "fontWeight": "bold"
+              }
+            },
+            {
+              "id": "el-1779144939174-8txvrrx13",
+              "type": "text",
+              "content": "<font color=\"#1cb0f6\">12 ÷ 3</font> <font color=\"#ffffff\">× 2</font>",
+              "x": 29.027777777777782,
+              "y": 18.125000000000004,
+              "width": 22.547880945838074,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#475569"
+              }
+            },
+            {
+              "id": "el-1779146527014",
+              "type": "line",
+              "x": 28.194444444444443,
+              "y": 20.9375,
+              "width": 101.06551310186515,
+              "height": 50,
+              "rotation": 0,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 17,
+                "isSymbol": true,
+                "symbolColor": "#58cc02",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779144939174-u91gj06ix",
+              "type": "text",
+              "content": "<font color=\"#ffffff\">12 ÷</font> <font color=\"#1cb0f6\">3 × 2</font>",
+              "x": 78.19444444444446,
+              "y": 18.593750000000004,
+              "width": 23.567033324173302,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#475569"
+              }
+            },
+            {
+              "id": "el-1779146600879",
+              "type": "line",
+              "x": 78.05555555555556,
+              "y": 21.40625,
+              "width": 97.94503861334962,
+              "height": 50,
+              "rotation": 0,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 17,
+                "isSymbol": true,
+                "symbolColor": "#58cc02",
+                "startCap": "arrow",
+                "endCap": "none"
+              }
+            },
+            {
+              "id": "el-1779144939174-bvoxicxf3",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">2</font></span>",
+              "x": 76.94444444444446,
+              "y": 46.25,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "textAlign": "center",
+                "backgroundColor": "#475569"
+              }
+            },
+            {
+              "id": "el-1779147237338",
+              "type": "line",
+              "x": 77.91666666666666,
+              "y": 39.06250000000001,
+              "width": 20.829231547808927,
+              "height": 50,
+              "rotation": 90,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 10,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779144939174-oe2bob96l",
+              "type": "text",
+              "content": "<font color=\"#ffffff\">12 ÷</font> 6 ",
+              "x": 77.77777777777777,
+              "y": 32.65625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "color": "#1cb0f6",
+                "backgroundColor": "#475569"
+              }
+            },
+            {
+              "id": "el-1779144939174-yxrn3y0ds",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+              "x": 27.777777777777775,
+              "y": 45.78125,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "textAlign": "center",
+                "backgroundColor": "#475569",
+                "color": "#ffffff"
+              }
+            },
+            {
+              "id": "el-1779147198713",
+              "type": "line",
+              "x": 28.749999999999993,
+              "y": 39.21875000000001,
+              "width": 20.829231547808927,
+              "height": 50,
+              "rotation": 90,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 10,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779144939174-p0uyev0i4",
+              "type": "text",
+              "content": "4 <font color=\"#ffffff\">× 2</font>",
+              "x": 27.777777777777782,
+              "y": 32.8125,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6353459032192443,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#475569",
+                "color": "#1cb0f6"
+              }
+            },
+            {
+              "id": "el-1779147155814",
+              "type": "line",
+              "x": 28.749999999999993,
+              "y": 26.093750000000007,
+              "width": 20.829231547808927,
+              "height": 50,
+              "rotation": 90,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 10,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779147246238",
+              "type": "line",
+              "x": 79.02777777777777,
+              "y": 26.093750000000007,
+              "width": 18.748915222131917,
+              "height": 50,
+              "rotation": 90,
+              "scale": 0.26705340370520686,
+              "metadata": {
+                "width": 50,
+                "height": 10,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            }
+          ],
+          "order": 3,
+          "cartridge": null,
+          "stripper": {
+            "enabled": true,
+            "dividers": [
+              24,
+              37,
+              51
+            ]
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-05-18T22:39:48.732Z",
+      "updatedAt": "2026-05-18T23:35:26.663Z",
+      "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+      "textPreset": null,
+      "name": "0416-Why LEFT to RIGHT?",
+      "type": "file",
+      "description": "",
+      "visible": true,
+      "order": 416,
+      "content": {
+        "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+        "title": "Why LEFT to RIGHT?",
+        "slides": [
+          {
+            "id": "slide-1",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779144043763",
+                "type": "image",
+                "content": "/src/assets/characters/pest_scratches%20head_front.png",
+                "x": 72.5,
+                "y": 75.625,
+                "width": 40,
+                "height": 23.677130044843047,
+                "rotation": 0,
+                "scale": 1.9543810434492883,
+                "metadata": {
+                  "width": 40,
+                  "height": 23.677130044843047,
+                  "flipX": true
+                }
+              },
+              {
+                "id": "el-1779144006220",
+                "type": "balloon",
+                "content": "Why must we do operations LEFT to RIGHT?",
+                "x": 45.27777777777778,
+                "y": 35.15625,
+                "width": 60,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 20,
+                    "y": 93
+                  }
+                }
+              }
+            ],
+            "order": 0
+          },
+          {
+            "id": "slide-1779144057098",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779144079438",
+                "type": "image",
+                "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+                "x": 33.333333333333336,
+                "y": 70,
+                "width": 40,
+                "height": 29.456289978678036,
+                "rotation": 0,
+                "scale": 1.9267473730710742,
+                "metadata": {
+                  "width": 40,
+                  "height": 29.456289978678036,
+                  "locked": true
+                }
+              },
+              {
+                "id": "el-1779144092177",
+                "type": "balloon",
+                "content": "The direction operations can give different results.",
+                "x": 41.94444444444444,
+                "y": 24.375000000000004,
+                "width": 66.66666666666666,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -7,
+                    "y": 86
+                  }
+                }
+              },
+              {
+                "id": "el-1779144147881",
+                "type": "balloon",
+                "content": "For example,<div>10 - 4 + 2</div>",
+                "x": 75.83333333333334,
+                "y": 46.40625,
+                "width": 40,
+                "height": 14.374999999999998,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -93,
+                    "y": 24
+                  }
+                }
+              }
+            ],
+            "order": 1
+          },
+          {
+            "id": "slide-1779144192300",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779144636722",
+                "type": "image",
+                "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                "x": 85.27777777777779,
+                "y": 23.28125,
+                "width": 50,
+                "height": 50,
+                "rotation": 0,
+                "scale": 0.26705340370520686,
+                "metadata": {
+                  "width": 50,
+                  "height": 50,
+                  "isSymbol": true,
+                  "symbolType": "arrow-thin",
+                  "symbolValue": "right",
+                  "symbolColor": "#58cc02",
+                  "flipX": true
+                }
+              },
+              {
+                "id": "el-1779144622004",
+                "type": "image",
+                "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                "x": 20.27777777777778,
+                "y": 22.96875,
+                "width": 50,
+                "height": 50,
+                "rotation": 0,
+                "scale": 0.26705340370520686,
+                "metadata": {
+                  "width": 50,
+                  "height": 50,
+                  "isSymbol": true,
+                  "symbolType": "arrow-thin",
+                  "symbolValue": "right",
+                  "symbolColor": "#58cc02"
+                }
+              },
+              {
+                "id": "el-1779144215775",
+                "type": "text",
+                "content": "10 - <font color=\"#ec4899\">4 + 2</font>",
+                "x": 77.22222222222223,
+                "y": 18.593750000000004,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779144197951",
+                "type": "text",
+                "content": "<font color=\"#ec4899\">10 - 4</font> + 2",
+                "x": 26.944444444444446,
+                "y": 18.125000000000004,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779144705060",
+                "type": "text",
+                "content": "<font color=\"#000000\">10 -</font> 6 ",
+                "x": 78.61111111111111,
+                "y": 33.90625,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "color": "#ec4899"
+                }
+              },
+              {
+                "id": "el-1779144683739",
+                "type": "text",
+                "content": "<font color=\"#ec4899\">6</font> + 2",
+                "x": 28.611111111111114,
+                "y": 34.0625,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779144751518",
+                "type": "text",
+                "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+                "x": 34.722222222222214,
+                "y": 44.6875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779144775859",
+                "type": "text",
+                "content": "<span style=\"caret-color: rgb(236, 72, 153);\">4</span>",
+                "x": 86.66666666666667,
+                "y": 44.84375,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779144861208",
+                "type": "balloon",
+                "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>",
+                "x": 69.30555555555556,
+                "y": 74.6875,
+                "width": 49.166666666666664,
+                "height": 28.125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -101,
+                    "y": -32
+                  },
+                  "fontWeight": "bold"
+                }
+              },
+              {
+                "id": "el-1779144831001",
+                "type": "image",
+                "content": "/src/assets/characters/chef_scrathing.png",
+                "x": 21.944444444444443,
+                "y": 73.75,
+                "width": 40,
+                "height": 34.59586466165413,
+                "rotation": 0,
+                "scale": 1.553217361782514,
+                "metadata": {
+                  "width": 40,
+                  "height": 34.59586466165413,
+                  "flipX": false
+                }
+              }
+            ],
+            "order": 2
+          },
+          {
+            "id": "slide-1779144939174",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779144939174-cqdt7o0j8",
+                "type": "balloon",
+                "content": "Direction<span style=\"font-weight: 400;\"> also affects</span><div>division<span style=\"font-weight: 400;\"> and </span>multiplication<span style=\"font-weight: 400;\">.</span></div>",
+                "x": 73.75,
+                "y": 67.03125,
+                "width": 49.166666666666664,
+                "height": 28.125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -113,
+                    "y": 3
+                  },
+                  "fontWeight": "bold"
+                }
+              },
+              {
+                "id": "el-1779145121909",
+                "type": "image",
+                "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+                "x": 22.77777777777778,
+                "y": 77.03125,
+                "width": 40,
+                "height": 33.30223880597015,
+                "rotation": 0,
+                "scale": 1.7488739267620383,
+                "metadata": {
+                  "width": 40,
+                  "height": 33.30223880597015
+                }
+              },
+              {
+                "id": "el-1779144939174-yxrn3y0ds",
+                "type": "text",
+                "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+                "x": 27.777777777777775,
+                "y": 42.5,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "textAlign": "center",
+                  "backgroundColor": "#475569",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "id": "el-1779144939174-8txvrrx13",
+                "type": "text",
+                "content": "<font color=\"#1cb0f6\">12 ÷ 3</font> <font color=\"#ffffff\">× 2</font>",
+                "x": 29.027777777777782,
+                "y": 18.125000000000004,
+                "width": 22.547880945838074,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569"
+                }
+              },
+              {
+                "id": "el-1779146527014",
+                "type": "line",
+                "x": 28.194444444444443,
+                "y": 20.9375,
+                "width": 101.06551310186515,
+                "height": 50,
+                "rotation": 0,
+                "scale": 0.26705340370520686,
+                "metadata": {
+                  "width": 50,
+                  "height": 17,
+                  "isSymbol": true,
+                  "symbolColor": "#58cc02",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779144939174-p0uyev0i4",
+                "type": "text",
+                "content": "4 <font color=\"#ffffff\">× 2</font>",
+                "x": 27.777777777777782,
+                "y": 31.09375,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569",
+                  "color": "#1cb0f6"
+                }
+              },
+              {
+                "id": "el-1779144939174-bvoxicxf3",
+                "type": "text",
+                "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">2</font></span>",
+                "x": 76.3888888888889,
+                "y": 42.5,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "textAlign": "center",
+                  "backgroundColor": "#475569"
+                }
+              },
+              {
+                "id": "el-1779144939174-oe2bob96l",
+                "type": "text",
+                "content": "<font color=\"#ffffff\">12 ÷</font> 6 ",
+                "x": 77.77777777777777,
+                "y": 31.09375,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "color": "#1cb0f6",
+                  "backgroundColor": "#475569"
+                }
+              },
+              {
+                "id": "el-1779144939174-u91gj06ix",
+                "type": "text",
+                "content": "<font color=\"#ffffff\">12 ÷</font> <font color=\"#1cb0f6\">3 × 2</font>",
+                "x": 78.19444444444446,
+                "y": 18.593750000000004,
+                "width": 23.567033324173302,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6353459032192443,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569"
+                }
+              },
+              {
+                "id": "el-1779146600879",
+                "type": "line",
+                "x": 78.05555555555556,
+                "y": 21.40625,
+                "width": 97.94503861334962,
+                "height": 50,
+                "rotation": 0,
+                "scale": 0.26705340370520686,
+                "metadata": {
+                  "width": 50,
+                  "height": 17,
+                  "isSymbol": true,
+                  "symbolColor": "#58cc02",
+                  "startCap": "arrow",
+                  "endCap": "none"
+                }
+              }
+            ],
+            "order": 3,
+            "cartridge": null,
+            "stripper": {
+              "enabled": true,
+              "dividers": [
+                25,
+                36,
+                47
+              ]
+            }
+          }
+        ],
+        "author": "User",
+        "createdAt": "2026-05-18T22:39:48.732Z",
+        "updatedAt": "2026-05-18T23:28:20.138Z",
+        "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+        "textPreset": null,
+        "name": "0416-Why LEFT to RIGHT?",
+        "type": "file",
+        "description": "",
+        "visible": true,
+        "order": 416,
+        "content": {
+          "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+          "title": "Why LEFT to RIGHT?",
+          "slides": [
+            {
+              "id": "slide-1",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779144043763",
+                  "type": "image",
+                  "content": "/src/assets/characters/pest_scratches%20head_front.png",
+                  "x": 72.5,
+                  "y": 75.625,
+                  "width": 40,
+                  "height": 23.677130044843047,
+                  "rotation": 0,
+                  "scale": 1.9543810434492883,
+                  "metadata": {
+                    "width": 40,
+                    "height": 23.677130044843047,
+                    "flipX": true
+                  }
+                },
+                {
+                  "id": "el-1779144006220",
+                  "type": "balloon",
+                  "content": "Why must we do operations LEFT to RIGHT?",
+                  "x": 45.27777777777778,
+                  "y": 35.15625,
+                  "width": 60,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": 20,
+                      "y": 93
+                    }
+                  }
+                }
+              ],
+              "order": 0
+            },
+            {
+              "id": "slide-1779144057098",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779144079438",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+                  "x": 33.333333333333336,
+                  "y": 70,
+                  "width": 40,
+                  "height": 29.456289978678036,
+                  "rotation": 0,
+                  "scale": 1.9267473730710742,
+                  "metadata": {
+                    "width": 40,
+                    "height": 29.456289978678036,
+                    "locked": true
+                  }
+                },
+                {
+                  "id": "el-1779144092177",
+                  "type": "balloon",
+                  "content": "The direction operations can give different results.",
+                  "x": 41.94444444444444,
+                  "y": 24.375000000000004,
+                  "width": 66.66666666666666,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -7,
+                      "y": 86
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779144147881",
+                  "type": "balloon",
+                  "content": "For example,<div>10 - 4 + 2</div>",
+                  "x": 75.83333333333334,
+                  "y": 46.40625,
+                  "width": 40,
+                  "height": 14.374999999999998,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -93,
+                      "y": 24
+                    }
+                  }
+                }
+              ],
+              "order": 1
+            },
+            {
+              "id": "slide-1779144192300",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779144636722",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                  "x": 85.27777777777779,
+                  "y": 23.28125,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.26705340370520686,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50,
+                    "isSymbol": true,
+                    "symbolType": "arrow-thin",
+                    "symbolValue": "right",
+                    "symbolColor": "#58cc02",
+                    "flipX": true
+                  }
+                },
+                {
+                  "id": "el-1779144622004",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                  "x": 20.27777777777778,
+                  "y": 22.96875,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.26705340370520686,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50,
+                    "isSymbol": true,
+                    "symbolType": "arrow-thin",
+                    "symbolValue": "right",
+                    "symbolColor": "#58cc02"
+                  }
+                },
+                {
+                  "id": "el-1779144215775",
+                  "type": "text",
+                  "content": "10 - <font color=\"#ec4899\">4 + 2</font>",
+                  "x": 77.22222222222223,
+                  "y": 18.593750000000004,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144197951",
+                  "type": "text",
+                  "content": "<font color=\"#ec4899\">10 - 4</font> + 2",
+                  "x": 26.944444444444446,
+                  "y": 18.125000000000004,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144705060",
+                  "type": "text",
+                  "content": "<font color=\"#000000\">10 -</font> 6 ",
+                  "x": 78.61111111111111,
+                  "y": 33.90625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "color": "#ec4899"
+                  }
+                },
+                {
+                  "id": "el-1779144683739",
+                  "type": "text",
+                  "content": "<font color=\"#ec4899\">6</font> + 2",
+                  "x": 28.611111111111114,
+                  "y": 34.0625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144751518",
+                  "type": "text",
+                  "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+                  "x": 34.722222222222214,
+                  "y": 44.6875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144775859",
+                  "type": "text",
+                  "content": "<span style=\"caret-color: rgb(236, 72, 153);\">4</span>",
+                  "x": 86.66666666666667,
+                  "y": 44.84375,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144861208",
+                  "type": "balloon",
+                  "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>",
+                  "x": 69.30555555555556,
+                  "y": 74.6875,
+                  "width": 49.166666666666664,
+                  "height": 28.125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -101,
+                      "y": -32
+                    },
+                    "fontWeight": "bold"
+                  }
+                },
+                {
+                  "id": "el-1779144831001",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef_scrathing.png",
+                  "x": 21.944444444444443,
+                  "y": 73.75,
+                  "width": 40,
+                  "height": 34.59586466165413,
+                  "rotation": 0,
+                  "scale": 1.553217361782514,
+                  "metadata": {
+                    "width": 40,
+                    "height": 34.59586466165413,
+                    "flipX": false
+                  }
+                }
+              ],
+              "order": 2
+            },
+            {
+              "id": "slide-1779144939174",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779144939174-1d8a8tw32",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                  "x": 85.27777777777779,
+                  "y": 23.28125,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.26705340370520686,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50,
+                    "isSymbol": true,
+                    "symbolType": "arrow-thin",
+                    "symbolValue": "right",
+                    "symbolColor": "#58cc02",
+                    "flipX": true
+                  }
+                },
+                {
+                  "id": "el-1779144939174-7mggblu6j",
+                  "type": "image",
+                  "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%22%20height%3D%22100%22%3E%0A%20%20%3Cg%20transform%3D%22rotate(90%2050%2050)%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50%2015%20L50%2085%20M25%2040%20L50%2015%20L75%2040%22%20stroke%3D%22%2358cc02%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E",
+                  "x": 20.27777777777778,
+                  "y": 22.96875,
+                  "width": 50,
+                  "height": 50,
+                  "rotation": 0,
+                  "scale": 0.26705340370520686,
+                  "metadata": {
+                    "width": 50,
+                    "height": 50,
+                    "isSymbol": true,
+                    "symbolType": "arrow-thin",
+                    "symbolValue": "right",
+                    "symbolColor": "#58cc02"
+                  }
+                },
+                {
+                  "id": "el-1779144939174-8txvrrx13",
+                  "type": "text",
+                  "content": "<font color=\"#ec4899\">12 ÷ 3</font> × 2",
+                  "x": 28.194444444444446,
+                  "y": 18.125000000000004,
+                  "width": 21.528728567502846,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144939174-p0uyev0i4",
+                  "type": "text",
+                  "content": "<font color=\"#ec4899\">4</font> × 2",
+                  "x": 28.611111111111114,
+                  "y": 34.0625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144939174-u91gj06ix",
+                  "type": "text",
+                  "content": "12 ÷ <font color=\"#ec4899\">3 × 2</font>",
+                  "x": 77.22222222222223,
+                  "y": 18.593750000000004,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144939174-oe2bob96l",
+                  "type": "text",
+                  "content": "<font color=\"#000000\">12 ÷</font> 6 ",
+                  "x": 78.61111111111111,
+                  "y": 33.90625,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "color": "#ec4899"
+                  }
+                },
+                {
+                  "id": "el-1779144939174-bvoxicxf3",
+                  "type": "text",
+                  "content": "<span style=\"caret-color: rgb(236, 72, 153);\">2</span>",
+                  "x": 86.66666666666667,
+                  "y": 44.84375,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779144939174-yxrn3y0ds",
+                  "type": "text",
+                  "content": "<span style=\"caret-color: rgb(236, 72, 153);\">8</span>",
+                  "x": 34.722222222222214,
+                  "y": 44.6875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.6353459032192443,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779145121909",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
+                  "x": 22.77777777777778,
+                  "y": 77.03125,
+                  "width": 40,
+                  "height": 33.30223880597015,
+                  "rotation": 0,
+                  "scale": 1.7488739267620383,
+                  "metadata": {
+                    "width": 40,
+                    "height": 33.30223880597015
+                  }
+                },
+                {
+                  "id": "el-1779144939174-cqdt7o0j8",
+                  "type": "balloon",
+                  "content": "Direction<span style=\"font-weight: 400;\"> also affects</span><div>division<span style=\"font-weight: 400;\"> and </span>multiplication<span style=\"font-weight: 400;\">.</span></div>",
+                  "x": 73.47222222222223,
+                  "y": 65,
+                  "width": 49.166666666666664,
+                  "height": 28.125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -113,
+                      "y": 3
+                    },
+                    "fontWeight": "bold"
+                  }
+                }
+              ],
+              "order": 3,
+              "cartridge": null
+            }
+          ],
+          "author": "User",
+          "createdAt": "2026-05-18T22:39:48.732Z",
+          "updatedAt": "2026-05-18T22:59:31.808Z",
+          "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+          "textPreset": null,
+          "name": "0416-Why LEFT to RIGHT?",
+          "type": "file",
+          "description": "",
+          "visible": true,
+          "order": 416,
+          "content": {
+            "id": "draft-1",
+            "title": "Why LEFT to RIGHT?",
+            "slides": [
+              {
+                "id": "slide-1",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1779144043763",
+                    "type": "image",
+                    "content": "/src/assets/characters/pest_scratches%20head_front.png",
+                    "x": 72.5,
+                    "y": 75.625,
+                    "width": 40,
+                    "height": 23.677130044843047,
+                    "rotation": 0,
+                    "scale": 1.9543810434492883,
+                    "metadata": {
+                      "width": 40,
+                      "height": 23.677130044843047,
+                      "flipX": true
+                    }
+                  },
+                  {
+                    "id": "el-1779144006220",
+                    "type": "balloon",
+                    "content": "Why must we do operations LEFT to RIGHT?",
+                    "x": 45.27777777777778,
+                    "y": 35.15625,
+                    "width": 60,
+                    "height": 20,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": 20,
+                        "y": 93
+                      }
+                    }
+                  }
+                ],
+                "order": 0
+              },
+              {
+                "id": "slide-1779144057098",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1779144079438",
+                    "type": "image",
+                    "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
+                    "x": 33.333333333333336,
+                    "y": 70,
+                    "width": 40,
+                    "height": 29.456289978678036,
+                    "rotation": 0,
+                    "scale": 1.9267473730710742,
+                    "metadata": {
+                      "width": 40,
+                      "height": 29.456289978678036,
+                      "locked": true
+                    }
+                  },
+                  {
+                    "id": "el-1779144092177",
+                    "type": "balloon",
+                    "content": "The direction operations can give different results.",
+                    "x": 41.94444444444444,
+                    "y": 24.375000000000004,
+                    "width": 66.66666666666666,
+                    "height": 20,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": -7,
+                        "y": 86
+                      }
+                    }
+                  },
+                  {
+                    "id": "el-1779144147881",
+                    "type": "balloon",
+                    "content": "For example,<div>10 - 4 + 2</div>",
+                    "x": 75.83333333333334,
+                    "y": 46.40625,
+                    "width": 40,
+                    "height": 14.374999999999998,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": -93,
+                        "y": 24
+                      }
+                    }
+                  }
+                ],
+                "order": 1
+              },
+              {
+                "id": "slide-1779144192300",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1779144197951",
+                    "type": "text",
+                    "content": "<font color=\"#ec4899\">10 - 4</font> + 2",
+                    "x": 26.944444444444446,
+                    "y": 18.125000000000004,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1.6353459032192443,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\""
+                    }
+                  },
+                  {
+                    "id": "el-1779144215775",
+                    "type": "text",
+                    "content": "10 - 4 + 2",
+                    "x": 77.22222222222223,
+                    "y": 18.593750000000004,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1.6353459032192443,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\""
+                    }
+                  }
+                ],
+                "order": 2
+              }
+            ],
+            "author": "User",
+            "createdAt": "2026-05-18T22:39:48.732Z",
+            "updatedAt": "2026-05-18T22:45:40.416Z",
+            "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+            "textPreset": null
+          },
+          "status": "active",
+          "icon": {
+            "type": {},
+            "key": null,
+            "props": {
+              "size": 24
+            },
+            "_owner": null,
+            "_store": {}
+          },
+          "progress": null
+        },
+        "status": "active",
+        "icon": {
+          "type": {},
+          "key": null,
+          "props": {
+            "size": 24
+          },
+          "_owner": null,
+          "_store": {}
+        },
+        "progress": {
+          "lastSlideIndex": 2,
+          "completed": false,
+          "lastPlayed": 1779146137881
+        }
+      },
+      "status": "completed",
+      "icon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 3,
+        "completed": true,
+        "lastPlayed": 1779146923061
+      }
+    },
+    "status": "completed",
+    "icon": {
+      "type": {},
+      "key": null,
+      "props": {
+        "size": 24
+      },
+      "_owner": null,
+      "_store": {}
+    },
+    "progress": {
+      "lastSlideIndex": 3,
+      "completed": true,
+      "lastPlayed": 1779147306734
+    }
+  },
+  "status": "completed",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 3,
+    "completed": true,
+    "lastPlayed": 1779147789245
+  }
+}

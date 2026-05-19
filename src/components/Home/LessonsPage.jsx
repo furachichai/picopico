@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
+import ConfirmationModal from '../Editor/ConfirmationModal';
 import './LessonsPage.css';
 
 const LessonsPage = () => {
-    const { dispatch } = useEditor();
+    const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteTarget, setDeleteTarget] = useState(null); // lesson item pending delete confirmation
 
     const fetchLessons = async () => {
         try {
@@ -59,18 +61,34 @@ const LessonsPage = () => {
         }
     };
 
-    const handleDelete = async (item) => {
-        if (!window.confirm(`Delete lesson "${item.title}"?`)) return;
+    const handleDelete = (item) => {
+        setDeleteTarget(item);
+    };
+
+    const confirmDelete = async () => {
+        const item = deleteTarget;
+        setDeleteTarget(null);
+        if (!item) return;
         try {
-            // Delete the lesson folder (parent of lesson.json)
             const folderPath = item.path.replace('/lesson.json', '');
-            await fetch('/api/delete-lesson', {
+            const response = await fetch('/api/delete-lesson', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path: folderPath })
             });
-            fetchLessons();
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || 'Delete failed');
+            }
+            // If the deleted lesson is the one currently loaded in the editor, reset state
+            if (state.lesson?.path === item.path) {
+                dispatch({ type: 'NEW_LESSON' });
+                dispatch({ type: 'SET_VIEW', payload: 'lessons' });
+            }
+            await fetchLessons();
         } catch (error) {
             console.error('Error deleting:', error);
+            alert('Failed to delete lesson: ' + error.message);
         }
     };
 
@@ -157,7 +175,7 @@ const LessonsPage = () => {
                             key={item.path}
                             className={`file-tree-item file ${!item.visible ? 'lesson-hidden' : ''}`}
                             onClick={(e) => {
-                                if (e.target.closest('.btn-icon')) return;
+                                if (e.target.closest('button') || e.target.tagName === 'BUTTON') return;
                                 handleEdit(item);
                             }}
                             style={{ opacity: item.visible ? 1 : 0.5 }}
@@ -217,6 +235,15 @@ const LessonsPage = () => {
                     ))
                 )}
             </div>
+
+            <ConfirmationModal
+                isOpen={!!deleteTarget}
+                message={`Delete lesson "${deleteTarget?.title}"?`}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteTarget(null)}
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
         </div>
     );
 };

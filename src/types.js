@@ -37,4 +37,5 @@ export const ELEMENT_TYPES = {
     GAME: 'game',
     BALLOON: 'balloon',
     ISTICKER: 'isticker',
+    LINE: 'line',
 };

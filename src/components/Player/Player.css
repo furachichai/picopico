@@ -332,3 +332,33 @@
         filter: blur(0);
     }
 }
+
+/* ── Navigation Hint ── */
+/* Peek animation with built-in pause. Total cycle = 6.2s (1.2s motion + 5s idle). */
+.nav-hint-nudge {
+    animation: navHintNudge 6.2s ease-in-out infinite !important;
+}
+
+.nav-hint-peek {
+    animation: navHintPeek 6.2s ease-in-out infinite !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+/* Active slide: nudge left 20px then return */
+@keyframes navHintNudge {
+    0%    { transform: translateX(0) scale(var(--scale)); }
+    6%    { transform: translateX(-20px) scale(var(--scale)); }
+    13%   { transform: translateX(-20px) scale(var(--scale)); }
+    19%   { transform: translateX(0) scale(var(--scale)); }
+    100%  { transform: translateX(0) scale(var(--scale)); }
+}
+
+/* Next slide: peek a strip from the right edge, then retreat */
+@keyframes navHintPeek {
+    0%    { transform: translateX(100vw) scale(var(--scale)); }
+    6%    { transform: translateX(calc(100vw - 40px)) scale(var(--scale)); }
+    13%   { transform: translateX(calc(100vw - 40px)) scale(var(--scale)); }
+    19%   { transform: translateX(100vw) scale(var(--scale)); }
+    100%  { transform: translateX(100vw) scale(var(--scale)); }
+}

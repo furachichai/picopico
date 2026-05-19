@@ -24,7 +24,7 @@ const rotatePoint = (x, y, angle) => {
     };
 };
 
-const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, onDelete, translationMode = false }) => {
+const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onEdit, onDelete, translationMode = false }) => {
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [interactionType, setInteractionType] = useState(null); // 'move', 'resize', 'rotate'
@@ -207,6 +207,63 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                     x: newXPct,
                     y: newYPct
                 });
+            } else if (type === 'line-start' || type === 'line-end') {
+                // Line endpoint dragging
+                const localDelta = rotatePoint(dx, dy, -startRotation);
+                const localDx = localDelta.x / startScale;
+                const localDy = localDelta.y / startScale;
+
+                // Current length in pixels
+                const currentLengthPx = (startWidth / 100) * parentWidth;
+                
+                // Which end is fixed?
+                // If dragging 'end' (right), the 'start' (left) is fixed.
+                const fixedXLocal = (type === 'line-end') ? -currentLengthPx / 2 : currentLengthPx / 2;
+                
+                // New position of the dragged handle (local space)
+                const newHandleXLocal = (type === 'line-end') ? (currentLengthPx / 2 + localDx) : (-currentLengthPx / 2 + localDx);
+                const newHandleYLocal = localDy; // localDy is the deviation from the line's axis
+
+                // New length
+                const newLengthPx = Math.sqrt(Math.pow(newHandleXLocal - fixedXLocal, 2) + Math.pow(newHandleYLocal, 2));
+                const minLengthPx = 20; // 20px minimum length
+                const actualLengthPx = Math.max(minLengthPx, newLengthPx);
+
+                // New angle relative to the original rotation
+                let angleOffset = Math.atan2(newHandleYLocal, newHandleXLocal - fixedXLocal) * (180 / Math.PI);
+                if (type === 'line-start') {
+                    angleOffset = Math.atan2(newHandleYLocal, newHandleXLocal - fixedXLocal) * (180 / Math.PI) - 180;
+                }
+
+                let newAngle = startRotation + angleOffset;
+
+                // Snapping logic (snap if within 5 degrees of orthogonal angles)
+                const snapAngles = [0, 90, 180, 270, 360, -90, -180, -270];
+                for (let sa of snapAngles) {
+                    if (Math.abs(newAngle - sa) < 5) {
+                        newAngle = sa;
+                        break;
+                    }
+                }
+
+                // New center calculation
+                // The new center is halfway between the fixed point and the newly dragged point
+                const newCenterXLocal = (fixedXLocal + newHandleXLocal) / 2;
+                const newCenterYLocal = newHandleYLocal / 2;
+
+                // Rotate the center shift back to global space
+                const globalShift = rotatePoint(newCenterXLocal * startScale, newCenterYLocal * startScale, startRotation);
+                
+                const newXPct = startLeft + (globalShift.x / parentWidth) * 100;
+                const newYPct = startTop + (globalShift.y / parentHeight) * 100;
+                const newWidthPct = (actualLengthPx / parentWidth) * 100;
+
+                onChange(element.id, {
+                    width: newWidthPct,
+                    x: newXPct,
+                    y: newYPct,
+                    rotation: newAngle
+                });
             }
         };
 
@@ -235,8 +292,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: isSelected ? 100 : (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? 50 : 1)),
-                pointerEvents: (element.metadata?.locked && !isSelected) ? 'none' : undefined,
+                zIndex: isSelected ? (elementIndex + 1000) : (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
@@ -297,6 +353,37 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                         }}
                     />
                 )}
+                {element.type === 'line' && (
+                    <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {/* Line body */}
+                        <div style={{ 
+                            width: '100%', 
+                            height: `${element.metadata?.height || 10}px`, 
+                            backgroundColor: element.metadata?.symbolColor || '#8B5CF6',
+                            borderRadius: `${(element.metadata?.height || 10) / 2}px` 
+                        }} />
+                        
+                        {/* Start Cap */}
+                        {element.metadata?.startCap === 'arrow' && (
+                            <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                <polygon points="100,0 0,50 100,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                            </svg>
+                        )}
+                        {element.metadata?.startCap === 'circle' && (
+                            <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                        )}
+
+                        {/* End Cap */}
+                        {element.metadata?.endCap === 'arrow' && (
+                            <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                <polygon points="0,0 100,50 0,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                            </svg>
+                        )}
+                        {element.metadata?.endCap === 'circle' && (
+                            <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                        )}
+                    </div>
+                )}
                 {element.type === 'balloon' && (
                     <>
                         <Balloon
@@ -339,7 +426,7 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                             filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
                             width: '100%',
                             height: '100%',
-                            objectFit: 'contain'
+                            objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
                         }}
                     />
                 )}
@@ -502,7 +589,47 @@ const Sticker = React.memo(({ element, isSelected, onSelect, onChange, onEdit, o
                 </div>
             )}
 
-            {isSelected && !translationMode && element.type === 'balloon' && (
+            {isSelected && !translationMode && element.type === 'line' && (
+                <div className="sticker-controls">
+                    {/* Line Start Handle */}
+                    <div
+                        className="handle resize-handle w"
+                        style={{
+                            left: 0, top: '50%', marginLeft: '-8px', marginTop: '-8px',
+                            cursor: 'pointer',
+                            position: 'absolute',
+                            width: '16px', height: '16px',
+                            borderRadius: '50%',
+                            backgroundColor: 'white',
+                            border: '2px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'line-start')}
+                        onTouchStart={(e) => handleStart(e, 'line-start')}
+                    />
+                    
+                    {/* Line End Handle */}
+                    <div
+                        className="handle resize-handle e"
+                        style={{
+                            right: 0, top: '50%', marginRight: '-8px', marginTop: '-8px',
+                            cursor: 'pointer',
+                            position: 'absolute',
+                            width: '16px', height: '16px',
+                            borderRadius: '50%',
+                            backgroundColor: 'white',
+                            border: '2px solid #3b82f6',
+                            pointerEvents: 'auto',
+                            transform: `scale(${1 / element.scale})`
+                        }}
+                        onMouseDown={(e) => handleStart(e, 'line-end')}
+                        onTouchStart={(e) => handleStart(e, 'line-end')}
+                    />
+                </div>
+            )}
+
+            {isSelected && !translationMode && (element.type === 'balloon' || (element.type === 'image' && element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-'))) && (
                 <div className="sticker-controls">
                     {/* North Resize */}
                     <div

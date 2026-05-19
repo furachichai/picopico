@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { Gamepad2 } from 'lucide-react';
+import { getSymbolSvg } from '../../utils/symbols';
 
 const Toolbar = ({ onOpenLibrary }) => {
     const { state, dispatch } = useEditor();
@@ -11,17 +12,7 @@ const Toolbar = ({ onOpenLibrary }) => {
     const [showQ2Menu, setShowQ2Menu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
     const [showIStickerMenu, setShowIStickerMenu] = useState(false);
-    const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);
-
-    const getSymbolSvg = (number) => {
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <circle cx="50" cy="50" r="50" fill="#8B5CF6" />
-  <text x="50" y="55" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="Outfit, Inter, sans-serif" font-size="60" font-weight="900">${number}</text>
-</svg>`;
-        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-    };
-
-    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+    const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
     // Ensure it's a hex code for the color input. If it's a gradient or url, we can't show it in type="color".
     // We'll fallback to black or white if it's not a hex.
@@ -343,29 +334,79 @@ const Toolbar = ({ onOpenLibrary }) => {
                             #️⃣
                         </button>
                         {showSymbolsMenu && (
-                            <div className="toolbar-submenu" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', padding: '12px' }}>
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                            <div className="toolbar-submenu" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '12px', width: 'max-content' }}>
+                                {/* Numbers */}
+                                <div>
+                                    <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Numbers</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                            <button 
+                                                key={`symbol-num-${num}`}
+                                                onClick={() => {
+                                                    dispatch({
+                                                        type: 'ADD_ELEMENT',
+                                                        payload: {
+                                                            type: ELEMENT_TYPES.IMAGE,
+                                                            content: getSymbolSvg('number', num),
+                                                            metadata: { width: 50, height: 50, isSymbol: true, symbolType: 'number', symbolValue: num, symbolColor: '#8B5CF6' }
+                                                        }
+                                                    });
+                                                    setShowSymbolsMenu(false);
+                                                }}
+                                                style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#8B5CF6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold', padding: 0, border: 'none' }}
+                                            >
+                                                {num}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                {/* Shapes */}
+                                <div>
+                                    <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Shapes</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                                        {[{id: 'square', name: 'Rectangle'}, {id: 'circle', name: 'Circle'}].map(shape => (
+                                            <button 
+                                                key={`symbol-shape-${shape.id}`}
+                                                onClick={() => {
+                                                    dispatch({
+                                                        type: 'ADD_ELEMENT',
+                                                        payload: {
+                                                            type: ELEMENT_TYPES.IMAGE,
+                                                            content: getSymbolSvg(`shape-${shape.id}`, null, '#8B5CF6'),
+                                                            metadata: { width: 40, height: 40, isSymbol: true, symbolType: `shape-${shape.id}`, symbolColor: '#8B5CF6' }
+                                                        }
+                                                    });
+                                                    setShowSymbolsMenu(false);
+                                                }}
+                                                style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid #E2E8F0' }}
+                                                title={shape.name}
+                                            >
+                                                <img src={getSymbolSvg(`shape-${shape.id}`, null, '#8B5CF6')} alt={shape.name} style={{ width: '100%', height: '100%' }} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Line Tool */}
+                                <div>
+                                    <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Lines</div>
                                     <button 
-                                        key={`symbol-${num}`}
                                         onClick={() => {
                                             dispatch({
                                                 type: 'ADD_ELEMENT',
                                                 payload: {
-                                                    type: ELEMENT_TYPES.IMAGE,
-                                                    content: getSymbolSvg(num),
-                                                    metadata: {
-                                                        width: 50,
-                                                        height: 50
-                                                    }
+                                                    type: ELEMENT_TYPES.LINE,
+                                                    metadata: { width: 50, height: 10 /* thickness */, isSymbol: true, symbolColor: '#8B5CF6', startCap: 'none', endCap: 'arrow' }
                                                 }
                                             });
                                             setShowSymbolsMenu(false);
                                         }}
-                                        style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#8B5CF6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold', padding: 0, border: 'none' }}
+                                        style={{ width: '100%', height: '40px', borderRadius: '8px', backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid #E2E8F0', fontWeight: 'bold', color: '#334155' }}
                                     >
-                                        {num}
+                                        ✏️ Add Line
                                     </button>
-                                ))}
+                                </div>
                             </div>
                         )}
                     </div>

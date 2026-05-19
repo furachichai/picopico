@@ -10,6 +10,51 @@ import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
+// Error Boundary to prevent white screen crashes
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error('PicoPico crashed:', error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          position: 'fixed', inset: 0, background: '#1a202c',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontFamily: 'Inter, system-ui, sans-serif', gap: '16px'
+        }}>
+          <div style={{ fontSize: '3rem' }}>😵</div>
+          <h2 style={{ margin: 0 }}>Something went wrong</h2>
+          <p style={{ opacity: 0.6, fontSize: '0.85rem', maxWidth: '300px', textAlign: 'center' }}>
+            {this.state.error?.message || 'An unexpected error occurred'}
+          </p>
+          <button
+            onClick={() => {
+              this.setState({ hasError: false, error: null });
+              window.location.reload();
+            }}
+            style={{
+              background: '#8B5CF6', color: 'white', border: 'none',
+              borderRadius: '12px', padding: '12px 32px', fontSize: '1rem',
+              fontWeight: 700, cursor: 'pointer', marginTop: '8px'
+            }}
+          >
+            Reload App
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const AppContent = () => {
   const { state, dispatch } = useEditor();
   const [displayView, setDisplayView] = React.useState(state.view);
@@ -295,13 +340,15 @@ const PinGate = ({ children }) => {
 
 function App() {
   return (
-    <PinGate>
-      <LanguageProvider>
-        <EditorProvider>
-          <AppContent />
-        </EditorProvider>
-      </LanguageProvider>
-    </PinGate>
+    <ErrorBoundary>
+      <PinGate>
+        <LanguageProvider>
+          <EditorProvider>
+            <AppContent />
+          </EditorProvider>
+        </LanguageProvider>
+      </PinGate>
+    </ErrorBoundary>
   )
 }
 

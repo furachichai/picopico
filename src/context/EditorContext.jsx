@@ -129,6 +129,16 @@ const editorReducer = (state, action) => {
             // Build metadata based on element type
             let elementMetadata = action.payload.metadata || {};
 
+            if (elementMetadata.isSymbol) {
+                // Inherit size from the last added symbol on this slide
+                const symbols = currentSlide.elements.filter(el => el.metadata?.isSymbol);
+                if (symbols.length > 0) {
+                    const lastSymbol = symbols[symbols.length - 1];
+                    baseElement.width = lastSymbol.width;
+                    baseElement.height = lastSymbol.height;
+                    baseElement.scale = lastSymbol.scale;
+                }
+            }
             if (action.payload.type === 'balloon') {
                 elementMetadata = {
                     ...elementMetadata,
