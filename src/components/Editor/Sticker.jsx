@@ -298,12 +298,10 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             onTouchStart={(e) => handleStart(e, 'move')}
             onMouseDownCapture={() => {
                 // Capture phase fires parent-first, before child stopPropagation
-                const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
-                if (isLockedQuiz && !isSelected) onSelect();
+                if (!isSelected) onSelect(element.id);
             }}
             onTouchStartCapture={() => {
-                const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
-                if (isLockedQuiz && !isSelected) onSelect();
+                if (!isSelected) onSelect(element.id);
             }}
             onDoubleClick={() => {
                 if (element.type !== 'quiz' && onEdit) onEdit();
