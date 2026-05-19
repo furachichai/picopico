@@ -19,7 +19,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
 
     const quizType = element.metadata?.quizType || 'classic';
     const visualMode = element.metadata?.visualMode || false;
-    const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7', '8'];
+    const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7'];
 
     const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
 

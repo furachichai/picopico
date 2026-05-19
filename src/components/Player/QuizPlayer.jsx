@@ -675,7 +675,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     useEffect(() => {
         if (quizType !== 'match') return;
 
-        const matchAnswers = data.metadata?.matchAnswers || ['5', '6', '9', '7', '8'];
+        const matchAnswers = data.metadata?.matchAnswers || ['5', '6', '9', '7'];
         const matchContentType = data.metadata?.matchContentType || 'order_of_operations';
         const numPairs = options.length;
         const totalCards = numPairs * 2;
