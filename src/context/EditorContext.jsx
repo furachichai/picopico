@@ -178,6 +178,34 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'PASTE_ELEMENT': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const source = action.payload;
+            const pastedElement = {
+                ...source,
+                id: `el-${Date.now()}`,
+                x: Math.min((source.x || 50) + 2, 95),
+                y: Math.min((source.y || 50) + 2, 95),
+                metadata: { ...source.metadata },
+            };
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: [...slide.elements, pastedElement] }
+                            : slide
+                    ),
+                },
+                selectedElementId: pastedElement.id,
+            };
+        }
+
         case 'UPDATE_SLIDE': {
             return {
                 ...state,

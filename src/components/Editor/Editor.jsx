@@ -381,32 +381,77 @@ const Editor = () => {
     React.useEffect(() => {
         const handleKeyDown = (e) => {
             // Don't intercept if user is typing in an input, textarea, or contentEditable
+            // Exception: allow Cmd+B/I/U formatting shortcuts through
+            const isTextFormatShortcut = (e.metaKey || e.ctrlKey) && ['b', 'i', 'u'].includes(e.key.toLowerCase());
             if (
-                e.target.isContentEditable ||
-                e.target.closest('[contenteditable="true"]') ||
-                e.target.tagName === 'INPUT' ||
-                e.target.tagName === 'TEXTAREA' ||
-                e.target.tagName === 'SELECT'
+                !isTextFormatShortcut && (
+                    e.target.isContentEditable ||
+                    e.target.closest('[contenteditable="true"]') ||
+                    e.target.tagName === 'INPUT' ||
+                    e.target.tagName === 'TEXTAREA' ||
+                    e.target.tagName === 'SELECT'
+                )
             ) return;
 
             // Text Formatting Shortcuts (Cmd+B, Cmd+I, Cmd+U)
             if ((e.metaKey || e.ctrlKey) && state.selectedElementId && ['b', 'i', 'u'].includes(e.key.toLowerCase())) {
                 e.preventDefault();
                 const key = e.key.toLowerCase();
-                const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
-                const el = slide?.elements.find(el => el.id === state.selectedElementId);
-                if (el && (el.type === 'text' || el.type === 'balloon' || el.type === 'quiz')) {
-                    if (key === 'b') {
-                        const val = el.metadata?.fontWeight === 'bold' ? 'normal' : 'bold';
-                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontWeight: val } });
-                    } else if (key === 'i') {
-                        const val = el.metadata?.fontStyle === 'italic' ? 'normal' : 'italic';
-                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontStyle: val } });
-                    } else if (key === 'u') {
-                        const val = el.metadata?.textDecoration === 'underline' ? 'none' : 'underline';
-                        handleContextMenuChange(el.id, { metadata: { ...el.metadata, textDecoration: val } });
+                const isInContentEditable = e.target.isContentEditable || e.target.closest('[contenteditable="true"]');
+
+                if (isInContentEditable) {
+                    // Inline formatting on selected text using execCommand
+                    const command = key === 'b' ? 'bold' : key === 'i' ? 'italic' : 'underline';
+                    document.execCommand(command, false, null);
+                    // Save the updated innerHTML back to the element
+                    const editableEl = e.target.isContentEditable ? e.target : e.target.closest('[contenteditable="true"]');
+                    if (editableEl) {
+                        handleContextMenuChange(state.selectedElementId, { content: editableEl.innerHTML });
+                    }
+                } else {
+                    // Whole-element formatting when not actively editing text
+                    const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                    const el = slide?.elements.find(el => el.id === state.selectedElementId);
+                    if (el && (el.type === 'text' || el.type === 'balloon' || el.type === 'quiz')) {
+                        if (key === 'b') {
+                            const val = el.metadata?.fontWeight === 'bold' ? 'normal' : 'bold';
+                            handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontWeight: val } });
+                        } else if (key === 'i') {
+                            const val = el.metadata?.fontStyle === 'italic' ? 'normal' : 'italic';
+                            handleContextMenuChange(el.id, { metadata: { ...el.metadata, fontStyle: val } });
+                        } else if (key === 'u') {
+                            const val = el.metadata?.textDecoration === 'underline' ? 'none' : 'underline';
+                            handleContextMenuChange(el.id, { metadata: { ...el.metadata, textDecoration: val } });
+                        }
                     }
                 }
+                return;
+            }
+
+            // Copy selected element (Cmd+C / Ctrl+C)
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'c' && state.selectedElementId
+                && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge') {
+                e.preventDefault();
+                const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                const el = slide?.elements.find(el => el.id === state.selectedElementId);
+                if (el) {
+                    const payload = JSON.stringify({ _picopicoCopy: true, element: el });
+                    navigator.clipboard.writeText(payload).catch(() => {});
+                }
+                return;
+            }
+
+            // Paste element (Cmd+V / Ctrl+V)
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'v') {
+                e.preventDefault();
+                navigator.clipboard.readText().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data._picopicoCopy && data.element) {
+                            dispatch({ type: 'PASTE_ELEMENT', payload: data.element });
+                        }
+                    } catch { /* not our data, ignore */ }
+                }).catch(() => {});
                 return;
             }
 
