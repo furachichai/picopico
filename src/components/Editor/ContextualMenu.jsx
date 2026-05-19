@@ -1309,6 +1309,29 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             {element.type === 'quiz' && metadata.quizType === 'match' && (
                 <>
                     <div className="menu-group">
+                        <label>Content Type</label>
+                        <select
+                            value={metadata.matchContentType || 'order_of_operations'}
+                            onChange={(e) => updateMetadata({ matchContentType: e.target.value })}
+                            style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                borderRadius: '6px',
+                                border: '1px solid #ddd',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                background: '#fff',
+                                cursor: 'pointer',
+                                color: '#333'
+                            }}
+                        >
+                            <option value="order_of_operations">Order of Operations</option>
+                            <option value="basic_arithmetic">Basic Arithmetic</option>
+                            <option value="custom">Custom (manual)</option>
+                        </select>
+                    </div>
+                    <div className="menu-divider"></div>
+                    <div className="menu-group">
                         <label>Floating Bubbles</label>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', margin: '4px 0' }}>
                             <input

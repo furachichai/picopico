@@ -121,77 +121,83 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     const playSound = (type) => {
         try {
-            // Create context if needed
             if (!globalAudioCtx.current) {
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!AC) return;
                 globalAudioCtx.current = new AC();
             }
             const ctx = globalAudioCtx.current;
-            // Always try to resume — Safari needs this in the user gesture call stack.
-            // Do NOT defer to .then() — Safari drops the gesture authorization in async callbacks.
-            ctx.resume();
-            const now = ctx.currentTime;
 
-            if (type === 'correct') {
-                const osc1 = ctx.createOscillator();
-                const osc2 = ctx.createOscillator();
-                const gain1 = ctx.createGain();
-                const gain2 = ctx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(523.25, now);
-                osc1.frequency.setValueAtTime(659.25, now + 0.1);
-                gain1.gain.setValueAtTime(0.35, now);
-                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc1.connect(gain1); gain1.connect(ctx.destination);
-                osc1.start(now); osc1.stop(now + 0.35);
-                osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(783.99, now + 0.1);
-                osc2.frequency.setValueAtTime(1046.50, now + 0.2);
-                gain2.gain.setValueAtTime(0.35, now + 0.1);
-                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                osc2.connect(gain2); gain2.connect(ctx.destination);
-                osc2.start(now + 0.1); osc2.stop(now + 0.45);
-            } else if (type === 'wrong') {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(180, now);
-                osc.frequency.linearRampToValueAtTime(120, now + 0.25);
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.35);
-            } else if (type === 'fail') {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(120, now);
-                osc.frequency.setValueAtTime(90, now + 0.15);
-                gain.gain.setValueAtTime(0.35, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.45);
-            } else if (type === 'attach') {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, now);
-                osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.1);
-            } else if (type === 'detach') {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(250, now);
-                osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
-                gain.gain.setValueAtTime(0.25, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.12);
+            const schedule = () => {
+                try {
+                    const now = ctx.currentTime;
+                    if (type === 'correct') {
+                        const osc1 = ctx.createOscillator();
+                        const osc2 = ctx.createOscillator();
+                        const gain1 = ctx.createGain();
+                        const gain2 = ctx.createGain();
+                        osc1.type = 'sine';
+                        osc1.frequency.setValueAtTime(523.25, now);
+                        osc1.frequency.setValueAtTime(659.25, now + 0.1);
+                        gain1.gain.setValueAtTime(0.35, now);
+                        gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                        osc1.connect(gain1); gain1.connect(ctx.destination);
+                        osc1.start(now); osc1.stop(now + 0.35);
+                        osc2.type = 'sine';
+                        osc2.frequency.setValueAtTime(783.99, now + 0.1);
+                        osc2.frequency.setValueAtTime(1046.50, now + 0.2);
+                        gain2.gain.setValueAtTime(0.35, now + 0.1);
+                        gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                        osc2.connect(gain2); gain2.connect(ctx.destination);
+                        osc2.start(now + 0.1); osc2.stop(now + 0.45);
+                    } else if (type === 'wrong') {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(180, now);
+                        osc.frequency.linearRampToValueAtTime(120, now + 0.25);
+                        gain.gain.setValueAtTime(0.4, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.35);
+                    } else if (type === 'fail') {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(120, now);
+                        osc.frequency.setValueAtTime(90, now + 0.15);
+                        gain.gain.setValueAtTime(0.35, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.45);
+                    } else if (type === 'attach') {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(600, now);
+                        osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.1);
+                    } else if (type === 'detach') {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(250, now);
+                        osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+                        gain.gain.setValueAtTime(0.25, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.12);
+                    }
+                } catch(e) {}
+            };
+
+            if (ctx.state === 'running') {
+                schedule();
+            } else {
+                ctx.resume().then(schedule).catch(() => {});
             }
         } catch (err) {
             // silent
@@ -199,44 +205,50 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     };
 
     // Global click/touch unlocker for AudioContext — ensures audio works on first interaction.
-    // Safari requires creating the context AND playing a buffer during a user gesture.
+    // Safari requires await ctx.resume() to complete before audio can be scheduled.
     useEffect(() => {
-        const unlockAudio = () => {
+        const unlockAudio = async () => {
             try {
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!AC) return;
-                // Create both audio contexts if they don't exist
-                if (!globalAudioCtx.current) {
-                    globalAudioCtx.current = new AC();
-                }
-                if (!pemAudioCtx.current) {
-                    pemAudioCtx.current = new AC();
-                }
-                // Resume both contexts
-                [globalAudioCtx.current, pemAudioCtx.current].forEach(ctx => {
-                    if (ctx && ctx.state === 'suspended') {
-                        ctx.resume();
+                if (!globalAudioCtx.current) globalAudioCtx.current = new AC();
+                if (!pemAudioCtx.current) pemAudioCtx.current = new AC();
+                const contexts = [globalAudioCtx.current, pemAudioCtx.current];
+                for (const ctx of contexts) {
+                    if (!ctx) continue;
+                    if (ctx.state !== 'running') {
+                        await ctx.resume();
                     }
-                    // Safari trick: play a silent buffer to fully unlock the audio context
-                    if (ctx && ctx.state !== 'closed') {
+                    // Safari trick: play a silent buffer to fully unlock the context
+                    if (ctx.state === 'running') {
                         try {
-                            const silentBuffer = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
+                            const buf = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
                             const src = ctx.createBufferSource();
-                            src.buffer = silentBuffer;
+                            src.buffer = buf;
                             src.connect(ctx.destination);
                             src.start(0);
-                        } catch(e) { /* ignore */ }
+                        } catch(e) {}
                     }
+                }
+            } catch (e) {}
+        };
+        // Re-resume when user returns from background/tab switch (Safari suspends on blur)
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') {
+                [globalAudioCtx.current, pemAudioCtx.current].forEach(ctx => {
+                    if (ctx && ctx.state === 'suspended') ctx.resume();
                 });
-            } catch (e) { /* silent */ }
+            }
         };
         window.addEventListener('click', unlockAudio);
         window.addEventListener('touchstart', unlockAudio);
         window.addEventListener('touchend', unlockAudio);
+        document.addEventListener('visibilitychange', handleVisibility);
         return () => {
             window.removeEventListener('click', unlockAudio);
             window.removeEventListener('touchstart', unlockAudio);
             window.removeEventListener('touchend', unlockAudio);
+            document.removeEventListener('visibilitychange', handleVisibility);
         };
     }, []);
 
@@ -664,7 +676,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         if (quizType !== 'match') return;
 
         const matchAnswers = data.metadata?.matchAnswers || ['5', '6', '9', '7', '8'];
+        const matchContentType = data.metadata?.matchContentType || 'order_of_operations';
         const numPairs = options.length;
+        const totalCards = numPairs * 2;
 
         let containerW = 360;
         let containerH = 540;
@@ -678,48 +692,145 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const W_s = 100;
         const H_s = 100;
         const margin = 12;
+        const gap = 10; // minimum gap between cards
+
+        // Calculate grid dimensions to fit all cards without overlap
+        // Try increasing cols until we find a layout where totalCards <= cols * rows
+        let cols = 2;
+        let rows = Math.ceil(totalCards / cols);
+        // Prefer a layout that fits within the container with room for spacing
+        while (cols < 6) {
+            rows = Math.ceil(totalCards / cols);
+            const cellW = (containerW - 2 * margin) / cols;
+            const cellH = (containerH - 2 * margin) / rows;
+            if (cellW >= W_s + gap && cellH >= H_s + gap) break;
+            cols++;
+        }
+        rows = Math.ceil(totalCards / cols);
+
+        const cellW = (containerW - 2 * margin) / cols;
+        const cellH = (containerH - 2 * margin) / rows;
+
+        // Generate one slot per grid cell, centered in the cell
         const slots = [];
-        const cols = numPairs <= 3 ? 3 : 4;
-        const rows = numPairs <= 3 ? 2 : 3;
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
-                let x = (c * (containerW / cols)) + (containerW / cols - W_s) / 2;
-                let y = (r * (containerH / rows)) + (containerH / rows - H_s) / 2;
-                
-                // Clamp slot positions so they are completely inside the bounds from start
-                x = Math.max(margin, Math.min(containerW - W_s - margin, x));
-                y = Math.max(margin, Math.min(containerH - H_s - margin, y));
-
+                if (slots.length >= totalCards) break;
+                const baseX = margin + c * cellW + (cellW - W_s) / 2;
+                const baseY = margin + r * cellH + (cellH - H_s) / 2;
+                // Add small random jitter to avoid rigid grid appearance
+                const jitterX = (Math.random() - 0.5) * 16;
+                const jitterY = (Math.random() - 0.5) * 16;
+                const x = Math.max(margin, Math.min(containerW - W_s - margin, baseX + jitterX));
+                const y = Math.max(margin, Math.min(containerH - H_s - margin, baseY + jitterY));
                 slots.push({ x, y });
             }
         }
-        
+
+        // Shuffle the slots so questions and answers appear randomly distributed
         const shuffledSlots = [...slots].sort(() => Math.random() - 0.5);
+
+        // Auto-generate math content if matchContentType is set
+        let effectiveOptions = options;
+        let effectiveAnswers = matchAnswers;
+
+        if (matchContentType === 'basic_arithmetic') {
+            const ops = ['+', '-', '×', '÷'];
+            const pairs = [];
+            const usedExpressions = new Set();
+            for (let i = 0; i < numPairs; i++) {
+                let expr, result, a, b, op;
+                let attempts = 0;
+                do {
+                    op = ops[Math.floor(Math.random() * ops.length)];
+                    if (op === '+') { a = Math.floor(Math.random() * 9) + 1; b = Math.floor(Math.random() * 9) + 1; result = a + b; }
+                    else if (op === '-') { a = Math.floor(Math.random() * 9) + 2; b = Math.floor(Math.random() * a) + 1; result = a - b; }
+                    else if (op === '×') { a = Math.floor(Math.random() * 9) + 2; b = Math.floor(Math.random() * 9) + 2; result = a * b; }
+                    else { b = Math.floor(Math.random() * 8) + 2; result = Math.floor(Math.random() * 9) + 1; a = b * result; }
+                    expr = `${a} ${op} ${b}`;
+                    attempts++;
+                } while (usedExpressions.has(expr) && attempts < 50);
+                usedExpressions.add(expr);
+                pairs.push({ expr, result: String(result) });
+            }
+            effectiveOptions = pairs.map(p => p.expr);
+            effectiveAnswers = pairs.map(p => p.result);
+        } else if (matchContentType === 'order_of_operations') {
+            const addSubOps = ['+', '-'];
+            const mulDivOps = ['×', '÷'];
+            const pairs = [];
+            const usedExpressions = new Set();
+            for (let i = 0; i < numPairs; i++) {
+                let expr, result, attempts = 0;
+                do {
+                    // Pick one from +-  and one from */
+                    const asOp = addSubOps[Math.floor(Math.random() * 2)];
+                    const mdOp = mulDivOps[Math.floor(Math.random() * 2)];
+                    // Randomly decide order: [a asOp b mdOp c] or [a mdOp b asOp c]
+                    if (Math.random() < 0.5) {
+                        // Form: a +-  b */  c
+                        let a = Math.floor(Math.random() * 8) + 1;
+                        let b, c, mdResult;
+                        if (mdOp === '×') {
+                            b = Math.floor(Math.random() * 5) + 2;
+                            c = Math.floor(Math.random() * 5) + 2;
+                            mdResult = b * c;
+                        } else {
+                            c = Math.floor(Math.random() * 5) + 2;
+                            mdResult = Math.floor(Math.random() * 5) + 1;
+                            b = c * mdResult;
+                        }
+                        result = asOp === '+' ? a + mdResult : a - mdResult;
+                        expr = `${a} ${asOp} ${b} ${mdOp} ${c}`;
+                    } else {
+                        // Form: a */  b +-  c
+                        let c = Math.floor(Math.random() * 8) + 1;
+                        let a, b, mdResult;
+                        if (mdOp === '×') {
+                            a = Math.floor(Math.random() * 5) + 2;
+                            b = Math.floor(Math.random() * 5) + 2;
+                            mdResult = a * b;
+                        } else {
+                            b = Math.floor(Math.random() * 5) + 2;
+                            mdResult = Math.floor(Math.random() * 5) + 1;
+                            a = b * mdResult;
+                        }
+                        result = asOp === '+' ? mdResult + c : mdResult - c;
+                        expr = `${a} ${mdOp} ${b} ${asOp} ${c}`;
+                    }
+                    attempts++;
+                } while ((usedExpressions.has(expr) || result < 0) && attempts < 50);
+                usedExpressions.add(expr);
+                pairs.push({ expr, result: String(result) });
+            }
+            effectiveOptions = pairs.map(p => p.expr);
+            effectiveAnswers = pairs.map(p => p.result);
+        }
 
         const list = [];
         for (let i = 0; i < numPairs; i++) {
-            const slotQ = shuffledSlots[i] || { x: margin + Math.random() * (containerW - W_s - 2 * margin), y: margin + Math.random() * (containerH - H_s - 2 * margin) };
+            const slotQ = shuffledSlots[i * 2] || slots[0];
             list.push({
                 id: `q-${i}`,
                 type: 'question',
-                text: options[i],
+                text: effectiveOptions[i],
                 pairIndex: i,
-                x: Math.max(margin, Math.min(containerW - W_s - margin, slotQ.x)),
-                y: Math.max(margin, Math.min(containerH - H_s - margin, slotQ.y)),
+                x: slotQ.x,
+                y: slotQ.y,
                 vx: (Math.random() - 0.5) * 0.4,
                 vy: (Math.random() - 0.5) * 0.4,
                 matched: false,
                 flashRed: false
             });
 
-            const slotA = shuffledSlots[i + numPairs] || { x: margin + Math.random() * (containerW - W_s - 2 * margin), y: margin + Math.random() * (containerH - H_s - 2 * margin) };
+            const slotA = shuffledSlots[i * 2 + 1] || slots[slots.length - 1];
             list.push({
                 id: `a-${i}`,
                 type: 'answer',
-                text: matchAnswers[i] || '',
+                text: effectiveAnswers[i] || '',
                 pairIndex: i,
-                x: Math.max(margin, Math.min(containerW - W_s - margin, slotA.x)),
-                y: Math.max(margin, Math.min(containerH - H_s - margin, slotA.y)),
+                x: slotA.x,
+                y: slotA.y,
                 vx: (Math.random() - 0.5) * 0.4,
                 vy: (Math.random() - 0.5) * 0.4,
                 matched: false,
@@ -1387,16 +1498,21 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                ctx.resume(); // always resume synchronously for Safari
-                const now = ctx.currentTime;
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], now);
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.45);
+                const schedule = () => {
+                    try {
+                        const now = ctx.currentTime;
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], now);
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.45);
+                    } catch(e) {}
+                };
+                if (ctx.state === 'running') schedule();
+                else ctx.resume().then(schedule).catch(() => {});
             } catch(e) {}
         };
 
@@ -1404,16 +1520,21 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                ctx.resume(); // always resume synchronously for Safari
-                const now = ctx.currentTime;
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(180, now);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.35);
+                const schedule = () => {
+                    try {
+                        const now = ctx.currentTime;
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(180, now);
+                        gain.gain.setValueAtTime(0.2, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.35);
+                    } catch(e) {}
+                };
+                if (ctx.state === 'running') schedule();
+                else ctx.resume().then(schedule).catch(() => {});
             } catch(e) {}
         };
 
@@ -1516,16 +1637,21 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                ctx.resume(); // always resume synchronously for Safari
-                const now = ctx.currentTime;
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, now);
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.start(now); osc.stop(now + 0.15);
+                const schedule = () => {
+                    try {
+                        const now = ctx.currentTime;
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(880, now);
+                        gain.gain.setValueAtTime(0.15, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now); osc.stop(now + 0.15);
+                    } catch(e) {}
+                };
+                if (ctx.state === 'running') schedule();
+                else ctx.resume().then(schedule).catch(() => {});
             } catch(e) {}
         };
 
@@ -1548,30 +1674,35 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const ctx = pemAudioCtx.current;
-                ctx.resume(); // always resume synchronously for Safari
-                const now = ctx.currentTime;
-                const osc = ctx.createOscillator();
-                const filter = ctx.createBiquadFilter();
-                const gain = ctx.createGain();
-                
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(40, now);
-                
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(200, now);
-                filter.frequency.linearRampToValueAtTime(100, now + 1.5);
-                
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.5, now + 0.2);
-                gain.gain.linearRampToValueAtTime(0.3, now + 1.2);
-                gain.gain.linearRampToValueAtTime(0.01, now + 1.5);
-                
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(ctx.destination);
-                
-                osc.start(now);
-                osc.stop(now + 1.55);
+                const schedule = () => {
+                    try {
+                        const now = ctx.currentTime;
+                        const osc = ctx.createOscillator();
+                        const filter = ctx.createBiquadFilter();
+                        const gain = ctx.createGain();
+                        
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(40, now);
+                        
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(200, now);
+                        filter.frequency.linearRampToValueAtTime(100, now + 1.5);
+                        
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.linearRampToValueAtTime(0.5, now + 0.2);
+                        gain.gain.linearRampToValueAtTime(0.3, now + 1.2);
+                        gain.gain.linearRampToValueAtTime(0.01, now + 1.5);
+                        
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(ctx.destination);
+                        
+                        osc.start(now);
+                        osc.stop(now + 1.55);
+                    } catch(e) {}
+                };
+                if (ctx.state === 'running') schedule();
+                else ctx.resume().then(schedule).catch(() => {});
             } catch(e) {}
         };
 
