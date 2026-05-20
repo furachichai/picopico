@@ -121,6 +121,22 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     const playSound = (type) => {
         try {
+            if ('vibrate' in navigator) {
+                if (type === 'correct') {
+                    navigator.vibrate([80, 40, 80]);
+                } else if (type === 'wrong') {
+                    navigator.vibrate(100);
+                } else if (type === 'fail') {
+                    navigator.vibrate([150, 70, 150]);
+                } else if (type === 'attach') {
+                    navigator.vibrate(12);
+                } else if (type === 'detach') {
+                    navigator.vibrate(8);
+                }
+            }
+        } catch (e) {}
+
+        try {
             if (!globalAudioCtx.current) {
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!AC) return;

@@ -79,6 +79,16 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     }, []);
 
     const playSound = (type) => {
+        try {
+            if ('vibrate' in navigator) {
+                if (type === 'success') {
+                    navigator.vibrate([80, 40, 80]);
+                } else if (type === 'error') {
+                    navigator.vibrate(100);
+                }
+            }
+        } catch (e) {}
+
         if (!audioCtxRef.current) return;
         if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
 
