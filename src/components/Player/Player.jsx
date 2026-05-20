@@ -569,9 +569,11 @@ const Player = () => {
                     <>
                         <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'}`} />
                         <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'}`}>
-                            {banner.text.split('').map((letter, i) => (
-                                <span key={i} className="sign-letter">{letter}</span>
-                            ))}
+                            <img 
+                                src={banner.type === 'correct' ? '/assets/logo_topo.png' : '/assets/logo_moco.png'} 
+                                alt={banner.text} 
+                                className="result-graphic"
+                            />
                         </div>
                     </>
                 )}

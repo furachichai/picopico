@@ -198,6 +198,15 @@
     transform: scale(0) rotate(-15deg);
 }
 
+.result-graphic {
+    max-width: 320px;
+    max-height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 /* Correct (Topo!) colors — each letter gets a vibrant color */
 .quiz-result-sign.correct-sign .sign-letter:nth-child(1) { color: #22D3EE; animation-delay: 0.05s; }
 .quiz-result-sign.correct-sign .sign-letter:nth-child(2) { color: #34D399; animation-delay: 0.12s; }
