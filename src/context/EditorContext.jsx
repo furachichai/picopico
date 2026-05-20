@@ -23,6 +23,7 @@ const initialState = {
     },
     currentSlideId: 'slide-1',
     selectedElementId: null,
+    selectedElementIds: [],
 
     isDirty: false,
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
@@ -175,6 +176,7 @@ const editorReducer = (state, action) => {
                     ),
                 },
                 selectedElementId: newElement.id,
+                selectedElementIds: [newElement.id],
             };
         }
 
@@ -203,6 +205,7 @@ const editorReducer = (state, action) => {
                     ),
                 },
                 selectedElementId: pastedElement.id,
+                selectedElementIds: [pastedElement.id],
             };
         }
 
@@ -299,6 +302,7 @@ const editorReducer = (state, action) => {
                 lesson: { ...state.lesson, slides: newSlides },
                 currentSlideId: newCurrentId,
                 selectedElementId: null, // Clear selection to prevent stale references
+                selectedElementIds: [],
             };
         }
 
@@ -360,25 +364,87 @@ const editorReducer = (state, action) => {
         }
 
         case 'SELECT_ELEMENT': {
-            const selectedId = action.payload;
+            let selectedId;
+            let isShift = false;
+
+            if (action.payload && typeof action.payload === 'object') {
+                selectedId = action.payload.id;
+                isShift = action.payload.isShift;
+            } else {
+                selectedId = action.payload;
+            }
 
             // If deselecting or selecting cartridge, just update ID
             if (!selectedId || selectedId === 'cartridge') {
-                return { ...state, selectedElementId: selectedId };
+                return {
+                    ...state,
+                    selectedElementId: selectedId,
+                    selectedElementIds: selectedId ? [selectedId] : []
+                };
             }
 
             // Find current slide
             const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
-            if (currentSlideIndex === -1) return { ...state, selectedElementId: selectedId };
+            if (currentSlideIndex === -1) {
+                return {
+                    ...state,
+                    selectedElementId: selectedId,
+                    selectedElementIds: [selectedId]
+                };
+            }
 
             const currentSlide = state.lesson.slides[currentSlideIndex];
             const elementIndex = currentSlide.elements.findIndex(el => el.id === selectedId);
             const elementToSelect = currentSlide.elements[elementIndex];
 
-            // If element not found, or already last (visually on top), or is LOCKED, just select
-            if (elementIndex === -1 || elementIndex === currentSlide.elements.length - 1 || elementToSelect.metadata?.locked) {
-                const snapshot = elementToSelect ? { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex } : null;
-                return { ...state, selectedElementId: selectedId, undoSnapshot: snapshot };
+            if (elementIndex === -1) {
+                return {
+                    ...state,
+                    selectedElementId: selectedId,
+                    selectedElementIds: [selectedId]
+                };
+            }
+
+            // Let's compute the new selectedElementIds
+            let newSelectedIds = [...(state.selectedElementIds || [])];
+            
+            // Clean up any stale IDs not on this slide
+            const currentSlideElementIds = currentSlide.elements.map(el => el.id);
+            newSelectedIds = newSelectedIds.filter(id => currentSlideElementIds.includes(id));
+
+            if (isShift) {
+                if (newSelectedIds.includes(selectedId)) {
+                    // Deselect
+                    newSelectedIds = newSelectedIds.filter(id => id !== selectedId);
+                } else {
+                    // Select
+                    newSelectedIds.push(selectedId);
+                }
+            } else {
+                // Select only this one
+                newSelectedIds = [selectedId];
+            }
+
+            const primarySelectedId = newSelectedIds.length > 0 ? newSelectedIds[newSelectedIds.length - 1] : null;
+
+            // If deselecting, or if selecting a locked element, we don't need to reorder elements
+            if (!newSelectedIds.includes(selectedId) || elementToSelect.metadata?.locked) {
+                return {
+                    ...state,
+                    selectedElementId: primarySelectedId,
+                    selectedElementIds: newSelectedIds
+                };
+            }
+
+            // If element is already last (visually on top), just select
+            if (elementIndex === currentSlide.elements.length - 1) {
+                const snapshot = { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex };
+                return {
+                    ...state,
+                    selectedElementId: primarySelectedId,
+                    selectedElementIds: newSelectedIds,
+                    undoSnapshot: snapshot
+                };
             }
 
             const snapshot = { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex };
@@ -396,12 +462,13 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
-                isDirty: true, // Order change is a modification
+                isDirty: true,
                 lesson: {
                     ...state.lesson,
                     slides: newSlides
                 },
-                selectedElementId: selectedId,
+                selectedElementId: primarySelectedId,
+                selectedElementIds: newSelectedIds,
                 undoSnapshot: snapshot
             };
         }
@@ -433,7 +500,8 @@ const editorReducer = (state, action) => {
             };
         }
 
-        case 'DELETE_ELEMENT':
+        case 'DELETE_ELEMENT': {
+            const remainingIds = (state.selectedElementIds || []).filter(id => id !== action.payload);
             return {
                 ...state,
                 isDirty: true,
@@ -448,8 +516,36 @@ const editorReducer = (state, action) => {
                             : slide
                     ),
                 },
-                selectedElementId: null,
+                selectedElementId: remainingIds.length > 0 ? remainingIds[remainingIds.length - 1] : null,
+                selectedElementIds: remainingIds,
             };
+        }
+
+        case 'MOVE_ELEMENTS': {
+            const { ids, dx, dy } = action.payload;
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) => {
+                        if (slide.id !== state.currentSlideId) return slide;
+                        return {
+                            ...slide,
+                            elements: slide.elements.map((el) => {
+                                if (ids.includes(el.id)) {
+                                    if (el.type === 'quiz') {
+                                        return { ...el, y: el.y + dy };
+                                    }
+                                    return { ...el, x: el.x + dx, y: el.y + dy };
+                                }
+                                return el;
+                            })
+                        };
+                    })
+                }
+            };
+        }
 
         case 'DUPLICATE_ELEMENT': {
             const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
@@ -477,6 +573,7 @@ const editorReducer = (state, action) => {
                     ),
                 },
                 selectedElementId: newElement.id,
+                selectedElementIds: [newElement.id],
             };
         }
 
@@ -610,6 +707,7 @@ const editorReducer = (state, action) => {
                 lesson: action.payload,
                 currentSlideId: action.payload.slides[0]?.id || 'slide-1',
                 selectedElementId: null,
+                selectedElementIds: [],
                 isDirty: false,
             };
 
@@ -641,6 +739,7 @@ const editorReducer = (state, action) => {
                     } else if (el.type === 'quiz') {
                         draft[slide.id][el.id] = {
                             options: el.metadata?.translations?.[lang]?.options || [...(el.metadata?.options || [])],
+                            matchAnswers: el.metadata?.translations?.[lang]?.matchAnswers || [...(el.metadata?.matchAnswers || [])],
                             chatNodes: el.metadata?.translations?.[lang]?.chatNodes || (el.metadata?.chatNodes ? el.metadata.chatNodes.map(n => ({...n})) : [])
                         };
                     }
@@ -655,6 +754,7 @@ const editorReducer = (state, action) => {
                     lessonDescription: state.lesson.translations?.[lang]?.description || (state.lesson.description || ''),
                 },
                 selectedElementId: null, // Deselect on entering translation mode
+                selectedElementIds: [],
             };
         }
 
@@ -702,6 +802,7 @@ const editorReducer = (state, action) => {
                     if (el.type === 'quiz') {
                         const translationValue = {};
                         if (draftEntry.options) translationValue.options = draftEntry.options;
+                        if (draftEntry.matchAnswers) translationValue.matchAnswers = draftEntry.matchAnswers;
                         if (draftEntry.chatNodes) translationValue.chatNodes = draftEntry.chatNodes;
                         return {
                             ...el,
@@ -725,6 +826,7 @@ const editorReducer = (state, action) => {
                 isDirty: true,
                 translationMode: null,
                 selectedElementId: null, // Deselect so contentEditable DOM resets to base language
+                selectedElementIds: [],
                 lesson: {
                     ...state.lesson,
                     slides: newSlides,
@@ -740,7 +842,7 @@ const editorReducer = (state, action) => {
         }
 
         case 'DISCARD_TRANSLATION':
-            return { ...state, translationMode: null, selectedElementId: null };
+            return { ...state, translationMode: null, selectedElementId: null, selectedElementIds: [] };
 
         default:
             return state;

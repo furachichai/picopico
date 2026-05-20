@@ -59,8 +59,8 @@ const Canvas = (props) => {
   if (!currentSlide) return <div className="canvas-error">No slide selected</div>;
 
   // Stable callback for selecting an element
-  const handleSelect = useCallback((id) => {
-    dispatch({ type: 'SELECT_ELEMENT', payload: id });
+  const handleSelect = useCallback((id, isShift = false) => {
+    dispatch({ type: 'SELECT_ELEMENT', payload: { id, isShift } });
   }, [dispatch]);
 
   // Stable callback for updating an element
@@ -83,6 +83,7 @@ const Canvas = (props) => {
       if (el.type === 'quiz') {
         const transValue = {};
         if (updates.metadata?.options) transValue.options = updates.metadata.options;
+        if (updates.metadata?.matchAnswers) transValue.matchAnswers = updates.metadata.matchAnswers;
         if (updates.metadata?.chatNodes) transValue.chatNodes = updates.metadata.chatNodes;
         
         if (Object.keys(transValue).length > 0) {
@@ -243,16 +244,15 @@ const Canvas = (props) => {
               if (draft && (element.type === 'text' || element.type === 'balloon')) {
                 displayElement = { ...element, content: draft.content };
               }
-              if (draft && element.type === 'quiz' && draft.options) {
+              if (draft && element.type === 'quiz') {
                 displayElement = {
                   ...element,
-                  metadata: { ...element.metadata, options: draft.options }
-                };
-              }
-              if (draft && element.type === 'quiz' && draft.chatNodes) {
-                displayElement = {
-                  ...displayElement,
-                  metadata: { ...displayElement.metadata, chatNodes: draft.chatNodes }
+                  metadata: {
+                    ...element.metadata,
+                    ...(draft.options && { options: draft.options }),
+                    ...(draft.matchAnswers && { matchAnswers: draft.matchAnswers }),
+                    ...(draft.chatNodes && { chatNodes: draft.chatNodes }),
+                  }
                 };
               }
             }
@@ -261,7 +261,7 @@ const Canvas = (props) => {
                 key={`${element.id}-${state.translationMode ? state.translationMode.lang : 'base'}`}
                 element={displayElement}
                 elementIndex={elementIndex}
-                isSelected={element.id === selectedElementId}
+                isSelected={state.selectedElementIds?.includes(element.id) || element.id === selectedElementId}
                 onSelect={handleSelect}
                 onChange={handleChange}
                 onEdit={() => handleEdit(element.id)}

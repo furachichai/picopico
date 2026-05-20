@@ -382,6 +382,7 @@ const Editor = () => {
         const handleKeyDown = (e) => {
             // Don't intercept if user is typing in an input, textarea, or contentEditable
             // Exception: allow Cmd+B/I/U formatting shortcuts through
+            const isUndoShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z';
             const isTextFormatShortcut = (e.metaKey || e.ctrlKey) && ['b', 'i', 'u'].includes(e.key.toLowerCase());
             if (
                 !isTextFormatShortcut && (
@@ -392,6 +393,13 @@ const Editor = () => {
                     e.target.tagName === 'SELECT'
                 )
             ) return;
+
+            // Undo shortcut (Cmd+Z / Ctrl+Z)
+            if (isUndoShortcut) {
+                e.preventDefault();
+                handleUndo();
+                return;
+            }
 
             // Text Formatting Shortcuts (Cmd+B, Cmd+I, Cmd+U)
             if ((e.metaKey || e.ctrlKey) && state.selectedElementId && ['b', 'i', 'u'].includes(e.key.toLowerCase())) {
@@ -462,27 +470,54 @@ const Editor = () => {
 
             // Arrow keys: move selected element, or navigate slides if nothing selected
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-                if (state.selectedElementId && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge') {
+                const hasSelection = state.selectedElementId && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge';
+                if (hasSelection) {
                     e.preventDefault();
                     const canvas = document.querySelector('.slide-canvas');
                     if (!canvas) return;
                     const canvasW = canvas.offsetWidth;
                     const canvasH = canvas.offsetHeight;
-                    const pxStep = e.shiftKey ? 10 : 1;
-                    const dxPct = (pxStep / canvasW) * 100;
-                    const dyPct = (pxStep / canvasH) * 100;
 
-                    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
-                    const el = currentSlide?.elements.find(el => el.id === state.selectedElementId);
-                    if (!el) return;
+                    if (e.shiftKey) {
+                        // Move all selected elements together
+                        const pxStep = 10;
+                        const dxPct = (pxStep / canvasW) * 100;
+                        const dyPct = (pxStep / canvasH) * 100;
 
-                    let updates = {};
-                    if (e.key === 'ArrowLeft') updates = { x: el.x - dxPct };
-                    else if (e.key === 'ArrowRight') updates = { x: el.x + dxPct };
-                    else if (e.key === 'ArrowUp') updates = { y: el.y - dyPct };
-                    else if (e.key === 'ArrowDown') updates = { y: el.y + dyPct };
+                        let dx = 0;
+                        let dy = 0;
+                        if (e.key === 'ArrowLeft') dx = -dxPct;
+                        else if (e.key === 'ArrowRight') dx = dxPct;
+                        else if (e.key === 'ArrowUp') dy = -dyPct;
+                        else if (e.key === 'ArrowDown') dy = dyPct;
 
-                    handleContextMenuChange(el.id, updates);
+                        const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                            ? state.selectedElementIds
+                            : [state.selectedElementId];
+                        
+                        const movingIds = selectedIds.filter(id => id && id !== 'background' && id !== 'cartridge');
+                        
+                        if (movingIds.length > 0) {
+                            dispatch({ type: 'MOVE_ELEMENTS', payload: { ids: movingIds, dx, dy } });
+                        }
+                    } else {
+                        // Move just the single selected element by 1px
+                        const pxStep = 1;
+                        const dxPct = (pxStep / canvasW) * 100;
+                        const dyPct = (pxStep / canvasH) * 100;
+
+                        const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                        const el = currentSlide?.elements.find(el => el.id === state.selectedElementId);
+                        if (!el) return;
+
+                        let updates = {};
+                        if (e.key === 'ArrowLeft') updates = { x: el.x - dxPct };
+                        else if (e.key === 'ArrowRight') updates = { x: el.x + dxPct };
+                        else if (e.key === 'ArrowUp') updates = { y: el.y - dyPct };
+                        else if (e.key === 'ArrowDown') updates = { y: el.y + dyPct };
+
+                        handleContextMenuChange(el.id, updates);
+                    }
                 } else {
                     e.preventDefault();
                     if (e.key === 'ArrowLeft') handlePrevSlide();
@@ -493,7 +528,7 @@ const Editor = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [state.selectedElementId, state.currentSlideId, state.lesson.slides, handlePrevSlide, handleNextSlide]);
+    }, [state.selectedElementId, state.selectedElementIds, state.currentSlideId, state.lesson.slides, handlePrevSlide, handleNextSlide]);
 
     return (
         <div className="editor-layout" onClick={handleGlobalClick}>

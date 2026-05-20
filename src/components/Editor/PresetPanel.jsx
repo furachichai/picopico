@@ -3,6 +3,7 @@ import { useEditor } from '../../context/EditorContext';
 import './PresetPanel.css';
 
 const FONTS = [
+    { name: 'Outfit', value: 'Outfit' },
     { name: 'Nunito', value: 'Nunito' },
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },
     { name: 'Serif', value: 'Georgia, serif' },

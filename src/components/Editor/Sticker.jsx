@@ -53,15 +53,15 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
-            if (!isSelected) onSelect(element.id);
+            if (!isSelected || e.shiftKey) onSelect(element.id, e.shiftKey);
             return;
         }
 
         e.stopPropagation();
 
         // Only select if not already selected to avoid re-triggering selection logic unnecessarily
-        if (!isSelected) {
-            onSelect(element.id);
+        if (!isSelected || e.shiftKey) {
+            onSelect(element.id, e.shiftKey);
         }
 
         if (element.metadata?.locked) {
@@ -296,12 +296,17 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
-            onMouseDownCapture={() => {
+            onMouseDownCapture={(e) => {
                 // Capture phase fires parent-first, before child stopPropagation
-                if (!isSelected) onSelect(element.id);
+                // If shift key is pressed, we want to toggle selection, so we allow it even if already selected
+                if (!isSelected || e.shiftKey) {
+                    onSelect(element.id, e.shiftKey);
+                }
             }}
-            onTouchStartCapture={() => {
-                if (!isSelected) onSelect(element.id);
+            onTouchStartCapture={(e) => {
+                if (!isSelected || e.shiftKey) {
+                    onSelect(element.id, e.shiftKey);
+                }
             }}
             onDoubleClick={() => {
                 if (element.type !== 'quiz' && onEdit) onEdit();

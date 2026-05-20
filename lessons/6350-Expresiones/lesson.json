@@ -1,0 +1,1193 @@
+{
+  "id": "lessons/6350-Expresiones/lesson.json",
+  "title": "Expresiones",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779302263520",
+          "type": "text",
+          "content": "2 * 3 + 12 /4",
+          "x": 49.02777777777778,
+          "y": 20.468750000000004,
+          "width": 38.05555555555556,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\""
+          },
+          "translations": {
+            "en": {
+              "content": "2 * 3 + 12 /4"
+            }
+          }
+        },
+        {
+          "id": "el-1779302279638",
+          "type": "balloon",
+          "content": "¿Cómo le llamamos a esto?",
+          "x": 31.666666666666668,
+          "y": 35,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -35,
+              "y": 71
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "¿Cómo le llamamos a esto?"
+            }
+          }
+        },
+        {
+          "id": "el-1779302299058",
+          "type": "balloon",
+          "content": "¿Cuenta larga?",
+          "x": 62.638888888888886,
+          "y": 59.21875,
+          "width": 50.83333333333333,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 113,
+              "y": 29
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "¿Cuenta larga?"
+            }
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1779302322922",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779302322922-oqj394szj",
+          "type": "text",
+          "content": "2 * 3 + 12 /4",
+          "x": 49.02777777777778,
+          "y": 20.468750000000004,
+          "width": 38.05555555555556,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\""
+          },
+          "translations": {
+            "en": {
+              "content": "2 * 3 + 12 /4"
+            }
+          }
+        },
+        {
+          "id": "el-1779302322922-iu0f4ekld",
+          "type": "balloon",
+          "content": "Sí, es una cuenta larga.",
+          "x": 31.666666666666668,
+          "y": 35,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -35,
+              "y": 71
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Sí, es una cuenta larga."
+            }
+          }
+        },
+        {
+          "id": "el-1779302354058",
+          "type": "balloon",
+          "content": "En matemáticas se le llama \"expresión\".",
+          "x": 61.94444444444445,
+          "y": 70.3125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -35,
+              "y": 71
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "En matemáticas se le llama \"expresión\"."
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1779302385089",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779302385089-geptyzsmc",
+          "type": "balloon",
+          "content": "También se le puede llamar \"operación combinada\".",
+          "x": 39.44444444444444,
+          "y": 35,
+          "width": 55.55555555555556,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -35,
+              "y": 71
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "También se le puede llamar \"operación combinada\"."
+            }
+          }
+        },
+        {
+          "id": "el-1779302385089-iudgg08le",
+          "type": "text",
+          "content": "2 * 3 + 12 /4",
+          "x": 49.02777777777778,
+          "y": 20.468750000000004,
+          "width": 38.05555555555556,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.502056301794036,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\""
+          },
+          "translations": {
+            "en": {
+              "content": "2 * 3 + 12 /4"
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1779302500789",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779302503309",
+          "type": "text",
+          "content": "¿Por qué se le llama operación combinada?",
+          "x": 54.44444444444445,
+          "y": 28.125,
+          "width": 54.44444444444444,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.6063976150029184,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569",
+            "color": "#ffffff"
+          },
+          "translations": {
+            "en": {
+              "content": "¿Por qué se le llama operación combinada?"
+            }
+          }
+        },
+        {
+          "id": "el-1779302528193",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Combina con mi ropa",
+              "Mezcla operaciones como +,-, * y /",
+              "Es una operación médica"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "Combina con mi ropa",
+                  "Mezcla operaciones como +,-, * y /",
+                  "Es una operación médica"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1779302316737",
+      "background": "url(\"/src/assets/backgrounds/counter2.png\")",
+      "elements": [
+        {
+          "id": "el-1779303435746",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "2 * 3",
+              "2 * 3 + 6 / 2",
+              "7 + 2",
+              "1 + 6"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "match",
+            "visualMode": false,
+            "matchAnswers": [
+              "término",
+              "expresión",
+              "9",
+              "7"
+            ],
+            "cardShape": "square",
+            "matchContentType": "custom",
+            "translations": {
+              "en": {
+                "options": [
+                  "2 * 3",
+                  "2 * 3 + 6 / 2",
+                  "7 + 2",
+                  "1 + 6"
+                ],
+                "matchAnswers": [
+                  "term",
+                  "expression",
+                  "9",
+                  "7"
+                ],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {
+        "opacity": 0.18
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-20T18:37:37.224Z",
+  "updatedAt": "2026-05-20T19:12:59.560Z",
+  "path": "lessons/6350-Expresiones/lesson.json",
+  "textPreset": null,
+  "name": "6350-Expresiones",
+  "type": "file",
+  "description": "",
+  "visible": true,
+  "order": 6350,
+  "content": {
+    "id": "lessons/6350-Expresiones/lesson.json",
+    "title": "Expresiones",
+    "slides": [
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779302263520",
+            "type": "text",
+            "content": "2 * 3 + 12 /4",
+            "x": 49.02777777777778,
+            "y": 20.468750000000004,
+            "width": 38.05555555555556,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779302279638",
+            "type": "balloon",
+            "content": "¿Cómo le llamamos a esto?",
+            "x": 31.666666666666668,
+            "y": 35,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -35,
+                "y": 71
+              }
+            }
+          },
+          {
+            "id": "el-1779302299058",
+            "type": "balloon",
+            "content": "¿Cuenta larga?",
+            "x": 62.638888888888886,
+            "y": 59.21875,
+            "width": 50.83333333333333,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 113,
+                "y": 29
+              }
+            }
+          }
+        ],
+        "order": 0
+      },
+      {
+        "id": "slide-1779302322922",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779302322922-oqj394szj",
+            "type": "text",
+            "content": "2 * 3 + 12 /4",
+            "x": 49.02777777777778,
+            "y": 20.468750000000004,
+            "width": 38.05555555555556,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779302322922-iu0f4ekld",
+            "type": "balloon",
+            "content": "Sí, es una cuenta larga.",
+            "x": 31.666666666666668,
+            "y": 35,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -35,
+                "y": 71
+              }
+            }
+          },
+          {
+            "id": "el-1779302354058",
+            "type": "balloon",
+            "content": "En matemáticas se le llama \"expresión\".",
+            "x": 61.94444444444445,
+            "y": 70.3125,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -35,
+                "y": 71
+              }
+            }
+          }
+        ],
+        "order": 1,
+        "cartridge": null
+      },
+      {
+        "id": "slide-1779302385089",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779302385089-geptyzsmc",
+            "type": "balloon",
+            "content": "También se le puede llamar \"operación combinada\".",
+            "x": 39.44444444444444,
+            "y": 35,
+            "width": 55.55555555555556,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -35,
+                "y": 71
+              }
+            }
+          },
+          {
+            "id": "el-1779302385089-iudgg08le",
+            "type": "text",
+            "content": "2 * 3 + 12 /4",
+            "x": 49.02777777777778,
+            "y": 20.468750000000004,
+            "width": 38.05555555555556,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.502056301794036,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\""
+            }
+          }
+        ],
+        "order": 2,
+        "cartridge": null
+      },
+      {
+        "id": "slide-1779302500789",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779302503309",
+            "type": "text",
+            "content": "¿Por qué se le llama operación combinada?",
+            "x": 54.44444444444445,
+            "y": 28.125,
+            "width": 54.44444444444444,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.6063976150029184,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#475569",
+              "color": "#ffffff"
+            }
+          },
+          {
+            "id": "el-1779302528193",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "Combina con mi ropa",
+                "Mezcla operaciones como +,-, * y /",
+                "Es una operación médica"
+              ],
+              "correctIndex": 1,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "classic",
+              "visualMode": false
+            }
+          }
+        ],
+        "order": 3
+      },
+      {
+        "id": "slide-1779302316737",
+        "background": "url(\"/src/assets/backgrounds/counter2.png\")",
+        "elements": [
+          {
+            "id": "el-1779303435746",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "2 * 3",
+                "2 * 3 + 6 / 2",
+                "7 + 2",
+                "1 + 6"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "match",
+              "visualMode": false,
+              "matchAnswers": [
+                "término",
+                "expresión",
+                "9",
+                "7"
+              ],
+              "cardShape": "circle",
+              "matchContentType": "custom"
+            }
+          }
+        ],
+        "order": 4,
+        "backgroundSettings": {
+          "opacity": 0.18
+        }
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-05-20T18:37:37.224Z",
+    "updatedAt": "2026-05-20T19:01:26.674Z",
+    "path": "lessons/6350-Expresiones/lesson.json",
+    "textPreset": null,
+    "name": "6350-Expresiones",
+    "type": "file",
+    "description": "",
+    "visible": true,
+    "order": 6350,
+    "content": {
+      "id": "lessons/6350-Expresiones/lesson.json",
+      "title": "Expresiones",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779302263520",
+              "type": "text",
+              "content": "2 * 3 + 12 /4",
+              "x": 49.02777777777778,
+              "y": 20.468750000000004,
+              "width": 38.05555555555556,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779302279638",
+              "type": "balloon",
+              "content": "¿Cómo le llamamos a esto?",
+              "x": 31.666666666666668,
+              "y": 35,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -35,
+                  "y": 71
+                }
+              }
+            },
+            {
+              "id": "el-1779302299058",
+              "type": "balloon",
+              "content": "¿Cuenta larga?",
+              "x": 62.638888888888886,
+              "y": 59.21875,
+              "width": 50.83333333333333,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 113,
+                  "y": 29
+                }
+              }
+            }
+          ],
+          "order": 0
+        },
+        {
+          "id": "slide-1779302322922",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779302322922-oqj394szj",
+              "type": "text",
+              "content": "2 * 3 + 12 /4",
+              "x": 49.02777777777778,
+              "y": 20.468750000000004,
+              "width": 38.05555555555556,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779302322922-iu0f4ekld",
+              "type": "balloon",
+              "content": "Sí, es una cuenta larga.",
+              "x": 31.666666666666668,
+              "y": 35,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -35,
+                  "y": 71
+                }
+              }
+            },
+            {
+              "id": "el-1779302354058",
+              "type": "balloon",
+              "content": "En matemáticas se le llama \"expresión\".",
+              "x": 61.94444444444445,
+              "y": 70.3125,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -35,
+                  "y": 71
+                }
+              }
+            }
+          ],
+          "order": 1,
+          "cartridge": null
+        },
+        {
+          "id": "slide-1779302385089",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779302385089-geptyzsmc",
+              "type": "balloon",
+              "content": "También se le puede llamar \"operación combinada\".",
+              "x": 39.44444444444444,
+              "y": 35,
+              "width": 55.55555555555556,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -35,
+                  "y": 71
+                }
+              }
+            },
+            {
+              "id": "el-1779302385089-iudgg08le",
+              "type": "text",
+              "content": "2 * 3 + 12 /4",
+              "x": 49.02777777777778,
+              "y": 20.468750000000004,
+              "width": 38.05555555555556,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.502056301794036,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\""
+              }
+            }
+          ],
+          "order": 2,
+          "cartridge": null
+        },
+        {
+          "id": "slide-1779302500789",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779302503309",
+              "type": "text",
+              "content": "¿Por qué se le llama operación combinada?",
+              "x": 54.44444444444445,
+              "y": 28.125,
+              "width": 54.44444444444444,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1.6063976150029184,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#475569",
+                "color": "#ffffff"
+              }
+            },
+            {
+              "id": "el-1779302528193",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 75,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "Combina con mi ropa",
+                  "Mezcla operaciones como +,-, * y /",
+                  "Es una operación médica"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 3
+        },
+        {
+          "id": "slide-1779302316737",
+          "background": "url(\"/src/assets/backgrounds/counter2.png\")",
+          "elements": [
+            {
+              "id": "el-1779303435746",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 75,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "2 * 3",
+                  "2 * 3 + 6 / 2",
+                  "7 + 2",
+                  "1 + 6"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "match",
+                "visualMode": false,
+                "matchAnswers": [
+                  "término",
+                  "expresión",
+                  "9",
+                  "7"
+                ],
+                "cardShape": "circle",
+                "matchContentType": "custom"
+              }
+            }
+          ],
+          "order": 4,
+          "backgroundSettings": {
+            "opacity": 0.18
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-05-20T18:37:37.224Z",
+      "updatedAt": "2026-05-20T18:59:17.474Z",
+      "path": "lessons/6350-Expresiones/lesson.json",
+      "textPreset": null,
+      "name": "6350-Expresiones",
+      "type": "file",
+      "description": "",
+      "visible": true,
+      "order": 6350,
+      "content": {
+        "id": "draft-1779302257224",
+        "title": "Expresiones",
+        "slides": [
+          {
+            "id": "slide-1",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779302263520",
+                "type": "text",
+                "content": "2 * 3 + 12 /4",
+                "x": 49.02777777777778,
+                "y": 20.468750000000004,
+                "width": 38.05555555555556,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779302279638",
+                "type": "balloon",
+                "content": "¿Cómo le llamamos a esto?",
+                "x": 31.666666666666668,
+                "y": 35,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -35,
+                    "y": 71
+                  }
+                }
+              },
+              {
+                "id": "el-1779302299058",
+                "type": "balloon",
+                "content": "¿Cuenta larga?",
+                "x": 62.638888888888886,
+                "y": 59.21875,
+                "width": 50.83333333333333,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 113,
+                    "y": 29
+                  }
+                }
+              }
+            ],
+            "order": 0
+          },
+          {
+            "id": "slide-1779302322922",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779302322922-oqj394szj",
+                "type": "text",
+                "content": "2 * 3 + 12 /4",
+                "x": 49.02777777777778,
+                "y": 20.468750000000004,
+                "width": 38.05555555555556,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779302322922-iu0f4ekld",
+                "type": "balloon",
+                "content": "Sí, es una cuenta larga.",
+                "x": 31.666666666666668,
+                "y": 35,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -35,
+                    "y": 71
+                  }
+                }
+              },
+              {
+                "id": "el-1779302354058",
+                "type": "balloon",
+                "content": "En matemáticas se le llama \"expresión\".",
+                "x": 61.94444444444445,
+                "y": 70.3125,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -35,
+                    "y": 71
+                  }
+                }
+              }
+            ],
+            "order": 1,
+            "cartridge": null
+          },
+          {
+            "id": "slide-1779302385089",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779302385089-geptyzsmc",
+                "type": "balloon",
+                "content": "También se le puede llamar \"operación combinada\".",
+                "x": 39.44444444444444,
+                "y": 35,
+                "width": 55.55555555555556,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -35,
+                    "y": 71
+                  }
+                }
+              },
+              {
+                "id": "el-1779302385089-iudgg08le",
+                "type": "text",
+                "content": "2 * 3 + 12 /4",
+                "x": 49.02777777777778,
+                "y": 20.468750000000004,
+                "width": 38.05555555555556,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.502056301794036,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\""
+                }
+              }
+            ],
+            "order": 2,
+            "cartridge": null
+          },
+          {
+            "id": "slide-1779302500789",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779302503309",
+                "type": "text",
+                "content": "¿Por qué se le llama operación combinada?",
+                "x": 54.44444444444445,
+                "y": 28.125,
+                "width": 54.44444444444444,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1.6063976150029184,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#475569",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "id": "el-1779302528193",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 75,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "Combina con mi ropa",
+                    "Mezcla operaciones como +,-, * y /",
+                    "Es una operación médica"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "classic",
+                  "visualMode": false
+                }
+              }
+            ],
+            "order": 3
+          },
+          {
+            "id": "slide-1779302316737",
+            "background": "#E1F5FE",
+            "elements": [],
+            "order": 4
+          }
+        ],
+        "author": "User",
+        "createdAt": "2026-05-20T18:37:37.224Z",
+        "updatedAt": "2026-05-20T18:43:25.522Z",
+        "path": "lessons/6350-Expresiones/lesson.json",
+        "textPreset": null
+      },
+      "status": "completed",
+      "icon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 5,
+        "completed": true,
+        "lastPlayed": 1779302997508
+      }
+    },
+    "status": "completed",
+    "icon": {
+      "type": {},
+      "key": null,
+      "props": {
+        "size": 24
+      },
+      "_owner": null,
+      "_store": {}
+    },
+    "progress": {
+      "lastSlideIndex": 4,
+      "completed": true,
+      "lastPlayed": 1779303566577
+    }
+  },
+  "status": "completed",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 4,
+    "completed": true,
+    "lastPlayed": 1779303695924
+  },
+  "translations": {
+    "en": {
+      "title": "Expresiones",
+      "description": ""
+    }
+  }
+}

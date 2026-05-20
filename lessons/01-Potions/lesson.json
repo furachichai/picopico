@@ -718,7 +718,7 @@
   "visible": true,
   "name": "01-Potions",
   "type": "file",
-  "description": "",
+  "description": "1. Potions",
   "order": 1,
   "content": {
     "id": "lessons/01-Potions/lesson.json",

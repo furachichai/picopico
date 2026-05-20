@@ -7,10 +7,73 @@ import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx'
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine } from './PEMExpressionPool';
 
-/**
- * QuizPlayer Component
- * ...
- */
+const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents }) => {
+    const textRef = React.useRef(null);
+
+    React.useLayoutEffect(() => {
+        const el = textRef.current;
+        if (!el) return;
+
+        const parent = el.closest('.quiz-option-match');
+        if (!parent) return;
+
+        const style = window.getComputedStyle(parent);
+        const paddingLeft = parseFloat(style.paddingLeft) || 0;
+        const paddingRight = parseFloat(style.paddingRight) || 0;
+        const availableWidth = parent.clientWidth - paddingLeft - paddingRight;
+
+        // Reset to default font-size / style before measuring
+        el.style.fontSize = '';
+        el.style.whiteSpace = 'nowrap';
+        el.style.display = 'inline-block';
+
+        const currentWidth = el.scrollWidth;
+        if (currentWidth > availableWidth && availableWidth > 0) {
+            const ratio = availableWidth / currentWidth;
+            const defaultFontSize = 1.1; // Default font-size is 1.1rem in CSS
+            const newFontSize = Math.max(0.45, defaultFontSize * ratio);
+            el.style.fontSize = `${newFontSize}rem`;
+        }
+    }, [sq.text]);
+
+    const isDragging = sq.isDragging;
+    const isFlashing = sq.flashRed;
+    const isMatched = sq.matched;
+
+    return (
+        <div
+            id={`sq-el-${sq.id}`}
+            className={`quiz-option-match ${sq.type} ${cardShape === 'circle' ? 'circle' : 'square'} ${isDragging ? 'dragging' : ''} ${isFlashing ? 'flash-red' : ''} ${sq.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''} ${sq.merging ? 'merging' : ''}`}
+            style={{
+                pointerEvents: (isSolved || isFailed || disabled || isMatched || sq.merging) ? 'none' : 'auto',
+                transform: (() => {
+                    let s = 1;
+                    let r = 0;
+                    if (sq.merging || isMatched) {
+                        s = 0.1;
+                        r = 15;
+                    } else if (isDragging) {
+                        s = 1.15;
+                        r = -4;
+                    } else if (isFlashing || sq.flashGreen) {
+                        s = 1.1;
+                        r = -4;
+                    }
+                    return `translate3d(${sq.x}px, ${sq.y}px, 0) scale(${s}) rotate(${r}deg)`;
+                })(),
+            }}
+            onMouseDown={(e) => handleMatchDragStart(e, sq.id)}
+            onTouchStart={(e) => handleMatchDragStart(e, sq.id)}
+        >
+            <span
+                ref={textRef}
+                className="quiz-option-text"
+                dangerouslySetInnerHTML={{ __html: formatExponents(sq.text) }}
+            />
+        </div>
+    );
+};
+
 const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true }) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
@@ -464,6 +527,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         state.pointer.x = (clientX - containerRect.left) / scaleX;
         state.pointer.y = (clientY - containerRect.top) / scaleY;
+
+        console.log("DRAG MOVE - Pointer position:", {
+            clientX,
+            clientY,
+            pointer: { x: state.pointer.x, y: state.pointer.y },
+            cardOffset: { x: state.pointer.x - state.pointer.startX, y: state.pointer.y - state.pointer.startY }
+        });
     }, []);
 
     const handleMatchDragEnd = useCallback(() => {
@@ -652,9 +722,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const containerW = el.clientWidth || 360;
         const containerH = el.clientHeight || 540;
 
-        // Auto-readjust card position so it centers exactly on the grab point
+        // Auto-readjust card position so pointer is a little below its center
         sq.x = pointerX - W_s / 2;
-        sq.y = pointerY - H_s / 2;
+        sq.y = pointerY - (H_s / 2 + 20); // A little below its center (20px below the center)
+
+        console.log("DRAG START - Coordinates:", {
+            clientX,
+            clientY,
+            containerRect: { left: containerRect.left, top: containerRect.top, width: containerRect.width, height: containerRect.height },
+            scale: { scaleX, scaleY },
+            pointer: { pointerX, pointerY },
+            card: { x: sq.x, y: sq.y }
+        });
 
         // Bounding limits enforcement
         sq.x = Math.max(margin, Math.min(containerW - W_s - margin, sq.x));
@@ -664,7 +743,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             x: pointerX,
             y: pointerY,
             startX: W_s / 2,
-            startY: H_s / 2
+            startY: H_s / 2 + 20
         };
 
         setMatchSquares(matchStateRef.current.squares.map(s => {
@@ -1185,7 +1264,23 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         sq.y = Math.max(margin, Math.min(dims.h - H_s - margin, sq.y));
                     }
 
-                    el.style.transform = `translate3d(${sq.x}px, ${sq.y}px, 0)`;
+                    let s = 1;
+                    let r = 0;
+                    if (sq.merging) {
+                        s = 0.1;
+                        r = 15;
+                    } else if (sq.id === draggedId) {
+                        s = 1.15;
+                        r = -4;
+                    } else if (sq.id === currentHoveredId) {
+                        s = 1.25;
+                        r = -4;
+                    } else if (sq.flashRed || sq.flashGreen) {
+                        s = 1.1;
+                        r = -4;
+                    }
+
+                    el.style.transform = `translate3d(${sq.x}px, ${sq.y}px, 0) scale(${s}) rotate(${r}deg)`;
 
                     if (sq.id === currentHoveredId) {
                         el.classList.add('drag-hover');
@@ -1906,30 +2001,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             ))}
                         </div>
                     )}
-                    {matchSquares.map((sq) => {
-                        const isDragging = sq.isDragging;
-                        const isFlashing = sq.flashRed;
-                        const isMatched = sq.matched;
-
-                        return (
-                            <div
-                                key={sq.id}
-                                id={`sq-el-${sq.id}`}
-                                className={`quiz-option-match ${sq.type} ${isDragging ? 'dragging' : ''} ${isFlashing ? 'flash-red' : ''} ${sq.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''} ${sq.merging ? 'merging' : ''}`}
-                                style={{
-                                    pointerEvents: (isSolved || isFailed || disabled || isMatched || sq.merging) ? 'none' : 'auto',
-                                    transform: `translate3d(${sq.x}px, ${sq.y}px, 0)`,
-                                }}
-                                onMouseDown={(e) => handleMatchDragStart(e, sq.id)}
-                                onTouchStart={(e) => handleMatchDragStart(e, sq.id)}
-                            >
-                                <span 
-                                    className="quiz-option-text" 
-                                    dangerouslySetInnerHTML={{ __html: formatExponents(sq.text) }} 
-                                />
-                            </div>
-                        );
-                    })}
+                    {matchSquares.map((sq) => (
+                        <MatchCard
+                            key={sq.id}
+                            sq={sq}
+                            isSolved={isSolved}
+                            isFailed={isFailed}
+                            disabled={disabled}
+                            cardShape={data.metadata?.cardShape || 'square'}
+                            handleMatchDragStart={handleMatchDragStart}
+                            formatExponents={formatExponents}
+                        />
+                    ))}
                 </div>
             </div>
         );

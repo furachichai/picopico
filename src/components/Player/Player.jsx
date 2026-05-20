@@ -563,20 +563,20 @@ const Player = () => {
                             </button>
                         )}
                     </div>
-                </div>
 
-                {banner && (
-                    <>
-                        <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'}`} />
-                        <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'}`}>
-                            <img 
-                                src={banner.type === 'correct' ? '/assets/logo_topo.png' : '/assets/logo_moco.png'} 
-                                alt={banner.text} 
-                                className="result-graphic"
-                            />
-                        </div>
-                    </>
-                )}
+                    {banner && (
+                        <>
+                            <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'}`} />
+                            <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'}`}>
+                                <img 
+                                    src={banner.type === 'correct' ? '/assets/topo_logo.png' : '/assets/moco_logo.png'} 
+                                    alt={banner.text} 
+                                    className="result-graphic"
+                                />
+                            </div>
+                        </>
+                    )}
+                </div>
 
                 {/* Render all slides with transition classes */}
                 {slides.map((slide, index) => {
@@ -817,6 +817,7 @@ const Player = () => {
                                                                 metadata: {
                                                                     ...element.metadata,
                                                                     ...(trans.options && { options: trans.options }),
+                                                                    ...(trans.matchAnswers && { matchAnswers: trans.matchAnswers }),
                                                                     ...(trans.chatNodes && { chatNodes: trans.chatNodes }),
                                                                 }
                                                             };

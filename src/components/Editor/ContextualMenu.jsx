@@ -6,6 +6,7 @@ import { getSymbolSvg } from '../../utils/symbols';
 
 const FONTS = [
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
+    { name: 'Outfit', value: 'Outfit' },
     { name: 'Nunito', value: 'Nunito' },
     { name: 'Nunito Sans', value: '"Nunito Sans"' },
     { name: 'Noto Sans', value: '"Noto Sans"' },
@@ -1328,6 +1329,28 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             <option value="order_of_operations">Order of Operations</option>
                             <option value="basic_arithmetic">Basic Arithmetic</option>
                             <option value="custom">Custom (manual)</option>
+                        </select>
+                    </div>
+                    <div className="menu-divider"></div>
+                    <div className="menu-group">
+                        <label>Card Shape</label>
+                        <select
+                            value={metadata.cardShape || 'square'}
+                            onChange={(e) => updateMetadata({ cardShape: e.target.value })}
+                            style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                borderRadius: '6px',
+                                border: '1px solid #ddd',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                background: '#fff',
+                                cursor: 'pointer',
+                                color: '#333'
+                            }}
+                        >
+                            <option value="square">Square (Default)</option>
+                            <option value="circle">Circular Plate (White)</option>
                         </select>
                     </div>
                     <div className="menu-divider"></div>
