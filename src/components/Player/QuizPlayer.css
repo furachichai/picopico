@@ -1258,6 +1258,14 @@
     transform: scale(0.95);
 }
 
+.pem-token-paren-static {
+    color: #FFFFFF;
+    font-size: 1.6rem;
+    padding: 0 4px;
+    position: relative;
+    user-select: none;
+}
+
 .pem-token-paren {
     color: #FFFFFF;
     cursor: pointer;
@@ -1729,4 +1737,114 @@
 
 .quiz-option-match.circle.flash-green::after {
     opacity: 0;
+}
+
+/* ================================================================
+   CONECTA QUIZ MODE STYLING
+   ================================================================ */
+.quiz-player-2.conecta-mode {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.conecta-columns-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    height: calc(100% - 80px);
+    padding: 15px 20px 20px 20px;
+    box-sizing: border-box;
+    z-index: 5;
+    position: relative;
+    margin-top: 65px; /* Begin with a clean gap right below the progress bar */
+}
+
+.conecta-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+}
+
+.quiz-option-match.quiz-option-conecta {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 145px !important;
+    height: 75px !important;
+    border-radius: 16px !important;
+    cursor: pointer !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 2px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s !important;
+}
+
+.quiz-option-match.quiz-option-conecta:hover {
+    transform: translateY(-2px) scale(1.03) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Selected state - outline color & size indicator */
+.quiz-option-match.quiz-option-conecta.selected-conecta {
+    border-color: #3A86FF !important;
+    border-width: 3.5px !important;
+    box-shadow: 0 8px 16px rgba(58, 134, 255, 0.25), 0 0 12px rgba(58, 134, 255, 0.4) !important;
+    transform: scale(1.08) rotate(-1.5deg) !important;
+    z-index: 10;
+}
+
+/* Green and red flashing styles for Conecta */
+.quiz-option-match.quiz-option-conecta.flash-red {
+    background: #FEF2F2 !important;
+    border-color: #EF4444 !important;
+    color: #991B1B !important;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.25) !important;
+}
+
+.quiz-option-match.quiz-option-conecta.flash-green {
+    background: #ECFDF5 !important;
+    border-color: #10B981 !important;
+    color: #065F46 !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Circular Plate override for Conecta if user sets shape to circle */
+.quiz-option-match.quiz-option-conecta.circle {
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50% !important;
+    color: #1e293b !important;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #fafafa 60%, #ededee 100%) !important;
+    border: 2px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), inset 0 2px 4px rgba(255, 255, 255, 0.9), inset 0 -4px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.quiz-option-match.quiz-option-conecta.circle.selected-conecta {
+    border-color: #3A86FF !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22), 0 0 22px rgba(58, 134, 255, 0.75) !important;
+}
+
+/* Matched state for Conecta - remain visible, greyed out, and inactive */
+.quiz-option-match.quiz-option-conecta.matched {
+    opacity: 0.45 !important;
+    background: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
+.quiz-option-match.quiz-option-conecta.circle.matched {
+    background: radial-gradient(circle at 30% 30%, #f8fafc 0%, #f1f5f9 60%, #e2e8f0 100%) !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
 }

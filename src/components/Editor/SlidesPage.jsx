@@ -86,14 +86,6 @@ const SlidesPage = () => {
                                 ⬅️
                             </button>
                             <button
-                                className="btn-icon btn-delete"
-                                onClick={() => handleDeleteSlide(slide.id)}
-                                disabled={lesson.slides.length <= 1}
-                                title={t('slides.delete')}
-                            >
-                                🗑️
-                            </button>
-                            <button
                                 className="btn-icon"
                                 onClick={() => dispatch({ type: 'DUPLICATE_SLIDE', payload: slide.id })}
                                 title={t('slides.duplicate') || "Duplicate"}
@@ -107,6 +99,14 @@ const SlidesPage = () => {
                                 title={t('slides.moveRight')}
                             >
                                 ➡️
+                            </button>
+                            <button
+                                className="btn-icon btn-delete"
+                                onClick={() => handleDeleteSlide(slide.id)}
+                                disabled={lesson.slides.length <= 1}
+                                title={t('slides.delete')}
+                            >
+                                🗑️
                             </button>
                         </div>
                     </div>

@@ -131,21 +131,23 @@
 }
 
 .color-swatch {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: transform 0.1s;
+    transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .color-swatch:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
 .color-swatch.active {
-    border: 2px solid var(--text);
-    transform: scale(1.1);
+    border: 3px solid var(--text);
+    transform: scale(1.15);
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text);
 }
 
 select,

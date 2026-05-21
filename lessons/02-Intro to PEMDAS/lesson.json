@@ -286,6 +286,48 @@
             "width": 40,
             "height": 17.16790648246546
           }
+        },
+        {
+          "id": "el-1779378364369",
+          "type": "balloon",
+          "content": "There must be a way to solve this situation...",
+          "x": 30.138888888888886,
+          "y": 25.15625,
+          "width": 56.388888888888886,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -10,
+              "y": 121
+            }
+          }
+        },
+        {
+          "id": "el-1779378426079",
+          "type": "balloon",
+          "content": "Yes.<div>How are you calculating?</div>",
+          "x": 78.61111111111111,
+          "y": 41.71875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -15,
+              "y": 80
+            }
+          }
         }
       ],
       "order": 4,
@@ -605,7 +647,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-20T17:45:53.520Z",
+  "updatedAt": "2026-05-21T15:47:35.392Z",
   "path": "lessons/02-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
@@ -752,27 +794,6 @@
             }
           },
           {
-            "id": "el-1778449753213",
-            "type": "balloon",
-            "content": "I'm right!",
-            "x": 28.8888888888889,
-            "y": 35.625,
-            "width": 47.77777777777778,
-            "height": 14.374999999999998,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "backgroundColor": "#ffffff",
-              "color": "#000000",
-              "fontFamily": "monospace",
-              "fontSize": 20,
-              "tailPos": {
-                "x": 7,
-                "y": 82
-              }
-            }
-          },
-          {
             "id": "el-1778449733038",
             "type": "balloon",
             "content": "No, I am!",
@@ -790,6 +811,27 @@
               "tailPos": {
                 "x": 1,
                 "y": 55
+              }
+            }
+          },
+          {
+            "id": "el-1778449753213",
+            "type": "balloon",
+            "content": "I'm right!",
+            "x": 28.8888888888889,
+            "y": 35.625,
+            "width": 47.77777777777778,
+            "height": 14.374999999999998,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "monospace",
+              "fontSize": 20,
+              "tailPos": {
+                "x": 7,
+                "y": 82
               }
             }
           }
@@ -874,8 +916,8 @@
             "metadata": {
               "backgroundColor": "#ffffff",
               "color": "#000000",
-              "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
-              "fontSize": 30,
+              "fontFamily": "monospace",
+              "fontSize": 26,
               "tailPos": {
                 "x": 33,
                 "y": 57
@@ -933,30 +975,9 @@
             }
           },
           {
-            "id": "el-1778451128684",
-            "type": "balloon",
-            "content": "5+3<font color=\"#000000\">x2= </font>8<font color=\"#000000\">x2= 16</font>",
-            "x": 34.72222222222222,
-            "y": 30.234375,
-            "width": 68.8888888888889,
-            "height": 13.90625,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "backgroundColor": "#ffffff",
-              "color": "#ce82ff",
-              "fontFamily": "monospace",
-              "fontSize": 24,
-              "tailPos": {
-                "x": -32,
-                "y": 110
-              }
-            }
-          },
-          {
             "id": "el-1778451447261",
             "type": "balloon",
-            "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= 11",
+            "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= <b><font color=\"#9333ea\">11</font></b>",
             "x": 67.3611111111111,
             "y": 46.09375,
             "width": 68.61111111111113,
@@ -973,6 +994,27 @@
                 "y": 63
               }
             }
+          },
+          {
+            "id": "el-1778451128684",
+            "type": "balloon",
+            "content": "5+3<font color=\"#000000\">x2=</font><div>8<font color=\"#000000\">x2=</font></div><div><b><font color=\"#9333ea\">16</font></b></div>",
+            "x": 34.72222222222222,
+            "y": 25.46875,
+            "width": 68.8888888888889,
+            "height": 23.4375,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#ce82ff",
+              "fontFamily": "monospace",
+              "fontSize": 24,
+              "tailPos": {
+                "x": -32,
+                "y": 110
+              }
+            }
           }
         ],
         "order": 5,
@@ -984,20 +1026,6 @@
         "id": "slide-1778450494817",
         "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778452495308\")",
         "elements": [
-          {
-            "id": "el-1778453716834",
-            "type": "text",
-            "content": "How many solutions should 5+2x6 have?",
-            "x": 52.22222222222222,
-            "y": 20.625,
-            "width": 52.124561263633936,
-            "height": 10,
-            "rotation": -7.426750398360696,
-            "scale": 1.3009184706551526,
-            "metadata": {
-              "backgroundColor": "#58cc02"
-            }
-          },
           {
             "id": "el-1778452897747",
             "type": "image",
@@ -1037,6 +1065,22 @@
               "quizType": "4sq",
               "visualMode": false
             }
+          },
+          {
+            "id": "el-1778453716834",
+            "type": "text",
+            "content": "<b>How many </b>solutions should <b>5+2x6</b> have?",
+            "x": 52.22222222222222,
+            "y": 20.625,
+            "width": 52.124561263633936,
+            "height": 10,
+            "rotation": -7.426750398360696,
+            "scale": 1.3009184706551526,
+            "metadata": {
+              "backgroundColor": "#58cc02",
+              "fontFamily": "monospace",
+              "textAlign": "center"
+            }
           }
         ],
         "order": 6,
@@ -1066,17 +1110,17 @@
           {
             "id": "el-1778453122998",
             "type": "balloon",
-            "content": "If everyone got different results, bridges would fall and rockets would miss the moon.<div><br></div>",
+            "content": "If everyone got different results, bridges would fall and rockets would miss the moon.",
             "x": 68.61111111111111,
-            "y": 32.34375,
+            "y": 30.3125,
             "width": 50,
-            "height": 31.874999999999996,
+            "height": 35.9375,
             "rotation": 0,
             "scale": 1,
             "metadata": {
               "backgroundColor": "#ffffff",
               "color": "#000000",
-              "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+              "fontFamily": "monospace",
               "fontSize": 16,
               "tailPos": {
                 "x": -107,
@@ -1108,27 +1152,6 @@
             }
           },
           {
-            "id": "el-1778453225745",
-            "type": "balloon",
-            "content": "<div>It's called</div><div>PEMDAS</div>",
-            "x": 76.80555555555556,
-            "y": 69.21875,
-            "width": 43.05555555555556,
-            "height": 14.0625,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "backgroundColor": "#58cc02",
-              "color": "#000000",
-              "fontFamily": "monospace",
-              "fontSize": 16,
-              "tailPos": {
-                "x": -96,
-                "y": -21
-              }
-            }
-          },
-          {
             "id": "el-1778453169358",
             "type": "balloon",
             "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
@@ -1148,6 +1171,27 @@
                 "y": 87
               }
             }
+          },
+          {
+            "id": "el-1778453225745",
+            "type": "balloon",
+            "content": "<div><font color=\"#ffffff\">It's called</font></div><div><font color=\"#ffffff\">PEMDAS</font></div>",
+            "x": 76.80555555555556,
+            "y": 69.21875,
+            "width": 43.05555555555556,
+            "height": 14.0625,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#58cc02",
+              "color": "#000000",
+              "fontFamily": "monospace",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -96,
+                "y": -21
+              }
+            }
           }
         ],
         "order": 8
@@ -1156,6 +1200,38 @@
         "id": "slide-1778453284631",
         "background": "url(\"/src/assets/backgrounds/bkg_abstrat_004.png\")",
         "elements": [
+          {
+            "id": "el-1779298918887",
+            "type": "text",
+            "content": "<b>What's the meaning of PEMDAS?</b>",
+            "x": 50.27777777777777,
+            "y": 22.96875,
+            "width": 52.77777777777778,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1.0687113167192819,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "textAlign": "center",
+              "fontSize": 23,
+              "backgroundColor": "#1cb0f6"
+            }
+          },
+          {
+            "id": "el-1778869120648",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20meme.png",
+            "x": 51.666666666666664,
+            "y": 45.625,
+            "width": 40,
+            "height": 32.37410071942446,
+            "rotation": 0,
+            "scale": 0.7256637149971404,
+            "metadata": {
+              "width": 40,
+              "height": 32.37410071942446
+            }
+          },
           {
             "id": "el-1778453299767",
             "type": "quiz",
@@ -1168,9 +1244,9 @@
             "scale": 1,
             "metadata": {
               "options": [
-                "<font face=\"Verdana, Arial, sans-serif\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>laying <font color=\"#000000\">E</font>pic Minecraft <font color=\"#000000\">D</font>estroys <font color=\"#000000\">A</font>ll <font color=\"#000000\">S</font>leep</font>",
-                "<font face=\"Atkinson Hyperlegible Next\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>arenthesis <font color=\"#000000\">E</font>xponents <font color=\"#000000\">M</font>ultiplication <font color=\"#000000\">D</font>ivision <font color=\"#000000\">A</font>ddition <font color=\"#000000\">S</font>ubtraction</font><div><br></div>",
-                "<font face=\"Verdana, Arial, sans-serif\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack </font><font face=\"Verdana, Arial, sans-serif\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><font color=\"#000000\">S</font>quirrel</span></font>"
+                "<font face=\"Verdana, Arial, sans-serif\" style=\"font-size: 15px;\" color=\"#000000\">P<span style=\"font-weight: normal;\">laying </span>E<span style=\"font-weight: normal;\">pic </span>M<span style=\"font-weight: normal;\">inecraft </span>D<span style=\"font-weight: normal;\">estroys </span>A<span style=\"font-weight: normal;\">ll </span>S<span style=\"font-weight: normal;\">leep</span></font>",
+                "<font face=\"Atkinson Hyperlegible Next\" style=\"font-size: 15px;\" color=\"#000000\">P<span style=\"font-weight: normal;\">arenthesis </span>E<span style=\"font-weight: normal;\">xponents </span>M<span style=\"font-weight: normal;\">ultiplication</span> D<span style=\"font-weight: normal;\">ivision </span>A<span style=\"font-weight: normal;\">ddition </span>S<span style=\"font-weight: normal;\">ubtraction</span></font><div><br></div>",
+                "<font style=\"font-size: 15px;\" color=\"#000000\"><font face=\"Verdana, Arial, sans-serif\">P<span style=\"font-weight: normal;\">lease </span>E<span style=\"font-weight: normal;\">vade </span>M<span style=\"font-weight: normal;\">y </span>D<span style=\"font-weight: normal;\">angerous </span>A<span style=\"font-weight: normal;\">ttack </span></font><font face=\"Verdana, Arial, sans-serif\"><span style=\"caret-color: rgb(0, 0, 0);\">S<span style=\"font-weight: 400;\">quirrel</span></span></font></font>"
               ],
               "correctIndex": 1,
               "correctIndices": [
@@ -1178,22 +1254,8 @@
               ],
               "quizType": "classic",
               "visualMode": false,
-              "fontWeight": "bold"
-            }
-          },
-          {
-            "id": "el-1778869120648",
-            "type": "image",
-            "content": "/src/assets/characters/chef%20meme.png",
-            "x": 56.94444444444444,
-            "y": 45.46875,
-            "width": 40,
-            "height": 32.37410071942446,
-            "rotation": 0,
-            "scale": 1.904414336838374,
-            "metadata": {
-              "width": 40,
-              "height": 32.37410071942446
+              "fontWeight": "bold",
+              "color": "#000000"
             }
           }
         ],
@@ -1205,7 +1267,7 @@
     ],
     "author": "User",
     "createdAt": "2026-05-10T21:44:26.467Z",
-    "updatedAt": "2026-05-15T18:19:13.264Z",
+    "updatedAt": "2026-05-20T17:45:53.520Z",
     "path": "lessons/02-Intro to PEMDAS/lesson.json",
     "textPreset": null,
     "subject": "Math",
@@ -1708,27 +1770,6 @@
               }
             },
             {
-              "id": "el-1778453169358",
-              "type": "balloon",
-              "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
-              "x": 67.08333333333333,
-              "y": 25,
-              "width": 59.166666666666664,
-              "height": 25.3125,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "monospace",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": -56,
-                  "y": 87
-                }
-              }
-            },
-            {
               "id": "el-1778453225745",
               "type": "balloon",
               "content": "<div>It's called</div><div>PEMDAS</div>",
@@ -1748,45 +1789,85 @@
                   "y": -21
                 }
               }
+            },
+            {
+              "id": "el-1778453169358",
+              "type": "balloon",
+              "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
+              "x": 70.41666666666666,
+              "y": 23.75,
+              "width": 59.166666666666664,
+              "height": 25.3125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "monospace",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -56,
+                  "y": 87
+                }
+              }
             }
           ],
           "order": 8
         },
         {
           "id": "slide-1778453284631",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_004.png\")",
           "elements": [
             {
               "id": "el-1778453299767",
               "type": "quiz",
               "content": "Quiz",
               "x": 50,
-              "y": 75,
+              "y": 81.09375,
               "width": 20,
               "height": 10,
               "rotation": 0,
               "scale": 1,
               "metadata": {
                 "options": [
-                  "<font color=\"#000000\">P</font>laying <font color=\"#000000\">E</font>pic Minecraft <font color=\"#000000\">D</font>estroys <font color=\"#000000\">A</font>ll <font color=\"#000000\">S</font>leep",
-                  "Parenthesis Exponents Multiplication Division Addition Subtraction<div><br></div>",
-                  "<font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack <font color=\"#000000\">S</font>quirrell"
+                  "<font face=\"Verdana, Arial, sans-serif\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>laying <font color=\"#000000\">E</font>pic Minecraft <font color=\"#000000\">D</font>estroys <font color=\"#000000\">A</font>ll <font color=\"#000000\">S</font>leep</font>",
+                  "<font face=\"Atkinson Hyperlegible Next\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>arenthesis <font color=\"#000000\">E</font>xponents <font color=\"#000000\">M</font>ultiplication <font color=\"#000000\">D</font>ivision <font color=\"#000000\">A</font>ddition <font color=\"#000000\">S</font>ubtraction</font><div><br></div>",
+                  "<font face=\"Verdana, Arial, sans-serif\" style=\"font-weight: normal;\"><font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack </font><font face=\"Verdana, Arial, sans-serif\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><font color=\"#000000\">S</font>quirrel</span></font>"
                 ],
                 "correctIndex": 1,
                 "correctIndices": [
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "fontWeight": "bold"
+              }
+            },
+            {
+              "id": "el-1778869120648",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20meme.png",
+              "x": 56.94444444444444,
+              "y": 45.46875,
+              "width": 40,
+              "height": 32.37410071942446,
+              "rotation": 0,
+              "scale": 1.904414336838374,
+              "metadata": {
+                "width": 40,
+                "height": 32.37410071942446
               }
             }
           ],
-          "order": 9
+          "order": 9,
+          "backgroundSettings": {
+            "opacity": 0.22
+          }
         }
       ],
       "author": "User",
       "createdAt": "2026-05-10T21:44:26.467Z",
-      "updatedAt": "2026-05-14T15:15:33.553Z",
+      "updatedAt": "2026-05-15T18:19:13.264Z",
       "path": "lessons/02-Intro to PEMDAS/lesson.json",
       "textPreset": null,
       "subject": "Math",
@@ -1800,7 +1881,7 @@
       "description": "",
       "order": 2,
       "content": {
-        "id": "draft-1",
+        "id": "lessons/02-Intro to PEMDAS/lesson.json",
         "title": "Intro to PEMDAS",
         "slides": [
           {
@@ -2166,31 +2247,6 @@
             "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778452495308\")",
             "elements": [
               {
-                "id": "el-1778453688740",
-                "type": "quiz",
-                "content": "Quiz",
-                "x": 50,
-                "y": 81.875,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 1,
-                "metadata": {
-                  "options": [
-                    "None",
-                    "One",
-                    "Two",
-                    "Several"
-                  ],
-                  "correctIndex": 0,
-                  "correctIndices": [
-                    0
-                  ],
-                  "quizType": "4sq",
-                  "visualMode": false
-                }
-              },
-              {
                 "id": "el-1778453716834",
                 "type": "text",
                 "content": "How many solutions should 5+2x6 have?",
@@ -2217,6 +2273,31 @@
                 "metadata": {
                   "width": 40,
                   "height": 23.677130044843047
+                }
+              },
+              {
+                "id": "el-1778453688740",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 81.875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "options": [
+                    "None",
+                    "One",
+                    "Two",
+                    "Several"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    1
+                  ],
+                  "quizType": "4sq",
+                  "visualMode": false
                 }
               }
             ],
@@ -2353,7 +2434,7 @@
                     "Parenthesis Exponents Multiplication Division Addition Subtraction<div><br></div>",
                     "<font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack <font color=\"#000000\">S</font>quirrell"
                   ],
-                  "correctIndex": 0,
+                  "correctIndex": 1,
                   "correctIndices": [
                     0
                   ],
@@ -2367,15 +2448,608 @@
         ],
         "author": "User",
         "createdAt": "2026-05-10T21:44:26.467Z",
-        "updatedAt": "2026-05-10T22:57:43.991Z",
-        "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
+        "updatedAt": "2026-05-14T15:15:33.553Z",
+        "path": "lessons/02-Intro to PEMDAS/lesson.json",
         "textPreset": null,
         "subject": "Math",
         "topic": "PEMDAS",
         "chapterId": "00",
         "chapterName": "Chapter: Intro",
         "lessonId": "00",
-        "visible": true
+        "visible": true,
+        "name": "02-Intro to PEMDAS",
+        "type": "file",
+        "description": "",
+        "order": 2,
+        "content": {
+          "id": "draft-1",
+          "title": "Intro to PEMDAS",
+          "slides": [
+            {
+              "id": "slide-1778449564989",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+              "elements": [
+                {
+                  "id": "el-1778449574610",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png?t=1778448462548",
+                  "x": 52.77777777777778,
+                  "y": 57.5,
+                  "width": 40,
+                  "height": 39.97874601487779,
+                  "rotation": 0,
+                  "scale": 2.7841341841956515,
+                  "metadata": {
+                    "width": 40,
+                    "height": 39.97874601487779,
+                    "opacity": 1
+                  }
+                }
+              ],
+              "order": 0,
+              "backgroundSettings": {
+                "opacity": 0.42
+              }
+            },
+            {
+              "id": "slide-1",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png?t=1778448469816\")",
+              "elements": [
+                {
+                  "id": "el-1778449554728",
+                  "type": "image",
+                  "content": "/src/assets/characters/without%20balloons.png?t=1778448462975",
+                  "x": 49.72222222222222,
+                  "y": 63.75,
+                  "width": 40,
+                  "height": 29.458023379383636,
+                  "rotation": 0,
+                  "scale": 2.455463068602705,
+                  "metadata": {
+                    "width": 40,
+                    "height": 29.458023379383636
+                  }
+                },
+                {
+                  "id": "el-1778449663005",
+                  "type": "balloon",
+                  "content": "16",
+                  "x": 18.194444444444446,
+                  "y": 33.75,
+                  "width": 29.166666666666668,
+                  "height": 14.0625,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 30,
+                    "tailPos": {
+                      "x": -8,
+                      "y": 58
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778449690651",
+                  "type": "balloon",
+                  "content": "11",
+                  "x": 77.91666666666667,
+                  "y": 37.5,
+                  "width": 29.166666666666668,
+                  "height": 14.0625,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 30,
+                    "tailPos": {
+                      "x": -2,
+                      "y": 58
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778449469024",
+                  "type": "text",
+                  "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
+                  "x": 51.25,
+                  "y": 19.6875,
+                  "width": 39.72222222222222,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 2.1335235508432833,
+                  "metadata": {
+                    "color": "#ce82ff",
+                    "fontFamily": "monospace",
+                    "fontSize": 25,
+                    "backgroundColor": "#ffc800"
+                  }
+                }
+              ],
+              "order": 1,
+              "backgroundSettings": {
+                "opacity": 0.15
+              }
+            },
+            {
+              "id": "slide-1778449713057",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+              "elements": [
+                {
+                  "id": "el-1778449725019",
+                  "type": "image",
+                  "content": "/src/assets/characters/dilla%20pesto%20boxing.png?t=1778448462583",
+                  "x": 49.166666666666664,
+                  "y": 71.875,
+                  "width": 40,
+                  "height": 19.72635494155154,
+                  "rotation": 0,
+                  "scale": 2.5414668953255077,
+                  "metadata": {
+                    "width": 40,
+                    "height": 19.72635494155154
+                  }
+                },
+                {
+                  "id": "el-1778449753213",
+                  "type": "balloon",
+                  "content": "I'm right!",
+                  "x": 28.8888888888889,
+                  "y": 35.625,
+                  "width": 47.77777777777778,
+                  "height": 14.374999999999998,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 20,
+                    "tailPos": {
+                      "x": 7,
+                      "y": 82
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778449733038",
+                  "type": "balloon",
+                  "content": "No, I am!",
+                  "x": 77.6388888888889,
+                  "y": 38.90625,
+                  "width": 43.05555555555556,
+                  "height": 14.374999999999998,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 20,
+                    "tailPos": {
+                      "x": 1,
+                      "y": 55
+                    }
+                  }
+                }
+              ],
+              "order": 2,
+              "backgroundSettings": {
+                "opacity": 0.25
+              }
+            },
+            {
+              "id": "slide-1778450519975",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png?t=1778450935252\")",
+              "elements": [
+                {
+                  "id": "el-1778452542511",
+                  "type": "image",
+                  "content": "/src/assets/characters/dilla%20and%20pesto%20fighting%20chef%20freaks%20out.png",
+                  "x": 50,
+                  "y": 59.375,
+                  "width": 40,
+                  "height": 33.75,
+                  "rotation": 0,
+                  "scale": 2.3072961452092993,
+                  "metadata": {
+                    "width": 40,
+                    "height": 33.75,
+                    "locked": true
+                  }
+                },
+                {
+                  "id": "el-1778452577298",
+                  "type": "balloon",
+                  "content": "11",
+                  "x": 82.08333333333333,
+                  "y": 46.25,
+                  "width": 27.500000000000004,
+                  "height": 12.5,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                    "fontSize": 30,
+                    "tailPos": {
+                      "x": -15,
+                      "y": 72
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778452552278",
+                  "type": "balloon",
+                  "content": "16",
+                  "x": 19.86111111111111,
+                  "y": 45.78125,
+                  "width": 27.500000000000004,
+                  "height": 12.5,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                    "fontSize": 30,
+                    "tailPos": {
+                      "x": 15,
+                      "y": 63
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778452606877",
+                  "type": "balloon",
+                  "content": "Stop!",
+                  "x": 27.63888888888889,
+                  "y": 20.078125,
+                  "width": 35.27777777777778,
+                  "height": 12.65625,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                    "fontSize": 30,
+                    "tailPos": {
+                      "x": 33,
+                      "y": 57
+                    }
+                  }
+                }
+              ],
+              "order": 3,
+              "backgroundSettings": {
+                "opacity": 0.23
+              }
+            },
+            {
+              "id": "slide-1778449782585",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+              "elements": [
+                {
+                  "id": "el-1778450507224",
+                  "type": "image",
+                  "content": "/src/assets/characters/dilla%20pesto%20scratching%20head.png?t=1778448462585",
+                  "x": 49.166666666666664,
+                  "y": 73.125,
+                  "width": 40,
+                  "height": 17.16790648246546,
+                  "rotation": 0,
+                  "scale": 2.473645651334105,
+                  "metadata": {
+                    "width": 40,
+                    "height": 17.16790648246546
+                  }
+                }
+              ],
+              "order": 4,
+              "backgroundSettings": {
+                "opacity": 0.48
+              }
+            },
+            {
+              "id": "slide-1778451106316",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png?t=1778452495310\")",
+              "elements": [
+                {
+                  "id": "el-1778451111181",
+                  "type": "image",
+                  "content": "/src/assets/characters/dilla%20pesto%20wondering.png?t=1778450935156",
+                  "x": 48.888888888888886,
+                  "y": 75.3125,
+                  "width": 40,
+                  "height": 16.45058448459086,
+                  "rotation": 0,
+                  "scale": 2.588366082414242,
+                  "metadata": {
+                    "width": 40,
+                    "height": 16.45058448459086
+                  }
+                },
+                {
+                  "id": "el-1778451128684",
+                  "type": "balloon",
+                  "content": "5+3<font color=\"#000000\">x2= </font>8<font color=\"#000000\">x2= 16</font>",
+                  "x": 34.72222222222222,
+                  "y": 30.234375,
+                  "width": 68.8888888888889,
+                  "height": 13.90625,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#ce82ff",
+                    "fontFamily": "monospace",
+                    "fontSize": 24,
+                    "tailPos": {
+                      "x": -32,
+                      "y": 110
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778451447261",
+                  "type": "balloon",
+                  "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= 11",
+                  "x": 67.3611111111111,
+                  "y": 46.09375,
+                  "width": 68.61111111111113,
+                  "height": 14.6875,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 24,
+                    "tailPos": {
+                      "x": 8,
+                      "y": 63
+                    }
+                  }
+                }
+              ],
+              "order": 5,
+              "backgroundSettings": {
+                "opacity": 0.13
+              }
+            },
+            {
+              "id": "slide-1778450494817",
+              "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778452495308\")",
+              "elements": [
+                {
+                  "id": "el-1778453688740",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 81.875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "options": [
+                      "None",
+                      "One",
+                      "Two",
+                      "Several"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "4sq",
+                    "visualMode": false
+                  }
+                },
+                {
+                  "id": "el-1778453716834",
+                  "type": "text",
+                  "content": "How many solutions should 5+2x6 have?",
+                  "x": 52.22222222222222,
+                  "y": 20.625,
+                  "width": 52.124561263633936,
+                  "height": 10,
+                  "rotation": -7.426750398360696,
+                  "scale": 1.3009184706551526,
+                  "metadata": {
+                    "backgroundColor": "#58cc02"
+                  }
+                },
+                {
+                  "id": "el-1778452897747",
+                  "type": "image",
+                  "content": "/src/assets/characters/pest_scratches%20head_front.png?t=1778452495231",
+                  "x": 49.72222222222223,
+                  "y": 46.5625,
+                  "width": 40,
+                  "height": 23.677130044843047,
+                  "rotation": 0,
+                  "scale": 1.4752661737566275,
+                  "metadata": {
+                    "width": 40,
+                    "height": 23.677130044843047
+                  }
+                }
+              ],
+              "order": 6,
+              "backgroundSettings": {
+                "opacity": 0.23
+              }
+            },
+            {
+              "id": "slide-1778453102804",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1778453116073",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20with%20ice%20cream%20cone.png?t=1778452495183",
+                  "x": 30.833333333333332,
+                  "y": 58.90625,
+                  "width": 40,
+                  "height": 58.318739054290724,
+                  "rotation": 0,
+                  "scale": 1.3049954822663998,
+                  "metadata": {
+                    "width": 40,
+                    "height": 58.318739054290724
+                  }
+                },
+                {
+                  "id": "el-1778453122998",
+                  "type": "balloon",
+                  "content": "If everyone got different results, bridges would fall and rockets would miss the moon.<div><br></div>",
+                  "x": 68.61111111111111,
+                  "y": 32.34375,
+                  "width": 50,
+                  "height": 31.874999999999996,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -107,
+                      "y": 1
+                    }
+                  }
+                }
+              ],
+              "order": 7
+            },
+            {
+              "id": "slide-1778453153922",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1778453163112",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
+                  "x": 45.83333333333332,
+                  "y": 62.03125,
+                  "width": 40,
+                  "height": 30.809659090909093,
+                  "rotation": 0,
+                  "scale": 2.5681461438141,
+                  "metadata": {
+                    "width": 40,
+                    "height": 30.809659090909093,
+                    "locked": true
+                  }
+                },
+                {
+                  "id": "el-1778453169358",
+                  "type": "balloon",
+                  "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
+                  "x": 67.08333333333333,
+                  "y": 25,
+                  "width": 59.166666666666664,
+                  "height": 25.3125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -56,
+                      "y": 87
+                    }
+                  }
+                },
+                {
+                  "id": "el-1778453225745",
+                  "type": "balloon",
+                  "content": "<div>It's called</div><div>PEMDAS</div>",
+                  "x": 76.80555555555556,
+                  "y": 69.21875,
+                  "width": 43.05555555555556,
+                  "height": 14.0625,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#58cc02",
+                    "color": "#000000",
+                    "fontFamily": "monospace",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -96,
+                      "y": -21
+                    }
+                  }
+                }
+              ],
+              "order": 8
+            },
+            {
+              "id": "slide-1778453284631",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1778453299767",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 75,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "options": [
+                      "<font color=\"#000000\">P</font>laying <font color=\"#000000\">E</font>pic Minecraft <font color=\"#000000\">D</font>estroys <font color=\"#000000\">A</font>ll <font color=\"#000000\">S</font>leep",
+                      "Parenthesis Exponents Multiplication Division Addition Subtraction<div><br></div>",
+                      "<font color=\"#000000\">P</font>lease <font color=\"#000000\">E</font>vade <font color=\"#000000\">M</font>y <font color=\"#000000\">D</font>angerous <font color=\"#000000\">A</font>ttack <font color=\"#000000\">S</font>quirrell"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "classic",
+                    "visualMode": false
+                  }
+                }
+              ],
+              "order": 9
+            }
+          ],
+          "author": "User",
+          "createdAt": "2026-05-10T21:44:26.467Z",
+          "updatedAt": "2026-05-10T22:57:43.991Z",
+          "path": "lessons/Math/PEMDAS/00-Chapter: Intro/00-Intro to PEMDAS/lesson.json",
+          "textPreset": null,
+          "subject": "Math",
+          "topic": "PEMDAS",
+          "chapterId": "00",
+          "chapterName": "Chapter: Intro",
+          "lessonId": "00",
+          "visible": true
+        },
+        "status": "active",
+        "icon": {
+          "type": {},
+          "key": null,
+          "props": {
+            "size": 24
+          },
+          "_owner": null,
+          "_store": {}
+        },
+        "progress": null
       },
       "status": "active",
       "icon": {
@@ -2401,7 +3075,7 @@
     },
     "progress": null
   },
-  "status": "active",
+  "status": "completed",
   "icon": {
     "type": {},
     "key": null,
@@ -2411,5 +3085,9 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null
+  "progress": {
+    "lastSlideIndex": 9,
+    "completed": true,
+    "lastPlayed": 1779242353622
+  }
 }

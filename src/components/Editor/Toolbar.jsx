@@ -5,7 +5,7 @@ import { ELEMENT_TYPES } from '../../types';
 import { Gamepad2 } from 'lucide-react';
 import { getSymbolSvg } from '../../utils/symbols';
 
-const Toolbar = ({ onOpenLibrary }) => {
+const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [showQuizMenu, setShowQuizMenu] = useState(false);
@@ -52,13 +52,14 @@ const Toolbar = ({ onOpenLibrary }) => {
         const isChatQuiz = type === 'chatquiz';
         const isPEM = type === 'pem';
         const isMatch = type === 'match';
+        const isConecta = type === 'conecta';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
         else if (isReorder) defaultOptions = ['First', 'Second', 'Third', 'Fourth'];
         else if (isChatQuiz) defaultOptions = [];
         else if (isPEM) defaultOptions = [];
-        else if (isMatch) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6'];
+        else if (isMatch || isConecta) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6'];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -72,9 +73,9 @@ const Toolbar = ({ onOpenLibrary }) => {
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta'
                     visualMode: false,
-                    ...(isMatch && { matchAnswers: ['5', '6', '9', '7'] }),
+                    ...((isMatch || isConecta) && { matchAnswers: ['5', '6', '9', '7'] }),
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
                     ...(preset?.quizAnswers?.fontSize && { answerFontSize: preset.quizAnswers.fontSize }),
                     ...(preset?.quizAnswers?.color && { answerColor: preset.quizAnswers.color }),
@@ -151,6 +152,7 @@ const Toolbar = ({ onOpenLibrary }) => {
                                 <button onClick={() => handleAddQuiz('reorder')}>Reorder</button>
                                 <button onClick={() => handleAddQuiz('chatquiz')}>Chat</button>
                                 <button onClick={() => handleAddQuiz('match')}>Match Drag</button>
+                                <button onClick={() => handleAddQuiz('conecta')}>Conecta</button>
                             </div>
                         )}
                     </div>
@@ -480,8 +482,8 @@ const Toolbar = ({ onOpenLibrary }) => {
                         </>
                     )}
                 </div>
-                <div className="toolbar-section">
-                    {/* Add Slide button moved back to SlideStrip */}
+                <div className="toolbar-section" style={{ display: 'flex', gap: '6px', alignItems: 'center', borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '8px' }}>
+                    <button className="btn-danger" onClick={onDeleteSlide} disabled={state.lesson.slides.length <= 1} title="Delete Slide" style={{ fontSize: '1.2rem' }}>🗑️</button>
                 </div>
             </div>
         </>

@@ -299,6 +299,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     contentEditable
                                     suppressContentEditableWarning
                                     className="chatquiz-message-input"
+                                    data-node-index={index}
                                     style={{
                                         ...(element.metadata?.fontFamily && { fontFamily: element.metadata.fontFamily }),
                                         ...(element.metadata?.fontSize && { fontSize: `${element.metadata.fontSize}px` }),
@@ -342,6 +343,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                                 contentEditable
                                                 suppressContentEditableWarning
                                                 className="chatquiz-option-input"
+                                                data-node-index={index}
                                                 data-option-index={optIdx}
                                                 onInput={(e) => updateQuizOption(index, optIdx, e.currentTarget.innerHTML)}
                                                 onPaste={(e) => {
@@ -423,7 +425,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     // -------------------------------------------------------------------------
     // MATCH RENDER LOGIC
     // -------------------------------------------------------------------------
-    if (quizType === 'match') {
+    if (quizType === 'match' || quizType === 'conecta') {
         const handleMatchOptionChange = (idx, val) => {
             const newOptions = [...options];
             newOptions[idx] = val;
@@ -486,7 +488,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                 contentEditable
                                 suppressContentEditableWarning
                                 className="option-input-2"
-                                data-option-index={index}
+                                data-match-answer-index={index}
                                 onInput={(e) => handleMatchAnswerChange(index, e.currentTarget.innerHTML)}
                                 onPaste={(e) => {
                                     e.preventDefault();

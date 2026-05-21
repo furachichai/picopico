@@ -211,7 +211,7 @@ const ExpressionScanner001 = ({ expression, isActive = true, onComplete, isWiggl
  * terms animate apart at + and - operators (like the Potiondas powerup).
  * Operators are static (not buttons). Play button greys out after use.
  */
-const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggling = false }) => {
+const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggling = false, colorVersion = false, autoPlay = false }) => {
     const SEPARATORS = new Set(['+', '-', '−']);
 
     // Tokenize — split on spaces
@@ -226,6 +226,7 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
     const [hasPlayed, setHasPlayed] = useState(false);
     const [isSeparating, setIsSeparating] = useState(false);
     const audioCtxRef = useRef(null);
+    const autoPlayHandled = useRef(false);
 
     // Expanding sound (growing chime)
     const playSeparateSound = useCallback(() => {
@@ -267,11 +268,20 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
         }, 1500);
     }, [hasPlayed, isSeparating, playSeparateSound, onComplete]);
 
+    // Auto-play: when autoPlay transitions to true, trigger the animation automatically
+    useEffect(() => {
+        if (autoPlay && !hasPlayed && !isSeparating && !autoPlayHandled.current) {
+            autoPlayHandled.current = true;
+            handlePlay();
+        }
+    }, [autoPlay, hasPlayed, isSeparating, handlePlay]);
+
     // Reset when slide becomes inactive (navigating away and back)
     useEffect(() => {
         if (!isActive) {
             setHasPlayed(false);
             setIsSeparating(false);
+            autoPlayHandled.current = false;
         }
     }, [isActive]);
 
@@ -279,15 +289,19 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
         <div className={`isticker-termsep ${isWiggling ? 'wiggle' : ''}`}>
             <div className="isticker-termsep-inner">
                 <div className={`isticker-termsep-expression ${isSeparating || hasPlayed ? 'separated' : ''}`}>
-                    {tokens.map((token) => (
-                        <span
-                            key={token.id}
-                            className={`isticker-termsep-token ${token.isSeparator ? 'is-separator' : ''}`}
-                            style={((isSeparating || hasPlayed) && (token.display === '×' || token.display === '÷')) ? { color: '#6EE7B7' } : {}}
-                        >
-                            {token.display}
-                        </span>
-                    ))}
+                    {tokens.map((token) => {
+                        const isGreen = (isSeparating || hasPlayed) && (
+                            colorVersion ? !token.isSeparator : (token.display === '×' || token.display === '÷')
+                        );
+                        return (
+                            <span
+                                key={token.id}
+                                className={`isticker-termsep-token ${token.isSeparator ? 'is-separator' : 'is-element'} ${isGreen ? 'is-green' : ''}`}
+                            >
+                                {token.display}
+                            </span>
+                        );
+                    })}
                 </div>
                 <button
                     className={`isticker-termsep-play ${hasPlayed ? 'played' : ''} ${isSeparating ? 'separating' : ''}`}
@@ -309,7 +323,7 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
 /**
  * IStickerPlayer — Dispatcher component
  */
-const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false }) => {
+const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false, autoPlay = false }) => {
     const metadata = data.metadata || {};
 
     switch (metadata.stickerType) {
@@ -327,9 +341,11 @@ const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false 
             return (
                 <PemdasTermSeparator
                     expression={metadata.expression}
+                    colorVersion={metadata.colorVersion}
                     isActive={isActive}
                     onComplete={onComplete}
                     isWiggling={isWiggling}
+                    autoPlay={autoPlay}
                 />
             );
         default:

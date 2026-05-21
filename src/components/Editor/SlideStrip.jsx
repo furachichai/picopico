@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
+import ConfirmationModal from './ConfirmationModal';
 import './SlideStrip.css';
 
 const SlideStrip = () => {
     const { state, dispatch } = useEditor();
     const { lesson, currentSlideId } = state;
+    const [slideToDelete, setSlideToDelete] = useState(null);
 
     const handleSelect = (id) => {
         dispatch({ type: 'SET_CURRENT_SLIDE', payload: id });
@@ -12,9 +14,18 @@ const SlideStrip = () => {
 
     const handleDelete = (e, id) => {
         e.stopPropagation();
-        if (confirm('Delete this slide?')) {
-            dispatch({ type: 'DELETE_SLIDE', payload: id });
+        setSlideToDelete(id);
+    };
+
+    const confirmDelete = () => {
+        if (slideToDelete) {
+            dispatch({ type: 'DELETE_SLIDE', payload: slideToDelete });
         }
+        setSlideToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setSlideToDelete(null);
     };
 
     const handleMove = (e, id, direction) => {
@@ -24,6 +35,14 @@ const SlideStrip = () => {
 
     return (
         <div className="slide-strip">
+            <ConfirmationModal
+                isOpen={slideToDelete !== null}
+                message="Are you sure you want to delete this slide?"
+                onConfirm={confirmDelete}
+                onCancel={cancelDelete}
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
             <div className="slides-list">
                 {lesson.slides.map((slide, index) => (
                     <div
@@ -49,16 +68,18 @@ const SlideStrip = () => {
                                 &lt;
                             </button>
                             <button
-                                className="btn-delete"
-                                onClick={(e) => handleDelete(e, slide.id)}
-                            >
-                                &times;
-                            </button>
-                            <button
                                 disabled={index === lesson.slides.length - 1}
                                 onClick={(e) => handleMove(e, slide.id, 'right')}
                             >
                                 &gt;
+                            </button>
+                            <button
+                                className="btn-delete"
+                                onClick={(e) => handleDelete(e, slide.id)}
+                                disabled={lesson.slides.length <= 1}
+                                title="Delete Slide"
+                            >
+                                🗑️
                             </button>
                         </div>
                     </div>

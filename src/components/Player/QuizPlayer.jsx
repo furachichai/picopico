@@ -7,7 +7,121 @@ import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx'
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine } from './PEMExpressionPool';
 
-const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents }) => {
+// Helper functions for MEP solve-directly order of operations validation (when disableParenSelect is active)
+function getParenGroupsWithOps(node, depth = 0) {
+    if (!node) return [];
+    const groups = [];
+    if ((node.type === 'BinOpNode' || node.type === 'ExponentNode') && node.parenthesized) {
+        groups.push({ id: node.id, depth, node });
+    }
+    if (node.type === 'BinOpNode') {
+        groups.push(...getParenGroupsWithOps(node.left, depth + (node.parenthesized ? 1 : 0)));
+        groups.push(...getParenGroupsWithOps(node.right, depth + (node.parenthesized ? 1 : 0)));
+    } else if (node.type === 'ExponentNode') {
+        groups.push(...getParenGroupsWithOps(node.base, depth + (node.parenthesized ? 1 : 0)));
+        groups.push(...getParenGroupsWithOps(node.exponent, depth + (node.parenthesized ? 1 : 0)));
+    } else if (node.type === 'UnaryMinusNode') {
+        groups.push(...getParenGroupsWithOps(node.operand, depth));
+    }
+    return groups;
+}
+
+function getActiveParenScope(ast) {
+    const groups = getParenGroupsWithOps(ast, 0);
+    if (groups.length === 0) return ast;
+    let maxDepth = -1;
+    for (const g of groups) {
+        if (g.depth > maxDepth) maxDepth = g.depth;
+    }
+    const maxDepthGroups = groups.filter(g => g.depth === maxDepth);
+    maxDepthGroups.sort((a, b) => a.id - b.id);
+    return maxDepthGroups[0].node;
+}
+
+function getOpsInScope(node) {
+    if (!node) return [];
+    const ops = [];
+    if (node.type === 'BinOpNode') {
+        if (!node.left?.parenthesized) {
+            ops.push(...getOpsInScope(node.left));
+        }
+        if (!node.right?.parenthesized) {
+            ops.push(...getOpsInScope(node.right));
+        }
+        ops.push({ op: node.op, nodeId: node.id, node });
+    } else if (node.type === 'ExponentNode') {
+        if (!node.base?.parenthesized) {
+            ops.push(...getOpsInScope(node.base));
+        }
+        if (!node.exponent?.parenthesized) {
+            ops.push(...getOpsInScope(node.exponent));
+        }
+        ops.push({ op: '^', nodeId: node.id, node });
+    } else if (node.type === 'UnaryMinusNode') {
+        ops.push(...getOpsInScope(node.operand));
+    }
+    return ops;
+}
+
+function validateOperationNoParen(ast, tappedNodeId) {
+    const activeScope = getActiveParenScope(ast);
+    if (!activeScope) return { valid: false, errorType: 'wrong_order', nodeIds: [tappedNodeId] };
+
+    const ops = getOpsInScope(activeScope);
+    if (ops.length === 0) return { valid: false, errorType: 'wrong_order', nodeIds: [tappedNodeId] };
+
+    const PRIORITY = { '^': 1, '*': 2, '/': 2, '+': 3, '-': 3 };
+    let minPriority = Infinity;
+    for (const o of ops) {
+        const p = PRIORITY[o.op];
+        if (p < minPriority) minPriority = p;
+    }
+    const highestOps = ops.filter(o => PRIORITY[o.op] === minPriority);
+    highestOps.sort((a, b) => a.nodeId - b.nodeId);
+    const correctOp = highestOps[0];
+
+    if (tappedNodeId === correctOp.nodeId) {
+        return {
+            valid: true,
+            errorType: null,
+            targetNodeId: correctOp.nodeId,
+            targetNode: correctOp.node
+        };
+    }
+
+    const tappedNode = findNodeById(ast, tappedNodeId);
+    if (!tappedNode) return { valid: false, errorType: 'wrong_order', nodeIds: [tappedNodeId] };
+
+    const tappedOp = tappedNode.op || (tappedNode.type === 'ExponentNode' ? '^' : null);
+    if (!tappedOp) return { valid: false, errorType: 'wrong_order', nodeIds: [tappedNodeId] };
+
+    const isInsideActiveScope = ops.some(o => o.nodeId === tappedNodeId);
+    if (!isInsideActiveScope) {
+        return {
+            valid: false,
+            errorType: 'wrong_order',
+            nodeIds: [tappedNodeId]
+        };
+    }
+
+    const tappedPriority = PRIORITY[tappedOp];
+    if (tappedPriority > minPriority) {
+        return {
+            valid: false,
+            errorType: 'wrong_order',
+            nodeIds: [tappedNodeId]
+        };
+    }
+
+    return {
+        valid: false,
+        errorType: 'left_to_right',
+        nodeIds: [tappedNodeId]
+    };
+}
+
+
+const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents, baseStyle }) => {
     const textRef = React.useRef(null);
 
     React.useLayoutEffect(() => {
@@ -27,14 +141,16 @@ const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDra
         el.style.whiteSpace = 'nowrap';
         el.style.display = 'inline-block';
 
+        const defaultFontSizeStyle = baseStyle?.fontSize || window.getComputedStyle(el).fontSize;
+        const defaultFontSizeVal = parseFloat(defaultFontSizeStyle) || 16;
+
         const currentWidth = el.scrollWidth;
         if (currentWidth > availableWidth && availableWidth > 0) {
             const ratio = availableWidth / currentWidth;
-            const defaultFontSize = 1.1; // Default font-size is 1.1rem in CSS
-            const newFontSize = Math.max(0.45, defaultFontSize * ratio);
-            el.style.fontSize = `${newFontSize}rem`;
+            const newFontSize = Math.max(8, defaultFontSizeVal * ratio);
+            el.style.fontSize = `${newFontSize}px`;
         }
-    }, [sq.text]);
+    }, [sq.text, baseStyle?.fontSize]);
 
     const isDragging = sq.isDragging;
     const isFlashing = sq.flashRed;
@@ -68,7 +184,75 @@ const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDra
             <span
                 ref={textRef}
                 className="quiz-option-text"
+                style={baseStyle}
                 dangerouslySetInnerHTML={{ __html: formatExponents(sq.text) }}
+            />
+        </div>
+    );
+};
+
+const ConectaCard = ({ card, isSolved, isFailed, disabled, cardShape, baseStyle, formatExponents, isSelected, onClick }) => {
+    const textRef = React.useRef(null);
+
+    React.useLayoutEffect(() => {
+        const el = textRef.current;
+        if (!el) return;
+
+        const parent = el.closest('.quiz-option-conecta');
+        if (!parent) return;
+
+        const style = window.getComputedStyle(parent);
+        const paddingLeft = parseFloat(style.paddingLeft) || 0;
+        const paddingRight = parseFloat(style.paddingRight) || 0;
+        const availableWidth = parent.clientWidth - paddingLeft - paddingRight;
+
+        el.style.fontSize = '';
+        el.style.whiteSpace = 'nowrap';
+        el.style.display = 'inline-block';
+
+        const defaultFontSizeStyle = baseStyle?.fontSize || window.getComputedStyle(el).fontSize;
+        const defaultFontSizeVal = parseFloat(defaultFontSizeStyle) || 16;
+
+        const currentWidth = el.scrollWidth;
+        if (currentWidth > availableWidth && availableWidth > 0) {
+            const ratio = availableWidth / currentWidth;
+            const newFontSize = Math.max(8, defaultFontSizeVal * ratio);
+            el.style.fontSize = `${newFontSize}px`;
+        }
+    }, [card.text, baseStyle?.fontSize]);
+
+    const isFlashing = card.flashRed;
+    const isMatched = card.matched;
+
+    return (
+        <div
+            className={`quiz-option-match quiz-option-conecta ${card.type} ${cardShape === 'circle' ? 'circle' : 'square'} ${isSelected ? 'selected-conecta' : ''} ${isFlashing ? 'flash-red' : ''} ${card.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''}`}
+            style={{
+                pointerEvents: (isSolved || isFailed || disabled || isMatched) ? 'none' : 'auto',
+                position: 'relative',
+                transform: (() => {
+                    let s = 1;
+                    let r = 0;
+                    if (isMatched) {
+                        s = 0.95;
+                        r = 0;
+                    } else if (isSelected) {
+                        s = 1.08;
+                        r = -1.5;
+                    } else if (isFlashing || card.flashGreen) {
+                        s = 1.05;
+                        r = -2;
+                    }
+                    return `scale(${s}) rotate(${r}deg)`;
+                })(),
+            }}
+            onClick={onClick}
+        >
+            <span
+                ref={textRef}
+                className="quiz-option-text"
+                style={baseStyle}
+                dangerouslySetInnerHTML={{ __html: formatExponents(card.text) }}
             />
         </div>
     );
@@ -148,6 +332,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [activeMatchDragId, setActiveMatchDragId] = useState(null);
     const matchContainerRef = React.useRef(null);
     const matchStateRef = React.useRef({ squares: [], draggedId: null, pointer: { x: 0, y: 0, startX: 0, startY: 0 }, dims: { w: 360, h: 540 } });
+
+    // Conecta Quiz State
+    const [conectaLeft, setConectaLeft] = useState([]);
+    const [conectaRight, setConectaRight] = useState([]);
+    const [selectedLeftId, setSelectedLeftId] = useState(null);
+    const [selectedRightId, setSelectedRightId] = useState(null);
 
     // Generate a fixed set of subtle rising bubbles for the Match Drag background
     const matchBubbles = React.useMemo(() => {
@@ -937,6 +1127,101 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         setMatchSquares(list);
     }, [quizType, data, options]);
 
+    // Conecta Shuffling & Initialization
+    useEffect(() => {
+        if (quizType !== 'conecta') return;
+
+        const baseOptions = data.metadata?.options || [];
+        const baseAnswers = data.metadata?.matchAnswers || [];
+
+        // Build list of left cards
+        const leftList = baseOptions.map((text, idx) => ({
+            id: `l-${idx}`,
+            text,
+            pairIndex: idx,
+            type: 'question',
+            matched: false,
+            flashRed: false,
+            flashGreen: false,
+        }));
+
+        // Build list of right cards
+        const rightList = baseAnswers.map((text, idx) => ({
+            id: `r-${idx}`,
+            text,
+            pairIndex: idx,
+            type: 'answer',
+            matched: false,
+            flashRed: false,
+            flashGreen: false,
+        }));
+
+        // Shuffle independently
+        const shuffledLeft = [...leftList].sort(() => Math.random() - 0.5);
+        const shuffledRight = [...rightList].sort(() => Math.random() - 0.5);
+
+        setConectaLeft(shuffledLeft);
+        setConectaRight(shuffledRight);
+        setSelectedLeftId(null);
+        setSelectedRightId(null);
+    }, [quizType, data]);
+
+    // Conecta Tap & Selection Matching Evaluation
+    useEffect(() => {
+        if (selectedLeftId !== null && selectedRightId !== null) {
+            const leftCard = conectaLeft.find(c => c.id === selectedLeftId);
+            const rightCard = conectaRight.find(c => c.id === selectedRightId);
+
+            if (!leftCard || !rightCard) return;
+
+            const isMatch = leftCard.pairIndex === rightCard.pairIndex;
+
+            if (isMatch) {
+                playSound('correct');
+
+                setConectaLeft(prev => prev.map(c => c.id === selectedLeftId ? { ...c, flashGreen: true } : c));
+                setConectaRight(prev => prev.map(c => c.id === selectedRightId ? { ...c, flashGreen: true } : c));
+
+                setTimeout(() => {
+                    setConectaLeft(prev => prev.map(c => c.id === selectedLeftId ? { ...c, matched: true, flashGreen: false } : c));
+                    setConectaRight(prev => prev.map(c => c.id === selectedRightId ? { ...c, matched: true, flashGreen: false } : c));
+                    setSelectedLeftId(null);
+                    setSelectedRightId(null);
+                }, 400);
+
+            } else {
+                playSound('wrong');
+
+                setConectaLeft(prev => prev.map(c => c.id === selectedLeftId ? { ...c, flashRed: true } : c));
+                setConectaRight(prev => prev.map(c => c.id === selectedRightId ? { ...c, flashRed: true } : c));
+
+                setTimeout(() => {
+                    setConectaLeft(prev => prev.map(c => c.id === selectedLeftId ? { ...c, flashRed: false } : c));
+                    setConectaRight(prev => prev.map(c => c.id === selectedRightId ? { ...c, flashRed: false } : c));
+                    setSelectedLeftId(null);
+                    setSelectedRightId(null);
+                }, 500);
+            }
+        }
+    }, [selectedLeftId, selectedRightId]);
+
+    // Conecta Win Condition Checker
+    useEffect(() => {
+        if (quizType !== 'conecta' || conectaLeft.length === 0) return;
+        
+        const allMatched = conectaLeft.every(c => c.matched);
+        if (allMatched && !isSolved) {
+            setIsSolved(true);
+            playSound('correct');
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            if (onBanner) onBanner('correct');
+        }
+    }, [conectaLeft, quizType, isSolved]);
+
     useEffect(() => {
         if (quizType !== 'match' || !matchContainerRef.current) return;
 
@@ -1655,11 +1940,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const handlePemOperatorClick = (token) => {
             if (pemSolved || pemFailed || disabled || pemMerge || isPemPowerupActive) return;
-            const opMap = { '+': 'A', '-': 'S', '*': 'M', '/': 'D', '^': 'E' };
-            const pemKey = opMap[token.value];
-            if (!pemKey) return;
+            
+            const isDisableParenSelect = data.metadata?.disableParenSelect !== false;
+            let result;
+            if (isDisableParenSelect) {
+                result = validateOperationNoParen(pemAst, token.nodeId);
+            } else {
+                const opMap = { '+': 'A', '-': 'S', '*': 'M', '/': 'D', '^': 'E' };
+                const pemKey = opMap[token.value];
+                if (!pemKey) return;
+                result = validateOperation(pemAst, pemScopeId, pemKey, token.nodeId);
+            }
 
-            const result = validateOperation(pemAst, pemScopeId, pemKey, token.nodeId);
             if (result.valid) {
                 const opTokens = getOperationTokenIds(result.targetNode);
                 // Compute the result value directly from the target node
@@ -1851,6 +2143,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
                         if (token.type === 'paren') {
                             if (token.hidden) return null;
+                            if (data.metadata?.disableParenSelect !== false) {
+                                return (
+                                    <span key={`${token.nodeId}-${token.type}-${token.value}`}
+                                        className={`pem-token pem-token-paren-static ${isGreyed ? 'pem-greyed' : ''}`}
+                                    >{token.value}</span>
+                                );
+                            }
                             return (
                                 <span key={`${token.nodeId}-${token.type}-${token.value}`}
                                     className={`pem-token pem-token-paren ${isGreyed ? 'pem-greyed' : ''} ${pemScopeId === token.nodeId ? 'pem-paren-active' : ''}`}
@@ -1980,6 +2279,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     // MATCH RENDER LOGIC
     if (quizType === 'match') {
         const enableBubbles = data.metadata?.enableBubbles !== false;
+        const baseStyle = {
+            fontFamily: data.metadata?.fontFamily,
+            fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
+            fontWeight: data.metadata?.fontWeight,
+            fontStyle: data.metadata?.fontStyle,
+            textDecoration: data.metadata?.textDecoration,
+            color: data.metadata?.color,
+        };
         return (
             <div className="quiz-player-2 match-mode">
                 <div className="quiz-options-container-match" ref={matchContainerRef}>
@@ -2011,8 +2318,90 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             cardShape={data.metadata?.cardShape || 'square'}
                             handleMatchDragStart={handleMatchDragStart}
                             formatExponents={formatExponents}
+                            baseStyle={baseStyle}
                         />
                     ))}
+                </div>
+            </div>
+        );
+    }
+
+    // CONECTA RENDER LOGIC
+    if (quizType === 'conecta') {
+        const enableBubbles = data.metadata?.enableBubbles !== false;
+        const baseStyle = {
+            fontFamily: data.metadata?.fontFamily,
+            fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
+            fontWeight: data.metadata?.fontWeight,
+            fontStyle: data.metadata?.fontStyle,
+            textDecoration: data.metadata?.textDecoration,
+            color: data.metadata?.color,
+        };
+        return (
+            <div className="quiz-player-2 conecta-mode">
+                {enableBubbles && (
+                    <div className="quiz-match-bubbles">
+                        {matchBubbles.map(b => (
+                            <div
+                                key={b.id}
+                                className="bubble"
+                                style={{
+                                    width: `${b.size}px`,
+                                    height: `${b.size}px`,
+                                    left: `${b.left}%`,
+                                    animationDuration: `${b.duration}s`,
+                                    animationDelay: `${b.delay}s`,
+                                    '--sway-x': `${b.sway}px`
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
+                <div className="conecta-columns-container">
+                    <div className="conecta-column left-column">
+                        {conectaLeft.map(card => (
+                            <ConectaCard
+                                key={card.id}
+                                card={card}
+                                isSolved={isSolved}
+                                isFailed={isFailed}
+                                disabled={disabled}
+                                cardShape={data.metadata?.cardShape || 'square'}
+                                baseStyle={baseStyle}
+                                formatExponents={formatExponents}
+                                isSelected={selectedLeftId === card.id}
+                                onClick={() => {
+                                    if (selectedLeftId === card.id) {
+                                        setSelectedLeftId(null);
+                                    } else {
+                                        setSelectedLeftId(card.id);
+                                    }
+                                }}
+                            />
+                        ))}
+                    </div>
+                    <div className="conecta-column right-column">
+                        {conectaRight.map(card => (
+                            <ConectaCard
+                                key={card.id}
+                                card={card}
+                                isSolved={isSolved}
+                                isFailed={isFailed}
+                                disabled={disabled}
+                                cardShape={data.metadata?.cardShape || 'square'}
+                                baseStyle={baseStyle}
+                                formatExponents={formatExponents}
+                                isSelected={selectedRightId === card.id}
+                                onClick={() => {
+                                    if (selectedRightId === card.id) {
+                                        setSelectedRightId(null);
+                                    } else {
+                                        setSelectedRightId(card.id);
+                                    }
+                                }}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         );

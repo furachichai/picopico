@@ -20,11 +20,17 @@ const FONTS = [
 ];
 
 const COLORS = [
-    '#000000', '#ffffff', '#ff4b4b', '#58cc02', '#1cb0f6', '#ffc800', '#ce82ff',
-    '#9333ea', '#e11d48', '#f97316', '#0d9488', '#475569', '#8b4513', '#ec4899'
+    // Row 1 — Light
+    '#7EC8E3', '#5EEDC9', '#69F05E', '#FDE74C', '#F88B8B', '#F9A0C7',
+    // Row 2 — Medium
+    '#2196F3', '#00BFA5', '#4CAF50', '#FFC107', '#F44336', '#E91E8F',
+    // Row 3 — Dark
+    '#0D47A1', '#00897B', '#2E7D32', '#F57C00', '#C62828', '#880E4F',
+    // Row 4 — Neutrals
+    '#FFFFFF', '#C8C8C8', '#969696', '#5A5A5A', '#000000', '#D6DCE5',
 ];
 
-const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children }) => {
+const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center' }) => {
     const [isOpen, setIsOpen] = useState(false);
     
     return (
@@ -56,18 +62,18 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                         onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
                         onMouseDown={(e) => { e.stopPropagation(); setIsOpen(false); }}
                     />
-                    <div className="color-picker-submenu" style={{
-                        position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
-                        background: 'white', padding: '10px', borderRadius: '12px',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.2)', display: 'grid',
-                        gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', zIndex: 100,
-                        marginBottom: '10px'
+                    <div className="color-picker-popup" style={{
+                        position: 'absolute', bottom: 'calc(100% + 12px)',
+                        ...(align === 'left' ? { left: '0px' } : align === 'right' ? { right: '0px' } : { left: '50%', transform: 'translateX(-50%)' }),
+                        background: 'white', padding: '12px', borderRadius: '16px',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.25)', display: 'grid',
+                        gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', zIndex: 100,
                     }}>
                         {COLORS.map(c => (
                             <div
                                 key={c}
                                 className={`color-swatch ${color === c ? 'active' : ''}`}
-                                style={{ backgroundColor: c }}
+                                style={{ backgroundColor: c, width: '28px', height: '28px', borderRadius: '6px' }}
                                 onMouseDown={(e) => {
                                     if (onMouseDownItem) onMouseDownItem(e, c);
                                 }}
@@ -130,10 +136,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const saveQuizOption = (editableEl) => {
         if (!editableEl) return;
         const optionIndex = editableEl.dataset.optionIndex;
+        const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
         if (optionIndex !== undefined) {
             const currentOptions = [...(element.metadata?.options || [])];
             currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
             onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+        } else if (matchAnswerIndex !== undefined) {
+            const currentAnswers = [...(element.metadata?.matchAnswers || [])];
+            currentAnswers[parseInt(matchAnswerIndex)] = editableEl.innerHTML;
+            onChange(element.id, { metadata: { ...element.metadata, matchAnswers: currentAnswers } });
         }
     };
 
@@ -152,7 +163,8 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             const editableEl = getEditableFromSelection();
             if (editableEl) {
                 const optionIndex = editableEl.dataset.optionIndex;
-                if (optionIndex !== undefined) {
+                const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
+                if (optionIndex !== undefined || matchAnswerIndex !== undefined) {
                     saveQuizOption(editableEl);
                 } else {
                     onChange(element.id, { content: editableEl.innerHTML });
@@ -322,6 +334,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             label={element.type === 'balloon' ? 'Bubble' : 'Background'}
                             color={metadata.backgroundColor || '#ffffff'}
                             onSelect={(c) => updateMetadata({ backgroundColor: c })}
+                            align="left"
                         />
                         {element.type === 'background' && (
                             <button
@@ -1190,10 +1203,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             if (editableEl) {
                                 document.execCommand('foreColor', false, c);
                                 const optionIndex = editableEl.dataset.optionIndex;
+                                const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
                                 if (optionIndex !== undefined) {
                                     const currentOptions = [...(element.metadata?.options || [])];
                                     currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
                                     onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                } else if (matchAnswerIndex !== undefined) {
+                                    const currentAnswers = [...(element.metadata?.matchAnswers || [])];
+                                    currentAnswers[parseInt(matchAnswerIndex)] = editableEl.innerHTML;
+                                    onChange(element.id, { metadata: { ...element.metadata, matchAnswers: currentAnswers } });
                                 }
                             }
                         } else {
@@ -1225,10 +1243,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             if (editableEl) {
                                 document.execCommand('hiliteColor', false, c);
                                 const optionIndex = editableEl.dataset.optionIndex;
+                                const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
                                 if (optionIndex !== undefined) {
                                     const currentOptions = [...(element.metadata?.options || [])];
                                     currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
                                     onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                } else if (matchAnswerIndex !== undefined) {
+                                    const currentAnswers = [...(element.metadata?.matchAnswers || [])];
+                                    currentAnswers[parseInt(matchAnswerIndex)] = editableEl.innerHTML;
+                                    onChange(element.id, { metadata: { ...element.metadata, matchAnswers: currentAnswers } });
                                 }
                             }
                         }
@@ -1302,36 +1325,53 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             />
                         </div>
                     )}
+                    <div className="menu-group">
+                        <label>Parentheses Select</label>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', margin: '4px 0' }}>
+                            <input
+                                type="checkbox"
+                                id="disable-paren-select-checkbox"
+                                checked={metadata.disableParenSelect !== false}
+                                onChange={(e) => updateMetadata({ disableParenSelect: e.target.checked })}
+                                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#333' }}>Disable (solve directly)</span>
+                        </div>
+                    </div>
                     <div className="menu-divider"></div>
                 </>
             )}
 
-            {/* Match Quiz Settings */}
-            {element.type === 'quiz' && metadata.quizType === 'match' && (
+            {/* Match/Conecta Quiz Settings */}
+            {element.type === 'quiz' && (metadata.quizType === 'match' || metadata.quizType === 'conecta') && (
                 <>
-                    <div className="menu-group">
-                        <label>Content Type</label>
-                        <select
-                            value={metadata.matchContentType || 'order_of_operations'}
-                            onChange={(e) => updateMetadata({ matchContentType: e.target.value })}
-                            style={{
-                                width: '100%',
-                                padding: '6px 8px',
-                                borderRadius: '6px',
-                                border: '1px solid #ddd',
-                                fontSize: '0.8rem',
-                                fontWeight: 600,
-                                background: '#fff',
-                                cursor: 'pointer',
-                                color: '#333'
-                            }}
-                        >
-                            <option value="order_of_operations">Order of Operations</option>
-                            <option value="basic_arithmetic">Basic Arithmetic</option>
-                            <option value="custom">Custom (manual)</option>
-                        </select>
-                    </div>
-                    <div className="menu-divider"></div>
+                    {metadata.quizType === 'match' && (
+                        <>
+                            <div className="menu-group">
+                                <label>Content Type</label>
+                                <select
+                                    value={metadata.matchContentType || 'order_of_operations'}
+                                    onChange={(e) => updateMetadata({ matchContentType: e.target.value })}
+                                    style={{
+                                        width: '100%',
+                                        padding: '6px 8px',
+                                        borderRadius: '6px',
+                                        border: '1px solid #ddd',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 600,
+                                        background: '#fff',
+                                        cursor: 'pointer',
+                                        color: '#333'
+                                    }}
+                                >
+                                    <option value="order_of_operations">Order of Operations</option>
+                                    <option value="basic_arithmetic">Basic Arithmetic</option>
+                                    <option value="custom">Custom (manual)</option>
+                                </select>
+                            </div>
+                            <div className="menu-divider"></div>
+                        </>
+                    )}
                     <div className="menu-group">
                         <label>Card Shape</label>
                         <select
@@ -1516,6 +1556,18 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         onChange={(e) => updateMetadata({ scanDuration: parseFloat(e.target.value) })}
                                         style={{ flex: 1 }}
                                     />
+                                </div>
+                            )}
+                            {metadata.stickerType === 'pemdas_term_separator' && (
+                                <div className="menu-group">
+                                    <label>Color version</label>
+                                    <button
+                                        className={`btn-icon ${metadata.colorVersion ? 'active' : ''}`}
+                                        onClick={() => updateMetadata({ colorVersion: !metadata.colorVersion })}
+                                        title={metadata.colorVersion ? "Switch to Default style" : "Switch to Color version style"}
+                                    >
+                                        🎨
+                                    </button>
                                 </div>
                             )}
                         </>

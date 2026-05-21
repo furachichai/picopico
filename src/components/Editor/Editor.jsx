@@ -27,6 +27,7 @@ const Editor = () => {
     const [showPresetPanel, setShowPresetPanel] = useState(false);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
     const [showTranslateConfirm, setShowTranslateConfirm] = useState(false);
+    const [showDeleteSlideConfirmation, setShowDeleteSlideConfirmation] = useState(false);
     const [translationLang, setTranslationLang] = useState(() => {
         return localStorage.getItem('pico_translate_lang') || 'en';
     });
@@ -216,6 +217,11 @@ const Editor = () => {
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
 
+    const handleDeleteSlide = () => {
+        dispatch({ type: 'DELETE_SLIDE', payload: state.currentSlideId });
+        setShowDeleteSlideConfirmation(false);
+    };
+
     // Shared ContextualMenu handlers (used in both bottom-menus and floating keyboard mode)
     const handleContextMenuChange = (id, updates) => {
         if (id === 'cartridge') {
@@ -384,8 +390,9 @@ const Editor = () => {
             // Exception: allow Cmd+B/I/U formatting shortcuts through
             const isUndoShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z';
             const isTextFormatShortcut = (e.metaKey || e.ctrlKey) && ['b', 'i', 'u'].includes(e.key.toLowerCase());
+            const isMathShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e';
             if (
-                !isTextFormatShortcut && (
+                !isTextFormatShortcut && !isMathShortcut && (
                     e.target.isContentEditable ||
                     e.target.closest('[contenteditable="true"]') ||
                     e.target.tagName === 'INPUT' ||
@@ -398,6 +405,114 @@ const Editor = () => {
             if (isUndoShortcut) {
                 e.preventDefault();
                 handleUndo();
+                return;
+            }
+
+            // Math replacement shortcut (Cmd+M / Ctrl+M)
+            if (isMathShortcut) {
+                const sel = window.getSelection();
+                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                    const selectedText = sel.toString();
+                    if (selectedText) {
+                        e.preventDefault();
+                        
+                        const superscriptMap = {
+                            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+                            '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+                        };
+                        const toSuperscript = (numStr) => {
+                            return numStr.split('').map(digit => superscriptMap[digit] || digit).join('');
+                        };
+                        
+                        const replacement = selectedText
+                            .replace(/\*/g, '×')
+                            .replace(/\//g, '÷')
+                            .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
+                            
+                        document.execCommand('insertText', false, replacement);
+                        
+                        const activeEl = document.activeElement;
+                        if (activeEl) {
+                            activeEl.dispatchEvent(new Event('input', { bubbles: true }));
+                            
+                            const editableEl = activeEl.isContentEditable ? activeEl : activeEl.closest('[contenteditable="true"]');
+                            if (editableEl && state.selectedElementId) {
+                                const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                                const selectedElement = currentSlide?.elements.find(el => el.id === state.selectedElementId);
+                                
+                                const optionIndex = editableEl.dataset.optionIndex;
+                                const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
+                                const nodeIndex = editableEl.dataset.nodeIndex;
+                                
+                                if (selectedElement && selectedElement.type === 'quiz') {
+                                    const quizType = selectedElement.metadata?.quizType || 'classic';
+                                    if (quizType === 'chatquiz') {
+                                        if (nodeIndex !== undefined) {
+                                            const nIdx = parseInt(nodeIndex, 10);
+                                            const chatNodes = selectedElement.metadata?.chatNodes || [];
+                                            const newNodes = [...chatNodes];
+                                            if (optionIndex !== undefined) {
+                                                const optIdx = parseInt(optionIndex, 10);
+                                                const newOpts = [...(newNodes[nIdx]?.options || [])];
+                                                newOpts[optIdx] = editableEl.innerHTML;
+                                                newNodes[nIdx] = { ...newNodes[nIdx], options: newOpts };
+                                            } else {
+                                                newNodes[nIdx] = { ...newNodes[nIdx], text: editableEl.innerHTML };
+                                            }
+                                            handleContextMenuChange(state.selectedElementId, {
+                                                metadata: {
+                                                    ...selectedElement.metadata,
+                                                    chatNodes: newNodes
+                                                }
+                                            });
+                                        }
+                                    } else if (quizType === 'match' || quizType === 'conecta') {
+                                        if (optionIndex !== undefined) {
+                                            const idx = parseInt(optionIndex, 10);
+                                            const options = selectedElement.metadata?.options || [];
+                                            const newOptions = [...options];
+                                            newOptions[idx] = editableEl.innerHTML;
+                                            handleContextMenuChange(state.selectedElementId, {
+                                                metadata: {
+                                                    ...selectedElement.metadata,
+                                                    options: newOptions
+                                                }
+                                            });
+                                        } else if (matchAnswerIndex !== undefined) {
+                                            const idx = parseInt(matchAnswerIndex, 10);
+                                            const matchAnswers = selectedElement.metadata?.matchAnswers || [];
+                                            const newAnswers = [...matchAnswers];
+                                            newAnswers[idx] = editableEl.innerHTML;
+                                            handleContextMenuChange(state.selectedElementId, {
+                                                metadata: {
+                                                    ...selectedElement.metadata,
+                                                    matchAnswers: newAnswers
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        if (optionIndex !== undefined) {
+                                            const idx = parseInt(optionIndex, 10);
+                                            const options = selectedElement.metadata?.options || [];
+                                            const newOptions = [...options];
+                                            newOptions[idx] = editableEl.innerHTML;
+                                            handleContextMenuChange(state.selectedElementId, {
+                                                metadata: {
+                                                    ...selectedElement.metadata,
+                                                    options: newOptions
+                                                }
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    if (optionIndex === undefined && matchAnswerIndex === undefined) {
+                                        handleContextMenuChange(state.selectedElementId, { content: editableEl.innerHTML });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 return;
             }
 
@@ -833,6 +948,7 @@ const Editor = () => {
                                 setLibraryAllowedTabs(['custom', 'emojis', 'gifs']); // Sticker Mode
                                 setShowLibrary(true);
                             }}
+                            onDeleteSlide={() => setShowDeleteSlideConfirmation(true)}
                         />
                     )}
                 </div>
@@ -855,6 +971,15 @@ const Editor = () => {
                 }}
                 confirmText="Save"
                 cancelText="Discard"
+            />
+            {/* Slide Deletion Confirmation */}
+            <ConfirmationModal
+                isOpen={showDeleteSlideConfirmation}
+                message="Are you sure you want to delete this slide?"
+                onConfirm={handleDeleteSlide}
+                onCancel={() => setShowDeleteSlideConfirmation(false)}
+                confirmText="Delete"
+                cancelText="Cancel"
             />
         </div >
     );

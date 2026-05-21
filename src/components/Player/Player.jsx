@@ -46,6 +46,7 @@ const Player = () => {
     // Stripper state
     const [stripperStep, setStripperStep] = useState(0); // Current revealed strip index
     const [visitedStripperSlides, setVisitedStripperSlides] = useState(new Set()); // Slides fully stepped through
+    const [autoPlayIStickerId, setAutoPlayIStickerId] = useState(null); // iSticker to auto-play on stripper advance
 
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
@@ -180,9 +181,11 @@ const Player = () => {
                     el => el.type === 'isticker' && !solvedSlides.has(currentSlideIndex)
                 );
                 if (unsolvedInStrip) {
-                    setWiggleIStickerId(unsolvedInStrip.id);
-                    playTone('fail');
-                    setTimeout(() => setWiggleIStickerId(null), 500);
+                    // On stripper slides, auto-play the iSticker instead of wiggling.
+                    // The iSticker's onComplete will mark it solved, then we advance the strip.
+                    if (autoPlayIStickerId !== unsolvedInStrip.id) {
+                        setAutoPlayIStickerId(unsolvedInStrip.id);
+                    }
                     return;
                 }
 
@@ -273,6 +276,7 @@ const Player = () => {
     // Clear banner and reset stripper step when slide changes
     useEffect(() => {
         setBanner(null);
+        setAutoPlayIStickerId(null);
         // When entering a stripper slide: if already visited, show all; else start at 0
         const slide = slides[currentSlideIndex];
         if (slide?.stripper?.enabled && slide.stripper.dividers?.length > 0) {
@@ -620,7 +624,7 @@ const Player = () => {
                                         width: '100%',
                                         height: '100%',
                                         backgroundImage: slide.background.replaceAll('/src/assets/', '/assets/'),
-                                        backgroundSize: 'contain',
+                                        backgroundSize: 'cover',
                                         backgroundPosition: 'center',
                                         backgroundRepeat: 'no-repeat',
                                         zIndex: 0,
@@ -736,9 +740,13 @@ const Player = () => {
                                 const isFullScreenQuiz = element.type === 'quiz' && (
                                     element.metadata?.quizType === 'chatquiz' || 
                                     element.metadata?.quizType === 'pem' || 
-                                    element.metadata?.quizType === 'match'
+                                    element.metadata?.quizType === 'match' ||
+                                    element.metadata?.quizType === 'conecta'
                                 );
-                                const isMatchQuiz = element.type === 'quiz' && element.metadata?.quizType === 'match';
+                                const isMatchQuiz = element.type === 'quiz' && (
+                                    element.metadata?.quizType === 'match' ||
+                                    element.metadata?.quizType === 'conecta'
+                                );
 
                                 try {
                                     return (
@@ -848,8 +856,19 @@ const Player = () => {
                                                 <IStickerPlayer
                                                     data={element}
                                                     isActive={index === currentSlideIndex}
-                                                    onComplete={() => markSlideSolved(index)}
+                                                    onComplete={() => {
+                                                        markSlideSolved(index);
+                                                        setAutoPlayIStickerId(null);
+                                                        // If on a stripper slide, auto-advance to the next strip after animation
+                                                        const s = slides[index];
+                                                        const sActive = s?.stripper?.enabled && s.stripper.dividers?.length > 0;
+                                                        if (sActive && !visitedStripperSlides.has(index)) {
+                                                            playStripRevealSfx();
+                                                            setStripperStep(prev => prev + 1);
+                                                        }
+                                                    }}
                                                     isWiggling={wiggleIStickerId === element.id}
+                                                    autoPlay={autoPlayIStickerId === element.id}
                                                 />
                                             )}
                                         </div>

@@ -311,6 +311,23 @@
     border-bottom: 3px solid #CBD5E1 !important;
 }
 
+.btn-danger {
+    background-color: #FEE2E2;
+    color: #EF4444;
+    border-bottom: 3px solid #FCA5A5 !important;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #EF4444;
+    color: white;
+    border-bottom-color: #DC2626 !important;
+}
+
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Toolbar Submenu */
 .toolbar-dropdown-container {
     position: relative;

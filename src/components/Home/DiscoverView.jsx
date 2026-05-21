@@ -299,7 +299,7 @@ const DiscoverView = () => {
                 style={{
                     backgroundColor: (mappedBackground && !mappedBackground.includes('url') && !mappedBackground.includes('gradient')) ? mappedBackground : 'transparent',
                     backgroundImage: (mappedBackground && (mappedBackground.includes('url') || mappedBackground.includes('gradient'))) ? mappedBackground : 'none',
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     width: '360px',

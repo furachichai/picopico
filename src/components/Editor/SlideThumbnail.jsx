@@ -113,7 +113,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                             width: '100%',
                             height: '100%',
                             backgroundImage: slide.background,
-                            backgroundSize: 'contain',
+                            backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             backgroundRepeat: 'no-repeat',
                             zIndex: 0,
