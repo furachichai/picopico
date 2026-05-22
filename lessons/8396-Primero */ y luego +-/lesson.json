@@ -1,0 +1,32 @@
+{
+  "id": "draft-1779402520132",
+  "title": "Primero */ y luego +-",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779402603355",
+          "type": "text",
+          "content": "primero */ y lueg +-",
+          "x": 50,
+          "y": 50,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\""
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-21T22:28:40.132Z",
+  "updatedAt": "2026-05-21T22:30:48.396Z",
+  "path": "lessons/8396-Primero */ y luego +-/lesson.json",
+  "textPreset": null
+}
