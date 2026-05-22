@@ -394,7 +394,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             onChange={onChange}
                             isSelected={isSelected}
                         />
-                        {isSelected && (
+                        {isSelected && !translationMode && (
                             <div
                                 className="handle tail-handle"
                                 style={{

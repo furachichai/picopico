@@ -90,7 +90,7 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
     );
 };
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, showGuides, onToggleGuides }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, showGuides, onToggleGuides, translationMode = false }) => {
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -348,7 +348,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         )}
                     </div>
 
-                    {onOpenPresets && (
+                    {!translationMode && onOpenPresets && (
                         <button
                             className="btn-secondary"
                             onClick={onOpenPresets}
@@ -359,7 +359,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </button>
                     )}
 
-                    {element.type !== 'background' && onReorderElement && (
+                    {!translationMode && element.type !== 'background' && onReorderElement && (
                         <div className="menu-group">
                             <label>Layer</label>
                             <div style={{ display: 'flex', gap: '5px' }}>
@@ -1592,7 +1592,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             ↩️
                         </button>
                     )}
-                    {element.type === 'image' && (
+                    {!translationMode && element.type === 'image' && (
                         <button 
                             className={`btn-icon ${metadata.locked ? 'active' : ''}`} 
                             onClick={() => updateMetadata({ locked: !metadata.locked })} 
@@ -1602,14 +1602,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {metadata.locked ? '🔒' : '🔓'}
                         </button>
                     )}
-                    {element.type !== 'cartridge' && element.type !== 'quiz' && (
+                    {!translationMode && element.type !== 'cartridge' && element.type !== 'quiz' && (
                         <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
                             ❐
                         </button>
                     )}
-                    <button className="btn-delete" onClick={() => onDelete(element.type === 'cartridge' ? 'cartridge' : element.id)} title="Delete Element">
-                        🗑️
-                    </button>
+                    {!translationMode && (
+                        <button className="btn-delete" onClick={() => onDelete(element.type === 'cartridge' ? 'cartridge' : element.id)} title="Delete Element">
+                            🗑️
+                        </button>
+                    )}
                 </div>
             </div>
         </div >

@@ -96,9 +96,29 @@ const Canvas = (props) => {
             }
           });
         }
-        return;
       }
-      // Block all other changes (position, scale, rotation, etc.)
+
+      // Allow styling/formatting updates to pass through globally to the baseline element metadata
+      if (updates.metadata) {
+        const filteredMetadata = { ...updates.metadata };
+        // Exclude translatable fields from global metadata updates in translation mode
+        delete filteredMetadata.options;
+        delete filteredMetadata.matchAnswers;
+        delete filteredMetadata.chatNodes;
+        // Exclude layout positioning properties in metadata (e.g. bubble tail position)
+        delete filteredMetadata.tailPos;
+        delete filteredMetadata.locked;
+
+        if (Object.keys(filteredMetadata).length > 0) {
+          dispatch({
+            type: 'UPDATE_ELEMENT',
+            payload: {
+              id,
+              updates: { metadata: filteredMetadata }
+            }
+          });
+        }
+      }
       return;
     }
     dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });

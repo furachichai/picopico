@@ -920,28 +920,31 @@ const Editor = () => {
                                 onUndo={handleUndo}
                                 showGuides={state.showGuides}
                                 onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
+                                translationMode={isTranslating}
                             />
                         </div>
                     )}
                 </div>
 
-                {!isTranslating && (
-                <div className={`bottom-menus ${isKeyboardVisible && selectedElement?.type === 'quiz' ? 'hidden-menus' : ''}`}>
+                <div className={`bottom-menus ${(isKeyboardVisible && selectedElement?.type === 'quiz') || (isTranslating && (!selectedElement || !['text', 'balloon', 'quiz'].includes(selectedElement.type))) ? 'hidden-menus' : ''}`}>
                     {/* SlideStrip Removed */}
                     {selectedElement ? (
-                        <ContextualMenu
-                            element={selectedElement}
-                            onChange={handleContextMenuChange}
-                            onDelete={handleContextMenuDelete}
-                            onDuplicate={handleContextMenuDuplicate}
-                            onOpenLibrary={handleContextMenuOpenLibrary}
-                            onOpenPresets={() => setShowPresetPanel(true)}
-                            onReorderElement={handleReorderElement}
-                            onUndo={handleUndo}
-                            showGuides={state.showGuides}
-                            onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-                        />
-                    ) : (
+                        (!isTranslating || ['text', 'balloon', 'quiz'].includes(selectedElement.type)) ? (
+                            <ContextualMenu
+                                element={selectedElement}
+                                onChange={handleContextMenuChange}
+                                onDelete={handleContextMenuDelete}
+                                onDuplicate={handleContextMenuDuplicate}
+                                onOpenLibrary={handleContextMenuOpenLibrary}
+                                onOpenPresets={() => setShowPresetPanel(true)}
+                                onReorderElement={handleReorderElement}
+                                onUndo={handleUndo}
+                                showGuides={state.showGuides}
+                                onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
+                                translationMode={isTranslating}
+                            />
+                        ) : null
+                    ) : !isTranslating ? (
                         <Toolbar
                             onOpenLibrary={(tab) => {
                                 setLibraryTab(tab || 'custom');
@@ -950,9 +953,8 @@ const Editor = () => {
                             }}
                             onDeleteSlide={() => setShowDeleteSlideConfirmation(true)}
                         />
-                    )}
+                    ) : null}
                 </div>
-                )}
             </div>
 
             {/* Translation Save/Discard Confirmation */}
