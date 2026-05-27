@@ -718,22 +718,6 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1779301824002",
-          "type": "text",
-          "content": "- y + cortan la expresión en ",
-          "x": 50.55555555555555,
-          "y": 22.031250000000004,
-          "width": 56.666666666666664,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1.4659933757381056,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "backgroundColor": "#475569",
-            "color": "#ffffff"
-          }
-        },
-        {
           "id": "el-1779301817442",
           "type": "quiz",
           "content": "Quiz",
@@ -756,6 +740,22 @@
             ],
             "quizType": "classic",
             "visualMode": false
+          }
+        },
+        {
+          "id": "el-1779301824002",
+          "type": "text",
+          "content": "- y + cortan la expresión en _________",
+          "x": 50.55555555555555,
+          "y": 22.031250000000004,
+          "width": 56.666666666666664,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.4659933757381056,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#475569",
+            "color": "#ffffff"
           }
         }
       ],
@@ -993,7 +993,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-21T18:02:27.493Z",
+  "updatedAt": "2026-05-22T20:11:26.515Z",
   "path": "lessons/9941-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",

@@ -247,7 +247,39 @@ export const PEM_MODES = [
   { key: 'PPP', label: 'PPP (3 nested)' },
   { key: 'MANUAL', label: 'Manual' },
   { key: 'GAME', label: 'Lesson Mode' },
+  { key: 'LEVELS', label: 'Custom Levels' },
 ];
+
+export const DEFAULT_PEM_LEVELS_TEXT = `2 + 3 * 4
+5 - 6 / 2
+3 + 4 * 2 T
+10 - 2 * 3 TC`;
+
+export function deserializePemLevels(text) {
+  if (!text) return [];
+  return text.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+    let cleanLine = line;
+    let hasTC = false;
+    let hasT = false;
+    if (cleanLine.toUpperCase().endsWith('TC')) {
+      hasTC = true;
+      cleanLine = cleanLine.substring(0, cleanLine.length - 2).trim();
+    } else if (cleanLine.toUpperCase().endsWith('T')) {
+      hasT = true;
+      cleanLine = cleanLine.substring(0, cleanLine.length - 1).trim();
+    }
+    return { expr: cleanLine, hasT, hasTC };
+  });
+}
+
+export function serializePemLevels(levels) {
+  return levels.map(lv => {
+    let line = lv.expr;
+    if (lv.hasTC) line += ' TC';
+    else if (lv.hasT) line += ' T';
+    return line;
+  }).join('\n');
+}
 
 export function clearCache() {
   Object.keys(_cache).forEach(k => delete _cache[k]);

@@ -205,6 +205,269 @@ const ExpressionScanner001 = ({ expression, isActive = true, onComplete, isWiggl
 };
 
 /**
+ * Exponent Expander
+ * 
+ * Visualizes how exponents expand into repeated multiplication.
+ * e.g. 2!4 → 2⁴ → 2 × 2³ → 2 × 2 × 2² → 2 × 2 × 2 × 2
+ * The user drags a pointer left↔right to expand/collapse the expression.
+ */
+const ExponentExpander = ({ expression, isActive = true, onComplete, isWiggling = false }) => {
+    // Parse expression: "2!4" → base=2, exponent=4
+    const raw = (expression || '2!4').trim();
+    const match = raw.match(/^(\d+)!(\d+)$/);
+    const base = match ? parseInt(match[1]) : 2;
+    const exponent = match ? parseInt(match[2]) : 4;
+
+    // Number of steps: 0 = fully collapsed (b^n), exponent-1 = fully expanded (b × b × ... × b)
+    const totalSteps = exponent; // steps 0..exponent-1
+    const [currentStep, setCurrentStep] = useState(0);
+    const [progress, setProgress] = useState(0); // 0 to 1
+    const [isDragging, setIsDragging] = useState(false);
+    const [hasStartedDrag, setHasStartedDrag] = useState(false);
+    const [isFinished, setIsFinished] = useState(false);
+    const trackRef = useRef(null);
+    const audioCtxRef = useRef(null);
+    const prevStepRef = useRef(0);
+
+    // Build tokens for the current step
+    // Step k: k bases separated by ×, then b^(n-k) if (n-k) >= 2, or just b if (n-k)==1
+    const buildTokens = useCallback((step) => {
+        const tokens = [];
+        const expandedCount = step; // how many individual bases are shown
+        const remainingExp = exponent - step; // remaining exponent
+
+        for (let i = 0; i < expandedCount; i++) {
+            if (i > 0) {
+                tokens.push({ type: 'op', value: '×', key: `op-${i}` });
+            }
+            tokens.push({ type: 'base', value: base, exp: null, key: `base-${i}` });
+        }
+
+        if (remainingExp >= 2) {
+            // Still has an exponent part
+            if (expandedCount > 0) {
+                tokens.push({ type: 'op', value: '×', key: `op-exp` });
+            }
+            tokens.push({ type: 'base', value: base, exp: remainingExp, key: `exp-part` });
+        } else if (remainingExp === 1) {
+            // Just one more base, no exponent
+            if (expandedCount > 0) {
+                tokens.push({ type: 'op', value: '×', key: `op-last` });
+            }
+            tokens.push({ type: 'base', value: base, exp: null, key: `base-last` });
+        }
+        // remainingExp === 0 means fully expanded (step === exponent, but we cap at exponent-1)
+
+        return tokens;
+    }, [base, exponent]);
+
+    const tokens = buildTokens(currentStep);
+
+    // Play a step-change chime using C Major Pentatonic scale
+    const playStepChime = useCallback((step) => {
+        try {
+            if (!audioCtxRef.current) {
+                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const ctx = audioCtxRef.current;
+            if (ctx.state === 'suspended') ctx.resume();
+
+            const now = ctx.currentTime;
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(ctx.destination);
+
+            // C major pentatonic frequencies
+            const scale = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98, 1760.00];
+            const baseFreq = scale[step % scale.length] * Math.pow(2, Math.floor(step / scale.length));
+
+            osc1.type = 'sine';
+            osc2.type = 'triangle';
+            
+            osc1.frequency.setValueAtTime(baseFreq, now);
+            osc1.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, now + 0.08);
+            
+            const harmonicFreq = baseFreq * 1.25;
+            osc2.frequency.setValueAtTime(harmonicFreq, now);
+            osc2.frequency.exponentialRampToValueAtTime(harmonicFreq * 1.5, now + 0.06);
+
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + 0.25);
+            osc2.stop(now + 0.25);
+        } catch (e) { /* ignore */ }
+    }, []);
+
+    // Map progress (0-1) to step index
+    const progressToStep = useCallback((prog) => {
+        if (totalSteps <= 1) return 0;
+        return Math.round(prog * (totalSteps - 1));
+    }, [totalSteps]);
+
+    // Unified pointer handler
+    const handlePointerDown = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const el = e.currentTarget;
+        el.setPointerCapture(e.pointerId);
+        setIsDragging(true);
+        setHasStartedDrag(true);
+    }, []);
+
+    const handlePointerMove = useCallback((e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        if (trackRef.current) {
+            const trackRect = trackRef.current.getBoundingClientRect();
+            const x = e.clientX - trackRect.left;
+            const rawProg = Math.max(0, Math.min(1, x / trackRect.width));
+
+            const newStep = progressToStep(rawProg);
+            const stepProg = totalSteps > 1 ? newStep / (totalSteps - 1) : 0;
+
+            // Magnetic snap: if progress is within 5% of a step, snap to it!
+            const snapThreshold = 0.05;
+            const dist = Math.abs(rawProg - stepProg);
+            const snappedProg = dist < snapThreshold ? stepProg : rawProg;
+
+            setProgress(snappedProg);
+
+            if (newStep !== prevStepRef.current) {
+                playStepChime(newStep);
+                if (navigator.vibrate) {
+                    try {
+                        navigator.vibrate(8);
+                    } catch (err) { /* ignore */ }
+                }
+                prevStepRef.current = newStep;
+            }
+            setCurrentStep(newStep);
+        }
+    }, [isDragging, progressToStep, playStepChime, totalSteps]);
+
+    const handlePointerUp = useCallback((e) => {
+        setIsDragging(false);
+        e.currentTarget.releasePointerCapture(e.pointerId);
+
+        // Snap progress to the nearest step
+        if (totalSteps > 1) {
+            const snappedStep = progressToStep(progress);
+            const snappedProg = snappedStep / (totalSteps - 1);
+            setProgress(snappedProg);
+        }
+    }, [progress, progressToStep, totalSteps]);
+
+    // Reset when expression changes or slide becomes inactive
+    useEffect(() => {
+        if (!isActive) {
+            setProgress(0);
+            setCurrentStep(0);
+            prevStepRef.current = 0;
+            setHasStartedDrag(false);
+            setIsDragging(false);
+            setIsFinished(false);
+        }
+    }, [expression, isActive]);
+
+    // Detect completion
+    useEffect(() => {
+        if (currentStep === totalSteps - 1) {
+            if (!isFinished) {
+                setIsFinished(true);
+                if (onComplete) onComplete();
+            }
+        } else {
+            if (isFinished) {
+                setIsFinished(false);
+            }
+        }
+    }, [currentStep, totalSteps, isFinished, onComplete]);
+
+    return (
+        <div className={`isticker-exponent ${isWiggling ? 'wiggle' : ''}`}>
+            <div className="isticker-exponent-inner">
+                {/* Expression */}
+                <div className="isticker-exponent-expression">
+                    {tokens.map((token) => {
+                        if (token.type === 'op') {
+                            return (
+                                <span key={token.key} className="isticker-exponent-token is-op">
+                                    {token.value}
+                                </span>
+                            );
+                        }
+                        return (
+                            <span key={token.key} className="isticker-exponent-token is-base">
+                                {token.value}
+                                {token.exp != null && (
+                                    <sup className="isticker-exponent-sup">{token.exp}</sup>
+                                )}
+                            </span>
+                        );
+                    })}
+                </div>
+
+                {/* Measuring row: invisible fully-expanded expression to set rail width */}
+                <div className="isticker-exponent-measure" aria-hidden="true">
+                    {buildTokens(totalSteps - 1).map((token) => (
+                        <span key={token.key} className={`isticker-exponent-token ${token.type === 'op' ? 'is-op' : 'is-base'}`}>
+                            {token.value}
+                        </span>
+                    ))}
+                </div>
+
+                {/* Track / Rail */}
+                <div
+                    className="isticker-scanner-track-area"
+                    ref={trackRef}
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerCancel={handlePointerUp}
+                >
+                    <div className="isticker-scanner-rail">
+                        <div className="isticker-scanner-trail" style={{ width: `${progress * 100}%` }} />
+                    </div>
+
+                    {/* Visual stops along the rail */}
+                    <div className="isticker-exponent-stops">
+                        {Array.from({ length: totalSteps }).map((_, i) => {
+                            const stepProg = totalSteps > 1 ? i / (totalSteps - 1) : 0;
+                            const isReached = i <= currentStep;
+                            return (
+                                <div
+                                    key={`stop-${i}`}
+                                    className={`isticker-exponent-stop ${isReached ? 'reached' : ''} ${i === currentStep ? 'active' : ''}`}
+                                    style={{ left: `${stepProg * 100}%` }}
+                                />
+                            );
+                        })}
+                    </div>
+
+                    <div
+                        className={`isticker-scanner-pointer ${isDragging ? 'dragging' : ''} ${!hasStartedDrag ? 'hint' : ''}`}
+                        style={{ left: `calc(${progress * 100}% - 18px)` }}
+                    >
+                        <svg viewBox="0 0 24 36" width="24" height="36">
+                            <path d="M2,2 L22,18 L2,34 Z" fill="#34D399" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+/**
  * PEMDAS Term Separator
  * 
  * Displays a math expression. When the user presses the play button,
@@ -321,6 +584,8 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
 
 
 /**
+
+/**
  * IStickerPlayer — Dispatcher component
  */
 const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false, autoPlay = false }) => {
@@ -348,6 +613,16 @@ const IStickerPlayer = ({ data, isActive = true, onComplete, isWiggling = false,
                     autoPlay={autoPlay}
                 />
             );
+        case 'exponent_expander':
+            return (
+                <ExponentExpander
+                    expression={metadata.expression}
+                    isActive={isActive}
+                    onComplete={onComplete}
+                    isWiggling={isWiggling}
+                />
+            );
+
         default:
             return (
                 <div style={{ padding: '20px', color: 'white', background: '#1E1B4B', borderRadius: '12px', textAlign: 'center' }}>

@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
 import './QuizPlayer.css';
 import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
-import { getExpression, editorToEngine } from './PEMExpressionPool';
+import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
 
 // Helper functions for MEP solve-directly order of operations validation (when disableParenSelect is active)
 function getParenGroupsWithOps(node, depth = 0) {
@@ -569,10 +569,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             try {
                 resetIdCounter();
                 let expr;
-                const mode = data.metadata?.pemMode || 'P';
+                const mode = data.metadata?.pemMode || 'LEVELS';
                 const diff = data.metadata?.pemDifficulty || 5;
                 if (mode === 'MANUAL' && data.metadata?.pemExpression) {
                     expr = editorToEngine(data.metadata.pemExpression);
+                } else if (mode === 'LEVELS') {
+                    const levelsText = data.metadata?.pemLevelsText || DEFAULT_PEM_LEVELS_TEXT;
+                    let parsed = deserializePemLevels(levelsText);
+                    if (parsed.length === 0) {
+                        parsed = deserializePemLevels(DEFAULT_PEM_LEVELS_TEXT);
+                    }
+                    const lvlIdx = Math.min(Math.max(0, pemGameLevel), parsed.length - 1);
+                    expr = parsed[lvlIdx] ? editorToEngine(parsed[lvlIdx].expr) : '3 + 2';
                 } else if (mode === 'GAME') {
                     const gameModes = ['AS', 'MD', 'MDAS', 'EAS', 'EMDAS', 'P', 'P2', 'PP', 'PPP'];
                     const currentMode = gameModes[Math.min(pemGameLevel, gameModes.length - 1)];
@@ -926,8 +934,9 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         });
 
         // Bounding limits enforcement
+        const topLimit = 104;
         sq.x = Math.max(margin, Math.min(containerW - W_s - margin, sq.x));
-        sq.y = Math.max(margin, Math.min(containerH - H_s - margin, sq.y));
+        sq.y = Math.max(topLimit, Math.min(containerH - H_s - margin, sq.y));
 
         matchStateRef.current.pointer = {
             x: pointerX,
@@ -977,6 +986,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const W_s = 100;
         const H_s = 100;
         const margin = 22;
+        const topLimit = 104;
         const gap = 10; // minimum gap between cards
 
         // Calculate grid dimensions to fit all cards without overlap
@@ -987,14 +997,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         while (cols < 6) {
             rows = Math.ceil(totalCards / cols);
             const cellW = (containerW - 2 * margin) / cols;
-            const cellH = (containerH - 2 * margin) / rows;
+            const cellH = (containerH - topLimit - margin) / rows;
             if (cellW >= W_s + gap && cellH >= H_s + gap) break;
             cols++;
         }
         rows = Math.ceil(totalCards / cols);
 
         const cellW = (containerW - 2 * margin) / cols;
-        const cellH = (containerH - 2 * margin) / rows;
+        const cellH = (containerH - topLimit - margin) / rows;
 
         // Generate one slot per grid cell, centered in the cell
         const slots = [];
@@ -1002,12 +1012,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             for (let c = 0; c < cols; c++) {
                 if (slots.length >= totalCards) break;
                 const baseX = margin + c * cellW + (cellW - W_s) / 2;
-                const baseY = margin + r * cellH + (cellH - H_s) / 2;
+                const baseY = topLimit + r * cellH + (cellH - H_s) / 2;
                 // Add small random jitter to avoid rigid grid appearance
                 const jitterX = (Math.random() - 0.5) * 16;
                 const jitterY = (Math.random() - 0.5) * 16;
                 const x = Math.max(margin, Math.min(containerW - W_s - margin, baseX + jitterX));
-                const y = Math.max(margin, Math.min(containerH - H_s - margin, baseY + jitterY));
+                const y = Math.max(topLimit, Math.min(containerH - H_s - margin, baseY + jitterY));
                 slots.push({ x, y });
             }
         }
@@ -1236,10 +1246,11 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 const W_s = 100;
                 const H_s = 100;
                 const margin = 22;
+                const topLimit = 104;
                 let adjusted = false;
                 matchStateRef.current.squares.forEach(sq => {
                     const newX = Math.max(margin, Math.min(newW - W_s - margin, sq.x));
-                    const newY = Math.max(margin, Math.min(newH - H_s - margin, sq.y));
+                    const newY = Math.max(topLimit, Math.min(newH - H_s - margin, sq.y));
                     if (newX !== sq.x || newY !== sq.y) {
                         sq.x = newX;
                         sq.y = newY;
@@ -1267,6 +1278,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const W_s = 100;
         const H_s = 100;
         const margin = 22;
+        const topLimit = 104;
 
         const loop = () => {
             const state = matchStateRef.current;
@@ -1441,7 +1453,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     sq.y = state.pointer.y - state.pointer.startY;
 
                     sq.x = Math.max(margin, Math.min(dims.w - W_s - margin, sq.x));
-                    sq.y = Math.max(margin, Math.min(dims.h - H_s - margin, sq.y));
+                    sq.y = Math.max(topLimit, Math.min(dims.h - H_s - margin, sq.y));
                 } else if (sq.id === currentHoveredId) {
                     // Hovered target card: stop moving / stop having physics, and smoothly lerp to be directly below the dragged card
                     const draggedCard = squares.find(s => s.id === draggedId);
@@ -1483,8 +1495,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         sq.vx = -Math.abs(sq.vx) * elasticity;
                     }
 
-                    if (sq.y < margin) {
-                        sq.y = margin;
+                    if (sq.y < topLimit) {
+                        sq.y = topLimit;
                         sq.vy = Math.abs(sq.vy) * elasticity;
                     } else if (sq.y > dims.h - H_s - margin) {
                         sq.y = dims.h - H_s - margin;
@@ -1546,7 +1558,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     // Strict bounding-box clamping right before rendering (except for merging elements)
                     if (!sq.merging && !sq.flashGreen && !sq.flashRed) {
                         sq.x = Math.max(margin, Math.min(dims.w - W_s - margin, sq.x));
-                        sq.y = Math.max(margin, Math.min(dims.h - H_s - margin, sq.y));
+                        sq.y = Math.max(topLimit, Math.min(dims.h - H_s - margin, sq.y));
                     }
 
                     let s = 1;
@@ -1888,6 +1900,24 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     // PEM MODE
     if (quizType === 'pem') {
+        const currentMode = data.metadata?.pemMode || 'LEVELS';
+        const levelsText = data.metadata?.pemLevelsText || DEFAULT_PEM_LEVELS_TEXT;
+        let parsed = deserializePemLevels(levelsText);
+        if (parsed.length === 0) {
+            parsed = deserializePemLevels(DEFAULT_PEM_LEVELS_TEXT);
+        }
+        const totalLevels = parsed.length;
+
+        let isLevelT = false;
+        let isLevelTC = false;
+        if (currentMode === 'LEVELS') {
+            const lvlIdx = Math.min(Math.max(0, pemGameLevel), parsed.length - 1);
+            if (parsed[lvlIdx]) {
+                isLevelT = parsed[lvlIdx].hasT;
+                isLevelTC = parsed[lvlIdx].hasTC;
+            }
+        }
+
         const C_MAJOR = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
 
         const playNote = (noteIdx) => {
@@ -1993,17 +2023,32 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         setPemSolved(true);
                         setPemFlash(null);
                         playSound('correct');
-                        if (onBanner) onBanner('correct', 'Topo!');
                         
-                        const currentMode = data.metadata?.pemMode || 'P';
+                        const currentMode = data.metadata?.pemMode || 'LEVELS';
+                        
                         if (currentMode === 'GAME') {
-                            setTimeout(() => { if (onBanner) onBanner(null); }, 1500);
                             setTimeout(() => {
                                 setPemGameLevel(prev => prev + 1);
                                 setPemAst(null);
                                 setPemSolved(false);
                                 setPemErrors(0);
-                            }, 2000);
+                            }, 1000);
+                        } else if (currentMode === 'LEVELS') {
+                            const levelsText = data.metadata?.pemLevelsText || DEFAULT_PEM_LEVELS_TEXT;
+                            let parsed = deserializePemLevels(levelsText);
+                            if (parsed.length === 0) {
+                                parsed = deserializePemLevels(DEFAULT_PEM_LEVELS_TEXT);
+                            }
+                            if (pemGameLevel + 1 < parsed.length) {
+                                setTimeout(() => {
+                                    setPemGameLevel(prev => prev + 1);
+                                    setPemAst(null);
+                                    setPemSolved(false);
+                                    setPemErrors(0);
+                                }, 1000);
+                            } else {
+                                if (onNext) onNext();
+                            }
                         } else {
                             if (onNext) onNext();
                         }
@@ -2122,7 +2167,50 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         return (
             <div className={`quiz-player-2 pem-player-mode ${pemFailed ? 'pem-failed' : ''}`}
                  onClick={handlePemOutsideClick}>
-                <div className={`pem-expression ${isPemPowerupActive ? 'pem-powerup-active' : ''}`} onClick={(e) => e.stopPropagation()}>
+                {currentMode === 'LEVELS' && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '76px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10
+                    }}>
+                        <div style={{
+                            position: 'relative',
+                            width: `${totalLevels * 12}px`,
+                            maxWidth: '256px',
+                            height: '16px',
+                            borderRadius: '10px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '2px solid rgba(255,255,255,0.5)',
+                            overflow: 'hidden',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)',
+                            flexShrink: 0
+                        }}>
+                            <div
+                                style={{
+                                    height: '100%',
+                                    width: `${Math.min(((pemGameLevel + (pemSolved ? 1 : 0)) / totalLevels) * 100, 100)}%`,
+                                    background: 'linear-gradient(90deg, #34D399, #10B981)',
+                                    boxShadow: '0 0 8px #34D399',
+                                    transition: 'width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                                }}
+                            />
+                            {/* Glossy overlay for glass effect */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '1px',
+                                left: '2px',
+                                right: '2px',
+                                height: '4px',
+                                background: 'linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0))',
+                                borderRadius: '10px',
+                                pointerEvents: 'none'
+                            }} />
+                        </div>
+                    </div>
+                )}
+                <div className={`pem-expression ${isPemPowerupActive ? 'pem-powerup-active' : ''} ${isLevelT || isLevelTC ? 'pem-term-separation-active' : ''}`} onClick={(e) => e.stopPropagation()}>
                     {tokens.map((token, i) => {
                         if (token.hidden) return null;
                         const isInScope = !scopeNodeIds || scopeNodeIds.has(token.nodeId);
@@ -2181,13 +2269,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         break;
                                     }
                                 }
-                                if (leftHasComplex) sepLeftClass = 'pem-token-separator-left';
-                                if (rightHasComplex) sepRightClass = 'pem-token-separator-right';
+                                if (leftHasComplex || isLevelT || isLevelTC) sepLeftClass = 'pem-token-separator-left';
+                                if (rightHasComplex || isLevelT || isLevelTC) sepRightClass = 'pem-token-separator-right';
                             }
 
                             return (
                                 <span key={`${token.nodeId}-${token.type}-${token.value}`}
-                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript && !isMergePop ? 'pem-token-superscript' : ''} ${isSeparator ? 'pem-token-separator' : ''} ${sepLeftClass} ${sepRightClass}`}
+                                    className={`pem-token pem-token-op ${isGreyed ? 'pem-greyed' : ''} ${isFlashRed ? 'pem-flash-red' : ''} ${isMergeOp ? 'pem-merge-op' : ''} ${isMergePop ? 'pem-merge-pop' : ''} ${isMergeFade ? 'pem-merge-fade' : ''} ${token.superscript && !isMergePop ? 'pem-token-superscript' : ''} ${isSeparator ? 'pem-token-separator' : ''} ${sepLeftClass} ${sepRightClass} ${isLevelT && isSeparator ? 'pem-op-orange' : ''}`}
                                     onClick={(e) => { e.stopPropagation(); handlePemOperatorClick(token.isExponentOp ? { value: '^', nodeId: mergeTargetId } : token); }}
                                     data-merge-result={isMergePop ? pemMerge.result : undefined}
                                 >
@@ -2216,15 +2304,6 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 </div>
                 {pemFailed && !disabled && (
                     <button className="pem-continue-btn" onClick={(e) => { e.stopPropagation(); if (onNext) onNext(); }}>Continue</button>
-                )}
-                {!pemFailed && (
-                    <button 
-                        className={`pem-powerup-btn ${isPemPowerupActive ? 'disabled' : ''}`} 
-                        onClick={handlePowerupClick}
-                        title="Visualize terms"
-                    >
-                        ↔
-                    </button>
                 )}
             </div>
         );

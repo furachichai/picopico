@@ -551,30 +551,44 @@ const Editor = () => {
                 return;
             }
 
-            // Copy selected element (Cmd+C / Ctrl+C)
-            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'c' && state.selectedElementId
-                && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge') {
-                e.preventDefault();
-                const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
-                const el = slide?.elements.find(el => el.id === state.selectedElementId);
-                if (el) {
-                    const payload = JSON.stringify({ _picopicoCopy: true, element: el });
-                    navigator.clipboard.writeText(payload).catch(() => {});
+            // Copy selected element(s) (Cmd+C / Ctrl+C)
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'c') {
+                const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                    ? state.selectedElementIds
+                    : (state.selectedElementId ? [state.selectedElementId] : []);
+                
+                const validIds = selectedIds.filter(id => id !== 'background' && id !== 'cartridge');
+                
+                if (validIds.length > 0) {
+                    e.preventDefault();
+                    const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                    const elementsToCopy = slide?.elements.filter(el => validIds.includes(el.id));
+                    
+                    if (elementsToCopy && elementsToCopy.length > 0 && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                        const payload = JSON.stringify({ _picopicoCopy: true, elements: elementsToCopy });
+                        navigator.clipboard.writeText(payload).catch(() => {});
+                    }
                 }
                 return;
             }
 
-            // Paste element (Cmd+V / Ctrl+V)
+            // Paste element(s) (Cmd+V / Ctrl+V)
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'v') {
                 e.preventDefault();
-                navigator.clipboard.readText().then(text => {
-                    try {
-                        const data = JSON.parse(text);
-                        if (data._picopicoCopy && data.element) {
-                            dispatch({ type: 'PASTE_ELEMENT', payload: data.element });
-                        }
-                    } catch { /* not our data, ignore */ }
-                }).catch(() => {});
+                if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
+                    navigator.clipboard.readText().then(text => {
+                        try {
+                            const data = JSON.parse(text);
+                            if (data._picopicoCopy) {
+                                if (data.elements && data.elements.length > 0) {
+                                    dispatch({ type: 'PASTE_ELEMENTS', payload: data.elements });
+                                } else if (data.element) {
+                                    dispatch({ type: 'PASTE_ELEMENT', payload: data.element });
+                                }
+                            }
+                        } catch { /* not our data, ignore */ }
+                    }).catch(() => {});
+                }
                 return;
             }
 
@@ -588,6 +602,12 @@ const Editor = () => {
                 const hasSelection = state.selectedElementId && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge';
                 if (hasSelection) {
                     e.preventDefault();
+                    
+                    // Save history snapshot on initial key down (skip repeat keydown events when held down)
+                    if (!e.repeat) {
+                        dispatch({ type: 'SAVE_HISTORY' });
+                    }
+
                     const canvas = document.querySelector('.slide-canvas');
                     if (!canvas) return;
                     const canvasW = canvas.offsetWidth;
@@ -841,20 +861,22 @@ const Editor = () => {
                 {/* Navigation Buttons — hidden in translation mode */}
                 {!isTranslating && (
                 <div className={`editor-navigation ${selectedElement ? 'disabled-ui' : ''}`}>
-                    {!isFirstSlide && (
-                        <div className="nav-group nav-group-left">
-                            <button
-                                className="nav-insert"
-                                onClick={() => dispatch({ type: 'INSERT_SLIDE', payload: 'before' })}
-                                title={t('editor.insertBefore') || 'Insert before'}
-                            >
-                                +
-                            </button>
+                    <div className="nav-group nav-group-left">
+                        <button
+                            className="nav-insert"
+                            onClick={() => dispatch({ type: 'INSERT_SLIDE', payload: 'before' })}
+                            title={t('editor.insertBefore') || 'Insert before'}
+                        >
+                            +
+                        </button>
+                        {!isFirstSlide ? (
                             <button className="nav-btn nav-prev" onClick={handlePrevSlide}>
                                 &lt;
                             </button>
-                        </div>
-                    )}
+                        ) : (
+                            <div style={{ width: '48px', height: '48px' }} />
+                        )}
+                    </div>
 
                     <div className="nav-group nav-group-right">
                         <button

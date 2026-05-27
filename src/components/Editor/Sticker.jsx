@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import './Sticker.css';
 import QuizEditor from './QuizEditor';
 import Balloon from './Balloon';
+import { useEditor } from '../../context/EditorContext';
 
 /**
  * Sticker Component
@@ -24,7 +25,8 @@ const rotatePoint = (x, y, angle) => {
     };
 };
 
-const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onEdit, onDelete, translationMode = false }) => {
+const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onMoveMultiple, onEdit, onDelete, translationMode = false }) => {
+    const { state, dispatch } = useEditor();
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [interactionType, setInteractionType] = useState(null); // 'move', 'resize', 'rotate'
@@ -49,19 +51,21 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             return;
         }
 
+        const isMultiSelectModifier = e.shiftKey || e.metaKey || e.ctrlKey;
+
         // ChatQuiz: no dragging, resizing, or rotating — it fills the stage
         const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
-            if (!isSelected || e.shiftKey) onSelect(element.id, e.shiftKey);
+            if (!isSelected || isMultiSelectModifier) onSelect(element.id, isMultiSelectModifier);
             return;
         }
 
         e.stopPropagation();
 
         // Only select if not already selected to avoid re-triggering selection logic unnecessarily
-        if (!isSelected || e.shiftKey) {
-            onSelect(element.id, e.shiftKey);
+        if (!isSelected || isMultiSelectModifier) {
+            onSelect(element.id, isMultiSelectModifier);
         }
 
         if (element.metadata?.locked) {
@@ -99,25 +103,46 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         // Calculate initial distance from center for resize
         const startDist = Math.sqrt(Math.pow(startX - centerX, 2) + Math.pow(startY - centerY, 2));
 
+        let prevCoords = startCoords;
+        let historySaved = false;
+
         const handleMove = (moveEvent) => {
             moveEvent.preventDefault(); // Prevent scrolling/selection while dragging
             const moveCoords = getClientCoords(moveEvent);
             const dx = moveCoords.x - startX;
             const dy = moveCoords.y - startY;
+            
+            const frameDx = moveCoords.x - prevCoords.x;
+            const frameDy = moveCoords.y - prevCoords.y;
+            prevCoords = moveCoords;
+
+            // Only save history if we actually started moving/scaling/rotating!
+            if (!historySaved && (Math.abs(dx) > 1 || Math.abs(dy) > 1 || type !== 'move')) {
+                dispatch({ type: 'SAVE_HISTORY' });
+                historySaved = true;
+            }
 
             const parent = stickerRef.current.parentElement;
             const parentWidth = parent.offsetWidth;
             const parentHeight = parent.offsetHeight;
 
             if (type === 'move') {
-                // Calculate new position as percentage of parent
-                const newX = startLeft + (dx / parentWidth) * 100;
-                const newY = startTop + (dy / parentHeight) * 100;
-                if (element.type === 'quiz') {
-                    // Quiz elements only move vertically, locked horizontally
-                    onChange(element.id, { y: newY });
+                const isMultiSelected = state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1;
+                
+                if (isMultiSelected && onMoveMultiple) {
+                    const dxPct = (frameDx / parentWidth) * 100;
+                    const dyPct = (frameDy / parentHeight) * 100;
+                    onMoveMultiple(state.selectedElementIds.filter(id => id !== 'background' && id !== 'cartridge'), dxPct, dyPct);
                 } else {
-                    onChange(element.id, { x: newX, y: newY });
+                    // Single element move uses absolute positioning for perfection
+                    const newX = startLeft + (dx / parentWidth) * 100;
+                    const newY = startTop + (dy / parentHeight) * 100;
+                    if (element.type === 'quiz') {
+                        // Quiz elements only move vertically, locked horizontally
+                        onChange(element.id, { y: newY });
+                    } else {
+                        onChange(element.id, { x: newX, y: newY });
+                    }
                 }
             } else if (type === 'resize') {
                 // Distance-based resize logic:
@@ -290,7 +315,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
                 width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
-                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.height}%`),
+                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: isSelected ? (elementIndex + 1000) : (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
             }}
@@ -298,14 +323,16 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             onTouchStart={(e) => handleStart(e, 'move')}
             onMouseDownCapture={(e) => {
                 // Capture phase fires parent-first, before child stopPropagation
-                // If shift key is pressed, we want to toggle selection, so we allow it even if already selected
-                if (!isSelected || e.shiftKey) {
-                    onSelect(element.id, e.shiftKey);
+                // Support Cmd/Ctrl and Shift keys for toggling multi-selection
+                const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
+                if (!isSelected || isMulti) {
+                    onSelect(element.id, isMulti);
                 }
             }}
             onTouchStartCapture={(e) => {
-                if (!isSelected || e.shiftKey) {
-                    onSelect(element.id, e.shiftKey);
+                const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
+                if (!isSelected || isMulti) {
+                    onSelect(element.id, isMulti);
                 }
             }}
             onDoubleClick={() => {
@@ -345,7 +372,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
                             borderRadius: element.metadata?.borderRadius || '8px',
                             border: element.metadata?.border || 'none',
-                            textAlign: element.metadata?.textAlign || 'left',
+                            textAlign: element.metadata?.textAlign || 'center',
                             lineHeight: 1,
                             position: 'relative',
                             outline: 'none',
@@ -433,6 +460,21 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         }}
                     />
                 )}
+                {element.type === 'popup' && (
+                    <img
+                        src="/assets/characters/tutuTucaSticker_SMALL.png"
+                        alt="popup-sticker"
+                        draggable="false"
+                        style={{
+                            transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
+                            opacity: element.metadata?.opacity ?? 1,
+                            filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain'
+                        }}
+                    />
+                )}
                 {element.type === 'quiz' && (
                     <div className="sticker-quiz-wysiwyg"
                         onClick={(e) => {
@@ -470,7 +512,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         height: '100%',
                         boxSizing: 'border-box',
                     }}>
-                        <div style={{ fontSize: '0.65rem', opacity: 0.6, letterSpacing: '1px' }}>🧩 {element.metadata?.stickerType === 'expression_scanner_001' ? 'EXPRESSION SCANNER' : element.metadata?.stickerType === 'pemdas_term_separator' ? 'TERM SEPARATOR' : 'iSTICKER'}</div>
+                        <div style={{ fontSize: '0.65rem', opacity: 0.6, letterSpacing: '1px' }}>🧩 {element.metadata?.stickerType === 'expression_scanner_001' ? 'EXPRESSION SCANNER' : element.metadata?.stickerType === 'pemdas_term_separator' ? 'TERM SEPARATOR' : element.metadata?.stickerType === 'exponent_expander' ? 'EXPONENT EXPANDER' : 'iSTICKER'}</div>
                         <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '2px', fontFamily: 'monospace' }}>
                             {element.metadata?.expression || '2 + 3 * 4'}
                         </div>

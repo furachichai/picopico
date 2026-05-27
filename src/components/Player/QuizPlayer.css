@@ -1213,7 +1213,7 @@
 
 .pem-token-number {
     color: #FFFFFF;
-    font-size: 0.85rem;
+    font-size: 1.5rem;
 }
 
 .pem-token-op {
@@ -1847,4 +1847,22 @@
     background: radial-gradient(circle at 30% 30%, #f8fafc 0%, #f1f5f9 60%, #e2e8f0 100%) !important;
     border-color: #cbd5e1 !important;
     box-shadow: none !important;
+}
+
+/* MEP CUSTOM LEVELS & OPERATOR ENHANCEMENTS */
+.pem-term-separation-active .pem-token-separator-left {
+    margin-left: 14px !important;
+}
+.pem-term-separation-active .pem-token-separator-right {
+    margin-right: 14px !important;
+}
+.pem-op-orange .pem-op-circle {
+    background: rgba(249, 115, 22, 0.25) !important;
+    border-color: rgba(249, 115, 22, 0.6) !important;
+    color: #F97316 !important;
+}
+.pem-op-orange:hover .pem-op-circle {
+    background: rgba(249, 115, 22, 0.4) !important;
+    border-color: rgba(249, 115, 22, 0.8) !important;
+    transform: scale(1.1);
 }

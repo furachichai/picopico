@@ -33,7 +33,6 @@ const ASSETS = {
 };
 
 // Load custom characters from src/assets/characters
-// Load custom characters from src/assets/characters
 // Force HMR reload - triggering glob re-eval
 const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customCharacterList = Object.values(customCharacters).map(mod => mod.default);
@@ -42,7 +41,11 @@ const customCharacterList = Object.values(customCharacters).map(mod => mod.defau
 const customImages = import.meta.glob('../../assets/images/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
 const customImageList = Object.values(customImages);
 
-const combinedImageList = [...customCharacterList, ...customImageList];
+// Load custom graphics from src/assets/graphics
+const customGraphics = import.meta.glob('../../assets/graphics/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customGraphicsList = Object.values(customGraphics);
+
+const combinedImageList = [...customCharacterList, ...customImageList, ...customGraphicsList];
 
 // Load custom backgrounds from src/assets/backgrounds
 const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });

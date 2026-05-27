@@ -30,10 +30,31 @@ const initialState = {
     readOnly: false, // Default to false, will be set on mount
     translationMode: null, // null | { lang: 'en' | 'pt', draft: { [slideId]: { [elementId]: { content } }, lessonTitle: '', lessonDescription: '' } }
     showGuides: true, // Grid guides in editor
+    past: [], // History stack for undoing operations
+};
+
+const pushToPast = (state) => {
+    const snapshot = {
+        lesson: JSON.parse(JSON.stringify(state.lesson)),
+        selectedElementId: state.selectedElementId,
+        selectedElementIds: [...(state.selectedElementIds || [])],
+        currentSlideId: state.currentSlideId
+    };
+    const newPast = [...(state.past || [])];
+    if (newPast.length >= 50) {
+        newPast.shift();
+    }
+    newPast.push(snapshot);
+    return newPast;
 };
 
 const editorReducer = (state, action) => {
     switch (action.type) {
+        case 'SAVE_HISTORY':
+            return {
+                ...state,
+                past: pushToPast(state)
+            };
         case 'TOGGLE_GUIDES':
             return { ...state, showGuides: !state.showGuides };
         case 'SET_VIEW':
@@ -113,6 +134,8 @@ const editorReducer = (state, action) => {
             const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
             if (!currentSlide) return state;
 
+            const newPast = pushToPast(state);
+
             const baseElement = {
                 id: `el-${Date.now()}`,
                 type: action.payload.type,
@@ -159,6 +182,25 @@ const editorReducer = (state, action) => {
                 baseElement.y = 50;
             }
 
+            if (action.payload.type === 'text') {
+                baseElement.width = action.payload.metadata?.width || 10;
+                baseElement.height = action.payload.metadata?.height || 5;
+                elementMetadata = {
+                    textAlign: 'center',
+                    ...elementMetadata
+                };
+            }
+
+            if (action.payload.type === 'popup') {
+                baseElement.width = action.payload.metadata?.width || 30;
+                baseElement.height = action.payload.metadata?.height || 17.38125;
+                baseElement.y = 50;
+                elementMetadata = {
+                    popupText: 'Hello from the popup!',
+                    ...elementMetadata
+                };
+            }
+
             const newElement = {
                 ...baseElement,
                 metadata: elementMetadata
@@ -166,6 +208,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                past: newPast,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
@@ -184,6 +227,8 @@ const editorReducer = (state, action) => {
             const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
             if (!currentSlide) return state;
 
+            const newPast = pushToPast(state);
+
             const source = action.payload;
             const pastedElement = {
                 ...source,
@@ -195,6 +240,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                past: newPast,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
@@ -206,6 +252,40 @@ const editorReducer = (state, action) => {
                 },
                 selectedElementId: pastedElement.id,
                 selectedElementIds: [pastedElement.id],
+            };
+        }
+
+        case 'PASTE_ELEMENTS': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const newPast = pushToPast(state);
+
+            const sources = action.payload;
+            const pastedElements = sources.map(source => ({
+                ...source,
+                id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                x: Math.min((source.x || 50) + 2, 95),
+                y: Math.min((source.y || 50) + 2, 95),
+                metadata: { ...source.metadata },
+            }));
+
+            const pastedIds = pastedElements.map(el => el.id);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: [...slide.elements, ...pastedElements] }
+                            : slide
+                    ),
+                },
+                selectedElementId: pastedIds[pastedIds.length - 1],
+                selectedElementIds: pastedIds,
             };
         }
 
@@ -363,6 +443,22 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'SELECT_ELEMENTS': {
+            const ids = action.payload; // Array of IDs
+            const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+            if (currentSlideIndex === -1) return state;
+
+            const currentSlide = state.lesson.slides[currentSlideIndex];
+            const currentSlideElementIds = currentSlide.elements.map(el => el.id);
+            const validIds = ids.filter(id => currentSlideElementIds.includes(id));
+
+            return {
+                ...state,
+                selectedElementId: validIds.length > 0 ? validIds[validIds.length - 1] : null,
+                selectedElementIds: validIds
+            };
+        }
+
         case 'SELECT_ELEMENT': {
             let selectedId;
             let isShift = false;
@@ -474,36 +570,26 @@ const editorReducer = (state, action) => {
         }
 
         case 'UNDO_ELEMENT': {
-            if (!state.undoSnapshot || !state.selectedElementId) return state;
-            const { element, originalIndex } = state.undoSnapshot;
-            if (element.id !== state.selectedElementId) return state;
-
-            const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
-            if (currentSlideIndex === -1) return state;
-
-            const currentSlide = state.lesson.slides[currentSlideIndex];
-            // Remove current state of element
-            const newElements = currentSlide.elements.filter(el => el.id !== element.id);
-            // Insert element back at its original index
-            newElements.splice(originalIndex, 0, element);
-
-            const newSlides = [...state.lesson.slides];
-            newSlides[currentSlideIndex] = {
-                ...currentSlide,
-                elements: newElements
-            };
-
+            if (!state.past || state.past.length === 0) return state;
+            const newPast = [...state.past];
+            const previousState = newPast.pop();
             return {
                 ...state,
-                isDirty: true,
-                lesson: { ...state.lesson, slides: newSlides }
+                lesson: previousState.lesson,
+                selectedElementId: previousState.selectedElementId,
+                selectedElementIds: previousState.selectedElementIds,
+                currentSlideId: previousState.currentSlideId,
+                past: newPast,
+                isDirty: true
             };
         }
 
         case 'DELETE_ELEMENT': {
+            const newPast = pushToPast(state);
             const remainingIds = (state.selectedElementIds || []).filter(id => id !== action.payload);
             return {
                 ...state,
+                past: newPast,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
@@ -554,6 +640,8 @@ const editorReducer = (state, action) => {
             const elementToDuplicate = currentSlide.elements.find(el => el.id === action.payload);
             if (!elementToDuplicate) return state;
 
+            const newPast = pushToPast(state);
+
             const newElement = {
                 ...elementToDuplicate,
                 id: `el-${Date.now()}`,
@@ -563,6 +651,7 @@ const editorReducer = (state, action) => {
 
             return {
                 ...state,
+                past: newPast,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,

@@ -258,16 +258,15 @@ export default function GameScreen({ onGameOver, locale, secretSettings }) {
   }, [handleButtonPress, locale]);
 
   const total = getTotalLevels();
-  const progress = ((level - 1) % total) / (total - 1 || 1);
+  const progress = (level - 1 + (gameState === 'levelComplete' ? 1 : 0)) / total;
 
   return (
     <div className="game-screen" onClick={unlockAudio}>
       <HUD
         score={score}
-        lives={lives}
-        maxLives={MAX_LIVES}
         level={level}
         progress={progress}
+        totalLevels={total}
         locale={locale}
       />
 

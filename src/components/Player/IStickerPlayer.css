@@ -288,3 +288,127 @@
     pointer-events: none;
     animation: none;
 }
+
+
+/* ─── Exponent Expander ────────────────────────────────────── */
+.isticker-exponent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #0F0A2E, #1E1B4B);
+    border-radius: 14px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.isticker-exponent.wiggle {
+    animation: istickerWiggle 0.4s ease-in-out;
+}
+
+.isticker-exponent-inner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    width: max-content;
+    position: relative;
+}
+
+.isticker-exponent-expression {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 8px;
+    white-space: nowrap;
+    position: relative;
+    padding: 16px 0px 6px 0px;
+    width: 100%;
+    min-height: 2.2rem;
+}
+
+
+/* Invisible measuring row — sets the width of the inner container to match the fully expanded expression */
+.isticker-exponent-measure {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 8px;
+    white-space: nowrap;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.isticker-exponent-token {
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.85);
+    position: relative;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.isticker-exponent-token.is-op {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    margin: 0 4px;
+}
+
+.isticker-exponent-token.is-base {
+    display: inline-block;
+    position: relative;
+}
+
+.isticker-exponent-sup {
+    font-size: 0.65em;
+    font-weight: 700;
+    color: #A78BFA;
+    position: relative;
+    top: -0.65em;
+    line-height: 1;
+    margin-left: 2px;
+    text-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.isticker-exponent-stops {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.isticker-exponent-stop {
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(15, 10, 46, 0.6);
+    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.isticker-exponent-stop.reached {
+    background: #34D399;
+    box-shadow: 0 0 4px rgba(52, 211, 153, 0.4);
+}
+
+.isticker-exponent-stop.active {
+    background: #6EE7B7;
+    transform: translate(-50%, -50%) scale(1.4);
+    box-shadow: 0 0 8px rgba(110, 231, 183, 0.8);
+}
+

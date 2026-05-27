@@ -356,7 +356,7 @@ const DiscoverView = () => {
                                     border: element.metadata?.border || 'none',
                                     lineHeight: 1,
                                     whiteSpace: 'pre-wrap',
-                                    textAlign: element.metadata?.textAlign || 'left',
+                                    textAlign: element.metadata?.textAlign || 'center',
                                     fontWeight: element.metadata?.fontWeight || 'normal',
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none'

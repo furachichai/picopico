@@ -38,4 +38,5 @@ export const ELEMENT_TYPES = {
     BALLOON: 'balloon',
     ISTICKER: 'isticker',
     LINE: 'line',
+    POPUP: 'popup',
 };

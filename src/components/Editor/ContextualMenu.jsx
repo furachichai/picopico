@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './ContextualMenu.css';
-import { PEM_MODES } from '../Player/PEMExpressionPool';
+import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Player/PEMExpressionPool';
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 import { getSymbolSvg } from '../../utils/symbols';
 
@@ -317,14 +317,14 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             <button
                                 className="btn-icon"
                                 onClick={() => {
-                                    const current = metadata.textAlign || 'left';
+                                    const current = metadata.textAlign || 'center';
                                     const next = current === 'left' ? 'center' : current === 'center' ? 'right' : 'left';
                                     updateMetadata({ textAlign: next });
                                 }}
-                                title={`Align: ${metadata.textAlign || 'left'}`}
+                                title={`Align: ${metadata.textAlign || 'center'}`}
                                 style={{ fontSize: '1rem', minWidth: '36px' }}
                             >
-                                {(metadata.textAlign || 'left') === 'left' ? '⬅' : (metadata.textAlign === 'center' ? '⬛' : '➡')}
+                                {(metadata.textAlign || 'center') === 'left' ? '⬅' : ((metadata.textAlign || 'center') === 'center' ? '⬛' : '➡')}
                             </button>
                         </div>
                     )}
@@ -1105,6 +1105,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </div>
                     )}
 
+
                     <div className="menu-divider"></div>
                 </>
             )}
@@ -1273,7 +1274,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
                 )}
-                {onOpenPresets && (
+                {onOpenPresets && metadata.quizType !== 'pem' && (
                     <button
                         className="btn-secondary"
                         onClick={onOpenPresets}
@@ -1292,7 +1293,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group">
                         <label>Mode</label>
                         <select
-                            value={metadata.pemMode || 'A'}
+                            value={metadata.pemMode || 'LEVELS'}
                             onChange={(e) => updateMetadata({ pemMode: e.target.value })}
                             style={{ fontSize: '0.8rem' }}
                         >
@@ -1301,7 +1302,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             ))}
                         </select>
                     </div>
-                    {metadata.pemMode !== 'MANUAL' && (
+                    {metadata.pemMode !== 'MANUAL' && metadata.pemMode !== 'LEVELS' && (
                         <div className="menu-group">
                             <label>Difficulty</label>
                             <input
@@ -1325,6 +1326,22 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             />
                         </div>
                     )}
+                    {metadata.pemMode === 'LEVELS' && (
+                        <div className="menu-group">
+                            <button
+                                className="btn-secondary"
+                                style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}
+                                onClick={() => {
+                                    const currentText = metadata.pemLevelsText || DEFAULT_PEM_LEVELS_TEXT;
+                                    setLevelsText(currentText);
+                                    setLevelsOriginalText(currentText);
+                                    setShowLevelsEditor(true);
+                                }}
+                            >
+                                📋 LEVELS
+                            </button>
+                        </div>
+                    )}
                     <div className="menu-group">
                         <label>Parentheses Select</label>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', margin: '4px 0' }}>
@@ -1340,6 +1357,71 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     </div>
                     <div className="menu-divider"></div>
                 </>
+            )}
+
+            {/* MEP Levels Editor Modal */}
+            {showLevelsEditor && element.type === 'quiz' && metadata.quizType === 'pem' && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                    background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+                    zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: '20px'
+                }} onClick={() => { setShowLevelsEditor(false); setLevelsText(levelsOriginalText); }}>
+                    <div style={{
+                        background: '#1e1b3a', border: '1px solid rgba(167,139,250,0.4)',
+                        borderRadius: '16px', padding: '20px', width: '100%', maxWidth: '360px',
+                        maxHeight: '80vh', display: 'flex', flexDirection: 'column', gap: '12px',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
+                    }} onClick={(e) => e.stopPropagation()}>
+                        <div style={{ color: 'white', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '2px', textAlign: 'center' }}>MEP LEVELS</div>
+                        <textarea
+                            value={levelsText}
+                            onChange={(e) => setLevelsText(e.target.value)}
+                            spellCheck={false}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            style={{
+                                width: '100%', minHeight: '300px', maxHeight: '50vh',
+                                background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(167,139,250,0.3)',
+                                borderRadius: '8px', color: '#e2e8f0', fontFamily: "'Courier New', monospace",
+                                fontSize: '0.85rem', padding: '12px', resize: 'vertical',
+                                outline: 'none', lineHeight: '1.6', boxSizing: 'border-box'
+                            }}
+                        />
+                        {levelsText !== levelsOriginalText && (
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                    onClick={() => { setLevelsText(levelsOriginalText); setShowLevelsEditor(false); }}
+                                    style={{
+                                        flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                        fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                        background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)',
+                                        letterSpacing: '1px'
+                                    }}
+                                >CANCEL</button>
+                                <button
+                                    onClick={() => {
+                                        try {
+                                            const parsed = deserializePemLevels(levelsText);
+                                            if (parsed.length === 0) return;
+                                            updateMetadata({ pemLevelsText: levelsText });
+                                            setShowLevelsEditor(false);
+                                        } catch (err) {
+                                            console.error('Failed to parse levels:', err);
+                                        }
+                                    }}
+                                    style={{
+                                        flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                        fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                        background: 'linear-gradient(135deg, #22C55E, #16A34A)', color: 'white',
+                                        letterSpacing: '1px'
+                                    }}
+                                >SAVE</button>
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
 
             {/* Match/Conecta Quiz Settings */}
@@ -1532,9 +1614,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             {element.type === 'isticker' && (
                 <>
                     <div className="menu-group">
-                        <label>🧩 {metadata.stickerType === 'expression_scanner_001' ? 'Expression Scanner' : metadata.stickerType === 'pemdas_term_separator' ? 'Term Separator' : 'iSticker'}</label>
+                        <label>🧩 {metadata.stickerType === 'expression_scanner_001' ? 'Expression Scanner' : metadata.stickerType === 'pemdas_term_separator' ? 'Term Separator' : metadata.stickerType === 'exponent_expander' ? 'Exponent Expander' : 'iSticker'}</label>
                     </div>
-                    {(metadata.stickerType === 'expression_scanner_001' || metadata.stickerType === 'pemdas_term_separator') && (
+                    {(metadata.stickerType === 'expression_scanner_001' || metadata.stickerType === 'pemdas_term_separator' || metadata.stickerType === 'exponent_expander') && (
                         <>
                             <div className="menu-group">
                                 <label>Expression</label>
@@ -1572,6 +1654,99 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             )}
                         </>
                     )}
+                </>
+            )}
+
+            {/* Popup Settings */}
+            {element.type === 'popup' && (
+                <>
+                    <div className="menu-group" style={{ flex: 1 }}>
+                        <label>Popup Text</label>
+                        <textarea
+                            value={metadata.popupText || ''}
+                            onChange={(e) => updateMetadata({ popupText: e.target.value })}
+                            placeholder="Enter the text to display in the popup window..."
+                            style={{ 
+                                flex: 1, 
+                                minHeight: '38px', 
+                                maxHeight: '80px', 
+                                padding: '6px 8px', 
+                                borderRadius: '8px', 
+                                border: '1px solid rgba(0,0,0,0.15)',
+                                fontFamily: 'inherit',
+                                fontSize: '0.85rem',
+                                resize: 'vertical'
+                            }}
+                        />
+                    </div>
+                    <div className="menu-group">
+                        <label>Flip</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className={`btn-icon ${metadata.flipX ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ flipX: !metadata.flipX })}
+                                title="Flip Horizontal"
+                            >
+                                ↔️
+                            </button>
+                            <button
+                                className={`btn-icon ${metadata.flipY ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ flipY: !metadata.flipY })}
+                                title="Flip Vertical"
+                            >
+                                ↕️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="menu-group">
+                        <label>Opacity</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={(metadata.opacity ?? 1) * 100}
+                            onChange={(e) => updateMetadata({ opacity: parseInt(e.target.value) / 100 })}
+                            style={{ width: '80px' }}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Brightness</label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            value={metadata.brightness ?? 100}
+                            onChange={(e) => updateMetadata({ brightness: parseInt(e.target.value) })}
+                            style={{ width: '80px' }}
+                            title={metadata.brightness ? `${metadata.brightness}%` : '100%'}
+                        />
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Layer</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'backward')}
+                                title="Send Backward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬇️
+                            </button>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'forward')}
+                                title="Bring Forward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬆️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="menu-divider"></div>
                 </>
             )}
 

@@ -1,0 +1,54 @@
+{
+  "id": "draft-1779633381380",
+  "title": "Parenthesis",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779633427168",
+          "type": "text",
+          "content": "<b>NEW RULE!</b>",
+          "x": 48.333333333333336,
+          "y": 20.937499999999996,
+          "width": 27.22222222222222,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.5869837517760454,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1779633416135",
+          "type": "balloon",
+          "content": "()",
+          "x": 54.583333333333336,
+          "y": 42.8125,
+          "width": 54.72222222222223,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 34,
+              "y": 101
+            }
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-24T14:36:21.380Z",
+  "updatedAt": "2026-05-24T14:38:11.427Z",
+  "path": "lessons/1426-Parenthesis/lesson.json",
+  "textPreset": null
+}

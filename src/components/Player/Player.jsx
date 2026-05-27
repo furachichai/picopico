@@ -48,6 +48,14 @@ const Player = () => {
     const [visitedStripperSlides, setVisitedStripperSlides] = useState(new Set()); // Slides fully stepped through
     const [autoPlayIStickerId, setAutoPlayIStickerId] = useState(null); // iSticker to auto-play on stripper advance
 
+    // Popup state
+    const [activePopupText, setActivePopupText] = useState(null);
+
+    // Close open popup when changing slides
+    useEffect(() => {
+        setActivePopupText(null);
+    }, [currentSlideIndex]);
+
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
@@ -647,7 +655,14 @@ const Player = () => {
                                     }}
                                 />
                             )}
-                            <div className="player-progress-bar">
+                            <div className={`player-progress-bar ${
+                                !solvedSlides.has(currentSlideIndex) && (
+                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS')) ||
+                                    currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'pem')
+                                )
+                                    ? 'greyed-out'
+                                    : ''
+                            }`}>
                                 {slides.map((_, i) => (
                                     <div
                                         key={i}
@@ -757,10 +772,10 @@ const Player = () => {
                                                 left: isFullScreenQuiz ? '50%' : `${element.x}%`,
                                                 top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${element.y}%`),
                                                 width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
-                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.height}%`)),
+                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
                                                 transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
                                                 zIndex: isFullScreenQuiz ? 100 : 10,
-                                                pointerEvents: (isFullScreenQuiz || element.type === 'isticker') ? 'auto' : undefined,
+                                                pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
                                             }}
                                         >
                                             {element.type === 'text' && (
@@ -777,7 +792,7 @@ const Player = () => {
                                                         padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
                                                         borderRadius: element.metadata?.borderRadius || '8px',
                                                         border: element.metadata?.border || 'none',
-                                                        textAlign: element.metadata?.textAlign || 'left',
+                                                        textAlign: element.metadata?.textAlign || 'center',
                                                         lineHeight: 1,
                                                     }}
                                                     dangerouslySetInnerHTML={{ __html: formatExponents(
@@ -871,6 +886,21 @@ const Player = () => {
                                                     autoPlay={autoPlayIStickerId === element.id}
                                                 />
                                             )}
+                                            {element.type === 'popup' && (
+                                                <img 
+                                                    src="/assets/characters/tutuTucaSticker_SMALL.png" 
+                                                    alt="popup" 
+                                                    onClick={() => setActivePopupText(element.metadata?.popupText || '')}
+                                                    style={{
+                                                        opacity: element.metadata?.opacity ?? 1,
+                                                        filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        objectFit: 'contain',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                />
+                                            )}
                                         </div>
                                     );
                                 } catch (err) {
@@ -878,6 +908,18 @@ const Player = () => {
                                     return null;
                                 }
                             })}
+
+                            {/* Popup Overlay Modal */}
+                            {index === currentSlideIndex && activePopupText !== null && (
+                                <div className="popup-modal-overlay" onClick={() => setActivePopupText(null)}>
+                                    <div className="popup-modal-window" onClick={(e) => e.stopPropagation()}>
+                                        <button className="popup-modal-close" onClick={() => setActivePopupText(null)}>×</button>
+                                        <div className="popup-modal-content">
+                                            {activePopupText}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     );
                 })}

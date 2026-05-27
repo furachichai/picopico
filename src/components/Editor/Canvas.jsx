@@ -21,7 +21,10 @@ const Canvas = (props) => {
   const { state, dispatch } = useEditor();
   const { lesson, currentSlideId, selectedElementId } = state;
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const marqueeRef = useRef(null);
   const [scale, setScale] = useState(1);
+  const [marquee, setMarquee] = useState(null);
 
   // Memoize current slide lookup to avoid recalculating on every render
   const currentSlide = useMemo(() =>
@@ -124,21 +127,92 @@ const Canvas = (props) => {
     dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
   }, [dispatch, state.translationMode, currentSlide]);
 
-  // Handle background clicks to deselect elements
-  const handleCanvasClick = useCallback((e) => {
-    // Deselect if clicking on canvas background directly
-    if (e.target === e.currentTarget || e.target.closest('.cartridge-container')) {
-      // Prevent Editor.jsx's global click handler from firing and deselecting
-      e.stopPropagation();
-
-      // If there is a cartridge, select it
+  const handlePointerDown = useCallback((e) => {
+    // If the click is inside a sticker, let it handle its own interaction
+    if (e.target.closest('.sticker')) {
+      return;
+    }
+    
+    // Determine initial selection
+    const isMultiSelectModifier = e.shiftKey || e.metaKey || e.ctrlKey;
+    
+    // If the click is inside a cartridge, select it and don't start lasso
+    if (e.target.closest('.cartridge-container')) {
       if (currentSlide?.cartridge) {
         dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' });
-      } else {
-        dispatch({ type: 'SELECT_ELEMENT', payload: null });
       }
+      return;
     }
-  }, [dispatch, currentSlide]);
+    
+    // Prevent default if it's mouse to avoid text selection during drag
+    if (e.pointerType === 'mouse') {
+      e.preventDefault();
+    }
+    
+    e.stopPropagation();
+
+    let baseSelection = [];
+    if (isMultiSelectModifier && state.selectedElementIds) {
+      baseSelection = [...state.selectedElementIds];
+    } else {
+      dispatch({ type: 'SELECT_ELEMENT', payload: null });
+    }
+
+    const rect = canvasRef.current.getBoundingClientRect();
+    const startX = ((e.clientX - rect.left) / rect.width) * 100;
+    const startY = ((e.clientY - rect.top) / rect.height) * 100;
+
+    const startMarquee = { startX, startY, endX: startX, endY: startY };
+    setMarquee(startMarquee);
+    marqueeRef.current = startMarquee;
+
+    const handlePointerMove = (moveEvent) => {
+      moveEvent.preventDefault();
+      if (!marqueeRef.current) return;
+      const currentX = ((moveEvent.clientX - rect.left) / rect.width) * 100;
+      const currentY = ((moveEvent.clientY - rect.top) / rect.height) * 100;
+      const newMarquee = { ...marqueeRef.current, endX: currentX, endY: currentY };
+      marqueeRef.current = newMarquee;
+      setMarquee(newMarquee);
+    };
+
+    const handlePointerUp = () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      
+      const finalMarquee = marqueeRef.current;
+      setMarquee(null);
+      marqueeRef.current = null;
+      
+      if (!finalMarquee) return;
+      
+      const left = Math.min(finalMarquee.startX, finalMarquee.endX);
+      const right = Math.max(finalMarquee.startX, finalMarquee.endX);
+      const top = Math.min(finalMarquee.startY, finalMarquee.endY);
+      const bottom = Math.max(finalMarquee.startY, finalMarquee.endY);
+      
+      if (right - left > 1 || bottom - top > 1) {
+          const intersectedIds = currentSlide?.elements.filter(el => {
+              const w = el.width || 20;
+              const h = el.height || 20;
+              const elLeft = el.x - (w / 2);
+              const elRight = el.x + (w / 2);
+              const elTop = el.y - (h / 2);
+              const elBottom = el.y + (h / 2);
+              
+              return !(elRight < left || elLeft > right || elBottom < top || elTop > bottom);
+          }).map(el => el.id) || [];
+          
+          if (intersectedIds.length > 0) {
+              const newSelection = Array.from(new Set([...baseSelection, ...intersectedIds]));
+              dispatch({ type: 'SELECT_ELEMENTS', payload: newSelection });
+          }
+      }
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  }, [dispatch, currentSlide, state.selectedElementIds]);
 
   // Stable callback for deleting an element
   const handleDelete = useCallback((id) => {
@@ -157,6 +231,7 @@ const Canvas = (props) => {
       {/* Wrapper: position:relative so pointers can sit outside the overflow:hidden canvas */}
       <div style={{ position: 'relative', width: '360px', height: '640px', flexShrink: 0 }}>
         <div
+          ref={canvasRef}
           className="slide-canvas"
           style={{
             width: '360px',
@@ -164,7 +239,8 @@ const Canvas = (props) => {
             overflow: 'hidden',
             position: 'relative'
           }}
-          onClick={handleCanvasClick}
+          onPointerDown={handlePointerDown}
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Background Layer */}
           {currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient')) && (
@@ -207,6 +283,21 @@ const Canvas = (props) => {
                 </React.Fragment>
               ))}
             </div>
+          )}
+
+          {/* Marquee Selection Box */}
+          {marquee && (
+            <div style={{
+              position: 'absolute',
+              border: '1px dashed #3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              pointerEvents: 'none',
+              zIndex: 9999,
+              left: `${Math.min(marquee.startX, marquee.endX)}%`,
+              top: `${Math.min(marquee.startY, marquee.endY)}%`,
+              width: `${Math.abs(marquee.endX - marquee.startX)}%`,
+              height: `${Math.abs(marquee.endY - marquee.startY)}%`,
+            }} />
           )}
 
           {/* Stripper Divider Lines (inside canvas) */}
@@ -284,6 +375,7 @@ const Canvas = (props) => {
                 isSelected={state.selectedElementIds?.includes(element.id) || element.id === selectedElementId}
                 onSelect={handleSelect}
                 onChange={handleChange}
+                onMoveMultiple={(ids, dx, dy) => dispatch({ type: 'MOVE_ELEMENTS', payload: { ids, dx, dy } })}
                 onEdit={() => handleEdit(element.id)}
                 onDelete={handleDelete}
                 translationMode={state.translationMode || false}

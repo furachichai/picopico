@@ -193,23 +193,6 @@
           }
         },
         {
-          "id": "el-1779144831001",
-          "type": "image",
-          "content": "/src/assets/characters/chef_scrathing.png",
-          "x": 21.944444444444443,
-          "y": 74.84375,
-          "width": 40,
-          "height": 34.59586466165413,
-          "rotation": 0,
-          "scale": 1.553217361782514,
-          "metadata": {
-            "width": 40,
-            "height": 34.59586466165413,
-            "flipX": false,
-            "locked": false
-          }
-        },
-        {
           "id": "el-1779144705060",
           "type": "text",
           "content": "<font color=\"#ffffff\">10 -</font> 6 ",
@@ -410,6 +393,21 @@
             "en": {
               "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>"
             }
+          }
+        },
+        {
+          "id": "el-1779565027710",
+          "type": "image",
+          "content": "/src/assets/characters/Chef_explain%20s_signals.png",
+          "x": 24.166666666666664,
+          "y": 81.09375,
+          "width": 40,
+          "height": 37.47761194029851,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 37.47761194029851
           }
         }
       ],
@@ -846,12 +844,12 @@
           "id": "el-1779160469024",
           "type": "image",
           "content": "/src/assets/characters/tucu%20tucu.png",
-          "x": 75.83333333333333,
-          "y": 94.0625,
+          "x": 74.44444444444444,
+          "y": 91.40625,
           "width": 40,
           "height": 23.94,
           "rotation": 0,
-          "scale": 0.5463250847499495,
+          "scale": 0.8528588862682,
           "metadata": {
             "width": 40,
             "height": 23.94,
@@ -867,8 +865,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-18T22:39:48.732Z",
-  "updatedAt": "2026-05-19T03:14:49.715Z",
-  "path": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+  "updatedAt": "2026-05-23T19:37:23.339Z",
+  "path": "lessons/9941-Why LEFT to RIGHT?/lesson.json",
   "textPreset": null,
   "name": "0416-Why LEFT to RIGHT?",
   "type": "file",

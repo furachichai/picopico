@@ -88,7 +88,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     }),
                     // PEM Defaults
                     ...(isPEM && {
-                        pemMode: 'P',
+                        pemMode: 'LEVELS',
                         pemDifficulty: 5,
                         pemExpression: null,
                     }),
@@ -321,6 +321,41 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     });
                                     setShowIStickerMenu(false);
                                 }}>Term Separator</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'ADD_ELEMENT',
+                                        payload: {
+                                            type: ELEMENT_TYPES.ISTICKER,
+                                            content: 'iSticker',
+                                            metadata: {
+                                                stickerType: 'exponent_expander',
+                                                expression: '2!4',
+                                            }
+                                        }
+                                    });
+                                    setShowIStickerMenu(false);
+                                }}>Exponent Expander</button>
+
+                                <button onClick={() => {
+                                    const hasPopup = currentSlide?.elements?.some(el => el.type === ELEMENT_TYPES.POPUP);
+                                    if (hasPopup) {
+                                        alert("Only one popup allowed per slide!");
+                                        return;
+                                    }
+                                    dispatch({
+                                        type: 'ADD_ELEMENT',
+                                        payload: {
+                                            type: ELEMENT_TYPES.POPUP,
+                                            content: '/assets/characters/tutuTucaSticker_SMALL.png',
+                                            metadata: {
+                                                width: 30,
+                                                height: 17.38125,
+                                                popupText: 'Hello from the popup!',
+                                            }
+                                        }
+                                    });
+                                    setShowIStickerMenu(false);
+                                }}>Popup</button>
                             </div>
                         )}
                     </div>

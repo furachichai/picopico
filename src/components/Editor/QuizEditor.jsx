@@ -85,7 +85,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     // PEM RENDER LOGIC
     // -------------------------------------------------------------------------
     if (quizType === 'pem') {
-        const pemMode = element.metadata?.pemMode || 'A';
+        const pemMode = element.metadata?.pemMode || 'LEVELS';
         const pemDifficulty = element.metadata?.pemDifficulty || 1;
         const pemExpression = element.metadata?.pemExpression || null;
 
@@ -96,7 +96,11 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                     <div className="pem-editor-info">
                         <div className="pem-editor-title">MEP Expression</div>
                         <div className="pem-editor-detail">
-                            Mode: <strong>{pemMode}</strong> &nbsp;|&nbsp; Difficulty: <strong>{pemDifficulty}</strong>
+                            {pemMode === 'LEVELS' ? (
+                                <>Mode: <strong>LEVELS</strong></>
+                            ) : (
+                                <>Mode: <strong>{pemMode}</strong> &nbsp;|&nbsp; Difficulty: <strong>{pemDifficulty}</strong></>
+                            )}
                         </div>
                         {pemMode === 'MANUAL' && (
                             <div className="pem-editor-manual">
@@ -120,7 +124,10 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                 <div className="pem-manual-hint">Use ! for exponents: 2!3 = 2³</div>
                             </div>
                         )}
-                        {pemMode !== 'MANUAL' && (
+                        {pemMode === 'LEVELS' && (
+                            <div className="pem-editor-hint">Custom Levels active. Configure levels in contextual menu.</div>
+                        )}
+                        {pemMode !== 'MANUAL' && pemMode !== 'LEVELS' && (
                             <div className="pem-editor-hint">Expression auto-generated. Configure in contextual menu.</div>
                         )}
                     </div>

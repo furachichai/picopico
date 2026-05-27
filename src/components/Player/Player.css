@@ -301,6 +301,13 @@
     z-index: 1000;
     display: flex;
     gap: 4px;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.player-progress-bar.greyed-out {
+    opacity: 0.25;
+    filter: grayscale(100%);
+    pointer-events: none;
 }
 
 .player-progress-bar .progress-segment {
@@ -372,4 +379,89 @@
     13%   { transform: translateX(calc(100vw - 40px)) scale(var(--scale)); }
     19%   { transform: translateX(100vw) scale(var(--scale)); }
     100%  { transform: translateX(100vw) scale(var(--scale)); }
+}
+
+/* ─── Popup Modal Overlay & Window styles ─────────────────── */
+.popup-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+    animation: fadeInPopup 0.25s ease-out forwards;
+}
+
+@keyframes fadeInPopup {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.popup-modal-window {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 20px 20px 20px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform-origin: center center;
+    animation: scaleInPopup 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scaleInPopup {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.popup-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #4b5563;
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.popup-modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #111827;
+    transform: scale(1.05);
+}
+
+.popup-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    font-family: 'Fira Sans', 'Outfit', sans-serif;
+    color: #1f2937;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-top: 20px;
+    word-break: break-word;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
