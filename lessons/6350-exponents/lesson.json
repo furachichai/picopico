@@ -184,21 +184,6 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1779848749123-udlf94sqx",
-          "type": "text",
-          "content": "RULES",
-          "x": 50.888888888888886,
-          "y": 26.21875,
-          "width": 10,
-          "height": 5,
-          "rotation": 0,
-          "scale": 3.1633935612770996,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "\"Fira Sans\""
-          }
-        },
-        {
           "id": "el-1779848749123-e8kb4lch2",
           "type": "line",
           "x": 52,
@@ -338,14 +323,353 @@
             "color": "#FFFFFF",
             "fontSize": 22
           }
+        },
+        {
+          "id": "el-1779848749123-udlf94sqx",
+          "type": "text",
+          "content": "Order of operations",
+          "x": 49.91666666666667,
+          "y": 21.21875,
+          "width": 22.52933353870275,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.4057612881117203,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          }
+        },
+        {
+          "id": "el-1779914077507",
+          "type": "balloon",
+          "content": "NEW RULE:<div><b>Start with exponents</b></div>",
+          "x": 17.22222222222222,
+          "y": 34.6875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -21,
+              "y": 90
+            }
+          }
         }
       ],
       "order": 3
+    },
+    {
+      "id": "slide-1779915271972",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779915352678",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "chatquiz",
+            "visualMode": false,
+            "chatNodes": [
+              {
+                "type": "reply",
+                "text": "How do I solve this?<div>2+3²-5</div>"
+              },
+              {
+                "type": "message",
+                "text": "Where should we begin?"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "the addition",
+                  "the subtraction",
+                  "the exponent"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "type": "message",
+                "text": "Good.<div>2+<font color=\"#2e7d32\">3²</font>-5 =</div><div>2+<font color=\"#2e7d32\">9</font>-5=</div>"
+              },
+              {
+                "type": "message",
+                "text": "Ok, now what we do next?"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "2+9",
+                  "9-5"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "<div>We always go left to right.</div><div>So now all we need to solve is</div><div><br></div>&nbsp;11 - 5"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "6",
+                  "7"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "That's it!<div>2+3²-5 = 6</div>"
+              }
+            ]
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1779914384629",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779914416955",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 20.156249999999993,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "pem",
+            "visualMode": false,
+            "pemMode": "LEVELS",
+            "pemDifficulty": 5,
+            "pemExpression": null,
+            "pemLevelsText": "2!3\n3!2 + 4\n10 - 2!3\n2!2 * 3\n10 - 3!2 + 1\n15 - 2!2 + 3"
+          }
+        }
+      ],
+      "order": 5,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1779915721540",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779915729078",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "chatquiz",
+            "visualMode": false,
+            "chatNodes": [
+              {
+                "type": "reply",
+                "text": "Things got more complicated...<div><br></div><div>10 + 5 * 2!2 - 12 =</div>"
+              },
+              {
+                "type": "message",
+                "text": "Don't worry.<div>Just follow the rules.</div><div>What do we solve first?</div>"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "exponents",
+                  "+ - from left to right",
+                  "× ÷ from left to right"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "type": "message",
+                "text": "We begin by exponents!<div><br></div><div>10 + 5 × 2² - 12</div><div>= 10 + 5 × 4 - 12</div><div><br></div><div>What's next?</div>"
+              },
+              {
+                "type": "quiz",
+                "options": [
+                  "+ - from left to right",
+                  "× ÷ from left to right"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "type": "message",
+                "text": "10 + 5 × 4 - 12<div>= 10 + 20 - 12</div><div>= 18</div>"
+              },
+              {
+                "type": "reply",
+                "text": "10 + 5 × 4 - 12 = 18<div><br></div><div>Thanks!</div>"
+              }
+            ]
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1779915095749",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779915146852",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 25.46875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "pem",
+            "visualMode": false,
+            "pemMode": "LEVELS",
+            "pemDifficulty": 5,
+            "pemExpression": null,
+            "pemLevelsText": "5 * 3!2\n16 / 2!3\n3!2 + 4!2\n4 * 2!3 + 5\n50 - 2 * 3!2\n4!3 / 8 + 2!2\n7 + 3 * 2!4 - 10 / 2\n6!2 / 4 + 3 * 2!3 - 5"
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1779916065980",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779916071076",
+          "type": "text",
+          "content": "What's the right order?",
+          "x": 49.44444444444444,
+          "y": 25.624999999999996,
+          "width": 30,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.14545708063201,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1779916068156",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "exponents",
+              "+ - from left to right",
+              "× ÷ from left to right",
+              "final result"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "reorder",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1779914874032",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779914890407",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 57.03125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "2² + 3²",
+              "5² - 2³",
+              "3 × 4²",
+              "2 × 3² + 5",
+              "4³ ÷ 2 + 10",
+              "50 - 2⁴ × 3"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "conecta",
+            "visualMode": false,
+            "matchAnswers": [
+              "13",
+              "17",
+              "48",
+              "23",
+              "42",
+              "2"
+            ]
+          }
+        }
+      ],
+      "order": 9
     }
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-05-27T02:27:11.390Z",
+  "updatedAt": "2026-05-27T21:09:17.685Z",
   "path": "lessons/0381-exponents/lesson.json",
   "textPreset": null,
   "name": "0381-exponents",

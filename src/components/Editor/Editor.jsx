@@ -169,6 +169,7 @@ const Editor = () => {
 
     const handleUpdateInfo = async (data) => {
         // data contains { path, title } from LessonInfoModal
+        const oldPath = state.lesson.path;
 
         dispatch({
             type: 'UPDATE_LESSON_METADATA',
@@ -181,6 +182,7 @@ const Editor = () => {
         // Construct the lesson object with the new data
         const lessonToSave = {
             ...state.lesson,
+            id: data.path, // Sync id with new path
             title: data.title,
             path: data.path,
             updatedAt: new Date()
@@ -194,6 +196,21 @@ const Editor = () => {
                 type: 'UPDATE_LESSON_METADATA',
                 payload: { path: savedPath }
             });
+
+            // Clean up the old lesson folder if the path has changed and it's not a local fallback
+            if (oldPath && oldPath !== savedPath && !oldPath.startsWith('local://')) {
+                try {
+                    const oldFolderPath = oldPath.replace('/lesson.json', '');
+                    await fetch('/api/delete-lesson', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: oldFolderPath })
+                    });
+                    console.log('Successfully cleaned up old lesson folder:', oldFolderPath);
+                } catch (error) {
+                    console.error('Failed to clean up old lesson folder:', error);
+                }
+            }
 
             setShowInfoModal(false);
             setShowSaveFeedback(true);
