@@ -45,16 +45,85 @@ const customImageList = Object.values(customImages);
 const customGraphics = import.meta.glob('../../assets/graphics/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
 const customGraphicsList = Object.values(customGraphics);
 
-const combinedImageList = [...customCharacterList, ...customImageList, ...customGraphicsList];
+// Load custom objects from src/assets/objects and public/assets/objects
+const customObjects = import.meta.glob('../../assets/objects/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customObjectsListGlob = Object.values(customObjects);
+
+const staticObjects = [
+    '/assets/objects/phone_cases.png',
+    '/assets/objects/shop_counter.png',
+    '/assets/objects/shop_wall_display.png'
+];
+
+const filteredStaticObjects = staticObjects.filter(url => {
+    const filename = url.split('/').pop();
+    return !customObjectsListGlob.some(globPath => typeof globPath === 'string' && globPath.includes(filename));
+});
+
+const customObjectsList = [...filteredStaticObjects, ...customObjectsListGlob];
+
+const combinedImageList = [...customCharacterList, ...customImageList, ...customGraphicsList, ...customObjectsList];
 
 // Load custom backgrounds from src/assets/backgrounds
 const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
 const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.default);
 
+const classifyAsset = (src) => {
+    if (!src) return 'other';
+    // If it is a webpack/vite module object, try to read the default path
+    const url = typeof src === 'object' ? src.default || '' : src;
+    const filename = url.split('/').pop().toLowerCase();
+    
+    if (url.includes('/assets/objects/')) {
+        return 'objects';
+    }
+    if (filename.includes('chef')) {
+        return 'chef';
+    }
+    if (filename.includes('pesto') || filename.includes('pest')) {
+        return 'pesto';
+    }
+    if (filename.includes('sales') || filename.includes('alien') || filename.includes('salesman')) {
+        return 'sales';
+    }
+    if (filename.includes('dilla') || filename.includes('tucu')) {
+        return 'dilla';
+    }
+    if (
+        filename.startsWith('whole_') || 
+        filename.startsWith('part_') || 
+        filename.includes('chili') || 
+        filename.includes('soup') || 
+        filename.includes('bowl') || 
+        filename.includes('recipe') || 
+        filename.includes('scroll') || 
+        filename.includes('plate') || 
+        filename.includes('knife') ||
+        filename.includes('box') ||
+        filename.includes('counter') ||
+        filename.includes('cases') ||
+        filename.includes('display')
+    ) {
+        return 'objects';
+    }
+    return 'other';
+};
+
+const CATEGORIES = [
+    { id: 'chef', name: 'Chef' },
+    { id: 'pesto', name: 'Pesto' },
+    { id: 'sales', name: 'Sales' },
+    { id: 'dilla', name: 'Dilla' },
+    { id: 'objects', name: 'Objects' },
+    { id: 'other', name: 'Other' },
+    { id: 'all', name: 'All' }
+];
+
 const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSelect = null }) => {
     const { dispatch } = useEditor();
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(initialTab);
+    const [activeSubCategory, setActiveSubCategory] = useState('all');
 
     // If allowedTabs is provided, filter the available tabs
     // otherwise show all
@@ -79,7 +148,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
 
             dispatch({ type: 'UPDATE_SLIDE_BACKGROUND', payload: finalPayload });
             onClose();
-        } else if (activeTab === 'gifs' || activeTab === 'custom') {
+        } else if (activeTab === 'gifs' || activeTab === 'custom' || activeTab === 'custom-objects') {
             // Pre-load image to get dimensions
             const img = new Image();
             img.onload = () => {
@@ -130,6 +199,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         {t('library.imgs')}
                     </button>
                 )}
+                {showTab('custom-objects') && (
+                    <button
+                        className={activeTab === 'custom-objects' ? 'active' : ''}
+                        onClick={() => setActiveTab('custom-objects')}
+                    >
+                        {t('library.objects')}
+                    </button>
+                )}
                 {showTab('custom-bg') && (
                     <button
                         className={activeTab === 'custom-bg' ? 'active' : ''}
@@ -165,10 +242,28 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             </div>
 
             <div className="library-content">
+                {activeTab === 'custom' && (
+                    <div className="library-subcategories">
+                        {CATEGORIES.map(cat => (
+                            <button
+                                key={cat.id}
+                                className={`subcategory-pill ${activeSubCategory === cat.id ? 'active' : ''}`}
+                                onClick={() => setActiveSubCategory(cat.id)}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 <div className="assets-grid">
-                    {activeTab === 'custom' && (
-                        combinedImageList.length > 0 ? (
-                            combinedImageList.map((src, index) => (
+                    {activeTab === 'custom' && (() => {
+                        const filtered = combinedImageList.filter(src => {
+                            if (activeSubCategory === 'all') return true;
+                            return classifyAsset(src) === activeSubCategory;
+                        });
+                        return filtered.length > 0 ? (
+                            filtered.map((src, index) => (
                                 <div
                                     key={index}
                                     className="asset-item custom"
@@ -179,8 +274,26 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                             ))
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
-                                {t('library.noCharacters')} <br />
-                                {t('library.addCharacters')} <code>src/assets/characters</code> or <code>src/assets/images</code>
+                                No images found in this category.
+                            </div>
+                        );
+                    })()}
+
+                    {activeTab === 'custom-objects' && (
+                        customObjectsList.length > 0 ? (
+                            customObjectsList.map((src, index) => (
+                                <div
+                                    key={index}
+                                    className="asset-item custom"
+                                    onClick={() => handleSelect(src)}
+                                >
+                                    <img src={src} alt="object" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
+                                No objects found. <br />
+                                Add images to <code>public/assets/objects</code> or <code>src/assets/objects</code>
                             </div>
                         )
                     )}

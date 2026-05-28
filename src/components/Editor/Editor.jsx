@@ -307,7 +307,7 @@ const Editor = () => {
             setLibraryAllowedTabs(['custom-bg', 'backgrounds']);
         } else {
             setLibraryTab(tab || 'custom');
-            setLibraryAllowedTabs(['custom', 'emojis', 'gifs']);
+            setLibraryAllowedTabs(['custom', 'custom-objects', 'emojis', 'gifs']);
         }
         setShowLibrary(true);
     };
@@ -987,7 +987,7 @@ const Editor = () => {
                         <Toolbar
                             onOpenLibrary={(tab) => {
                                 setLibraryTab(tab || 'custom');
-                                setLibraryAllowedTabs(['custom', 'emojis', 'gifs']); // Sticker Mode
+                                setLibraryAllowedTabs(['custom', 'custom-objects', 'emojis', 'gifs']); // Sticker Mode
                                 setShowLibrary(true);
                             }}
                             onDeleteSlide={() => setShowDeleteSlideConfirmation(true)}

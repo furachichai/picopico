@@ -1806,7 +1806,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             }
                             return (
                                 <div key={idx} className="chat-bubble-row chat-row-tutor">
-                                    <div className="chat-avatar"><img src="/assets/characters/avatar_chef.png" alt="Chef" className="chat-avatar-img" /></div>
+                                    <div className="chat-avatar"><img src={`/assets/characters/${node.avatar || 'avatar_chef.png'}`} alt="Avatar" className="chat-avatar-img" /></div>
                                     <div className="chat-bubble chat-bubble-tutor"
                                         style={{
                                             ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),
@@ -1835,7 +1835,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                             }),
                                         }}
                                         dangerouslySetInnerHTML={{ __html: formatExponents(node.text) }} />
-                                    <div className="chat-avatar chat-avatar-user"><img src="/assets/characters/avatar_pesto.png" alt="Pesto" className="chat-avatar-img" /></div>
+                                    <div className="chat-avatar chat-avatar-user"><img src={`/assets/characters/${node.avatar || 'avatar_pesto.png'}`} alt="Avatar" className="chat-avatar-img" /></div>
                                 </div>
                             );
                         }
@@ -1874,7 +1874,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                         disabled={nodeSolved || isWrong || disabled || chatFadingOut}
                                                         dangerouslySetInnerHTML={{ __html: formatExponents(opt) }}
                                                     />
-                                                    <div className="chat-avatar chat-avatar-user"><img src="/assets/characters/avatar_pesto.png" alt="Pesto" className="chat-avatar-img" /></div>
+                                                    <div className="chat-avatar chat-avatar-user"><img src={`/assets/characters/${node.avatar || 'avatar_pesto.png'}`} alt="Avatar" className="chat-avatar-img" /></div>
                                                 </div>
                                             );
                                         })}

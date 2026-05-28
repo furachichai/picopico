@@ -892,3 +892,145 @@ input:checked+.toggle-slider:before {
     color: white;
     border-color: rgba(255, 255, 255, 0.7);
 }
+
+/* ============================================================
+   CHATQUIZ AVATAR CUSTOMIZATIONS
+   ============================================================ */
+.chatquiz-avatar-selector-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.chatquiz-avatar-selector-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 3px 10px 3px 6px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    outline: none;
+    user-select: none;
+}
+
+.chatquiz-avatar-selector-btn:hover {
+    background: rgba(0, 0, 0, 0.09);
+    border-color: rgba(0, 0, 0, 0.18);
+}
+
+.chatquiz-avatar-selector-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chatquiz-avatar-selector-name {
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.chatquiz-avatar-selector-arrow {
+    font-size: 8px;
+    color: #64748B;
+    margin-left: 2px;
+}
+
+.chatquiz-avatar-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    z-index: 1000;
+    min-width: 130px;
+    gap: 2px;
+}
+
+.chatquiz-avatar-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 10px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    outline: none;
+}
+
+.chatquiz-avatar-dropdown-item:hover {
+    background: #F1F5F9;
+}
+
+.chatquiz-avatar-dropdown-item.selected {
+    background: #EEF2FF;
+    color: #4F46E5;
+}
+
+.chatquiz-dropdown-avatar-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chatquiz-dropdown-avatar-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #334155;
+}
+
+.chatquiz-side-picker-img {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4px;
+    vertical-align: middle;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chatquiz-side-toggle-img {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4px;
+    vertical-align: middle;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chatquiz-side-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatquiz-side-toggle {
+    display: inline-flex;
+    align-items: center;
+}

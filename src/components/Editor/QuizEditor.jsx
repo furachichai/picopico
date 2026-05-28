@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './QuizEditor.css';
 import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
@@ -11,6 +11,17 @@ import { parseFraction, formatFraction, FractionComponent } from '../../utils/Fr
  */
 const STICKER_DIR = '/assets/images/stickers/';
 
+const CHARACTERS = [
+    { id: 'chef', name: 'Chef', avatar: 'avatar_chef.png', defaultSide: 'left' },
+    { id: 'pesto', name: 'Pesto', avatar: 'avatar_pesto.png', defaultSide: 'right' },
+    { id: 'dilla', name: 'Dilla', avatar: 'avatar_dilla.png', defaultSide: 'left' },
+    { id: 'sales', name: 'Sales', avatar: 'avatar_sales.png', defaultSide: 'right' }
+];
+
+const getCharacterByAvatar = (avatar) => {
+    return CHARACTERS.find(c => c.avatar === avatar) || CHARACTERS[0];
+};
+
 const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
@@ -22,6 +33,16 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7'];
 
     const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
+
+    const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
+
+    useEffect(() => {
+        const handleOutsideClick = () => {
+            setActiveDropdownIndex(null);
+        };
+        document.addEventListener('click', handleOutsideClick);
+        return () => document.removeEventListener('click', handleOutsideClick);
+    }, []);
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
@@ -147,8 +168,29 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
             onChange(element.id, { chatNodes: newNodes });
         };
 
+        const getLastLeftAvatar = () => {
+            for (let i = chatNodes.length - 1; i >= 0; i--) {
+                const node = chatNodes[i];
+                if (node.type === 'message' && node.style !== 'narrator' && node.avatar) {
+                    return node.avatar;
+                }
+            }
+            return 'avatar_chef.png';
+        };
+
+        const getLastRightAvatar = () => {
+            for (let i = chatNodes.length - 1; i >= 0; i--) {
+                const node = chatNodes[i];
+                if ((node.type === 'reply' || node.type === 'quiz') && node.avatar) {
+                    return node.avatar;
+                }
+            }
+            return 'avatar_pesto.png';
+        };
+
         const addMessageNode = () => {
-            updateChatNodes([...chatNodes, { type: 'message', text: '' }]);
+            const avatar = getLastLeftAvatar();
+            updateChatNodes([...chatNodes, { type: 'message', text: '', avatar }]);
         };
 
         const addNarratorNode = () => {
@@ -156,11 +198,13 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
         };
 
         const addReplyNode = () => {
-            updateChatNodes([...chatNodes, { type: 'reply', text: '' }]);
+            const avatar = getLastRightAvatar();
+            updateChatNodes([...chatNodes, { type: 'reply', text: '', avatar }]);
         };
 
         const addQuizNode = () => {
-            updateChatNodes([...chatNodes, { type: 'quiz', options: ['', ''], correctIndex: 0 }]);
+            const avatar = getLastRightAvatar();
+            updateChatNodes([...chatNodes, { type: 'quiz', options: ['', ''], correctIndex: 0, avatar }]);
         };
 
         const [showStickerPicker, setShowStickerPicker] = useState(false);
@@ -277,8 +321,58 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                     {chatNodes.map((node, index) => (
                         <div key={index} className={`chatquiz-node chatquiz-node-${node.type} ${node.style === 'narrator' ? 'chatquiz-node-narrator' : ''}`}>
                             <div className="chatquiz-node-header">
-                                <span className="chatquiz-node-icon">{node.type === 'message' ? (node.style === 'narrator' ? '📢' : '👨‍🍳') : node.type === 'reply' ? '🤖' : node.type === 'sticker' ? '🌟' : '🧩'}</span>
-                                <span className="chatquiz-node-label">{node.type === 'message' ? (node.style === 'narrator' ? 'Narrator' : 'Chef') : node.type === 'reply' ? 'Pesto' : node.type === 'sticker' ? 'Sticker' : 'Quiz'}</span>
+                                {node.type === 'message' && node.style === 'narrator' ? (
+                                    <>
+                                        <span className="chatquiz-node-icon">📢</span>
+                                        <span className="chatquiz-node-label">Narrator</span>
+                                    </>
+                                ) : node.type === 'sticker' ? (
+                                    <>
+                                        <span className="chatquiz-node-icon">🌟</span>
+                                        <span className="chatquiz-node-label">Sticker</span>
+                                    </>
+                                ) : (
+                                    <div className="chatquiz-avatar-selector-container">
+                                        <button 
+                                            className="chatquiz-avatar-selector-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveDropdownIndex(activeDropdownIndex === index ? null : index);
+                                            }}
+                                        >
+                                            <img 
+                                                src={`/assets/characters/${node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')}`} 
+                                                alt="avatar" 
+                                                className="chatquiz-avatar-selector-icon" 
+                                            />
+                                            <span className="chatquiz-avatar-selector-name">
+                                                {getCharacterByAvatar(node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')).name}
+                                            </span>
+                                            <span className="chatquiz-avatar-selector-arrow">▼</span>
+                                        </button>
+
+                                        {activeDropdownIndex === index && (
+                                            <div className="chatquiz-avatar-dropdown-menu">
+                                                {CHARACTERS.map((char) => (
+                                                    <button
+                                                        key={char.id}
+                                                        className={`chatquiz-avatar-dropdown-item ${(node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')) === char.avatar ? 'selected' : ''}`}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const newNodes = [...chatNodes];
+                                                            newNodes[index] = { ...newNodes[index], avatar: char.avatar };
+                                                            updateChatNodes(newNodes);
+                                                            setActiveDropdownIndex(null);
+                                                        }}
+                                                    >
+                                                        <img src={`/assets/characters/${char.avatar}`} alt={char.name} className="chatquiz-dropdown-avatar-img" />
+                                                        <span className="chatquiz-dropdown-avatar-name">{char.name}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                                 {node.type === 'message' && (
                                     <button
                                         className={`chatquiz-style-toggle ${node.style === 'narrator' ? 'active' : ''}`}
@@ -329,18 +423,23 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                 />
                             )}
 
-                            {node.type === 'sticker' && (
-                                <div className="chatquiz-sticker-preview">
-                                    <img src={node.src} alt="sticker" className="chatquiz-sticker-thumb" />
-                                    <button
-                                        className={`chatquiz-side-toggle ${node.side === 'right' ? 'side-right' : 'side-left'}`}
-                                        onClick={() => toggleStickerSide(index)}
-                                        title={node.side === 'left' ? 'Sent by Chef (left)' : 'Sent by Pesto (right)'}
-                                    >
-                                        {node.side === 'left' ? '👨‍🍳 Chef' : '🤖 Pesto'}
-                                    </button>
-                                </div>
-                            )}
+                            {node.type === 'sticker' && (() => {
+                                 const leftChar = getCharacterByAvatar(getLastLeftAvatar());
+                                 const rightChar = getCharacterByAvatar(getLastRightAvatar());
+                                 return (
+                                     <div className="chatquiz-sticker-preview">
+                                         <img src={node.src} alt="sticker" className="chatquiz-sticker-thumb" />
+                                         <button
+                                             className={`chatquiz-side-toggle ${node.side === 'right' ? 'side-right' : 'side-left'}`}
+                                             onClick={() => toggleStickerSide(index)}
+                                             title={node.side === 'left' ? `Sent by ${leftChar.name} (left)` : `Sent by ${rightChar.name} (right)`}
+                                         >
+                                             <img src={`/assets/characters/${node.side === 'left' ? leftChar.avatar : rightChar.avatar}`} alt="avatar" className="chatquiz-side-toggle-img" />
+                                             {node.side === 'left' ? leftChar.name : rightChar.name}
+                                         </button>
+                                     </div>
+                                 );
+                             })()}
 
                             {node.type === 'quiz' && (
                                 <div className="chatquiz-options">
@@ -388,43 +487,57 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                     ))}
                 </div>
 
-                {!translationMode && (
-                <div className="chatquiz-add-buttons">
-                    <button className="chatquiz-add-btn" onClick={addMessageNode}>+ Chef</button>
-                    <button className="chatquiz-add-btn" onClick={addReplyNode}>+ Pesto</button>
-                    <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
-                    <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
-                    <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
-                </div>
-                )}
+                {!translationMode && (() => {
+                    const leftChar = getCharacterByAvatar(getLastLeftAvatar());
+                    const rightChar = getCharacterByAvatar(getLastRightAvatar());
+                    return (
+                        <div className="chatquiz-add-buttons">
+                            <button className="chatquiz-add-btn" onClick={addMessageNode}>+ {leftChar.name}</button>
+                            <button className="chatquiz-add-btn" onClick={addReplyNode}>+ {rightChar.name}</button>
+                            <button className="chatquiz-add-btn" onClick={addNarratorNode}>+ Narrator</button>
+                            <button className="chatquiz-add-btn" onClick={addQuizNode}>+ Quiz</button>
+                            <button className="chatquiz-add-btn chatquiz-add-sticker" onClick={openStickerPicker}>+ Sticker</button>
+                        </div>
+                    );
+                })()}
 
-                {showStickerPicker && ReactDOM.createPortal(
-                    <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>
-                        <div className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
-                            <div className="chatquiz-sticker-modal-header">
-                                <span>Pick a Sticker</span>
-                                <div className="chatquiz-sticker-side-picker">
-                                    <button
-                                        className={`chatquiz-side-btn ${stickerPickerSide === 'left' ? 'active' : ''}`}
-                                        onClick={() => setStickerPickerSide('left')}
-                                    >👨‍🍳 Chef</button>
-                                    <button
-                                        className={`chatquiz-side-btn ${stickerPickerSide === 'right' ? 'active' : ''}`}
-                                        onClick={() => setStickerPickerSide('right')}
-                                    >🤖 Pesto</button>
+                {showStickerPicker && (() => {
+                    const leftChar = getCharacterByAvatar(getLastLeftAvatar());
+                    const rightChar = getCharacterByAvatar(getLastRightAvatar());
+                    return ReactDOM.createPortal(
+                        <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>
+                            <div className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="chatquiz-sticker-modal-header">
+                                    <span>Pick a Sticker</span>
+                                    <div className="chatquiz-sticker-side-picker">
+                                        <button
+                                            className={`chatquiz-side-btn ${stickerPickerSide === 'left' ? 'active' : ''}`}
+                                            onClick={() => setStickerPickerSide('left')}
+                                        >
+                                            <img src={`/assets/characters/${leftChar.avatar}`} alt={leftChar.name} className="chatquiz-side-picker-img" />
+                                            {leftChar.name}
+                                        </button>
+                                        <button
+                                            className={`chatquiz-side-btn ${stickerPickerSide === 'right' ? 'active' : ''}`}
+                                            onClick={() => setStickerPickerSide('right')}
+                                        >
+                                            <img src={`/assets/characters/${rightChar.avatar}`} alt={rightChar.name} className="chatquiz-side-picker-img" />
+                                            {rightChar.name}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="chatquiz-sticker-grid">
+                                    {availableStickers.map((filename) => (
+                                        <div key={filename} className="chatquiz-sticker-item" onClick={() => selectSticker(filename)}>
+                                            <img src={`${STICKER_DIR}${filename}`} alt={filename} />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                            <div className="chatquiz-sticker-grid">
-                                {availableStickers.map((filename) => (
-                                    <div key={filename} className="chatquiz-sticker-item" onClick={() => selectSticker(filename)}>
-                                        <img src={`${STICKER_DIR}${filename}`} alt={filename} />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>,
-                    document.body
-                )}
+                        </div>,
+                        document.body
+                    );
+                })()}
             </div>
         );
     }

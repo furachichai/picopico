@@ -828,7 +828,19 @@ const Player = () => {
                                                     )}
                                                 </div>
                                             )}
-                                            {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" style={(element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? { objectFit: 'fill' } : undefined} />}
+                                            {element.type === 'image' && (
+                                                <img 
+                                                    src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} 
+                                                    alt="content" 
+                                                    style={{
+                                                        opacity: element.metadata?.opacity ?? 1,
+                                                        filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
+                                                    }} 
+                                                />
+                                            )}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
                                                     data={(() => {

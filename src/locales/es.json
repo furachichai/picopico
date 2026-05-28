@@ -33,6 +33,7 @@
     "library": {
         "title": "Biblioteca",
         "imgs": "IMGs",
+        "objects": "Objetos",
         "bkgs": "FONDOS",
         "emojis": "EMOJIS",
         "colors": "COLORES",
