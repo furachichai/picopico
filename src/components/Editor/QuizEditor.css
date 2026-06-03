@@ -1226,7 +1226,7 @@ input:checked+.toggle-slider:before {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 4px;
     padding: 12px 20px;
     font-family: 'Outfit', sans-serif;
     font-weight: 800;

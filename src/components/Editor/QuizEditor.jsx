@@ -82,6 +82,18 @@ const parseFieldExpression = (expression) => {
             content: expression.substring(lastIndex)
         });
     }
+
+    // Trim trailing/leading whitespace from text segments adjacent to fields
+    for (let i = 0; i < segments.length; i++) {
+        if (segments[i].type === 'text') {
+            if (i + 1 < segments.length && segments[i + 1].type === 'field') {
+                segments[i].content = segments[i].content.replace(/\s+$/, '');
+            }
+            if (i - 1 >= 0 && segments[i - 1].type === 'field') {
+                segments[i].content = segments[i].content.replace(/^\s+/, '');
+            }
+        }
+    }
     
     return segments;
 };
