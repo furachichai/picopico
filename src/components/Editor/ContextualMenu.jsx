@@ -777,6 +777,20 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
                     <div className="menu-group">
+                        <label>Line Type</label>
+                        <select
+                            value={metadata.lineType || 'normal'}
+                            onChange={(e) => updateMetadata({ lineType: e.target.value })}
+                            style={{ fontSize: '0.8rem', padding: '2px 4px' }}
+                        >
+                            <option value="normal">Normal</option>
+                            <option value="dotted">Dotted</option>
+                            <option value="cutting">Cutting Line</option>
+                            <option value="pencil">Pencil Line</option>
+                            <option value="ink">Ink Line</option>
+                        </select>
+                    </div>
+                    <div className="menu-group">
                         <label>Start Cap</label>
                         <select
                             value={metadata.startCap || 'none'}

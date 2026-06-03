@@ -405,37 +405,81 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         }}
                     />
                 )}
-                {element.type === 'line' && (
-                    <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {/* Line body */}
-                        <div style={{ 
-                            width: '100%', 
-                            height: `${element.metadata?.height || 10}px`, 
-                            backgroundColor: element.metadata?.symbolColor || '#8B5CF6',
-                            borderRadius: `${(element.metadata?.height || 10) / 2}px` 
-                        }} />
-                        
-                        {/* Start Cap */}
-                        {element.metadata?.startCap === 'arrow' && (
-                            <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
-                                <polygon points="100,0 0,50 100,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
-                            </svg>
-                        )}
-                        {element.metadata?.startCap === 'circle' && (
-                            <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
-                        )}
+                {element.type === 'line' && (() => {
+                    const thickness = element.metadata?.height || 10;
+                    const color = element.metadata?.symbolColor || '#8B5CF6';
+                    const lineType = element.metadata?.lineType || 'normal';
 
-                        {/* End Cap */}
-                        {element.metadata?.endCap === 'arrow' && (
-                            <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
-                                <polygon points="0,0 100,50 0,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                    let lineStyle = {
+                        width: '100%',
+                        height: `${thickness}px`,
+                        boxSizing: 'border-box'
+                    };
+
+                    if (lineType === 'normal') {
+                        lineStyle.backgroundColor = color;
+                        lineStyle.borderRadius = `${thickness / 2}px`;
+                    } else if (lineType === 'dotted') {
+                        lineStyle.backgroundImage = `radial-gradient(circle, ${color} 30%, transparent 35%)`;
+                        lineStyle.backgroundSize = `${thickness * 2}px ${thickness}px`;
+                        lineStyle.backgroundRepeat = 'repeat-x';
+                        lineStyle.backgroundPosition = 'center';
+                    } else if (lineType === 'cutting') {
+                        lineStyle.backgroundImage = `linear-gradient(to right, ${color} 60%, transparent 60%)`;
+                        lineStyle.backgroundSize = `${thickness * 3}px ${thickness}px`;
+                        lineStyle.backgroundRepeat = 'repeat-x';
+                        lineStyle.backgroundPosition = 'center';
+                    } else if (lineType === 'pencil') {
+                        lineStyle.backgroundColor = color;
+                        lineStyle.borderRadius = `${thickness / 2}px`;
+                        lineStyle.filter = 'url(#pencil-filter)';
+                    } else if (lineType === 'ink') {
+                        lineStyle.backgroundColor = color;
+                        lineStyle.borderRadius = `${thickness / 2}px`;
+                        lineStyle.filter = 'url(#ink-filter)';
+                    }
+
+                    return (
+                        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {/* Hidden SVG Filters for hand-drawn look */}
+                            <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none', visibility: 'hidden' }}>
+                                <defs>
+                                    <filter id="pencil-filter" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+                                    </filter>
+                                    <filter id="ink-filter" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+                                    </filter>
+                                </defs>
                             </svg>
-                        )}
-                        {element.metadata?.endCap === 'circle' && (
-                            <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
-                        )}
-                    </div>
-                )}
+
+                            {/* Line body */}
+                            <div style={lineStyle} />
+                            
+                            {/* Start Cap */}
+                            {element.metadata?.startCap === 'arrow' && (
+                                <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                    <polygon points="100,0 0,50 100,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                                </svg>
+                            )}
+                            {element.metadata?.startCap === 'circle' && (
+                                <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                            )}
+
+                            {/* End Cap */}
+                            {element.metadata?.endCap === 'arrow' && (
+                                <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                    <polygon points="0,0 100,50 0,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
+                                </svg>
+                            )}
+                            {element.metadata?.endCap === 'circle' && (
+                                <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                            )}
+                        </div>
+                    );
+                })()}
                 {element.type === 'balloon' && (
                     <>
                         <Balloon
