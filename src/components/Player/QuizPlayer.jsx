@@ -970,8 +970,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             const endWNew = endRectNew.width / scaleX;
             const endHNew = endRectNew.height / scaleY;
 
-            const duration = isSwapping ? 0.11 : 0.22;
-            const delayMs = isSwapping ? 110 : 220;
+            const duration = 0.22;
+            const delayMs = 220;
 
             if (isSwapping) {
                 const oldGridEl = choiceGridRefs.current[existingChoice.id];
