@@ -1902,9 +1902,6 @@
     flex-wrap: wrap;
     gap: 8px;
     padding: 16px 24px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     font-family: 'Outfit', sans-serif;
     font-weight: 800;
     font-size: 1.4rem;
@@ -1913,7 +1910,6 @@
     max-width: 90%;
     text-align: center;
     user-select: none;
-    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .field-player-text {
