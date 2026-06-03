@@ -279,7 +279,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '?';
                         const placeholderStr = seg.isDouble ? (seg.placeholder || '') : '';
                         const len = Math.max(1, evaluatedStr.length, placeholderStr.length);
-                        const width = 44 + (len - 1) * 15;
+                        const width = 38 + (len - 1) * 12;
                         return (
                             <span
                                 key={idx}
