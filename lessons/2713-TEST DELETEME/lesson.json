@@ -1,0 +1,92 @@
+{
+  "id": "draft-1",
+  "title": "TEST DELETEME",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1780516225085",
+          "type": "line",
+          "x": 55.97222222222222,
+          "y": 40.078125,
+          "width": 71.10864471593015,
+          "height": 10,
+          "rotation": 90.42453003353728,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 6,
+            "isSymbol": true,
+            "symbolColor": "#5A5A5A",
+            "startCap": "none",
+            "endCap": "none",
+            "lineType": "ink"
+          }
+        },
+        {
+          "id": "el-1780516588313",
+          "type": "text",
+          "content": "<b>3 + 2 × 8 =</b>",
+          "x": 23.333333333333343,
+          "y": 30.15625,
+          "width": 29.444444444444446,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 23
+          }
+        },
+        {
+          "id": "el-1780514308526",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 26.111111111111114,
+          "y": 40.46875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "field",
+            "visualMode": false,
+            "fieldExpression": "3 + **8 x 2** = "
+          }
+        },
+        {
+          "id": "el-1780515342049",
+          "type": "text",
+          "content": "<b>3 + 2 × 8 =</b>",
+          "x": 78.61111111111111,
+          "y": 30.46875,
+          "width": 29.444444444444446,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 23,
+            "color": "#C8C8C8"
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-06-03T19:18:22.892Z",
+  "updatedAt": "2026-06-03T19:57:23.876Z",
+  "path": "lessons/2713-TEST DELETEME/lesson.json",
+  "textPreset": null
+}

@@ -3093,7 +3093,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
                                 const placeholderStr = seg.isDouble ? (seg.placeholder || '') : '';
                                 const len = Math.max(1, evaluatedStr.length, placeholderStr.length);
-                                const slotWidth = 38 + (len - 1) * 12;
+                                const slotWidth = 44 + (len - 1) * 15;
                                 
                                 return (
                                     <div
