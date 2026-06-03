@@ -277,8 +277,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         return <span key={idx} className="field-preview-text">{seg.content}</span>;
                     } else {
                         const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '?';
-                        const placeholderStr = seg.isDouble ? (seg.placeholder || '') : '';
-                        const len = Math.max(1, evaluatedStr.length, placeholderStr.length);
+                        const len = Math.max(1, evaluatedStr.length);
                         const width = 44 + (len - 1) * 15;
                         return (
                             <span
