@@ -248,17 +248,36 @@ const Canvas = (props) => {
               style={{
                 position: 'absolute',
                 top: 0, left: 0, width: '100%', height: '100%',
-                backgroundImage: currentSlide.background,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
                 zIndex: 0,
-                opacity: currentSlide.backgroundSettings?.opacity ?? 1,
-                filter: `brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
-                transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`,
                 pointerEvents: 'none'
               }}
-            />
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0, left: 0, width: '100%', height: '100%',
+                  backgroundImage: currentSlide.background,
+                  backgroundSize: currentSlide.backgroundSettings?.sizeMode === 'custom'
+                    ? `${currentSlide.backgroundSettings?.size ?? 100}%`
+                    : (currentSlide.backgroundSettings?.sizeMode || 'cover'),
+                  backgroundPosition: `${currentSlide.backgroundSettings?.positionX ?? 50}% ${currentSlide.backgroundSettings?.positionY ?? 50}%`,
+                  backgroundRepeat: 'no-repeat',
+                  opacity: currentSlide.backgroundSettings?.opacity ?? 1,
+                  filter: `grayscale(${currentSlide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
+                  transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`
+                }}
+              />
+              {currentSlide.backgroundSettings?.grayscale && currentSlide.backgroundSettings?.tintColor && currentSlide.backgroundSettings.tintColor !== 'transparent' && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0, left: 0, width: '100%', height: '100%',
+                    backgroundColor: currentSlide.backgroundSettings.tintColor,
+                    mixBlendMode: 'color'
+                  }}
+                />
+              )}
+            </div>
           )}
           {currentSlide?.background && !currentSlide.background.includes('url') && !currentSlide.background.includes('gradient') && (
             <div

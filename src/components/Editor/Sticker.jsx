@@ -135,12 +135,22 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     onMoveMultiple(state.selectedElementIds.filter(id => id !== 'background' && id !== 'cartridge'), dxPct, dyPct);
                 } else {
                     // Single element move uses absolute positioning for perfection
-                    const newX = startLeft + (dx / parentWidth) * 100;
+                    let newX = startLeft + (dx / parentWidth) * 100;
                     const newY = startTop + (dy / parentHeight) * 100;
                     if (element.type === 'quiz') {
                         // Quiz elements only move vertically, locked horizontally
                         onChange(element.id, { y: newY });
                     } else {
+                        if (element.type === 'popup') {
+                            const halfWidth = ((element.width || 30) * element.scale) / 2;
+                            const minX = 15 + halfWidth;
+                            const maxX = 85 - halfWidth;
+                            if (minX <= maxX) {
+                                newX = Math.max(minX, Math.min(maxX, newX));
+                            } else {
+                                newX = 50;
+                            }
+                        }
                         onChange(element.id, { x: newX, y: newY });
                     }
                 }
@@ -152,7 +162,15 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 // Scale factor is the ratio of current distance to start distance
                 // We multiply the startScale by this ratio
                 const scaleFactor = currentDist / startDist;
-                const newScale = startScale * scaleFactor;
+                let newScale = startScale * scaleFactor;
+
+                if (element.type === 'popup') {
+                    const distLeft = element.x - 15;
+                    const distRight = 85 - element.x;
+                    const maxHalfWidth = Math.min(distLeft, distRight);
+                    const maxScale = (2 * maxHalfWidth) / (element.width || 30);
+                    newScale = Math.min(maxScale, newScale);
+                }
 
                 onChange(element.id, { scale: Math.max(0.1, newScale) });
             } else if (type === 'rotate') {
@@ -310,14 +328,14 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
     return (
         <div
             ref={stickerRef}
-            className={`sticker ${isSelected ? 'selected' : ''}`}
+            className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''}`}
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
                 width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: isSelected ? (elementIndex + 1000) : (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
+                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
@@ -633,6 +651,21 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     </div>
                 </div>
             )}
+
+            {isSelected && !translationMode && element.type === 'quiz' && element.metadata?.quizType === 'field' && !element.metadata?.locked && (
+                <div className="sticker-controls">
+                    {/* Rotate Handle for Field Quiz */}
+                    <div
+                        className="handle rotate-handle"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'rotate')}
+                        onTouchStart={(e) => handleStart(e, 'rotate')}
+                    >
+                        ↻
+                    </div>
+                </div>
+            )}
+
 
             {isSelected && !translationMode && element.type === 'line' && (
                 <div className="sticker-controls">

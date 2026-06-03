@@ -35,7 +35,6 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
             }
         });
     };
-
     const handleAddQuiz = (type = 'classic') => {
         setShowQuizMenu(false);
         setShowQ2Menu(false);
@@ -53,6 +52,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         const isPEM = type === 'pem';
         const isMatch = type === 'match';
         const isConecta = type === 'conecta';
+        const isField = type === 'field';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
@@ -60,6 +60,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         else if (isChatQuiz) defaultOptions = [];
         else if (isPEM) defaultOptions = [];
         else if (isMatch || isConecta) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6'];
+        else if (isField) defaultOptions = [];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -73,7 +74,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta', 'field'
                     visualMode: false,
                     ...((isMatch || isConecta) && { matchAnswers: ['5', '6', '9', '7'] }),
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
@@ -91,6 +92,10 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                         pemMode: 'LEVELS',
                         pemDifficulty: 5,
                         pemExpression: null,
+                    }),
+                    // Field Defaults
+                    ...(isField && {
+                        fieldExpression: '3 + *8 x 2* = 19'
                     }),
                     // NL Defaults
                     nlConfig: type === 'nl' ? {
@@ -153,10 +158,10 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                 <button onClick={() => handleAddQuiz('chatquiz')}>Chat</button>
                                 <button onClick={() => handleAddQuiz('match')}>Match Drag</button>
                                 <button onClick={() => handleAddQuiz('conecta')}>Conecta</button>
+                                <button onClick={() => handleAddQuiz('field')}>Field</button>
                             </div>
                         )}
                     </div>
-
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
                             className={`btn-secondary ${showQ2Menu ? 'active' : ''}`}

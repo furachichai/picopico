@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { formatExponents } from '../../utils/textFormatters';
 import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
@@ -258,6 +259,165 @@ const ConectaCard = ({ card, isSolved, isFailed, disabled, cardShape, baseStyle,
     );
 };
 
+const evaluateMathExpression = (expr) => {
+    try {
+        if (!expr) return null;
+        let clean = expr
+            .replace(/[xX×]/g, '*')
+            .replace(/[÷]/g, '/')
+            .replace(/[−—–]/g, '-')
+            .replace(/\s+/g, '');
+        
+        if (!/^[0-9+\-*/().\s]+$/.test(clean)) {
+            return null;
+        }
+        
+        const val = new Function(`return (${clean})`)();
+        if (typeof val === 'number' && !isNaN(val) && isFinite(val)) {
+            return val;
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+};
+
+const parseFieldExpression = (expression) => {
+    if (!expression) return [];
+    
+    const segments = [];
+    let lastIndex = 0;
+    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+    let match;
+    
+    while ((match = regex.exec(expression)) !== null) {
+        if (match.index > lastIndex) {
+            segments.push({
+                type: 'text',
+                content: expression.substring(lastIndex, match.index)
+            });
+        }
+        
+        const isDouble = match[1].startsWith('**');
+        const expr = isDouble ? match[2] : match[3];
+        const val = evaluateMathExpression(expr);
+        
+        segments.push({
+            type: 'field',
+            isDouble,
+            placeholder: expr,
+            evaluated: val,
+            raw: match[1]
+        });
+        
+        lastIndex = regex.lastIndex;
+    }
+    
+    if (lastIndex < expression.length) {
+        segments.push({
+            type: 'text',
+            content: expression.substring(lastIndex)
+        });
+    }
+    
+    return segments;
+};
+
+const generateFieldChoices = (segments) => {
+    const fields = segments.filter(s => s.type === 'field' && s.evaluated !== null);
+    const correctAnswers = fields.map(f => f.evaluated);
+    const uniqueCorrect = Array.from(new Set(correctAnswers));
+    
+    if (uniqueCorrect.length === 0) return [];
+    
+    const targetSet = new Set(uniqueCorrect);
+    const candidates = [];
+    
+    fields.forEach(field => {
+        const val = field.evaluated;
+        const expr = field.placeholder;
+        
+        const hasOp = /[+\-*/xX×÷]/.test(expr);
+        if (hasOp) {
+            const numbers = expr.match(/\d+(\.\d+)?/g);
+            if (numbers && numbers.length >= 2) {
+                const n1 = parseFloat(numbers[0]);
+                const n2 = parseFloat(numbers[1]);
+                if (!isNaN(n1) && !isNaN(n2)) {
+                    const opsVal = [
+                        n1 + n2,
+                        n1 - n2,
+                        n2 - n1,
+                        n1 * n2,
+                        n2 !== 0 ? n1 / n2 : null,
+                        n1 !== 0 ? n2 / n1 : null,
+                    ];
+                    opsVal.forEach(o => {
+                        if (o !== null && !isNaN(o) && isFinite(o)) {
+                            const rounded = Math.round(o * 100) / 100;
+                            candidates.push(rounded);
+                        }
+                    });
+                }
+            }
+        }
+        
+        candidates.push(val + 1);
+        candidates.push(val - 1);
+        candidates.push(val + 2);
+        candidates.push(val - 2);
+        candidates.push(val + 3);
+        candidates.push(val - 3);
+        candidates.push(val + 10);
+        if (val - 10 >= 0) candidates.push(val - 10);
+        candidates.push(val * 2);
+        if (val % 2 === 0) candidates.push(val / 2);
+        
+        const valStr = Math.abs(val).toString();
+        if (valStr.length >= 2) {
+            const swappedStr = valStr.split('').reverse().join('');
+            const swappedVal = parseFloat(swappedStr) * (val < 0 ? -1 : 1);
+            if (!isNaN(swappedVal)) {
+                candidates.push(swappedVal);
+            }
+        }
+    });
+    
+    const allIntegers = uniqueCorrect.every(n => Number.isInteger(n));
+    
+    let filteredCandidates = candidates.filter(c => {
+        if (targetSet.has(c)) return false;
+        if (allIntegers && !Number.isInteger(c)) return false;
+        if (c < 0 && uniqueCorrect.every(n => n >= 0)) return false;
+        return true;
+    });
+    
+    filteredCandidates = Array.from(new Set(filteredCandidates));
+    
+    const baseVal = uniqueCorrect[0];
+    let offset = 4;
+    while (uniqueCorrect.length + filteredCandidates.length < 10) {
+        const up = baseVal + offset;
+        const down = baseVal - offset;
+        if (!targetSet.has(up) && !filteredCandidates.includes(up)) {
+            filteredCandidates.push(up);
+        }
+        if (down >= 0 || !uniqueCorrect.every(n => n >= 0)) {
+            if (!targetSet.has(down) && !filteredCandidates.includes(down)) {
+                filteredCandidates.push(down);
+            }
+        }
+        offset++;
+    }
+    
+    const choices = [...uniqueCorrect];
+    for (let i = 0; i < filteredCandidates.length && choices.length < 10; i++) {
+        choices.push(filteredCandidates[i]);
+    }
+    
+    return choices.sort((a, b) => a - b);
+};
+
 const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true }) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
@@ -338,6 +498,20 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [conectaRight, setConectaRight] = useState([]);
     const [selectedLeftId, setSelectedLeftId] = useState(null);
     const [selectedRightId, setSelectedRightId] = useState(null);
+
+    // Field Quiz State
+    const [fieldChoices, setFieldChoices] = useState([]);
+    const [fieldSelections, setFieldSelections] = useState({}); // slotIndex -> choiceObj
+    const [activeSlotIndex, setActiveSlotIndex] = useState(0);
+    const [fieldWrong, setFieldWrong] = useState(false);
+    const [fieldAttempts, setFieldAttempts] = useState(0);
+    const [fieldShakeSlots, setFieldShakeSlots] = useState(new Set());
+    const [slideNode, setSlideNode] = useState(null);
+    const [flyingPieces, setFlyingPieces] = useState([]);
+    const [pendingSelections, setPendingSelections] = useState({});
+    const slotRefs = useRef({});
+    const choiceGridRefs = useRef({});
+
 
     // Generate a fixed set of subtle rising bubbles for the Match Drag background
     const matchBubbles = React.useMemo(() => {
@@ -598,6 +772,47 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         }
     }, [quizType, pemAst, pemSolved, pemFailed, data, pemGameLevel]);
 
+    useEffect(() => {
+        if (quizType === 'field') {
+            const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+            const segments = parseFieldExpression(expr);
+            const rawChoices = generateFieldChoices(segments);
+            const mapped = rawChoices.map((val, idx) => ({
+                id: `choice-${idx}`,
+                value: val
+            }));
+            
+            const shuffled = [...mapped].sort(() => Math.random() - 0.5);
+            setFieldChoices(shuffled);
+            setFieldSelections({});
+            
+            const firstSlot = segments.findIndex(s => s.type === 'field');
+            setActiveSlotIndex(firstSlot !== -1 ? firstSlot : 0);
+            setFieldWrong(false);
+            setFieldAttempts(0);
+            setFieldShakeSlots(new Set());
+        }
+    }, [quizType, data]);
+
+    useEffect(() => {
+        if (quizType === 'field') {
+            const node = document.querySelector('.player-slide.slide-active');
+            if (node) {
+                setSlideNode(node);
+            } else {
+                const interval = setInterval(() => {
+                    const activeNode = document.querySelector('.player-slide.slide-active');
+                    if (activeNode) {
+                        setSlideNode(activeNode);
+                        clearInterval(interval);
+                    }
+                }, 50);
+                return () => clearInterval(interval);
+            }
+        }
+    }, [quizType, data]);
+
+
     const getThumbImage = (index) => {
         return index === 0 ? '/assets/quiz/thumbs_up.png' : '/assets/quiz/thumbs_down.png';
     };
@@ -707,6 +922,233 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             window.removeEventListener('touchend', handleDragEnd);
         };
     }, [isDragging, handleDragMove, handleDragEnd]);
+
+    // Field Quiz Handlers
+    const handleFieldChoiceTap = (choice, e) => {
+        ensureAudioAuthorized();
+        if (isSolved || isFailed || disabled) return;
+        
+        // If already placed (or pending to be placed), tapping it in the grid should 
+        // find its slot and trigger the un-place animation
+        const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id];
+        if (isPlaced) {
+            const slotIdx = Object.keys(fieldSelections).find(k => fieldSelections[k]?.id === choice.id) || 
+                            Object.keys(pendingSelections).find(k => pendingSelections[k]?.id === choice.id);
+            if (slotIdx !== undefined) {
+                handleFieldSlotTap(parseInt(slotIdx));
+            }
+            return;
+        }
+
+        if (activeSlotIndex === -1 || fieldSelections[activeSlotIndex] || pendingSelections[activeSlotIndex]) {
+            return;
+        }
+
+        const targetSlotIdx = activeSlotIndex;
+        const slotEl = slotRefs.current[targetSlotIdx];
+        const gridEl = e?.currentTarget;
+        const sNode = document.querySelector('.slide-active') || document.body;
+        
+        if (slotEl && gridEl && sNode) {
+            const startRect = gridEl.getBoundingClientRect();
+            const endRect = slotEl.getBoundingClientRect();
+            const slideRect = sNode.getBoundingClientRect();
+            
+            const scaleX = slideRect.width / 360;
+            const scaleY = slideRect.height / 640;
+
+            const startX = (startRect.left - slideRect.left) / scaleX;
+            const startY = (startRect.top - slideRect.top) / scaleY;
+            const startW = startRect.width / scaleX;
+            const startH = startRect.height / scaleY;
+
+            const endX = (endRect.left - slideRect.left) / scaleX;
+            const endY = (endRect.top - slideRect.top) / scaleY;
+            const endW = endRect.width / scaleX;
+            const endH = endRect.height / scaleY;
+
+            const flyId = Date.now() + Math.random();
+            
+            setFlyingPieces(prev => [...prev, {
+                id: flyId,
+                choice,
+                startX, startY, startW, startH,
+                endX, endY, endW, endH,
+                targetSlotIdx
+            }]);
+
+            setPendingSelections(prev => ({ ...prev, [choice.id]: true, [targetSlotIdx]: choice }));
+            playSound('attach');
+
+            setTimeout(() => {
+                setFlyingPieces(prev => prev.filter(p => p.id !== flyId));
+                setPendingSelections(prev => {
+                    const next = { ...prev };
+                    delete next[choice.id];
+                    delete next[targetSlotIdx];
+                    return next;
+                });
+                
+                setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
+                
+                const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+                const segments = parseFieldExpression(expr);
+                
+                setFieldSelections(currentSelections => {
+                    const nextEmptyIdx = segments.findIndex(
+                        (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
+                    );
+                    if (nextEmptyIdx !== -1) {
+                        setActiveSlotIndex(nextEmptyIdx);
+                    }
+                    return currentSelections;
+                });
+                
+                setFieldShakeSlots(prev => {
+                    const newShake = new Set(prev);
+                    newShake.delete(targetSlotIdx);
+                    return newShake;
+                });
+            }, 220);
+        } else {
+            // Fallback if refs are missing
+            const newSelections = { ...fieldSelections };
+            newSelections[activeSlotIndex] = choice;
+            setFieldSelections(newSelections);
+            playSound('attach');
+            
+            const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+            const segments = parseFieldExpression(expr);
+            const nextEmptyIdx = segments.findIndex(
+                (s, idx) => s.type === 'field' && !newSelections[idx]
+            );
+            if (nextEmptyIdx !== -1) {
+                setActiveSlotIndex(nextEmptyIdx);
+            }
+        }
+    };
+
+    const handleFieldSlotTap = (slotIdx) => {
+        ensureAudioAuthorized();
+        if (isSolved || isFailed || disabled) return;
+        
+        const choice = fieldSelections[slotIdx] || pendingSelections[slotIdx];
+        if (choice && !pendingSelections[choice.id]) {
+            // It's filled, move it back
+            const slotEl = slotRefs.current[slotIdx];
+            const gridEl = choiceGridRefs.current[choice.id];
+            const sNode = document.querySelector('.slide-active') || document.body;
+            
+            if (slotEl && gridEl && sNode) {
+                const startRect = slotEl.getBoundingClientRect();
+                const endRect = gridEl.getBoundingClientRect();
+                const slideRect = sNode.getBoundingClientRect();
+                
+                const scaleX = slideRect.width / 360;
+                const scaleY = slideRect.height / 640;
+
+                const startX = (startRect.left - slideRect.left) / scaleX;
+                const startY = (startRect.top - slideRect.top) / scaleY;
+                const startW = startRect.width / scaleX;
+                const startH = startRect.height / scaleY;
+
+                const endX = (endRect.left - slideRect.left) / scaleX;
+                const endY = (endRect.top - slideRect.top) / scaleY;
+                const endW = endRect.width / scaleX;
+                const endH = endRect.height / scaleY;
+
+                const flyId = Date.now() + Math.random();
+                
+                setFlyingPieces(prev => [...prev, {
+                    id: flyId,
+                    choice,
+                    startX, startY, startW, startH,
+                    endX, endY, endW, endH,
+                    sourceSlotIdx: slotIdx
+                }]);
+
+                setPendingSelections(prev => ({ ...prev, [choice.id]: true }));
+                playSound('detach');
+
+                // Clear from selections instantly so the slot appears empty
+                setFieldSelections(prev => {
+                    const next = { ...prev };
+                    delete next[slotIdx];
+                    return next;
+                });
+                setActiveSlotIndex(slotIdx);
+
+                setTimeout(() => {
+                    setFlyingPieces(prev => prev.filter(p => p.id !== flyId));
+                    setPendingSelections(prev => {
+                        const next = { ...prev };
+                        delete next[choice.id];
+                        return next;
+                    });
+                }, 220);
+            } else {
+                setFieldSelections(prev => {
+                    const next = { ...prev };
+                    delete next[slotIdx];
+                    return next;
+                });
+                setActiveSlotIndex(slotIdx);
+                playSound('detach');
+            }
+        } else if (!choice) {
+            setActiveSlotIndex(slotIdx);
+        }
+    };
+
+    const handleFieldOkSubmit = () => {
+        ensureAudioAuthorized();
+        if (isSolved || isFailed || disabled) return;
+        
+        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+        const segments = parseFieldExpression(expr);
+        
+        const unfilledIndices = segments
+            .map((s, idx) => (s.type === 'field' && !fieldSelections[idx] ? idx : null))
+            .filter(val => val !== null);
+            
+        if (unfilledIndices.length > 0) {
+            setFieldShakeSlots(new Set(unfilledIndices));
+            setTimeout(() => setFieldShakeSlots(new Set()), 500);
+            playSound('wrong');
+            return;
+        }
+        
+        let allCorrect = true;
+        const wrongSlots = new Set();
+        
+        segments.forEach((s, idx) => {
+            if (s.type === 'field') {
+                const placed = fieldSelections[idx];
+                if (!placed || placed.value !== s.evaluated) {
+                    allCorrect = false;
+                    wrongSlots.add(idx);
+                }
+            }
+        });
+        
+        if (allCorrect) {
+            handleSuccess();
+        } else {
+            const nextAttempts = fieldAttempts + 1;
+            setFieldAttempts(nextAttempts);
+            setFieldShakeSlots(wrongSlots);
+            setTimeout(() => setFieldShakeSlots(new Set()), 500);
+            
+            if (nextAttempts >= 3) {
+                setIsFailed(true);
+                playSound('fail');
+                if (onBanner) onBanner('fail', 'Moco!');
+                if (onNext) onNext();
+            } else {
+                playSound('wrong');
+            }
+        }
+    };
 
     // -------------------------------------------------------------------------
     // MATCH QUIZ HANDLERS & PHYSICS
@@ -2535,6 +2977,184 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     </button>
                 </div>
             </div>
+        );
+    }
+
+    if (quizType === 'field') {
+        const fieldExpression = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+        const segments = parseFieldExpression(fieldExpression);
+        
+        return (
+            <>
+                <div className="quiz-player-2 field-mode-expression" style={{ pointerEvents: 'auto' }}>
+                    <div className="field-player-expression-card" style={{ pointerEvents: 'auto' }}>
+                        {segments.map((seg, idx) => {
+                            if (seg.type === 'text') {
+                                return (
+                                    <span key={idx} className="field-player-text">
+                                        {seg.content}
+                                    </span>
+                                );
+                            } else {
+                                const placed = fieldSelections[idx];
+                                const isSlotActive = activeSlotIndex === idx;
+                                const isSlotWrong = fieldShakeSlots.has(idx);
+                                const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
+                                const len = Math.max(1, evaluatedStr.length);
+                                const slotWidth = 44 + (len - 1) * 15;
+                                
+                                return (
+                                    <div
+                                        key={idx}
+                                        ref={el => slotRefs.current[idx] = el}
+                                        className={`field-player-slot ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''} ${placed ? 'has-placed' : ''}`}
+                                        style={{ minWidth: `${slotWidth}px`, height: '40px', pointerEvents: 'auto', visibility: pendingSelections[idx] ? 'hidden' : 'visible' }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleFieldSlotTap(idx);
+                                        }}
+                                    >
+                                        {placed ? (
+                                            <button
+                                                className="field-placed-choice-btn"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    backgroundColor: '#8338EC',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '8px',
+                                                    fontSize: '1rem',
+                                                    fontWeight: 800,
+                                                    cursor: 'pointer',
+                                                    pointerEvents: 'auto'
+                                                }}
+                                            >
+                                                {placed.value}
+                                            </button>
+                                        ) : (
+                                            <>
+                                                {seg.isDouble ? (
+                                                    <span className="field-slot-placeholder-text">
+                                                        {seg.placeholder}
+                                                    </span>
+                                                ) : (
+                                                    <span className="field-slot-empty-indicator"></span>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                );
+                            }
+                        })}
+                    </div>
+
+                    {/* Flying Pieces Overlay */}
+                    {slideNode && ReactDOM.createPortal(
+                        <div className="field-flying-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 9999 }}>
+                            {flyingPieces.map(piece => (
+                                <motion.div
+                                    key={piece.id}
+                                    initial={{
+                                        x: piece.startX,
+                                        y: piece.startY,
+                                        width: piece.startW,
+                                        height: piece.startH,
+                                    }}
+                                    animate={{
+                                        x: piece.endX,
+                                        y: piece.endY,
+                                        width: piece.endW,
+                                        height: piece.endH,
+                                    }}
+                                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.22 }}
+                                    style={{
+                                        position: 'absolute',
+                                        backgroundColor: piece.sourceSlotIdx !== undefined ? '#8338EC' : '#3A86FF',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        fontWeight: 800,
+                                        boxShadow: piece.sourceSlotIdx !== undefined ? 'none' : '0 4px 0 rgba(0,0,0,0.15)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        pointerEvents: 'none'
+                                    }}
+                                >
+                                    {piece.choice.value}
+                                </motion.div>
+                            ))}
+                        </div>,
+                        slideNode
+                    )}
+
+                    {/* Choices & OK Button render into active slide wrapper via React Portal */}
+                    {slideNode && ReactDOM.createPortal(
+                        <div className="field-player-bottom-portal" style={{ pointerEvents: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                            {/* Choices Grid (2 rows of 5 buttons) */}
+                            <div className="field-choices-section">
+                                <div className="field-choices-grid">
+                                    {fieldChoices.map((choice) => {
+                                        const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id];
+                                        
+                                        return (
+                                            <div key={choice.id} ref={el => choiceGridRefs.current[choice.id] = el} className="field-choice-cell">
+                                                {isPlaced ? (
+                                                    <div className="field-choice-placeholder-cell"></div>
+                                                ) : (
+                                                    <motion.button
+                                                        className="field-choice-btn"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleFieldChoiceTap(choice, e);
+                                                        }}
+                                                        disabled={isSolved || isFailed || disabled}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            backgroundColor: '#3A86FF',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            borderRadius: '8px',
+                                                            fontSize: '1rem',
+                                                            fontWeight: 800,
+                                                            boxShadow: '0 4px 0 rgba(0,0,0,0.15)',
+                                                            cursor: 'pointer',
+                                                            pointerEvents: 'auto'
+                                                        }}
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        {choice.value}
+                                                    </motion.button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* OK Validation Button */}
+                            <div className="field-ok-section">
+                                <button
+                                    className="field-ok-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFieldOkSubmit();
+                                    }}
+                                    disabled={isSolved || isFailed || disabled}
+                                    style={{ pointerEvents: 'auto' }}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>,
+                        slideNode
+                    )}
+                </div>
+            </>
         );
     }
 

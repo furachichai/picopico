@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
+import i18n from 'i18next';
 
 const LanguageContext = createContext();
 
@@ -11,12 +12,15 @@ const DEFAULT_LANGUAGE = 'es';
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('pico_language') || DEFAULT_LANGUAGE;
+    const saved = localStorage.getItem('pico_language') || DEFAULT_LANGUAGE;
+    i18n.changeLanguage(saved);
+    return saved;
   });
 
   const setLanguage = useCallback((lang) => {
     localStorage.setItem('pico_language', lang);
     setLanguageState(lang);
+    i18n.changeLanguage(lang);
   }, []);
 
   return (

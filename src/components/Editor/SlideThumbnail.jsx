@@ -112,16 +112,42 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundImage: slide.background,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
                             zIndex: 0,
-                            opacity: slide.backgroundSettings?.opacity ?? 1,
-                            filter: `brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
-                            transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                            pointerEvents: 'none'
                         }}
-                    />
+                    >
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                backgroundImage: slide.background,
+                                backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
+                                    ? `${slide.backgroundSettings?.size ?? 100}%`
+                                    : (slide.backgroundSettings?.sizeMode || 'cover'),
+                                backgroundPosition: `${slide.backgroundSettings?.positionX ?? 50}% ${slide.backgroundSettings?.positionY ?? 50}%`,
+                                backgroundRepeat: 'no-repeat',
+                                opacity: slide.backgroundSettings?.opacity ?? 1,
+                                filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
+                                transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                            }}
+                        />
+                        {slide.backgroundSettings?.grayscale && slide.backgroundSettings?.tintColor && slide.backgroundSettings.tintColor !== 'transparent' && (
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    backgroundColor: slide.backgroundSettings.tintColor,
+                                    mixBlendMode: 'color'
+                                }}
+                            />
+                        )}
+                    </div>
                 )}
                 {slide.background && !slide.background.includes('url') && !slide.background.includes('gradient') && (
                     <div

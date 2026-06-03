@@ -987,14 +987,16 @@
         "opacity": 0.41,
         "brightness": 86,
         "flipY": false,
-        "flipX": false
+        "flipX": false,
+        "grayscale": true,
+        "tintColor": "rgba(253, 224, 71, 0.4)"
       }
     }
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-22T20:11:26.515Z",
-  "path": "lessons/9941-First Steps/lesson.json",
+  "updatedAt": "2026-05-29T23:07:49.475Z",
+  "path": "lessons/0416-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",
   "type": "file",

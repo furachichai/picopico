@@ -50,6 +50,7 @@ const customObjects = import.meta.glob('../../assets/objects/*.{png,jpg,jpeg,svg
 const customObjectsListGlob = Object.values(customObjects);
 
 const staticObjects = [
+    '/assets/objects/broken_phone.png',
     '/assets/objects/phone_cases.png',
     '/assets/objects/shop_counter.png',
     '/assets/objects/shop_wall_display.png'

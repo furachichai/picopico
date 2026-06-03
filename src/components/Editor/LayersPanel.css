@@ -1,0 +1,309 @@
+/* ── Layers Panel ── */
+
+.layers-panel {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    bottom: 12px;
+    width: 280px;
+    background: #1e1e2e;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    z-index: 1001;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    font-family: 'Outfit', sans-serif;
+}
+
+.layers-panel.collapsed {
+    transform: translateX(-300px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Toggle tab — always visible */
+.layers-toggle-tab {
+    position: absolute;
+    top: 130px;
+    left: 12px;
+    z-index: 1000;
+    width: 28px;
+    height: 64px;
+    background: #1e1e2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.layers-toggle-tab:hover {
+    background: #2a2a3e;
+    color: rgba(255, 255, 255, 0.8);
+    width: 32px;
+}
+
+.layers-toggle-tab.panel-open {
+    left: 292px;
+}
+
+/* Header */
+.layers-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+}
+
+.layers-panel-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.layers-panel-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+}
+
+.layers-panel-close:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Pinned section separator */
+.layers-pinned-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+    margin: 2px 12px;
+    flex-shrink: 0;
+}
+
+/* Scrollable list */
+.layers-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 0;
+}
+
+.layers-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.layers-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.layers-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.layers-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Layer row */
+.layer-row {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 10px;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+    position: relative;
+    user-select: none;
+}
+
+.layer-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.layer-row.selected {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.layer-row.selected:hover {
+    background: rgba(139, 92, 246, 0.28);
+}
+
+.layer-row.dragging {
+    opacity: 0.4;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.layer-row.hidden-element {
+    opacity: 0.4;
+}
+
+.layer-row.hidden-element .layer-name {
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Drag handle */
+.layer-drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.15);
+    cursor: grab;
+    flex-shrink: 0;
+    font-size: 10px;
+    letter-spacing: 1px;
+    transition: color 0.15s;
+}
+
+.layer-drag-handle:active {
+    cursor: grabbing;
+}
+
+.layer-row:hover .layer-drag-handle {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.layer-drag-handle.pinned {
+    cursor: default;
+    color: rgba(139, 92, 246, 0.3);
+    font-size: 9px;
+}
+
+/* Type icon */
+.layer-type-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Element name */
+.layer-name {
+    flex: 1;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+.layer-row.selected .layer-name {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Action buttons (visibility, lock) */
+.layer-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.layer-row:hover .layer-actions,
+.layer-row.selected .layer-actions,
+.layer-row .layer-actions.has-active {
+    opacity: 1;
+}
+
+.layer-action-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+}
+
+.layer-action-btn:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.layer-action-btn:disabled {
+    opacity: 0.15;
+    color: rgba(255, 255, 255, 0.15);
+    cursor: not-allowed;
+    background: none;
+    pointer-events: none;
+}
+
+.layer-action-btn.active {
+    color: rgba(255, 200, 100, 0.8);
+}
+
+.layer-action-btn.active.locked {
+    color: rgba(255, 130, 130, 0.8);
+}
+
+/* Drop indicator */
+.layer-drop-indicator {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    background: #8B5CF6;
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+}
+
+.layer-drop-indicator.top {
+    top: -1px;
+}
+
+.layer-drop-indicator.bottom {
+    bottom: -1px;
+}
+
+/* Empty state */
+.layers-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
+    font-style: italic;
+}

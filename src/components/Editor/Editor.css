@@ -44,6 +44,7 @@
     /* Slightly darker than bg for contrast */
     background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
     background-size: 20px 20px;
+    position: relative;
 }
 
 @media (max-width: 480px) {

@@ -365,9 +365,9 @@ const Player = () => {
         }, 450);
     };
 
-    // Check for NL Quiz in current slide to adjust hotzones
+    // Check for NL or Field Quiz in current slide to adjust hotzones
     const hasNL = currentSlide?.elements?.some(
-        el => el.type === 'quiz' && el.metadata?.quizType === 'nl'
+        el => el.type === 'quiz' && (el.metadata?.quizType === 'nl' || el.metadata?.quizType === 'field')
     );
 
     // Hotzone Styles (Base)
@@ -631,16 +631,42 @@ const Player = () => {
                                         left: 0,
                                         width: '100%',
                                         height: '100%',
-                                        backgroundImage: slide.background.replaceAll('/src/assets/', '/assets/'),
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
-                                        backgroundRepeat: 'no-repeat',
                                         zIndex: 0,
-                                        opacity: slide.backgroundSettings?.opacity ?? 1,
-                                        filter: `brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
-                                        transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                                        pointerEvents: 'none'
                                     }}
-                                />
+                                >
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            backgroundImage: slide.background.replaceAll('/src/assets/', '/assets/'),
+                                            backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
+                                                ? `${slide.backgroundSettings?.size ?? 100}%`
+                                                : (slide.backgroundSettings?.sizeMode || 'cover'),
+                                            backgroundPosition: `${slide.backgroundSettings?.positionX ?? 50}% ${slide.backgroundSettings?.positionY ?? 50}%`,
+                                            backgroundRepeat: 'no-repeat',
+                                            opacity: slide.backgroundSettings?.opacity ?? 1,
+                                            filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
+                                            transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                                        }}
+                                    />
+                                    {slide.backgroundSettings?.grayscale && slide.backgroundSettings?.tintColor && slide.backgroundSettings.tintColor !== 'transparent' && (
+                                        <div
+                                            style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                backgroundColor: slide.backgroundSettings.tintColor,
+                                                mixBlendMode: 'color'
+                                            }}
+                                        />
+                                    )}
+                                </div>
                             )}
                             {slide.background && !slide.background.includes('url') && !slide.background.includes('gradient') && (
                                 <div
@@ -745,6 +771,8 @@ const Player = () => {
                             )}
 
                             {slide.elements.map(element => {
+                                if (element.metadata?.hidden) return null;
+
                                 // Stripper: determine strip and visibility
                                 const stripperActive = slide.stripper?.enabled && slide.stripper?.dividers?.length > 0;
                                 const elementStrip = stripperActive ? getElementStrip(element.y, slide.stripper.dividers) : 0;
@@ -774,7 +802,7 @@ const Player = () => {
                                                 width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
                                                 height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
                                                 transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                                                zIndex: isFullScreenQuiz ? 100 : 10,
+                                                zIndex: element.type === 'quiz' ? 1000 : 10,
                                                 pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
                                             }}
                                         >
@@ -861,7 +889,6 @@ const Player = () => {
                                                     })()}
                                                     onNext={() => {
                                                         markSlideSolved(currentSlideIndex);
-                                                        nextSlide(true);
                                                     }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}

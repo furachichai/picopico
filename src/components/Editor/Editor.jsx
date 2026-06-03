@@ -11,6 +11,7 @@ import BurgerMenu from './BurgerMenu';
 import LessonInfoModal from './LessonInfoModal';
 import ConfirmationModal from './ConfirmationModal';
 import PresetPanel from './PresetPanel';
+import LayersPanel from './LayersPanel';
 import { useTranslation } from 'react-i18next';
 
 const Editor = () => {
@@ -258,10 +259,12 @@ const Editor = () => {
             let newBackground = undefined;
             if (updates.metadata) {
                 if (updates.metadata.backgroundColor) newBackground = updates.metadata.backgroundColor;
-                if (updates.metadata.opacity !== undefined) newSettings.opacity = updates.metadata.opacity;
-                if (updates.metadata.brightness !== undefined) newSettings.brightness = updates.metadata.brightness;
-                if (updates.metadata.flipX !== undefined) newSettings.flipX = updates.metadata.flipX;
-                if (updates.metadata.flipY !== undefined) newSettings.flipY = updates.metadata.flipY;
+                // Copy all other fields dynamically to backgroundSettings
+                Object.keys(updates.metadata).forEach(key => {
+                    if (key !== 'backgroundColor') {
+                        newSettings[key] = updates.metadata[key];
+                    }
+                });
             }
             dispatch({
                 type: 'UPDATE_SLIDE',
@@ -294,6 +297,26 @@ const Editor = () => {
     const handleReorderElement = (elementId, direction) => {
         dispatch({ type: 'REORDER_ELEMENT', payload: { elementId, direction } });
     };
+
+    const handleReorderElementTo = (elementId, toIndex) => {
+        dispatch({ type: 'REORDER_ELEMENT_TO', payload: { elementId, toIndex } });
+    };
+
+    const handleToggleLock = (elementId) => {
+        const el = currentSlide?.elements.find(e => e.id === elementId);
+        if (!el) return;
+        dispatch({ type: 'SAVE_HISTORY' });
+        dispatch({ type: 'UPDATE_ELEMENT', payload: { id: elementId, updates: { metadata: { locked: !el.metadata?.locked } } } });
+    };
+
+    const handleToggleVisibility = (elementId) => {
+        const el = currentSlide?.elements.find(e => e.id === elementId);
+        if (!el) return;
+        dispatch({ type: 'SAVE_HISTORY' });
+        dispatch({ type: 'UPDATE_ELEMENT', payload: { id: elementId, updates: { metadata: { hidden: !el.metadata?.hidden } } } });
+    };
+
+    const [showLayersPanel, setShowLayersPanel] = useState(false);
 
     const handleContextMenuOpenLibrary = (tab, callback) => {
         if (callback) {
@@ -962,6 +985,21 @@ const Editor = () => {
                                 translationMode={isTranslating}
                             />
                         </div>
+                    )}
+
+                    {/* Layers Panel */}
+                    {!isTranslating && (
+                        <LayersPanel
+                            elements={currentSlide?.elements || []}
+                            selectedElementIds={state.selectedElementIds}
+                            onSelect={(id, isMulti) => dispatch({ type: 'SELECT_ELEMENT', payload: isMulti ? { id, isShift: true } : id })}
+                            onReorderTo={handleReorderElementTo}
+                            onToggleLock={handleToggleLock}
+                            onToggleVisibility={handleToggleVisibility}
+                            isOpen={showLayersPanel}
+                            onToggle={() => setShowLayersPanel(prev => !prev)}
+                            onReorder={(id, direction) => dispatch({ type: 'REORDER_ELEMENT', payload: { elementId: id, direction } })}
+                        />
                     )}
                 </div>
 

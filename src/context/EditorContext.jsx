@@ -48,6 +48,33 @@ const pushToPast = (state) => {
     return newPast;
 };
 
+const clampPopupSticker = (el) => {
+    if (el.type !== 'popup') return el;
+    
+    let scale = el.scale ?? 1;
+    let width = el.width ?? 30;
+    
+    // Clamp scale so the sticker width fits within the 70% safe zone (15% to 85%)
+    const maxVisualWidth = 70;
+    if (width * scale > maxVisualWidth) {
+        scale = maxVisualWidth / width;
+    }
+    
+    // Clamp x position
+    const halfWidth = (width * scale) / 2;
+    const minX = 15 + halfWidth;
+    const maxX = 85 - halfWidth;
+    
+    let x = el.x ?? 50;
+    x = Math.max(minX, Math.min(maxX, x));
+    
+    return {
+        ...el,
+        x,
+        scale
+    };
+};
+
 const editorReducer = (state, action) => {
     switch (action.type) {
         case 'SAVE_HISTORY':
@@ -142,7 +169,7 @@ const editorReducer = (state, action) => {
                 content: action.payload.content,
                 x: 50, // Center
                 y: action.payload.type === 'quiz'
-                    ? (action.payload.metadata?.quizType === 'tf' ? 85 : 75)
+                    ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 75))
                     : 50,
                 width: action.payload.metadata?.width || 20,
                 height: action.payload.metadata?.height || 10,
@@ -201,10 +228,10 @@ const editorReducer = (state, action) => {
                 };
             }
 
-            const newElement = {
+            const newElement = clampPopupSticker({
                 ...baseElement,
                 metadata: elementMetadata
-            };
+            });
 
             return {
                 ...state,
@@ -230,13 +257,13 @@ const editorReducer = (state, action) => {
             const newPast = pushToPast(state);
 
             const source = action.payload;
-            const pastedElement = {
+            const pastedElement = clampPopupSticker({
                 ...source,
                 id: `el-${Date.now()}`,
                 x: Math.min((source.x || 50) + 2, 95),
                 y: Math.min((source.y || 50) + 2, 95),
                 metadata: { ...source.metadata },
-            };
+            });
 
             return {
                 ...state,
@@ -262,7 +289,7 @@ const editorReducer = (state, action) => {
             const newPast = pushToPast(state);
 
             const sources = action.payload;
-            const pastedElements = sources.map(source => ({
+            const pastedElements = sources.map(source => clampPopupSticker({
                 ...source,
                 id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 x: Math.min((source.x || 50) + 2, 95),
@@ -316,7 +343,7 @@ const editorReducer = (state, action) => {
 
                         const oldElement = slide.elements.find(el => el.id === id);
                         let newElements = slide.elements.map((el) =>
-                            el.id === id ? { ...el, ...updates, metadata: { ...el.metadata, ...updates.metadata } } : el
+                            el.id === id ? clampPopupSticker({ ...el, ...updates, metadata: { ...el.metadata, ...updates.metadata } }) : el
                         );
 
                         // If element was just locked, move it to the beginning of the array (lowest z-sort)
@@ -358,6 +385,37 @@ const editorReducer = (state, action) => {
                     slides: state.lesson.slides.map(slide =>
                         slide.id === state.currentSlideId
                             ? { ...slide, elements: reorderElements }
+                            : slide
+                    ),
+                },
+            };
+        }
+
+        case 'REORDER_ELEMENT_TO': {
+            const { elementId, toIndex } = action.payload;
+            const currentSlideForMove = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlideForMove) return state;
+
+            const moveElements = [...currentSlideForMove.elements];
+            const fromIndex = moveElements.findIndex(el => el.id === elementId);
+            if (fromIndex === -1) return state;
+
+            const clampedTo = Math.max(0, Math.min(toIndex, moveElements.length - 1));
+            if (fromIndex === clampedTo) return state;
+
+            const newPast = pushToPast(state);
+            const [moved] = moveElements.splice(fromIndex, 1);
+            moveElements.splice(clampedTo, 0, moved);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(slide =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: moveElements }
                             : slide
                     ),
                 },
@@ -623,7 +681,7 @@ const editorReducer = (state, action) => {
                                     if (el.type === 'quiz') {
                                         return { ...el, y: el.y + dy };
                                     }
-                                    return { ...el, x: el.x + dx, y: el.y + dy };
+                                    return clampPopupSticker({ ...el, x: el.x + dx, y: el.y + dy });
                                 }
                                 return el;
                             })
@@ -642,12 +700,12 @@ const editorReducer = (state, action) => {
 
             const newPast = pushToPast(state);
 
-            const newElement = {
+            const newElement = clampPopupSticker({
                 ...elementToDuplicate,
                 id: `el-${Date.now()}`,
                 x: elementToDuplicate.x + 5,
                 y: elementToDuplicate.y + 5,
-            };
+            });
 
             return {
                 ...state,

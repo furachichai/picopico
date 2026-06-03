@@ -209,3 +209,19 @@
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
     color: var(--color-text);
 }
+
+/* Hidden elements visual representation in Editor */
+.sticker.is-hidden {
+    opacity: 0.45;
+}
+
+.sticker.is-hidden .sticker-content {
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 0px,
+        rgba(255, 255, 255, 0.15) 10px,
+        rgba(0, 0, 0, 0.05) 10px,
+        rgba(0, 0, 0, 0.05) 20px
+    );
+    border-radius: 8px;
+}

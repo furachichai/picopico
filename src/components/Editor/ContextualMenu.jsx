@@ -4,6 +4,70 @@ import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Pla
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 import { getSymbolSvg } from '../../utils/symbols';
 
+const evaluateMathExpression = (expr) => {
+    try {
+        if (!expr) return null;
+        let clean = expr
+            .replace(/[xX×]/g, '*')
+            .replace(/[÷]/g, '/')
+            .replace(/[−—–]/g, '-')
+            .replace(/\s+/g, '');
+        
+        if (!/^[0-9+\-*/().\s]+$/.test(clean)) {
+            return null;
+        }
+        
+        const val = new Function(`return (${clean})`)();
+        if (typeof val === 'number' && !isNaN(val) && isFinite(val)) {
+            return val;
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+};
+
+const parseFieldExpression = (expression) => {
+    if (!expression) return [];
+    
+    const segments = [];
+    let lastIndex = 0;
+    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+    let match;
+    
+    while ((match = regex.exec(expression)) !== null) {
+        if (match.index > lastIndex) {
+            segments.push({
+                type: 'text',
+                content: expression.substring(lastIndex, match.index)
+            });
+        }
+        
+        const isDouble = match[1].startsWith('**');
+        const expr = isDouble ? match[2] : match[3];
+        const val = evaluateMathExpression(expr);
+        
+        segments.push({
+            type: 'field',
+            isDouble,
+            placeholder: expr,
+            evaluated: val,
+            raw: match[1]
+        });
+        
+        lastIndex = regex.lastIndex;
+    }
+    
+    if (lastIndex < expression.length) {
+        segments.push({
+            type: 'text',
+            content: expression.substring(lastIndex)
+        });
+    }
+    
+    return segments;
+};
+
 const FONTS = [
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
     { name: 'Outfit', value: 'Outfit' },
@@ -389,6 +453,147 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
             {element.type === 'background' && element.background && (element.background.startsWith('url') || element.background.startsWith('gradient')) && (
                 <>
+                    <div className="menu-group">
+                        <label>Size Mode</label>
+                        <select
+                            value={metadata.sizeMode || 'cover'}
+                            onChange={(e) => updateMetadata({ sizeMode: e.target.value })}
+                            style={{ fontSize: '0.8rem', padding: '4px 8px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.15)' }}
+                        >
+                            <option value="cover">Cover (Fill)</option>
+                            <option value="contain">Contain (Fit)</option>
+                            <option value="custom">Custom (Scale)</option>
+                        </select>
+                    </div>
+
+                    {metadata.sizeMode === 'custom' && (
+                        <div className="menu-group">
+                            <label>Scale</label>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                    type="range"
+                                    min="10"
+                                    max="400"
+                                    value={metadata.size ?? 100}
+                                    onChange={(e) => updateMetadata({ size: parseInt(e.target.value) })}
+                                    style={{ width: '80px' }}
+                                />
+                                <span style={{ fontSize: '0.75rem', minWidth: '32px', color: '#666' }}>{metadata.size ?? 100}%</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="menu-group">
+                        <label>Position X</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={metadata.positionX ?? 50}
+                                onChange={(e) => updateMetadata({ positionX: parseInt(e.target.value) })}
+                                style={{ width: '80px' }}
+                            />
+                            <span style={{ fontSize: '0.75rem', minWidth: '32px', color: '#666' }}>{metadata.positionX ?? 50}%</span>
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Position Y</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={metadata.positionY ?? 50}
+                                onChange={(e) => updateMetadata({ positionY: parseInt(e.target.value) })}
+                                style={{ width: '80px' }}
+                            />
+                            <span style={{ fontSize: '0.75rem', minWidth: '32px', color: '#666' }}>{metadata.positionY ?? 50}%</span>
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
+                        <label>Filter</label>
+                        <button
+                            className={`btn-icon ${metadata.grayscale ? 'active' : ''}`}
+                            onClick={() => {
+                                const nextGrayscale = !metadata.grayscale;
+                                updateMetadata({
+                                    grayscale: nextGrayscale,
+                                    tintColor: nextGrayscale ? (metadata.tintColor || 'transparent') : 'transparent'
+                                });
+                            }}
+                            title="Convert to Black & White"
+                            style={{
+                                fontSize: '1rem',
+                                padding: '4px 8px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                border: '1px solid rgba(0,0,0,0.15)',
+                                borderRadius: '8px',
+                                background: metadata.grayscale ? '#3b82f6' : 'white',
+                                color: metadata.grayscale ? 'white' : 'black',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            {metadata.grayscale ? '🖤 B&W' : '🤍 Grayscale'}
+                        </button>
+                    </div>
+
+                    {metadata.grayscale && (
+                        <div className="menu-group" style={{ gridColumn: 'span 2', width: '100%', marginTop: '6px' }}>
+                            <label style={{ marginBottom: '6px', display: 'block', fontWeight: 'bold' }}>Tint Color</label>
+                            <div style={{
+                                display: 'flex',
+                                gap: '8px',
+                                overflowX: 'auto',
+                                padding: '4px 2px',
+                                width: '100%',
+                                scrollbarWidth: 'none',
+                                msOverflowStyle: 'none'
+                            }}>
+                                {[
+                                    { name: 'None', value: 'transparent', display: '🚫' },
+                                    { name: 'Warm Sepia', value: 'rgba(198, 138, 76, 0.4)', display: '🟤' },
+                                    { name: 'Rose Pink', value: 'rgba(253, 164, 175, 0.4)', display: '🔴' },
+                                    { name: 'Ocean Cyan', value: 'rgba(103, 232, 249, 0.4)', display: '🔵' },
+                                    { name: 'Forest Green', value: 'rgba(134, 239, 172, 0.4)', display: '🟢' },
+                                    { name: 'Lavender Purple', value: 'rgba(192, 132, 252, 0.4)', display: '🟣' },
+                                    { name: 'Amber Gold', value: 'rgba(253, 224, 71, 0.4)', display: '🟡' },
+                                    { name: 'Slate Blue', value: 'rgba(148, 163, 184, 0.4)', display: '⚫' }
+                                ].map((t) => (
+                                    <button
+                                        key={t.value}
+                                        onClick={() => updateMetadata({ tintColor: t.value })}
+                                        style={{
+                                            border: (metadata.tintColor || 'transparent') === t.value ? '2px solid #3b82f6' : '1px solid rgba(0,0,0,0.15)',
+                                            borderRadius: '20px',
+                                            padding: '4px 10px',
+                                            fontSize: '0.75rem',
+                                            backgroundColor: (metadata.tintColor || 'transparent') === t.value ? 'rgba(59, 130, 246, 0.1)' : 'white',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '4px',
+                                            whiteSpace: 'nowrap',
+                                            transition: 'all 0.15s ease',
+                                            boxShadow: (metadata.tintColor || 'transparent') === t.value ? '0 2px 4px rgba(59, 130, 246, 0.2)' : 'none',
+                                            transform: (metadata.tintColor || 'transparent') === t.value ? 'scale(1.05)' : 'none'
+                                        }}
+                                        title={t.name}
+                                    >
+                                        <span>{t.display}</span>
+                                        <span style={{ fontWeight: (metadata.tintColor || 'transparent') === t.value ? 'bold' : 'normal' }}>{t.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <div className="menu-group">
                         <label>Flip</label>
                         <div style={{ display: 'flex', gap: '5px' }}>
@@ -1508,6 +1713,47 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             </button>
                         </div>
                     </div>
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
+            {/* Field Quiz Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'field' && (
+                <>
+                    <div className="menu-group" style={{ flex: 1, minWidth: '220px' }}>
+                        <label>Field Expression (manual mode)</label>
+                        <input
+                            type="text"
+                            value={metadata.fieldExpression || '3 + *8 x 2* = 19'}
+                            onChange={(e) => updateMetadata({ fieldExpression: e.target.value })}
+                            placeholder="e.g. 3 + *8 x 2* = 19"
+                            style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
+                        />
+                        <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                            Use *expr* for empty box, **expr** for grey text placeholder.
+                        </span>
+                    </div>
+
+                    <div className="menu-group" style={{ minWidth: '150px' }}>
+                        <label>Correct Values</label>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                            {parseFieldExpression(metadata.fieldExpression || '3 + *8 x 2* = 19')
+                                .filter(s => s.type === 'field')
+                                .map((s, i) => (
+                                    <span key={i} style={{
+                                        fontSize: '0.75rem',
+                                        background: s.evaluated !== null ? 'rgba(52, 211, 153, 0.25)' : 'rgba(239, 68, 68, 0.25)',
+                                        border: s.evaluated !== null ? '1px solid #10B981' : '1px solid #EF4444',
+                                        color: s.evaluated !== null ? '#10B981' : '#EF4444',
+                                        padding: '2px 6px',
+                                        borderRadius: '4px'
+                                    }}>
+                                        Slot {i + 1}: {s.evaluated !== null ? s.evaluated : '?'}
+                                    </span>
+                                ))}
+                        </div>
+                    </div>
+
                     <div className="menu-divider"></div>
                 </>
             )}
