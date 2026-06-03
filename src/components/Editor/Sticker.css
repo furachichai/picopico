@@ -225,3 +225,11 @@
     );
     border-radius: 8px;
 }
+
+.sticker-quiz-wysiwyg.field-wysiwyg {
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+    border-radius: 0;
+    width: auto;
+}

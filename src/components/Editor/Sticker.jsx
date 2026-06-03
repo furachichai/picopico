@@ -138,8 +138,12 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     let newX = startLeft + (dx / parentWidth) * 100;
                     const newY = startTop + (dy / parentHeight) * 100;
                     if (element.type === 'quiz') {
-                        // Quiz elements only move vertically, locked horizontally
-                        onChange(element.id, { y: newY });
+                        // Quiz elements only move vertically, locked horizontally (except field type)
+                        if (element.metadata?.quizType === 'field') {
+                            onChange(element.id, { x: newX, y: newY });
+                        } else {
+                            onChange(element.id, { y: newY });
+                        }
                     } else {
                         if (element.type === 'popup') {
                             const halfWidth = ((element.width || 30) * element.scale) / 2;
@@ -494,7 +498,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     />
                 )}
                 {element.type === 'quiz' && (
-                    <div className="sticker-quiz-wysiwyg"
+                    <div className={`sticker-quiz-wysiwyg ${element.metadata?.quizType === 'field' ? 'field-wysiwyg' : ''}`}
                         onClick={(e) => {
                             const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
                             if (isLockedQuiz && !isSelected) {

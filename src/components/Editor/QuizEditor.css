@@ -1236,9 +1236,9 @@ input:checked+.toggle-slider:before {
     font-weight: 800;
     font-size: 1.4rem;
     color: #1e1b4b;
-    width: 100%;
-    max-width: 450px;
-    min-width: 200px;
+    width: max-content;
+    max-width: 500px;
+    min-width: 100px;
     text-align: center;
     user-select: none;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -1271,7 +1271,7 @@ input:checked+.toggle-slider:before {
 }
 
 .field-canvas-preview .field-preview-placeholder {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     color: rgba(0, 0, 0, 0.35);
     font-weight: 600;
     padding: 0 6px;

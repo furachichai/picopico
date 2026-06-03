@@ -3000,7 +3000,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 const isSlotActive = activeSlotIndex === idx;
                                 const isSlotWrong = fieldShakeSlots.has(idx);
                                 const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
-                                const len = Math.max(1, evaluatedStr.length);
+                                const placeholderStr = seg.isDouble ? (seg.placeholder || '') : '';
+                                const len = Math.max(1, evaluatedStr.length, placeholderStr.length);
                                 const slotWidth = 44 + (len - 1) * 15;
                                 
                                 return (
