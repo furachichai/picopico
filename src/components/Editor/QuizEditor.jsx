@@ -159,7 +159,8 @@ const generateFieldChoices = (segments) => {
     
     const baseVal = uniqueCorrect[0];
     let offset = 4;
-    while (uniqueCorrect.length + filteredCandidates.length < 10) {
+    const targetSize = Math.max(5, uniqueCorrect.length);
+    while (uniqueCorrect.length + filteredCandidates.length < targetSize) {
         const up = baseVal + offset;
         const down = baseVal - offset;
         if (!targetSet.has(up) && !filteredCandidates.includes(up)) {
@@ -174,7 +175,7 @@ const generateFieldChoices = (segments) => {
     }
     
     const choices = [...uniqueCorrect];
-    for (let i = 0; i < filteredCandidates.length && choices.length < 10; i++) {
+    for (let i = 0; i < filteredCandidates.length && choices.length < targetSize; i++) {
         choices.push(filteredCandidates[i]);
     }
     
