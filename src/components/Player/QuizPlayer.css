@@ -1909,8 +1909,8 @@
     font-weight: 800;
     font-size: 1.4rem;
     color: #1e1b4b;
-    width: 90%;
-    max-width: 450px;
+    width: max-content;
+    max-width: 90%;
     text-align: center;
     user-select: none;
     border: 1px solid rgba(0, 0, 0, 0.05);
