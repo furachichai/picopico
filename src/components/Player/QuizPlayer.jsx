@@ -941,48 +941,135 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             return;
         }
 
-        if (activeSlotIndex === -1 || fieldSelections[activeSlotIndex] || pendingSelections[activeSlotIndex]) {
-            return;
-        }
-
         const targetSlotIdx = activeSlotIndex;
+        if (targetSlotIdx === -1) return;
+
+        const existingChoice = fieldSelections[targetSlotIdx] || pendingSelections[targetSlotIdx];
+        const isSwapping = !!existingChoice && typeof existingChoice === 'object' && existingChoice.id;
+
         const slotEl = slotRefs.current[targetSlotIdx];
         const gridEl = e?.currentTarget;
         const sNode = document.querySelector('.slide-active') || document.body;
         
         if (slotEl && gridEl && sNode) {
-            const startRect = gridEl.getBoundingClientRect();
-            const endRect = slotEl.getBoundingClientRect();
             const slideRect = sNode.getBoundingClientRect();
-            
             const scaleX = slideRect.width / 360;
             const scaleY = slideRect.height / 640;
 
-            const startX = (startRect.left - slideRect.left) / scaleX;
-            const startY = (startRect.top - slideRect.top) / scaleY;
-            const startW = startRect.width / scaleX;
-            const startH = startRect.height / scaleY;
+            const flyIdNew = Date.now() + Math.random();
+            const startRectNew = gridEl.getBoundingClientRect();
+            const endRectNew = slotEl.getBoundingClientRect();
 
-            const endX = (endRect.left - slideRect.left) / scaleX;
-            const endY = (endRect.top - slideRect.top) / scaleY;
-            const endW = endRect.width / scaleX;
-            const endH = endRect.height / scaleY;
+            const startXNew = (startRectNew.left - slideRect.left) / scaleX;
+            const startYNew = (startRectNew.top - slideRect.top) / scaleY;
+            const startWNew = startRectNew.width / scaleX;
+            const startHNew = startRectNew.height / scaleY;
 
-            const flyId = Date.now() + Math.random();
+            const endXNew = (endRectNew.left - slideRect.left) / scaleX;
+            const endYNew = (endRectNew.top - slideRect.top) / scaleY;
+            const endWNew = endRectNew.width / scaleX;
+            const endHNew = endRectNew.height / scaleY;
+
+            const duration = isSwapping ? 0.11 : 0.22;
+            const delayMs = isSwapping ? 110 : 220;
+
+            if (isSwapping) {
+                const oldGridEl = choiceGridRefs.current[existingChoice.id];
+                if (oldGridEl) {
+                    const startRectOld = slotEl.getBoundingClientRect();
+                    const endRectOld = oldGridEl.getBoundingClientRect();
+
+                    const startXOld = (startRectOld.left - slideRect.left) / scaleX;
+                    const startYOld = (startRectOld.top - slideRect.top) / scaleY;
+                    const startWOld = startRectOld.width / scaleX;
+                    const startHOld = startRectOld.height / scaleY;
+
+                    const endXOld = (endRectOld.left - slideRect.left) / scaleX;
+                    const endYOld = (endRectOld.top - slideRect.top) / scaleY;
+                    const endWOld = endRectOld.width / scaleX;
+                    const endHOld = endRectOld.height / scaleY;
+
+                    const flyIdOld = Date.now() + 1 + Math.random();
+
+                    setFlyingPieces(prev => [
+                        ...prev,
+                        {
+                            id: flyIdOld,
+                            choice: existingChoice,
+                            startX: startXOld, startY: startYOld, startW: startWOld, startH: startHOld,
+                            endX: endXOld, endY: endYOld, endW: endWOld, endH: endHOld,
+                            sourceSlotIdx: targetSlotIdx,
+                            duration
+                        },
+                        {
+                            id: flyIdNew,
+                            choice,
+                            startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                            endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                            targetSlotIdx,
+                            duration
+                        }
+                    ]);
+
+                    setPendingSelections(prev => ({
+                        ...prev,
+                        [choice.id]: true,
+                        [existingChoice.id]: true,
+                        [targetSlotIdx]: choice
+                    }));
+
+                    setFieldSelections(prev => {
+                        const next = { ...prev };
+                        delete next[targetSlotIdx];
+                        return next;
+                    });
+                    
+                    playSound('attach');
+
+                    setTimeout(() => {
+                        setFlyingPieces(prev => prev.filter(p => p.id !== flyIdOld && p.id !== flyIdNew));
+                        setPendingSelections(prev => {
+                            const next = { ...prev };
+                            delete next[choice.id];
+                            delete next[existingChoice.id];
+                            delete next[targetSlotIdx];
+                            return next;
+                        });
+                        
+                        setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
+
+                        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+                        const segments = parseFieldExpression(expr);
+                        setFieldSelections(currentSelections => {
+                            const nextEmptyIdx = segments.findIndex(
+                                (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
+                            );
+                            if (nextEmptyIdx !== -1) {
+                                setActiveSlotIndex(nextEmptyIdx);
+                            }
+                            return currentSelections;
+                        });
+                    }, delayMs);
+                    return;
+                }
+            }
+
+            if (pendingSelections[targetSlotIdx]) return;
             
             setFlyingPieces(prev => [...prev, {
-                id: flyId,
+                id: flyIdNew,
                 choice,
-                startX, startY, startW, startH,
-                endX, endY, endW, endH,
-                targetSlotIdx
+                startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                targetSlotIdx,
+                duration
             }]);
 
             setPendingSelections(prev => ({ ...prev, [choice.id]: true, [targetSlotIdx]: choice }));
             playSound('attach');
 
             setTimeout(() => {
-                setFlyingPieces(prev => prev.filter(p => p.id !== flyId));
+                setFlyingPieces(prev => prev.filter(p => p.id !== flyIdNew));
                 setPendingSelections(prev => {
                     const next = { ...prev };
                     delete next[choice.id];
@@ -1010,11 +1097,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                     newShake.delete(targetSlotIdx);
                     return newShake;
                 });
-            }, 220);
+            }, delayMs);
         } else {
-            // Fallback if refs are missing
             const newSelections = { ...fieldSelections };
-            newSelections[activeSlotIndex] = choice;
+            newSelections[targetSlotIdx] = choice;
             setFieldSelections(newSelections);
             playSound('attach');
             
@@ -3073,7 +3159,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         width: piece.endW,
                                         height: piece.endH,
                                     }}
-                                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.22 }}
+                                    transition={{ type: 'tween', ease: 'easeOut', duration: piece.duration || 0.22 }}
                                     style={{
                                         position: 'absolute',
                                         backgroundColor: piece.sourceSlotIdx !== undefined ? '#8338EC' : '#3A86FF',
