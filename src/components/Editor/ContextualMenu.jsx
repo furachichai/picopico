@@ -412,16 +412,6 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             onSelect={(c) => updateMetadata({ backgroundColor: c })}
                             align="left"
                         />
-                        {element.type === 'background' && (
-                            <button
-                                className="btn-secondary"
-                                onClick={() => onOpenLibrary('custom-bg')}
-                                title="Open Background Library"
-                                style={{ fontSize: '0.8rem', padding: '4px 8px', marginBottom: '2px' }}
-                            >
-                                LIBRARY
-                            </button>
-                        )}
                     </div>
 
                     {!translationMode && onOpenPresets && (
@@ -2061,6 +2051,19 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
                 </div>
             </div>
+
+            {element.type === 'background' && onOpenLibrary && (
+                <div className="menu-group" style={{ marginLeft: 'auto' }}>
+                    <button
+                        className="btn-secondary"
+                        onClick={() => onOpenLibrary('custom-bg')}
+                        title="Open Background Library"
+                        style={{ fontSize: '0.8rem', padding: '6px 12px', height: '100%', fontWeight: 'bold' }}
+                    >
+                        LIBRARY
+                    </button>
+                </div>
+            )}
         </div >
     );
 };
