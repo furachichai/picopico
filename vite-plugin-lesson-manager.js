@@ -186,43 +186,41 @@ export default function lessonManagerPlugin() {
                 }
             });
 
-            // Reorder lessons by swapping the order prefixes of two adjacent lessons
+            // Reorder lessons by assigning them new sequential prefixes based on the provided array
             server.middlewares.use('/api/reorder-lessons', (req, res, next) => {
                 if (req.method === 'POST') {
                     let body = '';
                     req.on('data', chunk => { body += chunk.toString(); });
                     req.on('end', () => {
                         try {
-                            const { folderA, folderB } = JSON.parse(body);
-                            if (!folderA || !folderB) throw new Error('Missing folder names');
+                            const { orderedFolders } = JSON.parse(body);
+                            if (!orderedFolders || !Array.isArray(orderedFolders)) throw new Error('Missing orderedFolders');
 
                             const lessonsDir = path.resolve(process.cwd(), 'lessons');
-                            const pathA = path.join(lessonsDir, folderA);
-                            const pathB = path.join(lessonsDir, folderB);
 
-                            if (!fs.existsSync(pathA) || !fs.existsSync(pathB)) {
-                                throw new Error('Folder not found');
-                            }
+                            const tempNames = orderedFolders.map((folder, index) => {
+                                const oldPath = path.join(lessonsDir, folder);
+                                if (!fs.existsSync(oldPath)) throw new Error(`Folder not found: ${folder}`);
+                                
+                                const match = folder.match(/^(\d+)-(.*)$/);
+                                const baseName = match ? match[2] : folder;
+                                
+                                const newPrefix = String(index + 1).padStart(2, '0');
+                                const newName = `${newPrefix}-${baseName}`;
+                                const tempName = `TEMP-${Date.now()}-${newName}`;
+                                
+                                return { oldPath, tempPath: path.join(lessonsDir, tempName), finalPath: path.join(lessonsDir, newName) };
+                            });
 
-                            // Parse order prefixes
-                            const matchA = folderA.match(/^(\d+)-(.*)$/);
-                            const matchB = folderB.match(/^(\d+)-(.*)$/);
-                            if (!matchA || !matchB) throw new Error('Invalid folder names');
-
-                            const newFolderA = `${matchB[1]}-${matchA[2]}`;
-                            const newFolderB = `${matchA[1]}-${matchB[2]}`;
-
-                            // Use temp name to avoid collision
-                            const tempName = `TEMP-${Date.now()}`;
-                            const tempPath = path.join(lessonsDir, tempName);
-
-                            fs.renameSync(pathA, tempPath);
-                            fs.renameSync(pathB, path.join(lessonsDir, newFolderB));
-                            fs.renameSync(tempPath, path.join(lessonsDir, newFolderA));
+                            // Rename to temp
+                            tempNames.forEach(t => fs.renameSync(t.oldPath, t.tempPath));
+                            // Rename to final
+                            tempNames.forEach(t => fs.renameSync(t.tempPath, t.finalPath));
 
                             res.statusCode = 200;
                             res.end(JSON.stringify({ success: true }));
                         } catch (error) {
+                            console.error('Reorder error:', error);
                             res.statusCode = 500;
                             res.end(JSON.stringify({ error: error.message }));
                         }

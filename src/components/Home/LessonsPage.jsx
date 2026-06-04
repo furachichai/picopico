@@ -119,13 +119,17 @@ const LessonsPage = () => {
         const swapIndex = direction === 'up' ? index - 1 : index + 1;
         if (swapIndex < 0 || swapIndex >= lessons.length) return;
 
-        const sibling = lessons[swapIndex];
+        const newOrder = [...lessons];
+        const [moved] = newOrder.splice(index, 1);
+        newOrder.splice(swapIndex, 0, moved);
+
+        const orderedFolders = newOrder.map(l => l.name);
 
         try {
             await fetch('/api/reorder-lessons', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ folderA: item.name, folderB: sibling.name })
+                body: JSON.stringify({ orderedFolders })
             });
             fetchLessons();
         } catch (error) {
