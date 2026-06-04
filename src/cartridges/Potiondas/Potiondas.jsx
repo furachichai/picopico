@@ -870,7 +870,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           <div className="pot-hearts" style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px' }}>
             <button 
               className="pot-btn" 
-              style={{ padding: '7px 13.2px', fontSize: '1rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
+              style={{ padding: '6.5px 13px', fontSize: '0.97rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
               onClick={resetGame}
             >
               Play Again
@@ -909,7 +909,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
 
         {/* Next Slide Button */}
         {showNextBtn && (
-          <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '13px 26.4px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
+          <button className="pot-btn pot-btn-next" style={{position: 'absolute', bottom: '20px', right: '20px', zIndex: 52, padding: '13px 26px', fontSize: '1.08rem', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'}} onClick={() => { if(onNextSlide) onNextSlide(); }}>
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
@@ -927,7 +927,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
           {showGoodJob ? (
             <button 
               className="pot-btn" 
-              style={{ padding: '7px 13.2px', fontSize: '1rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
+              style={{ padding: '6.5px 13px', fontSize: '0.97rem', backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', margin: 0, pointerEvents: 'auto', zIndex: 55 }}
               onClick={resetGame}
             >
               Play Again
