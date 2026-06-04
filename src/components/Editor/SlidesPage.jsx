@@ -12,6 +12,7 @@ const SlidesPage = () => {
     const { lesson } = state;
 
     const [slideToDelete, setSlideToDelete] = useState(null);
+    const [slideToSplit, setSlideToSplit] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState('');
 
     const showFeedback = (msg) => {
@@ -38,6 +39,85 @@ const SlidesPage = () => {
 
     const cancelDelete = () => {
         setSlideToDelete(null);
+    };
+
+    const handleSplitLesson = (id) => {
+        setSlideToSplit(id);
+    };
+
+    const confirmSplit = async () => {
+        if (!slideToSplit) return;
+        
+        const splitIndex = lesson.slides.findIndex(s => s.id === slideToSplit);
+        if (splitIndex === -1 || splitIndex === lesson.slides.length - 1) {
+            setSlideToSplit(null);
+            return;
+        }
+
+        const lesson1Slides = lesson.slides.slice(0, splitIndex + 1);
+        const lesson2Slides = lesson.slides.slice(splitIndex + 1);
+
+        let newPath = '';
+        if (lesson.path && lesson.path.startsWith('local://')) {
+            newPath = `local://${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        } else if (lesson.path) {
+            const baseFolder = lesson.path.substring(0, lesson.path.lastIndexOf('/'));
+            newPath = `${baseFolder}_Part_2/lesson.json`;
+        } else {
+            newPath = `local://${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        const lesson2 = {
+            ...lesson,
+            id: newPath,
+            path: newPath,
+            title: `${lesson.title || 'Lesson'} - Part 2`,
+            slides: lesson2Slides,
+            updatedAt: new Date()
+        };
+
+        try {
+            if (newPath.startsWith('local://')) {
+                const { saveLocalLesson } = await import('../../utils/lessonStorage');
+                saveLocalLesson(lesson2);
+            } else {
+                await fetch('/api/save-lesson', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: newPath, content: lesson2 })
+                });
+            }
+
+            dispatch({ type: 'REPLACE_SLIDES', payload: lesson1Slides });
+            
+            const updatedLesson1 = {
+                ...lesson,
+                slides: lesson1Slides,
+                updatedAt: new Date()
+            };
+
+            if (lesson.path && lesson.path.startsWith('local://')) {
+                const { saveLocalLesson } = await import('../../utils/lessonStorage');
+                saveLocalLesson(updatedLesson1);
+            } else if (lesson.path) {
+                await fetch('/api/save-lesson', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: lesson.path, content: updatedLesson1 })
+                });
+            }
+
+            showFeedback(t('slides.splitSuccess') || 'Lesson split successfully!');
+        } catch (error) {
+            console.error('Failed to split lesson:', error);
+            showFeedback(t('slides.splitFailed') || 'Failed to split lesson');
+        }
+
+        setSlideToSplit(null);
+    };
+
+    const cancelSplit = () => {
+        setSlideToSplit(null);
     };
 
     const handleMoveSlide = (id, direction) => {
@@ -108,6 +188,14 @@ const SlidesPage = () => {
                 confirmText={t('common.yes') || 'Delete'}
                 cancelText={t('common.no') || 'Cancel'}
             />
+            <ConfirmationModal
+                isOpen={slideToSplit !== null}
+                message={t('slides.confirmSplit') || 'Split the lesson here? This slide will be the last slide of the first lesson.'}
+                onConfirm={confirmSplit}
+                onCancel={cancelSplit}
+                confirmText={t('common.yes') || 'Split'}
+                cancelText={t('common.no') || 'Cancel'}
+            />
 
             <div className="slides-header">
                 <button className="btn-back" onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}>
@@ -166,6 +254,14 @@ const SlidesPage = () => {
                                 title={t('slides.moveRight')}
                             >
                                 ➡️
+                            </button>
+                            <button
+                                className="btn-icon btn-split"
+                                onClick={() => handleSplitLesson(slide.id)}
+                                disabled={index === lesson.slides.length - 1}
+                                title={t('slides.split') || "Split Lesson Here"}
+                            >
+                                ✂️
                             </button>
                             <button
                                 className="btn-icon btn-delete"

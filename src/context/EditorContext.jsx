@@ -540,6 +540,17 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'REPLACE_SLIDES': {
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: action.payload
+                }
+            };
+        }
+
         case 'SELECT_ELEMENTS': {
             const ids = action.payload; // Array of IDs
             const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
