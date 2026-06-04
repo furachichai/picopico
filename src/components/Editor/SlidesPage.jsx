@@ -12,6 +12,12 @@ const SlidesPage = () => {
     const { lesson } = state;
 
     const [slideToDelete, setSlideToDelete] = useState(null);
+    const [feedbackMessage, setFeedbackMessage] = useState('');
+
+    const showFeedback = (msg) => {
+        setFeedbackMessage(msg);
+        setTimeout(() => setFeedbackMessage(''), 2000);
+    };
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
@@ -48,20 +54,20 @@ const SlidesPage = () => {
             const slideClone = JSON.parse(JSON.stringify(slide));
             const dataString = `picopico-slide:${JSON.stringify(slideClone)}`;
             localStorage.setItem('picopico-copied-slide', dataString);
-            if (navigator.clipboard && navigator.clipboard.writeText) {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
                 await navigator.clipboard.writeText(dataString);
             }
-            alert('Slide copied to clipboard!');
+            showFeedback(t('slides.copied') || 'Slide copied!');
         } catch (err) {
             console.error('Failed to copy slide:', err);
-            alert('Failed to copy slide');
+            showFeedback(t('slides.copyFailed') || 'Failed to copy slide');
         }
     };
 
     const handlePasteSlide = async () => {
         let clipboardText = '';
         try {
-            if (navigator.clipboard && navigator.clipboard.readText) {
+            if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
                 clipboardText = await navigator.clipboard.readText();
             }
         } catch (err) {
@@ -77,17 +83,23 @@ const SlidesPage = () => {
                 const slideJson = clipboardText.substring('picopico-slide:'.length);
                 const slideObj = JSON.parse(slideJson);
                 dispatch({ type: 'PASTE_SLIDE', payload: slideObj });
+                showFeedback(t('slides.pasted') || 'Slide pasted!');
             } catch (err) {
                 console.error('Failed to paste slide:', err);
-                alert('Failed to paste slide: invalid slide data');
+                showFeedback(t('slides.pasteFailed') || 'Failed to paste: invalid data');
             }
         } else {
-            alert('No copied slide found! Please copy a slide first.');
+            showFeedback(t('slides.noCopiedSlide') || 'No copied slide found!');
         }
     };
 
     return (
         <div className="slides-page">
+            {feedbackMessage && (
+                <div className="slides-feedback">
+                    {feedbackMessage}
+                </div>
+            )}
             <ConfirmationModal
                 isOpen={slideToDelete !== null}
                 message={t('slides.confirmDelete') || 'Are you sure you want to delete this slide?'}
