@@ -395,7 +395,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             borderRadius: element.metadata?.borderRadius || '8px',
                             border: element.metadata?.border || 'none',
                             textAlign: element.metadata?.textAlign || 'center',
-                            lineHeight: 1,
+                            lineHeight: element.metadata?.lineHeight ?? 1,
                             position: 'relative',
                             outline: 'none',
                             cursor: 'text',

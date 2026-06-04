@@ -286,7 +286,19 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     value={metadata.fontSize}
                                     onChange={(e) => updateMetadata({ fontSize: parseInt(e.target.value) })}
                                     min="10" max="100"
-                                    style={{ width: '70px' }}
+                                    style={{ width: '60px' }}
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Leading</label>
+                                <input
+                                    type="number"
+                                    step="0.1"
+                                    value={metadata.lineHeight ?? 1}
+                                    onChange={(e) => updateMetadata({ lineHeight: parseFloat(e.target.value) })}
+                                    min="0.5" max="3"
+                                    style={{ width: '50px' }}
                                 />
                             </div>
 
