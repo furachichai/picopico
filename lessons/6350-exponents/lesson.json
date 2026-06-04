@@ -624,6 +624,153 @@
       "order": 8
     },
     {
+      "id": "slide-1780582475515",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1780582475515-52kv47tn3",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780582475515-13dxhxh8c",
+          "type": "text",
+          "content": "<b>× </b>or<b> ÷ </b><div>from left to right</div>",
+          "x": 47.77777777777777,
+          "y": 64.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#F57C00"
+          }
+        },
+        {
+          "id": "el-1780582475515-ofz43ixm5",
+          "type": "text",
+          "content": "<b>RULES</b>",
+          "x": 48.61111111111111,
+          "y": 31.40625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit"
+          }
+        },
+        {
+          "id": "el-1780582475515-rea0qnmns",
+          "type": "text",
+          "content": "<b>E</b>xponents",
+          "x": 47.77777777777777,
+          "y": 50.9375,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FFC107"
+          }
+        },
+        {
+          "id": "el-1780582475515-e6qwz96ch",
+          "type": "line",
+          "x": 47.500000000000014,
+          "y": 55.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780582475515-liisgjhez",
+          "type": "line",
+          "x": 47.50000000000001,
+          "y": 70.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780582475515-jncric9mf",
+          "type": "text",
+          "content": "<b>                           </b>",
+          "x": 49.166666666666664,
+          "y": 39.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#D6DCE5"
+          }
+        },
+        {
+          "id": "el-1780582475515-eka0k35rj",
+          "type": "text",
+          "content": "<font color=\"#d6dce5\"><b>+ </b>or<b> - </b><br></font><div><font color=\"#d6dce5\">from left to right</font></div>",
+          "x": 48.05555555555555,
+          "y": 78.90625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#F44336"
+          }
+        }
+      ],
+      "order": 9,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      }
+    },
+    {
       "id": "slide-1779914874032",
       "background": "#E1F5FE",
       "elements": [
@@ -664,13 +811,13 @@
           }
         }
       ],
-      "order": 9
+      "order": 10
     }
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-05-27T21:09:17.685Z",
-  "path": "lessons/0381-exponents/lesson.json",
+  "updatedAt": "2026-06-04T14:15:29.407Z",
+  "path": "lessons/6350-exponents/lesson.json",
   "textPreset": null,
   "name": "0381-exponents",
   "type": "file",
