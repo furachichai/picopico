@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../Editor/ConfirmationModal';
+import SlideThumbnail from '../Editor/SlideThumbnail';
 import './LessonsPage.css';
 
 const LessonsPage = () => {
@@ -184,56 +185,66 @@ const LessonsPage = () => {
                             }}
                             style={{ opacity: item.visible ? 1 : 0.5 }}
                         >
-                            <div style={{ flex: 1 }}>
-                                <span className="item-name">{item.title}</span>
-                                {item.description && (
-                                    <div className="item-description">{item.description}</div>
+                            <div className="lesson-card-preview">
+                                {item.content?.slides?.[0] ? (
+                                    <SlideThumbnail slide={item.content.slides[0]} />
+                                ) : (
+                                    <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                 )}
                             </div>
+                            <div className="lesson-card-content">
+                                <div className="item-name">{item.title}</div>
+                                <div className="item-slides-count">
+                                    #{item.content?.slides?.length || 0} slides
+                                </div>
+                                {item.description && (
+                                    <div className="item-description" style={{ textAlign: 'center' }}>{item.description}</div>
+                                )}
 
-                            <div className="item-actions" style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                                {/* Visibility toggle */}
-                                <button
-                                    className="btn-icon"
-                                    onClick={(e) => { e.stopPropagation(); handleToggleVisibility(item); }}
-                                    title={item.visible ? 'Hide from menu' : 'Show on menu'}
-                                    style={{ fontSize: '1.1rem' }}
-                                >
-                                    {item.visible ? '👁️' : '🚫'}
-                                </button>
-                                {/* Reorder */}
-                                <button
-                                    className="btn-icon"
-                                    onClick={(e) => { e.stopPropagation(); handleMove(item, 'up'); }}
-                                    title="Move Up"
-                                    style={{ opacity: idx === 0 ? 0.3 : 1 }}
-                                >
-                                    ⬆️
-                                </button>
-                                <button
-                                    className="btn-icon"
-                                    onClick={(e) => { e.stopPropagation(); handleMove(item, 'down'); }}
-                                    title="Move Down"
-                                    style={{ opacity: idx === lessons.length - 1 ? 0.3 : 1 }}
-                                >
-                                    ⬇️
-                                </button>
-                                {/* Play */}
-                                <button
-                                    className="btn-icon"
-                                    onClick={(e) => { e.stopPropagation(); handlePlay(item); }}
-                                    title="Play"
-                                >
-                                    ▶️
-                                </button>
-                                {/* Delete */}
-                                <button
-                                    className="btn-icon"
-                                    onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
-                                    title="Delete"
-                                >
-                                    🗑️
-                                </button>
+                                <div className="item-actions" style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                    {/* Visibility toggle */}
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handleToggleVisibility(item); }}
+                                        title={item.visible ? 'Hide from menu' : 'Show on menu'}
+                                        style={{ fontSize: '1.1rem' }}
+                                    >
+                                        {item.visible ? '👁️' : '🚫'}
+                                    </button>
+                                    {/* Reorder */}
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handleMove(item, 'up'); }}
+                                        title="Move Up"
+                                        style={{ opacity: idx === 0 ? 0.3 : 1 }}
+                                    >
+                                        ⬆️
+                                    </button>
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handleMove(item, 'down'); }}
+                                        title="Move Down"
+                                        style={{ opacity: idx === lessons.length - 1 ? 0.3 : 1 }}
+                                    >
+                                        ⬇️
+                                    </button>
+                                    {/* Play */}
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handlePlay(item); }}
+                                        title="Play"
+                                    >
+                                        ▶️
+                                    </button>
+                                    {/* Delete */}
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
+                                        title="Delete"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))

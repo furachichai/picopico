@@ -57,21 +57,40 @@
 .file-tree-item.file {
     color: white;
     background-color: #8b5cf6;
-    /* Violet-500 */
     border: none;
-    margin-bottom: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 0;
+    border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
 }
 
 .file-tree-item.file:hover {
     background-color: #7c3aed;
-    /* Violet-600 */
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.lesson-card-preview {
+    width: 120px;
+    flex-shrink: 0;
+    position: relative;
+    background-color: #000;
+}
+
+.lesson-card-preview > div {
+    height: 100% !important;
+}
+
+.lesson-card-content {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .file-tree-item.file .file-icon {
@@ -79,10 +98,20 @@
 }
 
 .file-tree-item.file .item-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
     width: 100%;
+    color: #FCD34D;
+    text-align: center;
+}
+
+.item-slides-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FCD34D;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 .item-description {
@@ -136,11 +165,10 @@
 .file-tree-item.file .item-actions {
     width: 100%;
     justify-content: flex-end;
-    margin-top: 0.5rem;
+    margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding-top: 0.5rem;
     opacity: 1;
-    /* Always show actions for file cards */
 }
 
 .file-tree-item.file .btn-icon {
