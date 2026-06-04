@@ -962,9 +962,12 @@ const Player = () => {
                                                         }
                                                         return d;
                                                     })()}
-                                                    onNext={() => {
-                                                        markSlideSolved(currentSlideIndex);
-                                                    }}
+                                                    onNext={(autoAdvance = false) => {
+                                                         markSlideSolved(currentSlideIndex);
+                                                         if (autoAdvance) {
+                                                             nextSlide(true);
+                                                         }
+                                                     }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
                                                     debugMode={debugMode}

@@ -1979,7 +1979,18 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         });
 
         if (bestMatch) {
-            if (sq1.pairIndex === bestMatch.pairIndex && sq1.type !== bestMatch.type) {
+            const isTypeMatch = sq1.type !== bestMatch.type;
+            let isCorrectMatch = false;
+            if (isTypeMatch) {
+                const qCard = sq1.type === 'question' ? sq1 : bestMatch;
+                const aCard = sq1.type === 'answer' ? sq1 : bestMatch;
+                const correctACard = state.squares.find(s => s.pairIndex === qCard.pairIndex && s.type === 'answer');
+                if (sq1.pairIndex === bestMatch.pairIndex || (correctACard && correctACard.text === aCard.text)) {
+                    isCorrectMatch = true;
+                }
+            }
+
+            if (isCorrectMatch) {
                 // Correct match! Two-stage premium animation
                 sq1.flashGreen = true;
                 bestMatch.flashGreen = true;
@@ -2382,7 +2393,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
             if (!leftCard || !rightCard) return;
 
-            const isMatch = leftCard.pairIndex === rightCard.pairIndex;
+            const correctRightCard = conectaRight.find(c => c.pairIndex === leftCard.pairIndex);
+            const isMatch = leftCard.pairIndex === rightCard.pairIndex || (correctRightCard && correctRightCard.text === rightCard.text);
 
             if (isMatch) {
                 playSound('correct');
@@ -2944,7 +2956,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             if (chatFinished) return;
             setChatFinished(true);
             // Go directly to next slide — no banner
-            if (onNext) onNext();
+            if (onNext) onNext(true);
         };
 
         const handleChatOptionClick = (nodeIdx, optIdx) => {
@@ -3089,7 +3101,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         className="chat-continue-btn"
                         onClick={(e) => { e.stopPropagation(); handleChatDone(); }}
                     >
-                        Done
+                        OK
                     </button>
                 )}
             </div>
