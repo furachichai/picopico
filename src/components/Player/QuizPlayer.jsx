@@ -8,6 +8,8 @@ import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx'
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
 
+const generateFieldFlyId = () => Date.now() + Math.random();
+
 // Helper functions for MEP solve-directly order of operations validation (when disableParenSelect is active)
 function getParenGroupsWithOps(node, depth = 0) {
     if (!node) return [];
@@ -524,6 +526,25 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pendingSelections, setPendingSelections] = useState({});
     const slotRefs = useRef({});
     const choiceGridRefs = useRef({});
+    const [draggedChoice, setDraggedChoice] = useState(null); // { choice, x, y, width, height }
+    const [draggedSlotIdx, setDraggedSlotIdx] = useState(null);
+    const fieldDragStateRef = useRef({
+        active: false,
+        choice: null,
+        startX: 0,
+        startY: 0,
+        startPointerX: 0,
+        startPointerY: 0,
+        width: 0,
+        height: 0,
+        currentX: 0,
+        currentY: 0,
+        hasMoved: false,
+        okBox: null,
+        slots: [],
+        limitY: 640,
+        sourceSlotIdx: null
+    });
 
 
     // Generate a fixed set of subtle rising bubbles for the Match Drag background
@@ -960,7 +981,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const isSwapping = !!existingChoice && typeof existingChoice === 'object' && existingChoice.id;
 
         const slotEl = slotRefs.current[targetSlotIdx];
-        const gridEl = e?.currentTarget;
+        const targetElement = (e && e.currentTarget && typeof e.currentTarget.getBoundingClientRect === 'function') 
+            ? e.currentTarget 
+            : choiceGridRefs.current[choice.id];
+        const gridEl = targetElement;
         const sNode = document.querySelector('.slide-active') || document.body;
         
         if (slotEl && gridEl && sNode) {
@@ -1126,6 +1150,639 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             }
         }
     };
+
+    const resolveCollision = (rect, okBox) => {
+        const W = rect.width;
+        const H = rect.height;
+        let x = rect.left;
+        let y = rect.top;
+        
+        // Keep inside game area first (bounds checking)
+        x = Math.max(0, Math.min(360 - W, x));
+        y = Math.max(0, Math.min(640 - H, y));
+        
+        if (!okBox) return { x, y };
+        
+        // Check overlap (AABB intersection)
+        const overlapX = Math.min(x + W, okBox.left + okBox.width) - Math.max(x, okBox.left);
+        const overlapY = Math.min(y + H, okBox.top + okBox.height) - Math.max(y, okBox.top);
+        
+        if (overlapX > 0 && overlapY > 0) {
+            // There is an overlap! Push along the axis of minimum overlap
+            if (overlapX < overlapY) {
+                // Push horizontally
+                if (x + W / 2 < okBox.left + okBox.width / 2) {
+                    x -= overlapX; // push left
+                } else {
+                    x += overlapX; // push right
+                }
+            } else {
+                // Push vertically
+                if (y + H / 2 < okBox.top + okBox.height / 2) {
+                    y -= overlapY; // push up
+                } else {
+                    y += overlapY; // push down
+                }
+            }
+            // Re-constrain inside game area after push
+            x = Math.max(0, Math.min(360 - W, x));
+            y = Math.max(0, Math.min(640 - H, y));
+        }
+        return { x, y };
+    };
+
+    const handleFieldDragStart = (choice, e, slotIdx = null) => {
+        ensureAudioAuthorized();
+        if (isSolved || isFailed || disabled) return;
+        
+        if (slotIdx === null) {
+            // Find if this choice is already placed or pending
+            const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id];
+            if (isPlaced) return;
+        } else {
+            // Dragging from a slot!
+            setDraggedSlotIdx(slotIdx);
+        }
+
+        // Prevent default only for touch events to avoid scrolling during drag. 
+        if (e.touches && e.cancelable) {
+            e.preventDefault();
+        }
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const sNode = document.querySelector('.slide-active') || document.body;
+        const slideRect = sNode.getBoundingClientRect();
+        const scaleX = slideRect.width / 360;
+        const scaleY = slideRect.height / 640;
+
+        const buttonEl = e.currentTarget;
+        const buttonRect = buttonEl.getBoundingClientRect();
+        const logicalW = buttonRect.width / scaleX;
+        const logicalH = buttonRect.height / scaleY;
+
+        // Logical button position
+        const buttonX = (buttonRect.left - slideRect.left) / scaleX;
+        const buttonY = (buttonRect.top - slideRect.top) / scaleY;
+
+        // Cache green line limitY (top edge of OK section, which is the bottom limit)
+        const okSecEl = document.querySelector('.field-ok-section');
+        let limitY = 640; // fallback
+        if (okSecEl) {
+            const rect = okSecEl.getBoundingClientRect();
+            limitY = (rect.top - slideRect.top) / scaleY;
+        }
+
+        fieldDragStateRef.current = {
+            active: true,
+            choice,
+            startX: buttonX,
+            startY: buttonY,
+            startPointerX: clientX,
+            startPointerY: clientY,
+            width: logicalW,
+            height: logicalH,
+            currentX: buttonX,
+            currentY: buttonY,
+            hasMoved: false,
+            okBox: null,
+            slots: [],
+            limitY,
+            sourceSlotIdx: slotIdx
+        };
+
+        // Cache OK button boundaries
+        const okEl = document.querySelector('.field-ok-btn');
+        if (okEl) {
+            const rect = okEl.getBoundingClientRect();
+            fieldDragStateRef.current.okBox = {
+                left: (rect.left - slideRect.left) / scaleX,
+                top: (rect.top - slideRect.top) / scaleY,
+                width: rect.width / scaleX,
+                height: rect.height / scaleY,
+            };
+        }
+
+        // Cache Slots boundaries
+        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+        const segments = parseFieldExpression(expr);
+        const slotsData = segments.map((seg, idx) => {
+            if (seg.type !== 'field') return null;
+            const slotEl = slotRefs.current[idx];
+            if (!slotEl) return null;
+            const rect = slotEl.getBoundingClientRect();
+            return {
+                idx,
+                left: (rect.left - slideRect.left) / scaleX,
+                top: (rect.top - slideRect.top) / scaleY,
+                width: rect.width / scaleX,
+                height: rect.height / scaleY,
+            };
+        }).filter(Boolean);
+        fieldDragStateRef.current.slots = slotsData;
+
+        // Listen for global move and end events
+        window.addEventListener('mousemove', handleFieldDragMove);
+        window.addEventListener('mouseup', handleFieldDragEnd);
+        window.addEventListener('touchmove', handleFieldDragMove, { passive: false });
+        window.addEventListener('touchend', handleFieldDragEnd);
+    };
+
+    const handleFieldDragMove = (e) => {
+        const state = fieldDragStateRef.current;
+        if (!state.active) return;
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const dx = clientX - state.startPointerX;
+        const dy = clientY - state.startPointerY;
+
+        // If moved beyond a threshold, trigger drag mode
+        if (!state.hasMoved) {
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 6) {
+                state.hasMoved = true;
+            } else {
+                return; // not yet dragging
+            }
+        }
+
+        // Prevent scrolling on touch devices during drag
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+
+        const sNode = document.querySelector('.slide-active') || document.body;
+        const slideRect = sNode.getBoundingClientRect();
+        const scaleX = slideRect.width / 360;
+        const scaleY = slideRect.height / 640;
+
+        // Compute current logical position based on pointer delta
+        const logicalDx = dx / scaleX;
+        const logicalDy = dy / scaleY;
+
+        const targetX = state.startX + logicalDx;
+        const targetY = state.startY + logicalDy;
+
+        // Resolve collision with OK button and restrict within game area
+        let resolved = resolveCollision(
+            { left: targetX, top: targetY, width: state.width, height: state.height },
+            state.okBox
+        );
+
+        // Limit y-position so that the bottom of the button doesn't cross the green line (limitY)
+        if (resolved.y + state.height > state.limitY) {
+            resolved.y = state.limitY - state.height;
+        }
+
+        state.currentX = resolved.x;
+        state.currentY = resolved.y;
+
+        setDraggedChoice({
+            choice: state.choice,
+            x: resolved.x,
+            y: resolved.y,
+            width: state.width,
+            height: state.height
+        });
+    };
+
+    const handleFieldDragEnd = (e) => {
+        // Clean up event listeners
+        window.removeEventListener('mousemove', handleFieldDragMove);
+        window.removeEventListener('mouseup', handleFieldDragEnd);
+        window.removeEventListener('touchmove', handleFieldDragMove);
+        window.removeEventListener('touchend', handleFieldDragEnd);
+
+        const state = fieldDragStateRef.current;
+        if (!state.active) return;
+        state.active = false;
+
+        const choice = state.choice;
+        const hasMoved = state.hasMoved;
+        const sourceSlotIdx = state.sourceSlotIdx;
+
+        setDraggedSlotIdx(null);
+        setDraggedChoice(null);
+
+        if (!hasMoved) {
+            // Click/tap
+            if (sourceSlotIdx !== null) {
+                // Tapped on a placed button in a slot -> return it to the choices grid
+                handleFieldSlotTap(sourceSlotIdx);
+            } else {
+                // Tapped on a choices grid button
+                handleFieldChoiceTap(choice, e);
+            }
+            return;
+        }
+
+        const lastChoicePos = {
+            x: state.currentX,
+            y: state.currentY
+        };
+
+        const W = state.width;
+        const H = state.height;
+        const btnCenterX = lastChoicePos.x + W / 2;
+        const btnCenterY = lastChoicePos.y + H / 2;
+
+        // Check if dropped over any slot
+        let targetSlot = null;
+        for (const slot of state.slots) {
+            if (
+                btnCenterX >= slot.left &&
+                btnCenterX <= slot.left + slot.width &&
+                btnCenterY >= slot.top &&
+                btnCenterY <= slot.top + slot.height
+            ) {
+                targetSlot = slot;
+                break;
+            }
+        }
+
+        const sNode = document.querySelector('.slide-active') || document.body;
+        const slideRect = sNode.getBoundingClientRect();
+        const scaleX = slideRect.width / 360;
+        const scaleY = slideRect.height / 640;
+
+        if (targetSlot !== null) {
+            // Dropped in a slot! Place it there.
+            const targetSlotIdx = targetSlot.idx;
+            const slotEl = slotRefs.current[targetSlotIdx];
+            
+            if (slotEl) {
+                const duration = 0.22;
+                const delayMs = 220;
+
+                const startXNew = lastChoicePos.x;
+                const startYNew = lastChoicePos.y;
+                const startWNew = W;
+                const startHNew = H;
+
+                const endRectNew = slotEl.getBoundingClientRect();
+                const endXNew = (endRectNew.left - slideRect.left) / scaleX;
+                const endYNew = (endRectNew.top - slideRect.top) / scaleY;
+                const endWNew = endRectNew.width / scaleX;
+                const endHNew = endRectNew.height / scaleY;
+
+                const flyIdNew = generateFieldFlyId();
+
+                if (sourceSlotIdx !== null) {
+                    // Dragged from slot to slot
+                    if (targetSlotIdx === sourceSlotIdx) {
+                        // Restored to the same slot
+                        setFieldSelections(prev => ({ ...prev, [sourceSlotIdx]: choice }));
+                        return;
+                    }
+
+                    const existingChoice = fieldSelections[targetSlotIdx] || pendingSelections[targetSlotIdx];
+                    const isSwapping = !!existingChoice && typeof existingChoice === 'object' && existingChoice.id;
+
+                    if (isSwapping) {
+                        // Swap slots: choice goes to targetSlotIdx, existingChoice goes to sourceSlotIdx
+                        const sourceSlotEl = slotRefs.current[sourceSlotIdx];
+                        if (sourceSlotEl) {
+                            const startRectOld = slotEl.getBoundingClientRect();
+                            const endRectOld = sourceSlotEl.getBoundingClientRect();
+
+                            const startXOld = (startRectOld.left - slideRect.left) / scaleX;
+                            const startYOld = (startRectOld.top - slideRect.top) / scaleY;
+                            const startWOld = startRectOld.width / scaleX;
+                            const startHOld = startRectOld.height / scaleY;
+
+                            const endXOld = (endRectOld.left - slideRect.left) / scaleX;
+                            const endYOld = (endRectOld.top - slideRect.top) / scaleY;
+                            const endWOld = endRectOld.width / scaleX;
+                            const endHOld = endRectOld.height / scaleY;
+
+                            const flyIdOld = generateFieldFlyId();
+
+                            setFlyingPieces(prev => [
+                                ...prev,
+                                {
+                                    id: flyIdOld,
+                                    choice: existingChoice,
+                                    startX: startXOld, startY: startYOld, startW: startWOld, startH: startHOld,
+                                    endX: endXOld, endY: endYOld, endW: endWOld, endH: endHOld,
+                                    targetSlotIdx: sourceSlotIdx,
+                                    duration
+                                },
+                                {
+                                    id: flyIdNew,
+                                    choice,
+                                    startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                                    endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                                    targetSlotIdx,
+                                    duration
+                                }
+                            ]);
+
+                            setPendingSelections(prev => ({
+                                ...prev,
+                                [choice.id]: true,
+                                [existingChoice.id]: true,
+                                [targetSlotIdx]: choice,
+                                [sourceSlotIdx]: existingChoice
+                            }));
+
+                            setFieldSelections(prev => {
+                                const next = { ...prev };
+                                delete next[sourceSlotIdx];
+                                delete next[targetSlotIdx];
+                                return next;
+                            });
+
+                            playSound('attach');
+
+                            setTimeout(() => {
+                                setFlyingPieces(prev => prev.filter(p => p.id !== flyIdOld && p.id !== flyIdNew));
+                                setPendingSelections(prev => {
+                                    const next = { ...prev };
+                                    delete next[choice.id];
+                                    delete next[existingChoice.id];
+                                    delete next[targetSlotIdx];
+                                    delete next[sourceSlotIdx];
+                                    return next;
+                                });
+
+                                setFieldSelections(prev => ({
+                                    ...prev,
+                                    [targetSlotIdx]: choice,
+                                    [sourceSlotIdx]: existingChoice
+                                }));
+                            }, delayMs);
+                            return;
+                        }
+                    } else {
+                        // Move to empty slot targetSlotIdx, clear old sourceSlotIdx
+                        setFlyingPieces(prev => [...prev, {
+                            id: flyIdNew,
+                            choice,
+                            startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                            endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                            targetSlotIdx,
+                            duration
+                        }]);
+
+                        setPendingSelections(prev => ({
+                            ...prev,
+                            [choice.id]: true,
+                            [targetSlotIdx]: choice
+                        }));
+
+                        setFieldSelections(prev => {
+                            const next = { ...prev };
+                            delete next[sourceSlotIdx];
+                            delete next[targetSlotIdx];
+                            return next;
+                        });
+
+                        playSound('attach');
+
+                        setTimeout(() => {
+                            setFlyingPieces(prev => prev.filter(p => p.id !== flyIdNew));
+                            setPendingSelections(prev => {
+                                const next = { ...prev };
+                                delete next[choice.id];
+                                delete next[targetSlotIdx];
+                                return next;
+                            });
+
+                            setFieldSelections(prev => ({
+                                ...prev,
+                                [targetSlotIdx]: choice
+                            }));
+                        }, delayMs);
+                        return;
+                    }
+                } else {
+                    // Dragged from choices grid (sourceSlotIdx === null)
+                    const existingChoice = fieldSelections[targetSlotIdx] || pendingSelections[targetSlotIdx];
+                    const isSwapping = !!existingChoice && typeof existingChoice === 'object' && existingChoice.id;
+
+                    if (isSwapping) {
+                        const oldGridEl = choiceGridRefs.current[existingChoice.id];
+                        if (oldGridEl) {
+                            const startRectOld = slotEl.getBoundingClientRect();
+                            const endRectOld = oldGridEl.getBoundingClientRect();
+
+                            const startXOld = (startRectOld.left - slideRect.left) / scaleX;
+                            const startYOld = (startRectOld.top - slideRect.top) / scaleY;
+                            const startWOld = startRectOld.width / scaleX;
+                            const startHOld = startRectOld.height / scaleY;
+
+                            const endXOld = (endRectOld.left - slideRect.left) / scaleX;
+                            const endYOld = (endRectOld.top - slideRect.top) / scaleY;
+                            const endWOld = endRectOld.width / scaleX;
+                            const endHOld = endRectOld.height / scaleY;
+
+                            const flyIdOld = generateFieldFlyId();
+
+                            setFlyingPieces(prev => [
+                                ...prev,
+                                {
+                                    id: flyIdOld,
+                                    choice: existingChoice,
+                                    startX: startXOld, startY: startYOld, startW: startWOld, startH: startHOld,
+                                    endX: endXOld, endY: endYOld, endW: endWOld, endH: endHOld,
+                                    sourceSlotIdx: targetSlotIdx,
+                                    duration
+                                },
+                                {
+                                    id: flyIdNew,
+                                    choice,
+                                    startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                                    endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                                    targetSlotIdx,
+                                    duration
+                                }
+                            ]);
+
+                            setPendingSelections(prev => ({
+                                ...prev,
+                                [choice.id]: true,
+                                [existingChoice.id]: true,
+                                [targetSlotIdx]: choice
+                            }));
+
+                            setFieldSelections(prev => {
+                                const next = { ...prev };
+                                delete next[targetSlotIdx];
+                                return next;
+                            });
+
+                            playSound('attach');
+
+                            setTimeout(() => {
+                                setFlyingPieces(prev => prev.filter(p => p.id !== flyIdOld && p.id !== flyIdNew));
+                                setPendingSelections(prev => {
+                                    const next = { ...prev };
+                                    delete next[choice.id];
+                                    delete next[existingChoice.id];
+                                    delete next[targetSlotIdx];
+                                    return next;
+                                });
+
+                                setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
+
+                                const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+                                const segments = parseFieldExpression(expr);
+                                setFieldSelections(currentSelections => {
+                                    const nextEmptyIdx = segments.findIndex(
+                                        (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
+                                    );
+                                    if (nextEmptyIdx !== -1) {
+                                        setActiveSlotIndex(nextEmptyIdx);
+                                    }
+                                    return currentSelections;
+                                });
+                            }, delayMs);
+                            return;
+                        }
+                    }
+
+                    // Slot is empty
+                    setFlyingPieces(prev => [...prev, {
+                        id: flyIdNew,
+                        choice,
+                        startX: startXNew, startY: startYNew, startW: startWNew, startH: startHNew,
+                        endX: endXNew, endY: endYNew, endW: endWNew, endH: endHNew,
+                        targetSlotIdx,
+                        duration
+                    }]);
+
+                    setPendingSelections(prev => ({ ...prev, [choice.id]: true, [targetSlotIdx]: choice }));
+                    playSound('attach');
+
+                    setTimeout(() => {
+                        setFlyingPieces(prev => prev.filter(p => p.id !== flyIdNew));
+                        setPendingSelections(prev => {
+                            const next = { ...prev };
+                            delete next[choice.id];
+                            delete next[targetSlotIdx];
+                            return next;
+                        });
+
+                        setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
+
+                        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+                        const segments = parseFieldExpression(expr);
+
+                        setFieldSelections(currentSelections => {
+                            const nextEmptyIdx = segments.findIndex(
+                                (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
+                            );
+                            if (nextEmptyIdx !== -1) {
+                                setActiveSlotIndex(nextEmptyIdx);
+                            }
+                            return currentSelections;
+                        });
+
+                        setFieldShakeSlots(prev => {
+                            const newShake = new Set(prev);
+                            newShake.delete(targetSlotIdx);
+                            return newShake;
+                        });
+                    }, delayMs);
+                }
+            } else {
+                const newSelections = { ...fieldSelections };
+                newSelections[targetSlotIdx] = choice;
+                if (sourceSlotIdx !== null) delete newSelections[sourceSlotIdx];
+                setFieldSelections(newSelections);
+                playSound('attach');
+            }
+        } else {
+            // Not dropped in a slot
+            if (sourceSlotIdx !== null) {
+                // Dragged from slot and released elsewhere -> return to choices grid!
+                setFieldSelections(prev => {
+                    const next = { ...prev };
+                    delete next[sourceSlotIdx];
+                    return next;
+                });
+
+                const gridEl = choiceGridRefs.current[choice.id];
+                if (gridEl) {
+                    const gridRect = gridEl.getBoundingClientRect();
+                    const endX = (gridRect.left - slideRect.left) / scaleX;
+                    const endY = (gridRect.top - slideRect.top) / scaleY;
+                    const endW = gridRect.width / scaleX;
+                    const endH = gridRect.height / scaleY;
+
+                    const flyId = generateFieldFlyId();
+
+                    setFlyingPieces(prev => [...prev, {
+                        id: flyId,
+                        choice,
+                        startX: lastChoicePos.x,
+                        startY: lastChoicePos.y,
+                        startW: W,
+                        startH: H,
+                        endX,
+                        endY,
+                        endW,
+                        endH,
+                        duration: 0.22
+                    }]);
+
+                    setPendingSelections(prev => ({ ...prev, [choice.id]: true }));
+                    playSound('detach');
+
+                    setTimeout(() => {
+                        setFlyingPieces(prev => prev.filter(p => p.id !== flyId));
+                        setPendingSelections(prev => {
+                            const next = { ...prev };
+                            delete next[choice.id];
+                            return next;
+                        });
+                    }, 220);
+                }
+            } else {
+                // Dragged from choices grid and released elsewhere -> return to choices grid
+                const gridEl = choiceGridRefs.current[choice.id];
+                if (gridEl) {
+                    const gridRect = gridEl.getBoundingClientRect();
+                    const endX = (gridRect.left - slideRect.left) / scaleX;
+                    const endY = (gridRect.top - slideRect.top) / scaleY;
+                    const endW = gridRect.width / scaleX;
+                    const endH = gridRect.height / scaleY;
+
+                    const flyId = generateFieldFlyId();
+
+                    setFlyingPieces(prev => [...prev, {
+                        id: flyId,
+                        choice,
+                        startX: lastChoicePos.x,
+                        startY: lastChoicePos.y,
+                        startW: W,
+                        startH: H,
+                        endX,
+                        endY,
+                        endW,
+                        endH,
+                        duration: 0.22
+                    }]);
+
+                    setPendingSelections(prev => ({ ...prev, [choice.id]: true }));
+                    playSound('detach');
+
+                    setTimeout(() => {
+                        setFlyingPieces(prev => prev.filter(p => p.id !== flyId));
+                        setPendingSelections(prev => {
+                            const next = { ...prev };
+                            delete next[choice.id];
+                            return next;
+                        });
+                    }, 220);
+                }
+            }
+        }
+    };
+
 
     const handleFieldSlotTap = (slotIdx) => {
         ensureAudioAuthorized();
@@ -3099,7 +3756,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     </span>
                                 );
                             } else {
-                                const placed = fieldSelections[idx];
+                                const placed = draggedSlotIdx === idx ? null : fieldSelections[idx];
                                 const isSlotActive = activeSlotIndex === idx;
                                 const isSlotWrong = fieldShakeSlots.has(idx);
                                 const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
@@ -3120,6 +3777,17 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         {placed ? (
                                             <button
                                                 className="field-placed-choice-btn"
+                                                onMouseDown={(e) => {
+                                                    e.stopPropagation();
+                                                    handleFieldDragStart(placed, e, idx);
+                                                }}
+                                                onTouchStart={(e) => {
+                                                    e.stopPropagation();
+                                                    handleFieldDragStart(placed, e, idx);
+                                                }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
                                                 style={{
                                                     width: '100%',
                                                     height: '100%',
@@ -3189,6 +3857,32 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     {piece.choice.value}
                                 </motion.div>
                             ))}
+                            {draggedChoice && (
+                                <div
+                                    className="field-choice-btn dragging"
+                                    style={{
+                                        position: 'absolute',
+                                        left: `${draggedChoice.x}px`,
+                                        top: `${draggedChoice.y}px`,
+                                        width: `${draggedChoice.width}px`,
+                                        height: `${draggedChoice.height}px`,
+                                        backgroundColor: '#3A86FF',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        fontWeight: 800,
+                                        boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'grabbing',
+                                        pointerEvents: 'none'
+                                    }}
+                                >
+                                    {draggedChoice.choice.value}
+                                </div>
+                            )}
                         </div>,
                         slideNode
                     )}
@@ -3200,7 +3894,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             <div className="field-choices-section">
                                 <div className="field-choices-grid">
                                     {fieldChoices.map((choice) => {
-                                        const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id];
+                                        const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id] || (draggedChoice?.choice.id === choice.id);
                                         
                                         return (
                                             <div key={choice.id} ref={el => choiceGridRefs.current[choice.id] = el} className="field-choice-cell">
@@ -3209,9 +3903,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                 ) : (
                                                     <motion.button
                                                         className="field-choice-btn"
-                                                        onClick={(e) => {
+                                                        onMouseDown={(e) => {
                                                             e.stopPropagation();
-                                                            handleFieldChoiceTap(choice, e);
+                                                            handleFieldDragStart(choice, e);
+                                                        }}
+                                                        onTouchStart={(e) => {
+                                                            e.stopPropagation();
+                                                            handleFieldDragStart(choice, e);
                                                         }}
                                                         disabled={isSolved || isFailed || disabled}
                                                         style={{

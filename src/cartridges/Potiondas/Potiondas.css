@@ -65,7 +65,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 3.5px; /* Reduced further from 4px */
+  gap: 4px; /* Scaled up 10% */
   padding: 20px 0; /* Removed horizontal padding to fit larger expressions */
   position: relative;
 }
@@ -81,7 +81,7 @@
 }
 
 .pot-token-emoji {
-  font-size: 0.78rem; /* 20% larger than 0.65rem */
+  font-size: 0.86rem; /* Scaled up 10% */
   line-height: 1;
 }
 
@@ -89,12 +89,12 @@
   cursor: pointer;
   position: relative;
   -webkit-tap-highlight-color: transparent;
-  font-size: 1.5rem; /* 25% smaller than previous 2.04rem */
+  font-size: 1.65rem; /* Scaled up 10% */
 }
 
 /* Extra spacing for exponent tiles to avoid tap overlap */
 .pot-token-exponent {
-  margin: 0 2px;
+  margin: 0 3px;
 }
 
 /* Invisible larger tap area — consistent size for both ops and exponents */
@@ -113,12 +113,12 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 0 -2px;
+  margin: 0 -1.8px;
   transition: opacity 0.4s ease-out;
 }
 
 .pot-paren-img {
-  height: 1.6em;
+  height: 1.76em;
   width: auto;
   object-fit: contain;
   pointer-events: none;
@@ -143,10 +143,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.28em;
-  height: 1.28em;
+  width: 1.41em;
+  height: 1.41em;
   border-radius: 50%;
-  font-size: 0.85em;
+  font-size: 0.94em;
   color: #FFFFFF;
   transition: transform 0.15s;
   font-weight: 800;
@@ -175,7 +175,7 @@
 }
 
 .pot-exp-star {
-  font-size: 0.85em;
+  font-size: 0.94em;
   color: #FFFFFF;
   line-height: 1;
 }
@@ -185,7 +185,7 @@
   position: absolute;
   top: -2px;
   right: -2px;
-  font-size: 0.35em;
+  font-size: 0.39em;
   font-weight: 900;
   color: #FFFFFF;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
@@ -200,12 +200,12 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 53px;
+  height: 53px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -233,7 +233,7 @@
 }
 
 .pot-powerup-active .pot-token-separator {
-  margin: 0 24px !important;
+  margin: 0 26px !important;
 }
 
 /* ─── Wrong State ───────────────────────────────────── */
@@ -429,11 +429,11 @@
 }
 
 .pot-btn {
-  padding: 14px 40px;
+  padding: 16px 44px;
   border: none;
-  border-radius: 14px;
+  border-radius: 15px;
   font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   color: white;

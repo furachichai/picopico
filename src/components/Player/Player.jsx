@@ -221,6 +221,8 @@ const Player = () => {
         if (currentSlideIndex < slides.length - 1) {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev + 1);
+        } else {
+            handleMenu();
         }
     };
 
@@ -234,6 +236,9 @@ const Player = () => {
     // Removed Swipe Logic (handleTouchStart, handleTouchEnd) as requested
 
     const [banner, setBanner] = useState(null); // { type: 'correct' | 'fail', text: string }
+    const [bannerFadingOut, setBannerFadingOut] = useState(false);
+    const bannerTimeoutRef = useRef(null);
+    const bannerFadeTimeoutRef = useRef(null);
     const [scale, setScale] = useState(1);
     const viewportRef = useRef(null);
 
@@ -273,17 +278,35 @@ const Player = () => {
     };
 
     const handleBanner = (type, text) => {
+        if (bannerTimeoutRef.current) clearTimeout(bannerTimeoutRef.current);
+        if (bannerFadeTimeoutRef.current) clearTimeout(bannerFadeTimeoutRef.current);
+
         if (!type) {
             setBanner(null);
+            setBannerFadingOut(false);
             return;
         }
         playTone(type);
         setBanner({ type, text });
+        setBannerFadingOut(false);
+
+        // Show for 1 second (1000ms), then start fade out (400ms)
+        bannerFadeTimeoutRef.current = setTimeout(() => {
+            setBannerFadingOut(true);
+        }, 1000);
+
+        bannerTimeoutRef.current = setTimeout(() => {
+            setBanner(null);
+            setBannerFadingOut(false);
+        }, 1400);
     };
 
     // Clear banner and reset stripper step when slide changes
     useEffect(() => {
+        if (bannerTimeoutRef.current) clearTimeout(bannerTimeoutRef.current);
+        if (bannerFadeTimeoutRef.current) clearTimeout(bannerFadeTimeoutRef.current);
         setBanner(null);
+        setBannerFadingOut(false);
         setAutoPlayIStickerId(null);
         // When entering a stripper slide: if already visited, show all; else start at 0
         const slide = slides[currentSlideIndex];
@@ -296,6 +319,11 @@ const Player = () => {
         } else {
             setStripperStep(0);
         }
+
+        return () => {
+            if (bannerTimeoutRef.current) clearTimeout(bannerTimeoutRef.current);
+            if (bannerFadeTimeoutRef.current) clearTimeout(bannerFadeTimeoutRef.current);
+        };
     }, [currentSlideIndex]);
 
     // Handle responsive scaling
@@ -578,8 +606,8 @@ const Player = () => {
 
                     {banner && (
                         <>
-                            <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'}`} />
-                            <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'}`}>
+                            <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'} ${bannerFadingOut ? 'banner-fade-out' : ''}`} />
+                            <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'} ${bannerFadingOut ? 'banner-fade-out' : ''}`}>
                                 <img 
                                     src={banner.type === 'correct' ? '/assets/topo_logo.png' : '/assets/moco_logo.png'} 
                                     alt={banner.text} 

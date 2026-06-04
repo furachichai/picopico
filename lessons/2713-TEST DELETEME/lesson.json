@@ -7,64 +7,6 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1780514308526",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 31.388888888888893,
-          "y": 38.59375,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "options": [],
-            "correctIndex": 0,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "field",
-            "visualMode": false,
-            "fieldExpression": "3 + **8 x 2** = *19*"
-          }
-        },
-        {
-          "id": "el-1780516225085",
-          "type": "line",
-          "x": 62.08333333333333,
-          "y": 41.953125,
-          "width": 71.10864471593015,
-          "height": 10,
-          "rotation": 90.42453003353728,
-          "scale": 1,
-          "metadata": {
-            "width": 50,
-            "height": 6,
-            "isSymbol": true,
-            "symbolColor": "#5A5A5A",
-            "startCap": "none",
-            "endCap": "none",
-            "lineType": "ink"
-          }
-        },
-        {
-          "id": "el-1780515342049",
-          "type": "text",
-          "content": "<b>3 + 2 × 8 =</b>",
-          "x": 81.25000000000001,
-          "y": 30.78125,
-          "width": 38.05555555555556,
-          "height": 7.8125,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "Outfit",
-            "fontSize": 23,
-            "color": "#C8C8C8"
-          }
-        },
-        {
           "id": "el-1780516588313",
           "type": "text",
           "content": "<b>3 +  2 × 8  =</b>",
@@ -109,6 +51,64 @@
             "width": 40,
             "height": 22.5
           }
+        },
+        {
+          "id": "el-1780515342049",
+          "type": "text",
+          "content": "<b>3 + 2 × 8 =</b>",
+          "x": 77.6388888888889,
+          "y": 29.84375,
+          "width": 38.05555555555556,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 23,
+            "color": "#C8C8C8"
+          }
+        },
+        {
+          "id": "el-1780514308526",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 26.388888888888893,
+          "y": 38.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "field",
+            "visualMode": false,
+            "fieldExpression": "3 + **8 x 2** = *19*"
+          }
+        },
+        {
+          "id": "el-1780516225085",
+          "type": "line",
+          "x": 53.472222222222214,
+          "y": 41.484375,
+          "width": 71.10864471593015,
+          "height": 10,
+          "rotation": 90.42453003353728,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 6,
+            "isSymbol": true,
+            "symbolColor": "#5A5A5A",
+            "startCap": "none",
+            "endCap": "none",
+            "lineType": "ink"
+          }
         }
       ],
       "order": 0
@@ -116,7 +116,7 @@
   ],
   "author": "User",
   "createdAt": "2026-06-03T19:18:22.892Z",
-  "updatedAt": "2026-06-03T20:11:25.973Z",
+  "updatedAt": "2026-06-04T00:57:55.732Z",
   "path": "lessons/2713-TEST DELETEME/lesson.json",
   "textPreset": null,
   "name": "2713-TEST DELETEME",
@@ -125,7 +125,7 @@
   "visible": true,
   "order": 2713,
   "content": {
-    "id": "draft-1",
+    "id": "lessons/2713-TEST DELETEME/lesson.json",
     "title": "TEST DELETEME",
     "slides": [
       {
@@ -133,10 +133,78 @@
         "background": "#E1F5FE",
         "elements": [
           {
+            "id": "el-1780516588313",
+            "type": "text",
+            "content": "<b>3 +  2 × 8  =</b>",
+            "x": 19.305555555555568,
+            "y": 30.3125,
+            "width": 35.27777777777778,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 23
+            }
+          },
+          {
+            "id": "el-1780517464741",
+            "type": "image",
+            "content": "/src/assets/characters/avatar_dilla.png",
+            "x": 83.33333333333333,
+            "y": 20.46875,
+            "width": 40,
+            "height": 22.5,
+            "rotation": 0,
+            "scale": 0.49902282563065475,
+            "metadata": {
+              "width": 40,
+              "height": 22.5
+            }
+          },
+          {
+            "id": "el-1780517474775",
+            "type": "image",
+            "content": "/src/assets/characters/avatar_pesto.png",
+            "x": 30.27777777777778,
+            "y": 20.468750000000004,
+            "width": 40,
+            "height": 22.5,
+            "rotation": 0,
+            "scale": 0.5036973044907965,
+            "metadata": {
+              "width": 40,
+              "height": 22.5
+            }
+          },
+          {
+            "id": "el-1780514308526",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 27.777777777777782,
+            "y": 38.59375,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "field",
+              "visualMode": false,
+              "fieldExpression": "3 + **8 x 2** = *19*"
+            }
+          },
+          {
             "id": "el-1780516225085",
             "type": "line",
-            "x": 55.97222222222222,
-            "y": 40.078125,
+            "x": 55.972222222222214,
+            "y": 41.484375,
             "width": 71.10864471593015,
             "height": 10,
             "rotation": 90.42453003353728,
@@ -152,50 +220,12 @@
             }
           },
           {
-            "id": "el-1780516588313",
-            "type": "text",
-            "content": "<b>3 + 2 × 8 =</b>",
-            "x": 23.333333333333343,
-            "y": 30.15625,
-            "width": 29.444444444444446,
-            "height": 7.8125,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "textAlign": "center",
-              "fontFamily": "Outfit",
-              "fontSize": 23
-            }
-          },
-          {
-            "id": "el-1780514308526",
-            "type": "quiz",
-            "content": "Quiz",
-            "x": 26.111111111111114,
-            "y": 40.46875,
-            "width": 20,
-            "height": 10,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "fontFamily": "\"Fira Sans\"",
-              "options": [],
-              "correctIndex": 0,
-              "correctIndices": [
-                0
-              ],
-              "quizType": "field",
-              "visualMode": false,
-              "fieldExpression": "3 + **8 x 2** = "
-            }
-          },
-          {
             "id": "el-1780515342049",
             "type": "text",
             "content": "<b>3 + 2 × 8 =</b>",
-            "x": 78.61111111111111,
-            "y": 30.46875,
-            "width": 29.444444444444446,
+            "x": 77.6388888888889,
+            "y": 29.84375,
+            "width": 38.05555555555556,
             "height": 7.8125,
             "rotation": 0,
             "scale": 1,
@@ -212,9 +242,121 @@
     ],
     "author": "User",
     "createdAt": "2026-06-03T19:18:22.892Z",
-    "updatedAt": "2026-06-03T19:57:23.876Z",
+    "updatedAt": "2026-06-03T20:15:36.927Z",
     "path": "lessons/2713-TEST DELETEME/lesson.json",
-    "textPreset": null
+    "textPreset": null,
+    "name": "2713-TEST DELETEME",
+    "type": "file",
+    "description": "",
+    "visible": true,
+    "order": 2713,
+    "content": {
+      "id": "draft-1",
+      "title": "TEST DELETEME",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1780516225085",
+              "type": "line",
+              "x": 55.97222222222222,
+              "y": 40.078125,
+              "width": 71.10864471593015,
+              "height": 10,
+              "rotation": 90.42453003353728,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 6,
+                "isSymbol": true,
+                "symbolColor": "#5A5A5A",
+                "startCap": "none",
+                "endCap": "none",
+                "lineType": "ink"
+              }
+            },
+            {
+              "id": "el-1780516588313",
+              "type": "text",
+              "content": "<b>3 + 2 × 8 =</b>",
+              "x": 23.333333333333343,
+              "y": 30.15625,
+              "width": 29.444444444444446,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Outfit",
+                "fontSize": 23
+              }
+            },
+            {
+              "id": "el-1780514308526",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 26.111111111111114,
+              "y": 40.46875,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "field",
+                "visualMode": false,
+                "fieldExpression": "3 + **8 x 2** = "
+              }
+            },
+            {
+              "id": "el-1780515342049",
+              "type": "text",
+              "content": "<b>3 + 2 × 8 =</b>",
+              "x": 78.61111111111111,
+              "y": 30.46875,
+              "width": 29.444444444444446,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Outfit",
+                "fontSize": 23,
+                "color": "#C8C8C8"
+              }
+            }
+          ],
+          "order": 0
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-06-03T19:18:22.892Z",
+      "updatedAt": "2026-06-03T19:57:23.876Z",
+      "path": "lessons/2713-TEST DELETEME/lesson.json",
+      "textPreset": null
+    },
+    "status": "completed",
+    "icon": {
+      "type": {},
+      "key": null,
+      "props": {
+        "size": 24
+      },
+      "_owner": null,
+      "_store": {}
+    },
+    "progress": {
+      "lastSlideIndex": 0,
+      "completed": true,
+      "lastPlayed": 1780516871504
+    }
   },
   "status": "completed",
   "icon": {
@@ -229,6 +371,6 @@
   "progress": {
     "lastSlideIndex": 0,
     "completed": true,
-    "lastPlayed": 1780516871504
+    "lastPlayed": 1780533034935
   }
 }

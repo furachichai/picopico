@@ -210,6 +210,11 @@
                 "text": "¡Lo lograste!"
               },
               {
+                "type": "message",
+                "text": "2+3×2 = 8",
+                "style": "bubble"
+              },
+              {
                 "type": "sticker",
                 "src": "/assets/images/stickers/pesto_rock_sticker.png",
                 "side": "right"
@@ -995,7 +1000,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-05-29T23:07:49.475Z",
+  "updatedAt": "2026-06-04T13:46:48.258Z",
   "path": "lessons/0416-First Steps/lesson.json",
   "textPreset": null,
   "name": "9941-First Steps",
