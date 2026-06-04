@@ -248,6 +248,61 @@
       "backgroundSettings": {}
     },
     {
+      "id": "slide-1780580863692",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1780580868510",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780580921604",
+          "type": "text",
+          "content": "<b>×</b> or <b>÷ </b><div>from left to right</div>",
+          "x": 48.05555555555555,
+          "y": 77.8125,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FDE74C"
+          }
+        },
+        {
+          "id": "el-1780580998436",
+          "type": "text",
+          "content": "<b>RULES</b>",
+          "x": 49.72222222222222,
+          "y": 32.5,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit"
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
       "id": "slide-1778636034579",
       "background": "#ffffff",
       "elements": [
@@ -315,14 +370,14 @@
           }
         }
       ],
-      "order": 5,
+      "order": 6,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1778703957916",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 6,
+      "order": 7,
       "cartridge": {
         "type": "Potiondas",
         "config": {
@@ -409,14 +464,14 @@
           }
         }
       ],
-      "order": 7,
+      "order": 8,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1778622262960",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 8,
+      "order": 9,
       "cartridge": {
         "type": "Potiondas",
         "config": {
@@ -504,7 +559,7 @@
           }
         }
       ],
-      "order": 9,
+      "order": 10,
       "backgroundSettings": {},
       "cartridge": null
     },
@@ -597,7 +652,7 @@
           }
         }
       ],
-      "order": 10,
+      "order": 11,
       "backgroundSettings": {},
       "cartridge": null
     },
@@ -605,7 +660,7 @@
       "id": "slide-1778705953154",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 11,
+      "order": 12,
       "cartridge": {
         "type": "Potiondas",
         "config": {
@@ -697,14 +752,14 @@
           }
         }
       ],
-      "order": 12,
+      "order": 13,
       "backgroundSettings": {}
     },
     {
       "id": "slide-1778775982680",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 13,
+      "order": 14,
       "cartridge": {
         "type": "Potiondas",
         "config": {
@@ -715,7 +770,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-04T13:39:05.104Z",
+  "updatedAt": "2026-06-04T13:50:29.809Z",
   "path": "lessons/01-Potions/lesson.json",
   "textPreset": null,
   "subject": "Math",

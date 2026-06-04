@@ -501,6 +501,45 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'PASTE_SLIDE': {
+            const pastedSlideData = action.payload;
+            if (!pastedSlideData || typeof pastedSlideData !== 'object') return state;
+
+            // Generate new IDs to prevent clashing
+            const newSlideId = `slide-${Date.now()}`;
+            const newSlide = {
+                ...pastedSlideData,
+                id: newSlideId,
+                elements: (pastedSlideData.elements || []).map(el => ({
+                    ...el,
+                    id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                })),
+                cartridge: pastedSlideData.cartridge ? { ...pastedSlideData.cartridge } : null,
+            };
+
+            // Insert after the current slide if one exists, otherwise append to end
+            const currentIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+            const newSlides = [...state.lesson.slides];
+            if (currentIndex !== -1) {
+                newSlides.splice(currentIndex + 1, 0, newSlide);
+            } else {
+                newSlides.push(newSlide);
+            }
+
+            // Re-index order
+            newSlides.forEach((s, i) => s.order = i);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: newSlides
+                },
+                currentSlideId: newSlideId
+            };
+        }
+
         case 'SELECT_ELEMENTS': {
             const ids = action.payload; // Array of IDs
             const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);

@@ -43,6 +43,49 @@ const SlidesPage = () => {
         dispatch({ type: 'SET_VIEW', payload: 'editor' });
     };
 
+    const handleCopySlide = async (slide) => {
+        try {
+            const slideClone = JSON.parse(JSON.stringify(slide));
+            const dataString = `picopico-slide:${JSON.stringify(slideClone)}`;
+            localStorage.setItem('picopico-copied-slide', dataString);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(dataString);
+            }
+            alert('Slide copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy slide:', err);
+            alert('Failed to copy slide');
+        }
+    };
+
+    const handlePasteSlide = async () => {
+        let clipboardText = '';
+        try {
+            if (navigator.clipboard && navigator.clipboard.readText) {
+                clipboardText = await navigator.clipboard.readText();
+            }
+        } catch (err) {
+            console.warn('Clipboard read failed, trying localStorage:', err);
+        }
+
+        if (!clipboardText || !clipboardText.startsWith('picopico-slide:')) {
+            clipboardText = localStorage.getItem('picopico-copied-slide') || '';
+        }
+
+        if (clipboardText && clipboardText.startsWith('picopico-slide:')) {
+            try {
+                const slideJson = clipboardText.substring('picopico-slide:'.length);
+                const slideObj = JSON.parse(slideJson);
+                dispatch({ type: 'PASTE_SLIDE', payload: slideObj });
+            } catch (err) {
+                console.error('Failed to paste slide:', err);
+                alert('Failed to paste slide: invalid slide data');
+            }
+        } else {
+            alert('No copied slide found! Please copy a slide first.');
+        }
+    };
+
     return (
         <div className="slides-page">
             <ConfirmationModal
@@ -59,9 +102,14 @@ const SlidesPage = () => {
                     &lt; {t('slides.back')}
                 </button>
                 <h1>{t('slides.title')}</h1>
-                <button className="btn-primary btn-create" onClick={handleAddSlide}>
-                    + {t('slides.create')}
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button className="btn-paste" onClick={handlePasteSlide} title={t('slides.paste') || "Paste Slide"}>
+                        📋 {t('slides.paste') || 'Paste'}
+                    </button>
+                    <button className="btn-primary btn-create" onClick={handleAddSlide}>
+                        + {t('slides.create')}
+                    </button>
+                </div>
             </div>
 
             <div className="slides-grid">
@@ -91,6 +139,13 @@ const SlidesPage = () => {
                                 title={t('slides.duplicate') || "Duplicate"}
                             >
                                 📄
+                            </button>
+                            <button
+                                className="btn-icon"
+                                onClick={() => handleCopySlide(slide)}
+                                title={t('slides.copy') || "Copy Slide"}
+                            >
+                                📋
                             </button>
                             <button
                                 className="btn-icon"
