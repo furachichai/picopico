@@ -1252,7 +1252,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-06-08T17:32:42.223Z",
+  "updatedAt": "2026-06-08T18:15:14.492Z",
   "path": "lessons/07-Separa los términos/lesson.json",
   "textPreset": null,
   "name": "07-1. Analiza la expresión",
@@ -14010,8 +14010,10 @@
   "translations": {
     "en": {
       "title": "First Steps",
-      "description": ""
+      "description": "",
+      "hashtag": ""
     }
   },
-  "cardColor": "#8B5CF6"
+  "cardColor": "#8B5CF6",
+  "hashtag": "#OrderOfOperations"
 }

@@ -97,7 +97,6 @@ const LessonsPage = () => {
                 ...infoTarget,
                 title: data.title,
                 description: data.description,
-                hashtag: data.hashtag,
                 icon: data.icon,
                 cardColor: data.cardColor,
                 translations: data.translations,

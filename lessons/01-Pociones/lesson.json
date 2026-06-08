@@ -694,7 +694,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-08T17:23:14.228Z",
+  "updatedAt": "2026-06-08T18:14:39.247Z",
   "path": "lessons/01-Pociones/lesson.json",
   "textPreset": null,
   "subject": "Math",
@@ -13621,8 +13621,10 @@
   "translations": {
     "en": {
       "title": "Potions",
-      "description": "1. Potions"
+      "description": "1. Potions",
+      "hashtag": ""
     }
   },
-  "cardColor": "#8B5CF6"
+  "cardColor": "#8B5CF6",
+  "hashtag": "#OrderOfOperations"
 }

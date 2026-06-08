@@ -269,7 +269,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-24T14:36:21.380Z",
-  "updatedAt": "2026-06-08T17:32:27.120Z",
+  "updatedAt": "2026-06-08T18:15:25.663Z",
   "path": "lessons/12-Parenthesis/lesson.json",
   "textPreset": null,
   "description": "",
@@ -278,7 +278,9 @@
   "translations": {
     "en": {
       "title": "",
-      "description": ""
+      "description": "",
+      "hashtag": ""
     }
-  }
+  },
+  "hashtag": "#OrderOfOperations"
 }

@@ -855,7 +855,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-28T00:51:30.015Z",
-  "updatedAt": "2026-06-08T17:22:47.582Z",
+  "updatedAt": "2026-06-08T18:15:17.934Z",
   "path": "lessons/09-Estafa/lesson.json",
   "textPreset": null,
   "name": "5704-Scam",
@@ -5952,8 +5952,10 @@
   "translations": {
     "en": {
       "title": "Estafa",
-      "description": ""
+      "description": "",
+      "hashtag": ""
     }
   },
-  "cardColor": "#06B6D4"
+  "cardColor": "#06B6D4",
+  "hashtag": "#OrderOfOperations"
 }

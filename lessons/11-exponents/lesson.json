@@ -816,7 +816,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-06-08T17:32:22.391Z",
+  "updatedAt": "2026-06-08T18:15:21.896Z",
   "path": "lessons/11-exponents/lesson.json",
   "textPreset": null,
   "name": "0381-exponents",
@@ -910,7 +910,9 @@
   "translations": {
     "en": {
       "title": "",
-      "description": ""
+      "description": "",
+      "hashtag": ""
     }
-  }
+  },
+  "hashtag": "#OrderOfOperations"
 }

@@ -674,8 +674,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-08T16:49:35.266Z",
-  "path": "lessons/02-Potions - Parte 2/lesson.json",
+  "updatedAt": "2026-06-08T18:14:43.409Z",
+  "path": "lessons/02-Pociones - Parte 2/lesson.json",
   "textPreset": null,
   "subject": "Math",
   "topic": "PEMDAS",
@@ -13601,7 +13601,10 @@
   "translations": {
     "en": {
       "title": "Potions",
-      "description": "1. Potions"
+      "description": "1. Potions",
+      "hashtag": ""
     }
-  }
+  },
+  "hashtag": "#OrderOfOperations",
+  "cardColor": "#8B5CF6"
 }

@@ -996,7 +996,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-20T18:37:37.224Z",
-  "updatedAt": "2026-06-08T17:32:37.810Z",
+  "updatedAt": "2026-06-08T18:49:12.973Z",
   "path": "lessons/06-Expresiones/lesson.json",
   "textPreset": null,
   "name": "06-Expresiones",
@@ -1647,42 +1647,6 @@
             }
           },
           {
-            "id": "el-1779379622181",
-            "type": "quiz",
-            "content": "Quiz",
-            "x": 50,
-            "y": 75,
-            "width": 20,
-            "height": 10,
-            "rotation": 0,
-            "scale": 1,
-            "metadata": {
-              "fontFamily": "\"Fira Sans\"",
-              "options": [
-                "expresión",
-                "operación combinada",
-                "ambos nombres son correctos"
-              ],
-              "correctIndex": 2,
-              "correctIndices": [
-                0
-              ],
-              "quizType": "classic",
-              "visualMode": false,
-              "translations": {
-                "en": {
-                  "options": [
-                    "expression",
-                    "mixed operation",
-                    "both names are correct"
-                  ],
-                  "matchAnswers": [],
-                  "chatNodes": []
-                }
-              }
-            }
-          },
-          {
             "id": "el-1779379656209",
             "type": "text",
             "content": "¿Cómo se le llama a esto?",
@@ -1699,6 +1663,42 @@
             "translations": {
               "en": {
                 "content": "How do you call this?"
+              }
+            }
+          },
+          {
+            "id": "el-1779379622181",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "ambos nombres son correctos",
+                "operación combinada",
+                "expresión"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "classic",
+              "visualMode": false,
+              "translations": {
+                "en": {
+                  "options": [
+                    "expression",
+                    "mixed operation",
+                    "both names are correct"
+                  ],
+                  "matchAnswers": [],
+                  "chatNodes": []
+                }
               }
             }
           }
@@ -2002,7 +2002,7 @@
     ],
     "author": "User",
     "createdAt": "2026-05-20T18:37:37.224Z",
-    "updatedAt": "2026-06-04T17:11:21.593Z",
+    "updatedAt": "2026-06-08T18:15:08.299Z",
     "path": "lessons/06-Expresiones/lesson.json",
     "textPreset": null,
     "name": "06-Expresiones",
@@ -2011,7 +2011,7 @@
     "visible": true,
     "order": 6,
     "content": {
-      "id": "lessons/6350-Expresiones/lesson.json",
+      "id": "lessons/06-Expresiones/lesson.json",
       "title": "Expresiones",
       "slides": [
         {
@@ -2022,7 +2022,7 @@
         },
         {
           "id": "slide-1779402727046",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
               "id": "el-1779402740053",
@@ -2107,11 +2107,16 @@
               }
             }
           ],
-          "order": 1
+          "order": 1,
+          "backgroundSettings": {
+            "opacity": 0.37,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
+          }
         },
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png\")",
           "elements": [
             {
               "id": "el-1779386142068",
@@ -2288,11 +2293,16 @@
               }
             }
           ],
-          "order": 2
+          "order": 2,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(253, 164, 175, 0.4)",
+            "opacity": 0.21
+          }
         },
         {
           "id": "slide-1779302322922",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png\")",
           "elements": [
             {
               "id": "el-1779386226164",
@@ -2313,22 +2323,6 @@
                 "en": {
                   "content": "2 * 3 + 12 /4"
                 }
-              }
-            },
-            {
-              "id": "el-1779378668493",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains.png",
-              "x": 27.000000000000007,
-              "y": 95.28125,
-              "width": 40,
-              "height": 30.809659090909093,
-              "rotation": 0,
-              "scale": 1.7084055158590379,
-              "metadata": {
-                "width": 40,
-                "height": 30.809659090909093,
-                "locked": false
               }
             },
             {
@@ -2422,14 +2416,34 @@
                   "content": "Howdy!"
                 }
               }
+            },
+            {
+              "id": "el-1780592783697",
+              "type": "image",
+              "content": "/src/assets/characters/Chef_explain%20s_signals.png",
+              "x": 22.222222222222225,
+              "y": 69.84375,
+              "width": 40,
+              "height": 37.47761194029851,
+              "rotation": 0,
+              "scale": 1.3950555298902578,
+              "metadata": {
+                "width": 40,
+                "height": 37.47761194029851
+              }
             }
           ],
           "order": 3,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(253, 164, 175, 0.4)",
+            "opacity": 0.11
+          }
         },
         {
           "id": "slide-1779302385089",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
               "id": "el-1779386238482",
@@ -2450,21 +2464,6 @@
                 "en": {
                   "content": "2 * 3 + 12 /4"
                 }
-              }
-            },
-            {
-              "id": "el-1779378661710",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains.png",
-              "x": 25.555555555555557,
-              "y": 91.71875,
-              "width": 40,
-              "height": 30.809659090909093,
-              "rotation": 0,
-              "scale": 1.5299518064429154,
-              "metadata": {
-                "width": 40,
-                "height": 30.809659090909093
               }
             },
             {
@@ -2508,11 +2507,27 @@
               }
             },
             {
+              "id": "el-1780592815950",
+              "type": "image",
+              "content": "/src/assets/characters/pesto%20asking%20question.png",
+              "x": 75.55555555555556,
+              "y": 82.03125,
+              "width": 40,
+              "height": 25.981132075471695,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 25.981132075471695,
+                "flipX": true
+              }
+            },
+            {
               "id": "el-1779302385089-geptyzsmc",
               "type": "balloon",
               "content": "También me llaman <b>operación combinada</b>.",
-              "x": 58.888888888888886,
-              "y": 48.59375,
+              "x": 34.44444444444444,
+              "y": 50.625,
               "width": 55.55555555555556,
               "height": 20,
               "rotation": 0,
@@ -2523,8 +2538,8 @@
                 "fontFamily": "\"Noto Sans\"",
                 "fontSize": 16,
                 "tailPos": {
-                  "x": -5,
-                  "y": -73
+                  "x": 19,
+                  "y": -74
                 }
               },
               "translations": {
@@ -2535,27 +2550,17 @@
             }
           ],
           "order": 4,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(134, 239, 172, 0.4)",
+            "opacity": 0.34
+          }
         },
         {
           "id": "slide-1779302500789",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png\")",
           "elements": [
-            {
-              "id": "el-1779386265219",
-              "type": "image",
-              "content": "/src/assets/characters/chef_scrathing.png",
-              "x": 45.55555555555556,
-              "y": 62.96875,
-              "width": 40,
-              "height": 34.59586466165413,
-              "rotation": 0,
-              "scale": 1.699728626084838,
-              "metadata": {
-                "width": 40,
-                "height": 34.59586466165413
-              }
-            },
             {
               "id": "el-1779302503309",
               "type": "text",
@@ -2581,7 +2586,7 @@
             {
               "id": "el-1779302528193",
               "type": "quiz",
-              "content": "Quiz",
+              "content": "combina operaciones como <b>+- × ÷</b>",
               "x": 50,
               "y": 75,
               "width": 20,
@@ -2592,7 +2597,7 @@
                 "fontFamily": "\"Fira Sans\"",
                 "options": [
                   "combina con mi ropa",
-                  "combina operaciones como +,-, × y ÷",
+                  "combina operaciones como <b>+- × ÷</b>",
                   "es una forma de cirugía"
                 ],
                 "correctIndex": 1,
@@ -2615,11 +2620,16 @@
               }
             }
           ],
-          "order": 5
+          "order": 5,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(198, 138, 76, 0.4)",
+            "opacity": 0.25
+          }
         },
         {
           "id": "slide-1779379613566",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
               "id": "el-1779379623953",
@@ -2689,7 +2699,8 @@
               "rotation": 0,
               "scale": 1,
               "metadata": {
-                "fontFamily": "\"Fira Sans\""
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 23
               },
               "translations": {
                 "en": {
@@ -2698,11 +2709,16 @@
               }
             }
           ],
-          "order": 6
+          "order": 6,
+          "backgroundSettings": {
+            "opacity": 0.26,
+            "grayscale": true,
+            "tintColor": "rgba(148, 163, 184, 0.4)"
+          }
         },
         {
           "id": "slide-1779379687271",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
               "id": "el-1779379692976",
@@ -2789,11 +2805,14 @@
               }
             }
           ],
-          "order": 7
+          "order": 7,
+          "backgroundSettings": {
+            "opacity": 0.41
+          }
         },
         {
           "id": "slide-1779319535533",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
           "elements": [
             {
               "id": "el-1779319538785",
@@ -2849,7 +2868,10 @@
               }
             }
           ],
-          "order": 8
+          "order": 8,
+          "backgroundSettings": {
+            "opacity": 0.34
+          }
         },
         {
           "id": "slide-1779382073256",
@@ -2986,14 +3008,14 @@
       ],
       "author": "User",
       "createdAt": "2026-05-20T18:37:37.224Z",
-      "updatedAt": "2026-05-22T20:16:48.864Z",
-      "path": "lessons/6350-Expresiones/lesson.json",
+      "updatedAt": "2026-06-04T17:11:21.593Z",
+      "path": "lessons/06-Expresiones/lesson.json",
       "textPreset": null,
-      "name": "6350-Expresiones",
+      "name": "06-Expresiones",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 6350,
+      "order": 6,
       "content": {
         "id": "lessons/6350-Expresiones/lesson.json",
         "title": "Expresiones",
@@ -3840,26 +3862,6 @@
             "background": "url(\"/src/assets/backgrounds/Trade%20Card.png\")",
             "elements": [
               {
-                "id": "el-1779382405959",
-                "type": "text",
-                "content": "<b>Expresión</b>",
-                "x": 49.44444444444444,
-                "y": 45.625,
-                "width": 20,
-                "height": 10,
-                "rotation": 0,
-                "scale": 1.4900092795879247,
-                "metadata": {
-                  "fontFamily": "\"Fira Sans\"",
-                  "color": "#2196F3"
-                },
-                "translations": {
-                  "en": {
-                    "content": "<b>Expresión</b>"
-                  }
-                }
-              },
-              {
                 "id": "el-1779382104371",
                 "type": "text",
                 "content": "<font color=\"#ffffff\">2 × 3 </font><b><font color=\"#f57c00\">-</font></b><font color=\"#ffffff\"> 12 ÷ 4 </font><b><font color=\"#f57c00\">+</font></b><font color=\"#ffffff\"> 6</font>",
@@ -3902,9 +3904,29 @@
                 }
               },
               {
+                "id": "el-1779382128480",
+                "type": "text",
+                "content": "<font color=\"#4caf50\">}</font>",
+                "x": 31.66666666666666,
+                "y": 67.1875,
+                "width": 20,
+                "height": 10,
+                "rotation": 89.43132069727594,
+                "scale": 4.341910079183815,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "textAlign": "center"
+                },
+                "translations": {
+                  "en": {
+                    "content": "<font color=\"#4caf50\">}</font>"
+                  }
+                }
+              },
+              {
                 "id": "el-1779382473799",
                 "type": "text",
-                "content": "The <b style=\"color: rgb(76, 175, 80);\">terms</b> in an <b><font color=\"#2196f3\">expression</font></b> are separated by <b><font color=\"#f57c00\">+</font></b> &amp; <span style=\"caret-color: rgb(245, 124, 0);\"><b><font color=\"#f57c00\">-</font> </b></span>",
+                "content": "<font color=\"#f57c00\"><b>+</b></font> &amp; <font color=\"#f57c00\"><b>-</b></font> separan los <b style=\"color: rgb(76, 175, 80);\">términos</b> de una <b><font color=\"#2196f3\">expresión.</font></b>",
                 "x": 50.69444444444445,
                 "y": 79.0625,
                 "width": 57.9538608490329,
@@ -3945,22 +3967,22 @@
                 }
               },
               {
-                "id": "el-1779382128480",
+                "id": "el-1779382405959",
                 "type": "text",
-                "content": "<font color=\"#4caf50\">}</font>",
-                "x": 31.66666666666666,
-                "y": 67.1875,
-                "width": 20,
+                "content": "<b>Expresión</b>",
+                "x": 49.166666666666664,
+                "y": 45.625,
+                "width": 23.72853755453925,
                 "height": 10,
-                "rotation": 89.43132069727594,
-                "scale": 4.341910079183815,
+                "rotation": 0,
+                "scale": 1.4900092795879247,
                 "metadata": {
                   "fontFamily": "\"Fira Sans\"",
-                  "textAlign": "center"
+                  "color": "#2196F3"
                 },
                 "translations": {
                   "en": {
-                    "content": "<font color=\"#4caf50\">}</font>"
+                    "content": "<b>Expression</b>"
                   }
                 }
               }
@@ -3970,7 +3992,7 @@
         ],
         "author": "User",
         "createdAt": "2026-05-20T18:37:37.224Z",
-        "updatedAt": "2026-05-22T20:09:51.406Z",
+        "updatedAt": "2026-05-22T20:16:48.864Z",
         "path": "lessons/6350-Expresiones/lesson.json",
         "textPreset": null,
         "name": "6350-Expresiones",
@@ -4733,7 +4755,7 @@
                 {
                   "id": "el-1779379747276",
                   "type": "balloon",
-                  "content": "An expression is divided into <font color=\"#4caf50\"><b>parts</b></font> separated by <font color=\"#f57c00\"><b>+</b></font> and <font color=\"#f57c00\"><b>-</b></font>.",
+                  "content": "Una expresión es dividida en <font color=\"#4caf50\"><b>partes</b></font> por <font color=\"#f57c00\"><b>+</b></font> y <font color=\"#f57c00\"><b>-</b></font>.",
                   "x": 42.638888888888886,
                   "y": 50,
                   "width": 54.72222222222223,
@@ -4886,6 +4908,29 @@
                   }
                 },
                 {
+                  "id": "el-1779382473799",
+                  "type": "text",
+                  "content": "The <b style=\"color: rgb(76, 175, 80);\">terms</b> in an <b><font color=\"#2196f3\">expression</font></b> are separated by <b><font color=\"#f57c00\">+</font></b> &amp; <span style=\"caret-color: rgb(245, 124, 0);\"><b><font color=\"#f57c00\">-</font> </b></span>",
+                  "x": 50.69444444444445,
+                  "y": 79.0625,
+                  "width": 57.9538608490329,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1.3022192500072702,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "textAlign": "center",
+                    "fontSize": 19,
+                    "color": "#000000",
+                    "fontWeight": "normal"
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "The <b style=\"color: rgb(76, 175, 80);\">terms</b> in an <b><font color=\"#2196f3\">expression</font></b> are separated by <b><font color=\"#f57c00\">+</font></b> &amp; <span style=\"caret-color: rgb(245, 124, 0);\"><b><font color=\"#f57c00\">-</font> </b></span>"
+                    }
+                  }
+                },
+                {
                   "id": "el-1779382784384",
                   "type": "text",
                   "content": "<font color=\"#4caf50\">}</font>",
@@ -4924,27 +4969,6 @@
                       "content": "<font color=\"#4caf50\">}</font>"
                     }
                   }
-                },
-                {
-                  "id": "el-1779382473799",
-                  "type": "text",
-                  "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">+</font></b> y <font color=\"#f57c00\"><span style=\"caret-color: rgb(245, 124, 0);\"><b>-</b></span></font></div>",
-                  "x": 50.69444444444445,
-                  "y": 79.0625,
-                  "width": 57.9538608490329,
-                  "height": 10,
-                  "rotation": 0,
-                  "scale": 1.3022192500072702,
-                  "metadata": {
-                    "fontFamily": "\"Fira Sans\"",
-                    "textAlign": "center",
-                    "fontSize": 19
-                  },
-                  "translations": {
-                    "en": {
-                      "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">+</font></b> y <font color=\"#f57c00\"><span style=\"caret-color: rgb(245, 124, 0);\"><b>-</b></span></font></div>"
-                    }
-                  }
                 }
               ],
               "order": 9
@@ -4952,7 +4976,7 @@
           ],
           "author": "User",
           "createdAt": "2026-05-20T18:37:37.224Z",
-          "updatedAt": "2026-05-22T13:33:15.498Z",
+          "updatedAt": "2026-05-22T20:09:51.406Z",
           "path": "lessons/6350-Expresiones/lesson.json",
           "textPreset": null,
           "name": "6350-Expresiones",
@@ -5507,45 +5531,9 @@
                     }
                   },
                   {
-                    "id": "el-1779302528193",
-                    "type": "quiz",
-                    "content": "Quiz",
-                    "x": 50,
-                    "y": 75,
-                    "width": 20,
-                    "height": 10,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "fontFamily": "\"Fira Sans\"",
-                      "options": [
-                        "numbers are put in a blender",
-                        "it mixes operations such as +,-, × and ÷",
-                        "it combines different surgeries"
-                      ],
-                      "correctIndex": 1,
-                      "correctIndices": [
-                        0
-                      ],
-                      "quizType": "classic",
-                      "visualMode": false,
-                      "translations": {
-                        "en": {
-                          "options": [
-                            "Combina con mi ropa",
-                            "Mezcla operaciones como +,-, * y /",
-                            "Es una operación médica"
-                          ],
-                          "matchAnswers": [],
-                          "chatNodes": []
-                        }
-                      }
-                    }
-                  },
-                  {
                     "id": "el-1779302503309",
                     "type": "text",
-                    "content": "It's called a <b>mixed operation</b> because...",
+                    "content": "Se llama operación combinada porque...",
                     "x": 51.94444444444445,
                     "y": 24.84375,
                     "width": 54.44444444444444,
@@ -5560,7 +5548,43 @@
                     },
                     "translations": {
                       "en": {
-                        "content": "¿Por qué se le llama operación combinada?"
+                        "content": "It's called a <b>mixed operation</b> because..."
+                      }
+                    }
+                  },
+                  {
+                    "id": "el-1779302528193",
+                    "type": "quiz",
+                    "content": "Quiz",
+                    "x": 50,
+                    "y": 75,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\"",
+                      "options": [
+                        "combina con mi ropa",
+                        "combina operaciones como +,-, × y ÷",
+                        "es una forma de cirugía"
+                      ],
+                      "correctIndex": 1,
+                      "correctIndices": [
+                        0
+                      ],
+                      "quizType": "classic",
+                      "visualMode": false,
+                      "translations": {
+                        "en": {
+                          "options": [
+                            "its mixed in a blender",
+                            "it mixes operations such as +,-, × and ÷",
+                            "it combines surgeries"
+                          ],
+                          "matchAnswers": [],
+                          "chatNodes": []
+                        }
                       }
                     }
                   }
@@ -5593,25 +5617,6 @@
                     }
                   },
                   {
-                    "id": "el-1779379656209",
-                    "type": "text",
-                    "content": "¿Cómo se le llama a esto?",
-                    "x": 46.38888888888888,
-                    "y": 21.5625,
-                    "width": 53.333333333333336,
-                    "height": 10,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "fontFamily": "\"Fira Sans\""
-                    },
-                    "translations": {
-                      "en": {
-                        "content": "¿Cómo se le llama a esto?"
-                      }
-                    }
-                  },
-                  {
                     "id": "el-1779379622181",
                     "type": "quiz",
                     "content": "Quiz",
@@ -5624,7 +5629,7 @@
                     "metadata": {
                       "fontFamily": "\"Fira Sans\"",
                       "options": [
-                        "término",
+                        "expresión",
                         "operación combinada",
                         "ambos nombres son correctos"
                       ],
@@ -5644,6 +5649,25 @@
                           "matchAnswers": [],
                           "chatNodes": []
                         }
+                      }
+                    }
+                  },
+                  {
+                    "id": "el-1779379656209",
+                    "type": "text",
+                    "content": "¿Cómo se le llama a esto?",
+                    "x": 46.38888888888888,
+                    "y": 21.5625,
+                    "width": 53.333333333333336,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\""
+                    },
+                    "translations": {
+                      "en": {
+                        "content": "How do you call this?"
                       }
                     }
                   }
@@ -5687,32 +5711,6 @@
                     }
                   },
                   {
-                    "id": "el-1779379747276",
-                    "type": "balloon",
-                    "content": "Una expresión se divide en <font color=\"#4caf50\"><b>partes</b></font> separadas por <font color=\"#f57c00\"><b>+</b></font> y <font color=\"#f57c00\"><b>-</b></font>.",
-                    "x": 42.638888888888886,
-                    "y": 50,
-                    "width": 54.72222222222223,
-                    "height": 20,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "backgroundColor": "#ffffff",
-                      "color": "#000000",
-                      "fontFamily": "\"Noto Sans\"",
-                      "fontSize": 16,
-                      "tailPos": {
-                        "x": -32,
-                        "y": 100
-                      }
-                    },
-                    "translations": {
-                      "en": {
-                        "content": "Una expresión se divide en <font color=\"#4caf50\"><b>partes</b></font> separadas por <font color=\"#f57c00\"><b>+</b></font> y <font color=\"#f57c00\"><b>-</b></font>."
-                      }
-                    }
-                  },
-                  {
                     "id": "el-1779379791124",
                     "type": "balloon",
                     "content": "A cada parte se le llama <b><font color=\"#4caf50\">término</font></b>.",
@@ -5734,7 +5732,33 @@
                     },
                     "translations": {
                       "en": {
-                        "content": "A cada parte se le llama <b><font color=\"#4caf50\">término</font></b>."
+                        "content": "Each part is called a <b><font color=\"#4caf50\">term</font></b>."
+                      }
+                    }
+                  },
+                  {
+                    "id": "el-1779379747276",
+                    "type": "balloon",
+                    "content": "An expression is divided into <font color=\"#4caf50\"><b>parts</b></font> separated by <font color=\"#f57c00\"><b>+</b></font> and <font color=\"#f57c00\"><b>-</b></font>.",
+                    "x": 42.638888888888886,
+                    "y": 50,
+                    "width": 54.72222222222223,
+                    "height": 20,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": -32,
+                        "y": 100
+                      }
+                    },
+                    "translations": {
+                      "en": {
+                        "content": "An expression is divided into <font color=\"#4caf50\"><b>parts</b></font> separated by <font color=\"#f57c00\"><b>+</b></font> and <font color=\"#f57c00\"><b>-</b></font>."
                       }
                     }
                   }
@@ -5758,7 +5782,7 @@
                     "metadata": {
                       "fontFamily": "\"Fira Sans\"",
                       "options": [
-                        "4 × 2 - 4",
+                        "4 × 2<font color=\"#5a5a5a\"> - 4</font>",
                         "4 × 2 - 6 ÷ 3",
                         "1 + 6",
                         "7 × 2",
@@ -5780,15 +5804,15 @@
                       "translations": {
                         "en": {
                           "options": [
-                            "4 × 2 - 4",
+                            "4 × 2<font color=\"#5a5a5a\"> - 4</font>",
                             "4 × 2 - 6 ÷ 3",
                             "1 + 6",
                             "7 × 2",
                             "0 × 0 - 0"
                           ],
                           "matchAnswers": [
-                            "término",
-                            "expresión",
+                            "term",
+                            "expression",
                             "7",
                             "14",
                             "0"
@@ -5934,7 +5958,7 @@
             ],
             "author": "User",
             "createdAt": "2026-05-20T18:37:37.224Z",
-            "updatedAt": "2026-05-22T13:28:43.329Z",
+            "updatedAt": "2026-05-22T13:33:15.498Z",
             "path": "lessons/6350-Expresiones/lesson.json",
             "textPreset": null,
             "name": "6350-Expresiones",
@@ -6442,7 +6466,7 @@
                     {
                       "id": "el-1779302385089-geptyzsmc",
                       "type": "balloon",
-                      "content": "I'm also known as a <b>mixed operation</b>.",
+                      "content": "También me llaman <b>operación combinada</b>.",
                       "x": 58.888888888888886,
                       "y": 48.59375,
                       "width": 55.55555555555556,
@@ -6474,6 +6498,21 @@
                   "background": "#E1F5FE",
                   "elements": [
                     {
+                      "id": "el-1779386265219",
+                      "type": "image",
+                      "content": "/src/assets/characters/chef_scrathing.png",
+                      "x": 45.55555555555556,
+                      "y": 62.96875,
+                      "width": 40,
+                      "height": 34.59586466165413,
+                      "rotation": 0,
+                      "scale": 1.699728626084838,
+                      "metadata": {
+                        "width": 40,
+                        "height": 34.59586466165413
+                      }
+                    },
+                    {
                       "id": "el-1779302528193",
                       "type": "quiz",
                       "content": "Quiz",
@@ -6486,9 +6525,9 @@
                       "metadata": {
                         "fontFamily": "\"Fira Sans\"",
                         "options": [
-                          "Combina con mi ropa",
-                          "Mezcla operaciones como +,-, * y /",
-                          "Es una operación médica"
+                          "numbers are put in a blender",
+                          "it mixes operations such as +,-, × and ÷",
+                          "it combines different surgeries"
                         ],
                         "correctIndex": 1,
                         "correctIndices": [
@@ -6512,7 +6551,7 @@
                     {
                       "id": "el-1779302503309",
                       "type": "text",
-                      "content": "¿Por qué se le llama operación combinada?",
+                      "content": "It's called a <b>mixed operation</b> because...",
                       "x": 51.94444444444445,
                       "y": 24.84375,
                       "width": 54.44444444444444,
@@ -6529,21 +6568,6 @@
                         "en": {
                           "content": "¿Por qué se le llama operación combinada?"
                         }
-                      }
-                    },
-                    {
-                      "id": "el-1779386265219",
-                      "type": "image",
-                      "content": "/src/assets/characters/chef_scrathing.png",
-                      "x": 45.55555555555556,
-                      "y": 62.96875,
-                      "width": 40,
-                      "height": 34.59586466165413,
-                      "rotation": 0,
-                      "scale": 1.699728626084838,
-                      "metadata": {
-                        "width": 40,
-                        "height": 34.59586466165413
                       }
                     }
                   ],
@@ -6916,7 +6940,7 @@
               ],
               "author": "User",
               "createdAt": "2026-05-20T18:37:37.224Z",
-              "updatedAt": "2026-05-22T13:26:16.621Z",
+              "updatedAt": "2026-05-22T13:28:43.329Z",
               "path": "lessons/6350-Expresiones/lesson.json",
               "textPreset": null,
               "name": "6350-Expresiones",
@@ -6935,67 +6959,45 @@
                     "order": 0
                   },
                   {
-                    "id": "slide-1",
+                    "id": "slide-1779402727046",
                     "background": "#E1F5FE",
                     "elements": [
                       {
-                        "id": "el-1779378679892",
+                        "id": "el-1779402740053",
                         "type": "image",
-                        "content": "/src/assets/characters/chef%20explains.png",
-                        "x": 32,
-                        "y": 71.53125,
+                        "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+                        "x": 27.22222222222222,
+                        "y": 67.34375,
                         "width": 40,
-                        "height": 30.809659090909093,
+                        "height": 29.263005780346823,
                         "rotation": 0,
-                        "scale": 1.7084055158590379,
+                        "scale": 1.887134764466538,
                         "metadata": {
                           "width": 40,
-                          "height": 30.809659090909093
+                          "height": 29.263005780346823
                         }
                       },
                       {
-                        "id": "el-1779378696472",
+                        "id": "el-1779402776685",
                         "type": "image",
-                        "content": "/src/assets/characters/pesto%20asking%20question.png",
-                        "x": 80.55555555555556,
-                        "y": 85,
+                        "content": "/src/assets/characters/pesto%20jumping.png",
+                        "x": 72.22222222222223,
+                        "y": 79.6875,
                         "width": 40,
-                        "height": 25.981132075471695,
+                        "height": 26.642384105960264,
                         "rotation": 0,
-                        "scale": 1,
+                        "scale": 1.3368437217345785,
                         "metadata": {
                           "width": 40,
-                          "height": 25.981132075471695,
-                          "flipX": true
+                          "height": 26.642384105960264
                         }
                       },
                       {
-                        "id": "el-1779302263520",
-                        "type": "text",
-                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
-                        "x": 55.138888888888886,
-                        "y": 21.250000000000004,
-                        "width": 38.05555555555556,
-                        "height": 10,
-                        "rotation": 0,
-                        "scale": 2.069987904043228,
-                        "metadata": {
-                          "fontFamily": "\"Fira Sans\"",
-                          "backgroundColor": "#000000",
-                          "color": "#FDE74C"
-                        },
-                        "translations": {
-                          "en": {
-                            "content": "2 * 3 + 12 /4"
-                          }
-                        }
-                      },
-                      {
-                        "id": "el-1779302279638",
+                        "id": "el-1779402747197",
                         "type": "balloon",
-                        "content": "¿Cómo le llamamos a esto?",
-                        "x": 37.5,
-                        "y": 41.09375,
+                        "content": "Mi nombre es Chef.",
+                        "x": 46.111111111111114,
+                        "y": 27.1875,
                         "width": 40,
                         "height": 20,
                         "rotation": 0,
@@ -7006,13 +7008,118 @@
                           "fontFamily": "\"Noto Sans\"",
                           "fontSize": 16,
                           "tailPos": {
-                            "x": -35,
-                            "y": 71
+                            "x": -23,
+                            "y": 77
                           }
                         },
                         "translations": {
                           "en": {
-                            "content": "¿Cómo le llamamos a esto?"
+                            "content": "My name is Chef"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779402757661",
+                        "type": "balloon",
+                        "content": "¡Mi nombre es Pesto!",
+                        "x": 78.33333333333334,
+                        "y": 45.3125,
+                        "width": 40,
+                        "height": 20,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": 3,
+                            "y": 79
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "My name is Pesto!"
+                          }
+                        }
+                      }
+                    ],
+                    "order": 1
+                  },
+                  {
+                    "id": "slide-1",
+                    "background": "#E1F5FE",
+                    "elements": [
+                      {
+                        "id": "el-1779386142068",
+                        "type": "image",
+                        "content": "/src/assets/images/spotlights.png",
+                        "x": 31.38888888888889,
+                        "y": 23.90625,
+                        "width": 40,
+                        "height": 9.0087890625,
+                        "rotation": 0,
+                        "scale": 1.6208873835028823,
+                        "metadata": {
+                          "width": 40,
+                          "height": 9.0087890625
+                        }
+                      },
+                      {
+                        "id": "el-1779386156934",
+                        "type": "image",
+                        "content": "/src/assets/images/spotlights.png",
+                        "x": 92.5,
+                        "y": 23.75,
+                        "width": 40,
+                        "height": 9.0087890625,
+                        "rotation": 0,
+                        "scale": 1.6208873835028823,
+                        "metadata": {
+                          "width": 40,
+                          "height": 9.0087890625
+                        }
+                      },
+                      {
+                        "id": "el-1779378696472",
+                        "type": "image",
+                        "content": "/src/assets/characters/pesto%20asking%20question.png",
+                        "x": 79.16666666666667,
+                        "y": 87.8125,
+                        "width": 40,
+                        "height": 25.981132075471695,
+                        "rotation": 0,
+                        "scale": 0.8631788058485828,
+                        "metadata": {
+                          "width": 40,
+                          "height": 25.981132075471695,
+                          "flipX": true
+                        }
+                      },
+                      {
+                        "id": "el-1779302279638",
+                        "type": "balloon",
+                        "content": "¿Cómo le llamamos a esto?",
+                        "x": 21.11111111111111,
+                        "y": 40.546875,
+                        "width": 40,
+                        "height": 16.71875,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": 9,
+                            "y": 63
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "and what is their name?"
                           }
                         }
                       },
@@ -7020,8 +7127,8 @@
                         "id": "el-1779302299058",
                         "type": "balloon",
                         "content": "¿Cuenta <font color=\"#c62828\">larga</font>?",
-                        "x": 73.61111111111111,
-                        "y": 61.796875,
+                        "x": 73.33333333333334,
+                        "y": 66.484375,
                         "width": 36.11111111111111,
                         "height": 14.531250000000002,
                         "rotation": 0,
@@ -7038,71 +7145,24 @@
                         },
                         "translations": {
                           "en": {
-                            "content": "¿Cuenta larga?"
-                          }
-                        }
-                      }
-                    ],
-                    "order": 1
-                  },
-                  {
-                    "id": "slide-1779302322922",
-                    "background": "#E1F5FE",
-                    "elements": [
-                      {
-                        "id": "el-1779378668493",
-                        "type": "image",
-                        "content": "/src/assets/characters/chef%20explains.png",
-                        "x": 45.611111111111114,
-                        "y": 71.53125,
-                        "width": 40,
-                        "height": 30.809659090909093,
-                        "rotation": 0,
-                        "scale": 1.7084055158590379,
-                        "metadata": {
-                          "width": 40,
-                          "height": 30.809659090909093,
-                          "locked": true
-                        }
-                      },
-                      {
-                        "id": "el-1779302354058",
-                        "type": "balloon",
-                        "content": "En matemáticas se le llama \"expresión\".",
-                        "x": 74.72222222222223,
-                        "y": 41.40625,
-                        "width": 40,
-                        "height": 20,
-                        "rotation": 0,
-                        "scale": 1,
-                        "metadata": {
-                          "backgroundColor": "#ffffff",
-                          "color": "#000000",
-                          "fontFamily": "\"Noto Sans\"",
-                          "fontSize": 16,
-                          "tailPos": {
-                            "x": -35,
-                            "y": 71
-                          }
-                        },
-                        "translations": {
-                          "en": {
-                            "content": "En matemáticas se le llama \"expresión\"."
+                            "content": "¿Long operation?"
                           }
                         }
                       },
                       {
-                        "id": "el-1779302322922-oqj394szj",
+                        "id": "el-1779302263520",
                         "type": "text",
-                        "content": "2 × 3 + 12 ÷ 4",
-                        "x": 49.02777777777778,
-                        "y": 20.468750000000004,
+                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                        "x": 66.80555555555554,
+                        "y": 51.40625,
                         "width": 38.05555555555556,
                         "height": 10,
                         "rotation": 0,
-                        "scale": 1,
+                        "scale": 2.069987904043228,
                         "metadata": {
-                          "fontFamily": "\"Fira Sans\""
+                          "fontFamily": "\"Fira Sans\"",
+                          "backgroundColor": "#000000",
+                          "color": "#FDE74C"
                         },
                         "translations": {
                           "en": {
@@ -7111,71 +7171,31 @@
                         }
                       },
                       {
-                        "id": "el-1779302322922-iu0f4ekld",
-                        "type": "balloon",
-                        "content": "Cierto, es una cuenta larga.",
-                        "x": 31.666666666666668,
-                        "y": 35,
-                        "width": 40,
-                        "height": 20,
+                        "id": "el-1779402685546",
+                        "type": "text",
+                        "content": "👀",
+                        "x": 51.666666666666664,
+                        "y": 45.9375,
+                        "width": 20,
+                        "height": 10,
                         "rotation": 0,
-                        "scale": 1,
+                        "scale": 2.267708829186052,
                         "metadata": {
-                          "backgroundColor": "#ffffff",
-                          "color": "#000000",
-                          "fontFamily": "\"Noto Sans\"",
-                          "fontSize": 16,
-                          "tailPos": {
-                            "x": 4,
-                            "y": 82
-                          }
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
                         },
                         "translations": {
                           "en": {
-                            "content": "Sí, es una cuenta larga."
-                          }
-                        }
-                      }
-                    ],
-                    "order": 2,
-                    "cartridge": null
-                  },
-                  {
-                    "id": "slide-1779302385089",
-                    "background": "#E1F5FE",
-                    "elements": [
-                      {
-                        "id": "el-1779302385089-geptyzsmc",
-                        "type": "balloon",
-                        "content": "También se le puede llamar \"operación combinada\".",
-                        "x": 39.44444444444444,
-                        "y": 35,
-                        "width": 55.55555555555556,
-                        "height": 20,
-                        "rotation": 0,
-                        "scale": 1,
-                        "metadata": {
-                          "backgroundColor": "#ffffff",
-                          "color": "#000000",
-                          "fontFamily": "\"Noto Sans\"",
-                          "fontSize": 16,
-                          "tailPos": {
-                            "x": -35,
-                            "y": 71
-                          }
-                        },
-                        "translations": {
-                          "en": {
-                            "content": "También se le puede llamar \"operación combinada\"."
+                            "content": "👀"
                           }
                         }
                       },
                       {
-                        "id": "el-1779378661710",
+                        "id": "el-1779378679892",
                         "type": "image",
                         "content": "/src/assets/characters/chef%20explains.png",
-                        "x": 43.611111111111114,
-                        "y": 69.53125,
+                        "x": 36.72222222222222,
+                        "y": 74.03125,
                         "width": 40,
                         "height": 30.809659090909093,
                         "rotation": 0,
@@ -7186,26 +7206,273 @@
                         }
                       },
                       {
-                        "id": "el-1779302385089-iudgg08le",
+                        "id": "el-1779402965691",
                         "type": "text",
-                        "content": "2 × 3 + 12 ÷ 4",
-                        "x": 49.02777777777778,
-                        "y": 20.468750000000004,
+                        "content": "<br>",
+                        "x": 53.444444444444436,
+                        "y": 56.96875,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.267708829186052,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "👀"
+                          }
+                        }
+                      }
+                    ],
+                    "order": 2
+                  },
+                  {
+                    "id": "slide-1779302322922",
+                    "background": "#E1F5FE",
+                    "elements": [
+                      {
+                        "id": "el-1779386226164",
+                        "type": "text",
+                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                        "x": 51.02777777777776,
+                        "y": 40.4375,
                         "width": 38.05555555555556,
                         "height": 10,
                         "rotation": 0,
-                        "scale": 1.502056301794036,
+                        "scale": 2.069987904043228,
                         "metadata": {
-                          "fontFamily": "\"Fira Sans\""
+                          "fontFamily": "\"Fira Sans\"",
+                          "backgroundColor": "#000000",
+                          "color": "#FDE74C"
                         },
                         "translations": {
                           "en": {
                             "content": "2 * 3 + 12 /4"
                           }
                         }
+                      },
+                      {
+                        "id": "el-1779378668493",
+                        "type": "image",
+                        "content": "/src/assets/characters/chef%20explains.png",
+                        "x": 27.000000000000007,
+                        "y": 95.28125,
+                        "width": 40,
+                        "height": 30.809659090909093,
+                        "rotation": 0,
+                        "scale": 1.7084055158590379,
+                        "metadata": {
+                          "width": 40,
+                          "height": 30.809659090909093,
+                          "locked": false
+                        }
+                      },
+                      {
+                        "id": "el-1779402897264",
+                        "type": "text",
+                        "content": "👀",
+                        "x": 51.99999999999999,
+                        "y": 34.65625,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.267708829186052,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "👀"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779402944499",
+                        "type": "text",
+                        "content": "👄",
+                        "x": 52.55555555555555,
+                        "y": 46.21875,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.267708829186052,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "👀"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779302354058",
+                        "type": "balloon",
+                        "content": "En matemática me llamo \"expresión\".",
+                        "x": 67.5,
+                        "y": 65.3125,
+                        "width": 40,
+                        "height": 20,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": -37,
+                            "y": -91
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "In math they call me an expression."
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779302322922-iu0f4ekld",
+                        "type": "balloon",
+                        "content": "Cierto, soy una cuenta larga.",
+                        "x": 54.861111111111114,
+                        "y": 22.1875,
+                        "width": 56.94444444444444,
+                        "height": 13.4375,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": -13,
+                            "y": 57
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Howdy!"
+                          }
+                        }
                       }
                     ],
                     "order": 3,
+                    "cartridge": null
+                  },
+                  {
+                    "id": "slide-1779302385089",
+                    "background": "#E1F5FE",
+                    "elements": [
+                      {
+                        "id": "el-1779386238482",
+                        "type": "text",
+                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                        "x": 52.41666666666666,
+                        "y": 28.71875,
+                        "width": 38.05555555555556,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.069987904043228,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "backgroundColor": "#000000",
+                          "color": "#FDE74C"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "2 * 3 + 12 /4"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779378661710",
+                        "type": "image",
+                        "content": "/src/assets/characters/chef%20explains.png",
+                        "x": 25.555555555555557,
+                        "y": 91.71875,
+                        "width": 40,
+                        "height": 30.809659090909093,
+                        "rotation": 0,
+                        "scale": 1.5299518064429154,
+                        "metadata": {
+                          "width": 40,
+                          "height": 30.809659090909093
+                        }
+                      },
+                      {
+                        "id": "el-1779403081160",
+                        "type": "text",
+                        "content": "👀",
+                        "x": 53.444444444444436,
+                        "y": 22.90625,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.267708829186052,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "👀"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779403100296",
+                        "type": "text",
+                        "content": "👄",
+                        "x": 53.166666666666664,
+                        "y": 34.15625,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.267708829186052,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "👀"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779302385089-geptyzsmc",
+                        "type": "balloon",
+                        "content": "I'm also known as a <b>mixed operation</b>.",
+                        "x": 58.888888888888886,
+                        "y": 48.59375,
+                        "width": 55.55555555555556,
+                        "height": 20,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": -5,
+                            "y": -73
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "I'm also known as a <b>mixed operation</b>."
+                          }
+                        }
+                      }
+                    ],
+                    "order": 4,
                     "cartridge": null
                   },
                   {
@@ -7269,14 +7536,69 @@
                             "content": "¿Por qué se le llama operación combinada?"
                           }
                         }
+                      },
+                      {
+                        "id": "el-1779386265219",
+                        "type": "image",
+                        "content": "/src/assets/characters/chef_scrathing.png",
+                        "x": 45.55555555555556,
+                        "y": 62.96875,
+                        "width": 40,
+                        "height": 34.59586466165413,
+                        "rotation": 0,
+                        "scale": 1.699728626084838,
+                        "metadata": {
+                          "width": 40,
+                          "height": 34.59586466165413
+                        }
                       }
                     ],
-                    "order": 4
+                    "order": 5
                   },
                   {
                     "id": "slide-1779379613566",
                     "background": "#E1F5FE",
                     "elements": [
+                      {
+                        "id": "el-1779379623953",
+                        "type": "text",
+                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                        "x": 47.69444444444444,
+                        "y": 35.125,
+                        "width": 38.05555555555556,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 2.069987904043228,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "backgroundColor": "#000000",
+                          "color": "#FDE74C"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "2 * 3 + 12 /4"
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779379656209",
+                        "type": "text",
+                        "content": "¿Cómo se le llama a esto?",
+                        "x": 46.38888888888888,
+                        "y": 21.5625,
+                        "width": 53.333333333333336,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\""
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "¿Cómo se le llama a esto?"
+                          }
+                        }
+                      },
                       {
                         "id": "el-1779379622181",
                         "type": "quiz",
@@ -7299,46 +7621,22 @@
                             0
                           ],
                           "quizType": "classic",
-                          "visualMode": false
-                        }
-                      },
-                      {
-                        "id": "el-1779379656209",
-                        "type": "text",
-                        "content": "¿Cómo se le llama a esto?",
-                        "x": 46.38888888888888,
-                        "y": 21.5625,
-                        "width": 53.333333333333336,
-                        "height": 10,
-                        "rotation": 0,
-                        "scale": 1,
-                        "metadata": {
-                          "fontFamily": "\"Fira Sans\""
-                        }
-                      },
-                      {
-                        "id": "el-1779379623953",
-                        "type": "text",
-                        "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
-                        "x": 47.69444444444444,
-                        "y": 35.125,
-                        "width": 38.05555555555556,
-                        "height": 10,
-                        "rotation": 0,
-                        "scale": 2.069987904043228,
-                        "metadata": {
-                          "fontFamily": "\"Fira Sans\"",
-                          "backgroundColor": "#000000",
-                          "color": "#FDE74C"
-                        },
-                        "translations": {
-                          "en": {
-                            "content": "2 * 3 + 12 /4"
+                          "visualMode": false,
+                          "translations": {
+                            "en": {
+                              "options": [
+                                "expression",
+                                "mixed operation",
+                                "both names are correct"
+                              ],
+                              "matchAnswers": [],
+                              "chatNodes": []
+                            }
                           }
                         }
                       }
                     ],
-                    "order": 5
+                    "order": 6
                   },
                   {
                     "id": "slide-1779379687271",
@@ -7395,6 +7693,11 @@
                             "x": -32,
                             "y": 100
                           }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Una expresión se divide en <font color=\"#4caf50\"><b>partes</b></font> separadas por <font color=\"#f57c00\"><b>+</b></font> y <font color=\"#f57c00\"><b>-</b></font>."
+                          }
                         }
                       },
                       {
@@ -7416,10 +7719,15 @@
                             "x": -122,
                             "y": 21
                           }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "A cada parte se le llama <b><font color=\"#4caf50\">término</font></b>."
+                          }
                         }
                       }
                     ],
-                    "order": 6
+                    "order": 7
                   },
                   {
                     "id": "slide-1779319535533",
@@ -7456,11 +7764,30 @@
                             "7",
                             "14",
                             "0"
-                          ]
+                          ],
+                          "translations": {
+                            "en": {
+                              "options": [
+                                "4 × 2 - 4",
+                                "4 × 2 - 6 ÷ 3",
+                                "1 + 6",
+                                "7 × 2",
+                                "0 × 0 - 0"
+                              ],
+                              "matchAnswers": [
+                                "término",
+                                "expresión",
+                                "7",
+                                "14",
+                                "0"
+                              ],
+                              "chatNodes": []
+                            }
+                          }
                         }
                       }
                     ],
-                    "order": 7
+                    "order": 8
                   },
                   {
                     "id": "slide-1779382073256",
@@ -7479,6 +7806,11 @@
                         "metadata": {
                           "fontFamily": "\"Fira Sans\"",
                           "color": "#2196F3"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "<b>Expresión</b>"
+                          }
                         }
                       },
                       {
@@ -7516,6 +7848,11 @@
                         "metadata": {
                           "fontFamily": "\"Fira Sans\"",
                           "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "<font color=\"#4caf50\">}</font>"
+                          }
                         }
                       },
                       {
@@ -7531,6 +7868,11 @@
                         "metadata": {
                           "fontFamily": "\"Fira Sans\"",
                           "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "<font color=\"#4caf50\">}</font>"
+                          }
                         }
                       },
                       {
@@ -7546,6 +7888,11 @@
                         "metadata": {
                           "fontFamily": "\"Fira Sans\"",
                           "textAlign": "center"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "<font color=\"#4caf50\">}</font>"
+                          }
                         }
                       },
                       {
@@ -7562,15 +7909,20 @@
                           "fontFamily": "\"Fira Sans\"",
                           "textAlign": "center",
                           "fontSize": 19
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">+</font></b> y <font color=\"#f57c00\"><span style=\"caret-color: rgb(245, 124, 0);\"><b>-</b></span></font></div>"
+                          }
                         }
                       }
                     ],
-                    "order": 8
+                    "order": 9
                   }
                 ],
                 "author": "User",
                 "createdAt": "2026-05-20T18:37:37.224Z",
-                "updatedAt": "2026-05-21T17:37:30.147Z",
+                "updatedAt": "2026-05-22T13:26:16.621Z",
                 "path": "lessons/6350-Expresiones/lesson.json",
                 "textPreset": null,
                 "name": "6350-Expresiones",
@@ -8205,7 +8557,7 @@
                         {
                           "id": "el-1779382473799",
                           "type": "text",
-                          "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">-</font></b> y <b><font color=\"#f57c00\">+</font></b></div>",
+                          "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">+</font></b> y <font color=\"#f57c00\"><span style=\"caret-color: rgb(245, 124, 0);\"><b>-</b></span></font></div>",
                           "x": 50.69444444444445,
                           "y": 79.0625,
                           "width": 57.9538608490329,
@@ -8224,7 +8576,7 @@
                   ],
                   "author": "User",
                   "createdAt": "2026-05-20T18:37:37.224Z",
-                  "updatedAt": "2026-05-21T17:32:21.894Z",
+                  "updatedAt": "2026-05-21T17:37:30.147Z",
                   "path": "lessons/6350-Expresiones/lesson.json",
                   "textPreset": null,
                   "name": "6350-Expresiones",
@@ -8237,35 +8589,15 @@
                     "title": "Expresiones",
                     "slides": [
                       {
+                        "id": "slide-1779384246851",
+                        "background": "url(\"/src/assets/backgrounds/bkg_therightname.jpg\")",
+                        "elements": [],
+                        "order": 0
+                      },
+                      {
                         "id": "slide-1",
                         "background": "#E1F5FE",
                         "elements": [
-                          {
-                            "id": "el-1779302279638",
-                            "type": "balloon",
-                            "content": "¿Cómo le llamamos a esto?",
-                            "x": 31.666666666666668,
-                            "y": 35,
-                            "width": 40,
-                            "height": 20,
-                            "rotation": 0,
-                            "scale": 1,
-                            "metadata": {
-                              "backgroundColor": "#ffffff",
-                              "color": "#000000",
-                              "fontFamily": "\"Noto Sans\"",
-                              "fontSize": 16,
-                              "tailPos": {
-                                "x": -35,
-                                "y": 71
-                              }
-                            },
-                            "translations": {
-                              "en": {
-                                "content": "¿Cómo le llamamos a esto?"
-                              }
-                            }
-                          },
                           {
                             "id": "el-1779378679892",
                             "type": "image",
@@ -8298,6 +8630,53 @@
                             }
                           },
                           {
+                            "id": "el-1779302263520",
+                            "type": "text",
+                            "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                            "x": 55.138888888888886,
+                            "y": 21.250000000000004,
+                            "width": 38.05555555555556,
+                            "height": 10,
+                            "rotation": 0,
+                            "scale": 2.069987904043228,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "backgroundColor": "#000000",
+                              "color": "#FDE74C"
+                            },
+                            "translations": {
+                              "en": {
+                                "content": "2 * 3 + 12 /4"
+                              }
+                            }
+                          },
+                          {
+                            "id": "el-1779302279638",
+                            "type": "balloon",
+                            "content": "¿Cómo le llamamos a esto?",
+                            "x": 37.5,
+                            "y": 41.09375,
+                            "width": 40,
+                            "height": 20,
+                            "rotation": 0,
+                            "scale": 1,
+                            "metadata": {
+                              "backgroundColor": "#ffffff",
+                              "color": "#000000",
+                              "fontFamily": "\"Noto Sans\"",
+                              "fontSize": 16,
+                              "tailPos": {
+                                "x": -35,
+                                "y": 71
+                              }
+                            },
+                            "translations": {
+                              "en": {
+                                "content": "¿Cómo le llamamos a esto?"
+                              }
+                            }
+                          },
+                          {
                             "id": "el-1779302299058",
                             "type": "balloon",
                             "content": "¿Cuenta <font color=\"#c62828\">larga</font>?",
@@ -8322,30 +8701,9 @@
                                 "content": "¿Cuenta larga?"
                               }
                             }
-                          },
-                          {
-                            "id": "el-1779302263520",
-                            "type": "text",
-                            "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
-                            "x": 55.138888888888886,
-                            "y": 21.250000000000004,
-                            "width": 38.05555555555556,
-                            "height": 10,
-                            "rotation": 0,
-                            "scale": 2.069987904043228,
-                            "metadata": {
-                              "fontFamily": "\"Fira Sans\"",
-                              "backgroundColor": "#000000",
-                              "color": "#FDE74C"
-                            },
-                            "translations": {
-                              "en": {
-                                "content": "2 * 3 + 12 /4"
-                              }
-                            }
                           }
                         ],
-                        "order": 0
+                        "order": 1
                       },
                       {
                         "id": "slide-1779302322922",
@@ -8365,32 +8723,6 @@
                               "width": 40,
                               "height": 30.809659090909093,
                               "locked": true
-                            }
-                          },
-                          {
-                            "id": "el-1779302322922-iu0f4ekld",
-                            "type": "balloon",
-                            "content": "Cierto, es una cuenta larga.",
-                            "x": 31.666666666666668,
-                            "y": 35,
-                            "width": 40,
-                            "height": 20,
-                            "rotation": 0,
-                            "scale": 1,
-                            "metadata": {
-                              "backgroundColor": "#ffffff",
-                              "color": "#000000",
-                              "fontFamily": "\"Noto Sans\"",
-                              "fontSize": 16,
-                              "tailPos": {
-                                "x": -35,
-                                "y": 71
-                              }
-                            },
-                            "translations": {
-                              "en": {
-                                "content": "Sí, es una cuenta larga."
-                              }
                             }
                           },
                           {
@@ -8437,9 +8769,35 @@
                                 "content": "2 * 3 + 12 /4"
                               }
                             }
+                          },
+                          {
+                            "id": "el-1779302322922-iu0f4ekld",
+                            "type": "balloon",
+                            "content": "Cierto, es una cuenta larga.",
+                            "x": 31.666666666666668,
+                            "y": 35,
+                            "width": 40,
+                            "height": 20,
+                            "rotation": 0,
+                            "scale": 1,
+                            "metadata": {
+                              "backgroundColor": "#ffffff",
+                              "color": "#000000",
+                              "fontFamily": "\"Noto Sans\"",
+                              "fontSize": 16,
+                              "tailPos": {
+                                "x": 4,
+                                "y": 82
+                              }
+                            },
+                            "translations": {
+                              "en": {
+                                "content": "Sí, es una cuenta larga."
+                              }
+                            }
                           }
                         ],
-                        "order": 1,
+                        "order": 2,
                         "cartridge": null
                       },
                       {
@@ -8507,34 +8865,13 @@
                             }
                           }
                         ],
-                        "order": 2,
+                        "order": 3,
                         "cartridge": null
                       },
                       {
                         "id": "slide-1779302500789",
                         "background": "#E1F5FE",
                         "elements": [
-                          {
-                            "id": "el-1779302503309",
-                            "type": "text",
-                            "content": "¿Por qué se le llama operación combinada?",
-                            "x": 54.44444444444445,
-                            "y": 28.125,
-                            "width": 54.44444444444444,
-                            "height": 10,
-                            "rotation": 0,
-                            "scale": 1.6063976150029184,
-                            "metadata": {
-                              "fontFamily": "\"Fira Sans\"",
-                              "backgroundColor": "#475569",
-                              "color": "#ffffff"
-                            },
-                            "translations": {
-                              "en": {
-                                "content": "¿Por qué se le llama operación combinada?"
-                              }
-                            }
-                          },
                           {
                             "id": "el-1779302528193",
                             "type": "quiz",
@@ -8570,9 +8907,31 @@
                                 }
                               }
                             }
+                          },
+                          {
+                            "id": "el-1779302503309",
+                            "type": "text",
+                            "content": "¿Por qué se le llama operación combinada?",
+                            "x": 51.94444444444445,
+                            "y": 24.84375,
+                            "width": 54.44444444444444,
+                            "height": 10,
+                            "rotation": -0.21747439866052787,
+                            "scale": 1.6063976150029184,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "backgroundColor": "#F57C00",
+                              "color": "#ffffff",
+                              "textAlign": "center"
+                            },
+                            "translations": {
+                              "en": {
+                                "content": "¿Por qué se le llama operación combinada?"
+                              }
+                            }
                           }
                         ],
-                        "order": 3
+                        "order": 4
                       },
                       {
                         "id": "slide-1779379613566",
@@ -8639,7 +8998,7 @@
                             }
                           }
                         ],
-                        "order": 4
+                        "order": 5
                       },
                       {
                         "id": "slide-1779379687271",
@@ -8657,7 +9016,24 @@
                             "scale": 1,
                             "metadata": {
                               "stickerType": "pemdas_term_separator",
-                              "expression": "2 × 3 + 12 ÷ 4 - 3"
+                              "expression": "2 × 3 + 12 ÷ 4 - 3",
+                              "colorVersion": true
+                            }
+                          },
+                          {
+                            "id": "el-1779383116542",
+                            "type": "image",
+                            "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+                            "x": 20.833333333333332,
+                            "y": 86.25,
+                            "width": 40,
+                            "height": 32.59797724399495,
+                            "rotation": 0,
+                            "scale": 1.91708938486618,
+                            "metadata": {
+                              "width": 40,
+                              "height": 32.59797724399495,
+                              "flipX": true
                             }
                           },
                           {
@@ -8676,8 +9052,8 @@
                               "fontFamily": "\"Noto Sans\"",
                               "fontSize": 16,
                               "tailPos": {
-                                "x": -64,
-                                "y": 99
+                                "x": -32,
+                                "y": 100
                               }
                             }
                           },
@@ -8685,8 +9061,8 @@
                             "id": "el-1779379791124",
                             "type": "balloon",
                             "content": "A cada parte se le llama <b><font color=\"#4caf50\">término</font></b>.",
-                            "x": 62.638888888888886,
-                            "y": 77.03125,
+                            "x": 69.30555555555556,
+                            "y": 70,
                             "width": 54.72222222222223,
                             "height": 20,
                             "rotation": 0,
@@ -8697,13 +9073,13 @@
                               "fontFamily": "\"Noto Sans\"",
                               "fontSize": 16,
                               "tailPos": {
-                                "x": -64,
-                                "y": 99
+                                "x": -122,
+                                "y": 21
                               }
                             }
                           }
                         ],
-                        "order": 5
+                        "order": 6
                       },
                       {
                         "id": "slide-1779319535533",
@@ -8722,10 +9098,11 @@
                             "metadata": {
                               "fontFamily": "\"Fira Sans\"",
                               "options": [
-                                "expresión",
-                                "4 * 2<font color=\"#5a5a5a\"> </font><font color=\"#c8c8c8\">- 4</font>",
-                                "4 * 2 - 6 / 3",
-                                "1 + 6"
+                                "4 × 2 - 4",
+                                "4 × 2 - 6 ÷ 3",
+                                "1 + 6",
+                                "7 × 2",
+                                "0 × 0 - 0"
                               ],
                               "correctIndex": 0,
                               "correctIndices": [
@@ -8734,20 +9111,126 @@
                               "quizType": "conecta",
                               "visualMode": false,
                               "matchAnswers": [
-                                "operación combinada",
                                 "término",
                                 "expresión",
-                                "7"
+                                "7",
+                                "14",
+                                "0"
                               ]
                             }
                           }
                         ],
                         "order": 7
+                      },
+                      {
+                        "id": "slide-1779382073256",
+                        "background": "url(\"/src/assets/backgrounds/Trade%20Card.png\")",
+                        "elements": [
+                          {
+                            "id": "el-1779382405959",
+                            "type": "text",
+                            "content": "<b>Expresión</b>",
+                            "x": 49.44444444444444,
+                            "y": 45.625,
+                            "width": 20,
+                            "height": 10,
+                            "rotation": 0,
+                            "scale": 1.4900092795879247,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "color": "#2196F3"
+                            }
+                          },
+                          {
+                            "id": "el-1779382104371",
+                            "type": "text",
+                            "content": "<font color=\"#ffffff\">2 × 3 </font><b><font color=\"#f57c00\">-</font></b><font color=\"#ffffff\"> 12 ÷ 4 </font><b><font color=\"#f57c00\">+</font></b><font color=\"#ffffff\"> 6</font>",
+                            "x": 50.80555555555555,
+                            "y": 59,
+                            "width": 38.05555555555556,
+                            "height": 10,
+                            "rotation": 0,
+                            "scale": 2.069987904043228,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "backgroundColor": "#2196F3",
+                              "color": "#FDE74C",
+                              "fontSize": 13
+                            },
+                            "translations": {
+                              "en": {
+                                "content": "2 * 3 + 12 /4"
+                              }
+                            }
+                          },
+                          {
+                            "id": "el-1779382797443",
+                            "type": "text",
+                            "content": "<font color=\"#4caf50\">}</font>",
+                            "x": 75.27777777777777,
+                            "y": 66.5625,
+                            "width": 20,
+                            "height": 10,
+                            "rotation": 89.43132069727594,
+                            "scale": 2.4848779672643913,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "textAlign": "center"
+                            }
+                          },
+                          {
+                            "id": "el-1779382784384",
+                            "type": "text",
+                            "content": "<font color=\"#4caf50\">}</font>",
+                            "x": 56.66666666666666,
+                            "y": 66.875,
+                            "width": 20,
+                            "height": 10,
+                            "rotation": 89.43132069727594,
+                            "scale": 4.09784630929152,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "textAlign": "center"
+                            }
+                          },
+                          {
+                            "id": "el-1779382128480",
+                            "type": "text",
+                            "content": "<font color=\"#4caf50\">}</font>",
+                            "x": 31.66666666666666,
+                            "y": 67.1875,
+                            "width": 20,
+                            "height": 10,
+                            "rotation": 89.43132069727594,
+                            "scale": 4.341910079183815,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "textAlign": "center"
+                            }
+                          },
+                          {
+                            "id": "el-1779382473799",
+                            "type": "text",
+                            "content": "Los <font color=\"#4caf50\"><b>términos</b></font> de una <b><font color=\"#2196f3\">expresión</font></b> se separan<div>por <b><font color=\"#f57c00\">-</font></b> y <b><font color=\"#f57c00\">+</font></b></div>",
+                            "x": 50.69444444444445,
+                            "y": 79.0625,
+                            "width": 57.9538608490329,
+                            "height": 10,
+                            "rotation": 0,
+                            "scale": 1.3022192500072702,
+                            "metadata": {
+                              "fontFamily": "\"Fira Sans\"",
+                              "textAlign": "center",
+                              "fontSize": 19
+                            }
+                          }
+                        ],
+                        "order": 8
                       }
                     ],
                     "author": "User",
                     "createdAt": "2026-05-20T18:37:37.224Z",
-                    "updatedAt": "2026-05-21T16:32:27.449Z",
+                    "updatedAt": "2026-05-21T17:32:21.894Z",
                     "path": "lessons/6350-Expresiones/lesson.json",
                     "textPreset": null,
                     "name": "6350-Expresiones",
@@ -9229,67 +9712,6 @@
                           "order": 5
                         },
                         {
-                          "id": "slide-1779302316737",
-                          "background": "url(\"/src/assets/backgrounds/counter2.png\")",
-                          "elements": [
-                            {
-                              "id": "el-1779303435746",
-                              "type": "quiz",
-                              "content": "Quiz",
-                              "x": 50,
-                              "y": 75,
-                              "width": 20,
-                              "height": 10,
-                              "rotation": 0,
-                              "scale": 1,
-                              "metadata": {
-                                "fontFamily": "\"Fira Sans\"",
-                                "options": [
-                                  "2 * 3 <font color=\"#5a5a5a\">+ 4</font>",
-                                  "2 * 3 + 6 / 2",
-                                  "7 + 2",
-                                  "1 + 6"
-                                ],
-                                "correctIndex": 0,
-                                "correctIndices": [
-                                  0
-                                ],
-                                "quizType": "match",
-                                "visualMode": false,
-                                "matchAnswers": [
-                                  "término",
-                                  "expresión",
-                                  "9",
-                                  "7"
-                                ],
-                                "cardShape": "square",
-                                "matchContentType": "custom",
-                                "translations": {
-                                  "en": {
-                                    "options": [
-                                      "2 * 3",
-                                      "2 * 3 + 6 / 2",
-                                      "7 + 2",
-                                      "1 + 6"
-                                    ],
-                                    "matchAnswers": [
-                                      "term",
-                                      "expression",
-                                      "9",
-                                      "7"
-                                    ],
-                                    "chatNodes": []
-                                  }
-                                }
-                              }
-                            }
-                          ],
-                          "order": 6,
-                          "backgroundSettings": {
-                            "opacity": 0.18
-                          }
-                        },
-                        {
                           "id": "slide-1779319535533",
                           "background": "#E1F5FE",
                           "elements": [
@@ -9306,12 +9728,10 @@
                               "metadata": {
                                 "fontFamily": "\"Fira Sans\"",
                                 "options": [
-                                  "2 + 3",
-                                  "4 + 2",
-                                  "7 + 2",
-                                  "1 + 6",
-                                  "New Q",
-                                  "New Q"
+                                  "expresión",
+                                  "4 * 2<font color=\"#5a5a5a\"> </font><font color=\"#c8c8c8\">- 4</font>",
+                                  "4 * 2 - 6 / 3",
+                                  "1 + 6"
                                 ],
                                 "correctIndex": 0,
                                 "correctIndices": [
@@ -9320,12 +9740,10 @@
                                 "quizType": "conecta",
                                 "visualMode": false,
                                 "matchAnswers": [
-                                  "5",
-                                  "6",
-                                  "9",
-                                  "7",
-                                  "New A",
-                                  "New A"
+                                  "operación combinada",
+                                  "término",
+                                  "expresión",
+                                  "7"
                                 ]
                               }
                             }
@@ -9335,7 +9753,7 @@
                       ],
                       "author": "User",
                       "createdAt": "2026-05-20T18:37:37.224Z",
-                      "updatedAt": "2026-05-21T16:10:43.990Z",
+                      "updatedAt": "2026-05-21T16:32:27.449Z",
                       "path": "lessons/6350-Expresiones/lesson.json",
                       "textPreset": null,
                       "name": "6350-Expresiones",
@@ -9351,25 +9769,6 @@
                             "id": "slide-1",
                             "background": "#E1F5FE",
                             "elements": [
-                              {
-                                "id": "el-1779302263520",
-                                "type": "text",
-                                "content": "2 * 3 + 12 /4",
-                                "x": 49.02777777777778,
-                                "y": 20.468750000000004,
-                                "width": 38.05555555555556,
-                                "height": 10,
-                                "rotation": 0,
-                                "scale": 1,
-                                "metadata": {
-                                  "fontFamily": "\"Fira Sans\""
-                                },
-                                "translations": {
-                                  "en": {
-                                    "content": "2 * 3 + 12 /4"
-                                  }
-                                }
-                              },
                               {
                                 "id": "el-1779302279638",
                                 "type": "balloon",
@@ -9452,6 +9851,27 @@
                                     "content": "¿Cuenta larga?"
                                   }
                                 }
+                              },
+                              {
+                                "id": "el-1779302263520",
+                                "type": "text",
+                                "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                                "x": 55.138888888888886,
+                                "y": 21.250000000000004,
+                                "width": 38.05555555555556,
+                                "height": 10,
+                                "rotation": 0,
+                                "scale": 2.069987904043228,
+                                "metadata": {
+                                  "fontFamily": "\"Fira Sans\"",
+                                  "backgroundColor": "#000000",
+                                  "color": "#FDE74C"
+                                },
+                                "translations": {
+                                  "en": {
+                                    "content": "2 * 3 + 12 /4"
+                                  }
+                                }
                               }
                             ],
                             "order": 0
@@ -9474,25 +9894,6 @@
                                   "width": 40,
                                   "height": 30.809659090909093,
                                   "locked": true
-                                }
-                              },
-                              {
-                                "id": "el-1779302322922-oqj394szj",
-                                "type": "text",
-                                "content": "2 * 3 + 12 /4",
-                                "x": 49.02777777777778,
-                                "y": 20.468750000000004,
-                                "width": 38.05555555555556,
-                                "height": 10,
-                                "rotation": 0,
-                                "scale": 1,
-                                "metadata": {
-                                  "fontFamily": "\"Fira Sans\""
-                                },
-                                "translations": {
-                                  "en": {
-                                    "content": "2 * 3 + 12 /4"
-                                  }
                                 }
                               },
                               {
@@ -9546,6 +9947,25 @@
                                     "content": "En matemáticas se le llama \"expresión\"."
                                   }
                                 }
+                              },
+                              {
+                                "id": "el-1779302322922-oqj394szj",
+                                "type": "text",
+                                "content": "2 × 3 + 12 ÷ 4",
+                                "x": 49.02777777777778,
+                                "y": 20.468750000000004,
+                                "width": 38.05555555555556,
+                                "height": 10,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "fontFamily": "\"Fira Sans\""
+                                },
+                                "translations": {
+                                  "en": {
+                                    "content": "2 * 3 + 12 /4"
+                                  }
+                                }
                               }
                             ],
                             "order": 1,
@@ -9582,9 +10002,24 @@
                                 }
                               },
                               {
+                                "id": "el-1779378661710",
+                                "type": "image",
+                                "content": "/src/assets/characters/chef%20explains.png",
+                                "x": 43.611111111111114,
+                                "y": 69.53125,
+                                "width": 40,
+                                "height": 30.809659090909093,
+                                "rotation": 0,
+                                "scale": 1.7084055158590379,
+                                "metadata": {
+                                  "width": 40,
+                                  "height": 30.809659090909093
+                                }
+                              },
+                              {
                                 "id": "el-1779302385089-iudgg08le",
                                 "type": "text",
-                                "content": "2 * 3 + 12 /4",
+                                "content": "2 × 3 + 12 ÷ 4",
                                 "x": 49.02777777777778,
                                 "y": 20.468750000000004,
                                 "width": 38.05555555555556,
@@ -9598,21 +10033,6 @@
                                   "en": {
                                     "content": "2 * 3 + 12 /4"
                                   }
-                                }
-                              },
-                              {
-                                "id": "el-1779378661710",
-                                "type": "image",
-                                "content": "/src/assets/characters/chef%20explains.png",
-                                "x": 43.611111111111114,
-                                "y": 69.53125,
-                                "width": 40,
-                                "height": 30.809659090909093,
-                                "rotation": 0,
-                                "scale": 1.7084055158590379,
-                                "metadata": {
-                                  "width": 40,
-                                  "height": 30.809659090909093
                                 }
                               }
                             ],
@@ -9684,6 +10104,137 @@
                             "order": 3
                           },
                           {
+                            "id": "slide-1779379613566",
+                            "background": "#E1F5FE",
+                            "elements": [
+                              {
+                                "id": "el-1779379622181",
+                                "type": "quiz",
+                                "content": "Quiz",
+                                "x": 50,
+                                "y": 75,
+                                "width": 20,
+                                "height": 10,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "fontFamily": "\"Fira Sans\"",
+                                  "options": [
+                                    "término",
+                                    "operación combinada",
+                                    "ambos nombres son correctos"
+                                  ],
+                                  "correctIndex": 2,
+                                  "correctIndices": [
+                                    0
+                                  ],
+                                  "quizType": "classic",
+                                  "visualMode": false
+                                }
+                              },
+                              {
+                                "id": "el-1779379656209",
+                                "type": "text",
+                                "content": "¿Cómo se le llama a esto?",
+                                "x": 46.38888888888888,
+                                "y": 21.5625,
+                                "width": 53.333333333333336,
+                                "height": 10,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "fontFamily": "\"Fira Sans\""
+                                }
+                              },
+                              {
+                                "id": "el-1779379623953",
+                                "type": "text",
+                                "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
+                                "x": 47.69444444444444,
+                                "y": 35.125,
+                                "width": 38.05555555555556,
+                                "height": 10,
+                                "rotation": 0,
+                                "scale": 2.069987904043228,
+                                "metadata": {
+                                  "fontFamily": "\"Fira Sans\"",
+                                  "backgroundColor": "#000000",
+                                  "color": "#FDE74C"
+                                },
+                                "translations": {
+                                  "en": {
+                                    "content": "2 * 3 + 12 /4"
+                                  }
+                                }
+                              }
+                            ],
+                            "order": 4
+                          },
+                          {
+                            "id": "slide-1779379687271",
+                            "background": "#E1F5FE",
+                            "elements": [
+                              {
+                                "id": "el-1779379692976",
+                                "type": "isticker",
+                                "content": "iSticker",
+                                "x": 49.44444444444444,
+                                "y": 25,
+                                "width": 80,
+                                "height": 15,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "stickerType": "pemdas_term_separator",
+                                  "expression": "2 × 3 + 12 ÷ 4 - 3"
+                                }
+                              },
+                              {
+                                "id": "el-1779379747276",
+                                "type": "balloon",
+                                "content": "Una expresión se divide en <font color=\"#4caf50\"><b>partes</b></font> separadas por <font color=\"#f57c00\"><b>+</b></font> y <font color=\"#f57c00\"><b>-</b></font>.",
+                                "x": 42.638888888888886,
+                                "y": 50,
+                                "width": 54.72222222222223,
+                                "height": 20,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "backgroundColor": "#ffffff",
+                                  "color": "#000000",
+                                  "fontFamily": "\"Noto Sans\"",
+                                  "fontSize": 16,
+                                  "tailPos": {
+                                    "x": -64,
+                                    "y": 99
+                                  }
+                                }
+                              },
+                              {
+                                "id": "el-1779379791124",
+                                "type": "balloon",
+                                "content": "A cada parte se le llama <b><font color=\"#4caf50\">término</font></b>.",
+                                "x": 62.638888888888886,
+                                "y": 77.03125,
+                                "width": 54.72222222222223,
+                                "height": 20,
+                                "rotation": 0,
+                                "scale": 1,
+                                "metadata": {
+                                  "backgroundColor": "#ffffff",
+                                  "color": "#000000",
+                                  "fontFamily": "\"Noto Sans\"",
+                                  "fontSize": 16,
+                                  "tailPos": {
+                                    "x": -64,
+                                    "y": 99
+                                  }
+                                }
+                              }
+                            ],
+                            "order": 5
+                          },
+                          {
                             "id": "slide-1779302316737",
                             "background": "url(\"/src/assets/backgrounds/counter2.png\")",
                             "elements": [
@@ -9739,7 +10290,7 @@
                                 }
                               }
                             ],
-                            "order": 4,
+                            "order": 6,
                             "backgroundSettings": {
                               "opacity": 0.18
                             }
@@ -9785,12 +10336,12 @@
                                 }
                               }
                             ],
-                            "order": 5
+                            "order": 7
                           }
                         ],
                         "author": "User",
                         "createdAt": "2026-05-20T18:37:37.224Z",
-                        "updatedAt": "2026-05-21T15:59:50.964Z",
+                        "updatedAt": "2026-05-21T16:10:43.990Z",
                         "path": "lessons/6350-Expresiones/lesson.json",
                         "textPreset": null,
                         "name": "6350-Expresiones",
@@ -9885,7 +10436,7 @@
                                 {
                                   "id": "el-1779302299058",
                                   "type": "balloon",
-                                  "content": "¿Cuenta larga?",
+                                  "content": "¿Cuenta <font color=\"#c62828\">larga</font>?",
                                   "x": 73.61111111111111,
                                   "y": 61.796875,
                                   "width": 36.11111111111111,
@@ -10155,7 +10706,7 @@
                                   "metadata": {
                                     "fontFamily": "\"Fira Sans\"",
                                     "options": [
-                                      "2 * 3",
+                                      "2 * 3 <font color=\"#5a5a5a\">+ 4</font>",
                                       "2 * 3 + 6 / 2",
                                       "7 + 2",
                                       "1 + 6"
@@ -10245,7 +10796,7 @@
                           ],
                           "author": "User",
                           "createdAt": "2026-05-20T18:37:37.224Z",
-                          "updatedAt": "2026-05-21T15:52:02.189Z",
+                          "updatedAt": "2026-05-21T15:59:50.964Z",
                           "path": "lessons/6350-Expresiones/lesson.json",
                           "textPreset": null,
                           "name": "6350-Expresiones",
@@ -10307,13 +10858,44 @@
                                     }
                                   },
                                   {
+                                    "id": "el-1779378679892",
+                                    "type": "image",
+                                    "content": "/src/assets/characters/chef%20explains.png",
+                                    "x": 32,
+                                    "y": 71.53125,
+                                    "width": 40,
+                                    "height": 30.809659090909093,
+                                    "rotation": 0,
+                                    "scale": 1.7084055158590379,
+                                    "metadata": {
+                                      "width": 40,
+                                      "height": 30.809659090909093
+                                    }
+                                  },
+                                  {
+                                    "id": "el-1779378696472",
+                                    "type": "image",
+                                    "content": "/src/assets/characters/pesto%20asking%20question.png",
+                                    "x": 80.55555555555556,
+                                    "y": 85,
+                                    "width": 40,
+                                    "height": 25.981132075471695,
+                                    "rotation": 0,
+                                    "scale": 1,
+                                    "metadata": {
+                                      "width": 40,
+                                      "height": 25.981132075471695,
+                                      "flipX": true
+                                    }
+                                  },
+                                  {
                                     "id": "el-1779302299058",
                                     "type": "balloon",
                                     "content": "¿Cuenta larga?",
-                                    "x": 62.638888888888886,
-                                    "y": 59.21875,
-                                    "width": 50.83333333333333,
-                                    "height": 20,
+                                    "x": 73.61111111111111,
+                                    "y": 61.796875,
+                                    "width": 36.11111111111111,
+                                    "height": 14.531250000000002,
                                     "rotation": 0,
                                     "scale": 1,
                                     "metadata": {
@@ -10322,8 +10904,8 @@
                                       "fontFamily": "\"Noto Sans\"",
                                       "fontSize": 16,
                                       "tailPos": {
-                                        "x": 113,
-                                        "y": 29
+                                        "x": 10,
+                                        "y": 61
                                       }
                                     },
                                     "translations": {
@@ -10339,6 +10921,22 @@
                                 "id": "slide-1779302322922",
                                 "background": "#E1F5FE",
                                 "elements": [
+                                  {
+                                    "id": "el-1779378668493",
+                                    "type": "image",
+                                    "content": "/src/assets/characters/chef%20explains.png",
+                                    "x": 45.611111111111114,
+                                    "y": 71.53125,
+                                    "width": 40,
+                                    "height": 30.809659090909093,
+                                    "rotation": 0,
+                                    "scale": 1.7084055158590379,
+                                    "metadata": {
+                                      "width": 40,
+                                      "height": 30.809659090909093,
+                                      "locked": true
+                                    }
+                                  },
                                   {
                                     "id": "el-1779302322922-oqj394szj",
                                     "type": "text",
@@ -10361,7 +10959,7 @@
                                   {
                                     "id": "el-1779302322922-iu0f4ekld",
                                     "type": "balloon",
-                                    "content": "Sí, es una cuenta larga.",
+                                    "content": "Cierto, es una cuenta larga.",
                                     "x": 31.666666666666668,
                                     "y": 35,
                                     "width": 40,
@@ -10388,8 +10986,8 @@
                                     "id": "el-1779302354058",
                                     "type": "balloon",
                                     "content": "En matemáticas se le llama \"expresión\".",
-                                    "x": 61.94444444444445,
-                                    "y": 70.3125,
+                                    "x": 74.72222222222223,
+                                    "y": 41.40625,
                                     "width": 40,
                                     "height": 20,
                                     "rotation": 0,
@@ -10461,6 +11059,21 @@
                                       "en": {
                                         "content": "2 * 3 + 12 /4"
                                       }
+                                    }
+                                  },
+                                  {
+                                    "id": "el-1779378661710",
+                                    "type": "image",
+                                    "content": "/src/assets/characters/chef%20explains.png",
+                                    "x": 43.611111111111114,
+                                    "y": 69.53125,
+                                    "width": 40,
+                                    "height": 30.809659090909093,
+                                    "rotation": 0,
+                                    "scale": 1.7084055158590379,
+                                    "metadata": {
+                                      "width": 40,
+                                      "height": 30.809659090909093
                                     }
                                   }
                                 ],
@@ -10638,7 +11251,7 @@
                             ],
                             "author": "User",
                             "createdAt": "2026-05-20T18:37:37.224Z",
-                            "updatedAt": "2026-05-20T23:25:48.965Z",
+                            "updatedAt": "2026-05-21T15:52:02.189Z",
                             "path": "lessons/6350-Expresiones/lesson.json",
                             "textPreset": null,
                             "name": "6350-Expresiones",
@@ -10984,11 +11597,54 @@
                                   "backgroundSettings": {
                                     "opacity": 0.18
                                   }
+                                },
+                                {
+                                  "id": "slide-1779319535533",
+                                  "background": "#E1F5FE",
+                                  "elements": [
+                                    {
+                                      "id": "el-1779319538785",
+                                      "type": "quiz",
+                                      "content": "Quiz",
+                                      "x": 50,
+                                      "y": 75,
+                                      "width": 20,
+                                      "height": 10,
+                                      "rotation": 0,
+                                      "scale": 1,
+                                      "metadata": {
+                                        "fontFamily": "\"Fira Sans\"",
+                                        "options": [
+                                          "2 + 3",
+                                          "4 + 2",
+                                          "7 + 2",
+                                          "1 + 6",
+                                          "New Q",
+                                          "New Q"
+                                        ],
+                                        "correctIndex": 0,
+                                        "correctIndices": [
+                                          0
+                                        ],
+                                        "quizType": "conecta",
+                                        "visualMode": false,
+                                        "matchAnswers": [
+                                          "5",
+                                          "6",
+                                          "9",
+                                          "7",
+                                          "New A",
+                                          "New A"
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "order": 5
                                 }
                               ],
                               "author": "User",
                               "createdAt": "2026-05-20T18:37:37.224Z",
-                              "updatedAt": "2026-05-20T19:12:59.560Z",
+                              "updatedAt": "2026-05-20T23:25:48.965Z",
                               "path": "lessons/6350-Expresiones/lesson.json",
                               "textPreset": null,
                               "name": "6350-Expresiones",
@@ -11016,6 +11672,11 @@
                                         "scale": 1,
                                         "metadata": {
                                           "fontFamily": "\"Fira Sans\""
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "2 * 3 + 12 /4"
+                                          }
                                         }
                                       },
                                       {
@@ -11036,6 +11697,11 @@
                                           "tailPos": {
                                             "x": -35,
                                             "y": 71
+                                          }
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "¿Cómo le llamamos a esto?"
                                           }
                                         }
                                       },
@@ -11058,6 +11724,11 @@
                                             "x": 113,
                                             "y": 29
                                           }
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "¿Cuenta larga?"
+                                          }
                                         }
                                       }
                                     ],
@@ -11079,6 +11750,11 @@
                                         "scale": 1,
                                         "metadata": {
                                           "fontFamily": "\"Fira Sans\""
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "2 * 3 + 12 /4"
+                                          }
                                         }
                                       },
                                       {
@@ -11100,6 +11776,11 @@
                                             "x": -35,
                                             "y": 71
                                           }
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "Sí, es una cuenta larga."
+                                          }
                                         }
                                       },
                                       {
@@ -11120,6 +11801,11 @@
                                           "tailPos": {
                                             "x": -35,
                                             "y": 71
+                                          }
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "En matemáticas se le llama \"expresión\"."
                                           }
                                         }
                                       }
@@ -11150,6 +11836,11 @@
                                             "x": -35,
                                             "y": 71
                                           }
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "También se le puede llamar \"operación combinada\"."
+                                          }
                                         }
                                       },
                                       {
@@ -11164,6 +11855,11 @@
                                         "scale": 1.502056301794036,
                                         "metadata": {
                                           "fontFamily": "\"Fira Sans\""
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "2 * 3 + 12 /4"
+                                          }
                                         }
                                       }
                                     ],
@@ -11188,6 +11884,11 @@
                                           "fontFamily": "\"Fira Sans\"",
                                           "backgroundColor": "#475569",
                                           "color": "#ffffff"
+                                        },
+                                        "translations": {
+                                          "en": {
+                                            "content": "¿Por qué se le llama operación combinada?"
+                                          }
                                         }
                                       },
                                       {
@@ -11212,7 +11913,18 @@
                                             0
                                           ],
                                           "quizType": "classic",
-                                          "visualMode": false
+                                          "visualMode": false,
+                                          "translations": {
+                                            "en": {
+                                              "options": [
+                                                "Combina con mi ropa",
+                                                "Mezcla operaciones como +,-, * y /",
+                                                "Es una operación médica"
+                                              ],
+                                              "matchAnswers": [],
+                                              "chatNodes": []
+                                            }
+                                          }
                                         }
                                       }
                                     ],
@@ -11252,8 +11964,25 @@
                                             "9",
                                             "7"
                                           ],
-                                          "cardShape": "circle",
-                                          "matchContentType": "custom"
+                                          "cardShape": "square",
+                                          "matchContentType": "custom",
+                                          "translations": {
+                                            "en": {
+                                              "options": [
+                                                "2 * 3",
+                                                "2 * 3 + 6 / 2",
+                                                "7 + 2",
+                                                "1 + 6"
+                                              ],
+                                              "matchAnswers": [
+                                                "term",
+                                                "expression",
+                                                "9",
+                                                "7"
+                                              ],
+                                              "chatNodes": []
+                                            }
+                                          }
                                         }
                                       }
                                     ],
@@ -11265,7 +11994,7 @@
                                 ],
                                 "author": "User",
                                 "createdAt": "2026-05-20T18:37:37.224Z",
-                                "updatedAt": "2026-05-20T19:01:26.674Z",
+                                "updatedAt": "2026-05-20T19:12:59.560Z",
                                 "path": "lessons/6350-Expresiones/lesson.json",
                                 "textPreset": null,
                                 "name": "6350-Expresiones",
@@ -11484,7 +12213,7 @@
                                               "Mezcla operaciones como +,-, * y /",
                                               "Es una operación médica"
                                             ],
-                                            "correctIndex": 0,
+                                            "correctIndex": 1,
                                             "correctIndices": [
                                               0
                                             ],
@@ -11542,7 +12271,7 @@
                                   ],
                                   "author": "User",
                                   "createdAt": "2026-05-20T18:37:37.224Z",
-                                  "updatedAt": "2026-05-20T18:59:17.474Z",
+                                  "updatedAt": "2026-05-20T19:01:26.674Z",
                                   "path": "lessons/6350-Expresiones/lesson.json",
                                   "textPreset": null,
                                   "name": "6350-Expresiones",
@@ -11551,7 +12280,7 @@
                                   "visible": true,
                                   "order": 6350,
                                   "content": {
-                                    "id": "draft-1779302257224",
+                                    "id": "lessons/6350-Expresiones/lesson.json",
                                     "title": "Expresiones",
                                     "slides": [
                                       {
@@ -11774,16 +12503,309 @@
                                       },
                                       {
                                         "id": "slide-1779302316737",
-                                        "background": "#E1F5FE",
-                                        "elements": [],
-                                        "order": 4
+                                        "background": "url(\"/src/assets/backgrounds/counter2.png\")",
+                                        "elements": [
+                                          {
+                                            "id": "el-1779303435746",
+                                            "type": "quiz",
+                                            "content": "Quiz",
+                                            "x": 50,
+                                            "y": 75,
+                                            "width": 20,
+                                            "height": 10,
+                                            "rotation": 0,
+                                            "scale": 1,
+                                            "metadata": {
+                                              "fontFamily": "\"Fira Sans\"",
+                                              "options": [
+                                                "2 * 3",
+                                                "2 * 3 + 6 / 2",
+                                                "7 + 2",
+                                                "1 + 6"
+                                              ],
+                                              "correctIndex": 0,
+                                              "correctIndices": [
+                                                0
+                                              ],
+                                              "quizType": "match",
+                                              "visualMode": false,
+                                              "matchAnswers": [
+                                                "término",
+                                                "expresión",
+                                                "9",
+                                                "7"
+                                              ],
+                                              "cardShape": "circle",
+                                              "matchContentType": "custom"
+                                            }
+                                          }
+                                        ],
+                                        "order": 4,
+                                        "backgroundSettings": {
+                                          "opacity": 0.18
+                                        }
                                       }
                                     ],
                                     "author": "User",
                                     "createdAt": "2026-05-20T18:37:37.224Z",
-                                    "updatedAt": "2026-05-20T18:43:25.522Z",
+                                    "updatedAt": "2026-05-20T18:59:17.474Z",
                                     "path": "lessons/6350-Expresiones/lesson.json",
-                                    "textPreset": null
+                                    "textPreset": null,
+                                    "name": "6350-Expresiones",
+                                    "type": "file",
+                                    "description": "",
+                                    "visible": true,
+                                    "order": 6350,
+                                    "content": {
+                                      "id": "draft-1779302257224",
+                                      "title": "Expresiones",
+                                      "slides": [
+                                        {
+                                          "id": "slide-1",
+                                          "background": "#E1F5FE",
+                                          "elements": [
+                                            {
+                                              "id": "el-1779302263520",
+                                              "type": "text",
+                                              "content": "2 * 3 + 12 /4",
+                                              "x": 49.02777777777778,
+                                              "y": 20.468750000000004,
+                                              "width": 38.05555555555556,
+                                              "height": 10,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "fontFamily": "\"Fira Sans\""
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302279638",
+                                              "type": "balloon",
+                                              "content": "¿Cómo le llamamos a esto?",
+                                              "x": 31.666666666666668,
+                                              "y": 35,
+                                              "width": 40,
+                                              "height": 20,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "backgroundColor": "#ffffff",
+                                                "color": "#000000",
+                                                "fontFamily": "\"Noto Sans\"",
+                                                "fontSize": 16,
+                                                "tailPos": {
+                                                  "x": -35,
+                                                  "y": 71
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302299058",
+                                              "type": "balloon",
+                                              "content": "¿Cuenta larga?",
+                                              "x": 62.638888888888886,
+                                              "y": 59.21875,
+                                              "width": 50.83333333333333,
+                                              "height": 20,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "backgroundColor": "#ffffff",
+                                                "color": "#000000",
+                                                "fontFamily": "\"Noto Sans\"",
+                                                "fontSize": 16,
+                                                "tailPos": {
+                                                  "x": 113,
+                                                  "y": 29
+                                                }
+                                              }
+                                            }
+                                          ],
+                                          "order": 0
+                                        },
+                                        {
+                                          "id": "slide-1779302322922",
+                                          "background": "#E1F5FE",
+                                          "elements": [
+                                            {
+                                              "id": "el-1779302322922-oqj394szj",
+                                              "type": "text",
+                                              "content": "2 * 3 + 12 /4",
+                                              "x": 49.02777777777778,
+                                              "y": 20.468750000000004,
+                                              "width": 38.05555555555556,
+                                              "height": 10,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "fontFamily": "\"Fira Sans\""
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302322922-iu0f4ekld",
+                                              "type": "balloon",
+                                              "content": "Sí, es una cuenta larga.",
+                                              "x": 31.666666666666668,
+                                              "y": 35,
+                                              "width": 40,
+                                              "height": 20,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "backgroundColor": "#ffffff",
+                                                "color": "#000000",
+                                                "fontFamily": "\"Noto Sans\"",
+                                                "fontSize": 16,
+                                                "tailPos": {
+                                                  "x": -35,
+                                                  "y": 71
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302354058",
+                                              "type": "balloon",
+                                              "content": "En matemáticas se le llama \"expresión\".",
+                                              "x": 61.94444444444445,
+                                              "y": 70.3125,
+                                              "width": 40,
+                                              "height": 20,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "backgroundColor": "#ffffff",
+                                                "color": "#000000",
+                                                "fontFamily": "\"Noto Sans\"",
+                                                "fontSize": 16,
+                                                "tailPos": {
+                                                  "x": -35,
+                                                  "y": 71
+                                                }
+                                              }
+                                            }
+                                          ],
+                                          "order": 1,
+                                          "cartridge": null
+                                        },
+                                        {
+                                          "id": "slide-1779302385089",
+                                          "background": "#E1F5FE",
+                                          "elements": [
+                                            {
+                                              "id": "el-1779302385089-geptyzsmc",
+                                              "type": "balloon",
+                                              "content": "También se le puede llamar \"operación combinada\".",
+                                              "x": 39.44444444444444,
+                                              "y": 35,
+                                              "width": 55.55555555555556,
+                                              "height": 20,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "backgroundColor": "#ffffff",
+                                                "color": "#000000",
+                                                "fontFamily": "\"Noto Sans\"",
+                                                "fontSize": 16,
+                                                "tailPos": {
+                                                  "x": -35,
+                                                  "y": 71
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302385089-iudgg08le",
+                                              "type": "text",
+                                              "content": "2 * 3 + 12 /4",
+                                              "x": 49.02777777777778,
+                                              "y": 20.468750000000004,
+                                              "width": 38.05555555555556,
+                                              "height": 10,
+                                              "rotation": 0,
+                                              "scale": 1.502056301794036,
+                                              "metadata": {
+                                                "fontFamily": "\"Fira Sans\""
+                                              }
+                                            }
+                                          ],
+                                          "order": 2,
+                                          "cartridge": null
+                                        },
+                                        {
+                                          "id": "slide-1779302500789",
+                                          "background": "#E1F5FE",
+                                          "elements": [
+                                            {
+                                              "id": "el-1779302503309",
+                                              "type": "text",
+                                              "content": "¿Por qué se le llama operación combinada?",
+                                              "x": 54.44444444444445,
+                                              "y": 28.125,
+                                              "width": 54.44444444444444,
+                                              "height": 10,
+                                              "rotation": 0,
+                                              "scale": 1.6063976150029184,
+                                              "metadata": {
+                                                "fontFamily": "\"Fira Sans\"",
+                                                "backgroundColor": "#475569",
+                                                "color": "#ffffff"
+                                              }
+                                            },
+                                            {
+                                              "id": "el-1779302528193",
+                                              "type": "quiz",
+                                              "content": "Quiz",
+                                              "x": 50,
+                                              "y": 75,
+                                              "width": 20,
+                                              "height": 10,
+                                              "rotation": 0,
+                                              "scale": 1,
+                                              "metadata": {
+                                                "fontFamily": "\"Fira Sans\"",
+                                                "options": [
+                                                  "Combina con mi ropa",
+                                                  "Mezcla operaciones como +,-, * y /",
+                                                  "Es una operación médica"
+                                                ],
+                                                "correctIndex": 0,
+                                                "correctIndices": [
+                                                  0
+                                                ],
+                                                "quizType": "classic",
+                                                "visualMode": false
+                                              }
+                                            }
+                                          ],
+                                          "order": 3
+                                        },
+                                        {
+                                          "id": "slide-1779302316737",
+                                          "background": "#E1F5FE",
+                                          "elements": [],
+                                          "order": 4
+                                        }
+                                      ],
+                                      "author": "User",
+                                      "createdAt": "2026-05-20T18:37:37.224Z",
+                                      "updatedAt": "2026-05-20T18:43:25.522Z",
+                                      "path": "lessons/6350-Expresiones/lesson.json",
+                                      "textPreset": null
+                                    },
+                                    "status": "completed",
+                                    "icon": {
+                                      "type": {},
+                                      "key": null,
+                                      "props": {
+                                        "size": 24
+                                      },
+                                      "_owner": null,
+                                      "_store": {}
+                                    },
+                                    "progress": {
+                                      "lastSlideIndex": 5,
+                                      "completed": true,
+                                      "lastPlayed": 1779302997508
+                                    }
                                   },
                                   "status": "completed",
                                   "icon": {
@@ -11796,9 +12818,9 @@
                                     "_store": {}
                                   },
                                   "progress": {
-                                    "lastSlideIndex": 5,
+                                    "lastSlideIndex": 4,
                                     "completed": true,
-                                    "lastPlayed": 1779302997508
+                                    "lastPlayed": 1779303566577
                                   }
                                 },
                                 "status": "completed",
@@ -11814,7 +12836,13 @@
                                 "progress": {
                                   "lastSlideIndex": 4,
                                   "completed": true,
-                                  "lastPlayed": 1779303566577
+                                  "lastPlayed": 1779303695924
+                                },
+                                "translations": {
+                                  "en": {
+                                    "title": "Expresiones",
+                                    "description": ""
+                                  }
                                 }
                               },
                               "status": "completed",
@@ -11828,9 +12856,9 @@
                                 "_store": {}
                               },
                               "progress": {
-                                "lastSlideIndex": 4,
+                                "lastSlideIndex": 5,
                                 "completed": true,
-                                "lastPlayed": 1779303695924
+                                "lastPlayed": 1779319433298
                               },
                               "translations": {
                                 "en": {
@@ -11839,7 +12867,7 @@
                                 }
                               }
                             },
-                            "status": "completed",
+                            "status": "active",
                             "icon": {
                               "type": {},
                               "key": null,
@@ -11850,9 +12878,9 @@
                               "_store": {}
                             },
                             "progress": {
-                              "lastSlideIndex": 5,
-                              "completed": true,
-                              "lastPlayed": 1779319433298
+                              "lastSlideIndex": 4,
+                              "completed": false,
+                              "lastPlayed": 1779378573153
                             },
                             "translations": {
                               "en": {
@@ -11872,9 +12900,9 @@
                             "_store": {}
                           },
                           "progress": {
-                            "lastSlideIndex": 4,
+                            "lastSlideIndex": 0,
                             "completed": false,
-                            "lastPlayed": 1779378573153
+                            "lastPlayed": 1779379038909
                           },
                           "translations": {
                             "en": {
@@ -11894,9 +12922,9 @@
                           "_store": {}
                         },
                         "progress": {
-                          "lastSlideIndex": 0,
+                          "lastSlideIndex": 4,
                           "completed": false,
-                          "lastPlayed": 1779379038909
+                          "lastPlayed": 1779379189702
                         },
                         "translations": {
                           "en": {
@@ -11916,9 +12944,9 @@
                         "_store": {}
                       },
                       "progress": {
-                        "lastSlideIndex": 4,
+                        "lastSlideIndex": 6,
                         "completed": false,
-                        "lastPlayed": 1779379189702
+                        "lastPlayed": 1779380310600
                       },
                       "translations": {
                         "en": {
@@ -11927,7 +12955,7 @@
                         }
                       }
                     },
-                    "status": "active",
+                    "status": "completed",
                     "icon": {
                       "type": {},
                       "key": null,
@@ -11939,8 +12967,8 @@
                     },
                     "progress": {
                       "lastSlideIndex": 6,
-                      "completed": false,
-                      "lastPlayed": 1779380310600
+                      "completed": true,
+                      "lastPlayed": 1779381104368
                     },
                     "translations": {
                       "en": {
@@ -11949,7 +12977,7 @@
                       }
                     }
                   },
-                  "status": "completed",
+                  "status": "active",
                   "icon": {
                     "type": {},
                     "key": null,
@@ -11960,9 +12988,9 @@
                     "_store": {}
                   },
                   "progress": {
-                    "lastSlideIndex": 6,
-                    "completed": true,
-                    "lastPlayed": 1779381104368
+                    "lastSlideIndex": 0,
+                    "completed": false,
+                    "lastPlayed": 1779384765691
                   },
                   "translations": {
                     "en": {
@@ -11984,7 +13012,7 @@
                 "progress": {
                   "lastSlideIndex": 0,
                   "completed": false,
-                  "lastPlayed": 1779384765691
+                  "lastPlayed": 1779385911830
                 },
                 "translations": {
                   "en": {
@@ -12006,7 +13034,7 @@
               "progress": {
                 "lastSlideIndex": 0,
                 "completed": false,
-                "lastPlayed": 1779385911830
+                "lastPlayed": 1779455077961
               },
               "translations": {
                 "en": {
@@ -12028,7 +13056,7 @@
             "progress": {
               "lastSlideIndex": 0,
               "completed": false,
-              "lastPlayed": 1779455077961
+              "lastPlayed": 1779456398344
             },
             "translations": {
               "en": {
@@ -12047,11 +13075,7 @@
             "_owner": null,
             "_store": {}
           },
-          "progress": {
-            "lastSlideIndex": 0,
-            "completed": false,
-            "lastPlayed": 1779456398344
-          },
+          "progress": null,
           "translations": {
             "en": {
               "title": "Expresiones",
@@ -12069,7 +13093,11 @@
           "_owner": null,
           "_store": {}
         },
-        "progress": null,
+        "progress": {
+          "lastSlideIndex": 0,
+          "completed": false,
+          "lastPlayed": 1779480330782
+        },
         "translations": {
           "en": {
             "title": "Expresiones",
@@ -12090,7 +13118,7 @@
       "progress": {
         "lastSlideIndex": 0,
         "completed": false,
-        "lastPlayed": 1779480330782
+        "lastPlayed": 1780592766916
       },
       "translations": {
         "en": {
@@ -12100,33 +13128,36 @@
       }
     },
     "status": "active",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_textbook.png",
     "progress": {
-      "lastSlideIndex": 0,
+      "lastSlideIndex": 8,
       "completed": false,
-      "lastPlayed": 1780592766916
+      "lastPlayed": 1780593086599
     },
     "translations": {
       "en": {
         "title": "Expresiones",
-        "description": ""
+        "description": "",
+        "hashtag": ""
       }
-    }
+    },
+    "cardColor": "#8B5CF6",
+    "hashtag": "#OrderOfOperations"
   },
   "status": "active",
-  "icon": "icon_textbook.png",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
   "progress": {
-    "lastSlideIndex": 8,
+    "lastSlideIndex": 0,
     "completed": false,
-    "lastPlayed": 1780593086599
+    "lastPlayed": 1780926728101
   },
   "translations": {
     "en": {
@@ -12134,5 +13165,6 @@
       "description": ""
     }
   },
-  "cardColor": "#8B5CF6"
+  "cardColor": "#8B5CF6",
+  "hashtag": "#OrderOfOperations"
 }

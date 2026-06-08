@@ -865,7 +865,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-18T22:39:48.732Z",
-  "updatedAt": "2026-06-08T17:32:32.652Z",
+  "updatedAt": "2026-06-08T18:15:29.859Z",
   "path": "lessons/13-Why LEFT to RIGHT?/lesson.json",
   "textPreset": null,
   "name": "0416-Why LEFT to RIGHT?",
@@ -7107,8 +7107,10 @@
   "translations": {
     "en": {
       "title": "Why LEFT to RIGHT?",
-      "description": ""
+      "description": "",
+      "hashtag": ""
     }
   },
-  "cardColor": "#14B8A6"
+  "cardColor": "#14B8A6",
+  "hashtag": "#OrderOfOperations"
 }

@@ -850,7 +850,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-08T17:47:05.499Z",
+  "updatedAt": "2026-06-08T18:14:54.596Z",
   "path": "lessons/04-Pociones - parte 4/lesson.json",
   "textPreset": null,
   "subject": "Math",
@@ -16457,20 +16457,15 @@
     }
   },
   "status": "active",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_potion.png",
   "progress": null,
   "translations": {
     "en": {
       "title": "Potions",
-      "description": "1. Potions"
+      "description": "1. Potions",
+      "hashtag": ""
     }
-  }
+  },
+  "hashtag": "#OrderOfOperations",
+  "cardColor": "#8B5CF6"
 }

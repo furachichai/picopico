@@ -32,14 +32,12 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                 if (lang.code === 'es') {
                     initialData[lang.code] = {
                         title: lesson.title || '',
-                        description: lesson.description || '',
-                        hashtag: lesson.hashtag || lesson.content?.hashtag || ''
+                        description: lesson.description || ''
                     };
                 } else {
                     initialData[lang.code] = {
                         title: lesson.translations?.[lang.code]?.title || '',
-                        description: lesson.translations?.[lang.code]?.description || '',
-                        hashtag: lesson.translations?.[lang.code]?.hashtag || ''
+                        description: lesson.translations?.[lang.code]?.description || ''
                     };
                 }
             });
@@ -100,15 +98,13 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
 
         const safeName = formData['es']?.title?.trim() || 'Untitled Lesson';
         const finalDescription = formData['es']?.description || '';
-        const finalHashtag = formData['es']?.hashtag || '';
 
         const newTranslations = {};
         SUPPORTED_LANGUAGES.forEach(lang => {
             if (lang.code !== 'es') {
                 newTranslations[lang.code] = {
                     title: formData[lang.code]?.title?.trim() || '',
-                    description: formData[lang.code]?.description || '',
-                    hashtag: formData[lang.code]?.hashtag || ''
+                    description: formData[lang.code]?.description || ''
                 };
             }
         });
@@ -135,7 +131,6 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
             path: fullPath,
             title: safeName,
             description: finalDescription,
-            hashtag: finalHashtag,
             icon: lessonIcon,
             cardColor: cardColor,
             translations: newTranslations
@@ -251,20 +246,6 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                             onKeyDown={handleKeyDown}
                             placeholder="Brief description of the lesson..."
                             style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
-                        />
-                    </div>
-
-                    {/* Hashtag */}
-                    <div>
-                        <label style={labelStyle}>Hashtag {isTranslating && `(${activeLangTab.toUpperCase()})`}</label>
-                        <input
-                            type="text"
-                            name="hashtag"
-                            value={formData[activeLangTab].hashtag}
-                            onChange={(e) => handleFieldChange('hashtag', e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="#OrderOfOperations"
-                            style={inputStyle}
                         />
                     </div>
 
