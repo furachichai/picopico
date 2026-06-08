@@ -1,5 +1,5 @@
 {
-  "id": "lessons/0381-exponents/lesson.json",
+  "id": "lessons/11-exponents/lesson.json",
   "title": "exponents",
   "slides": [
     {
@@ -7,26 +7,26 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1779828116246",
+          "id": "el-1780946083892",
           "type": "image",
-          "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
-          "x": 18.333333333333336,
-          "y": 83.4375,
+          "content": "/src/assets/characters/chef_juggles_fruit.png?t=1780946043664",
+          "x": 33.888888888888886,
+          "y": 66.875,
           "width": 40,
-          "height": 29.263005780346823,
+          "height": 36.39705882352941,
           "rotation": 0,
-          "scale": 1,
+          "scale": 1.6886355120911427,
           "metadata": {
             "width": 40,
-            "height": 29.263005780346823
+            "height": 36.39705882352941
           }
         },
         {
           "id": "el-1779828121523",
           "type": "balloon",
           "content": "Let's learn one more rule: <b>exponents</b>.",
-          "x": 30.833333333333332,
-          "y": 47.34375,
+          "x": 56.666666666666664,
+          "y": 24.0625,
           "width": 40,
           "height": 20,
           "rotation": 0,
@@ -41,13 +41,20 @@
               "y": 124
             }
           }
-        },
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1780946129161",
+      "background": "#E1F5FE",
+      "elements": [
         {
-          "id": "el-1779828172008",
+          "id": "el-1780946134847-bz7beycjo",
           "type": "balloon",
           "content": "This is an exponent:<div><b>2⁴</b></div>",
-          "x": 71.38888888888889,
-          "y": 68.75,
+          "x": 73.38888888888889,
+          "y": 27.78125,
           "width": 51.66666666666667,
           "height": 23.75,
           "rotation": 0,
@@ -62,9 +69,24 @@
               "y": 95
             }
           }
+        },
+        {
+          "id": "el-1780946251698",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20looking%20glass.png?t=1780946043633",
+          "x": 50,
+          "y": 74.0625,
+          "width": 40,
+          "height": 32.06250000000001,
+          "rotation": 0,
+          "scale": 2.0627740363669163,
+          "metadata": {
+            "width": 40,
+            "height": 32.06250000000001
+          }
         }
       ],
-      "order": 0
+      "order": 1
     },
     {
       "id": "slide-1779846259262",
@@ -131,7 +153,7 @@
           }
         }
       ],
-      "order": 1
+      "order": 2
     },
     {
       "id": "slide-1779846457667",
@@ -175,9 +197,24 @@
             "quizType": "classic",
             "visualMode": false
           }
+        },
+        {
+          "id": "el-1780946116854",
+          "type": "image",
+          "content": "/src/assets/characters/chef_reading_Book.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 26.6767955801105,
+          "rotation": 0,
+          "scale": 1.6412797623120268,
+          "metadata": {
+            "width": 40,
+            "height": 26.6767955801105
+          }
         }
       ],
-      "order": 2
+      "order": 3
     },
     {
       "id": "slide-1779846776521",
@@ -362,7 +399,7 @@
           }
         }
       ],
-      "order": 3
+      "order": 4
     },
     {
       "id": "slide-1779915271972",
@@ -441,7 +478,7 @@
           }
         }
       ],
-      "order": 4
+      "order": 5
     },
     {
       "id": "slide-1779914384629",
@@ -473,7 +510,7 @@
           }
         }
       ],
-      "order": 5,
+      "order": 6,
       "cartridge": null
     },
     {
@@ -541,7 +578,7 @@
           }
         }
       ],
-      "order": 6
+      "order": 7
     },
     {
       "id": "slide-1779915095749",
@@ -573,33 +610,18 @@
           }
         }
       ],
-      "order": 7
+      "order": 8
     },
     {
       "id": "slide-1779916065980",
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1779916071076",
-          "type": "text",
-          "content": "What's the right order?",
-          "x": 49.44444444444444,
-          "y": 25.624999999999996,
-          "width": 30,
-          "height": 7.8125,
-          "rotation": 0,
-          "scale": 2.14545708063201,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "\"Fira Sans\""
-          }
-        },
-        {
           "id": "el-1779916068156",
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 75,
+          "y": 74.6875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -619,9 +641,40 @@
             "quizType": "reorder",
             "visualMode": false
           }
+        },
+        {
+          "id": "el-1779916071076",
+          "type": "text",
+          "content": "What's the right order?",
+          "x": 49.30555555555556,
+          "y": 14.999999999999996,
+          "width": 41.78200114370568,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.14545708063201,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          }
+        },
+        {
+          "id": "el-1780946189719",
+          "type": "image",
+          "content": "/src/assets/characters/chef_pile_plate.png?t=1780946043672",
+          "x": 49.44444444444444,
+          "y": 33.75,
+          "width": 40,
+          "height": 30.638925294888598,
+          "rotation": 0,
+          "scale": 1.1408281971414227,
+          "metadata": {
+            "width": 40,
+            "height": 30.638925294888598
+          }
         }
       ],
-      "order": 8
+      "order": 9
     },
     {
       "id": "slide-1780582475515",
@@ -763,7 +816,7 @@
           }
         }
       ],
-      "order": 9,
+      "order": 10,
       "cartridge": null,
       "backgroundSettings": {
         "grayscale": true,
@@ -811,21 +864,21 @@
           }
         }
       ],
-      "order": 10
+      "order": 11
     }
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-06-08T18:15:21.896Z",
+  "updatedAt": "2026-06-08T19:17:40.473Z",
   "path": "lessons/11-exponents/lesson.json",
   "textPreset": null,
-  "name": "0381-exponents",
+  "name": "11-exponents",
   "type": "file",
   "description": "",
   "visible": true,
-  "order": 381,
+  "order": 11,
   "content": {
-    "id": "draft-1779828111156",
+    "id": "lessons/0381-exponents/lesson.json",
     "title": "exponents",
     "slides": [
       {
@@ -850,7 +903,7 @@
           {
             "id": "el-1779828121523",
             "type": "balloon",
-            "content": "Let's learn one more rule.",
+            "content": "Let's learn one more rule: <b>exponents</b>.",
             "x": 30.833333333333332,
             "y": 47.34375,
             "width": 40,
@@ -871,10 +924,10 @@
           {
             "id": "el-1779828172008",
             "type": "balloon",
-            "content": "It deals with exponents.<div><br></div><div>Do you know exponents?</div>",
-            "x": 71.94444444444444,
-            "y": 68.28125,
-            "width": 40,
+            "content": "This is an exponent:<div><b>2⁴</b></div>",
+            "x": 71.38888888888889,
+            "y": 68.75,
+            "width": 51.66666666666667,
             "height": 23.75,
             "rotation": 0,
             "scale": 1,
@@ -882,7 +935,7 @@
               "backgroundColor": "#ffffff",
               "color": "#000000",
               "fontFamily": "\"Noto Sans\"",
-              "fontSize": 16,
+              "fontSize": 23,
               "tailPos": {
                 "x": -59,
                 "y": 95
@@ -891,20 +944,871 @@
           }
         ],
         "order": 0
+      },
+      {
+        "id": "slide-1779846259262",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779846281740",
+            "type": "text",
+            "content": "These are exponents:",
+            "x": 49.44444444444444,
+            "y": 19.84375,
+            "width": 40,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1.8992595037084183,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779846316816",
+            "type": "isticker",
+            "content": "iSticker",
+            "x": 50.277777777777786,
+            "y": 34.53125,
+            "width": 80,
+            "height": 15,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "stickerType": "exponent_expander",
+              "expression": "3!5"
+            }
+          },
+          {
+            "id": "el-1779846277583",
+            "type": "isticker",
+            "content": "iSticker",
+            "x": 50.83333333333333,
+            "y": 55.3125,
+            "width": 80,
+            "height": 15,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "stickerType": "exponent_expander",
+              "expression": "2!4"
+            }
+          },
+          {
+            "id": "el-1779846355154",
+            "type": "isticker",
+            "content": "iSticker",
+            "x": 50.27777777777778,
+            "y": 76.09375,
+            "width": 80,
+            "height": 15,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "stickerType": "exponent_expander",
+              "expression": "5!3"
+            }
+          }
+        ],
+        "order": 1
+      },
+      {
+        "id": "slide-1779846457667",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779846464396",
+            "type": "text",
+            "content": "What is an exponent?",
+            "x": 51.66666666666667,
+            "y": 21.875000000000004,
+            "width": 65,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1.813598986677882,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779846461588",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 85.9375,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "A musical accordion",
+                "A number multiplied by itself several times."
+              ],
+              "correctIndex": 1,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "classic",
+              "visualMode": false
+            }
+          }
+        ],
+        "order": 2
+      },
+      {
+        "id": "slide-1779846776521",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779848749123-e8kb4lch2",
+            "type": "line",
+            "x": 52,
+            "y": 44.734375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779848749123-atm370ouj",
+            "type": "line",
+            "x": 52,
+            "y": 55.671875,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779848749123-e6tmun3wb",
+            "type": "line",
+            "x": 52,
+            "y": 70.984375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779848749123-wk144a1f8",
+            "type": "text",
+            "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+            "x": 52.27777777777777,
+            "y": 79.65625,
+            "width": 71.66666666666667,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779848749123-m0klzuvsl",
+            "type": "text",
+            "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+            "x": 53.388888888888886,
+            "y": 64.34375,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779848749123-vponfagj6",
+            "type": "text",
+            "content": "Calculate exponents<br>",
+            "x": 49.77777777777778,
+            "y": 51.0625,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779848809733",
+            "type": "image",
+            "content": "/src/assets/characters/Chef_with_phone_flow.png",
+            "x": 11.111111111111107,
+            "y": 78.75,
+            "width": 40,
+            "height": 46.51442307692307,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "width": 40,
+              "height": 46.51442307692307
+            }
+          },
+          {
+            "id": "el-1779848749123-l3qj9qd15",
+            "type": "text",
+            "content": "<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><b>                                        </b></span></font>",
+            "x": 52,
+            "y": 36.375,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#5A5A5A",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779848749123-udlf94sqx",
+            "type": "text",
+            "content": "Order of operations",
+            "x": 49.91666666666667,
+            "y": 21.21875,
+            "width": 22.52933353870275,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 2.4057612881117203,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "fontSize": 10
+            }
+          },
+          {
+            "id": "el-1779914077507",
+            "type": "balloon",
+            "content": "NEW RULE:<div><b>Start with exponents</b></div>",
+            "x": 17.22222222222222,
+            "y": 34.6875,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -21,
+                "y": 90
+              }
+            }
+          }
+        ],
+        "order": 3
+      },
+      {
+        "id": "slide-1779915271972",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779915352678",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "chatquiz",
+              "visualMode": false,
+              "chatNodes": [
+                {
+                  "type": "reply",
+                  "text": "How do I solve this?<div>2+3²-5</div>"
+                },
+                {
+                  "type": "message",
+                  "text": "Where should we begin?"
+                },
+                {
+                  "type": "quiz",
+                  "options": [
+                    "the addition",
+                    "the subtraction",
+                    "the exponent"
+                  ],
+                  "correctIndex": 2
+                },
+                {
+                  "type": "message",
+                  "text": "Good.<div>2+<font color=\"#2e7d32\">3²</font>-5 =</div><div>2+<font color=\"#2e7d32\">9</font>-5=</div>"
+                },
+                {
+                  "type": "message",
+                  "text": "Ok, now what we do next?"
+                },
+                {
+                  "type": "quiz",
+                  "options": [
+                    "2+9",
+                    "9-5"
+                  ],
+                  "correctIndex": 0
+                },
+                {
+                  "type": "message",
+                  "text": "<div>We always go left to right.</div><div>So now all we need to solve is</div><div><br></div>&nbsp;11 - 5"
+                },
+                {
+                  "type": "quiz",
+                  "options": [
+                    "6",
+                    "7"
+                  ],
+                  "correctIndex": 0
+                },
+                {
+                  "type": "message",
+                  "text": "That's it!<div>2+3²-5 = 6</div>"
+                }
+              ]
+            }
+          }
+        ],
+        "order": 4
+      },
+      {
+        "id": "slide-1779914384629",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779914416955",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 20.156249999999993,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "pem",
+              "visualMode": false,
+              "pemMode": "LEVELS",
+              "pemDifficulty": 5,
+              "pemExpression": null,
+              "pemLevelsText": "2!3\n3!2 + 4\n10 - 2!3\n2!2 * 3\n10 - 3!2 + 1\n15 - 2!2 + 3"
+            }
+          }
+        ],
+        "order": 5,
+        "cartridge": null
+      },
+      {
+        "id": "slide-1779915721540",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779915729078",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "chatquiz",
+              "visualMode": false,
+              "chatNodes": [
+                {
+                  "type": "reply",
+                  "text": "Things got more complicated...<div><br></div><div>10 + 5 * 2!2 - 12 =</div>"
+                },
+                {
+                  "type": "message",
+                  "text": "Don't worry.<div>Just follow the rules.</div><div>What do we solve first?</div>"
+                },
+                {
+                  "type": "quiz",
+                  "options": [
+                    "exponents",
+                    "+ - from left to right",
+                    "× ÷ from left to right"
+                  ],
+                  "correctIndex": 0
+                },
+                {
+                  "type": "message",
+                  "text": "We begin by exponents!<div><br></div><div>10 + 5 × 2² - 12</div><div>= 10 + 5 × 4 - 12</div><div><br></div><div>What's next?</div>"
+                },
+                {
+                  "type": "quiz",
+                  "options": [
+                    "+ - from left to right",
+                    "× ÷ from left to right"
+                  ],
+                  "correctIndex": 1
+                },
+                {
+                  "type": "message",
+                  "text": "10 + 5 × 4 - 12<div>= 10 + 20 - 12</div><div>= 18</div>"
+                },
+                {
+                  "type": "reply",
+                  "text": "10 + 5 × 4 - 12 = 18<div><br></div><div>Thanks!</div>"
+                }
+              ]
+            }
+          }
+        ],
+        "order": 6
+      },
+      {
+        "id": "slide-1779915095749",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779915146852",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 25.46875,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "pem",
+              "visualMode": false,
+              "pemMode": "LEVELS",
+              "pemDifficulty": 5,
+              "pemExpression": null,
+              "pemLevelsText": "5 * 3!2\n16 / 2!3\n3!2 + 4!2\n4 * 2!3 + 5\n50 - 2 * 3!2\n4!3 / 8 + 2!2\n7 + 3 * 2!4 - 10 / 2\n6!2 / 4 + 3 * 2!3 - 5"
+            }
+          }
+        ],
+        "order": 7
+      },
+      {
+        "id": "slide-1779916065980",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779916071076",
+            "type": "text",
+            "content": "What's the right order?",
+            "x": 49.44444444444444,
+            "y": 25.624999999999996,
+            "width": 30,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 2.14545708063201,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779916068156",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "exponents",
+                "+ - from left to right",
+                "× ÷ from left to right",
+                "final result"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "reorder",
+              "visualMode": false
+            }
+          }
+        ],
+        "order": 8
+      },
+      {
+        "id": "slide-1780582475515",
+        "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+        "elements": [
+          {
+            "id": "el-1780582475515-52kv47tn3",
+            "type": "image",
+            "content": "/src/assets/characters/scroll.png",
+            "x": 49.166666666666664,
+            "y": 53.59375,
+            "width": 40,
+            "height": 33.53711790393013,
+            "rotation": 0,
+            "scale": 2.965326382502965,
+            "metadata": {
+              "width": 40,
+              "height": 33.53711790393013,
+              "locked": true
+            }
+          },
+          {
+            "id": "el-1780582475515-13dxhxh8c",
+            "type": "text",
+            "content": "<b>× </b>or<b> ÷ </b><div>from left to right</div>",
+            "x": 47.77777777777777,
+            "y": 64.0625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#F57C00"
+            }
+          },
+          {
+            "id": "el-1780582475515-ofz43ixm5",
+            "type": "text",
+            "content": "<b>RULES</b>",
+            "x": 48.61111111111111,
+            "y": 31.40625,
+            "width": 10,
+            "height": 5,
+            "rotation": 0,
+            "scale": 2.153722403662122,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit"
+            }
+          },
+          {
+            "id": "el-1780582475515-rea0qnmns",
+            "type": "text",
+            "content": "<b>E</b>xponents",
+            "x": 47.77777777777777,
+            "y": 50.9375,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#FFC107"
+            }
+          },
+          {
+            "id": "el-1780582475515-e6qwz96ch",
+            "type": "line",
+            "x": 47.500000000000014,
+            "y": 55.703125,
+            "width": 6.408704915343446,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1780582475515-liisgjhez",
+            "type": "line",
+            "x": 47.50000000000001,
+            "y": 70.703125,
+            "width": 6.408704915343446,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1780582475515-jncric9mf",
+            "type": "text",
+            "content": "<b>                           </b>",
+            "x": 49.166666666666664,
+            "y": 39.0625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#D6DCE5"
+            }
+          },
+          {
+            "id": "el-1780582475515-eka0k35rj",
+            "type": "text",
+            "content": "<font color=\"#d6dce5\"><b>+ </b>or<b> - </b><br></font><div><font color=\"#d6dce5\">from left to right</font></div>",
+            "x": 48.05555555555555,
+            "y": 78.90625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#F44336"
+            }
+          }
+        ],
+        "order": 9,
+        "cartridge": null,
+        "backgroundSettings": {
+          "grayscale": true,
+          "tintColor": "transparent"
+        }
+      },
+      {
+        "id": "slide-1779914874032",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779914890407",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 57.03125,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "2² + 3²",
+                "5² - 2³",
+                "3 × 4²",
+                "2 × 3² + 5",
+                "4³ ÷ 2 + 10",
+                "50 - 2⁴ × 3"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "conecta",
+              "visualMode": false,
+              "matchAnswers": [
+                "13",
+                "17",
+                "48",
+                "23",
+                "42",
+                "2"
+              ]
+            }
+          }
+        ],
+        "order": 10
       }
     ],
     "author": "User",
     "createdAt": "2026-05-26T20:41:51.156Z",
-    "updatedAt": "2026-05-26T20:44:10.381Z",
-    "path": "lessons/0381-exponents/lesson.json",
-    "textPreset": null
+    "updatedAt": "2026-06-08T18:15:21.896Z",
+    "path": "lessons/11-exponents/lesson.json",
+    "textPreset": null,
+    "name": "0381-exponents",
+    "type": "file",
+    "description": "",
+    "visible": true,
+    "order": 381,
+    "content": {
+      "id": "draft-1779828111156",
+      "title": "exponents",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779828116246",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+              "x": 18.333333333333336,
+              "y": 83.4375,
+              "width": 40,
+              "height": 29.263005780346823,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 29.263005780346823
+              }
+            },
+            {
+              "id": "el-1779828121523",
+              "type": "balloon",
+              "content": "Let's learn one more rule.",
+              "x": 30.833333333333332,
+              "y": 47.34375,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -24,
+                  "y": 124
+                }
+              }
+            },
+            {
+              "id": "el-1779828172008",
+              "type": "balloon",
+              "content": "It deals with exponents.<div><br></div><div>Do you know exponents?</div>",
+              "x": 71.94444444444444,
+              "y": 68.28125,
+              "width": 40,
+              "height": 23.75,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -59,
+                  "y": 95
+                }
+              }
+            }
+          ],
+          "order": 0
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-05-26T20:41:51.156Z",
+      "updatedAt": "2026-05-26T20:44:10.381Z",
+      "path": "lessons/0381-exponents/lesson.json",
+      "textPreset": null
+    },
+    "status": "completed",
+    "icon": "icon_textbook.png",
+    "progress": {
+      "lastSlideIndex": 0,
+      "completed": true,
+      "lastPlayed": 1779846144761
+    },
+    "cardColor": "#8B5CF6",
+    "translations": {
+      "en": {
+        "title": "",
+        "description": "",
+        "hashtag": ""
+      }
+    },
+    "hashtag": "#OrderOfOperations"
   },
-  "status": "completed",
-  "icon": "icon_textbook.png",
+  "status": "active",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
   "progress": {
     "lastSlideIndex": 0,
-    "completed": true,
-    "lastPlayed": 1779846144761
+    "completed": false,
+    "lastPlayed": 1780945896009
   },
   "cardColor": "#8B5CF6",
   "translations": {

@@ -248,6 +248,11 @@ const Editor = () => {
         setShowDeleteSlideConfirmation(false);
     };
 
+    const handleApplyBackgroundToAll = (backgroundElement) => {
+        if (!backgroundElement) return;
+        dispatch({ type: 'APPLY_BACKGROUND_TO_ALL', payload: backgroundElement });
+    };
+
     // Shared ContextualMenu handlers (used in both bottom-menus and floating keyboard mode)
     const handleContextMenuChange = (id, updates) => {
         if (id === 'cartridge') {
@@ -1026,6 +1031,7 @@ const Editor = () => {
                                 onOpenPresets={() => setShowPresetPanel(true)}
                                 onReorderElement={handleReorderElement}
                                 onUndo={handleUndo}
+                                onApplyBackgroundToAll={handleApplyBackgroundToAll}
                                 showGuides={state.showGuides}
                                 onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
                                 translationMode={isTranslating}
@@ -1062,6 +1068,7 @@ const Editor = () => {
                                 onOpenPresets={() => setShowPresetPanel(true)}
                                 onReorderElement={handleReorderElement}
                                 onUndo={handleUndo}
+                                onApplyBackgroundToAll={handleApplyBackgroundToAll}
                                 showGuides={state.showGuides}
                                 onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
                                 translationMode={isTranslating}

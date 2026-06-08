@@ -166,7 +166,9 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
     );
 };
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, showGuides, onToggleGuides, translationMode = false }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false }) => {
+    const [applyToAllChecked, setApplyToAllChecked] = useState(false);
+
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
@@ -433,6 +435,26 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             >
                                 LIBRARY
                             </button>
+                        )}
+                        {element.type === 'background' && onApplyBackgroundToAll && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '36px', padding: '0 8px', background: 'rgba(0,0,0,0.05)', borderRadius: '6px', marginLeft: 'auto' }}>
+                                <input
+                                    type="checkbox"
+                                    id="apply-bg-all"
+                                    checked={applyToAllChecked}
+                                    onChange={(e) => {
+                                        setApplyToAllChecked(e.target.checked);
+                                        if (e.target.checked) {
+                                            onApplyBackgroundToAll(element);
+                                            setTimeout(() => setApplyToAllChecked(false), 1500);
+                                        }
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                <label htmlFor="apply-bg-all" style={{ fontSize: '0.8rem', cursor: 'pointer', margin: 0, fontWeight: '500' }}>
+                                    Apply to all
+                                </label>
+                            </div>
                         )}
                     </div>
 

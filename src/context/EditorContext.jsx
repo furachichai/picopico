@@ -316,6 +316,36 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'APPLY_BACKGROUND_TO_ALL': {
+            const backgroundElement = action.payload;
+            if (!backgroundElement || backgroundElement.type !== 'background') return state;
+
+            const newPast = pushToPast(state);
+            
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) => {
+                        // Create a new copy of elements without any existing background
+                        const otherElements = slide.elements.filter(el => el.type !== 'background');
+                        // Clone the background element with a new id
+                        const newBgElement = {
+                            ...backgroundElement,
+                            id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                        };
+                        // Background should typically be the first element (lowest z-index)
+                        return {
+                            ...slide,
+                            elements: [newBgElement, ...otherElements]
+                        };
+                    })
+                }
+            };
+        }
+
         case 'UPDATE_SLIDE': {
             return {
                 ...state,
