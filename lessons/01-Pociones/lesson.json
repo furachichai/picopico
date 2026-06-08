@@ -694,7 +694,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-08T16:46:55.247Z",
+  "updatedAt": "2026-06-08T17:23:14.228Z",
   "path": "lessons/01-Pociones/lesson.json",
   "textPreset": null,
   "subject": "Math",
@@ -13623,5 +13623,6 @@
       "title": "Potions",
       "description": "1. Potions"
     }
-  }
+  },
+  "cardColor": "#8B5CF6"
 }

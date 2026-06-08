@@ -816,7 +816,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-06-04T22:34:56.750Z",
+  "updatedAt": "2026-06-08T17:32:22.391Z",
   "path": "lessons/11-exponents/lesson.json",
   "textPreset": null,
   "name": "0381-exponents",
@@ -900,18 +900,17 @@
     "textPreset": null
   },
   "status": "completed",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_textbook.png",
   "progress": {
     "lastSlideIndex": 0,
     "completed": true,
     "lastPlayed": 1779846144761
+  },
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
   }
 }

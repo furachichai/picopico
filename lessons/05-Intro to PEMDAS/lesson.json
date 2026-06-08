@@ -664,8 +664,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-05-29T23:07:05.239Z",
-  "path": "lessons/02-Intro to PEMDAS/lesson.json",
+  "updatedAt": "2026-06-08T17:34:43.419Z",
+  "path": "lessons/05-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
   "topic": "PEMDAS",
@@ -3771,18 +3771,17 @@
     }
   },
   "status": "completed",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_gym.png",
   "progress": {
     "lastSlideIndex": 9,
     "completed": true,
     "lastPlayed": 1779299186316
-  }
+  },
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "cardColor": "#EC4899"
 }

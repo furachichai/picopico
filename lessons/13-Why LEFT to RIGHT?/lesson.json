@@ -865,8 +865,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-18T22:39:48.732Z",
-  "updatedAt": "2026-05-23T19:37:23.339Z",
-  "path": "lessons/9941-Why LEFT to RIGHT?/lesson.json",
+  "updatedAt": "2026-06-08T17:32:32.652Z",
+  "path": "lessons/13-Why LEFT to RIGHT?/lesson.json",
   "textPreset": null,
   "name": "0416-Why LEFT to RIGHT?",
   "type": "file",
@@ -7098,15 +7098,7 @@
     }
   },
   "status": "completed",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_lightbulb.png",
   "progress": {
     "lastSlideIndex": 4,
     "completed": true,
@@ -7117,5 +7109,6 @@
       "title": "Why LEFT to RIGHT?",
       "description": ""
     }
-  }
+  },
+  "cardColor": "#14B8A6"
 }

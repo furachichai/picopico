@@ -269,7 +269,16 @@
   ],
   "author": "User",
   "createdAt": "2026-05-24T14:36:21.380Z",
-  "updatedAt": "2026-06-04T14:16:00.248Z",
-  "path": "lessons/9941-Parenthesis/lesson.json",
-  "textPreset": null
+  "updatedAt": "2026-06-08T17:32:27.120Z",
+  "path": "lessons/12-Parenthesis/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  }
 }

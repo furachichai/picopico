@@ -317,10 +317,10 @@ const Dashboard = () => {
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          background: #2563EB; /* Dark blue background for icon circle */
+          background: transparent;
           margin: 0 auto 8px auto;
           overflow: hidden;
-          border: 2px solid rgba(255,255,255,0.1);
+          border: none;
         }
 
         .lesson-icon-box img {
@@ -501,9 +501,26 @@ const Dashboard = () => {
                          <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                      )}
                   </div>
+                  
+                  {/* Hashtag */}
+                  {((language !== 'es' && lesson.content?.translations?.[language]?.hashtag) || lesson.content?.hashtag || lesson.hashtag) && (
+                      <div style={{
+                          position: 'absolute',
+                          top: '12px',
+                          right: '16px',
+                          color: '#FDE047',
+                          fontWeight: '800',
+                          fontSize: '14px',
+                          zIndex: 10,
+                          textShadow: '0px 2px 4px rgba(0,0,0,0.2)'
+                      }}>
+                          {((language !== 'es' && lesson.content?.translations?.[language]?.hashtag) || lesson.content?.hashtag || lesson.hashtag)}
+                      </div>
+                  )}
+
                   <div className="lesson-info">
                     <div className="lesson-icon-box">
-                      <img src={`/assets/graphics/${lesson.content?.icon || 'icon_book.png'}`} alt="icon" />
+                      <img src={`/assets/graphics/${lesson.content?.icon || 'icon_textbook.png'}`} alt="icon" />
                     </div>
                     <div className="lesson-title">
                       {(language !== 'es' && lesson.content?.translations?.[language]?.title) || lesson.title}

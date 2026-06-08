@@ -178,7 +178,9 @@ const Editor = () => {
                 title: data.title,
                 path: data.path,
                 description: data.description,
+                hashtag: data.hashtag,
                 icon: data.icon,
+                cardColor: data.cardColor,
                 translations: data.translations
             }
         });
@@ -190,7 +192,9 @@ const Editor = () => {
             title: data.title,
             path: data.path,
             description: data.description,
+            hashtag: data.hashtag,
             icon: data.icon,
+            cardColor: data.cardColor,
             translations: data.translations,
             updatedAt: new Date()
         };

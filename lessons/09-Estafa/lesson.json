@@ -855,8 +855,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-28T00:51:30.015Z",
-  "updatedAt": "2026-06-08T16:47:21.826Z",
-  "path": "lessons/09-Scam/lesson.json",
+  "updatedAt": "2026-06-08T17:22:47.582Z",
+  "path": "lessons/09-Estafa/lesson.json",
   "textPreset": null,
   "name": "5704-Scam",
   "type": "file",
@@ -5954,5 +5954,6 @@
       "title": "Estafa",
       "description": ""
     }
-  }
+  },
+  "cardColor": "#06B6D4"
 }

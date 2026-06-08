@@ -25,7 +25,7 @@ const rotatePoint = (x, y, angle) => {
     };
 };
 
-const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onMoveMultiple, onEdit, onDelete, translationMode = false }) => {
+const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onMoveMultiple, onEdit, onDelete, translationMode = false, readOnly = false }) => {
     const { state, dispatch } = useEditor();
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -590,7 +590,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             </div>
 
             {/* Lock icon for locked elements — always clickable so user can select them */}
-            {element.metadata?.locked && !isSelected && (
+            {element.metadata?.locked && !isSelected && !readOnly && (
                 <div
                     onClick={(e) => {
                         e.stopPropagation();

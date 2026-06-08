@@ -7,7 +7,9 @@ const AVAILABLE_ICONS = [
     'icon_potion.png',
     'icon_gym.png',
     'icon_book.png',
-    'icon_game.png'
+    'icon_game.png',
+    'icon_lightbulb.png',
+    'icon_textbook.png'
 ];
 
 const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 'es' }) => {
@@ -16,12 +18,12 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
 
     const [activeLangTab, setActiveLangTab] = useState('es');
     const [formData, setFormData] = useState({});
-    const [lessonIcon, setLessonIcon] = useState('icon_book.png');
+    const [lessonIcon, setLessonIcon] = useState('icon_textbook.png');
     const [cardColor, setCardColor] = useState('#8B5CF6');
 
     useEffect(() => {
         if (isOpen && lesson) {
-            setLessonIcon(lesson.icon || lesson.content?.icon || 'icon_book.png');
+            setLessonIcon(lesson.icon || lesson.content?.icon || 'icon_textbook.png');
             setCardColor(lesson.cardColor || lesson.content?.cardColor || '#8B5CF6');
             
             // Initialize form data for all supported languages
@@ -30,12 +32,14 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                 if (lang.code === 'es') {
                     initialData[lang.code] = {
                         title: lesson.title || '',
-                        description: lesson.description || ''
+                        description: lesson.description || '',
+                        hashtag: lesson.hashtag || lesson.content?.hashtag || ''
                     };
                 } else {
                     initialData[lang.code] = {
                         title: lesson.translations?.[lang.code]?.title || '',
-                        description: lesson.translations?.[lang.code]?.description || ''
+                        description: lesson.translations?.[lang.code]?.description || '',
+                        hashtag: lesson.translations?.[lang.code]?.hashtag || ''
                     };
                 }
             });
@@ -96,13 +100,15 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
 
         const safeName = formData['es']?.title?.trim() || 'Untitled Lesson';
         const finalDescription = formData['es']?.description || '';
+        const finalHashtag = formData['es']?.hashtag || '';
 
         const newTranslations = {};
         SUPPORTED_LANGUAGES.forEach(lang => {
             if (lang.code !== 'es') {
                 newTranslations[lang.code] = {
                     title: formData[lang.code]?.title?.trim() || '',
-                    description: formData[lang.code]?.description || ''
+                    description: formData[lang.code]?.description || '',
+                    hashtag: formData[lang.code]?.hashtag || ''
                 };
             }
         });
@@ -129,6 +135,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
             path: fullPath,
             title: safeName,
             description: finalDescription,
+            hashtag: finalHashtag,
             icon: lessonIcon,
             cardColor: cardColor,
             translations: newTranslations
@@ -244,6 +251,20 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                             onKeyDown={handleKeyDown}
                             placeholder="Brief description of the lesson..."
                             style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
+                        />
+                    </div>
+
+                    {/* Hashtag */}
+                    <div>
+                        <label style={labelStyle}>Hashtag {isTranslating && `(${activeLangTab.toUpperCase()})`}</label>
+                        <input
+                            type="text"
+                            name="hashtag"
+                            value={formData[activeLangTab].hashtag}
+                            onChange={(e) => handleFieldChange('hashtag', e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="#OrderOfOperations"
+                            style={inputStyle}
                         />
                     </div>
 

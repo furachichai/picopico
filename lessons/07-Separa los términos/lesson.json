@@ -1252,7 +1252,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-06-08T15:18:13.479Z",
+  "updatedAt": "2026-06-08T17:32:42.223Z",
   "path": "lessons/07-Separa los términos/lesson.json",
   "textPreset": null,
   "name": "07-1. Analiza la expresión",
@@ -14001,15 +14001,7 @@
     }
   },
   "status": "active",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_lightbulb.png",
   "progress": {
     "lastSlideIndex": 0,
     "completed": false,
@@ -14020,5 +14012,6 @@
       "title": "First Steps",
       "description": ""
     }
-  }
+  },
+  "cardColor": "#8B5CF6"
 }

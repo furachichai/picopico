@@ -996,7 +996,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-20T18:37:37.224Z",
-  "updatedAt": "2026-06-08T13:47:44.191Z",
+  "updatedAt": "2026-06-08T17:32:37.810Z",
   "path": "lessons/06-Expresiones/lesson.json",
   "textPreset": null,
   "name": "06-Expresiones",
@@ -12122,15 +12122,7 @@
     }
   },
   "status": "active",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_textbook.png",
   "progress": {
     "lastSlideIndex": 8,
     "completed": false,
@@ -12141,5 +12133,6 @@
       "title": "Expresiones",
       "description": ""
     }
-  }
+  },
+  "cardColor": "#8B5CF6"
 }
