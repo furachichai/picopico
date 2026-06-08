@@ -50,7 +50,7 @@ export const PotiondasThumbnail = ({ config }) => {
     );
 };
 
-const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
+const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false }) => {
     const containerRef = useRef(null);
     const [scale, setScale] = useState(1);
 
@@ -208,7 +208,9 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%' }) => {
                         )}
                     </div>
                 )}
-                {slide.elements.map(element => (
+                {slide.elements
+                    .filter(el => !hideTextAndBalloons || (el.type !== 'text' && el.type !== 'balloon'))
+                    .map(element => (
                     <Sticker
                         key={element.id}
                         element={element}

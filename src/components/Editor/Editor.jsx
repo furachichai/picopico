@@ -177,6 +177,9 @@ const Editor = () => {
             payload: {
                 title: data.title,
                 path: data.path,
+                description: data.description,
+                icon: data.icon,
+                translations: data.translations
             }
         });
 
@@ -186,6 +189,9 @@ const Editor = () => {
             id: data.path, // Sync id with new path
             title: data.title,
             path: data.path,
+            description: data.description,
+            icon: data.icon,
+            translations: data.translations,
             updatedAt: new Date()
         };
 
@@ -450,28 +456,55 @@ const Editor = () => {
 
             // Math replacement shortcut (Cmd+M / Ctrl+M)
             if (isMathShortcut) {
-                const sel = window.getSelection();
-                if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                    const selectedText = sel.toString();
-                    if (selectedText) {
-                        e.preventDefault();
+                const activeEl = document.activeElement;
+                const isNativeInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+                let selectedText = '';
+
+                if (isNativeInput) {
+                    if (activeEl.selectionStart !== activeEl.selectionEnd) {
+                        selectedText = activeEl.value.substring(activeEl.selectionStart, activeEl.selectionEnd);
+                    }
+                } else {
+                    const sel = window.getSelection();
+                    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+                        selectedText = sel.toString();
+                    }
+                }
+
+                if (selectedText) {
+                    e.preventDefault();
+                    
+                    const superscriptMap = {
+                        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+                        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+                    };
+                    const toSuperscript = (numStr) => {
+                        return numStr.split('').map(digit => superscriptMap[digit] || digit).join('');
+                    };
+                    
+                    const replacement = selectedText
+                        .replace(/\*/g, '×')
+                        .replace(/\//g, '÷')
+                        .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
                         
-                        const superscriptMap = {
-                            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-                            '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
-                        };
-                        const toSuperscript = (numStr) => {
-                            return numStr.split('').map(digit => superscriptMap[digit] || digit).join('');
-                        };
+                    if (isNativeInput) {
+                        const start = activeEl.selectionStart;
+                        const end = activeEl.selectionEnd;
+                        const val = activeEl.value;
+                        const newVal = val.substring(0, start) + replacement + val.substring(end);
                         
-                        const replacement = selectedText
-                            .replace(/\*/g, '×')
-                            .replace(/\//g, '÷')
-                            .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
-                            
+                        // React 16+ overrides native setters, so we must get the native descriptor
+                        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                            activeEl.tagName === 'INPUT' ? window.HTMLInputElement.prototype : window.HTMLTextAreaElement.prototype,
+                            "value"
+                        ).set;
+                        
+                        nativeInputValueSetter.call(activeEl, newVal);
+                        activeEl.setSelectionRange(start, start + replacement.length);
+                        activeEl.dispatchEvent(new Event('input', { bubbles: true }));
+                    } else {
                         document.execCommand('insertText', false, replacement);
                         
-                        const activeEl = document.activeElement;
                         if (activeEl) {
                             activeEl.dispatchEvent(new Event('input', { bubbles: true }));
                             
@@ -719,6 +752,7 @@ const Editor = () => {
                     lesson={state.lesson}
                     onUpdate={handleUpdateInfo}
                     onClose={() => setShowInfoModal(false)}
+                    translationLang={isTranslating ? translationLang : 'es'}
                 />
 
                 {showLibrary && (

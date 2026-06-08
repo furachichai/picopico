@@ -1,0 +1,3226 @@
+{
+  "id": "lessons/1426-tests/lesson.json",
+  "title": "+ - and * /",
+  "slides": [
+    {
+      "id": "slide-1779554686535",
+      "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1779560643419",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779560652731",
+          "type": "balloon",
+          "content": "It's time to <b>practice</b>!",
+          "x": 30.555555555555554,
+          "y": 31.09375,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 50,
+              "y": 85
+            }
+          }
+        },
+        {
+          "id": "el-1779560646927",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+          "x": 66.11111111111111,
+          "y": 73.28125,
+          "width": 40,
+          "height": 32.59797724399495,
+          "rotation": 0,
+          "scale": 1.9513905364398278,
+          "metadata": {
+            "width": 40,
+            "height": 32.59797724399495
+          }
+        },
+        {
+          "id": "el-1779748340554",
+          "type": "popup",
+          "content": "/assets/characters/tutuTucaSticker_SMALL.png",
+          "x": 39.16666666666667,
+          "y": 71.875,
+          "width": 30,
+          "height": 30,
+          "rotation": 179.1461117615676,
+          "scale": 0.895876166267133,
+          "metadata": {
+            "popupText": "Hello from the popup!\n\nThis is the song of our lives. YES YES",
+            "width": 30,
+            "height": 30,
+            "flipX": false,
+            "flipY": true
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1779555807271",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779555827154",
+          "type": "balloon",
+          "content": "First, do you remember the order of operations?",
+          "x": 61.111111111111114,
+          "y": 24.53125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -91,
+              "y": -11
+            }
+          }
+        },
+        {
+          "id": "el-1779564973865",
+          "type": "image",
+          "content": "/src/assets/characters/Chef_dipper.png",
+          "x": 26.11111111111111,
+          "y": 33.75,
+          "width": 40,
+          "height": 37.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 37.5
+          }
+        },
+        {
+          "id": "el-1779555867049",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Analyze the whole expression",
+              "Solve × or ÷&nbsp;<div>from left or right</div>",
+              "Solve + or -<div>from left to right</div>",
+              "Do a little dance to celebrate"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "reorder",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779482535388",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 16.71875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "pem",
+            "visualMode": false,
+            "pemMode": "LEVELS",
+            "pemDifficulty": 5,
+            "pemExpression": null,
+            "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1779560704118",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779560709871",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+          "x": 31.11111111111111,
+          "y": 73.59375,
+          "width": 40,
+          "height": 29.263005780346823,
+          "rotation": 0,
+          "scale": 1.5446897617817255,
+          "metadata": {
+            "width": 40,
+            "height": 29.263005780346823
+          }
+        },
+        {
+          "id": "el-1779560715484",
+          "type": "balloon",
+          "content": "Good!<div>Let's continue with our practice.</div>",
+          "x": 64.16666666666667,
+          "y": 32.96875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -24,
+              "y": 87
+            }
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1779554551282",
+      "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+      "elements": [
+        {
+          "id": "el-1779560764347",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "2 + 3",
+              "4 + 2",
+              "7 + 2",
+              "1 + 6"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "match",
+            "visualMode": false,
+            "matchAnswers": [
+              "5",
+              "6",
+              "9",
+              "7"
+            ],
+            "cardShape": "circle"
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.23,
+        "brightness": 126
+      }
+    },
+    {
+      "id": "slide-1779633261919",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779633265302",
+          "type": "image",
+          "content": "/src/assets/characters/Chef_dynamic_jump.png",
+          "x": 47.22222222222222,
+          "y": 65,
+          "width": 40,
+          "height": 46.44174757281554,
+          "rotation": 0,
+          "scale": 1.4464451546175463,
+          "metadata": {
+            "width": 40,
+            "height": 46.44174757281554
+          }
+        },
+        {
+          "id": "el-1779633273594",
+          "type": "balloon",
+          "content": "Great job!",
+          "x": 42.5,
+          "y": 24.687499999999996,
+          "width": 40,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 20,
+              "y": 50
+            }
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1779633520297",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779633667945",
+          "type": "text",
+          "content": "                                                                    ",
+          "x": 73.19444444444444,
+          "y": 50.9375,
+          "width": 48.61111111111109,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#969696"
+          }
+        },
+        {
+          "id": "el-1779633618485",
+          "type": "text",
+          "content": "                                                                    ",
+          "x": 73.47222222222223,
+          "y": 37.8125,
+          "width": 49.16666666666665,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#969696"
+          }
+        },
+        {
+          "id": "el-1779633696446",
+          "type": "line",
+          "x": 73.88888888888889,
+          "y": 43.515625,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779633724957",
+          "type": "line",
+          "x": 73.61111111111111,
+          "y": 54.765625,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779633761348",
+          "type": "line",
+          "x": 73.88888888888889,
+          "y": 69.609375,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779827882755",
+          "type": "balloon",
+          "content": "We just learned two rules.<div><br></div><div>Let's learn the rest!</div>",
+          "x": 26.666666666666668,
+          "y": 43.28125,
+          "width": 40,
+          "height": 30.312499999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -16,
+              "y": 118
+            }
+          }
+        },
+        {
+          "id": "el-1779633625283",
+          "type": "text",
+          "content": "Order of operations rules",
+          "x": 52.63888888888889,
+          "y": 23.75,
+          "width": 23.610559268563954,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 3.1633935612770996,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          }
+        },
+        {
+          "id": "el-1779828059880",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23F57C00%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 91.79070559587801,
+          "y": 62.73907203131925,
+          "width": 18.41072621594372,
+          "height": 10,
+          "rotation": 42.79884401599702,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#F57C00"
+          }
+        },
+        {
+          "id": "el-1779827857938",
+          "type": "image",
+          "content": "/src/assets/characters/chef%20explains.png",
+          "x": 30,
+          "y": 87.34375,
+          "width": 40,
+          "height": 30.809659090909093,
+          "rotation": 0,
+          "scale": 2.2581430901854302,
+          "metadata": {
+            "width": 40,
+            "height": 30.809659090909093
+          }
+        },
+        {
+          "id": "el-1779633580038",
+          "type": "text",
+          "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+          "x": 72.63888888888889,
+          "y": 62.65625,
+          "width": 74.72222222222223,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 0.9993568985121905,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1779633533567",
+          "type": "text",
+          "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+          "x": 73.6111111111111,
+          "y": 77.65625,
+          "width": 71.66666666666667,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1779634174400",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1779634174400-c4epmwdy3",
+          "type": "text",
+          "content": "RULES",
+          "x": 48.888888888888886,
+          "y": 24.21875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 3.1633935612770996,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1779634174400-c5mjxu3sc",
+          "type": "line",
+          "x": 50,
+          "y": 42.734375,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779634174400-washohej2",
+          "type": "line",
+          "x": 50,
+          "y": 53.671875,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779634174400-t4l9vbadw",
+          "type": "line",
+          "x": 50,
+          "y": 68.984375,
+          "width": 5.847568994314799,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 3,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779634174400-p844wzudw",
+          "type": "text",
+          "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+          "x": 50.27777777777777,
+          "y": 77.65625,
+          "width": 71.66666666666667,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1779634224678",
+          "type": "text",
+          "content": "<font color=\"#000000\"><b>Exponents</b></font>:<div>Calculate powers &amp; roots.</div>",
+          "x": 47.77777777777778,
+          "y": 49.0625,
+          "width": 82.22222222222221,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1779634191387",
+          "type": "text",
+          "content": "<b><font color=\"#000000\">Parentheses</font></b>:<div>Solve inside first.</div>",
+          "x": 50,
+          "y": 34.375,
+          "width": 82.22222222222221,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1779634174400-xyn2ojrsx",
+          "type": "text",
+          "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+          "x": 51.388888888888886,
+          "y": 62.34375,
+          "width": 82.22222222222221,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#F57C00",
+            "color": "#FFFFFF",
+            "fontSize": 22
+          }
+        }
+      ],
+      "order": 8,
+      "cartridge": null
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-22T20:42:11.915Z",
+  "updatedAt": "2026-06-04T22:17:13.813Z",
+  "path": "lessons/08-+ - and * /lesson.json",
+  "textPreset": null,
+  "name": "1426-tests",
+  "type": "file",
+  "description": "",
+  "visible": true,
+  "order": 1426,
+  "content": {
+    "id": "lessons/1426-tests/lesson.json",
+    "title": "tests",
+    "slides": [
+      {
+        "id": "slide-1779554686535",
+        "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+        "elements": [],
+        "order": 0
+      },
+      {
+        "id": "slide-1779560643419",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779560652731",
+            "type": "balloon",
+            "content": "It's time to <b>practice</b>!",
+            "x": 30.555555555555554,
+            "y": 31.09375,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 50,
+                "y": 85
+              }
+            }
+          },
+          {
+            "id": "el-1779560646927",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+            "x": 66.11111111111111,
+            "y": 73.28125,
+            "width": 40,
+            "height": 32.59797724399495,
+            "rotation": 0,
+            "scale": 1.9513905364398278,
+            "metadata": {
+              "width": 40,
+              "height": 32.59797724399495
+            }
+          },
+          {
+            "id": "el-1779748340554",
+            "type": "popup",
+            "content": "/assets/characters/tutuTucaSticker_SMALL.png",
+            "x": 39.16666666666667,
+            "y": 71.875,
+            "width": 30,
+            "height": 30,
+            "rotation": 179.1461117615676,
+            "scale": 0.895876166267133,
+            "metadata": {
+              "popupText": "Hello from the popup!\n\nThis is the song of our lives. YES YES",
+              "width": 30,
+              "height": 30,
+              "flipX": false,
+              "flipY": true
+            }
+          }
+        ],
+        "order": 1
+      },
+      {
+        "id": "slide-1779555807271",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779555867049",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "Read the whole expression",
+                "Solve × and ÷&nbsp;<div>from left to right</div>",
+                "Solve + or -<div>from left to right</div>",
+                "Do a little dance to celebrate"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "reorder",
+              "visualMode": false
+            }
+          },
+          {
+            "id": "el-1779555827154",
+            "type": "balloon",
+            "content": "First, do you remember the order of operations?",
+            "x": 61.111111111111114,
+            "y": 24.53125,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -91,
+                "y": -11
+              }
+            }
+          },
+          {
+            "id": "el-1779564973865",
+            "type": "image",
+            "content": "/src/assets/characters/Chef_dipper.png",
+            "x": 26.11111111111111,
+            "y": 33.75,
+            "width": 40,
+            "height": 37.5,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "width": 40,
+              "height": 37.5
+            }
+          }
+        ],
+        "order": 2
+      },
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779482535388",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 16.71875,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "pem",
+              "visualMode": false,
+              "pemMode": "LEVELS",
+              "pemDifficulty": 5,
+              "pemExpression": null,
+              "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+            }
+          }
+        ],
+        "order": 3
+      },
+      {
+        "id": "slide-1779560704118",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779560709871",
+            "type": "image",
+            "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+            "x": 31.11111111111111,
+            "y": 73.59375,
+            "width": 40,
+            "height": 29.263005780346823,
+            "rotation": 0,
+            "scale": 1.5446897617817255,
+            "metadata": {
+              "width": 40,
+              "height": 29.263005780346823
+            }
+          },
+          {
+            "id": "el-1779560715484",
+            "type": "balloon",
+            "content": "Good!<div>Let's continue with our practice.</div>",
+            "x": 64.16666666666667,
+            "y": 32.96875,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -24,
+                "y": 87
+              }
+            }
+          }
+        ],
+        "order": 4
+      },
+      {
+        "id": "slide-1779554551282",
+        "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+        "elements": [
+          {
+            "id": "el-1779560764347",
+            "type": "quiz",
+            "content": "Quiz",
+            "x": 50,
+            "y": 75,
+            "width": 20,
+            "height": 10,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "fontFamily": "\"Fira Sans\"",
+              "options": [
+                "2 + 3",
+                "4 + 2",
+                "7 + 2",
+                "1 + 6"
+              ],
+              "correctIndex": 0,
+              "correctIndices": [
+                0
+              ],
+              "quizType": "match",
+              "visualMode": false,
+              "matchAnswers": [
+                "5",
+                "6",
+                "9",
+                "7"
+              ],
+              "cardShape": "circle"
+            }
+          }
+        ],
+        "order": 5,
+        "backgroundSettings": {
+          "opacity": 0.23,
+          "brightness": 126
+        }
+      },
+      {
+        "id": "slide-1779633261919",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779633265302",
+            "type": "image",
+            "content": "/src/assets/characters/Chef_dynamic_jump.png",
+            "x": 47.22222222222222,
+            "y": 65,
+            "width": 40,
+            "height": 46.44174757281554,
+            "rotation": 0,
+            "scale": 1.4464451546175463,
+            "metadata": {
+              "width": 40,
+              "height": 46.44174757281554
+            }
+          },
+          {
+            "id": "el-1779633273594",
+            "type": "balloon",
+            "content": "Great job!",
+            "x": 42.5,
+            "y": 24.687499999999996,
+            "width": 40,
+            "height": 12.5,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 20,
+                "y": 50
+              }
+            }
+          }
+        ],
+        "order": 6
+      },
+      {
+        "id": "slide-1779633520297",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779633625283",
+            "type": "text",
+            "content": "RULES",
+            "x": 48.888888888888886,
+            "y": 24.21875,
+            "width": 10,
+            "height": 5,
+            "rotation": 0,
+            "scale": 3.1633935612770996,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779633618485",
+            "type": "text",
+            "content": "                                                                    ",
+            "x": 51.111111111111114,
+            "y": 37.8125,
+            "width": 93.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#969696"
+            }
+          },
+          {
+            "id": "el-1779633667945",
+            "type": "text",
+            "content": "                                                                    ",
+            "x": 50.55555555555556,
+            "y": 49.0625,
+            "width": 93.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#969696"
+            }
+          },
+          {
+            "id": "el-1779633696446",
+            "type": "line",
+            "x": 50,
+            "y": 42.734375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779633724957",
+            "type": "line",
+            "x": 50,
+            "y": 53.671875,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779633761348",
+            "type": "line",
+            "x": 50,
+            "y": 68.984375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779633580038",
+            "type": "text",
+            "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+            "x": 51.388888888888886,
+            "y": 62.34375,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779633533567",
+            "type": "text",
+            "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+            "x": 50.27777777777777,
+            "y": 77.65625,
+            "width": 71.66666666666667,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          }
+        ],
+        "order": 7
+      },
+      {
+        "id": "slide-1779634174400",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779634174400-c4epmwdy3",
+            "type": "text",
+            "content": "RULES",
+            "x": 48.888888888888886,
+            "y": 24.21875,
+            "width": 10,
+            "height": 5,
+            "rotation": 0,
+            "scale": 3.1633935612770996,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779634174400-c5mjxu3sc",
+            "type": "line",
+            "x": 50,
+            "y": 42.734375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779634174400-washohej2",
+            "type": "line",
+            "x": 50,
+            "y": 53.671875,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779634174400-t4l9vbadw",
+            "type": "line",
+            "x": 50,
+            "y": 68.984375,
+            "width": 5.847568994314799,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 3,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1779634174400-p844wzudw",
+            "type": "text",
+            "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+            "x": 50.27777777777777,
+            "y": 77.65625,
+            "width": 71.66666666666667,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779634224678",
+            "type": "text",
+            "content": "<font color=\"#000000\"><b>Exponents</b></font>:<div>Calculate powers &amp; roots.</div>",
+            "x": 47.77777777777778,
+            "y": 49.0625,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779634191387",
+            "type": "text",
+            "content": "<b><font color=\"#000000\">Parentheses</font></b>:<div>Solve inside first.</div>",
+            "x": 50,
+            "y": 34.375,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          },
+          {
+            "id": "el-1779634174400-xyn2ojrsx",
+            "type": "text",
+            "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+            "x": 51.388888888888886,
+            "y": 62.34375,
+            "width": 82.22222222222221,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\"",
+              "backgroundColor": "#F57C00",
+              "color": "#FFFFFF",
+              "fontSize": 22
+            }
+          }
+        ],
+        "order": 8,
+        "cartridge": null
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-05-22T20:42:11.915Z",
+    "updatedAt": "2026-05-25T22:41:48.583Z",
+    "path": "lessons/1426-tests/lesson.json",
+    "textPreset": null,
+    "name": "1426-tests",
+    "type": "file",
+    "description": "",
+    "visible": true,
+    "order": 1426,
+    "content": {
+      "id": "lessons/1426-tests/lesson.json",
+      "title": "tests",
+      "slides": [
+        {
+          "id": "slide-1779554686535",
+          "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+          "elements": [],
+          "order": 0
+        },
+        {
+          "id": "slide-1779560643419",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779560652731",
+              "type": "balloon",
+              "content": "It's time to <b>practice</b>!",
+              "x": 30.555555555555554,
+              "y": 31.09375,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 50,
+                  "y": 85
+                }
+              }
+            },
+            {
+              "id": "el-1779560646927",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+              "x": 64.44444444444444,
+              "y": 72.65625,
+              "width": 40,
+              "height": 32.59797724399495,
+              "rotation": 0,
+              "scale": 1.9513905364398278,
+              "metadata": {
+                "width": 40,
+                "height": 32.59797724399495
+              }
+            },
+            {
+              "id": "el-1779748340554",
+              "type": "popup",
+              "content": "/assets/characters/tutuTucaSticker_SMALL.png",
+              "x": 20.833333333333332,
+              "y": 87.5,
+              "width": 30,
+              "height": 30,
+              "rotation": 20.257602853045462,
+              "scale": 3.0090953802547924,
+              "metadata": {
+                "popupText": "Hello from the popup!\n\nThis is the song of our lives. YES YES",
+                "width": 30,
+                "height": 30,
+                "flipX": true,
+                "flipY": true
+              }
+            }
+          ],
+          "order": 1
+        },
+        {
+          "id": "slide-1779555807271",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779555867049",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 75,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "Read the whole expression",
+                  "Solve × and ÷&nbsp;<div>from left to right</div>",
+                  "Solve + or -<div>from left to right</div>",
+                  "Do a little dance to celebrate"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "reorder",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1779555827154",
+              "type": "balloon",
+              "content": "First, do you remember the order of operations?",
+              "x": 61.111111111111114,
+              "y": 24.53125,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -91,
+                  "y": -11
+                }
+              }
+            },
+            {
+              "id": "el-1779564973865",
+              "type": "image",
+              "content": "/src/assets/characters/Chef_dipper.png",
+              "x": 26.11111111111111,
+              "y": 33.75,
+              "width": 40,
+              "height": 37.5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 37.5
+              }
+            }
+          ],
+          "order": 2
+        },
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779482535388",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 16.71875,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "pem",
+                "visualMode": false,
+                "pemMode": "LEVELS",
+                "pemDifficulty": 5,
+                "pemExpression": null,
+                "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+              }
+            }
+          ],
+          "order": 3
+        },
+        {
+          "id": "slide-1779560704118",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779560709871",
+              "type": "image",
+              "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+              "x": 31.11111111111111,
+              "y": 73.59375,
+              "width": 40,
+              "height": 29.263005780346823,
+              "rotation": 0,
+              "scale": 1.5446897617817255,
+              "metadata": {
+                "width": 40,
+                "height": 29.263005780346823
+              }
+            },
+            {
+              "id": "el-1779560715484",
+              "type": "balloon",
+              "content": "Good!<div>Let's continue with our practice.</div>",
+              "x": 64.16666666666667,
+              "y": 32.96875,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -24,
+                  "y": 87
+                }
+              }
+            }
+          ],
+          "order": 4
+        },
+        {
+          "id": "slide-1779554551282",
+          "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+          "elements": [
+            {
+              "id": "el-1779560764347",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 75,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "2 + 3",
+                  "4 + 2",
+                  "7 + 2",
+                  "1 + 6"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "match",
+                "visualMode": false,
+                "matchAnswers": [
+                  "5",
+                  "6",
+                  "9",
+                  "7"
+                ],
+                "cardShape": "circle"
+              }
+            }
+          ],
+          "order": 5,
+          "backgroundSettings": {
+            "opacity": 0.23,
+            "brightness": 126
+          }
+        },
+        {
+          "id": "slide-1779633261919",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779633265302",
+              "type": "image",
+              "content": "/src/assets/characters/Chef_dynamic_jump.png",
+              "x": 47.22222222222222,
+              "y": 65,
+              "width": 40,
+              "height": 46.44174757281554,
+              "rotation": 0,
+              "scale": 1.4464451546175463,
+              "metadata": {
+                "width": 40,
+                "height": 46.44174757281554
+              }
+            },
+            {
+              "id": "el-1779633273594",
+              "type": "balloon",
+              "content": "Great job!",
+              "x": 42.5,
+              "y": 24.687499999999996,
+              "width": 40,
+              "height": 12.5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 20,
+                  "y": 50
+                }
+              }
+            }
+          ],
+          "order": 6
+        },
+        {
+          "id": "slide-1779633520297",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779633625283",
+              "type": "text",
+              "content": "RULES",
+              "x": 48.888888888888886,
+              "y": 24.21875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 3.1633935612770996,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779633618485",
+              "type": "text",
+              "content": "                                                                    ",
+              "x": 51.111111111111114,
+              "y": 37.8125,
+              "width": 93.33333333333333,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#969696"
+              }
+            },
+            {
+              "id": "el-1779633667945",
+              "type": "text",
+              "content": "                                                                    ",
+              "x": 50.55555555555556,
+              "y": 49.0625,
+              "width": 93.33333333333333,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#969696"
+              }
+            },
+            {
+              "id": "el-1779633696446",
+              "type": "line",
+              "x": 50,
+              "y": 42.734375,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779633724957",
+              "type": "line",
+              "x": 50,
+              "y": 53.671875,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779633761348",
+              "type": "line",
+              "x": 50,
+              "y": 68.984375,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779633580038",
+              "type": "text",
+              "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+              "x": 51.388888888888886,
+              "y": 62.34375,
+              "width": 82.22222222222221,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1779633533567",
+              "type": "text",
+              "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+              "x": 50.27777777777777,
+              "y": 77.65625,
+              "width": 71.66666666666667,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            }
+          ],
+          "order": 7
+        },
+        {
+          "id": "slide-1779634174400",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1779634174400-c4epmwdy3",
+              "type": "text",
+              "content": "RULES",
+              "x": 48.888888888888886,
+              "y": 24.21875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 3.1633935612770996,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1779634174400-c5mjxu3sc",
+              "type": "line",
+              "x": 50,
+              "y": 42.734375,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779634174400-washohej2",
+              "type": "line",
+              "x": 50,
+              "y": 53.671875,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779634174400-t4l9vbadw",
+              "type": "line",
+              "x": 50,
+              "y": 68.984375,
+              "width": 5.847568994314799,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 3,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow"
+              }
+            },
+            {
+              "id": "el-1779634174400-p844wzudw",
+              "type": "text",
+              "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+              "x": 50.27777777777777,
+              "y": 77.65625,
+              "width": 71.66666666666667,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1779634224678",
+              "type": "text",
+              "content": "<font color=\"#000000\"><b>Exponents</b></font>:<div>Calculate powers &amp; roots.</div>",
+              "x": 47.77777777777778,
+              "y": 49.0625,
+              "width": 82.22222222222221,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1779634191387",
+              "type": "text",
+              "content": "<b><font color=\"#000000\">Parentheses</font></b>:<div>Solve inside first.</div>",
+              "x": 50,
+              "y": 34.375,
+              "width": 82.22222222222221,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1779634174400-xyn2ojrsx",
+              "type": "text",
+              "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+              "x": 51.388888888888886,
+              "y": 62.34375,
+              "width": 82.22222222222221,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#F57C00",
+                "color": "#FFFFFF",
+                "fontSize": 22
+              }
+            }
+          ],
+          "order": 8,
+          "cartridge": null
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-05-22T20:42:11.915Z",
+      "updatedAt": "2026-05-25T22:33:50.681Z",
+      "path": "lessons/1426-tests/lesson.json",
+      "textPreset": null,
+      "name": "1426-tests",
+      "type": "file",
+      "description": "",
+      "visible": true,
+      "order": 1426,
+      "content": {
+        "id": "lessons/1426-tests/lesson.json",
+        "title": "tests",
+        "slides": [
+          {
+            "id": "slide-1779554686535",
+            "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+            "elements": [],
+            "order": 0
+          },
+          {
+            "id": "slide-1779560643419",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779560652731",
+                "type": "balloon",
+                "content": "It's time to <b>practice</b>!",
+                "x": 30.555555555555554,
+                "y": 31.09375,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 50,
+                    "y": 85
+                  }
+                }
+              },
+              {
+                "id": "el-1779560646927",
+                "type": "image",
+                "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+                "x": 64.44444444444444,
+                "y": 72.65625,
+                "width": 40,
+                "height": 32.59797724399495,
+                "rotation": 0,
+                "scale": 1.9513905364398278,
+                "metadata": {
+                  "width": 40,
+                  "height": 32.59797724399495
+                }
+              }
+            ],
+            "order": 1
+          },
+          {
+            "id": "slide-1779555807271",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779555867049",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 75,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "Read the whole expression",
+                    "Solve × and ÷&nbsp;<div>from left to right</div>",
+                    "Solve + or -<div>from left to right</div>",
+                    "Do a little dance to celebrate"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "reorder",
+                  "visualMode": false
+                }
+              },
+              {
+                "id": "el-1779555827154",
+                "type": "balloon",
+                "content": "First, do you remember the order of operations?",
+                "x": 61.111111111111114,
+                "y": 24.53125,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -91,
+                    "y": -11
+                  }
+                }
+              },
+              {
+                "id": "el-1779564973865",
+                "type": "image",
+                "content": "/src/assets/characters/Chef_dipper.png",
+                "x": 26.11111111111111,
+                "y": 33.75,
+                "width": 40,
+                "height": 37.5,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "width": 40,
+                  "height": 37.5
+                }
+              }
+            ],
+            "order": 2
+          },
+          {
+            "id": "slide-1",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779482535388",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 16.71875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "pem",
+                  "visualMode": false,
+                  "pemMode": "LEVELS",
+                  "pemDifficulty": 5,
+                  "pemExpression": null,
+                  "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+                }
+              }
+            ],
+            "order": 3
+          },
+          {
+            "id": "slide-1779560704118",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779560709871",
+                "type": "image",
+                "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+                "x": 31.11111111111111,
+                "y": 73.59375,
+                "width": 40,
+                "height": 29.263005780346823,
+                "rotation": 0,
+                "scale": 1.5446897617817255,
+                "metadata": {
+                  "width": 40,
+                  "height": 29.263005780346823
+                }
+              },
+              {
+                "id": "el-1779560715484",
+                "type": "balloon",
+                "content": "Good!<div>Let's continue with our practice.</div>",
+                "x": 64.16666666666667,
+                "y": 32.96875,
+                "width": 40,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -24,
+                    "y": 87
+                  }
+                }
+              }
+            ],
+            "order": 4
+          },
+          {
+            "id": "slide-1779554551282",
+            "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+            "elements": [
+              {
+                "id": "el-1779560764347",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 75,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "2 + 3",
+                    "4 + 2",
+                    "7 + 2",
+                    "1 + 6"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "match",
+                  "visualMode": false,
+                  "matchAnswers": [
+                    "5",
+                    "6",
+                    "9",
+                    "7"
+                  ],
+                  "cardShape": "circle"
+                }
+              }
+            ],
+            "order": 5,
+            "backgroundSettings": {
+              "opacity": 0.23,
+              "brightness": 126
+            }
+          },
+          {
+            "id": "slide-1779633261919",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779633265302",
+                "type": "image",
+                "content": "/src/assets/characters/Chef_dynamic_jump.png",
+                "x": 47.22222222222222,
+                "y": 65,
+                "width": 40,
+                "height": 46.44174757281554,
+                "rotation": 0,
+                "scale": 1.4464451546175463,
+                "metadata": {
+                  "width": 40,
+                  "height": 46.44174757281554
+                }
+              },
+              {
+                "id": "el-1779633273594",
+                "type": "balloon",
+                "content": "Great job!",
+                "x": 42.5,
+                "y": 24.687499999999996,
+                "width": 40,
+                "height": 12.5,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 20,
+                    "y": 50
+                  }
+                }
+              }
+            ],
+            "order": 6
+          },
+          {
+            "id": "slide-1779633520297",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779633625283",
+                "type": "text",
+                "content": "RULES",
+                "x": 48.888888888888886,
+                "y": 24.21875,
+                "width": 10,
+                "height": 5,
+                "rotation": 0,
+                "scale": 3.1633935612770996,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779633618485",
+                "type": "text",
+                "content": "                                                                    ",
+                "x": 51.111111111111114,
+                "y": 37.8125,
+                "width": 93.33333333333333,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#969696"
+                }
+              },
+              {
+                "id": "el-1779633667945",
+                "type": "text",
+                "content": "                                                                    ",
+                "x": 50.55555555555556,
+                "y": 49.0625,
+                "width": 93.33333333333333,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#969696"
+                }
+              },
+              {
+                "id": "el-1779633696446",
+                "type": "line",
+                "x": 50,
+                "y": 42.734375,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779633724957",
+                "type": "line",
+                "x": 50,
+                "y": 53.671875,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779633761348",
+                "type": "line",
+                "x": 50,
+                "y": 68.984375,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779633580038",
+                "type": "text",
+                "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+                "x": 51.388888888888886,
+                "y": 62.34375,
+                "width": 82.22222222222221,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              },
+              {
+                "id": "el-1779633533567",
+                "type": "text",
+                "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+                "x": 50.27777777777777,
+                "y": 77.65625,
+                "width": 71.66666666666667,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              }
+            ],
+            "order": 7
+          },
+          {
+            "id": "slide-1779634174400",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1779634174400-c4epmwdy3",
+                "type": "text",
+                "content": "RULES",
+                "x": 48.888888888888886,
+                "y": 24.21875,
+                "width": 10,
+                "height": 5,
+                "rotation": 0,
+                "scale": 3.1633935612770996,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1779634174400-c5mjxu3sc",
+                "type": "line",
+                "x": 50,
+                "y": 42.734375,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779634174400-washohej2",
+                "type": "line",
+                "x": 50,
+                "y": 53.671875,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779634174400-t4l9vbadw",
+                "type": "line",
+                "x": 50,
+                "y": 68.984375,
+                "width": 5.847568994314799,
+                "height": 10,
+                "rotation": 90,
+                "scale": 1,
+                "metadata": {
+                  "width": 50,
+                  "height": 3,
+                  "isSymbol": true,
+                  "symbolColor": "#8B5CF6",
+                  "startCap": "none",
+                  "endCap": "arrow"
+                }
+              },
+              {
+                "id": "el-1779634174400-p844wzudw",
+                "type": "text",
+                "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+                "x": 50.27777777777777,
+                "y": 77.65625,
+                "width": 71.66666666666667,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              },
+              {
+                "id": "el-1779634224678",
+                "type": "text",
+                "content": "<font color=\"#000000\"><b>Exponents</b></font>:<div>Calculate powers &amp; roots.</div>",
+                "x": 47.77777777777778,
+                "y": 49.0625,
+                "width": 82.22222222222221,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              },
+              {
+                "id": "el-1779634191387",
+                "type": "text",
+                "content": "<b><font color=\"#000000\">Parentheses</font></b>:<div>Solve inside first.</div>",
+                "x": 50,
+                "y": 34.375,
+                "width": 82.22222222222221,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              },
+              {
+                "id": "el-1779634174400-xyn2ojrsx",
+                "type": "text",
+                "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+                "x": 51.388888888888886,
+                "y": 62.34375,
+                "width": 82.22222222222221,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#F57C00",
+                  "color": "#FFFFFF",
+                  "fontSize": 22
+                }
+              }
+            ],
+            "order": 8,
+            "cartridge": null
+          }
+        ],
+        "author": "User",
+        "createdAt": "2026-05-22T20:42:11.915Z",
+        "updatedAt": "2026-05-24T14:53:12.683Z",
+        "path": "lessons/1426-tests/lesson.json",
+        "textPreset": null,
+        "name": "1426-tests",
+        "type": "file",
+        "description": "",
+        "visible": true,
+        "order": 1426,
+        "content": {
+          "id": "lessons/1517-tests/lesson.json",
+          "title": "tests",
+          "slides": [
+            {
+              "id": "slide-1779554686535",
+              "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+              "elements": [],
+              "order": 0
+            },
+            {
+              "id": "slide-1779560643419",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779560652731",
+                  "type": "balloon",
+                  "content": "It's time to <b>practice</b>!",
+                  "x": 30.555555555555554,
+                  "y": 31.09375,
+                  "width": 40,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": 50,
+                      "y": 85
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779560646927",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
+                  "x": 64.44444444444444,
+                  "y": 72.65625,
+                  "width": 40,
+                  "height": 32.59797724399495,
+                  "rotation": 0,
+                  "scale": 1.9513905364398278,
+                  "metadata": {
+                    "width": 40,
+                    "height": 32.59797724399495
+                  }
+                }
+              ],
+              "order": 1
+            },
+            {
+              "id": "slide-1779555807271",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779555867049",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 75,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "Read the whole expression",
+                      "Solve × and ÷&nbsp;<div>from left to right</div>",
+                      "Solve + or -<div>from left to right</div>",
+                      "Do a little dance to celebrate"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "reorder",
+                    "visualMode": false
+                  }
+                },
+                {
+                  "id": "el-1779555827154",
+                  "type": "balloon",
+                  "content": "First, do you remember the order of operations?",
+                  "x": 61.111111111111114,
+                  "y": 24.53125,
+                  "width": 40,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -91,
+                      "y": -11
+                    }
+                  }
+                },
+                {
+                  "id": "el-1779564973865",
+                  "type": "image",
+                  "content": "/src/assets/characters/Chef_dipper.png",
+                  "x": 26.11111111111111,
+                  "y": 33.75,
+                  "width": 40,
+                  "height": 37.5,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "width": 40,
+                    "height": 37.5
+                  }
+                }
+              ],
+              "order": 2
+            },
+            {
+              "id": "slide-1",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779482535388",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 16.71875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "pem",
+                    "visualMode": false,
+                    "pemMode": "LEVELS",
+                    "pemDifficulty": 5,
+                    "pemExpression": null,
+                    "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+                  }
+                }
+              ],
+              "order": 3
+            },
+            {
+              "id": "slide-1779560704118",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779560709871",
+                  "type": "image",
+                  "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
+                  "x": 31.11111111111111,
+                  "y": 73.59375,
+                  "width": 40,
+                  "height": 29.263005780346823,
+                  "rotation": 0,
+                  "scale": 1.5446897617817255,
+                  "metadata": {
+                    "width": 40,
+                    "height": 29.263005780346823
+                  }
+                },
+                {
+                  "id": "el-1779560715484",
+                  "type": "balloon",
+                  "content": "Good!<div>Let's continue with our practice.</div>",
+                  "x": 64.16666666666667,
+                  "y": 32.96875,
+                  "width": 40,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": -24,
+                      "y": 87
+                    }
+                  }
+                }
+              ],
+              "order": 4
+            },
+            {
+              "id": "slide-1779554551282",
+              "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+              "elements": [
+                {
+                  "id": "el-1779560764347",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 75,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "2 + 3",
+                      "4 + 2",
+                      "7 + 2",
+                      "1 + 6"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "match",
+                    "visualMode": false,
+                    "matchAnswers": [
+                      "5",
+                      "6",
+                      "9",
+                      "7"
+                    ],
+                    "cardShape": "circle"
+                  }
+                }
+              ],
+              "order": 5,
+              "backgroundSettings": {
+                "opacity": 0.23,
+                "brightness": 126
+              }
+            },
+            {
+              "id": "slide-1779633261919",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779633265302",
+                  "type": "image",
+                  "content": "/src/assets/characters/Chef_dynamic_jump.png",
+                  "x": 47.22222222222222,
+                  "y": 65,
+                  "width": 40,
+                  "height": 46.44174757281554,
+                  "rotation": 0,
+                  "scale": 1.4464451546175463,
+                  "metadata": {
+                    "width": 40,
+                    "height": 46.44174757281554
+                  }
+                },
+                {
+                  "id": "el-1779633273594",
+                  "type": "balloon",
+                  "content": "Great job!",
+                  "x": 42.5,
+                  "y": 24.687499999999996,
+                  "width": 40,
+                  "height": 12.5,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": 20,
+                      "y": 50
+                    }
+                  }
+                }
+              ],
+              "order": 6
+            },
+            {
+              "id": "slide-1779633520297",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1779633625283",
+                  "type": "text",
+                  "content": "RULES",
+                  "x": 48.888888888888886,
+                  "y": 24.21875,
+                  "width": 10,
+                  "height": 5,
+                  "rotation": 0,
+                  "scale": 3.1633935612770996,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1779633618485",
+                  "type": "text",
+                  "content": "                                                                    ",
+                  "x": 51.111111111111114,
+                  "y": 37.8125,
+                  "width": 93.33333333333333,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#969696"
+                  }
+                },
+                {
+                  "id": "el-1779633667945",
+                  "type": "text",
+                  "content": "                                                                    ",
+                  "x": 50.55555555555556,
+                  "y": 49.0625,
+                  "width": 93.33333333333333,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#969696"
+                  }
+                },
+                {
+                  "id": "el-1779633696446",
+                  "type": "line",
+                  "x": 50,
+                  "y": 42.734375,
+                  "width": 5.847568994314799,
+                  "height": 10,
+                  "rotation": 90,
+                  "scale": 1,
+                  "metadata": {
+                    "width": 50,
+                    "height": 3,
+                    "isSymbol": true,
+                    "symbolColor": "#8B5CF6",
+                    "startCap": "none",
+                    "endCap": "arrow"
+                  }
+                },
+                {
+                  "id": "el-1779633724957",
+                  "type": "line",
+                  "x": 50,
+                  "y": 53.671875,
+                  "width": 5.847568994314799,
+                  "height": 10,
+                  "rotation": 90,
+                  "scale": 1,
+                  "metadata": {
+                    "width": 50,
+                    "height": 3,
+                    "isSymbol": true,
+                    "symbolColor": "#8B5CF6",
+                    "startCap": "none",
+                    "endCap": "arrow"
+                  }
+                },
+                {
+                  "id": "el-1779633761348",
+                  "type": "line",
+                  "x": 50,
+                  "y": 68.984375,
+                  "width": 5.847568994314799,
+                  "height": 10,
+                  "rotation": 90,
+                  "scale": 1,
+                  "metadata": {
+                    "width": 50,
+                    "height": 3,
+                    "isSymbol": true,
+                    "symbolColor": "#8B5CF6",
+                    "startCap": "none",
+                    "endCap": "arrow"
+                  }
+                },
+                {
+                  "id": "el-1779633580038",
+                  "type": "text",
+                  "content": "<b><font color=\"#69f05e\">×</font></b> and <b><font color=\"#69f05e\">÷</font></b><div>from left to right</div>",
+                  "x": 51.388888888888886,
+                  "y": 62.34375,
+                  "width": 82.22222222222221,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#F57C00",
+                    "color": "#FFFFFF",
+                    "fontSize": 22
+                  }
+                },
+                {
+                  "id": "el-1779633533567",
+                  "type": "text",
+                  "content": "<font color=\"#69f05e\">+</font> and <font color=\"#69f05e\">-</font><div>from left to right</div>",
+                  "x": 50.27777777777777,
+                  "y": 77.65625,
+                  "width": 71.66666666666667,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#F57C00",
+                    "color": "#FFFFFF",
+                    "fontSize": 22
+                  }
+                }
+              ],
+              "order": 7
+            }
+          ],
+          "author": "User",
+          "createdAt": "2026-05-22T20:42:11.915Z",
+          "updatedAt": "2026-05-24T14:44:38.389Z",
+          "path": "lessons/1426-tests/lesson.json",
+          "textPreset": null,
+          "name": "1517-tests",
+          "type": "file",
+          "description": "",
+          "visible": true,
+          "order": 1517,
+          "content": {
+            "id": "lessons/1517-tests/lesson.json",
+            "title": "tests",
+            "slides": [
+              {
+                "id": "slide-1779554686535",
+                "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+                "elements": [],
+                "order": 0
+              },
+              {
+                "id": "slide-1779555807271",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1779555867049",
+                    "type": "quiz",
+                    "content": "Quiz",
+                    "x": 50,
+                    "y": 75,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\"",
+                      "options": [
+                        "Read the whole expression",
+                        "Solve × and ÷&nbsp;<div>from left to right</div>",
+                        "Solve + or -<div>from left to right</div>",
+                        "Do a little dance to celebrate"
+                      ],
+                      "correctIndex": 0,
+                      "correctIndices": [
+                        0
+                      ],
+                      "quizType": "reorder",
+                      "visualMode": false
+                    }
+                  },
+                  {
+                    "id": "el-1779555822505",
+                    "type": "image",
+                    "content": "/src/assets/characters/chef_walking%20with%20box.png",
+                    "x": 24.166666666666664,
+                    "y": 31.875,
+                    "width": 40,
+                    "height": 34.59586466165413,
+                    "rotation": 0,
+                    "scale": 0.9715812520055128,
+                    "metadata": {
+                      "width": 40,
+                      "height": 34.59586466165413
+                    }
+                  },
+                  {
+                    "id": "el-1779555827154",
+                    "type": "balloon",
+                    "content": "Do you remember the order of operations?",
+                    "x": 61.111111111111114,
+                    "y": 24.53125,
+                    "width": 40,
+                    "height": 20,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": -91,
+                        "y": -11
+                      }
+                    }
+                  }
+                ],
+                "order": 1
+              },
+              {
+                "id": "slide-1",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1779482535388",
+                    "type": "quiz",
+                    "content": "Quiz",
+                    "x": 50,
+                    "y": 16.71875,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\"",
+                      "options": [],
+                      "correctIndex": 0,
+                      "correctIndices": [
+                        0
+                      ],
+                      "quizType": "pem",
+                      "visualMode": false,
+                      "pemMode": "LEVELS",
+                      "pemDifficulty": 5,
+                      "pemExpression": null,
+                      "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+                    }
+                  }
+                ],
+                "order": 2
+              },
+              {
+                "id": "slide-1779554551282",
+                "background": "#E1F5FE",
+                "elements": [],
+                "order": 3
+              }
+            ],
+            "author": "User",
+            "createdAt": "2026-05-22T20:42:11.915Z",
+            "updatedAt": "2026-05-23T17:06:44.785Z",
+            "path": "lessons/1517-tests/lesson.json",
+            "textPreset": null,
+            "name": "1517-tests",
+            "type": "file",
+            "description": "",
+            "visible": true,
+            "order": 1517,
+            "content": {
+              "id": "lessons/1517-tests/lesson.json",
+              "title": "tests",
+              "slides": [
+                {
+                  "id": "slide-1",
+                  "background": "#E1F5FE",
+                  "elements": [
+                    {
+                      "id": "el-1779482535388",
+                      "type": "quiz",
+                      "content": "Quiz",
+                      "x": 50,
+                      "y": 16.71875,
+                      "width": 20,
+                      "height": 10,
+                      "rotation": 0,
+                      "scale": 1,
+                      "metadata": {
+                        "fontFamily": "\"Fira Sans\"",
+                        "options": [],
+                        "correctIndex": 0,
+                        "correctIndices": [
+                          0
+                        ],
+                        "quizType": "pem",
+                        "visualMode": false,
+                        "pemMode": "LEVELS",
+                        "pemDifficulty": 5,
+                        "pemExpression": null,
+                        "pemLevelsText": "5 + 3 * 2 T\n12 - 8 / 4 T\n4 * 4 - 6 T\n15 / 3 + 2 T\n6 + 2 * 5 - 3 T\n20 - 10 / 2 + 4 TC\n3 * 6 - 12 / 3 TC\n8 + 4 * 3 + 10 / 5 TC\n25 - 4 * 5 + 18 / 6 TC\n30 / 5 + 2 * 4 - 7 \n10 * 2 / 4 + 7 - 3 * 2\n50 - 6 * 4 + 16 / 2 * 3 - 5"
+                      }
+                    }
+                  ],
+                  "order": 0
+                }
+              ],
+              "author": "User",
+              "createdAt": "2026-05-22T20:42:11.915Z",
+              "updatedAt": "2026-05-22T20:56:12.311Z",
+              "path": "lessons/1517-tests/lesson.json",
+              "textPreset": null,
+              "name": "1517-tests",
+              "type": "file",
+              "description": "",
+              "visible": true,
+              "order": 1517,
+              "content": {
+                "id": "draft-1779482531915",
+                "title": "tests",
+                "slides": [
+                  {
+                    "id": "slide-1",
+                    "background": "#E1F5FE",
+                    "elements": [
+                      {
+                        "id": "el-1779482535388",
+                        "type": "quiz",
+                        "content": "Quiz",
+                        "x": 50,
+                        "y": 16.71875,
+                        "width": 20,
+                        "height": 10,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "fontFamily": "\"Fira Sans\"",
+                          "options": [],
+                          "correctIndex": 0,
+                          "correctIndices": [
+                            0
+                          ],
+                          "quizType": "pem",
+                          "visualMode": false,
+                          "pemMode": "LEVELS",
+                          "pemDifficulty": 5,
+                          "pemExpression": null,
+                          "pemLevelsText": "2 + 3 * 4 / 2 TC\n5 - 6 / 2 * 3 TC\n3 + 4 * 2 - 5 * 2 T\n10 - 2 * 3 + 10 / 2"
+                        }
+                      }
+                    ],
+                    "order": 0
+                  }
+                ],
+                "author": "User",
+                "createdAt": "2026-05-22T20:42:11.915Z",
+                "updatedAt": "2026-05-22T20:44:01.517Z",
+                "path": "lessons/1517-tests/lesson.json",
+                "textPreset": null
+              },
+              "status": "completed",
+              "icon": {
+                "type": {},
+                "key": null,
+                "props": {
+                  "size": 24
+                },
+                "_owner": null,
+                "_store": {}
+              },
+              "progress": {
+                "lastSlideIndex": 0,
+                "completed": true,
+                "lastPlayed": 1779483256339
+              }
+            },
+            "status": "completed",
+            "icon": {
+              "type": {},
+              "key": null,
+              "props": {
+                "size": 24
+              },
+              "_owner": null,
+              "_store": {}
+            },
+            "progress": {
+              "lastSlideIndex": 0,
+              "completed": true,
+              "lastPlayed": 1779554510270
+            }
+          },
+          "status": "completed",
+          "icon": {
+            "type": {},
+            "key": null,
+            "props": {
+              "size": 24
+            },
+            "_owner": null,
+            "_store": {}
+          },
+          "progress": {
+            "lastSlideIndex": 3,
+            "completed": true,
+            "lastPlayed": 1779556105603
+          }
+        },
+        "status": "active",
+        "icon": {
+          "type": {},
+          "key": null,
+          "props": {
+            "size": 24
+          },
+          "_owner": null,
+          "_store": {}
+        },
+        "progress": null
+      },
+      "status": "active",
+      "icon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 0,
+        "completed": false,
+        "lastPlayed": 1779748313788
+      }
+    },
+    "status": "active",
+    "icon": {
+      "type": {},
+      "key": null,
+      "props": {
+        "size": 24
+      },
+      "_owner": null,
+      "_store": {}
+    },
+    "progress": {
+      "lastSlideIndex": 1,
+      "completed": false,
+      "lastPlayed": 1779748597330
+    }
+  },
+  "status": "active",
+  "icon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 1,
+    "completed": false,
+    "lastPlayed": 1779748919702
+  }
+}

@@ -1,32 +1,117 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 import './ContextualMenu.css';
 
-const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
-    const { t } = useTranslation();
+const AVAILABLE_ICONS = [
+    'icon_potion.png',
+    'icon_gym.png',
+    'icon_book.png',
+    'icon_game.png'
+];
 
-    const [lessonName, setLessonName] = useState('');
+const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 'es' }) => {
+    const { t } = useTranslation();
+    const { SUPPORTED_LANGUAGES } = useLanguage();
+
+    const [activeLangTab, setActiveLangTab] = useState('es');
+    const [formData, setFormData] = useState({});
+    const [lessonIcon, setLessonIcon] = useState('icon_book.png');
+    const [cardColor, setCardColor] = useState('#8B5CF6');
 
     useEffect(() => {
         if (isOpen && lesson) {
-            setLessonName(lesson.title || '');
+            setLessonIcon(lesson.icon || lesson.content?.icon || 'icon_book.png');
+            setCardColor(lesson.cardColor || lesson.content?.cardColor || '#8B5CF6');
+            
+            // Initialize form data for all supported languages
+            const initialData = {};
+            SUPPORTED_LANGUAGES.forEach(lang => {
+                if (lang.code === 'es') {
+                    initialData[lang.code] = {
+                        title: lesson.title || '',
+                        description: lesson.description || ''
+                    };
+                } else {
+                    initialData[lang.code] = {
+                        title: lesson.translations?.[lang.code]?.title || '',
+                        description: lesson.translations?.[lang.code]?.description || ''
+                    };
+                }
+            });
+            setFormData(initialData);
+            
+            // Default tab to the one requested, or fallback to 'es'
+            const validLang = SUPPORTED_LANGUAGES.find(l => l.code === translationLang) ? translationLang : 'es';
+            setActiveLangTab(validLang);
         }
-    }, [isOpen, lesson]);
+    }, [isOpen, lesson, translationLang, SUPPORTED_LANGUAGES]);
 
-    if (!isOpen) return null;
+    if (!isOpen || !formData[activeLangTab]) return null;
+
+    const handleFieldChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [activeLangTab]: {
+                ...prev[activeLangTab],
+                [field]: value
+            }
+        }));
+    };
+
+    const handleKeyDown = (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e') {
+            e.preventDefault();
+            const target = e.target;
+            const start = target.selectionStart;
+            const end = target.selectionEnd;
+            const text = target.value;
+            const selectedText = text.substring(start, end);
+            
+            if (selectedText) {
+                const toSuperscript = (str) => {
+                    const map = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+                    return str.split('').map(c => map[c] || c).join('');
+                };
+                
+                const replacement = selectedText
+                    .replace(/\*/g, '×')
+                    .replace(/\//g, '÷')
+                    .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
+                    
+                const newVal = text.substring(0, start) + replacement + text.substring(end);
+                
+                const fieldName = target.name;
+                handleFieldChange(fieldName, newVal);
+                
+                setTimeout(() => {
+                    target.setSelectionRange(start, start + replacement.length);
+                }, 0);
+            }
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const safeName = lessonName.trim() || 'Untitled Lesson';
+        const safeName = formData['es']?.title?.trim() || 'Untitled Lesson';
+        const finalDescription = formData['es']?.description || '';
+
+        const newTranslations = {};
+        SUPPORTED_LANGUAGES.forEach(lang => {
+            if (lang.code !== 'es') {
+                newTranslations[lang.code] = {
+                    title: formData[lang.code]?.title?.trim() || '',
+                    description: formData[lang.code]?.description || ''
+                };
+            }
+        });
 
         // If lesson already has a path, preserve its order prefix
         // Otherwise, generate a new path with a timestamp-based order
         let fullPath;
         if (lesson.path) {
-            // Extract the folder part from the existing path
             const parts = lesson.path.split('/');
-            // lessons/{order}-{name}/lesson.json
             if (parts.length >= 3) {
                 const folderName = parts[1]; // e.g. "01-Potions"
                 const match = folderName.match(/^(\d+)-(.*)$/);
@@ -36,7 +121,6 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                 fullPath = lesson.path;
             }
         } else {
-            // New lesson — use timestamp for ordering (will be normalized later)
             const order = String(Date.now()).slice(-4).padStart(2, '0');
             fullPath = `lessons/${order}-${safeName}/lesson.json`;
         }
@@ -44,6 +128,10 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
         onUpdate({
             path: fullPath,
             title: safeName,
+            description: finalDescription,
+            icon: lessonIcon,
+            cardColor: cardColor,
+            translations: newTranslations
         });
 
         onClose();
@@ -72,6 +160,8 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
         color: '#555'
     };
 
+    const isTranslating = activeLangTab !== 'es';
+
     return (
         <div className="modal-overlay" style={{
             position: 'fixed',
@@ -96,25 +186,127 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose }) => {
                 gap: '16px'
             }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '700', color: '#333' }}>{t('editor.info')}</h3>
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '700', color: '#333' }}>
+                        {t('editor.info')}
+                    </h3>
                     <button onClick={onClose} style={{
                         background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999'
                     }}>×</button>
                 </div>
 
+                {/* Language Tabs */}
+                <div style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '8px' }}>
+                    {SUPPORTED_LANGUAGES.map(lang => (
+                        <button
+                            key={lang.code}
+                            type="button"
+                            onClick={() => setActiveLangTab(lang.code)}
+                            style={{
+                                padding: '8px 16px',
+                                background: 'none',
+                                border: 'none',
+                                borderBottom: activeLangTab === lang.code ? '3px solid #8B5CF6' : '3px solid transparent',
+                                color: activeLangTab === lang.code ? '#8B5CF6' : '#666',
+                                fontWeight: activeLangTab === lang.code ? 'bold' : 'normal',
+                                cursor: 'pointer',
+                                fontSize: '0.9rem',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            {lang.flag} {lang.label}
+                        </button>
+                    ))}
+                </div>
+
                 <form onSubmit={handleSubmit}>
                     {/* Lesson Name */}
                     <div>
-                        <label style={labelStyle}>Lesson Name</label>
+                        <label style={labelStyle}>Lesson Name {isTranslating && `(${activeLangTab.toUpperCase()})`}</label>
                         <input
                             type="text"
-                            value={lessonName}
-                            onChange={(e) => setLessonName(e.target.value)}
+                            name="title"
+                            value={formData[activeLangTab].title}
+                            onChange={(e) => handleFieldChange('title', e.target.value)}
+                            onKeyDown={handleKeyDown}
                             placeholder="e.g. Potions"
                             style={inputStyle}
                             autoFocus
                         />
                     </div>
+
+                    {/* Lesson Description */}
+                    <div>
+                        <label style={labelStyle}>Description {isTranslating && `(${activeLangTab.toUpperCase()})`}</label>
+                        <textarea
+                            name="description"
+                            value={formData[activeLangTab].description}
+                            onChange={(e) => handleFieldChange('description', e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Brief description of the lesson..."
+                            style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
+                        />
+                    </div>
+
+                    {/* Icon Selection - only show when not translating */}
+                    {!isTranslating && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div>
+                                <label style={labelStyle}>Icon</label>
+                                <div style={{ display: 'flex', gap: '8px', padding: '4px', overflowX: 'auto' }}>
+                                    {AVAILABLE_ICONS.map(icon => (
+                                        <div
+                                            key={icon}
+                                            onClick={() => setLessonIcon(icon)}
+                                            style={{
+                                                width: '48px',
+                                                height: '48px',
+                                                borderRadius: '8px',
+                                                border: lessonIcon === icon ? '3px solid #8B5CF6' : '1px solid #ddd',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                background: lessonIcon === icon ? 'rgba(139, 92, 246, 0.1)' : '#f9f9f9',
+                                                padding: '4px',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            <img 
+                                                src={`/assets/graphics/${icon}`} 
+                                                alt={icon} 
+                                                style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style={labelStyle}>Card Color</label>
+                                <div style={{ display: 'flex', gap: '8px', padding: '4px', overflowX: 'auto' }}>
+                                    {[
+                                        '#FF6B6B', '#8B5CF6', '#06B6D4', '#EC4899', 
+                                        '#F59E0B', '#14B8A6', '#A855F7', '#22D3EE'
+                                    ].map(color => (
+                                        <div
+                                            key={color}
+                                            onClick={() => setCardColor(color)}
+                                            style={{
+                                                width: '36px',
+                                                height: '36px',
+                                                borderRadius: '50%',
+                                                backgroundColor: color,
+                                                border: cardColor === color ? '3px solid #333' : '2px solid transparent',
+                                                cursor: 'pointer',
+                                                boxShadow: cardColor === color ? '0 0 0 2px white inset' : 'none',
+                                                flexShrink: 0
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Metadata Display */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '10px', padding: '10px', background: '#f9f9f9', borderRadius: '8px' }}>

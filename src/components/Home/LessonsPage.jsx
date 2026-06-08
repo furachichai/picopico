@@ -3,6 +3,7 @@ import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../Editor/ConfirmationModal';
 import SlideThumbnail from '../Editor/SlideThumbnail';
+import LessonInfoModal from '../Editor/LessonInfoModal';
 import './LessonsPage.css';
 
 const LessonsPage = () => {
@@ -13,6 +14,7 @@ const LessonsPage = () => {
     const [showDeleted, setShowDeleted] = useState(false);
     const [loading, setLoading] = useState(true);
     const [deleteTarget, setDeleteTarget] = useState(null); // lesson item pending delete confirmation
+    const [infoTarget, setInfoTarget] = useState(null); // lesson item to edit info for
 
     const fetchLessons = async () => {
         try {
@@ -79,6 +81,52 @@ const LessonsPage = () => {
 
     const handleDelete = (item) => {
         setDeleteTarget(item);
+    };
+
+    const handleEditInfo = async (item) => {
+        const lesson = await loadLesson(item);
+        if (lesson) {
+            setInfoTarget(lesson);
+        }
+    };
+
+    const handleUpdateInfo = async (data) => {
+        try {
+            // Merge updated info into infoTarget content
+            const updatedLesson = {
+                ...infoTarget,
+                title: data.title,
+                description: data.description,
+                icon: data.icon,
+                translations: data.translations,
+                updatedAt: new Date().toISOString()
+            };
+
+            // If the path was changed, we might need a move-lesson API call.
+            // But for simplicity, save-lesson can just save to the new path, and we let the user manage it.
+            // Actually, we must use /api/move-lesson if path changed.
+            if (infoTarget.path && infoTarget.path !== data.path) {
+                await fetch('/api/move-lesson', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldPath: infoTarget.path, newPath: data.path })
+                });
+            }
+
+            const response = await fetch('/api/save-lesson', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: data.path, content: updatedLesson })
+            });
+
+            if (!response.ok) throw new Error('Failed to save lesson info');
+            
+            // Refetch to reflect new info
+            await fetchLessons();
+        } catch (error) {
+            console.error('Error saving lesson info:', error);
+            alert('Failed to save lesson info');
+        }
     };
 
     const confirmDelete = async () => {
@@ -260,7 +308,7 @@ const LessonsPage = () => {
                                 if (e.target.closest('button') || e.target.tagName === 'BUTTON') return;
                                 handleEdit(item);
                             }}
-                            style={{ opacity: item.visible ? 1 : 0.5 }}
+                            style={{ opacity: item.visible ? 1 : 0.5, backgroundColor: item.content?.cardColor || '#8B5CF6' }}
                         >
                             <div className="lesson-card-preview">
                                 {item.content?.slides?.[0] ? (
@@ -304,6 +352,14 @@ const LessonsPage = () => {
                                         style={{ opacity: idx === lessons.length - 1 ? 0.3 : 1 }}
                                     >
                                         ⬇️
+                                    </button>
+                                    {/* Edit Info */}
+                                    <button
+                                        className="btn-icon"
+                                        onClick={(e) => { e.stopPropagation(); handleEditInfo(item); }}
+                                        title="Edit Info"
+                                    >
+                                        ✏️
                                     </button>
                                     {/* Play */}
                                     <button
@@ -354,6 +410,12 @@ const LessonsPage = () => {
                 onCancel={() => setDeleteTarget(null)}
                 confirmText="Delete"
                 cancelText="Cancel"
+            />
+            <LessonInfoModal
+                isOpen={!!infoTarget}
+                lesson={infoTarget}
+                onUpdate={handleUpdateInfo}
+                onClose={() => setInfoTarget(null)}
             />
         </div>
     );

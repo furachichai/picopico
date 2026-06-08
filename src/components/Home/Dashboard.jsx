@@ -6,6 +6,7 @@ import { useEditor } from '../../context/EditorContext';
 import { useLanguage, getTranslatedContent } from '../../context/LanguageContext';
 import { getLessonProgress } from '../../utils/storage';
 import FullscreenToggle from '../FullscreenToggle';
+import SlideThumbnail from '../Editor/SlideThumbnail';
 
 // Mock translation function
 const t = (key) => {
@@ -282,12 +283,16 @@ const Dashboard = () => {
         }
 
         .lesson-card {
-          padding: 12px 16px;
+          padding: 0;
           display: flex;
-          align-items: center;
-          gap: 20px;
+          align-items: stretch;
+          background: #8B5CF6; /* Purple background from mockup */
+          border-radius: 16px;
+          overflow: hidden;
           transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
           cursor: pointer;
+          min-height: 160px;
+          box-shadow: var(--shadow);
         }
 
         .lesson-card:active {
@@ -295,43 +300,61 @@ const Dashboard = () => {
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
+        .lesson-card-preview {
+          width: 90px;
+          min-height: 160px;
+          flex-shrink: 0;
+          background: #333;
+          position: relative;
+          overflow: hidden;
+        }
+
         .lesson-icon-box {
-          width: 60px;
-          height: 60px;
+          width: 62.5px;
+          height: 62.5px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          background: transparent;
-          border: 3px solid currentColor;
-          color: currentColor;
-          font-weight: 700;
-          font-size: 1.5rem;
-          transition: all 0.2s;
+          background: #2563EB; /* Dark blue background for icon circle */
+          margin: 0 auto 8px auto;
+          overflow: hidden;
+          border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .lesson-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .lesson-info {
           flex: 1;
-          position: relative;
+          padding: 12px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: center;
           z-index: 1;
         }
 
         .lesson-title {
           font-weight: 800;
-          font-size: 1.15rem;
-          margin-bottom: 4px;
-          color: var(--text);
+          font-size: 1.2rem;
+          margin-bottom: 2px;
+          color: var(--secondary); /* Yellow title */
         }
 
         .lesson-desc {
           font-size: 0.9rem;
-          color: var(--text-light);
+          color: var(--secondary); /* Yellow desc */
+          opacity: 0.9;
         }
 
         /* Status Styles */
-        .status-completed .lesson-icon-box {
-          background: rgba(0,0,0,0.03);
+        .status-completed .lesson-info {
+          background: rgba(0,0,0,0.1);
         }
 
         .status-active {
@@ -346,28 +369,6 @@ const Dashboard = () => {
           opacity: 0.5;
           filter: grayscale(0.5);
           pointer-events: none;
-        }
-
-        /* Start Button */
-        .start-btn {
-          background-color: var(--secondary);
-          color: #713F12;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 12px;
-          font-weight: 800;
-          font-size: 0.9rem;
-          cursor: pointer;
-          border-bottom: 4px solid var(--secondary-dark);
-          transition: all 0.1s;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-
-        .start-btn:active {
-          transform: translateY(2px);
-          border-bottom-width: 2px;
         }
 
         /* Bottom Nav */
@@ -487,105 +488,31 @@ const Dashboard = () => {
                 <div
                   key={lesson.id}
                   className={`lesson-card status-${lesson.status}`}
+                  style={{ backgroundColor: lesson.content?.cardColor || '#8B5CF6' }}
                   onClick={(e) => {
                     if (e.target.closest('input') || e.target.closest('button')) return;
                     handlePlayLesson(lesson)
                   }}
-                  style={{ color: color }}
                 >
-                  <div className="lesson-icon-box">
-                    {lesson.icon}
+                  <div className="lesson-card-preview">
+                     {lesson.content?.slides?.[0] ? (
+                         <SlideThumbnail slide={lesson.content.slides[0]} hideTextAndBalloons={true} />
+                     ) : (
+                         <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
+                     )}
                   </div>
                   <div className="lesson-info">
-                    <div className="lesson-title">
-                      {(language !== 'es' && lesson.translations?.[language]?.title) || lesson.title}
+                    <div className="lesson-icon-box">
+                      <img src={`/assets/graphics/${lesson.content?.icon || 'icon_book.png'}`} alt="icon" />
                     </div>
-                    {editingLessonId === lesson.id ? (
-                      <div className="description-edit-area" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
-                        <input
-                          autoFocus
-                          value={editDescriptionValue}
-                          onChange={(e) => setEditDescriptionValue(e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
-                          style={{
-                            flex: 1,
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            border: '1px solid rgba(255,255,255,0.4)',
-                            background: 'rgba(255,255,255,0.2)',
-                            color: 'white',
-                            fontSize: '0.9rem',
-                            fontFamily: 'inherit'
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleSaveDescription(lesson);
-                            if (e.key === 'Escape') cancelEdit();
-                          }}
-                        />
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSaveDescription(lesson);
-                          }}
-                          style={{
-                            background: 'rgba(255,255,255,0.3)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '4px 8px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem',
-                            fontWeight: 'bold'
-                          }}
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            cancelEdit();
-                          }}
-                          style={{
-                            background: 'rgba(0,0,0,0.15)',
-                            color: 'rgba(255,255,255,0.9)',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '4px 8px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="lesson-title">
+                      {(language !== 'es' && lesson.content?.translations?.[language]?.title) || lesson.title}
+                    </div>
+                    <div className="lesson-desc-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                         <div className="lesson-desc">
-                          {(language !== 'es' && lesson.translations?.[language]?.description) || lesson.description || ''}
+                          {(language !== 'es' && lesson.content?.translations?.[language]?.description) || lesson.description || ''}
                         </div>
-                        {!state.readOnly && (
-                          <button
-                            className="edit-desc-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              startEditing(lesson);
-                            }}
-                            title="Edit Description"
-                            style={{
-                              background: 'transparent',
-                              border: 'none',
-                              cursor: 'pointer',
-                              opacity: 0.9,
-                              padding: '2px',
-                              display: 'flex',
-                              alignItems: 'center'
-                            }}
-                          >
-                            ✏️
-                          </button>
-                        )}
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               );

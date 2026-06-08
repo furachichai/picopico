@@ -67,6 +67,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s, box-shadow 0.2s;
     overflow: hidden;
+    min-height: 160px;
 }
 
 .file-tree-item.file:hover {
@@ -76,7 +77,8 @@
 }
 
 .lesson-card-preview {
-    width: 120px;
+    width: 90px;
+    min-height: 160px;
     flex-shrink: 0;
     position: relative;
     background-color: #000;
@@ -98,7 +100,7 @@
 }
 
 .file-tree-item.file .item-name {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 800;
     margin-bottom: 0.2rem;
     width: 100%;
@@ -107,11 +109,11 @@
 }
 
 .item-slides-count {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #FCD34D;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .item-description {
