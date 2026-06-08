@@ -798,7 +798,7 @@ const Player = () => {
                                 </div>
                             )}
 
-                            {slide.elements.map(element => {
+                            {slide.elements.map((element, idx) => {
                                 if (element.metadata?.hidden) return null;
 
                                 // Stripper: determine strip and visibility
@@ -827,10 +827,10 @@ const Player = () => {
                                             style={{
                                                 left: isFullScreenQuiz ? '50%' : `${element.x}%`,
                                                 top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${element.y}%`),
-                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? '360px' : `${element.width}%`),
-                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
-                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                                                zIndex: element.type === 'quiz' ? 1000 : 10,
+                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
+                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
+                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                                                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))),
                                                 pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
                                             }}
                                         >
@@ -936,6 +936,7 @@ const Player = () => {
                                                     src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} 
                                                     alt="content" 
                                                     style={{
+                                                        transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
                                                         opacity: element.metadata?.opacity ?? 1,
                                                         filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined,
                                                         width: '100%',
@@ -1009,6 +1010,7 @@ const Player = () => {
                                                     alt="popup" 
                                                     onClick={() => setActivePopupText(element.metadata?.popupText || '')}
                                                     style={{
+                                                        transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
                                                         opacity: element.metadata?.opacity ?? 1,
                                                         filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
                                                         width: '100%',

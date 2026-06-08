@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import './PresetPanel.css';
+import { useDraggable } from '../../hooks/useDraggable';
 
 const FONTS = [
     { name: 'Outfit', value: 'Outfit' },
@@ -18,6 +19,7 @@ const COLORS = [
 const PresetPanel = ({ onClose }) => {
     const { state, dispatch } = useEditor();
     const existing = state.lesson.textPreset || {};
+    const { popupRef, dragHandlers, style } = useDraggable('presetPanel');
 
     const [textFont, setTextFont] = useState(existing.text?.fontFamily || '"HVD Comic Serif Pro", sans-serif');
     const [textSize, setTextSize] = useState(existing.text?.fontSize || 24);
@@ -110,8 +112,8 @@ const PresetPanel = ({ onClose }) => {
 
     return (
         <div className="preset-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-            <div className="preset-panel">
-                <div className="preset-header">
+            <div ref={popupRef} style={style} className="preset-panel">
+                <div className="preset-header" {...dragHandlers}>
                     <h2>Text Presets</h2>
                     <button className="preset-close" onClick={onClose}>✕</button>
                 </div>

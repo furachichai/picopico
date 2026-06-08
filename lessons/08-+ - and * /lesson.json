@@ -74,32 +74,6 @@
       "background": "#E1F5FE",
       "elements": [
         {
-          "id": "el-1779555867049",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 75,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "options": [
-              "Read the whole expression",
-              "Solve × and ÷&nbsp;<div>from left to right</div>",
-              "Solve + or -<div>from left to right</div>",
-              "Do a little dance to celebrate"
-            ],
-            "correctIndex": 0,
-            "correctIndices": [
-              0
-            ],
-            "quizType": "reorder",
-            "visualMode": false
-          }
-        },
-        {
           "id": "el-1779555827154",
           "type": "balloon",
           "content": "First, do you remember the order of operations?",
@@ -133,6 +107,32 @@
           "metadata": {
             "width": 40,
             "height": 37.5
+          }
+        },
+        {
+          "id": "el-1779555867049",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Analyze the whole expression",
+              "Solve × or ÷&nbsp;<div>from left or right</div>",
+              "Solve + or -<div>from left to right</div>",
+              "Do a little dance to celebrate"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "reorder",
+            "visualMode": false
           }
         }
       ],
@@ -651,8 +651,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-22T20:42:11.915Z",
-  "updatedAt": "2026-05-27T21:11:23.110Z",
-  "path": "lessons/1517-+ - and * //lesson.json",
+  "updatedAt": "2026-06-04T22:17:13.813Z",
+  "path": "lessons/08-+ - and * /lesson.json",
   "textPreset": null,
   "name": "1426-tests",
   "type": "file",

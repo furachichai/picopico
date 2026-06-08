@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './QuizEditor.css';
 import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
+import { useDraggable } from '../../hooks/useDraggable';
 
 /**
  * QuizEditor Component
@@ -206,6 +207,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7'];
 
     const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
+
+    const { popupRef, dragHandlers, style } = useDraggable('stickerPicker');
 
     const [activeDropdownIndex, setActiveDropdownIndex] = useState(null);
 
@@ -714,8 +717,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                     const rightChar = getCharacterByAvatar(getLastRightAvatar());
                     return ReactDOM.createPortal(
                         <div className="chatquiz-sticker-modal" onClick={() => setShowStickerPicker(false)}>
-                            <div className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
-                                <div className="chatquiz-sticker-modal-header">
+                            <div ref={popupRef} style={style} className="chatquiz-sticker-modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="chatquiz-sticker-modal-header" {...dragHandlers}>
                                     <span>Pick a Sticker</span>
                                     <div className="chatquiz-sticker-side-picker">
                                         <button
@@ -806,7 +809,15 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                         el.innerHTML = option;
                                     }
                                 }}
-                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                style={{
+                                    resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
+                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontStyle: element.metadata?.fontStyle || 'normal',
+                                    textDecoration: element.metadata?.textDecoration || 'none',
+                                    color: element.metadata?.color || 'white'
+                                }}
                                 data-placeholder={`Q ${index + 1}`}
                             />
                         </div>
@@ -829,7 +840,15 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                         el.innerHTML = answerVal;
                                     }
                                 }}
-                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                style={{
+                                    resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
+                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontStyle: element.metadata?.fontStyle || 'normal',
+                                    textDecoration: element.metadata?.textDecoration || 'none',
+                                    color: element.metadata?.color || 'white'
+                                }}
                                 data-placeholder={`A ${index + 1}`}
                             />
                         </div>
@@ -894,7 +913,15 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                         el.innerHTML = option;
                                     }
                                 }}
-                                style={{ resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text' }}
+                                style={{
+                                    resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
+                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontStyle: element.metadata?.fontStyle || 'normal',
+                                    textDecoration: element.metadata?.textDecoration || 'none',
+                                    color: element.metadata?.color || 'white'
+                                }}
                                 data-placeholder={`Step ${index + 1}`}
                             />
                         </div>
@@ -1024,7 +1051,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
                                     fontWeight: element.metadata?.fontWeight || 'normal',
                                     fontStyle: element.metadata?.fontStyle || 'normal',
-                                    textDecoration: element.metadata?.textDecoration || 'none'
+                                    textDecoration: element.metadata?.textDecoration || 'none',
+                                    color: element.metadata?.color || 'white'
                                 }}
                                 data-placeholder={`Option ${index + 1}`}
                             />

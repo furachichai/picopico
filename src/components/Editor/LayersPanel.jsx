@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import './LayersPanel.css';
+import { useDraggable } from '../../hooks/useDraggable';
 
 /**
  * Determines if an element type is "pinned" (always on top, cannot be reordered).
@@ -65,6 +66,7 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
     const [dragState, setDragState] = useState(null); // { elementId, startIndex }
     const [dropIndex, setDropIndex] = useState(null); // visual drop indicator position
     const listRef = useRef(null);
+    const { popupRef, dragHandlers, style } = useDraggable('layersPanel');
 
     // Separate pinned (quiz/isticker/game) from draggable elements
     // Display order: reversed array (top of z-stack = top of list)
@@ -179,8 +181,8 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
             </div>
 
             {/* Panel */}
-            <div className={`layers-panel ${isOpen ? '' : 'collapsed'}`}>
-                <div className="layers-panel-header">
+            <div ref={popupRef} style={style} className={`layers-panel ${isOpen ? '' : 'collapsed'}`}>
+                <div className="layers-panel-header" {...dragHandlers}>
                     <span className="layers-panel-title">Layers</span>
                     <button className="layers-panel-close" onClick={onToggle} title="Close">
                         ✕

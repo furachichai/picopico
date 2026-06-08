@@ -9,6 +9,8 @@ const LessonsPage = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [lessons, setLessons] = useState([]);
+    const [deletedLessons, setDeletedLessons] = useState([]);
+    const [showDeleted, setShowDeleted] = useState(false);
     const [loading, setLoading] = useState(true);
     const [deleteTarget, setDeleteTarget] = useState(null); // lesson item pending delete confirmation
 
@@ -24,9 +26,22 @@ const LessonsPage = () => {
         }
     };
 
+    const fetchDeletedLessons = async () => {
+        try {
+            const response = await fetch('/api/list-deleted-lessons');
+            const data = await response.json();
+            setDeletedLessons(data);
+        } catch (error) {
+            console.error('Error fetching deleted lessons:', error);
+        }
+    };
+
     useEffect(() => {
         fetchLessons();
-    }, []);
+        if (showDeleted) {
+            fetchDeletedLessons();
+        }
+    }, [showDeleted]);
 
     const loadLesson = async (item) => {
         try {
@@ -93,6 +108,24 @@ const LessonsPage = () => {
         }
     };
 
+    const handleRecover = async (item) => {
+        try {
+            const response = await fetch('/api/recover-lesson', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ folderName: item.name }) // name includes timestamp
+            });
+            if (!response.ok) {
+                throw new Error('Recovery failed');
+            }
+            await fetchDeletedLessons();
+            await fetchLessons();
+        } catch (error) {
+            console.error('Error recovering:', error);
+            alert('Failed to recover lesson');
+        }
+    };
+
     const handleToggleVisibility = async (item) => {
         try {
             const lesson = await loadLesson(item);
@@ -149,27 +182,71 @@ const LessonsPage = () => {
                 <button className="btn-back" onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}>
                     &lt; {t('common.close')}
                 </button>
-                <h1>{t('editor.lessons')}</h1>
-                <button
-                    className="btn-new-lesson"
-                    onClick={handleCreateNew}
-                    style={{
-                        background: '#8B5CF6',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        padding: '8px 16px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        fontSize: '0.85rem'
-                    }}
-                >
-                    + New
-                </button>
+                <h1>{showDeleted ? 'Deleted Lessons' : t('editor.lessons')}</h1>
+                {!showDeleted && (
+                    <button
+                        className="btn-new-lesson"
+                        onClick={handleCreateNew}
+                        style={{
+                            background: '#8B5CF6',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '8px 16px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            fontSize: '0.85rem'
+                        }}
+                    >
+                        + New
+                    </button>
+                )}
             </div>
             <div className="lessons-content">
                 {loading ? (
                     <div>Loading...</div>
+                ) : showDeleted ? (
+                    deletedLessons.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
+                            No deleted lessons.
+                        </div>
+                    ) : (
+                        deletedLessons.map((item) => (
+                            <div
+                                key={item.path}
+                                className="file-tree-item file"
+                                style={{ opacity: 0.8 }}
+                            >
+                                <div className="lesson-card-preview">
+                                    {item.content?.slides?.[0] ? (
+                                        <SlideThumbnail slide={item.content.slides[0]} />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
+                                    )}
+                                </div>
+                                <div className="lesson-card-content">
+                                    <div className="item-name">{item.title}</div>
+                                    <div className="item-slides-count">
+                                        #{item.content?.slides?.length || 0} slides
+                                    </div>
+                                    {item.description && (
+                                        <div className="item-description" style={{ textAlign: 'center' }}>{item.description}</div>
+                                    )}
+
+                                    <div className="item-actions" style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                        <button
+                                            className="btn-icon"
+                                            onClick={(e) => { e.stopPropagation(); handleRecover(item); }}
+                                            title="Recover"
+                                            style={{ color: '#FCD34D', fontWeight: 'bold' }}
+                                        >
+                                            🔄 Recover
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )
                 ) : lessons.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
                         No lessons yet. Create your first one!
@@ -249,6 +326,25 @@ const LessonsPage = () => {
                         </div>
                     ))
                 )}
+                
+                {/* Deleted Lessons Toggle Button */}
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <button
+                        onClick={() => setShowDeleted(!showDeleted)}
+                        style={{
+                            background: 'transparent',
+                            color: '#8B5CF6',
+                            border: '1px solid #8B5CF6',
+                            borderRadius: '8px',
+                            padding: '8px 16px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            fontSize: '0.85rem'
+                        }}
+                    >
+                        {showDeleted ? 'Back to Active Lessons' : 'View Deleted Lessons 🗑️'}
+                    </button>
+                </div>
             </div>
 
             <ConfirmationModal

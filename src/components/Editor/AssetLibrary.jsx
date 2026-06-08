@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './AssetLibrary.css';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
+import { useDraggable } from '../../hooks/useDraggable';
 
 const ASSETS = {
     emojis: [
@@ -129,6 +130,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(initialTab);
     const [activeSubCategory, setActiveSubCategory] = useState('all');
+    const { popupRef, dragHandlers, style } = useDraggable('assetLibrary');
 
     // If allowedTabs is provided, filter the available tabs
     // otherwise show all
@@ -189,8 +191,8 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     };
 
     return (
-        <div className="asset-library">
-            <div className="library-header">
+        <div ref={popupRef} style={style} className={`asset-library ${allowedTabs && allowedTabs.includes('custom-bg') ? 'bg-library' : ''}`}>
+            <div className="library-header" {...dragHandlers}>
                 <h3>{t('library.title')}</h3>
                 <button className="close-btn" onClick={onClose}>×</button>
             </div>

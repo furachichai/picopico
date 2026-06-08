@@ -14,7 +14,7 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) =
     };
 
     return (
-        <div className="burger-menu-container" style={{ position: 'relative', display: 'inline-block' }}>
+        <div className="burger-menu-container" style={{ position: 'relative', display: 'inline-block', top: 0, left: 0 }}>
             <button
                 className="btn-floating btn-burger"
                 onClick={toggleMenu}
@@ -40,10 +40,6 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) =
                         <button className="menu-item" onClick={() => { onNew(); setIsOpen(false); }}>
                             <span className="menu-icon">📄</span>
                             <span className="menu-text">{t('editor.newLesson')}</span>
-                        </button>
-                        <button className="menu-item" onClick={() => { onLessons(); setIsOpen(false); }}>
-                            <span className="menu-icon">📂</span>
-                            <span className="menu-text">{t('editor.lessons')}</span>
                         </button>
                         <button className="menu-item" onClick={() => { onInfo(); setIsOpen(false); }}>
                             <span className="menu-icon">ℹ️</span>

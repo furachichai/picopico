@@ -458,7 +458,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     </div>
                     <button className="btn-secondary" onClick={() => { console.log('Slides button clicked'); dispatch({ type: 'SET_VIEW', payload: 'slides' }); }} title={t('editor.slides')} style={{ fontSize: '1.2rem' }}>🎞️</button>
                     <button className="btn-primary" onClick={() => onOpenLibrary('custom')} title={t('editor.openLibrary')} style={{ fontSize: '1.2rem' }}>📚</button>
-                    <button className="btn-secondary" onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'background' })} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
+                    <button className="btn-secondary" onClick={() => { dispatch({ type: 'SELECT_ELEMENT', payload: 'background' }); onOpenLibrary('custom-bg'); }} title={t('editor.background')} style={{ fontSize: '1.2rem' }}>🖼️</button>
                 </div>
                 {/* Stripper Controls */}
                 <div className="toolbar-section" style={{ display: 'flex', gap: '6px', alignItems: 'center', borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '8px' }}>

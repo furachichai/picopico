@@ -135,11 +135,124 @@ export default function lessonManagerPlugin() {
                             if (!fullPath.startsWith(process.cwd())) throw new Error('Invalid path');
 
                             if (fs.existsSync(fullPath)) {
-                                fs.rmSync(fullPath, { recursive: true, force: true });
+                                const deletedDir = path.resolve(process.cwd(), '.deleted_lessons');
+                                if (!fs.existsSync(deletedDir)) {
+                                    fs.mkdirSync(deletedDir);
+                                }
+                                const folderName = path.basename(fullPath);
+                                const newFolderName = `${Date.now()}__${folderName}`;
+                                const newPath = path.join(deletedDir, newFolderName);
+                                fs.renameSync(fullPath, newPath);
                             }
 
                             res.statusCode = 200;
                             res.end(JSON.stringify({ success: true }));
+                        } catch (error) {
+                            res.statusCode = 500;
+                            res.end(JSON.stringify({ error: error.message }));
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
+
+            server.middlewares.use('/api/list-deleted-lessons', (req, res, next) => {
+                if (req.method === 'GET') {
+                    try {
+                        const deletedDir = path.resolve(process.cwd(), '.deleted_lessons');
+
+                        if (!fs.existsSync(deletedDir)) {
+                            res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.end(JSON.stringify([]));
+                            return;
+                        }
+
+                        const results = [];
+                        const folders = fs.readdirSync(deletedDir);
+
+                        folders.forEach(folder => {
+                            const folderPath = path.join(deletedDir, folder);
+                            const stat = fs.statSync(folderPath);
+                            if (!stat.isDirectory()) return;
+
+                            const lessonFile = path.join(folderPath, 'lesson.json');
+                            if (!fs.existsSync(lessonFile)) return;
+
+                            let content = {};
+                            try {
+                                content = JSON.parse(fs.readFileSync(lessonFile, 'utf-8'));
+                            } catch (e) {
+                                console.error(`Error reading ${lessonFile}:`, e);
+                            }
+
+                            // Parse timestamp
+                            const match = folder.match(/^(\d+)__(.*)$/);
+                            const timestamp = match ? parseInt(match[1], 10) : 0;
+                            const originalName = match ? match[2] : folder;
+
+                            results.push({
+                                name: folder,
+                                originalName: originalName,
+                                path: path.relative(process.cwd(), lessonFile),
+                                title: content.title || originalName,
+                                description: content.description || '',
+                                timestamp: timestamp,
+                                content: content
+                            });
+                        });
+
+                        // Sort by timestamp descending
+                        results.sort((a, b) => b.timestamp - a.timestamp);
+
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify(results));
+                    } catch (error) {
+                        res.statusCode = 500;
+                        res.end(JSON.stringify({ error: error.message }));
+                    }
+                } else {
+                    next();
+                }
+            });
+
+            server.middlewares.use('/api/recover-lesson', (req, res, next) => {
+                if (req.method === 'POST') {
+                    let body = '';
+                    req.on('data', chunk => { body += chunk.toString(); });
+                    req.on('end', () => {
+                        try {
+                            const { folderName } = JSON.parse(body);
+                            if (!folderName) throw new Error('Missing folderName');
+
+                            const deletedDir = path.resolve(process.cwd(), '.deleted_lessons');
+                            const deletedPath = path.join(deletedDir, folderName);
+
+                            if (!fs.existsSync(deletedPath)) {
+                                throw new Error('Lesson not found in deleted lessons');
+                            }
+
+                            const lessonsDir = path.resolve(process.cwd(), 'lessons');
+                            if (!fs.existsSync(lessonsDir)) {
+                                fs.mkdirSync(lessonsDir);
+                            }
+
+                            const match = folderName.match(/^(\d+)__(.*)$/);
+                            let originalName = match ? match[2] : folderName;
+                            
+                            let targetPath = path.join(lessonsDir, originalName);
+                            let counter = 1;
+                            while (fs.existsSync(targetPath)) {
+                                targetPath = path.join(lessonsDir, `${originalName}_recovered_${counter}`);
+                                counter++;
+                            }
+
+                            fs.renameSync(deletedPath, targetPath);
+
+                            res.statusCode = 200;
+                            res.end(JSON.stringify({ success: true, newPath: path.relative(process.cwd(), path.join(targetPath, 'lesson.json')) }));
                         } catch (error) {
                             res.statusCode = 500;
                             res.end(JSON.stringify({ error: error.message }));

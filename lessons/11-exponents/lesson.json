@@ -138,6 +138,21 @@
       "background": "#E1F5FE",
       "elements": [
         {
+          "id": "el-1779846464396",
+          "type": "text",
+          "content": "What is an exponent?",
+          "x": 51.66666666666667,
+          "y": 21.875000000000004,
+          "width": 65,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1.813598986677882,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
           "id": "el-1779846461588",
           "type": "quiz",
           "content": "Quiz",
@@ -153,27 +168,12 @@
               "A musical accordion",
               "A number multiplied by itself several times."
             ],
-            "correctIndex": 0,
+            "correctIndex": 1,
             "correctIndices": [
               0
             ],
             "quizType": "classic",
             "visualMode": false
-          }
-        },
-        {
-          "id": "el-1779846464396",
-          "type": "text",
-          "content": "What is an exponent?",
-          "x": 51.66666666666667,
-          "y": 21.875000000000004,
-          "width": 65,
-          "height": 7.8125,
-          "rotation": 0,
-          "scale": 1.813598986677882,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "\"Fira Sans\""
           }
         }
       ],
@@ -816,8 +816,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-06-04T14:15:29.407Z",
-  "path": "lessons/6350-exponents/lesson.json",
+  "updatedAt": "2026-06-04T22:34:56.750Z",
+  "path": "lessons/11-exponents/lesson.json",
   "textPreset": null,
   "name": "0381-exponents",
   "type": "file",

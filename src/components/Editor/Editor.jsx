@@ -823,14 +823,24 @@ const Editor = () => {
                 )}
 
                 <div className={`editor-floating-actions ${selectedElement ? 'disabled-ui' : ''}`}>
-                    <BurgerMenu
-                        onInfo={() => setShowInfoModal(true)}
-                        onNew={handleNewLesson}
-                        onMenu={handleGoToMenu}
-                        onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
-                        onPresets={() => setShowPresetPanel(true)}
-                        disabled={isTranslating}
-                    />
+                    <div style={{ position: 'absolute', top: '16px', left: '16px', display: 'flex', gap: '8px', pointerEvents: 'auto' }}>
+                        <BurgerMenu
+                            onInfo={() => setShowInfoModal(true)}
+                            onNew={handleNewLesson}
+                            onMenu={handleGoToMenu}
+                            onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
+                            onPresets={() => setShowPresetPanel(true)}
+                            disabled={isTranslating}
+                        />
+                        <button
+                            className="btn-floating"
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
+                            title={t('editor.lessons')}
+                            style={{ fontSize: '1.5rem', cursor: 'pointer', background: 'white' }}
+                        >
+                            📂
+                        </button>
+                    </div>
                     <div className="top-right-actions">
                         {/* Translate Toggle */}
                         {!isTranslating ? (
@@ -1025,7 +1035,11 @@ const Editor = () => {
                         <Toolbar
                             onOpenLibrary={(tab) => {
                                 setLibraryTab(tab || 'custom');
-                                setLibraryAllowedTabs(['custom', 'custom-objects', 'emojis', 'gifs']); // Sticker Mode
+                                if (tab === 'custom-bg' || tab === 'backgrounds') {
+                                    setLibraryAllowedTabs(['custom-bg', 'backgrounds']);
+                                } else {
+                                    setLibraryAllowedTabs(['custom', 'custom-objects', 'emojis', 'gifs']); // Sticker Mode
+                                }
                                 setShowLibrary(true);
                             }}
                             onDeleteSlide={() => setShowDeleteSlideConfirmation(true)}
