@@ -69,7 +69,7 @@ const Dashboard = () => {
               ...item,
               id: item.path,
               status: isCompleted ? 'completed' : 'active',
-              icon: isCompleted ? <Trophy size={24} /> : <Play size={24} />,
+              statusIcon: isCompleted ? <Trophy size={24} /> : <Play size={24} />,
               progress
             };
           });

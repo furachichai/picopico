@@ -1,5 +1,5 @@
 {
-  "id": "draft-1779633381380",
+  "id": "lessons/12-Parenthesis/lesson.json",
   "title": "Parenthesis",
   "slides": [
     {
@@ -40,6 +40,21 @@
               "x": -55,
               "y": 81
             }
+          }
+        },
+        {
+          "id": "el-1782161640151",
+          "type": "text",
+          "content": "work in progress",
+          "x": 54.72222222222222,
+          "y": 73.90625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 4.445342969444943,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
           }
         }
       ],
@@ -269,7 +284,7 @@
   ],
   "author": "User",
   "createdAt": "2026-05-24T14:36:21.380Z",
-  "updatedAt": "2026-06-08T18:15:25.663Z",
+  "updatedAt": "2026-06-22T20:54:27.902Z",
   "path": "lessons/12-Parenthesis/lesson.json",
   "textPreset": null,
   "description": "",
@@ -282,5 +297,297 @@
       "hashtag": ""
     }
   },
-  "hashtag": "#OrderOfOperations"
+  "hashtag": "#OrderOfOperations",
+  "name": "12-Parenthesis",
+  "type": "file",
+  "visible": true,
+  "order": 12,
+  "content": {
+    "id": "draft-1779633381380",
+    "title": "Parenthesis",
+    "slides": [
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779633427168",
+            "type": "text",
+            "content": "<b>FINAL RULE!</b>",
+            "x": 48.333333333333336,
+            "y": 20.937499999999996,
+            "width": 27.22222222222222,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 2.5869837517760454,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "\"Fira Sans\""
+            }
+          },
+          {
+            "id": "el-1779633416135",
+            "type": "balloon",
+            "content": "<b>Parenthesis go FIRST</b>!",
+            "x": 54.583333333333336,
+            "y": 42.8125,
+            "width": 54.72222222222223,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -55,
+                "y": 81
+              }
+            }
+          }
+        ],
+        "order": 0
+      },
+      {
+        "id": "slide-1779917057022",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779917058836",
+            "type": "balloon",
+            "content": "First, solve what's inside the walls!",
+            "x": 50,
+            "y": 50,
+            "width": 40,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -33,
+                "y": 80
+              }
+            }
+          }
+        ],
+        "order": 1
+      },
+      {
+        "id": "slide-1779917083311",
+        "background": "#E1F5FE",
+        "elements": [
+          {
+            "id": "el-1779917084660",
+            "type": "balloon",
+            "content": "Inside the parenthesis the normal rules apply!",
+            "x": 55.55555555555556,
+            "y": 46.25,
+            "width": 51.11111111111111,
+            "height": 27.500000000000004,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -74,
+                "y": 116
+              }
+            }
+          }
+        ],
+        "order": 2
+      },
+      {
+        "id": "slide-1780582545814",
+        "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+        "elements": [
+          {
+            "id": "el-1780582545814-g27sgpq3f",
+            "type": "image",
+            "content": "/src/assets/characters/scroll.png",
+            "x": 49.166666666666664,
+            "y": 53.59375,
+            "width": 40,
+            "height": 33.53711790393013,
+            "rotation": 0,
+            "scale": 2.965326382502965,
+            "metadata": {
+              "width": 40,
+              "height": 33.53711790393013,
+              "locked": true
+            }
+          },
+          {
+            "id": "el-1780582545814-bar1n6hge",
+            "type": "line",
+            "x": 47.500000000000014,
+            "y": 44.296875,
+            "width": 6.408704915343446,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1780582545814-rzv91domj",
+            "type": "text",
+            "content": "<b>+ </b>or<b> - </b><br><div>from left to right</div>",
+            "x": 48.05555555555555,
+            "y": 78.90625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#F44336"
+            }
+          },
+          {
+            "id": "el-1780582545814-hcwqnimrt",
+            "type": "text",
+            "content": "<b>× </b>or<b> ÷ </b><div>from left to right</div>",
+            "x": 47.77777777777777,
+            "y": 64.0625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#F57C00"
+            }
+          },
+          {
+            "id": "el-1780582545814-okl4gjmv7",
+            "type": "text",
+            "content": "<b>RULES</b>",
+            "x": 48.61111111111111,
+            "y": 31.40625,
+            "width": 10,
+            "height": 5,
+            "rotation": 0,
+            "scale": 2.153722403662122,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit"
+            }
+          },
+          {
+            "id": "el-1780582545814-akjibafrq",
+            "type": "text",
+            "content": "<b>E</b>xponents",
+            "x": 47.77777777777777,
+            "y": 50.9375,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#FFC107"
+            }
+          },
+          {
+            "id": "el-1780582545814-eql5k04tr",
+            "type": "text",
+            "content": "<b>P</b>arenthesis",
+            "x": 49.166666666666664,
+            "y": 39.0625,
+            "width": 68.33333333333333,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "textAlign": "center",
+              "fontFamily": "Outfit",
+              "fontSize": 22,
+              "backgroundColor": "#FDE74C"
+            }
+          },
+          {
+            "id": "el-1780582545814-uhgl2q6bd",
+            "type": "line",
+            "x": 47.500000000000014,
+            "y": 55.703125,
+            "width": 6.408704915343446,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          },
+          {
+            "id": "el-1780582545814-cowdnjfrl",
+            "type": "line",
+            "x": 47.50000000000001,
+            "y": 70.703125,
+            "width": 6.408704915343446,
+            "height": 10,
+            "rotation": 90,
+            "scale": 1,
+            "metadata": {
+              "width": 50,
+              "height": 10,
+              "isSymbol": true,
+              "symbolColor": "#8B5CF6",
+              "startCap": "none",
+              "endCap": "arrow"
+            }
+          }
+        ],
+        "order": 3,
+        "cartridge": null,
+        "backgroundSettings": {
+          "grayscale": true,
+          "tintColor": "transparent"
+        }
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-05-24T14:36:21.380Z",
+    "updatedAt": "2026-06-08T18:15:25.663Z",
+    "path": "lessons/12-Parenthesis/lesson.json",
+    "textPreset": null,
+    "description": "",
+    "icon": "icon_textbook.png",
+    "cardColor": "#8B5CF6",
+    "translations": {
+      "en": {
+        "title": "",
+        "description": "",
+        "hashtag": ""
+      }
+    },
+    "hashtag": "#OrderOfOperations"
+  },
+  "status": "active",
+  "progress": null
 }

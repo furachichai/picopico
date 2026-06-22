@@ -256,7 +256,7 @@ const Canvas = (props) => {
                 style={{
                   position: 'absolute',
                   top: 0, left: 0, width: '100%', height: '100%',
-                  backgroundImage: currentSlide.background,
+                  backgroundImage: currentSlide.background ? currentSlide.background.replaceAll('/src/assets/', '/assets/') : currentSlide.background,
                   backgroundSize: currentSlide.backgroundSettings?.sizeMode === 'custom'
                     ? `${currentSlide.backgroundSettings?.size ?? 100}%`
                     : (currentSlide.backgroundSettings?.sizeMode || 'cover'),

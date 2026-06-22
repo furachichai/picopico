@@ -227,6 +227,7 @@ const PinGate = ({ children }) => {
       // Player-only access
       localStorage.setItem('pico_app_unlocked', 'true');
       localStorage.setItem('pico_access_level', 'player');
+      localStorage.removeItem('pico_editor_unlocked');
       localStorage.setItem('pico_language', selectedLang);
       setIsUnlocked(true);
     } else if (pinValue === '1314b') {

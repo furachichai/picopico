@@ -1,5 +1,5 @@
 {
-  "id": "lessons/5704-Scam/lesson.json",
+  "id": "lessons/09-Estafa/lesson.json",
   "title": "Estafa",
   "slides": [
     {
@@ -855,17 +855,17 @@
   ],
   "author": "User",
   "createdAt": "2026-05-28T00:51:30.015Z",
-  "updatedAt": "2026-06-08T18:15:17.934Z",
+  "updatedAt": "2026-06-22T22:37:46.738Z",
   "path": "lessons/09-Estafa/lesson.json",
   "textPreset": null,
-  "name": "5704-Scam",
+  "name": "09-Estafa",
   "type": "file",
   "description": "¡Cuidate del estafador!",
   "visible": true,
-  "order": 5704,
+  "order": 9,
   "content": {
     "id": "lessons/5704-Scam/lesson.json",
-    "title": "Scam",
+    "title": "Estafa",
     "slides": [
       {
         "id": "slide-1780002037696",
@@ -1479,9 +1479,24 @@
             }
           },
           {
+            "id": "el-1780001013187",
+            "type": "image",
+            "content": "/src/assets/characters/sales_phone_writing.png",
+            "x": 51.111111111111114,
+            "y": 57.96875,
+            "width": 40,
+            "height": 20.843023255813954,
+            "rotation": 0,
+            "scale": 2.2833651831607042,
+            "metadata": {
+              "width": 40,
+              "height": 20.843023255813954
+            }
+          },
+          {
             "id": "el-1780000761463",
             "type": "text",
-            "content": "30 + 50 + 20 x 2&nbsp;<div>= 100 x 2<div>= <b>200</b></div></div>",
+            "content": "30 + 50 + 20 <font color=\"#ffc107\">× 2</font>&nbsp;<div>= 100 <font color=\"#ffc107\">× 2</font></div><div>= 200     </div>",
             "x": 53.75,
             "y": 25.78125,
             "width": 52.5,
@@ -1498,21 +1513,6 @@
               "en": {
                 "content": "30 + 50 + 20 x 2&nbsp;<div>= 100 x 2<div>= <b>200</b></div></div>"
               }
-            }
-          },
-          {
-            "id": "el-1780001013187",
-            "type": "image",
-            "content": "/src/assets/characters/sales_phone_writing.png",
-            "x": 51.111111111111114,
-            "y": 57.96875,
-            "width": 40,
-            "height": 20.843023255813954,
-            "rotation": 0,
-            "scale": 2.2833651831607042,
-            "metadata": {
-              "width": 40,
-              "height": 20.843023255813954
             }
           }
         ],
@@ -1720,12 +1720,12 @@
     ],
     "author": "User",
     "createdAt": "2026-05-28T00:51:30.015Z",
-    "updatedAt": "2026-05-29T23:03:44.495Z",
-    "path": "lessons/5704-Scam/lesson.json",
+    "updatedAt": "2026-06-08T18:15:17.934Z",
+    "path": "lessons/09-Estafa/lesson.json",
     "textPreset": null,
     "name": "5704-Scam",
     "type": "file",
-    "description": "",
+    "description": "¡Cuidate del estafador!",
     "visible": true,
     "order": 5704,
     "content": {
@@ -1755,7 +1755,13 @@
           "order": 0,
           "backgroundSettings": {
             "brightness": 130,
-            "opacity": 0.95
+            "opacity": 0.95,
+            "grayscale": true,
+            "tintColor": "rgba(192, 132, 252, 0.4)",
+            "positionY": 48,
+            "positionX": 74,
+            "sizeMode": "custom",
+            "size": 117
           }
         },
         {
@@ -1862,7 +1868,9 @@
           ],
           "order": 1,
           "backgroundSettings": {
-            "opacity": 0.27
+            "opacity": 0.27,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
           }
         },
         {
@@ -1984,7 +1992,9 @@
           ],
           "order": 2,
           "backgroundSettings": {
-            "opacity": 0.27
+            "opacity": 0.27,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
           }
         },
         {
@@ -2157,9 +2167,9 @@
               "id": "el-1779929798964",
               "type": "balloon",
               "content": "Dale.",
-              "x": 17.222222222222218,
+              "x": 20.138888888888886,
               "y": 63.359375,
-              "width": 37.22222222222222,
+              "width": 30.277777777777775,
               "height": 13.90625,
               "rotation": 0,
               "scale": 1,
@@ -2182,7 +2192,9 @@
           ],
           "order": 3,
           "backgroundSettings": {
-            "opacity": 0.23
+            "opacity": 0.23,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
           }
         },
         {
@@ -2288,7 +2300,9 @@
           ],
           "order": 4,
           "backgroundSettings": {
-            "opacity": 0.26
+            "opacity": 0.26,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
           }
         },
         {
@@ -2369,12 +2383,14 @@
           ],
           "order": 5,
           "backgroundSettings": {
-            "opacity": 0.43
+            "opacity": 0.43,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
           }
         },
         {
           "id": "slide-1779929977435",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_skate_001.png\")",
           "elements": [
             {
               "id": "el-1779929987192",
@@ -2507,7 +2523,11 @@
               }
             }
           ],
-          "order": 6
+          "order": 6,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(148, 163, 184, 0.4)"
+          }
         },
         {
           "id": "slide-1780000573946",
@@ -2557,27 +2577,55 @@
           ],
           "order": 7,
           "backgroundSettings": {
-            "opacity": 0.22
+            "opacity": 0.22,
+            "grayscale": true,
+            "tintColor": "rgba(192, 132, 252, 0.4)"
           }
         }
       ],
       "author": "User",
       "createdAt": "2026-05-28T00:51:30.015Z",
-      "updatedAt": "2026-05-28T21:07:58.421Z",
+      "updatedAt": "2026-05-29T23:03:44.495Z",
       "path": "lessons/5704-Scam/lesson.json",
       "textPreset": null,
-      "name": "5704-Estafa",
+      "name": "5704-Scam",
       "type": "file",
       "description": "",
       "visible": true,
       "order": 5704,
       "content": {
-        "id": "lessons/5704-Estafa/lesson.json",
-        "title": "Estafa",
+        "id": "lessons/5704-Scam/lesson.json",
+        "title": "Scam",
         "slides": [
           {
+            "id": "slide-1780002037696",
+            "background": "url(\"/src/assets/backgrounds/phone_shop_bkg.jpg\")",
+            "elements": [
+              {
+                "id": "el-1780002057311",
+                "type": "image",
+                "content": "/src/assets/characters/sales_standing_money.png",
+                "x": 65.27777777777777,
+                "y": 65.3125,
+                "width": 40,
+                "height": 39.80329949238578,
+                "rotation": 0,
+                "scale": 1.6841509594949238,
+                "metadata": {
+                  "width": 40,
+                  "height": 39.80329949238578
+                }
+              }
+            ],
+            "order": 0,
+            "backgroundSettings": {
+              "brightness": 130,
+              "opacity": 0.95
+            }
+          },
+          {
             "id": "slide-1",
-            "background": "#E1F5FE",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
             "elements": [
               {
                 "id": "el-1779978514469",
@@ -2653,10 +2701,10 @@
               {
                 "id": "el-1779929503673",
                 "type": "balloon",
-                "content": "Te llamo luego.<div>Está entrando</div><div>una nueva víctima.</div>",
-                "x": 31.666666666666664,
-                "y": 22.34375,
-                "width": 67.77777777777779,
+                "content": "Te llamo luego.<div>Está entrando</div><div>una nueva <b>víctima</b>.</div>",
+                "x": 31.249999999999996,
+                "y": 22.1875,
+                "width": 57.49999999999999,
                 "height": 20,
                 "rotation": 0,
                 "scale": 1,
@@ -2677,11 +2725,14 @@
                 }
               }
             ],
-            "order": 0
+            "order": 1,
+            "backgroundSettings": {
+              "opacity": 0.27
+            }
           },
           {
             "id": "slide-1779929637383",
-            "background": "#E1F5FE",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
             "elements": [
               {
                 "id": "el-1779979727530",
@@ -2729,32 +2780,6 @@
                 }
               },
               {
-                "id": "el-1779929639166",
-                "type": "balloon",
-                "content": "Quiero reemplazar el vidrio y la batería de mi teléfono.",
-                "x": 23.88888888888889,
-                "y": 38.359375,
-                "width": 40,
-                "height": 26.406249999999996,
-                "rotation": 0,
-                "scale": 1,
-                "metadata": {
-                  "backgroundColor": "#ffffff",
-                  "color": "#000000",
-                  "fontFamily": "\"Noto Sans\"",
-                  "fontSize": 16,
-                  "tailPos": {
-                    "x": 7,
-                    "y": 105
-                  }
-                },
-                "translations": {
-                  "en": {
-                    "content": "Hi. I need to replace my phone's glass and battery."
-                  }
-                }
-              },
-              {
                 "id": "el-1779929656255",
                 "type": "balloon",
                 "content": "<div><br></div><div>Vidrio: $ <b>30</b><br></div><div>Batería: $ <b>50</b></div><div>Horas de trabajo:</div><div>$ <b>20</b> x 2</div><div><br></div>",
@@ -2779,27 +2804,126 @@
                     "content": "<div><br></div><div>Glass: $30<br></div><div>Battery: $50</div><div>Labor hour: $20 x 2</div><div><br></div>"
                   }
                 }
+              },
+              {
+                "id": "el-1780000516106",
+                "type": "image",
+                "content": "/assets/objects/broken_phone.png",
+                "x": 45.27777777777778,
+                "y": 80.625,
+                "width": 40,
+                "height": 11.789137380191693,
+                "rotation": 0,
+                "scale": 0.3326868342893042,
+                "metadata": {
+                  "width": 40,
+                  "height": 11.789137380191693
+                }
+              },
+              {
+                "id": "el-1779929639166",
+                "type": "balloon",
+                "content": "Quiero <b>reemplazar</b> el <b>vidrio</b> y la <b>batería</b> de mi <b>teléfono</b>.",
+                "x": 23.88888888888889,
+                "y": 38.359375,
+                "width": 40,
+                "height": 26.406249999999996,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": 7,
+                    "y": 105
+                  }
+                },
+                "translations": {
+                  "en": {
+                    "content": "Hi. I need to replace my phone's glass and battery."
+                  }
+                }
               }
             ],
-            "order": 1
+            "order": 2,
+            "backgroundSettings": {
+              "opacity": 0.27
+            }
           },
           {
             "id": "slide-1779929797408",
-            "background": "#E1F5FE",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
             "elements": [
               {
-                "id": "el-1779979894993",
+                "id": "el-1780000355135-hurm9n85t",
                 "type": "image",
-                "content": "/src/assets/characters/dilla_looking_up.png",
-                "x": 11.111111111111112,
-                "y": 99.0625,
+                "content": "/assets/objects/phone_cases.png",
+                "x": 23.666666666666664,
+                "y": 35.4375,
                 "width": 40,
-                "height": 29.432773109243698,
+                "height": 11.25,
                 "rotation": 0,
-                "scale": 1.9778952107375232,
+                "scale": 1.0461898849352116,
                 "metadata": {
                   "width": 40,
-                  "height": 29.432773109243698
+                  "height": 11.25,
+                  "opacity": 0.62,
+                  "locked": true,
+                  "hidden": false
+                }
+              },
+              {
+                "id": "el-1780000374243",
+                "type": "image",
+                "content": "/assets/objects/phone_cases.png",
+                "x": 41.16666666666667,
+                "y": 23.71875,
+                "width": 40,
+                "height": 11.25,
+                "rotation": 0,
+                "scale": 1.0461898849352116,
+                "metadata": {
+                  "width": 40,
+                  "height": 11.25,
+                  "opacity": 0.62,
+                  "locked": true,
+                  "hidden": false
+                }
+              },
+              {
+                "id": "el-1780000382906",
+                "type": "image",
+                "content": "/assets/objects/phone_cases.png",
+                "x": -1.6111111111111072,
+                "y": 23.71875,
+                "width": 40,
+                "height": 11.25,
+                "rotation": 0,
+                "scale": 1.0461898849352116,
+                "metadata": {
+                  "width": 40,
+                  "height": 11.25,
+                  "opacity": 0.62,
+                  "locked": true,
+                  "hidden": false
+                }
+              },
+              {
+                "id": "el-1780000316872",
+                "type": "image",
+                "content": "/assets/objects/shop_counter.png",
+                "x": 27.5,
+                "y": 55.78125,
+                "width": 40,
+                "height": 12.306472081218274,
+                "rotation": 0,
+                "scale": 2.0995012269469253,
+                "metadata": {
+                  "width": 40,
+                  "height": 12.306472081218274,
+                  "locked": true
                 }
               },
               {
@@ -2829,11 +2953,77 @@
                 }
               },
               {
+                "id": "el-1780000369174",
+                "type": "image",
+                "content": "/assets/objects/phone_cases.png",
+                "x": 67.55555555555556,
+                "y": 35.4375,
+                "width": 40,
+                "height": 11.25,
+                "rotation": 0,
+                "scale": 1.0461898849352116,
+                "metadata": {
+                  "width": 40,
+                  "height": 11.25,
+                  "opacity": 0.62,
+                  "locked": false,
+                  "hidden": false
+                }
+              },
+              {
+                "id": "el-1779979915719",
+                "type": "image",
+                "content": "/src/assets/characters/alien_salesman_003.png",
+                "x": 84.16666666666664,
+                "y": 62.34375,
+                "width": 40,
+                "height": 29.176829268292682,
+                "rotation": 0,
+                "scale": 2.5175607344393183,
+                "metadata": {
+                  "width": 40,
+                  "height": 29.176829268292682,
+                  "locked": true
+                }
+              },
+              {
+                "id": "el-1779979894993",
+                "type": "image",
+                "content": "/src/assets/characters/dilla_looking_up.png",
+                "x": 2.5000000000000018,
+                "y": 104.53125,
+                "width": 40,
+                "height": 29.432773109243698,
+                "rotation": 0,
+                "scale": 1.9778952107375232,
+                "metadata": {
+                  "width": 40,
+                  "height": 29.432773109243698
+                }
+              },
+              {
+                "id": "el-1780000234168",
+                "type": "image",
+                "content": "/assets/objects/broken_phone.png",
+                "x": 46.66666666666666,
+                "y": 70.15625,
+                "width": 40,
+                "height": 11.789137380191693,
+                "rotation": -46.664384784412704,
+                "scale": 0.8104508505610264,
+                "metadata": {
+                  "width": 40,
+                  "height": 11.789137380191693,
+                  "flipX": true,
+                  "flipY": false
+                }
+              },
+              {
                 "id": "el-1779929798964",
                 "type": "balloon",
                 "content": "Dale.",
-                "x": 22.222222222222218,
-                "y": 55.078125,
+                "x": 17.222222222222218,
+                "y": 63.359375,
                 "width": 37.22222222222222,
                 "height": 13.90625,
                 "rotation": 0,
@@ -2853,28 +3043,16 @@
                     "content": "OK."
                   }
                 }
-              },
-              {
-                "id": "el-1779979915719",
-                "type": "image",
-                "content": "/src/assets/characters/alien_salesman_003.png",
-                "x": 84.16666666666664,
-                "y": 62.34375,
-                "width": 40,
-                "height": 29.176829268292682,
-                "rotation": 0,
-                "scale": 2.5175607344393183,
-                "metadata": {
-                  "width": 40,
-                  "height": 29.176829268292682
-                }
               }
             ],
-            "order": 2
+            "order": 3,
+            "backgroundSettings": {
+              "opacity": 0.23
+            }
           },
           {
             "id": "slide-1779929820449",
-            "background": "#E1F5FE",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
             "elements": [
               {
                 "id": "el-1779984036243",
@@ -2890,28 +3068,6 @@
                   "width": 40,
                   "height": 12.306472081218274,
                   "locked": true
-                }
-              },
-              {
-                "id": "el-1779929821725",
-                "type": "text",
-                "content": "2 horas después...",
-                "x": 48.19444444444444,
-                "y": 16.40625,
-                "width": 45.27777777777778,
-                "height": 7.8125,
-                "rotation": 0,
-                "scale": 1.5758348196618663,
-                "metadata": {
-                  "textAlign": "center",
-                  "fontFamily": "\"Fira Sans\"",
-                  "backgroundColor": "#5A5A5A",
-                  "color": "#FFFFFF"
-                },
-                "translations": {
-                  "en": {
-                    "content": "2 hours later"
-                  }
                 }
               },
               {
@@ -2931,24 +3087,25 @@
                 }
               },
               {
-                "id": "el-1779979998811",
+                "id": "el-1780000703476-0koqhoogj",
                 "type": "image",
-                "content": "/src/assets/characters/dilla_standing_back.png",
-                "x": 41.111111111111114,
-                "y": 85.3125,
+                "content": "/src/assets/characters/dilla_phone2.png",
+                "x": 30.05555555555556,
+                "y": 82.625,
                 "width": 40,
-                "height": 25.83791208791209,
+                "height": 19.021308225966305,
                 "rotation": 0,
-                "scale": 1.2504583203649717,
+                "scale": 1.419559111416409,
                 "metadata": {
                   "width": 40,
-                  "height": 25.83791208791209
+                  "height": 19.021308225966305,
+                  "flipX": true
                 }
               },
               {
                 "id": "el-1779929847370",
                 "type": "balloon",
-                "content": "Listo!<div><br></div><div>Pagame $ <b>200</b>.<br></div>",
+                "content": "¡Listo!<div><br></div><div>Pagame $ <b>200</b>.<br></div>",
                 "x": 42.91666666666667,
                 "y": 32.8125,
                 "width": 47.5,
@@ -2970,15 +3127,115 @@
                     "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
                   }
                 }
+              },
+              {
+                "id": "el-1779929821725",
+                "type": "text",
+                "content": "2 horas después...",
+                "x": 47.916666666666664,
+                "y": 17.96875,
+                "width": 45.27777777777778,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.5758348196618663,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#5A5A5A",
+                  "color": "#FFFFFF"
+                },
+                "translations": {
+                  "en": {
+                    "content": "2 hours later"
+                  }
+                }
               }
             ],
-            "order": 3
+            "order": 4,
+            "backgroundSettings": {
+              "opacity": 0.26
+            }
           },
           {
             "id": "slide-1779929948764",
-            "background": "#E1F5FE",
-            "elements": [],
-            "order": 4
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+            "elements": [
+              {
+                "id": "el-1780000774542",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 85,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "True",
+                    "False"
+                  ],
+                  "correctIndex": 1,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "tf",
+                  "visualMode": false,
+                  "translations": {
+                    "en": {
+                      "options": [
+                        "True",
+                        "False"
+                      ],
+                      "matchAnswers": [],
+                      "chatNodes": []
+                    }
+                  }
+                }
+              },
+              {
+                "id": "el-1780000761463",
+                "type": "text",
+                "content": "30 + 50 + 20 x 2&nbsp;<div>= 100 x 2<div>= <b>200</b></div></div>",
+                "x": 53.75,
+                "y": 25.78125,
+                "width": 52.5,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.7522712692650717,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#880E4F",
+                  "color": "#FFFFFF"
+                },
+                "translations": {
+                  "en": {
+                    "content": "30 + 50 + 20 x 2&nbsp;<div>= 100 x 2<div>= <b>200</b></div></div>"
+                  }
+                }
+              },
+              {
+                "id": "el-1780001013187",
+                "type": "image",
+                "content": "/src/assets/characters/sales_phone_writing.png",
+                "x": 51.111111111111114,
+                "y": 57.96875,
+                "width": 40,
+                "height": 20.843023255813954,
+                "rotation": 0,
+                "scale": 2.2833651831607042,
+                "metadata": {
+                  "width": 40,
+                  "height": 20.843023255813954
+                }
+              }
+            ],
+            "order": 5,
+            "backgroundSettings": {
+              "opacity": 0.43
+            }
           },
           {
             "id": "slide-1779929977435",
@@ -2987,7 +3244,7 @@
               {
                 "id": "el-1779929987192",
                 "type": "quiz",
-                "content": "<span style=\"font-weight: normal;\">Gracias...</span>",
+                "content": "<span style=\"font-weight: normal;\">Debemos comenzar por la</span>",
                 "x": 50,
                 "y": 75,
                 "width": 20,
@@ -3006,22 +3263,22 @@
                   "chatNodes": [
                     {
                       "type": "message",
-                      "text": "<div>30 $ por reparar el vidrio +</div><div>50 $ por la batería +</div><div>20 por hora de trabajo (2 horas)</div><div><br></div>30+50+20x2&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x 2</span><div>= 200</div></div>",
+                      "text": "<div>30 $ por reparar el vidrio +</div><div>50 $ por la batería +</div><div>20 por hora de trabajo (<font color=\"#e91e8f\">2</font> horas)</div><div><br></div>30 + 50 + 20 x&nbsp;<font color=\"#e91e8f\">2</font>&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x <font color=\"#e91e8f\">2</font></span><div>= 200</div></div>",
                       "avatar": "avatar_sales.png"
                     },
                     {
                       "type": "reply",
-                      "text": "Eso no es correcto...",
+                      "text": "<span style=\"font-weight: normal;\">Eso no es correcto...</span>",
                       "avatar": "avatar_dilla.png"
                     },
                     {
                       "type": "message",
-                      "text": "¡Imposible!",
+                      "text": "<span style=\"font-weight: normal;\">¡Imposible!</span>",
                       "avatar": "avatar_sales.png"
                     },
                     {
                       "type": "reply",
-                      "text": "Debemos comenzar por la",
+                      "text": "<span style=\"font-weight: normal;\">Debemos comenzar por la</span>",
                       "avatar": "avatar_dilla.png"
                     },
                     {
@@ -3115,13 +3372,64 @@
                 }
               }
             ],
-            "order": 5
+            "order": 6
+          },
+          {
+            "id": "slide-1780000573946",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_004.png\")",
+            "elements": [
+              {
+                "id": "el-1780000581644",
+                "type": "image",
+                "content": "/src/assets/characters/dilla_phone_happy_videoconf.png",
+                "x": 50,
+                "y": 70.46875,
+                "width": 40,
+                "height": 17.91159962581852,
+                "rotation": 0,
+                "scale": 2.4767270377126267,
+                "metadata": {
+                  "width": 40,
+                  "height": 17.91159962581852
+                }
+              },
+              {
+                "id": "el-1780000588385",
+                "type": "balloon",
+                "content": "<b>Order of operations</b> <b>saved me </b>from a <b>crook</b>!",
+                "x": 53.888888888888886,
+                "y": 30.625,
+                "width": 56.111111111111114,
+                "height": 20,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "backgroundColor": "#ffffff",
+                  "color": "#000000",
+                  "fontFamily": "\"Noto Sans\"",
+                  "fontSize": 16,
+                  "tailPos": {
+                    "x": -8,
+                    "y": 84
+                  }
+                },
+                "translations": {
+                  "en": {
+                    "content": "<b>Order of operations</b> <b>saved me </b>from a <b>crook</b>!"
+                  }
+                }
+              }
+            ],
+            "order": 7,
+            "backgroundSettings": {
+              "opacity": 0.22
+            }
           }
         ],
         "author": "User",
         "createdAt": "2026-05-28T00:51:30.015Z",
-        "updatedAt": "2026-05-28T20:17:40.186Z",
-        "path": "lessons/5704-Estafa/lesson.json",
+        "updatedAt": "2026-05-28T21:07:58.421Z",
+        "path": "lessons/5704-Scam/lesson.json",
         "textPreset": null,
         "name": "5704-Estafa",
         "type": "file",
@@ -3210,7 +3518,7 @@
                 {
                   "id": "el-1779929503673",
                   "type": "balloon",
-                  "content": "Te dejo.<div>Voy a engañar a una tonta que acaba de entrar.</div>",
+                  "content": "Te llamo luego.<div>Está entrando</div><div>una nueva víctima.</div>",
                   "x": 31.666666666666664,
                   "y": 22.34375,
                   "width": 67.77777777777779,
@@ -3314,7 +3622,7 @@
                 {
                   "id": "el-1779929656255",
                   "type": "balloon",
-                  "content": "<div><br></div><div>Vidrio: $30<br></div><div>Batería: $50</div><div>Horas de trabajo: $20 x 2</div><div><br></div>",
+                  "content": "<div><br></div><div>Vidrio: $ <b>30</b><br></div><div>Batería: $ <b>50</b></div><div>Horas de trabajo:</div><div>$ <b>20</b> x 2</div><div><br></div>",
                   "x": 73.19444444444446,
                   "y": 28.984375,
                   "width": 53.05555555555556,
@@ -3360,21 +3668,6 @@
                   }
                 },
                 {
-                  "id": "el-1779979915719",
-                  "type": "image",
-                  "content": "/src/assets/characters/alien_salesman_003.png",
-                  "x": 84.16666666666664,
-                  "y": 62.34375,
-                  "width": 40,
-                  "height": 29.176829268292682,
-                  "rotation": 0,
-                  "scale": 2.5175607344393183,
-                  "metadata": {
-                    "width": 40,
-                    "height": 29.176829268292682
-                  }
-                },
-                {
                   "id": "el-1779929808147",
                   "type": "balloon",
                   "content": "Volvé en 2 horas.",
@@ -3403,11 +3696,11 @@
                 {
                   "id": "el-1779929798964",
                   "type": "balloon",
-                  "content": "Perfecto.",
-                  "x": 17.499999999999996,
-                  "y": 52.1875,
-                  "width": 40,
-                  "height": 20,
+                  "content": "Dale.",
+                  "x": 22.222222222222218,
+                  "y": 55.078125,
+                  "width": 37.22222222222222,
+                  "height": 13.90625,
                   "rotation": 0,
                   "scale": 1,
                   "metadata": {
@@ -3424,6 +3717,21 @@
                     "en": {
                       "content": "OK."
                     }
+                  }
+                },
+                {
+                  "id": "el-1779979915719",
+                  "type": "image",
+                  "content": "/src/assets/characters/alien_salesman_003.png",
+                  "x": 84.16666666666664,
+                  "y": 62.34375,
+                  "width": 40,
+                  "height": 29.176829268292682,
+                  "rotation": 0,
+                  "scale": 2.5175607344393183,
+                  "metadata": {
+                    "width": 40,
+                    "height": 29.176829268292682
                   }
                 }
               ],
@@ -3447,32 +3755,6 @@
                     "width": 40,
                     "height": 12.306472081218274,
                     "locked": true
-                  }
-                },
-                {
-                  "id": "el-1779929847370",
-                  "type": "balloon",
-                  "content": "Listo!<div><br></div><div>30+50+20x2&nbsp;</div><div>= 100 x 2&nbsp;</div><div>=$ 200 </div>",
-                  "x": 43.47222222222223,
-                  "y": 33.828125,
-                  "width": 47.5,
-                  "height": 25.46875,
-                  "rotation": 0,
-                  "scale": 1,
-                  "metadata": {
-                    "backgroundColor": "#ffffff",
-                    "color": "#000000",
-                    "fontFamily": "\"Noto Sans\"",
-                    "fontSize": 16,
-                    "tailPos": {
-                      "x": 89,
-                      "y": 11
-                    }
-                  },
-                  "translations": {
-                    "en": {
-                      "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
-                    }
                   }
                 },
                 {
@@ -3517,15 +3799,41 @@
                   "id": "el-1779979998811",
                   "type": "image",
                   "content": "/src/assets/characters/dilla_standing_back.png",
-                  "x": 36.38888888888889,
-                  "y": 90.15625,
+                  "x": 41.111111111111114,
+                  "y": 85.3125,
                   "width": 40,
                   "height": 25.83791208791209,
                   "rotation": 0,
-                  "scale": 1.8658188466871979,
+                  "scale": 1.2504583203649717,
                   "metadata": {
                     "width": 40,
                     "height": 25.83791208791209
+                  }
+                },
+                {
+                  "id": "el-1779929847370",
+                  "type": "balloon",
+                  "content": "Listo!<div><br></div><div>Pagame $ <b>200</b>.<br></div>",
+                  "x": 42.91666666666667,
+                  "y": 32.8125,
+                  "width": 47.5,
+                  "height": 20,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "backgroundColor": "#ffffff",
+                    "color": "#000000",
+                    "fontFamily": "\"Noto Sans\"",
+                    "fontSize": 16,
+                    "tailPos": {
+                      "x": 90,
+                      "y": 24
+                    }
+                  },
+                  "translations": {
+                    "en": {
+                      "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
+                    }
                   }
                 }
               ],
@@ -3534,46 +3842,7 @@
             {
               "id": "slide-1779929948764",
               "background": "#E1F5FE",
-              "elements": [
-                {
-                  "id": "el-1779929951389",
-                  "type": "quiz",
-                  "content": "Quiz",
-                  "x": 50,
-                  "y": 75,
-                  "width": 20,
-                  "height": 10,
-                  "rotation": 0,
-                  "scale": 1,
-                  "metadata": {
-                    "fontFamily": "\"Fira Sans\"",
-                    "options": [
-                      "Option 1",
-                      "Option 2",
-                      "Option 3",
-                      "Option 4"
-                    ],
-                    "correctIndex": 0,
-                    "correctIndices": [
-                      0
-                    ],
-                    "quizType": "classic",
-                    "visualMode": false,
-                    "translations": {
-                      "en": {
-                        "options": [
-                          "Option 1",
-                          "Option 2",
-                          "Option 3",
-                          "Option 4"
-                        ],
-                        "matchAnswers": [],
-                        "chatNodes": []
-                      }
-                    }
-                  }
-                }
-              ],
+              "elements": [],
               "order": 4
             },
             {
@@ -3583,7 +3852,7 @@
                 {
                   "id": "el-1779929987192",
                   "type": "quiz",
-                  "content": "Quiz",
+                  "content": "<span style=\"font-weight: normal;\">Gracias...</span>",
                   "x": 50,
                   "y": 75,
                   "width": 20,
@@ -3607,46 +3876,46 @@
                       },
                       {
                         "type": "reply",
-                        "text": "I'm afraid that's wrong...",
+                        "text": "Eso no es correcto...",
                         "avatar": "avatar_dilla.png"
                       },
                       {
                         "type": "message",
-                        "text": "Impossible!",
+                        "text": "¡Imposible!",
                         "avatar": "avatar_sales.png"
                       },
                       {
                         "type": "reply",
-                        "text": "We must start by the...",
+                        "text": "Debemos comenzar por la",
                         "avatar": "avatar_dilla.png"
                       },
                       {
                         "type": "quiz",
                         "options": [
-                          "addition",
-                          "multiplication"
+                          "suma",
+                          "multiplicación"
                         ],
                         "correctIndex": 1,
                         "avatar": "avatar_dilla.png"
                       },
                       {
                         "type": "message",
-                        "text": "Do whatever you want.<div><br><div>It's still going to cost $ 200.</div></div>",
+                        "text": "<span style=\"font-weight: normal;\">No digas tonterías.</span><div><span style=\"font-weight: normal;\"><br></span><div><span style=\"font-weight: normal;\">¡Pagame $ 200 !</span></div></div>",
                         "avatar": "avatar_sales.png"
                       },
                       {
                         "type": "reply",
-                        "text": "<div>2 hours of labor at $ 20 each equals 40.</div><div><br></div>30+50+<font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>",
+                        "text": "<div><font>2</font><font color=\"#000000\" style=\"font-weight: normal;\"> horas de trabajo, cada una a $ </font>20<span style=\"color: rgb(0, 0, 0); font-weight: normal;\"> es igual a &nbsp;</span>40<span style=\"color: rgb(0, 0, 0); font-weight: normal;\">.</span></div><div><br></div><font color=\"#000000\">30+50+</font><font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>",
                         "avatar": "avatar_dilla.png"
                       },
                       {
                         "type": "message",
-                        "text": "I see you know your order of operations...<div><br><div>Ok, I'll take $ 120.</div></div>",
+                        "text": "<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">Grrrr... veo que dominas el orden las operaciones.</span></font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">Ok, dame $ 120...</span></font></div>",
                         "avatar": "avatar_sales.png"
                       },
                       {
                         "type": "reply",
-                        "text": "Thanks...",
+                        "text": "<span style=\"font-weight: normal;\">Gracias...</span>",
                         "avatar": "avatar_dilla.png"
                       }
                     ],
@@ -3706,7 +3975,8 @@
                           }
                         ]
                       }
-                    }
+                    },
+                    "color": "#000000"
                   }
                 }
               ],
@@ -3715,7 +3985,7 @@
           ],
           "author": "User",
           "createdAt": "2026-05-28T00:51:30.015Z",
-          "updatedAt": "2026-05-28T16:08:25.807Z",
+          "updatedAt": "2026-05-28T20:17:40.186Z",
           "path": "lessons/5704-Estafa/lesson.json",
           "textPreset": null,
           "name": "5704-Estafa",
@@ -3744,7 +4014,8 @@
                     "metadata": {
                       "width": 40,
                       "height": 11.25,
-                      "opacity": 0.53
+                      "opacity": 0.53,
+                      "locked": true
                     }
                   },
                   {
@@ -3760,7 +4031,9 @@
                     "metadata": {
                       "width": 40,
                       "height": 11.25,
-                      "opacity": 0.63
+                      "opacity": 0.63,
+                      "locked": true,
+                      "hidden": false
                     }
                   },
                   {
@@ -3776,7 +4049,9 @@
                     "metadata": {
                       "width": 40,
                       "height": 11.25,
-                      "opacity": 0.62
+                      "opacity": 0.62,
+                      "locked": true,
+                      "hidden": false
                     }
                   },
                   {
@@ -3792,7 +4067,9 @@
                     "metadata": {
                       "width": 40,
                       "height": 22.78253424657534,
-                      "flipX": true
+                      "flipX": true,
+                      "locked": false,
+                      "hidden": false
                     }
                   },
                   {
@@ -4022,6 +4299,70 @@
                 "background": "#E1F5FE",
                 "elements": [
                   {
+                    "id": "el-1779984036243",
+                    "type": "image",
+                    "content": "/assets/objects/shop_counter.png",
+                    "x": 71.11111111111111,
+                    "y": 43.59375,
+                    "width": 40,
+                    "height": 12.306472081218274,
+                    "rotation": 0,
+                    "scale": 2.1400604093980444,
+                    "metadata": {
+                      "width": 40,
+                      "height": 12.306472081218274,
+                      "locked": true
+                    }
+                  },
+                  {
+                    "id": "el-1779929847370",
+                    "type": "balloon",
+                    "content": "Listo!<div><br></div><div>30+50+20x2&nbsp;</div><div>= 100 x 2&nbsp;</div><div>=$ 200 </div>",
+                    "x": 43.47222222222223,
+                    "y": 33.828125,
+                    "width": 47.5,
+                    "height": 25.46875,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "backgroundColor": "#ffffff",
+                      "color": "#000000",
+                      "fontFamily": "\"Noto Sans\"",
+                      "fontSize": 16,
+                      "tailPos": {
+                        "x": 89,
+                        "y": 11
+                      }
+                    },
+                    "translations": {
+                      "en": {
+                        "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
+                      }
+                    }
+                  },
+                  {
+                    "id": "el-1779929821725",
+                    "type": "text",
+                    "content": "2 horas después...",
+                    "x": 48.19444444444444,
+                    "y": 16.40625,
+                    "width": 45.27777777777778,
+                    "height": 7.8125,
+                    "rotation": 0,
+                    "scale": 1.5758348196618663,
+                    "metadata": {
+                      "textAlign": "center",
+                      "fontFamily": "\"Fira Sans\"",
+                      "backgroundColor": "#5A5A5A",
+                      "color": "#FFFFFF"
+                    },
+                    "translations": {
+                      "en": {
+                        "content": "2 hours later"
+                      }
+                    }
+                  },
+                  {
                     "id": "el-1779979971393",
                     "type": "image",
                     "content": "/src/assets/characters/sales_standing02.png",
@@ -4050,54 +4391,6 @@
                     "metadata": {
                       "width": 40,
                       "height": 25.83791208791209
-                    }
-                  },
-                  {
-                    "id": "el-1779929821725",
-                    "type": "text",
-                    "content": "2 horas después...",
-                    "x": 48.19444444444444,
-                    "y": 16.40625,
-                    "width": 45.27777777777778,
-                    "height": 7.8125,
-                    "rotation": 0,
-                    "scale": 1.5758348196618663,
-                    "metadata": {
-                      "textAlign": "center",
-                      "fontFamily": "\"Fira Sans\"",
-                      "backgroundColor": "#5A5A5A",
-                      "color": "#FFFFFF"
-                    },
-                    "translations": {
-                      "en": {
-                        "content": "2 hours later"
-                      }
-                    }
-                  },
-                  {
-                    "id": "el-1779929847370",
-                    "type": "balloon",
-                    "content": "Listo!<div><br></div><div>30+50+20x2&nbsp;</div><div>= 100 x 2&nbsp;</div><div>=$ 200 </div>",
-                    "x": 43.47222222222223,
-                    "y": 33.828125,
-                    "width": 47.5,
-                    "height": 25.46875,
-                    "rotation": 0,
-                    "scale": 1,
-                    "metadata": {
-                      "backgroundColor": "#ffffff",
-                      "color": "#000000",
-                      "fontFamily": "\"Noto Sans\"",
-                      "fontSize": 16,
-                      "tailPos": {
-                        "x": 89,
-                        "y": 11
-                      }
-                    },
-                    "translations": {
-                      "en": {
-                        "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
-                      }
                     }
                   }
                 ],
@@ -4287,7 +4580,7 @@
             ],
             "author": "User",
             "createdAt": "2026-05-28T00:51:30.015Z",
-            "updatedAt": "2026-05-28T15:07:03.361Z",
+            "updatedAt": "2026-05-28T16:08:25.807Z",
             "path": "lessons/5704-Estafa/lesson.json",
             "textPreset": null,
             "name": "5704-Estafa",
@@ -4649,7 +4942,7 @@
                     {
                       "id": "el-1779929847370",
                       "type": "balloon",
-                      "content": "Listo!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>",
+                      "content": "Listo!<div><br></div><div>30+50+20x2&nbsp;</div><div>= 100 x 2&nbsp;</div><div>=$ 200 </div>",
                       "x": 43.47222222222223,
                       "y": 33.828125,
                       "width": 47.5,
@@ -4859,7 +5152,7 @@
               ],
               "author": "User",
               "createdAt": "2026-05-28T00:51:30.015Z",
-              "updatedAt": "2026-05-28T14:58:21.789Z",
+              "updatedAt": "2026-05-28T15:07:03.361Z",
               "path": "lessons/5704-Estafa/lesson.json",
               "textPreset": null,
               "name": "5704-Estafa",
@@ -4924,11 +5217,27 @@
                         }
                       },
                       {
+                        "id": "el-1779978583454",
+                        "type": "image",
+                        "content": "/src/assets/characters/sales_phone.png",
+                        "x": 60.83333333333332,
+                        "y": 68.4375,
+                        "width": 40,
+                        "height": 22.78253424657534,
+                        "rotation": 0,
+                        "scale": 3.3038295921524536,
+                        "metadata": {
+                          "width": 40,
+                          "height": 22.78253424657534,
+                          "flipX": true
+                        }
+                      },
+                      {
                         "id": "el-1779929503673",
                         "type": "balloon",
-                        "content": "Te dejo.<div>Voy a engañar a un tontito que acaba de entrar.</div>",
-                        "x": 27.777777777777775,
-                        "y": 39.6875,
+                        "content": "Te dejo.<div>Voy a engañar a una tonta que acaba de entrar.</div>",
+                        "x": 31.666666666666664,
+                        "y": 22.34375,
                         "width": 67.77777777777779,
                         "height": 20,
                         "rotation": 0,
@@ -4939,8 +5248,13 @@
                           "fontFamily": "\"Noto Sans\"",
                           "fontSize": 16,
                           "tailPos": {
-                            "x": 46,
-                            "y": 106
+                            "x": 28,
+                            "y": 101
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "I'll call you back.<div>A new sucker&nbsp;</div><div>just walked in.</div>"
                           }
                         }
                       }
@@ -4952,33 +5266,57 @@
                     "background": "#E1F5FE",
                     "elements": [
                       {
-                        "id": "el-1779929639166",
-                        "type": "balloon",
-                        "content": "Quiero reemplazar el vidrio y la batería.",
-                        "x": 30,
-                        "y": 28.4375,
+                        "id": "el-1779979727530",
+                        "type": "image",
+                        "content": "/src/assets/characters/dilla_looking_up.png",
+                        "x": 24.166666666666668,
+                        "y": 85.15625,
                         "width": 40,
-                        "height": 20,
+                        "height": 29.432773109243698,
                         "rotation": 0,
                         "scale": 1,
                         "metadata": {
-                          "backgroundColor": "#ffffff",
-                          "color": "#000000",
-                          "fontFamily": "\"Noto Sans\"",
-                          "fontSize": 16,
-                          "tailPos": {
-                            "x": -48,
-                            "y": 87
-                          }
+                          "width": 40,
+                          "height": 29.432773109243698
                         }
                       },
                       {
-                        "id": "el-1779929656255",
+                        "id": "el-1779979797863",
+                        "type": "image",
+                        "content": "/assets/objects/shop_counter.png",
+                        "x": 79.16666666666667,
+                        "y": 54.53125,
+                        "width": 40,
+                        "height": 12.306472081218274,
+                        "rotation": 0,
+                        "scale": 1.798236323798209,
+                        "metadata": {
+                          "width": 40,
+                          "height": 12.306472081218274
+                        }
+                      },
+                      {
+                        "id": "el-1779979751577",
+                        "type": "image",
+                        "content": "/src/assets/characters/alien_salesman_002.png",
+                        "x": 67.77777777777779,
+                        "y": 66.71875,
+                        "width": 40,
+                        "height": 40.74446680080484,
+                        "rotation": 0,
+                        "scale": 1.1710742376802976,
+                        "metadata": {
+                          "width": 40,
+                          "height": 40.74446680080484
+                        }
+                      },
+                      {
+                        "id": "el-1779929639166",
                         "type": "balloon",
-                        "content": "<div>Estos son los costos.</div><div><br></div><div>Vidrio: $30</div><div>Batería: $50</div><div>Horas de trabajo: $20 x 2</div><div><br></div>",
-                        "x": 65.55555555555556,
-                        "y": 56.796875,
-                        "width": 68.88888888888889,
+                        "content": "Quiero reemplazar el vidrio y la batería de mi teléfono.",
+                        "x": 23.88888888888889,
+                        "y": 38.359375,
+                        "width": 40,
                         "height": 26.406249999999996,
                         "rotation": 0,
                         "scale": 1,
@@ -4988,8 +5326,39 @@
                           "fontFamily": "\"Noto Sans\"",
                           "fontSize": 16,
                           "tailPos": {
-                            "x": 60,
-                            "y": 97
+                            "x": 7,
+                            "y": 105
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Hi. I need to replace my phone's glass and battery."
+                          }
+                        }
+                      },
+                      {
+                        "id": "el-1779929656255",
+                        "type": "balloon",
+                        "content": "<div><br></div><div>Vidrio: $30<br></div><div>Batería: $50</div><div>Horas de trabajo: $20 x 2</div><div><br></div>",
+                        "x": 73.19444444444446,
+                        "y": 28.984375,
+                        "width": 53.05555555555556,
+                        "height": 24.53125,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": -17,
+                            "y": 106
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "<div><br></div><div>Glass: $30<br></div><div>Battery: $50</div><div>Labor hour: $20 x 2</div><div><br></div>"
                           }
                         }
                       }
@@ -5001,11 +5370,67 @@
                     "background": "#E1F5FE",
                     "elements": [
                       {
+                        "id": "el-1779979894993",
+                        "type": "image",
+                        "content": "/src/assets/characters/dilla_looking_up.png",
+                        "x": 11.111111111111112,
+                        "y": 99.0625,
+                        "width": 40,
+                        "height": 29.432773109243698,
+                        "rotation": 0,
+                        "scale": 1.9778952107375232,
+                        "metadata": {
+                          "width": 40,
+                          "height": 29.432773109243698
+                        }
+                      },
+                      {
+                        "id": "el-1779979915719",
+                        "type": "image",
+                        "content": "/src/assets/characters/alien_salesman_003.png",
+                        "x": 84.16666666666664,
+                        "y": 62.34375,
+                        "width": 40,
+                        "height": 29.176829268292682,
+                        "rotation": 0,
+                        "scale": 2.5175607344393183,
+                        "metadata": {
+                          "width": 40,
+                          "height": 29.176829268292682
+                        }
+                      },
+                      {
+                        "id": "el-1779929808147",
+                        "type": "balloon",
+                        "content": "Volvé en 2 horas.",
+                        "x": 62.22222222222222,
+                        "y": 20.078125,
+                        "width": 40,
+                        "height": 15.78125,
+                        "rotation": 0,
+                        "scale": 1,
+                        "metadata": {
+                          "backgroundColor": "#ffffff",
+                          "color": "#000000",
+                          "fontFamily": "\"Noto Sans\"",
+                          "fontSize": 16,
+                          "tailPos": {
+                            "x": 6,
+                            "y": 72
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Come back in 2 hours."
+                          }
+                        }
+                      },
+                      {
                         "id": "el-1779929798964",
                         "type": "balloon",
-                        "content": "Perfecto",
-                        "x": 34.44444444444444,
-                        "y": 30,
+                        "content": "Perfecto.",
+                        "x": 17.499999999999996,
+                        "y": 52.1875,
                         "width": 40,
                         "height": 20,
                         "rotation": 0,
@@ -5016,29 +5441,13 @@
                           "fontFamily": "\"Noto Sans\"",
                           "fontSize": 16,
                           "tailPos": {
-                            "x": -38,
-                            "y": 81
+                            "x": 6,
+                            "y": 79
                           }
-                        }
-                      },
-                      {
-                        "id": "el-1779929808147",
-                        "type": "balloon",
-                        "content": "Volvé en 2 horas",
-                        "x": 65.55555555555556,
-                        "y": 53.59375,
-                        "width": 40,
-                        "height": 24.375,
-                        "rotation": 0,
-                        "scale": 1,
-                        "metadata": {
-                          "backgroundColor": "#ffffff",
-                          "color": "#000000",
-                          "fontFamily": "\"Noto Sans\"",
-                          "fontSize": 16,
-                          "tailPos": {
-                            "x": 44,
-                            "y": 93
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "OK."
                           }
                         }
                       }
@@ -5050,28 +5459,66 @@
                     "background": "#E1F5FE",
                     "elements": [
                       {
+                        "id": "el-1779979971393",
+                        "type": "image",
+                        "content": "/src/assets/characters/sales_standing02.png",
+                        "x": 75,
+                        "y": 60.9375,
+                        "width": 40,
+                        "height": 21.675,
+                        "rotation": 0,
+                        "scale": 2.4182037957908045,
+                        "metadata": {
+                          "width": 40,
+                          "height": 21.675,
+                          "flipX": false
+                        }
+                      },
+                      {
+                        "id": "el-1779979998811",
+                        "type": "image",
+                        "content": "/src/assets/characters/dilla_standing_back.png",
+                        "x": 36.38888888888889,
+                        "y": 90.15625,
+                        "width": 40,
+                        "height": 25.83791208791209,
+                        "rotation": 0,
+                        "scale": 1.8658188466871979,
+                        "metadata": {
+                          "width": 40,
+                          "height": 25.83791208791209
+                        }
+                      },
+                      {
                         "id": "el-1779929821725",
                         "type": "text",
                         "content": "2 horas después...",
-                        "x": 47.916666666666664,
-                        "y": 20.3125,
+                        "x": 48.19444444444444,
+                        "y": 16.40625,
                         "width": 45.27777777777778,
                         "height": 7.8125,
                         "rotation": 0,
-                        "scale": 1,
+                        "scale": 1.5758348196618663,
                         "metadata": {
                           "textAlign": "center",
-                          "fontFamily": "\"Fira Sans\""
+                          "fontFamily": "\"Fira Sans\"",
+                          "backgroundColor": "#5A5A5A",
+                          "color": "#FFFFFF"
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "2 hours later"
+                          }
                         }
                       },
                       {
                         "id": "el-1779929847370",
                         "type": "balloon",
-                        "content": "Listo!<div><br></div><div>30+50+20x2 =</div><div>100 x 2 =200 </div>",
-                        "x": 60.833333333333336,
-                        "y": 47.1875,
-                        "width": 66.11111111111111,
-                        "height": 20,
+                        "content": "Listo!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>",
+                        "x": 43.47222222222223,
+                        "y": 33.828125,
+                        "width": 47.5,
+                        "height": 25.46875,
                         "rotation": 0,
                         "scale": 1,
                         "metadata": {
@@ -5080,8 +5527,13 @@
                           "fontFamily": "\"Noto Sans\"",
                           "fontSize": 16,
                           "tailPos": {
-                            "x": 39,
-                            "y": 95
+                            "x": 89,
+                            "y": 11
+                          }
+                        },
+                        "translations": {
+                          "en": {
+                            "content": "Ready!<div><br></div><div>30+50+20x2 =</div><div>100 x 2&nbsp;</div><div>=$ 200 </div>"
                           }
                         }
                       }
@@ -5115,7 +5567,19 @@
                             0
                           ],
                           "quizType": "classic",
-                          "visualMode": false
+                          "visualMode": false,
+                          "translations": {
+                            "en": {
+                              "options": [
+                                "Option 1",
+                                "Option 2",
+                                "Option 3",
+                                "Option 4"
+                              ],
+                              "matchAnswers": [],
+                              "chatNodes": []
+                            }
+                          }
                         }
                       }
                     ],
@@ -5194,7 +5658,64 @@
                               "text": "Thanks...",
                               "avatar": "avatar_dilla.png"
                             }
-                          ]
+                          ],
+                          "translations": {
+                            "en": {
+                              "options": [],
+                              "matchAnswers": [],
+                              "chatNodes": [
+                                {
+                                  "type": "message",
+                                  "text": "<div>30 $ for the glass +</div><div>50 $ for the battery +</div><div>20 per labour hour (2 hours)</div><div><br></div>30+50+20x2&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x 2</span><div>= 200</div></div>",
+                                  "avatar": "avatar_sales.png"
+                                },
+                                {
+                                  "type": "reply",
+                                  "text": "I'm afraid that's wrong...",
+                                  "avatar": "avatar_dilla.png"
+                                },
+                                {
+                                  "type": "message",
+                                  "text": "Impossible!",
+                                  "avatar": "avatar_sales.png"
+                                },
+                                {
+                                  "type": "reply",
+                                  "text": "We must start by the...",
+                                  "avatar": "avatar_dilla.png"
+                                },
+                                {
+                                  "type": "quiz",
+                                  "options": [
+                                    "addition",
+                                    "multiplication"
+                                  ],
+                                  "correctIndex": 1,
+                                  "avatar": "avatar_dilla.png"
+                                },
+                                {
+                                  "type": "message",
+                                  "text": "Do whatever you want.<div><br><div>It's still going to cost $ 200.</div></div>",
+                                  "avatar": "avatar_sales.png"
+                                },
+                                {
+                                  "type": "reply",
+                                  "text": "<div>2 hours of labor at $ 20 each equals 40.</div><div><br></div>30+50+<font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>",
+                                  "avatar": "avatar_dilla.png"
+                                },
+                                {
+                                  "type": "message",
+                                  "text": "I see you know your order of operations...<div><br><div>Ok, I'll take $ 120.</div></div>",
+                                  "avatar": "avatar_sales.png"
+                                },
+                                {
+                                  "type": "reply",
+                                  "text": "Thanks...",
+                                  "avatar": "avatar_dilla.png"
+                                }
+                              ]
+                            }
+                          }
                         }
                       }
                     ],
@@ -5203,7 +5724,7 @@
                 ],
                 "author": "User",
                 "createdAt": "2026-05-28T00:51:30.015Z",
-                "updatedAt": "2026-05-28T14:29:13.994Z",
+                "updatedAt": "2026-05-28T14:58:21.789Z",
                 "path": "lessons/5704-Estafa/lesson.json",
                 "textPreset": null,
                 "name": "5704-Estafa",
@@ -5220,11 +5741,59 @@
                       "background": "#E1F5FE",
                       "elements": [
                         {
+                          "id": "el-1779978514469",
+                          "type": "image",
+                          "content": "/assets/objects/phone_cases.png",
+                          "x": 101.66666666666667,
+                          "y": 52.96875,
+                          "width": 40,
+                          "height": 11.25,
+                          "rotation": 0,
+                          "scale": 1.9175826058503884,
+                          "metadata": {
+                            "width": 40,
+                            "height": 11.25,
+                            "opacity": 0.53
+                          }
+                        },
+                        {
+                          "id": "el-1779978508511",
+                          "type": "image",
+                          "content": "/assets/objects/phone_cases.png",
+                          "x": 22.22222222222222,
+                          "y": 53.28125,
+                          "width": 40,
+                          "height": 11.25,
+                          "rotation": 0,
+                          "scale": 1.9175826058503884,
+                          "metadata": {
+                            "width": 40,
+                            "height": 11.25,
+                            "opacity": 0.63
+                          }
+                        },
+                        {
+                          "id": "el-1779978500562",
+                          "type": "image",
+                          "content": "/assets/objects/phone_cases.png",
+                          "x": 49.44444444444444,
+                          "y": 29.6875,
+                          "width": 40,
+                          "height": 11.25,
+                          "rotation": 0,
+                          "scale": 1.9175826058503884,
+                          "metadata": {
+                            "width": 40,
+                            "height": 11.25,
+                            "opacity": 0.62
+                          }
+                        },
+                        {
                           "id": "el-1779929503673",
                           "type": "balloon",
                           "content": "Te dejo.<div>Voy a engañar a un tontito que acaba de entrar.</div>",
-                          "x": 61.388888888888886,
-                          "y": 34.6875,
+                          "x": 27.777777777777775,
+                          "y": 39.6875,
                           "width": 67.77777777777779,
                           "height": 20,
                           "rotation": 0,
@@ -5499,7 +6068,7 @@
                   ],
                   "author": "User",
                   "createdAt": "2026-05-28T00:51:30.015Z",
-                  "updatedAt": "2026-05-28T13:59:02.861Z",
+                  "updatedAt": "2026-05-28T14:29:13.994Z",
                   "path": "lessons/5704-Estafa/lesson.json",
                   "textPreset": null,
                   "name": "5704-Estafa",
@@ -5508,7 +6077,7 @@
                   "visible": true,
                   "order": 5704,
                   "content": {
-                    "id": "draft-1",
+                    "id": "lessons/5704-Estafa/lesson.json",
                     "title": "Estafa",
                     "slides": [
                       {
@@ -5739,19 +6308,23 @@
                               "chatNodes": [
                                 {
                                   "type": "message",
-                                  "text": "<div>30 por reparar el vidrio +</div><div>50 por la batería +</div><div>20 por hora de trabajo (2 horas)</div><div><br></div>30+50+20x2&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x 2</span><div>= 200</div></div>"
+                                  "text": "<div>30 $ por reparar el vidrio +</div><div>50 $ por la batería +</div><div>20 por hora de trabajo (2 horas)</div><div><br></div>30+50+20x2&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x 2</span><div>= 200</div></div>",
+                                  "avatar": "avatar_sales.png"
                                 },
                                 {
                                   "type": "reply",
-                                  "text": "I'm afraid that's wrong..."
+                                  "text": "I'm afraid that's wrong...",
+                                  "avatar": "avatar_dilla.png"
                                 },
                                 {
                                   "type": "message",
-                                  "text": "Impossible!"
+                                  "text": "Impossible!",
+                                  "avatar": "avatar_sales.png"
                                 },
                                 {
                                   "type": "reply",
-                                  "text": "We must start by the..."
+                                  "text": "We must start by the...",
+                                  "avatar": "avatar_dilla.png"
                                 },
                                 {
                                   "type": "quiz",
@@ -5759,23 +6332,28 @@
                                     "addition",
                                     "multiplication"
                                   ],
-                                  "correctIndex": 1
+                                  "correctIndex": 1,
+                                  "avatar": "avatar_dilla.png"
                                 },
                                 {
                                   "type": "message",
-                                  "text": "Do whatever you want.<div>It's still going to cost 200.</div>"
+                                  "text": "Do whatever you want.<div><br><div>It's still going to cost $ 200.</div></div>",
+                                  "avatar": "avatar_sales.png"
                                 },
                                 {
                                   "type": "reply",
-                                  "text": "<div>2 hours of labor at 20 each equals 40.</div><div><br></div>30+50+<font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>"
+                                  "text": "<div>2 hours of labor at $ 20 each equals 40.</div><div><br></div>30+50+<font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>",
+                                  "avatar": "avatar_dilla.png"
                                 },
                                 {
                                   "type": "message",
-                                  "text": "I see you know your order of operations...<div>Ok, I'll take 120.</div>"
+                                  "text": "I see you know your order of operations...<div><br><div>Ok, I'll take $ 120.</div></div>",
+                                  "avatar": "avatar_sales.png"
                                 },
                                 {
                                   "type": "reply",
-                                  "text": "Thanks"
+                                  "text": "Thanks...",
+                                  "avatar": "avatar_dilla.png"
                                 }
                               ]
                             }
@@ -5786,11 +6364,314 @@
                     ],
                     "author": "User",
                     "createdAt": "2026-05-28T00:51:30.015Z",
-                    "updatedAt": "2026-05-28T01:06:44.823Z",
+                    "updatedAt": "2026-05-28T13:59:02.861Z",
                     "path": "lessons/5704-Estafa/lesson.json",
-                    "textPreset": null
+                    "textPreset": null,
+                    "name": "5704-Estafa",
+                    "type": "file",
+                    "description": "",
+                    "visible": true,
+                    "order": 5704,
+                    "content": {
+                      "id": "draft-1",
+                      "title": "Estafa",
+                      "slides": [
+                        {
+                          "id": "slide-1",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929503673",
+                              "type": "balloon",
+                              "content": "Te dejo.<div>Voy a engañar a un tontito que acaba de entrar.</div>",
+                              "x": 61.388888888888886,
+                              "y": 34.6875,
+                              "width": 67.77777777777779,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 46,
+                                  "y": 106
+                                }
+                              }
+                            }
+                          ],
+                          "order": 0
+                        },
+                        {
+                          "id": "slide-1779929637383",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929639166",
+                              "type": "balloon",
+                              "content": "Quiero reemplazar el vidrio y la batería.",
+                              "x": 30,
+                              "y": 28.4375,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": -48,
+                                  "y": 87
+                                }
+                              }
+                            },
+                            {
+                              "id": "el-1779929656255",
+                              "type": "balloon",
+                              "content": "<div>Estos son los costos.</div><div><br></div><div>Vidrio: $30</div><div>Batería: $50</div><div>Horas de trabajo: $20 x 2</div><div><br></div>",
+                              "x": 65.55555555555556,
+                              "y": 56.796875,
+                              "width": 68.88888888888889,
+                              "height": 26.406249999999996,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 60,
+                                  "y": 97
+                                }
+                              }
+                            }
+                          ],
+                          "order": 1
+                        },
+                        {
+                          "id": "slide-1779929797408",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929798964",
+                              "type": "balloon",
+                              "content": "Perfecto",
+                              "x": 34.44444444444444,
+                              "y": 30,
+                              "width": 40,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": -38,
+                                  "y": 81
+                                }
+                              }
+                            },
+                            {
+                              "id": "el-1779929808147",
+                              "type": "balloon",
+                              "content": "Volvé en 2 horas",
+                              "x": 65.55555555555556,
+                              "y": 53.59375,
+                              "width": 40,
+                              "height": 24.375,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 44,
+                                  "y": 93
+                                }
+                              }
+                            }
+                          ],
+                          "order": 2
+                        },
+                        {
+                          "id": "slide-1779929820449",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929821725",
+                              "type": "text",
+                              "content": "2 horas después...",
+                              "x": 47.916666666666664,
+                              "y": 20.3125,
+                              "width": 45.27777777777778,
+                              "height": 7.8125,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "textAlign": "center",
+                                "fontFamily": "\"Fira Sans\""
+                              }
+                            },
+                            {
+                              "id": "el-1779929847370",
+                              "type": "balloon",
+                              "content": "Listo!<div><br></div><div>30+50+20x2 =</div><div>100 x 2 =200 </div>",
+                              "x": 60.833333333333336,
+                              "y": 47.1875,
+                              "width": 66.11111111111111,
+                              "height": 20,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "backgroundColor": "#ffffff",
+                                "color": "#000000",
+                                "fontFamily": "\"Noto Sans\"",
+                                "fontSize": 16,
+                                "tailPos": {
+                                  "x": 39,
+                                  "y": 95
+                                }
+                              }
+                            }
+                          ],
+                          "order": 3
+                        },
+                        {
+                          "id": "slide-1779929948764",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929951389",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "fontFamily": "\"Fira Sans\"",
+                                "options": [
+                                  "Option 1",
+                                  "Option 2",
+                                  "Option 3",
+                                  "Option 4"
+                                ],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "classic",
+                                "visualMode": false
+                              }
+                            }
+                          ],
+                          "order": 4
+                        },
+                        {
+                          "id": "slide-1779929977435",
+                          "background": "#E1F5FE",
+                          "elements": [
+                            {
+                              "id": "el-1779929987192",
+                              "type": "quiz",
+                              "content": "Quiz",
+                              "x": 50,
+                              "y": 75,
+                              "width": 20,
+                              "height": 10,
+                              "rotation": 0,
+                              "scale": 1,
+                              "metadata": {
+                                "fontFamily": "\"Fira Sans\"",
+                                "options": [],
+                                "correctIndex": 0,
+                                "correctIndices": [
+                                  0
+                                ],
+                                "quizType": "chatquiz",
+                                "visualMode": false,
+                                "chatNodes": [
+                                  {
+                                    "type": "message",
+                                    "text": "<div>30 por reparar el vidrio +</div><div>50 por la batería +</div><div>20 por hora de trabajo (2 horas)</div><div><br></div>30+50+20x2&nbsp;<div>=&nbsp;<span style=\"font-size: 0.85rem;\">100 x 2</span><div>= 200</div></div>"
+                                  },
+                                  {
+                                    "type": "reply",
+                                    "text": "I'm afraid that's wrong..."
+                                  },
+                                  {
+                                    "type": "message",
+                                    "text": "Impossible!"
+                                  },
+                                  {
+                                    "type": "reply",
+                                    "text": "We must start by the..."
+                                  },
+                                  {
+                                    "type": "quiz",
+                                    "options": [
+                                      "addition",
+                                      "multiplication"
+                                    ],
+                                    "correctIndex": 1
+                                  },
+                                  {
+                                    "type": "message",
+                                    "text": "Do whatever you want.<div>It's still going to cost 200.</div>"
+                                  },
+                                  {
+                                    "type": "reply",
+                                    "text": "<div>2 hours of labor at 20 each equals 40.</div><div><br></div>30+50+<font color=\"#2e7d32\">20x2&nbsp;</font><div><font color=\"#2e7d32\">= </font><font color=\"#000000\">30 + 50 +</font><font color=\"#2e7d32\"> 40</font></div><div><font color=\"#000000\">= 120</font></div>"
+                                  },
+                                  {
+                                    "type": "message",
+                                    "text": "I see you know your order of operations...<div>Ok, I'll take 120.</div>"
+                                  },
+                                  {
+                                    "type": "reply",
+                                    "text": "Thanks"
+                                  }
+                                ]
+                              }
+                            }
+                          ],
+                          "order": 5
+                        }
+                      ],
+                      "author": "User",
+                      "createdAt": "2026-05-28T00:51:30.015Z",
+                      "updatedAt": "2026-05-28T01:06:44.823Z",
+                      "path": "lessons/5704-Estafa/lesson.json",
+                      "textPreset": null
+                    },
+                    "status": "active",
+                    "icon": {
+                      "type": {},
+                      "key": null,
+                      "props": {
+                        "size": 24
+                      },
+                      "_owner": null,
+                      "_store": {}
+                    },
+                    "progress": {
+                      "lastSlideIndex": 0,
+                      "completed": false,
+                      "lastPlayed": 1779974646381
+                    }
                   },
-                  "status": "active",
+                  "status": "completed",
                   "icon": {
                     "type": {},
                     "key": null,
@@ -5801,12 +6682,12 @@
                     "_store": {}
                   },
                   "progress": {
-                    "lastSlideIndex": 0,
-                    "completed": false,
-                    "lastPlayed": 1779974646381
+                    "lastSlideIndex": 5,
+                    "completed": true,
+                    "lastPlayed": 1779976692445
                   }
                 },
-                "status": "completed",
+                "status": "active",
                 "icon": {
                   "type": {},
                   "key": null,
@@ -5817,9 +6698,15 @@
                   "_store": {}
                 },
                 "progress": {
-                  "lastSlideIndex": 5,
-                  "completed": true,
-                  "lastPlayed": 1779976692445
+                  "lastSlideIndex": 0,
+                  "completed": false,
+                  "lastPlayed": 1779978413556
+                },
+                "translations": {
+                  "en": {
+                    "title": "Estafa",
+                    "description": ""
+                  }
                 }
               },
               "status": "active",
@@ -5835,7 +6722,7 @@
               "progress": {
                 "lastSlideIndex": 0,
                 "completed": false,
-                "lastPlayed": 1779978413556
+                "lastPlayed": 1779980369094
               },
               "translations": {
                 "en": {
@@ -5857,7 +6744,7 @@
             "progress": {
               "lastSlideIndex": 0,
               "completed": false,
-              "lastPlayed": 1779980369094
+              "lastPlayed": 1779981721359
             },
             "translations": {
               "en": {
@@ -5876,11 +6763,7 @@
             "_owner": null,
             "_store": {}
           },
-          "progress": {
-            "lastSlideIndex": 0,
-            "completed": false,
-            "lastPlayed": 1779981721359
-          },
+          "progress": null,
           "translations": {
             "en": {
               "title": "Estafa",
@@ -5898,7 +6781,11 @@
           "_owner": null,
           "_store": {}
         },
-        "progress": null,
+        "progress": {
+          "lastSlideIndex": 0,
+          "completed": false,
+          "lastPlayed": 1779982921308
+        },
         "translations": {
           "en": {
             "title": "Estafa",
@@ -5916,11 +6803,7 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1779982921308
-      },
+      "progress": null,
       "translations": {
         "en": {
           "title": "Estafa",
@@ -5929,31 +6812,29 @@
       }
     },
     "status": "active",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_textbook.png",
     "progress": null,
     "translations": {
       "en": {
         "title": "Estafa",
-        "description": ""
+        "description": "",
+        "hashtag": ""
       }
-    }
+    },
+    "cardColor": "#06B6D4",
+    "hashtag": "#OrderOfOperations"
   },
   "status": "active",
-  "icon": "icon_book.png",
-  "progress": null,
+  "icon": "icon_textbook.png",
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1782167457407
+  },
   "translations": {
     "en": {
-      "title": "Estafa",
-      "description": "",
-      "hashtag": ""
+      "title": "Scam",
+      "description": "Watch out for the scammer!"
     }
   },
   "cardColor": "#06B6D4",

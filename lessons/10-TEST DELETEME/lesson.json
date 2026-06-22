@@ -343,15 +343,7 @@
       "textPreset": null
     },
     "status": "completed",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_textbook.png",
     "progress": {
       "lastSlideIndex": 0,
       "completed": true,
@@ -359,15 +351,7 @@
     }
   },
   "status": "completed",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_textbook.png",
   "progress": {
     "lastSlideIndex": 0,
     "completed": true,

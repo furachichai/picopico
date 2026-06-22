@@ -123,7 +123,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                 left: 0,
                                 width: '100%',
                                 height: '100%',
-                                backgroundImage: slide.background,
+                                backgroundImage: slide.background ? slide.background.replaceAll('/src/assets/', '/assets/') : slide.background,
                                 backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
                                     ? `${slide.backgroundSettings?.size ?? 100}%`
                                     : (slide.backgroundSettings?.sizeMode || 'cover'),

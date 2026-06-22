@@ -513,7 +513,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 )}
                 {element.type === 'image' && (
                     <img
-                        src={element.content}
+                        src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''}
                         alt="sticker"
                         draggable="false"
                         style={{

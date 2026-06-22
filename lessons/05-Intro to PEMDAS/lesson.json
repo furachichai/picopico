@@ -3755,15 +3755,7 @@
       "progress": null
     },
     "status": "completed",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_gym.png",
     "progress": {
       "lastSlideIndex": 9,
       "completed": true,

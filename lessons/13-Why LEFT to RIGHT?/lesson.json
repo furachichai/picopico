@@ -7076,15 +7076,7 @@
       }
     },
     "status": "active",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_textbook.png",
     "progress": {
       "lastSlideIndex": 0,
       "completed": false,
@@ -7098,7 +7090,7 @@
     }
   },
   "status": "completed",
-  "icon": "icon_lightbulb.png",
+  "icon": "icon_textbook.png",
   "progress": {
     "lastSlideIndex": 4,
     "completed": true,

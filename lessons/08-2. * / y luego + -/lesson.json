@@ -3193,15 +3193,7 @@
       }
     },
     "status": "active",
-    "icon": {
-      "type": {},
-      "key": null,
-      "props": {
-        "size": 24
-      },
-      "_owner": null,
-      "_store": {}
-    },
+    "icon": "icon_textbook.png",
     "progress": {
       "lastSlideIndex": 1,
       "completed": false,
@@ -3209,15 +3201,7 @@
     }
   },
   "status": "active",
-  "icon": {
-    "type": {},
-    "key": null,
-    "props": {
-      "size": 24
-    },
-    "_owner": null,
-    "_store": {}
-  },
+  "icon": "icon_textbook.png",
   "progress": {
     "lastSlideIndex": 1,
     "completed": false,
