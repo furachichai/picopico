@@ -396,6 +396,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const isGlobalSlicing = React.useRef(false);
+  const canvasRef = React.useRef(null);
+  const swipePoints = React.useRef([]);
+
+  // Resize canvas to match bounds on screen changes or viewport resize
+  useEffect(() => {
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [screen]);
 
   const compareAndCrossOutSlice = useCallback((numId, numIdx, denId, denIdx) => {
     const termA = numTerms.find(t => t.id === numId);
@@ -473,35 +489,114 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [slicedNum, slicedDen, numTerms, denTerms, compareAndCrossOutSlice]);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    
+    const animateCanvas = () => {
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const now = Date.now();
+      // Filter out points older than 250ms for a snappy, fast-fading tail
+      swipePoints.current = swipePoints.current.filter(p => now - p.time < 250);
+      
+      if (swipePoints.current.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(swipePoints.current[0].x, swipePoints.current[0].y);
+        for (let i = 1; i < swipePoints.current.length; i++) {
+          ctx.lineTo(swipePoints.current[i].x, swipePoints.current[i].y);
+        }
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#10b981';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#10b981';
+        ctx.stroke();
+      }
+      
+      if (isGlobalSlicing.current || swipePoints.current.length > 0) {
+        requestAnimationFrame(animateCanvas);
+      }
+    };
+
     const handleGlobalDown = (e) => {
-      if (isValidating) return;
+      if (isValidating || topic !== 'divisions') return;
+      
       // Slicing must start outside the card
       if (e.target.closest('.term-card')) {
         isGlobalSlicing.current = false;
         return;
       }
+      
+      const canvasEl = canvasRef.current;
+      if (!canvasEl) return;
+      const rect = canvasEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
       isGlobalSlicing.current = true;
+      swipePoints.current = [{
+        x,
+        y,
+        clientX: e.clientX,
+        clientY: e.clientY,
+        time: Date.now()
+      }];
+      
+      requestAnimationFrame(animateCanvas);
     };
 
     const handleGlobalMove = (e) => {
       if (!isGlobalSlicing.current) return;
       
-      const elem = document.elementFromPoint(e.clientX, e.clientY);
-      const card = elem?.closest('.term-card');
-      if (card) {
-        const id = card.getAttribute('data-id');
-        const type = card.getAttribute('data-type');
-        const indexVal = card.getAttribute('data-index');
+      const canvasEl = canvasRef.current;
+      if (!canvasEl) return;
+      const rect = canvasEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const lastPoint = swipePoints.current[swipePoints.current.length - 1];
+      const newPoint = {
+        x,
+        y,
+        clientX: e.clientX,
+        clientY: e.clientY,
+        time: Date.now()
+      };
+      
+      swipePoints.current.push(newPoint);
+      
+      // Collision segment interpolation
+      if (lastPoint) {
+        const dx = e.clientX - lastPoint.clientX;
+        const dy = e.clientY - lastPoint.clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.max(1, Math.floor(dist / 8)); // sample every 8px
         
-        if (id && type && indexVal !== null) {
-          const index = parseInt(indexVal, 10);
-          if (type === 'num') {
-            if (!slicedNum.includes(id) && !crossedOutNum.includes(id)) {
-              handleSlice('num', index, id);
-            }
-          } else {
-            if (!slicedDen.includes(id) && !crossedOutDen.includes(id)) {
-              handleSlice('den', index, id);
+        for (let s = 0; s <= steps; s++) {
+          const t = steps === 0 ? 0 : s / steps;
+          const interpClientX = lastPoint.clientX + dx * t;
+          const interpClientY = lastPoint.clientY + dy * t;
+          
+          const elem = document.elementFromPoint(interpClientX, interpClientY);
+          const card = elem?.closest('.term-card');
+          if (card) {
+            const id = card.getAttribute('data-id');
+            const type = card.getAttribute('data-type');
+            const indexVal = card.getAttribute('data-index');
+            
+            if (id && type && indexVal !== null) {
+              const index = parseInt(indexVal, 10);
+              if (type === 'num') {
+                if (!slicedNum.includes(id) && !crossedOutNum.includes(id)) {
+                  handleSlice('num', index, id);
+                }
+              } else {
+                if (!slicedDen.includes(id) && !crossedOutDen.includes(id)) {
+                  handleSlice('den', index, id);
+                }
+              }
             }
           }
         }
@@ -520,7 +615,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);
     };
-  }, [slicedNum, slicedDen, crossedOutNum, crossedOutDen, handleSlice, isValidating]);
+  }, [slicedNum, slicedDen, crossedOutNum, crossedOutDen, handleSlice, isValidating, topic]);
 
 
   const handleCombine = (index) => {
@@ -725,6 +820,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       <ParticlesBG />
       
       <div className="screen-container">
+        <canvas
+          ref={canvasRef}
+          className="slice-canvas"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: 1000
+          }}
+        />
         <AnimatePresence mode="wait">
           {screen === 'start' && (
             <StartScreen key="start" onStart={handleStart} topic={topic} setTopic={setTopic} />
