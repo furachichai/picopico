@@ -328,8 +328,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [topic, setTopic] = useState('divisions'); // Default is 'divisions'
   const [numTerms, setNumTerms] = useState([]);
   const [denTerms, setDenTerms] = useState([]);
-  const [selectedNumIdx, setSelectedNumIdx] = useState(null);
-  const [selectedDenIdx, setSelectedDenIdx] = useState(null);
+  const [slicedNum, setSlicedNum] = useState([]); // Sliced numerator term IDs
+  const [slicedDen, setSlicedDen] = useState([]); // Sliced denominator term IDs
   const [crossedOutNum, setCrossedOutNum] = useState([]);
   const [crossedOutDen, setCrossedOutDen] = useState([]);
 
@@ -341,26 +341,26 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     perfectLevels: 0
   });
 
-  const handleStart = () => {
-    const generated = topic === 'divisions' ? generateDivisionLevels() : generateLevels();
-    setLevels(generated);
-    setCurrentLevelIndex(0);
-    loadLevel(generated[0]);
-    setStats({
-      totalUserPresses: 0,
-      totalMinPresses: 0,
-      totalMistakes: 0,
-      perfectLevels: 0
-    });
-    setScreen('game');
-  };
+  const triggerShake = useCallback(() => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  }, []);
 
-  const loadLevel = (levelObj) => {
+  const triggerFlash = useCallback((type) => {
+    setFlash(type);
+    setTimeout(() => setFlash(null), 500);
+  }, []);
+
+  const showFeedback = useCallback((text, type) => {
+    setFeedback({ text, type });
+  }, []);
+
+  const loadLevel = useCallback((levelObj) => {
     if (topic === 'divisions') {
       setNumTerms(levelObj.initialNum || []);
       setDenTerms(levelObj.initialDen || []);
-      setSelectedNumIdx(null);
-      setSelectedDenIdx(null);
+      setSlicedNum([]);
+      setSlicedDen([]);
       setCrossedOutNum([]);
       setCrossedOutDen([]);
     } else {
@@ -379,68 +379,58 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setIsValidating(false);
     setIsElegantCompleted(false);
     setIsDraggingTerm(false);
+  }, [topic]);
+
+  const handleStart = () => {
+    const generated = topic === 'divisions' ? generateDivisionLevels() : generateLevels();
+    setLevels(generated);
+    setCurrentLevelIndex(0);
+    loadLevel(generated[0]);
+    setStats({
+      totalUserPresses: 0,
+      totalMinPresses: 0,
+      totalMistakes: 0,
+      perfectLevels: 0
+    });
+    setScreen('game');
   };
 
-  const triggerShake = () => {
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
-  };
+  const pointerStart = React.useRef(null);
+  const isSwiping = React.useRef(false);
 
-  const triggerFlash = (type) => {
-    setFlash(type);
-    setTimeout(() => setFlash(null), 500);
-  };
-
-  const showFeedback = (text, type) => {
-    setFeedback({ text, type });
-  };
-
-  const handleTermSelect = (type, index) => {
+  const handlePointerDown = (e, type, index, id) => {
     if (isValidating || isDraggingTerm) return;
-    unlockAudio();
-
-    if (type === 'num') {
-      if (selectedNumIdx === index) {
-        setSelectedNumIdx(null);
-        return;
-      }
-      setSelectedNumIdx(index);
-      
-      if (selectedDenIdx !== null) {
-        compareAndCrossOut(index, selectedDenIdx);
-      }
-    } else {
-      if (selectedDenIdx === index) {
-        setSelectedDenIdx(null);
-        return;
-      }
-      setSelectedDenIdx(index);
-      
-      if (selectedNumIdx !== null) {
-        compareAndCrossOut(selectedNumIdx, index);
-      }
-    }
+    pointerStart.current = {
+      x: e.clientX,
+      y: e.clientY,
+      type,
+      index,
+      id
+    };
+    isSwiping.current = true;
   };
 
-  const compareAndCrossOut = (numIdx, denIdx) => {
-    const termA = numTerms[numIdx];
-    const termB = denTerms[denIdx];
+  const compareAndCrossOutSlice = useCallback((numId, numIdx, denId, denIdx) => {
+    const termA = numTerms.find(t => t.id === numId);
+    const termB = denTerms.find(t => t.id === denId);
+
+    if (!termA || !termB) return;
 
     if (areEqualTerms(termA, termB)) {
       playMerge();
       triggerFlash('success');
       
-      setCrossedOutNum(prev => [...prev, termA.id]);
-      setCrossedOutDen(prev => [...prev, termB.id]);
+      setCrossedOutNum(prev => [...prev, numId]);
+      setCrossedOutDen(prev => [...prev, denId]);
       
       setUserPresses(p => p + 1);
       
-      setSelectedNumIdx(null);
-      setSelectedDenIdx(null);
+      setSlicedNum(prev => prev.filter(x => x !== numId));
+      setSlicedDen(prev => prev.filter(x => x !== denId));
       
       setTimeout(() => {
-        setNumTerms(prev => prev.filter(t => t.id !== termA.id));
-        setDenTerms(prev => prev.filter(t => t.id !== termB.id));
+        setNumTerms(prev => prev.filter(t => t.id !== numId));
+        setDenTerms(prev => prev.filter(t => t.id !== denId));
       }, 500);
     } else {
       setMistakes(m => m + 1);
@@ -454,10 +444,73 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       triggerFlash('error');
       triggerShake();
       
-      setSelectedNumIdx(null);
-      setSelectedDenIdx(null);
+      setTimeout(() => {
+        setSlicedNum(prev => prev.filter(x => x !== numId));
+        setSlicedDen(prev => prev.filter(x => x !== denId));
+      }, 400);
     }
-  };
+  }, [numTerms, denTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake]);
+
+  const handleSlice = useCallback((type, index, id) => {
+    unlockAudio();
+    
+    if (type === 'num') {
+      if (slicedNum.includes(id)) {
+        setSlicedNum(prev => prev.filter(x => x !== id));
+        return;
+      }
+      
+      const newSlicedNum = [...slicedNum, id];
+      setSlicedNum(newSlicedNum);
+      
+      if (slicedDen.length > 0) {
+        const otherId = slicedDen[0];
+        const otherIndex = denTerms.findIndex(t => t.id === otherId);
+        compareAndCrossOutSlice(id, index, otherId, otherIndex);
+      }
+    } else {
+      if (slicedDen.includes(id)) {
+        setSlicedDen(prev => prev.filter(x => x !== id));
+        return;
+      }
+      
+      const newSlicedDen = [...slicedDen, id];
+      setSlicedDen(newSlicedDen);
+      
+      if (slicedNum.length > 0) {
+        const otherId = slicedNum[0];
+        const otherIndex = numTerms.findIndex(t => t.id === otherId);
+        compareAndCrossOutSlice(otherId, otherIndex, id, index);
+      }
+    }
+  }, [slicedNum, slicedDen, numTerms, denTerms, compareAndCrossOutSlice]);
+
+  useEffect(() => {
+    const handleGlobalMove = (e) => {
+      if (!isSwiping.current || !pointerStart.current) return;
+      const dx = e.clientX - pointerStart.current.x;
+      const dy = e.clientY - pointerStart.current.y;
+      
+      if (Math.abs(dy) > 20 && Math.abs(dy) > Math.abs(dx)) {
+        isSwiping.current = false;
+        const { type, index, id } = pointerStart.current;
+        pointerStart.current = null;
+        handleSlice(type, index, id);
+      }
+    };
+
+    const handleGlobalUp = () => {
+      isSwiping.current = false;
+      pointerStart.current = null;
+    };
+
+    window.addEventListener('pointermove', handleGlobalMove);
+    window.addEventListener('pointerup', handleGlobalUp);
+    return () => {
+      window.removeEventListener('pointermove', handleGlobalMove);
+      window.removeEventListener('pointerup', handleGlobalUp);
+    };
+  }, [handleSlice]);
 
   const handleCombine = (index) => {
     if (isValidating) return;
@@ -717,7 +770,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                       <AnimatePresence mode="popLayout">
                         {numTerms.map((term, index) => {
                           const oneChar = isOneChar(term);
-                          const isSelected = selectedNumIdx === index;
+                          const isSliced = slicedNum.includes(term.id);
                           const isCrossed = crossedOutNum.includes(term.id);
                           return (
                             <Reorder.Item
@@ -728,10 +781,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                               onDragStart={() => setIsDraggingTerm(true)}
                               onDragEnd={() => setIsDraggingTerm(false)}
-                              onClick={() => handleTermSelect('num', index)}
                             >
                               {index > 0 && <span className="dot-separator">·</span>}
-                              <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                              <div
+                                className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
+                                onPointerDown={(e) => handlePointerDown(e, 'num', index, term.id)}
+                              >
                                 {renderTermValue(term)}
                               </div>
                             </Reorder.Item>
@@ -758,7 +813,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           ) : (
                             numTerms.map((term, index) => {
                               const oneChar = isOneChar(term);
-                              const isSelected = selectedNumIdx === index;
+                              const isSliced = slicedNum.includes(term.id);
                               const isCrossed = crossedOutNum.includes(term.id);
                               return (
                                 <Reorder.Item
@@ -769,10 +824,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                   onDragStart={() => setIsDraggingTerm(true)}
                                   onDragEnd={() => setIsDraggingTerm(false)}
-                                  onClick={() => handleTermSelect('num', index)}
                                 >
                                   {index > 0 && <span className="dot-separator">·</span>}
-                                  <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                                  <div
+                                    className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
+                                    onPointerDown={(e) => handlePointerDown(e, 'num', index, term.id)}
+                                  >
                                     {renderTermValue(term)}
                                   </div>
                                 </Reorder.Item>
@@ -799,7 +856,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <AnimatePresence mode="popLayout">
                           {denTerms.map((term, index) => {
                             const oneChar = isOneChar(term);
-                            const isSelected = selectedDenIdx === index;
+                            const isSliced = slicedDen.includes(term.id);
                             const isCrossed = crossedOutDen.includes(term.id);
                             return (
                               <Reorder.Item
@@ -810,10 +867,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                 onDragStart={() => setIsDraggingTerm(true)}
                                 onDragEnd={() => setIsDraggingTerm(false)}
-                                onClick={() => handleTermSelect('den', index)}
                               >
                                 {index > 0 && <span className="dot-separator">·</span>}
-                                <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                                <div
+                                  className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
+                                  onPointerDown={(e) => handlePointerDown(e, 'den', index, term.id)}
+                                >
                                   {renderTermValue(term)}
                                 </div>
                               </Reorder.Item>
