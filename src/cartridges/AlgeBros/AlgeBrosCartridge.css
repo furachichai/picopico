@@ -510,3 +510,72 @@
   border-color: rgba(15, 23, 42, 0.25) !important;
   color: var(--text-main) !important;
 }
+
+/* ─── Divisions Mode Styles ─── */
+.algebros-cartridge .division-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 12px;
+  margin: auto 0;
+  z-index: 5;
+}
+
+.algebros-cartridge .division-line {
+  width: 85%;
+  height: 3px;
+  background-color: var(--text-main);
+  opacity: 0.8;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+.algebros-cartridge .dot-separator {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+  opacity: 0.7;
+  margin: 0 4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Card Selection Highlights */
+.algebros-cartridge .term-card.is-selected {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25) !important;
+  background: rgba(16, 185, 129, 0.05) !important;
+}
+
+/* Diagonal hand-drawn green strike-through */
+.algebros-cartridge .term-card.is-crossed-out {
+  position: relative;
+  pointer-events: none !important;
+}
+
+.algebros-cartridge .term-card.is-crossed-out::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  background-color: #10b981;
+  transform: translateY(-50%) rotate(-12deg);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  z-index: 10;
+  animation: drawStrike 0.3s ease-out forwards;
+}
+
+@keyframes drawStrike {
+  from {
+    width: 0;
+    left: 50%;
+  }
+  to {
+    width: 120%;
+    left: -10%;
+  }
+}

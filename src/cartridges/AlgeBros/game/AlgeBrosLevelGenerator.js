@@ -3,7 +3,7 @@
  * 
  * Generates 10 levels of combining-like-terms algebra puzzles.
  */
-import { makeTerm, calculateMinPresses } from './AlgeBrosEngine';
+import { makeTerm, parseTermString, countMatchingPairs, calculateMinPresses } from './AlgeBrosEngine';
 
 const LEVEL_TEMPLATES = [
   // Level 1: 3 terms, e.g. "3x + 5 + 4x"
@@ -184,4 +184,83 @@ function doesExpressionFit(terms) {
   const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
   
   return calculatedScale >= 0.70;
+}
+
+const DIVISION_LEVEL_TEMPLATES = [
+  {
+    num: ['7x', '14'],
+    den: ['14', 'b']
+  },
+  {
+    num: ['5a', 'y'],
+    den: ['y', '3']
+  },
+  {
+    num: ['x^2', 'c'],
+    den: ['x', 'c']
+  },
+  {
+    num: ['2', '3a', '5'],
+    den: ['3a', '2']
+  },
+  {
+    num: ['8z', '3'],
+    den: ['3', '8z']
+  },
+  {
+    num: ['x', 'y^2', 'a'],
+    den: ['a', 'y^2', 'z']
+  },
+  {
+    num: ['15', 'c', 'x'],
+    den: ['x', '15', 'c']
+  },
+  {
+    num: ['2a', '7b', '3c'],
+    den: ['7b', '3c', 'x']
+  },
+  {
+    num: ['x^2', 'y^2', 'z^2'],
+    den: ['z^2', 'x^2', 'y^2']
+  },
+  {
+    num: ['4', 'ax', '10'],
+    den: ['10', 'ax', '4']
+  }
+];
+
+export function generateDivisionLevels() {
+  const unknowns = ['x', 'y', 'z'];
+  const parameters = ['a', 'b', 'c'];
+  
+  const xMapped = unknowns[Math.floor(Math.random() * unknowns.length)];
+  const yMapped = unknowns.filter(u => u !== xMapped)[Math.floor(Math.random() * 2)];
+  const zMapped = unknowns.filter(u => u !== xMapped && u !== yMapped)[0];
+  
+  const aMapped = parameters[Math.floor(Math.random() * parameters.length)];
+  const bMapped = parameters.filter(p => p !== aMapped)[Math.floor(Math.random() * 2)];
+  const cMapped = parameters.filter(p => p !== aMapped && p !== bMapped)[0];
+  
+  const mapStr = (str) => {
+    return str
+      .replace(/x/g, xMapped)
+      .replace(/y/g, yMapped)
+      .replace(/z/g, zMapped)
+      .replace(/a/g, aMapped)
+      .replace(/b/g, bMapped)
+      .replace(/c/g, cMapped);
+  };
+  
+  return DIVISION_LEVEL_TEMPLATES.map((tpl, index) => {
+    const numTerms = tpl.num.map(s => parseTermString(mapStr(s)));
+    const denTerms = tpl.den.map(s => parseTermString(mapStr(s)));
+    const minPresses = countMatchingPairs(numTerms, denTerms);
+    
+    return {
+      levelNum: index + 1,
+      initialNum: numTerms,
+      initialDen: denTerms,
+      minPresses
+    };
+  });
 }

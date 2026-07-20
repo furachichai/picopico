@@ -135,3 +135,34 @@ export function calculateMinPresses(initialTerms) {
   }
   return total;
 }
+
+/**
+ * Checks if two terms are exactly equal (same coefficient and variable).
+ */
+export function areEqualTerms(termA, termB) {
+  if (!termA || !termB) return false;
+  return termA.coeff === termB.coeff && termA.variable === termB.variable;
+}
+
+/**
+ * Counts the number of matching pairs between numerator and denominator lists.
+ */
+export function countMatchingPairs(numTerms, denTerms) {
+  let count = 0;
+  const tempDen = [...denTerms];
+  for (const numTerm of numTerms) {
+    const matchIdx = tempDen.findIndex(denTerm => areEqualTerms(numTerm, denTerm));
+    if (matchIdx !== -1) {
+      count++;
+      tempDen.splice(matchIdx, 1);
+    }
+  }
+  return count;
+}
+
+/**
+ * Checks if the division expression is fully simplified (no more equal pairs).
+ */
+export function isDivisionSimplified(numTerms, denTerms) {
+  return countMatchingPairs(numTerms, denTerms) === 0;
+}

@@ -5,9 +5,11 @@ import {
   areLikeTerms,
   combineTerms,
   isFullySimplified,
-  calculateMinPresses
+  calculateMinPresses,
+  areEqualTerms,
+  isDivisionSimplified
 } from './game/AlgeBrosEngine';
-import { generateLevels } from './game/AlgeBrosLevelGenerator';
+import { generateLevels, generateDivisionLevels } from './game/AlgeBrosLevelGenerator';
 import {
   unlockAudio,
   playSelect,
@@ -48,7 +50,7 @@ function ParticlesBG() {
   );
 }
 
-function StartScreen({ onStart }) {
+function StartScreen({ onStart, topic, setTopic }) {
   return (
     <motion.div
       className="start-screen"
@@ -58,23 +60,90 @@ function StartScreen({ onStart }) {
     >
       <h1 className="start-logo">algeBROS</h1>
       
-      <div className="start-card">
-        <p className="start-subtitle">
-          Master the art of combining like terms through spatial dragging and operations!
+      <div className="start-card" style={{ marginBottom: '16px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <p className="start-subtitle" style={{ fontWeight: 800, color: 'var(--accent-purple)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>
+          Select Topic:
         </p>
-        
-        <div className="rule-item">
-          <span className="rule-icon">🫳</span>
-          <span>Drag term cards left or right to reorder them. The sign and number move together.</span>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', justifyContent: 'center' }}>
+          <button
+            className="hud-badge"
+            style={{
+              cursor: 'pointer',
+              background: topic === 'divisions' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+              borderColor: topic === 'divisions' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
+              color: topic === 'divisions' ? 'var(--accent-purple)' : 'inherit',
+              padding: '6px 12px',
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              borderRadius: '8px'
+            }}
+            onClick={() => {
+              unlockAudio();
+              playSelect();
+              setTopic('divisions');
+            }}
+          >
+            🌸 DIVISIONS
+          </button>
+          <button
+            className="hud-badge"
+            style={{
+              cursor: 'pointer',
+              background: topic === 'liketerms' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+              borderColor: topic === 'liketerms' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
+              color: topic === 'liketerms' ? 'var(--accent-purple)' : 'inherit',
+              padding: '6px 12px',
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              borderRadius: '8px'
+            }}
+            onClick={() => {
+              unlockAudio();
+              playSelect();
+              setTopic('liketerms');
+            }}
+          >
+            📐 LIKE TERMS
+          </button>
         </div>
-        <div className="rule-item">
-          <span className="rule-icon">➕</span>
-          <span>Click the sign buttons (operators) between adjacent like terms to add/combine them.</span>
-        </div>
-        <div className="rule-item">
-          <span className="rule-icon">🎯</span>
-          <span>Combine all compatible terms and click <strong>READY</strong> to progress. Try to use the minimum number of presses!</span>
-        </div>
+
+        {topic === 'divisions' ? (
+          <>
+            <p className="start-subtitle">
+              Simplify fractions by crossing out identical terms on the top and bottom!
+            </p>
+            <div className="rule-item">
+              <span className="rule-icon">🫳</span>
+              <span>Drag cards horizontally in the top (numerator) or bottom (denominator) to reorder.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">✖️</span>
+              <span>Tap a card on top, then tap an identical card on the bottom to cross them out.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">🌸</span>
+              <span>Simplify completely and press <strong>READY</strong>. Keep them sorted alphabetically for the Elegance bonus!</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="start-subtitle">
+              Master the art of combining like terms through spatial dragging and operations!
+            </p>
+            <div className="rule-item">
+              <span className="rule-icon">🫳</span>
+              <span>Drag term cards left or right to reorder them. The sign and number move together.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">➕</span>
+              <span>Click the sign buttons (operators) between adjacent like terms to combine them.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">🎯</span>
+              <span>Combine all compatible terms and click <strong>READY</strong> to progress. Try to use minimum actions!</span>
+            </div>
+          </>
+        )}
       </div>
 
       <button
@@ -256,6 +325,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [isElegantCompleted, setIsElegantCompleted] = useState(false);
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
 
+  const [topic, setTopic] = useState('divisions'); // Default is 'divisions'
+  const [numTerms, setNumTerms] = useState([]);
+  const [denTerms, setDenTerms] = useState([]);
+  const [selectedNumIdx, setSelectedNumIdx] = useState(null);
+  const [selectedDenIdx, setSelectedDenIdx] = useState(null);
+  const [crossedOutNum, setCrossedOutNum] = useState([]);
+  const [crossedOutDen, setCrossedOutDen] = useState([]);
+
   // Game-wide statistics
   const [stats, setStats] = useState({
     totalUserPresses: 0,
@@ -265,7 +342,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   });
 
   const handleStart = () => {
-    const generated = generateLevels();
+    const generated = topic === 'divisions' ? generateDivisionLevels() : generateLevels();
     setLevels(generated);
     setCurrentLevelIndex(0);
     loadLevel(generated[0]);
@@ -279,12 +356,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const loadLevel = (levelObj) => {
-    setTerms(levelObj.initialTerms);
+    if (topic === 'divisions') {
+      setNumTerms(levelObj.initialNum || []);
+      setDenTerms(levelObj.initialDen || []);
+      setSelectedNumIdx(null);
+      setSelectedDenIdx(null);
+      setCrossedOutNum([]);
+      setCrossedOutDen([]);
+    } else {
+      setTerms(levelObj.initialTerms || []);
+    }
     setMinPresses(levelObj.minPresses);
     setUserPresses(0);
     setMistakes(0);
     setIsLevelPerfect(true);
-    setFeedback({ text: 'Reorder and combine like terms!', type: 'info' });
+    setFeedback({
+      text: topic === 'divisions' ? 'Cross out matching terms!' : 'Reorder and combine like terms!',
+      type: 'info'
+    });
     setFlash(null);
     setShake(false);
     setIsValidating(false);
@@ -304,6 +393,70 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
   const showFeedback = (text, type) => {
     setFeedback({ text, type });
+  };
+
+  const handleTermSelect = (type, index) => {
+    if (isValidating || isDraggingTerm) return;
+    unlockAudio();
+
+    if (type === 'num') {
+      if (selectedNumIdx === index) {
+        setSelectedNumIdx(null);
+        return;
+      }
+      setSelectedNumIdx(index);
+      
+      if (selectedDenIdx !== null) {
+        compareAndCrossOut(index, selectedDenIdx);
+      }
+    } else {
+      if (selectedDenIdx === index) {
+        setSelectedDenIdx(null);
+        return;
+      }
+      setSelectedDenIdx(index);
+      
+      if (selectedNumIdx !== null) {
+        compareAndCrossOut(selectedNumIdx, index);
+      }
+    }
+  };
+
+  const compareAndCrossOut = (numIdx, denIdx) => {
+    const termA = numTerms[numIdx];
+    const termB = denTerms[denIdx];
+
+    if (areEqualTerms(termA, termB)) {
+      playMerge();
+      triggerFlash('success');
+      
+      setCrossedOutNum(prev => [...prev, termA.id]);
+      setCrossedOutDen(prev => [...prev, termB.id]);
+      
+      setUserPresses(p => p + 1);
+      
+      setSelectedNumIdx(null);
+      setSelectedDenIdx(null);
+      
+      setTimeout(() => {
+        setNumTerms(prev => prev.filter(t => t.id !== termA.id));
+        setDenTerms(prev => prev.filter(t => t.id !== termB.id));
+      }, 500);
+    } else {
+      setMistakes(m => m + 1);
+      setIsLevelPerfect(false);
+      playWrong();
+      
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+      
+      triggerFlash('error');
+      triggerShake();
+      
+      setSelectedNumIdx(null);
+      setSelectedDenIdx(null);
+    }
   };
 
   const handleCombine = (index) => {
@@ -343,8 +496,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     if (isValidating) return;
     unlockAudio();
     
-    if (isFullySimplified(terms)) {
-      const elegant = checkElegance(terms);
+    const isSimplified = topic === 'divisions'
+      ? isDivisionSimplified(numTerms, denTerms)
+      : isFullySimplified(terms);
+    
+    if (isSimplified) {
+      const elegant = topic === 'divisions'
+        ? (checkElegance(numTerms) && checkElegance(denTerms))
+        : checkElegance(terms);
       if (elegant) {
         setIsElegantCompleted(true);
       }
@@ -395,7 +554,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         navigator.vibrate([150, 70, 150]);
       }
       
-      showFeedback('Equation is not fully simplified! Keep combining.', 'error');
+      showFeedback(topic === 'divisions' ? 'Doh! There are still matching terms you can cross out!' : 'Unlike terms cannot be combined!', 'error');
       triggerFlash('error');
       triggerShake();
     }
@@ -439,38 +598,46 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     );
   };
 
-  const expressionScale = useMemo(() => {
-    if (!terms || terms.length === 0) return 1;
-    
-    const getTermWidth = (term) => {
-      const absCoeff = Math.abs(term.coeff);
-      const isOne = absCoeff === 1;
-      const hasVar = !!term.variable;
-      let chars = 0;
-      if (term.coeff === 0) {
-        chars = 1;
+  const getTermWidth = useCallback((term) => {
+    if (!term) return 0;
+    const absCoeff = Math.abs(term.coeff);
+    const isOne = absCoeff === 1;
+    const hasVar = !!term.variable;
+    let chars = 0;
+    if (term.coeff === 0) {
+      chars = 1;
+    } else {
+      if (!hasVar) {
+        chars = absCoeff.toString().length;
       } else {
-        if (!hasVar) {
-          chars = absCoeff.toString().length;
-        } else {
-          chars = (isOne ? 0 : absCoeff.toString().length) + term.variable.length;
-        }
+        chars = (isOne ? 0 : absCoeff.toString().length) + term.variable.length;
       }
-      return 14 + chars * 8.5;
+    }
+    return 14 + chars * 8.5;
+  }, []);
+
+  const expressionScale = useMemo(() => {
+    const calculateScaleForList = (list) => {
+      if (!list || list.length === 0) return 1.6;
+      const totalBaseWidth = list.reduce((acc, term, idx) => {
+        const cardW = getTermWidth(term);
+        const opW = idx > 0 ? 32 : 0;
+        const staticSignW = (idx === 0 && term.coeff < 0) ? 12 : 0;
+        return acc + cardW + opW + staticSignW;
+      }, 0);
+      const targetWidth = 288;
+      const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
+      return Math.max(0.55, Math.min(2.0, calculatedScale));
     };
 
-    const totalBaseWidth = terms.reduce((acc, term, idx) => {
-      const cardW = getTermWidth(term);
-      const opW = idx > 0 ? 32 : 0; // 26px operator button + 4px margin + 2px list gap
-      const staticSignW = (idx === 0 && term.coeff < 0) ? 12 : 0;
-      return acc + cardW + opW + staticSignW;
-    }, 0);
-
-    const targetWidth = 288;
-    const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-    
-    return Math.max(0.55, Math.min(2.0, calculatedScale));
-  }, [terms]);
+    if (topic === 'divisions') {
+      const scaleNum = calculateScaleForList(numTerms);
+      const scaleDen = calculateScaleForList(denTerms);
+      return Math.min(scaleNum, scaleDen);
+    } else {
+      return calculateScaleForList(terms);
+    }
+  }, [topic, terms, numTerms, denTerms, getTermWidth]);
 
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
@@ -496,7 +663,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       <div className="screen-container">
         <AnimatePresence mode="wait">
           {screen === 'start' && (
-            <StartScreen key="start" onStart={handleStart} />
+            <StartScreen key="start" onStart={handleStart} topic={topic} setTopic={setTopic} />
           )}
 
           {screen === 'game' && (
@@ -527,63 +694,188 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                   🌸 <span style={{ fontSize: '0.75rem', fontWeight: 800, marginLeft: '2px' }}>ELEGANT</span>
                 </div>
                 <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
-                  PRESSES: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
+                  {topic === 'divisions' ? 'ACTIONS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
                 </div>
               </div>
 
               {/* Expression Dragging Area */}
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''}`} style={{ pointerEvents: isValidating ? 'none' : 'auto' }}>
-                <Reorder.Group
-                  axis="x"
-                  values={terms}
-                  onReorder={setTerms}
-                  className="expression-list"
-                  style={{
-                    transform: `scale(${expressionScale})`,
-                    transformOrigin: 'center'
-                  }}
-                >
-                  <AnimatePresence mode="popLayout">
-                    {terms.map((term, index) => {
-                      const isFirst = index === 0;
-                      const formatted = formatTerm(term, isFirst);
-                      const hasVar = !!term.variable;
-                      const oneChar = isOneChar(term);
-
-                      return (
-                        <Reorder.Item
-                          key={term.id}
-                          value={term}
-                          className="term-item-wrapper"
-                          whileDrag={{ scale: 1.06 }}
-                          transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                          onDragStart={() => setIsDraggingTerm(true)}
-                          onDragEnd={() => setIsDraggingTerm(false)}
-                        >
-                          {/* Sign button / text (outside the card box!) */}
-                          {!isFirst && (
-                            <button
-                              className="operator-btn"
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onTouchStart={(e) => e.stopPropagation()}
-                              onClick={() => handleCombine(index)}
+                {topic === 'divisions' ? (
+                  numTerms.length === 0 && denTerms.length === 0 ? (
+                    <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
+                  ) : denTerms.length === 0 ? (
+                    <Reorder.Group
+                      axis="x"
+                      values={numTerms}
+                      onReorder={setNumTerms}
+                      className="expression-list"
+                      style={{
+                        transform: `scale(${expressionScale})`,
+                        transformOrigin: 'center'
+                      }}
+                    >
+                      <AnimatePresence mode="popLayout">
+                        {numTerms.map((term, index) => {
+                          const oneChar = isOneChar(term);
+                          const isSelected = selectedNumIdx === index;
+                          const isCrossed = crossedOutNum.includes(term.id);
+                          return (
+                            <Reorder.Item
+                              key={term.id}
+                              value={term}
+                              className="term-item-wrapper"
+                              whileDrag={{ scale: 1.06 }}
+                              transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                              onDragStart={() => setIsDraggingTerm(true)}
+                              onDragEnd={() => setIsDraggingTerm(false)}
+                              onClick={() => handleTermSelect('num', index)}
                             >
-                              {formatted.sign}
-                            </button>
+                              {index > 0 && <span className="dot-separator">·</span>}
+                              <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                                {renderTermValue(term)}
+                              </div>
+                            </Reorder.Item>
+                          );
+                        })}
+                      </AnimatePresence>
+                    </Reorder.Group>
+                  ) : (
+                    <div className="division-container">
+                      {/* Numerator */}
+                      <Reorder.Group
+                        axis="x"
+                        values={numTerms}
+                        onReorder={setNumTerms}
+                        className="expression-list"
+                        style={{
+                          transform: `scale(${expressionScale})`,
+                          transformOrigin: 'center'
+                        }}
+                      >
+                        <AnimatePresence mode="popLayout">
+                          {numTerms.length === 0 ? (
+                            <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                          ) : (
+                            numTerms.map((term, index) => {
+                              const oneChar = isOneChar(term);
+                              const isSelected = selectedNumIdx === index;
+                              const isCrossed = crossedOutNum.includes(term.id);
+                              return (
+                                <Reorder.Item
+                                  key={term.id}
+                                  value={term}
+                                  className="term-item-wrapper"
+                                  whileDrag={{ scale: 1.06 }}
+                                  transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                  onDragStart={() => setIsDraggingTerm(true)}
+                                  onDragEnd={() => setIsDraggingTerm(false)}
+                                  onClick={() => handleTermSelect('num', index)}
+                                >
+                                  {index > 0 && <span className="dot-separator">·</span>}
+                                  <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                                    {renderTermValue(term)}
+                                  </div>
+                                </Reorder.Item>
+                              );
+                            })
                           )}
-                          {isFirst && formatted.sign === '-' && (
-                            <span className="operator-static">-</span>
-                          )}
+                        </AnimatePresence>
+                      </Reorder.Group>
 
-                          {/* Term card box (only wraps the value!) */}
-                          <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`}>
-                            {renderTermValue(term)}
-                          </div>
-                        </Reorder.Item>
-                      );
-                    })}
-                  </AnimatePresence>
-                </Reorder.Group>
+                      {/* Division Line */}
+                      <div className="division-line" />
+
+                      {/* Denominator */}
+                      <Reorder.Group
+                        axis="x"
+                        values={denTerms}
+                        onReorder={setDenTerms}
+                        className="expression-list"
+                        style={{
+                          transform: `scale(${expressionScale})`,
+                          transformOrigin: 'center'
+                        }}
+                      >
+                        <AnimatePresence mode="popLayout">
+                          {denTerms.map((term, index) => {
+                            const oneChar = isOneChar(term);
+                            const isSelected = selectedDenIdx === index;
+                            const isCrossed = crossedOutDen.includes(term.id);
+                            return (
+                              <Reorder.Item
+                                key={term.id}
+                                value={term}
+                                className="term-item-wrapper"
+                                whileDrag={{ scale: 1.06 }}
+                                transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                onDragStart={() => setIsDraggingTerm(true)}
+                                onDragEnd={() => setIsDraggingTerm(false)}
+                                onClick={() => handleTermSelect('den', index)}
+                              >
+                                {index > 0 && <span className="dot-separator">·</span>}
+                                <div className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSelected ? 'is-selected' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}>
+                                  {renderTermValue(term)}
+                                </div>
+                              </Reorder.Item>
+                            );
+                          })}
+                        </AnimatePresence>
+                      </Reorder.Group>
+                    </div>
+                  )
+                ) : (
+                  <Reorder.Group
+                    axis="x"
+                    values={terms}
+                    onReorder={setTerms}
+                    className="expression-list"
+                    style={{
+                      transform: `scale(${expressionScale})`,
+                      transformOrigin: 'center'
+                    }}
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {terms.map((term, index) => {
+                        const isFirst = index === 0;
+                        const formatted = formatTerm(term, isFirst);
+                        const hasVar = !!term.variable;
+                        const oneChar = isOneChar(term);
+
+                        return (
+                          <Reorder.Item
+                            key={term.id}
+                            value={term}
+                            className="term-item-wrapper"
+                            whileDrag={{ scale: 1.06 }}
+                            transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                            onDragStart={() => setIsDraggingTerm(true)}
+                            onDragEnd={() => setIsDraggingTerm(false)}
+                          >
+                            {/* Sign button / text (outside the card box!) */}
+                            {!isFirst && (
+                              <button
+                                className="operator-btn"
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                                onClick={() => handleCombine(index)}
+                              >
+                                {formatted.sign}
+                              </button>
+                            )}
+                            {isFirst && formatted.sign === '-' && (
+                              <span className="operator-static">-</span>
+                            )}
+
+                            {/* Term card box (only wraps the value!) */}
+                            <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`}>
+                              {renderTermValue(term)}
+                            </div>
+                          </Reorder.Item>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </Reorder.Group>
+                )}
               </div>
 
               {/* Feedback messages & Actions */}
