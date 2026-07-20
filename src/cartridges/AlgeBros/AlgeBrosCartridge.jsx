@@ -506,15 +506,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const handleGlobalDown = (e) => {
       if (isValidating || topic !== 'divisions') return;
       
-      // If a line is created outside any card, it uncrosses all cards in the equation
-      if (!e.target.closest('.term-card')) {
-        setSlicedNum([]);
-        setSlicedDen([]);
-        setCrossedOutNum([]);
-        setCrossedOutDen([]);
-        setCardAngles({});
-      } else {
-        // If starting on a card, do not slice (allows horizontal dragging/reordering)
+      // If starting on a card, do not slice (allows horizontal dragging/reordering)
+      if (e.target.closest('.term-card')) {
         isGlobalSlicing.current = false;
         return;
       }
@@ -594,12 +587,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }
     };
 
-    const handleGlobalUp = () => {
+    const handleGlobalUp = (e) => {
       if (!isGlobalSlicing.current) return;
       isGlobalSlicing.current = false;
       
       const numId = tempSlicedNum.current;
       const denId = tempSlicedDen.current;
+      
+      // Reset slices if the slice begins and ends outside of a card, without crossing any card
+      const endsOutside = !e || !e.target || !e.target.closest('.term-card');
+      const crossedAny = numId || denId;
+      
+      if (endsOutside && !crossedAny) {
+        setSlicedNum([]);
+        setSlicedDen([]);
+        setCrossedOutNum([]);
+        setCrossedOutDen([]);
+        setCardAngles({});
+        return;
+      }
       
       if (numId || denId) {
         unlockAudio();
@@ -627,19 +633,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         if (denId) anglesObj[denId] = angle;
         setCardAngles(prev => ({ ...prev, ...anglesObj }));
         
-        // Apply slice state (shows crossed visual after lifting finger!)
+        let nextSlicedNum = slicedNum;
+        let nextSlicedDen = slicedDen;
+        
         if (numId) {
+          nextSlicedNum = [numId];
           setSlicedNum([numId]);
         }
         if (denId) {
+          nextSlicedDen = [denId];
           setSlicedDen([denId]);
         }
         
-        // Evaluate matching if both numerator and denominator cards were crossed
-        if (numId && denId) {
-          const numIdx = numTerms.findIndex(t => t.id === numId);
-          const denIdx = denTerms.findIndex(t => t.id === denId);
-          compareAndCrossOutSlice(numId, numIdx, denId, denIdx);
+        // Evaluate matching if both numerator and denominator cards are active
+        const activeNumId = nextSlicedNum[0];
+        const activeDenId = nextSlicedDen[0];
+        if (activeNumId && activeDenId) {
+          const numIdx = numTerms.findIndex(t => t.id === activeNumId);
+          const denIdx = denTerms.findIndex(t => t.id === activeDenId);
+          compareAndCrossOutSlice(activeNumId, numIdx, activeDenId, denIdx);
         }
       }
     };
@@ -951,7 +963,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   <div
                                     className="strike-line"
                                     style={{
-                                      transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                      transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
                                     }}
                                   />
                                 )}
@@ -1005,7 +1017,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       <div
                                         className="strike-line"
                                         style={{
-                                          transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                          transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
                                         }}
                                       />
                                     )}
@@ -1059,7 +1071,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     <div
                                       className="strike-line"
                                       style={{
-                                        transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                        transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
                                       }}
                                     />
                                   )}
