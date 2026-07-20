@@ -395,20 +395,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setScreen('game');
   };
 
-  const pointerStart = React.useRef(null);
-  const isSwiping = React.useRef(false);
-
-  const handlePointerDown = (e, type, index, id) => {
-    if (isValidating || isDraggingTerm) return;
-    pointerStart.current = {
-      x: e.clientX,
-      y: e.clientY,
-      type,
-      index,
-      id
-    };
-    isSwiping.current = true;
-  };
+  const isGlobalSlicing = React.useRef(false);
 
   const compareAndCrossOutSlice = useCallback((numId, numIdx, denId, denIdx) => {
     const termA = numTerms.find(t => t.id === numId);
@@ -486,31 +473,55 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [slicedNum, slicedDen, numTerms, denTerms, compareAndCrossOutSlice]);
 
   useEffect(() => {
+    const handleGlobalDown = (e) => {
+      if (isValidating) return;
+      // Slicing must start outside the card
+      if (e.target.closest('.term-card')) {
+        isGlobalSlicing.current = false;
+        return;
+      }
+      isGlobalSlicing.current = true;
+    };
+
     const handleGlobalMove = (e) => {
-      if (!isSwiping.current || !pointerStart.current) return;
-      const dx = e.clientX - pointerStart.current.x;
-      const dy = e.clientY - pointerStart.current.y;
+      if (!isGlobalSlicing.current) return;
       
-      if (Math.abs(dy) > 20 && Math.abs(dy) > Math.abs(dx)) {
-        isSwiping.current = false;
-        const { type, index, id } = pointerStart.current;
-        pointerStart.current = null;
-        handleSlice(type, index, id);
+      const elem = document.elementFromPoint(e.clientX, e.clientY);
+      const card = elem?.closest('.term-card');
+      if (card) {
+        const id = card.getAttribute('data-id');
+        const type = card.getAttribute('data-type');
+        const indexVal = card.getAttribute('data-index');
+        
+        if (id && type && indexVal !== null) {
+          const index = parseInt(indexVal, 10);
+          if (type === 'num') {
+            if (!slicedNum.includes(id) && !crossedOutNum.includes(id)) {
+              handleSlice('num', index, id);
+            }
+          } else {
+            if (!slicedDen.includes(id) && !crossedOutDen.includes(id)) {
+              handleSlice('den', index, id);
+            }
+          }
+        }
       }
     };
 
     const handleGlobalUp = () => {
-      isSwiping.current = false;
-      pointerStart.current = null;
+      isGlobalSlicing.current = false;
     };
 
+    window.addEventListener('pointerdown', handleGlobalDown);
     window.addEventListener('pointermove', handleGlobalMove);
     window.addEventListener('pointerup', handleGlobalUp);
     return () => {
+      window.removeEventListener('pointerdown', handleGlobalDown);
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);
     };
-  }, [handleSlice]);
+  }, [slicedNum, slicedDen, crossedOutNum, crossedOutDen, handleSlice, isValidating]);
+
 
   const handleCombine = (index) => {
     if (isValidating) return;
@@ -785,7 +796,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               {index > 0 && <span className="dot-separator">·</span>}
                               <div
                                 className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
-                                onPointerDown={(e) => handlePointerDown(e, 'num', index, term.id)}
+                                data-id={term.id}
+                                data-type="num"
+                                data-index={index}
                               >
                                 {renderTermValue(term)}
                               </div>
@@ -828,7 +841,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   {index > 0 && <span className="dot-separator">·</span>}
                                   <div
                                     className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
-                                    onPointerDown={(e) => handlePointerDown(e, 'num', index, term.id)}
+                                    data-id={term.id}
+                                    data-type="num"
+                                    data-index={index}
                                   >
                                     {renderTermValue(term)}
                                   </div>
@@ -871,7 +886,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 {index > 0 && <span className="dot-separator">·</span>}
                                 <div
                                   className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''}`}
-                                  onPointerDown={(e) => handlePointerDown(e, 'den', index, term.id)}
+                                  data-id={term.id}
+                                  data-type="den"
+                                  data-index={index}
                                 >
                                   {renderTermValue(term)}
                                 </div>

@@ -207,24 +207,24 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  padding: 10px;
-  min-height: 100px;
+  padding: 6px;
+  min-height: 54px;
 }
 
 /* Drag Item Card */
 .algebros-cartridge .term-card {
   display: flex;
   align-items: center;
-  height: 52px;
+  height: 38px;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 12px;
+  border-radius: 8px;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
   cursor: grab;
   position: relative;
   transition: all 0.5s ease-in-out;
-  padding: 0 6px;
+  padding: 0 8px;
 }
 
 .algebros-cartridge .term-card.is-dragging {
@@ -237,18 +237,23 @@
 
 /* Sign / Operator Button component */
 .algebros-cartridge .operator-btn {
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
   border: 2px solid rgba(15, 23, 42, 0.25);
   color: var(--text-main);
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   font-weight: 800;
   margin-right: 4px;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
   pointer-events: auto; /* Ensure clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
 }
 
 /* Transition to clear text equation on level completion */
@@ -280,7 +285,7 @@
 
 /* Operator static text (for negative sign at index 0) */
 .algebros-cartridge .operator-static {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--text-main);
   margin-right: 4px;
@@ -288,7 +293,7 @@
 
 /* Term Content */
 .algebros-cartridge .term-value {
-  font-size: 1.15rem;
+  font-size: 1.0rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.5px;
