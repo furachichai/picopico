@@ -254,6 +254,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [flash, setFlash] = useState(null);
   const [isValidating, setIsValidating] = useState(false);
   const [isElegantCompleted, setIsElegantCompleted] = useState(false);
+  const [isDraggingTerm, setIsDraggingTerm] = useState(false);
 
   // Game-wide statistics
   const [stats, setStats] = useState({
@@ -288,6 +289,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setShake(false);
     setIsValidating(false);
     setIsElegantCompleted(false);
+    setIsDraggingTerm(false);
   };
 
   const triggerShake = () => {
@@ -530,7 +532,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               </div>
 
               {/* Expression Dragging Area */}
-              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''}`} style={{ pointerEvents: isValidating ? 'none' : 'auto' }}>
+              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''}`} style={{ pointerEvents: isValidating ? 'none' : 'auto' }}>
                 <Reorder.Group
                   axis="x"
                   values={terms}
@@ -555,6 +557,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           className="term-item-wrapper"
                           whileDrag={{ scale: 1.06 }}
                           transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                          onDragStart={() => setIsDraggingTerm(true)}
+                          onDragEnd={() => setIsDraggingTerm(false)}
                         >
                           {/* Sign button / text (outside the card box!) */}
                           {!isFirst && (

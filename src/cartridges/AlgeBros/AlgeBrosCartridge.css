@@ -502,3 +502,11 @@
   position: relative;
   z-index: 5;
 }
+
+/* Disable rollover and color transitions on sign/operator buttons during active drag actions */
+.algebros-cartridge .is-dragging-active .operator-btn {
+  pointer-events: none !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(15, 23, 42, 0.25) !important;
+  color: var(--text-main) !important;
+}
