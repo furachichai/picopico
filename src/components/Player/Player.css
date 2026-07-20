@@ -478,3 +478,8 @@
     align-items: center;
     justify-content: center;
 }
+
+.player-viewport.has-cartridge {
+    background: #ffffff;
+    box-shadow: none;
+}

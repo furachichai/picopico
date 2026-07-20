@@ -7,6 +7,7 @@ import SlidesPage from './components/Editor/SlidesPage';
 import LessonsPage from './components/Home/LessonsPage';
 import Dashboard from './components/Home/Dashboard';
 import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
+import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
@@ -58,6 +59,13 @@ class ErrorBoundary extends React.Component {
 const AppContent = () => {
   const { state, dispatch } = useEditor();
   const [displayView, setDisplayView] = React.useState(state.view);
+  const [selectedGame, setSelectedGame] = React.useState(null);
+
+  React.useEffect(() => {
+    if (state.view !== 'game') {
+      setSelectedGame(null);
+    }
+  }, [state.view]);
   const [animating, setAnimating] = React.useState(false);
   const [prevView, setPrevView] = React.useState(null);
   const [direction, setDirection] = React.useState('forward'); // 'forward' or 'back'
@@ -156,27 +164,152 @@ const AppContent = () => {
       case 'lessons': return <LessonsPage />;
       case 'player': return <Player />;
       case 'discover': return <DiscoverView />;
-      case 'game': return (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#0a0a0f' }}>
-          <PEMDASCartridge
-            config={{ locale: 'US', startLevel: 1, targetLevel: 9 }}
-            onComplete={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
-          />
-          <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
-            style={{
-              position: 'absolute', top: 12, left: 12, zIndex: 200,
-              background: 'rgba(255,255,255,0.15)', border: 'none',
-              borderRadius: '50%', width: 40, height: 40,
-              color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backdropFilter: 'blur(6px)'
-            }}
-          >
-            ✕
-          </button>
-        </div>
-      );
+      case 'game': {
+        if (selectedGame === 'pemdas') {
+          return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#0a0a0f' }}>
+              <PEMDASCartridge
+                config={{ locale: 'US', startLevel: 1, targetLevel: 9 }}
+                onComplete={() => setSelectedGame(null)}
+              />
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: 'rgba(255,255,255,0.15)', border: 'none',
+                  borderRadius: '50%', width: 40, height: 40,
+                  color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  backdropFilter: 'blur(6px)'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        }
+        if (selectedGame === 'algebros') {
+          return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#ffffff' }}>
+              <AlgeBrosCartridge
+                config={{ startLevel: 1, targetLevel: 10 }}
+                onComplete={() => setSelectedGame(null)}
+              />
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: 'rgba(0,0,0,0.08)', border: 'none',
+                  borderRadius: '50%', width: 40, height: 40,
+                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        }
+        return (
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: '24px', fontFamily: "'Outfit', sans-serif", color: '#fff',
+            backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 70%)'
+          }}>
+            {/* Back Button */}
+            <button
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
+              style={{
+                position: 'absolute', top: 12, left: 12, zIndex: 200,
+                background: 'rgba(255,255,255,0.1)', border: 'none',
+                borderRadius: '50%', width: 40, height: 40,
+                color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                backdropFilter: 'blur(6px)'
+              }}
+            >
+              ✕
+            </button>
+
+            <h1 style={{
+              fontSize: '2.2rem', fontWeight: 900, marginBottom: '8px', letterSpacing: '-1px',
+              background: 'linear-gradient(135deg, #06b6d4, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+            }}>
+              PicoPico ARCADE
+            </h1>
+            <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '32px', textAlign: 'center' }}>
+              Choose a cartridge to load and play
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '340px' }}>
+              {/* PEMDAS Game Card */}
+              <div
+                onClick={() => setSelectedGame('pemdas')}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <div style={{
+                  fontSize: '2.5rem', background: 'rgba(139, 92, 246, 0.1)', width: '64px', height: '64px',
+                  borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(139, 92, 246, 0.2)'
+                }}>
+                  🧮
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>PEMDAS</h3>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                    Master the order of operations by solving arithmetic expressions.
+                  </p>
+                </div>
+              </div>
+
+              {/* algeBROS Game Card */}
+              <div
+                onClick={() => setSelectedGame('algebros')}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <div style={{
+                  fontSize: '2.5rem', background: 'rgba(236, 72, 153, 0.1)', width: '64px', height: '64px',
+                  borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(236, 72, 153, 0.2)'
+                }}>
+                  📐
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>algeBROS</h3>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                    Learn to simplify equations by dragging and combining like terms.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
       default: return <Editor />;
     }
   };

@@ -278,6 +278,21 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>PEMDAS</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'AlgeBros',
+                                                config: {
+                                                    startLevel: 1,
+                                                    targetLevel: 10
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>algeBROS</button>
                             </div>
                         )}
                     </div>

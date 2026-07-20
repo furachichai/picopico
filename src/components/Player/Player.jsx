@@ -8,6 +8,7 @@ import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
+import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
@@ -450,7 +451,7 @@ const Player = () => {
             {/* Removed external player-header */}
 
             <div
-                className="player-viewport"
+                className={`player-viewport ${hasCartridge ? 'has-cartridge' : ''}`}
                 ref={viewportRef}
             // Removed touch handlers
             >
@@ -711,7 +712,7 @@ const Player = () => {
                             )}
                             <div className={`player-progress-bar ${
                                 !solvedSlides.has(currentSlideIndex) && (
-                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS')) ||
+                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'AlgeBros')) ||
                                     currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'pem')
                                 )
                                     ? 'greyed-out'
@@ -766,6 +767,17 @@ const Player = () => {
                                     {slide.cartridge.type === 'PEMDAS' && (
                                         <ErrorBoundary>
                                             <PEMDASCartridge
+                                                config={slide.cartridge.config}
+                                                onComplete={() => {
+                                                    markSlideSolved(index);
+                                                    setIsGameActive(false);
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
+                                    {slide.cartridge.type === 'AlgeBros' && (
+                                        <ErrorBoundary>
+                                            <AlgeBrosCartridge
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
                                                     markSlideSolved(index);

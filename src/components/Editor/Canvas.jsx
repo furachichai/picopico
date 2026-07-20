@@ -5,6 +5,7 @@ import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
+import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
 
@@ -345,7 +346,7 @@ const Canvas = (props) => {
 
           {/* Cartridge Container */}
           <div className="cartridge-container">
-            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas') && (
+            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros') && (
               <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
                 {currentSlide.cartridge.type === 'FractionAlpha' && (
                   <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
@@ -358,6 +359,9 @@ const Canvas = (props) => {
                 )}
                 {currentSlide.cartridge.type === 'PEMDAS' && (
                   <PEMDASCartridge config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'AlgeBros' && (
+                  <AlgeBrosCartridge config={currentSlide.cartridge.config} preview={true} />
                 )}
                 {currentSlide.cartridge.type === 'Potiondas' && (
                   <PotiondasThumbnail config={currentSlide.cartridge.config} />

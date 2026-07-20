@@ -1236,6 +1236,33 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </>
                     )}
 
+                    {/* AlgeBros Settings */}
+                    {element.cartridgeType === 'AlgeBros' && (
+                        <>
+                            <div className="menu-group">
+                                <label>Start Lvl</label>
+                                <input
+                                    type="number"
+                                    min="1" max="10"
+                                    value={element.config?.startLevel || 1}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, startLevel: parseInt(e.target.value) } })}
+                                    style={{ width: '50px' }}
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Target Lvl</label>
+                                <input
+                                    type="number"
+                                    min={element.config?.startLevel || 1} max="10"
+                                    value={element.config?.targetLevel || 10}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, targetLevel: parseInt(e.target.value) } })}
+                                    style={{ width: '50px' }}
+                                />
+                            </div>
+                        </>
+                    )}
+
                     {/* Potiondas Settings */}
                     {element.cartridgeType === 'Potiondas' && (
                         <>

@@ -1,0 +1,504 @@
+/* ─── algeBROS styling scoped under .algebros-cartridge ─── */
+
+.algebros-cartridge {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --accent-purple: #8b5cf6;
+  --accent-pink: #ec4899;
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
+  --accent-yellow: #f59e0b;
+  --accent-red: #ef4444;
+  --text-main: #0f172a;
+  --text-dim: #475569;
+  --text-muted: #64748b;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --font-main: 'Outfit', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #ffffff;
+  color: var(--text-main);
+  font-family: var(--font-main);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.algebros-cartridge * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.algebros-cartridge button {
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Particles / Background - disabled */
+.algebros-cartridge .particles-bg {
+  display: none;
+}
+
+/* Screens */
+.algebros-cartridge .screen-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+/* Start Screen */
+.algebros-cartridge .start-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.algebros-cartridge .start-logo {
+  font-size: clamp(2.2rem, 10vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.4));
+}
+
+.algebros-cartridge .start-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.algebros-cartridge .start-subtitle {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.algebros-cartridge .rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.algebros-cartridge .rule-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.algebros-cartridge .primary-btn {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  color: #fff;
+  border-radius: 16px;
+  padding: 16px 40px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  border-bottom: 4px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.algebros-cartridge .primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+}
+
+.algebros-cartridge .primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* HUD Header */
+.algebros-cartridge .hud-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  margin-bottom: 20px;
+  z-index: 10;
+}
+
+.algebros-cartridge .hud-badge {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  color: var(--text-dim);
+}
+
+.algebros-cartridge .hud-badge-highlight {
+  color: var(--accent-yellow);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+/* Gameplay Area */
+.algebros-cartridge .algebros-game-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  z-index: 5;
+}
+
+/* Expression Container and Reordering */
+.algebros-cartridge .expression-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.algebros-cartridge .expression-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.algebros-cartridge .expression-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 10px;
+  min-height: 100px;
+}
+
+/* Drag Item Card */
+.algebros-cartridge .term-card {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  cursor: grab;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+  padding: 0 6px;
+}
+
+.algebros-cartridge .term-card.is-dragging {
+  cursor: grabbing;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+  z-index: 100;
+}
+
+/* Sign / Operator Button component */
+.algebros-cartridge .operator-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(15, 23, 42, 0.25);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-right: 4px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  pointer-events: auto; /* Ensure clickable */
+}
+
+/* Transition to clear text equation on level completion */
+.algebros-cartridge .is-success-transition .term-card {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  cursor: default !important;
+}
+
+.algebros-cartridge .is-success-transition .operator-btn {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+.algebros-cartridge .operator-btn:hover {
+  background: var(--accent-purple);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 12px var(--accent-purple);
+  transform: scale(1.15);
+}
+
+.algebros-cartridge .operator-btn:active {
+  transform: scale(0.95);
+}
+
+/* Operator static text (for negative sign at index 0) */
+.algebros-cartridge .operator-static {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-right: 4px;
+}
+
+/* Term Content */
+.algebros-cartridge .term-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  pointer-events: none; /* Let drag pass through value text */
+}
+
+.algebros-cartridge .term-value sup {
+  font-size: 0.7rem;
+  color: var(--text-main);
+  margin-left: 1px;
+}
+
+/* Shake Animation for Errors */
+.algebros-cartridge .shake-container {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+  20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+/* Background Red Flash for Error */
+.algebros-cartridge .error-flash {
+  animation: redFlash 0.6s ease-out;
+}
+
+@keyframes redFlash {
+  0% { background-color: rgba(239, 68, 68, 0.15); }
+  100% { background-color: transparent; }
+}
+
+/* Background Green Flash for Success */
+.algebros-cartridge .success-flash {
+  animation: greenFlash 0.5s ease-out;
+}
+
+@keyframes greenFlash {
+  0% { background-color: rgba(16, 185, 129, 0.12); }
+  100% { background-color: transparent; }
+}
+
+/* Feedback Toast */
+.algebros-cartridge .feedback-msg {
+  height: 32px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.algebros-cartridge .msg-error {
+  color: var(--accent-red);
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.algebros-cartridge .msg-success {
+  color: var(--accent-green);
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.algebros-cartridge .msg-info {
+  color: var(--text-dim);
+}
+
+/* Bottom Controls */
+.algebros-cartridge .bottom-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 10;
+  margin-top: 20px;
+}
+
+/* Ready Button */
+.algebros-cartridge .ready-btn {
+  background: rgba(139, 92, 246, 0.1);
+  border: 2px solid var(--accent-purple);
+  color: #fff;
+  border-radius: 20px;
+  padding: 18px 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+  transition: all 0.25s;
+  width: 100%;
+  max-width: 320px;
+}
+
+.algebros-cartridge .ready-btn:hover:not(:disabled) {
+  background: var(--accent-purple);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+}
+
+.algebros-cartridge .ready-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.algebros-cartridge .ready-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Game Over / Win Summary Screen */
+.algebros-cartridge .summary-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 24px;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.algebros-cartridge .summary-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-yellow), var(--accent-green));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
+}
+
+.algebros-cartridge .summary-stats {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+  backdrop-filter: blur(12px);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.algebros-cartridge .stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.algebros-cartridge .stat-label {
+  color: var(--text-dim);
+}
+
+.algebros-cartridge .stat-value {
+  font-weight: 800;
+  font-family: var(--font-mono);
+}
+
+.algebros-cartridge .stat-value.perfect {
+  color: var(--accent-yellow);
+}
+
+.algebros-cartridge .stat-value.mistakes {
+  color: var(--accent-red);
+}
+
+.algebros-cartridge .stat-value.success {
+  color: var(--accent-green);
+}
+
+.algebros-cartridge .term-item-wrapper {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.algebros-cartridge .math-variable {
+  font-family: 'Baskerville', 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.algebros-cartridge .one-char-card {
+  position: relative;
+}
+
+.algebros-cartridge .one-char-card::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -20px;
+  right: -20px;
+  background: transparent;
+  cursor: grab;
+  z-index: 1;
+}
+
+.algebros-cartridge .operator-btn {
+  position: relative;
+  z-index: 5;
+}
+
+.algebros-cartridge .operator-static {
+  position: relative;
+  z-index: 5;
+}

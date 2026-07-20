@@ -189,7 +189,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                     {slide.cartridge.type === 'FractionAlpha' && '🍕'}
                                     {slide.cartridge.type === 'FractionSlicer' && '🔪'}
                                     {slide.cartridge.type === 'PEMDAS' && '🧮'}
-                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter'].includes(slide.cartridge.type) && '🎮'}
+                                    {slide.cartridge.type === 'AlgeBros' && '📐'}
+                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter', 'AlgeBros'].includes(slide.cartridge.type) && '🎮'}
                                 </div>
                                 <div style={{
                                     fontSize: '14px',
@@ -202,7 +203,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                     {slide.cartridge.type === 'FractionAlpha' && 'FRACTIONS'}
                                     {slide.cartridge.type === 'FractionSlicer' && 'SLICER'}
                                     {slide.cartridge.type === 'PEMDAS' && 'PEMDAS'}
-                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter'].includes(slide.cartridge.type) && 'GAME'}
+                                    {slide.cartridge.type === 'AlgeBros' && 'algeBROS'}
+                                    {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter', 'AlgeBros'].includes(slide.cartridge.type) && 'GAME'}
                                 </div>
                             </>
                         )}
