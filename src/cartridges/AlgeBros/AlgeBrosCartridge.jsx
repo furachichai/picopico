@@ -332,6 +332,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [slicedDen, setSlicedDen] = useState([]); // Sliced denominator term IDs
   const [crossedOutNum, setCrossedOutNum] = useState([]);
   const [crossedOutDen, setCrossedOutDen] = useState([]);
+  const [cardAngles, setCardAngles] = useState({}); // Stores line rotation angle per card ID
 
   // Game-wide statistics
   const [stats, setStats] = useState({
@@ -363,6 +364,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setSlicedDen([]);
       setCrossedOutNum([]);
       setCrossedOutDen([]);
+      setCardAngles({});
     } else {
       setTerms(levelObj.initialTerms || []);
     }
@@ -434,6 +436,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setTimeout(() => {
         setNumTerms(prev => prev.filter(t => t.id !== numId));
         setDenTerms(prev => prev.filter(t => t.id !== denId));
+        setCardAngles(prev => {
+          const next = { ...prev };
+          delete next[numId];
+          delete next[denId];
+          return next;
+        });
       }, 500);
     } else {
       setMistakes(m => m + 1);
@@ -450,43 +458,18 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setTimeout(() => {
         setSlicedNum(prev => prev.filter(x => x !== numId));
         setSlicedDen(prev => prev.filter(x => x !== denId));
+        setCardAngles(prev => {
+          const next = { ...prev };
+          delete next[numId];
+          delete next[denId];
+          return next;
+        });
       }, 400);
     }
   }, [numTerms, denTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake]);
 
-  const handleSlice = useCallback((type, index, id) => {
-    unlockAudio();
-    
-    if (type === 'num') {
-      if (slicedNum.includes(id)) {
-        setSlicedNum(prev => prev.filter(x => x !== id));
-        return;
-      }
-      
-      const newSlicedNum = [...slicedNum, id];
-      setSlicedNum(newSlicedNum);
-      
-      if (slicedDen.length > 0) {
-        const otherId = slicedDen[0];
-        const otherIndex = denTerms.findIndex(t => t.id === otherId);
-        compareAndCrossOutSlice(id, index, otherId, otherIndex);
-      }
-    } else {
-      if (slicedDen.includes(id)) {
-        setSlicedDen(prev => prev.filter(x => x !== id));
-        return;
-      }
-      
-      const newSlicedDen = [...slicedDen, id];
-      setSlicedDen(newSlicedDen);
-      
-      if (slicedNum.length > 0) {
-        const otherId = slicedNum[0];
-        const otherIndex = numTerms.findIndex(t => t.id === otherId);
-        compareAndCrossOutSlice(otherId, otherIndex, id, index);
-      }
-    }
-  }, [slicedNum, slicedDen, numTerms, denTerms, compareAndCrossOutSlice]);
+  const tempSlicedNum = React.useRef(null);
+  const tempSlicedDen = React.useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -523,8 +506,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const handleGlobalDown = (e) => {
       if (isValidating || topic !== 'divisions') return;
       
-      // Slicing must start outside the card
-      if (e.target.closest('.term-card')) {
+      // If a line is created outside any card, it uncrosses all cards in the equation
+      if (!e.target.closest('.term-card')) {
+        setSlicedNum([]);
+        setSlicedDen([]);
+        setCrossedOutNum([]);
+        setCrossedOutDen([]);
+        setCardAngles({});
+      } else {
+        // If starting on a card, do not slice (allows horizontal dragging/reordering)
         isGlobalSlicing.current = false;
         return;
       }
@@ -536,6 +526,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const y = e.clientY - rect.top;
       
       isGlobalSlicing.current = true;
+      tempSlicedNum.current = null;
+      tempSlicedDen.current = null;
+      
       swipePoints.current = [{
         x,
         y,
@@ -584,17 +577,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           if (card) {
             const id = card.getAttribute('data-id');
             const type = card.getAttribute('data-type');
-            const indexVal = card.getAttribute('data-index');
             
-            if (id && type && indexVal !== null) {
-              const index = parseInt(indexVal, 10);
+            if (id && type) {
               if (type === 'num') {
-                if (!slicedNum.includes(id) && !crossedOutNum.includes(id)) {
-                  handleSlice('num', index, id);
+                if (!crossedOutNum.includes(id)) {
+                  tempSlicedNum.current = id;
                 }
               } else {
-                if (!slicedDen.includes(id) && !crossedOutDen.includes(id)) {
-                  handleSlice('den', index, id);
+                if (!crossedOutDen.includes(id)) {
+                  tempSlicedDen.current = id;
                 }
               }
             }
@@ -604,7 +595,53 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     };
 
     const handleGlobalUp = () => {
+      if (!isGlobalSlicing.current) return;
       isGlobalSlicing.current = false;
+      
+      const numId = tempSlicedNum.current;
+      const denId = tempSlicedDen.current;
+      
+      if (numId || denId) {
+        unlockAudio();
+        
+        // Calculate the slice gesture's direction/angle
+        let angle = -12; // default fallback
+        const points = swipePoints.current;
+        if (points.length > 1) {
+          const first = points[0];
+          const last = points[points.length - 1];
+          const dx = last.clientX - first.clientX;
+          const dy = last.clientY - first.clientY;
+          if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            let rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+            // Normalize to [-90, 90] degrees to keep the line oriented nicely
+            while (rawAngle > 90) rawAngle -= 180;
+            while (rawAngle < -90) rawAngle += 180;
+            angle = rawAngle;
+          }
+        }
+        
+        // Save angles for crossed card IDs
+        const anglesObj = {};
+        if (numId) anglesObj[numId] = angle;
+        if (denId) anglesObj[denId] = angle;
+        setCardAngles(prev => ({ ...prev, ...anglesObj }));
+        
+        // Apply slice state (shows crossed visual after lifting finger!)
+        if (numId) {
+          setSlicedNum([numId]);
+        }
+        if (denId) {
+          setSlicedDen([denId]);
+        }
+        
+        // Evaluate matching if both numerator and denominator cards were crossed
+        if (numId && denId) {
+          const numIdx = numTerms.findIndex(t => t.id === numId);
+          const denIdx = denTerms.findIndex(t => t.id === denId);
+          compareAndCrossOutSlice(numId, numIdx, denId, denIdx);
+        }
+      }
     };
 
     window.addEventListener('pointerdown', handleGlobalDown);
@@ -615,7 +652,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);
     };
-  }, [slicedNum, slicedDen, crossedOutNum, crossedOutDen, handleSlice, isValidating, topic]);
+  }, [numTerms, denTerms, crossedOutNum, crossedOutDen, compareAndCrossOutSlice, topic, isValidating]);
 
 
   const handleCombine = (index) => {
@@ -907,8 +944,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 data-id={term.id}
                                 data-type="num"
                                 data-index={index}
+                                style={{ position: 'relative' }}
                               >
                                 {renderTermValue(term)}
+                                {(isSliced || isCrossed) && (
+                                  <div
+                                    className="strike-line"
+                                    style={{
+                                      transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                    }}
+                                  />
+                                )}
                               </div>
                             </Reorder.Item>
                           );
@@ -952,8 +998,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     data-id={term.id}
                                     data-type="num"
                                     data-index={index}
+                                    style={{ position: 'relative' }}
                                   >
                                     {renderTermValue(term)}
+                                    {(isSliced || isCrossed) && (
+                                      <div
+                                        className="strike-line"
+                                        style={{
+                                          transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                        }}
+                                      />
+                                    )}
                                   </div>
                                 </Reorder.Item>
                               );
@@ -997,8 +1052,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   data-id={term.id}
                                   data-type="den"
                                   data-index={index}
+                                  style={{ position: 'relative' }}
                                 >
                                   {renderTermValue(term)}
+                                  {(isSliced || isCrossed) && (
+                                    <div
+                                      className="strike-line"
+                                      style={{
+                                        transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                      }}
+                                    />
+                                  )}
                                 </div>
                               </Reorder.Item>
                             );
