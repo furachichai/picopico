@@ -522,8 +522,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const canvasEl = canvasRef.current;
       if (!canvasEl) return;
       const rect = canvasEl.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = (e.clientX - rect.left) * (canvasEl.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvasEl.height / rect.height);
       
       isGlobalSlicing.current = true;
       tempSlicedNum.current = null;
@@ -546,8 +546,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const canvasEl = canvasRef.current;
       if (!canvasEl) return;
       const rect = canvasEl.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = (e.clientX - rect.left) * (canvasEl.width / rect.width);
+      const y = (e.clientY - rect.top) * (canvasEl.height / rect.height);
       
       const lastPoint = swipePoints.current[swipePoints.current.length - 1];
       const newPoint = {

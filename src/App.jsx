@@ -342,12 +342,21 @@ const AppContent = () => {
 
 // PIN Gate Component
 const PinGate = ({ children }) => {
-  const [isUnlocked, setIsUnlocked] = React.useState(false);
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const [isUnlocked, setIsUnlocked] = React.useState(isLocal);
   const [pinValue, setPinValue] = React.useState('');
   const [error, setError] = React.useState('');
   const [selectedLang, setSelectedLang] = React.useState(() => {
     return localStorage.getItem('pico_language') || 'es';
   });
+
+  React.useEffect(() => {
+    if (isLocal) {
+      localStorage.setItem('pico_app_unlocked', 'true');
+      localStorage.setItem('pico_access_level', 'editor');
+      localStorage.setItem('pico_editor_unlocked', 'true');
+    }
+  }, [isLocal]);
 
   const languages = [
     { code: 'es', flag: '🇪🇸' },
