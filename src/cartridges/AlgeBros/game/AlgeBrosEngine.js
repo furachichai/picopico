@@ -20,8 +20,8 @@ export function makeTerm(coeff, variable) {
  */
 export function parseTermString(termStr) {
   const cleanStr = termStr.replace(/\s+/g, '');
-  // Matches: optional sign (+|-), optional coefficient digits, optional variable (letters and power)
-  const regex = /^([+-]?)(\d*)([a-zA-Z](?:\^\d+)?)?$/;
+  // Matches: optional sign (+|-), optional coefficient digits, optional variable (one or more letters and power)
+  const regex = /^([+-]?)(\d*)([a-zA-Z]+(?:\^\d+)?)?$/;
   const match = cleanStr.match(regex);
   if (!match) {
     throw new Error(`Invalid term string: ${termStr}`);
