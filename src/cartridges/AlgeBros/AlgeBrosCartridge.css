@@ -743,8 +743,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
   padding: 0 8px;
 }
 
@@ -753,7 +755,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 120px;
+  width: 135px;
+  flex-shrink: 0;
 }
 
 .algebros-cartridge .equals-sign {

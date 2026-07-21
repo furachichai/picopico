@@ -1202,7 +1202,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }, 0);
       const targetWidth = topic === 'equations' ? 120 : 260;
       const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-      return Math.max(topic === 'equations' ? 0.35 : 0.4, Math.min(2.0, calculatedScale));
+      return Math.max(topic === 'equations' ? 0.35 : 0.4, Math.min(topic === 'equations' ? 1.0 : 2.0, calculatedScale));
     };
 
     if (topic === 'divisions') {
@@ -1210,7 +1210,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const scaleDen = calculateScaleForList(denTerms);
       return Math.min(scaleNum, scaleDen);
     } else if (topic === 'equations') {
-      return 1.0;
+      const scaleLeftNum = calculateScaleForList(numTerms);
+      const scaleLeftDen = calculateScaleForList(denTerms);
+      const scaleRightNum = calculateScaleForList(rightNumTerms);
+      const scaleRightDen = calculateScaleForList(rightDenTerms);
+      return Math.min(scaleLeftNum, scaleLeftDen, scaleRightNum, scaleRightDen);
     } else {
       return calculateScaleForList(terms);
     }
