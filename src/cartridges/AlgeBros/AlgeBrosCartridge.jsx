@@ -608,31 +608,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     });
   };
 
-  const handleMoveCrossSide = (term, currentType) => {
+  const handleMoveCrossSide = (term, sourceType, targetType) => {
     setActiveFactorMenu(null);
     playMerge();
     setUserPresses(p => p + 1);
 
-    let sourceSetter;
-    let targetSetter;
+    const getSetter = (t) => t === 'num' ? setNumTerms
+                           : t === 'den' ? setDenTerms
+                           : t === 'rightNum' ? setRightNumTerms
+                           : setRightDenTerms;
 
-    if (currentType === 'num') {
-      sourceSetter = setNumTerms;
-      targetSetter = setRightDenTerms;
-    } else if (currentType === 'den') {
-      sourceSetter = setDenTerms;
-      targetSetter = setRightNumTerms;
-    } else if (currentType === 'rightNum') {
-      sourceSetter = setRightNumTerms;
-      targetSetter = setDenTerms;
-    } else if (currentType === 'rightDen') {
-      sourceSetter = setRightDenTerms;
-      targetSetter = setNumTerms;
-    }
+    const sourceSetter = getSetter(sourceType);
+    const targetSetter = getSetter(targetType);
 
     if (sourceSetter && targetSetter) {
       sourceSetter(prev => prev.filter(t => t.id !== term.id));
-      const newTerm = makeTerm(term.coeff, term.variable);
+      const isAdditiveTransposition = (sourceType === 'num' && targetType === 'rightNum') ||
+                                      (sourceType === 'rightNum' && targetType === 'num');
+      const newCoeff = isAdditiveTransposition ? -term.coeff : Math.abs(term.coeff);
+      const newTerm = makeTerm(newCoeff, term.variable);
       targetSetter(prev => [...prev, newTerm]);
     }
   };
@@ -645,14 +639,27 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const equalsRect = equalsEl.getBoundingClientRect();
     const centerX = equalsRect.left + equalsRect.width / 2;
 
-    // Framer motion screen coordinates
     const dropX = info.point.x;
+    const dropY = info.point.y;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
     const crossed = startedOnLeft ? (dropX > centerX) : (dropX <= centerX);
 
     if (crossed) {
-      handleMoveCrossSide(term, currentType);
+      const targetSideEl = document.querySelector(`.equation-side.${startedOnLeft ? 'right-side' : 'left-side'}`);
+      let targetType;
+      if (targetSideEl) {
+        const targetRect = targetSideEl.getBoundingClientRect();
+        const targetCenterY = targetRect.top + targetRect.height / 2;
+        if (dropY < targetCenterY) {
+          targetType = startedOnLeft ? 'rightNum' : 'num';
+        } else {
+          targetType = startedOnLeft ? 'rightDen' : 'den';
+        }
+      } else {
+        targetType = startedOnLeft ? 'rightDen' : 'den';
+      }
+      handleMoveCrossSide(term, currentType, targetType);
     }
   };
 
@@ -1328,7 +1335,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         >
                           <AnimatePresence mode="popLayout">
                             {numTerms.length === 0 ? (
-                              <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                              <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>
+                                {topic === 'equations' && denTerms.length === 0 ? '0' : '1'}
+                              </div>
                             ) : (
                               numTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
@@ -1346,6 +1355,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       position: 'relative'
                                     }}
                                   >
+                                    {index === 0 && topic === 'equations' && term.coeff < 0 && (
+                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
+                                    )}
                                     {index > 0 && (
                                       <button
                                         className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
@@ -1357,7 +1369,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           handleMultiplyAdjacent(index, 'num');
                                         }}
                                       >
-                                        ·
+                                        {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
                                       </button>
                                     )}
                                     <motion.div
@@ -1492,7 +1504,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         >
                           <AnimatePresence mode="popLayout">
                             {rightNumTerms.length === 0 ? (
-                              <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                              <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>
+                                {topic === 'equations' && rightDenTerms.length === 0 ? '0' : '1'}
+                              </div>
                             ) : (
                               rightNumTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
@@ -1510,6 +1524,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       position: 'relative'
                                     }}
                                   >
+                                    {index === 0 && topic === 'equations' && term.coeff < 0 && (
+                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
+                                    )}
                                     {index > 0 && (
                                       <button
                                         className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
@@ -1521,7 +1538,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           handleMultiplyAdjacent(index, 'rightNum');
                                         }}
                                       >
-                                        ·
+                                        {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
                                       </button>
                                     )}
                                     <motion.div
