@@ -672,17 +672,39 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const calculateInsertIndex = (targetSideClass, dropX) => {
-    const groupEls = document.querySelectorAll(`.equation-side${targetSideClass} .expression-list > .term-group-wrapper`);
-    if (!groupEls || groupEls.length === 0) return 0;
-    
-    for (let i = 0; i < groupEls.length; i++) {
-      const rect = groupEls[i].getBoundingClientRect();
-      const midX = rect.left + rect.width / 2;
-      if (dropX < midX) {
+    const sideEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
+    if (!sideEl) return 0;
+
+    const allGroupEls = Array.from(sideEl.querySelectorAll(':scope > .term-group-wrapper'));
+    if (allGroupEls.length === 0) return 0;
+
+    let placeholderIdx = -1;
+    let placeholderWidth = 0;
+    const realGroupEls = [];
+
+    allGroupEls.forEach((el) => {
+      const isPlaceholder = el.querySelector('.drop-slot-placeholder') || el.classList.contains('drop-slot-placeholder');
+      if (isPlaceholder) {
+        placeholderIdx = realGroupEls.length;
+        placeholderWidth = el.getBoundingClientRect().width;
+      } else {
+        realGroupEls.push(el);
+      }
+    });
+
+    if (realGroupEls.length === 0) return 0;
+
+    for (let i = 0; i < realGroupEls.length; i++) {
+      const rect = realGroupEls[i].getBoundingClientRect();
+      const isShifted = placeholderIdx !== -1 && i >= placeholderIdx;
+      const naturalLeft = isShifted ? (rect.left - placeholderWidth) : rect.left;
+      const naturalMidX = naturalLeft + rect.width / 2;
+
+      if (dropX < naturalMidX) {
         return i;
       }
     }
-    return groupEls.length;
+    return realGroupEls.length;
   };
 
   const handleMoveCrossSide = (term, sourceType, targetType, insertIndex = null) => {
@@ -1612,14 +1634,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   return (
                                     <React.Fragment key={`group-${group[0].id}`}>
                                       {showHintHere && (
-                                        <div key="hint-slot-num-left" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <motion.div
+                                          key="hint-slot-num-left"
+                                          layout
+                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          className="term-group-wrapper"
+                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                        >
                                           {(groupIdx > 0 || dragHintState.signHint === '-') && (
                                             <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
                                               {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
                                             </span>
                                           )}
                                           <div className="term-card drop-slot-placeholder" />
-                                        </div>
+                                        </motion.div>
                                       )}
                                       {groupIdx > 0 && (
                                         <span
@@ -1633,7 +1664,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           {group[0].coeff < 0 ? '-' : '+'}
                                         </span>
                                       )}
-                                      <div
+                                      <motion.div
+                                        layout
+                                        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
                                         className="term-group-wrapper"
                                         style={{
                                           display: 'flex',
@@ -1723,19 +1756,28 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             </div>
                                           );
                                         })}
-                                      </div>
+                                      </motion.div>
                                     </React.Fragment>
                                   );
                                 })}
                                 {dragHintState?.side === 'leftNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(numTerms).length && (
-                                  <div key="hint-slot-num-left-end" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                  <motion.div
+                                    key="hint-slot-num-left-end"
+                                    layout
+                                    initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                    animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                    exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                    className="term-group-wrapper"
+                                    style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                  >
                                     {(splitIntoAdditiveGroups(numTerms).length > 0 || dragHintState.signHint === '-') && (
                                       <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
                                         {splitIntoAdditiveGroups(numTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
                                       </span>
                                     )}
                                     <div className="term-card drop-slot-placeholder" />
-                                  </div>
+                                  </motion.div>
                                 )}
                               </>
                             )}
@@ -1857,14 +1899,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   return (
                                     <React.Fragment key={`group-${group[0].id}`}>
                                       {showHintHere && (
-                                        <div key="hint-slot-num-right" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <motion.div
+                                          key="hint-slot-num-right"
+                                          layout
+                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          className="term-group-wrapper"
+                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                        >
                                           {(groupIdx > 0 || dragHintState.signHint === '-') && (
                                             <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
                                               {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
                                             </span>
                                           )}
                                           <div className="term-card drop-slot-placeholder" />
-                                        </div>
+                                        </motion.div>
                                       )}
                                       {groupIdx > 0 && (
                                         <span
@@ -1878,7 +1929,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           {group[0].coeff < 0 ? '-' : '+'}
                                         </span>
                                       )}
-                                      <div
+                                      <motion.div
+                                        layout
+                                        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
                                         className="term-group-wrapper"
                                         style={{
                                           display: 'flex',
@@ -1968,19 +2021,28 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             </div>
                                           );
                                         })}
-                                      </div>
+                                      </motion.div>
                                     </React.Fragment>
                                   );
                                 })}
                                 {dragHintState?.side === 'rightNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(rightNumTerms).length && (
-                                  <div key="hint-slot-num-right-end" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                  <motion.div
+                                    key="hint-slot-num-right-end"
+                                    layout
+                                    initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                    animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                    exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                    className="term-group-wrapper"
+                                    style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                  >
                                     {(splitIntoAdditiveGroups(rightNumTerms).length > 0 || dragHintState.signHint === '-') && (
                                       <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
                                         {splitIntoAdditiveGroups(rightNumTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
                                       </span>
                                     )}
                                     <div className="term-card drop-slot-placeholder" />
-                                  </div>
+                                  </motion.div>
                                 )}
                               </>
                             )}
