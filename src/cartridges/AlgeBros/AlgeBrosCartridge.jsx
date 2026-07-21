@@ -814,6 +814,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setDragPos({ x: info.point.x, y: info.point.y });
     }
 
+    const isStartLeft = currentType === 'num' || currentType === 'den';
+    const initialSide = isStartLeft ? 'leftNum' : 'rightNum';
+    const initialList = isStartLeft ? numTerms : rightNumTerms;
+    const initialGroupIdx = splitIntoAdditiveGroups(initialList).findIndex(g => g.some(t => t.id === term.id));
+
+    setDragHintState({
+      side: initialSide,
+      insertIndex: initialGroupIdx >= 0 ? initialGroupIdx : 0,
+      signHint: (topic === 'equations' && term.coeff < 0) ? '-' : '+'
+    });
+
     // Snapshot group midpoints BEFORE any layout changes.
     // We exclude the dragged group and adjust positions of groups after it.
     const snapshotSide = (sideClass, termList) => {
@@ -913,17 +924,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const side = isTargetLeft ? 'leftNum' : 'rightNum';
     const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
 
-    // Initial deadzone lock-in near original start position when on same side
-    if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
-      const dist = Math.hypot(dropX - session.startX, dropY - session.startY);
-      if (!session.isUnlocked && dist < 36) {
-        setDragHintState(null);
-        return;
-      }
-      session.isUnlocked = true;
-    } else {
-      session.isUnlocked = true;
-    }
+    session.isUnlocked = true;
 
     // Use snapshot midpoints (frozen at drag start) instead of live DOM
     const snapshot = isTargetLeft ? session.leftSnapshot : session.rightSnapshot;
@@ -960,18 +961,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     session.lastInsertIndex = insertIndex;
-
-    // Suppress hint if near original placement on same side
-    // The draggingGroupIdx is relative to the ORIGINAL groups (before the dragged group was removed from midpoints).
-    // insertIndex is relative to the midpoints array (which excludes the dragged group).
-    // So "near original" means insertIndex equals the draggingGroupIdx in the snapshot.
-    if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
-      const dgi = snapshot?.draggingGroupIdx;
-      if (dgi !== undefined && dgi >= 0 && insertIndex === dgi) {
-        setDragHintState(null);
-        return;
-      }
-    }
 
     let signHint;
     if (crossedSides) {
@@ -1842,7 +1831,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           flexDirection: 'row',
                                           alignItems: 'center',
                                           position: 'relative',
-                                          width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
                                           overflow: 'visible',
                                           zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
                                         }}
@@ -1910,7 +1898,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'num', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', opacity: draggingCardId === term.id ? 0 : 1 }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1 }}
                                                 onTap={() => handleCardTap(term, 'num')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -2715,40 +2703,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         );
       })()}
 
-      {/* Top-Level Drag Overlay Card */}
-      {isDraggingTerm && dragOverlayTerm && (
-        <div
-          className="drag-overlay-card-container"
-          style={{
-            position: 'fixed',
-            left: dragPos.x,
-            top: dragPos.y,
-            transform: 'translate(-50%, -50%) scale(1.15)',
-            zIndex: 99999999,
-            pointerEvents: 'none'
-          }}
-        >
-          <div
-            className={`term-card is-dragging ${isOneChar(dragOverlayTerm) ? 'one-char-card' : ''}`}
-            style={{
-              boxShadow: '0 12px 36px rgba(139, 92, 246, 0.45), 0 0 24px rgba(139, 92, 246, 0.25)',
-              background: '#ffffff',
-              borderColor: 'var(--accent-purple, #8b5cf6)',
-              color: 'var(--text-main, #1e1b4b)',
-              cursor: 'grabbing',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0 14px'
-            }}
-          >
-            {dragOverlayTerm.coeff < 0 && (
-              <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
-            )}
-            {renderTermValue(dragOverlayTerm)}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
