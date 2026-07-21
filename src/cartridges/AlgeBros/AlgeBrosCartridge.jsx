@@ -1570,7 +1570,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       onDragStart={() => setIsDraggingTerm(true)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
-                                        handleDragEndCross(term, 'den', e, info);
+                                        handleDragEndCrossGroup([term], 'den', e, info);
                                       }}
                                       style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'den')}
@@ -1753,7 +1753,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       onDragStart={() => setIsDraggingTerm(true)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
-                                        handleDragEndCross(term, 'rightDen', e, info);
+                                        handleDragEndCrossGroup([term], 'rightDen', e, info);
                                       }}
                                       style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'rightDen')}
