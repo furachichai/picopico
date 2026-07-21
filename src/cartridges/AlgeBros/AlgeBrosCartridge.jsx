@@ -11,9 +11,10 @@ import {
   isDivisionSimplified,
   makeTerm,
   getPrimeFactors,
-  multiplyTerms
+  multiplyTerms,
+  isEquationSolved
 } from './game/AlgeBrosEngine';
-import { generateLevels, generateDivisionLevels } from './game/AlgeBrosLevelGenerator';
+import { generateLevels, generateDivisionLevels, generateEquationLevels } from './game/AlgeBrosLevelGenerator';
 import {
   unlockAudio,
   playSelect,
@@ -69,7 +70,27 @@ function StartScreen({ onStart, topic, setTopic }) {
         <p className="start-subtitle" style={{ fontWeight: 800, color: 'var(--accent-purple)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>
           Select Topic:
         </p>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="hud-badge"
+            style={{
+              cursor: 'pointer',
+              background: topic === 'equations' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+              borderColor: topic === 'equations' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
+              color: topic === 'equations' ? 'var(--accent-purple)' : 'inherit',
+              padding: '6px 12px',
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              borderRadius: '8px'
+            }}
+            onClick={() => {
+              unlockAudio();
+              playSelect();
+              setTopic('equations');
+            }}
+          >
+            ⚖️ EQUATIONS
+          </button>
           <button
             className="hud-badge"
             style={{
@@ -112,7 +133,25 @@ function StartScreen({ onStart, topic, setTopic }) {
           </button>
         </div>
 
-        {topic === 'divisions' ? (
+        {topic === 'equations' ? (
+          <>
+            <p className="start-subtitle">
+              Isolate the variable on one side of the equals sign to solve the equation!
+            </p>
+            <div className="rule-item">
+              <span className="rule-icon">⚖️</span>
+              <span>Tap a term, then click the arrow to move it to the other side's denominator.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">✖️</span>
+              <span>Decompose terms and cross out matching pairs to simplify.</span>
+            </div>
+            <div className="rule-item">
+              <span className="rule-icon">🎯</span>
+              <span>Get the variable isolated (e.g. x = 3) and click <strong>READY</strong>.</span>
+            </div>
+          </>
+        ) : topic === 'divisions' ? (
           <>
             <p className="start-subtitle">
               Simplify fractions by crossing out identical terms on the top and bottom!
@@ -331,13 +370,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
   const [isMatchingFading, setIsMatchingFading] = useState(false);
 
-  const [topic, setTopic] = useState('divisions'); // Default is 'divisions'
+  const [topic, setTopic] = useState('equations'); // Default is 'equations'
   const [numTerms, setNumTerms] = useState([]);
   const [denTerms, setDenTerms] = useState([]);
   const [slicedNum, setSlicedNum] = useState([]); // Sliced numerator term IDs
   const [slicedDen, setSlicedDen] = useState([]); // Sliced denominator term IDs
   const [crossedOutNum, setCrossedOutNum] = useState([]);
   const [crossedOutDen, setCrossedOutDen] = useState([]);
+
+  // Right side of equation state variables
+  const [rightNumTerms, setRightNumTerms] = useState([]);
+  const [rightDenTerms, setRightDenTerms] = useState([]);
+  const [slicedRightNum, setSlicedRightNum] = useState([]);
+  const [slicedRightDen, setSlicedRightDen] = useState([]);
+  const [crossedOutRightNum, setCrossedOutRightNum] = useState([]);
+  const [crossedOutRightDen, setCrossedOutRightDen] = useState([]);
+  const [unknownVar, setUnknownVar] = useState('x');
+
   const [cardAngles, setCardAngles] = useState({}); // Stores line rotation angle per card ID
   const [activeFactorMenu, setActiveFactorMenu] = useState(null); // { cardId, type } or null
   const [popoverPos, setPopoverPos] = useState(null); // { top, left, cardWidth }
@@ -349,12 +398,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const slicedNumRef = React.useRef(slicedNum);
   const slicedDenRef = React.useRef(slicedDen);
 
+  const rightNumTermsRef = React.useRef(rightNumTerms);
+  const rightDenTermsRef = React.useRef(rightDenTerms);
+  const slicedRightNumRef = React.useRef(slicedRightNum);
+  const slicedRightDenRef = React.useRef(slicedRightDen);
+
   React.useEffect(() => {
     numTermsRef.current = numTerms;
     denTermsRef.current = denTerms;
     slicedNumRef.current = slicedNum;
     slicedDenRef.current = slicedDen;
-  }, [numTerms, denTerms, slicedNum, slicedDen]);
+
+    rightNumTermsRef.current = rightNumTerms;
+    rightDenTermsRef.current = rightDenTerms;
+    slicedRightNumRef.current = slicedRightNum;
+    slicedRightDenRef.current = slicedRightDen;
+  }, [numTerms, denTerms, slicedNum, slicedDen, rightNumTerms, rightDenTerms, slicedRightNum, slicedRightDen]);
 
   const playPopFX = useCallback(() => {
     try {
@@ -420,6 +479,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setCrossedOutNum([]);
       setCrossedOutDen([]);
       setCardAngles({});
+    } else if (topic === 'equations') {
+      setNumTerms(levelObj.initialLeftNum || []);
+      setDenTerms(levelObj.initialLeftDen || []);
+      setRightNumTerms(levelObj.initialRightNum || []);
+      setRightDenTerms(levelObj.initialRightDen || []);
+      setSlicedNum([]);
+      setSlicedDen([]);
+      setCrossedOutNum([]);
+      setCrossedOutDen([]);
+      setSlicedRightNum([]);
+      setSlicedRightDen([]);
+      setCrossedOutRightNum([]);
+      setCrossedOutRightDen([]);
+      setCardAngles({});
+      
+      const firstVarTerm = (levelObj.initialLeftNum || []).find(t => t.variable);
+      setUnknownVar(firstVarTerm ? firstVarTerm.variable : 'x');
     } else {
       setTerms(levelObj.initialTerms || []);
     }
@@ -428,7 +504,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setMistakes(0);
     setIsLevelPerfect(true);
     setFeedback({
-      text: topic === 'divisions' ? 'Cross out matching terms!' : 'Reorder and combine like terms!',
+      text: topic === 'equations'
+        ? 'Isolate the variable on one side of the equals sign!'
+        : topic === 'divisions'
+        ? 'Cross out matching terms!'
+        : 'Reorder and combine like terms!',
       type: 'info'
     });
     setFlash(null);
@@ -441,25 +521,18 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const handleMultiplyAdjacent = (index, type) => {
     setActiveFactorMenu(null);
     playMerge();
-    if (type === 'num') {
-      setNumTerms(prev => {
-        const next = [...prev];
-        const termA = next[index - 1];
-        const termB = next[index];
-        const product = multiplyTerms(termA, termB);
-        next.splice(index - 1, 2, product);
-        return next;
-      });
-    } else {
-      setDenTerms(prev => {
-        const next = [...prev];
-        const termA = next[index - 1];
-        const termB = next[index];
-        const product = multiplyTerms(termA, termB);
-        next.splice(index - 1, 2, product);
-        return next;
-      });
-    }
+    const setter = type === 'num' ? setNumTerms
+                 : type === 'den' ? setDenTerms
+                 : type === 'rightNum' ? setRightNumTerms
+                 : setRightDenTerms;
+    setter(prev => {
+      const next = [...prev];
+      const termA = next[index - 1];
+      const termB = next[index];
+      const product = multiplyTerms(termA, termB);
+      next.splice(index - 1, 2, product);
+      return next;
+    });
   };
 
   const handleCardTap = (term, type) => {
@@ -473,23 +546,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         const splitA = makeTerm(term.coeff, exponent - 1 === 1 ? base : `${base}^${exponent - 1}`);
         const splitB = makeTerm(1, base);
         const splitTerms = [splitA, splitB];
-        if (type === 'num') {
-          setNumTerms(prev => {
-            const idx = prev.findIndex(t => t.id === term.id);
-            if (idx === -1) return prev;
-            const next = [...prev];
-            next.splice(idx, 1, ...splitTerms);
-            return next;
-          });
-        } else {
-          setDenTerms(prev => {
-            const idx = prev.findIndex(t => t.id === term.id);
-            if (idx === -1) return prev;
-            const next = [...prev];
-            next.splice(idx, 1, ...splitTerms);
-            return next;
-          });
-        }
+        const setter = type === 'num' ? setNumTerms
+                     : type === 'den' ? setDenTerms
+                     : type === 'rightNum' ? setRightNumTerms
+                     : setRightDenTerms;
+        setter(prev => {
+          const idx = prev.findIndex(t => t.id === term.id);
+          if (idx === -1) return prev;
+          const next = [...prev];
+          next.splice(idx, 1, ...splitTerms);
+          return next;
+        });
         return;
       }
     }
@@ -499,22 +566,26 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       playMerge();
       const splitA = makeTerm(term.coeff, null);
       const splitB = makeTerm(1, term.variable);
-      if (type === 'num') {
-        setNumTerms(prev => {
-          const idx = prev.findIndex(t => t.id === term.id);
-          if (idx === -1) return prev;
-          const next = [...prev];
-          next.splice(idx, 1, splitA, splitB);
-          return next;
-        });
+      const setter = type === 'num' ? setNumTerms
+                   : type === 'den' ? setDenTerms
+                   : type === 'rightNum' ? setRightNumTerms
+                   : setRightDenTerms;
+      setter(prev => {
+        const idx = prev.findIndex(t => t.id === term.id);
+        if (idx === -1) return prev;
+        const next = [...prev];
+        next.splice(idx, 1, splitA, splitB);
+        return next;
+      });
+      return;
+    }
+
+    // Tapping a simple card
+    if (topic === 'equations') {
+      if (activeFactorMenu?.cardId === term.id) {
+        setActiveFactorMenu(null);
       } else {
-        setDenTerms(prev => {
-          const idx = prev.findIndex(t => t.id === term.id);
-          if (idx === -1) return prev;
-          const next = [...prev];
-          next.splice(idx, 1, splitA, splitB);
-          return next;
-        });
+        setActiveFactorMenu({ cardId: term.id, type });
       }
     } else if (!term.variable) {
       const factors = getPrimeFactors(term.coeff);
@@ -533,27 +604,54 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     playMerge();
     const splitA = makeTerm(factor * Math.sign(term.coeff), null);
     const splitB = makeTerm(Math.abs(term.coeff / factor), null);
-    if (type === 'num') {
-      setNumTerms(prev => {
-        const idx = prev.findIndex(t => t.id === term.id);
-        if (idx === -1) return prev;
-        const next = [...prev];
-        next.splice(idx, 1, splitA, splitB);
-        return next;
-      });
-    } else {
-      setDenTerms(prev => {
-        const idx = prev.findIndex(t => t.id === term.id);
-        if (idx === -1) return prev;
-        const next = [...prev];
-        next.splice(idx, 1, splitA, splitB);
-        return next;
-      });
+    const setter = type === 'num' ? setNumTerms
+                 : type === 'den' ? setDenTerms
+                 : type === 'rightNum' ? setRightNumTerms
+                 : setRightDenTerms;
+    setter(prev => {
+      const idx = prev.findIndex(t => t.id === term.id);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      next.splice(idx, 1, splitA, splitB);
+      return next;
+    });
+  };
+
+  const handleMoveCrossSide = (term, currentType) => {
+    setActiveFactorMenu(null);
+    playMerge();
+    setUserPresses(p => p + 1);
+
+    let sourceSetter;
+    let targetSetter;
+
+    if (currentType === 'num') {
+      sourceSetter = setNumTerms;
+      targetSetter = setRightDenTerms;
+    } else if (currentType === 'den') {
+      sourceSetter = setDenTerms;
+      targetSetter = setRightNumTerms;
+    } else if (currentType === 'rightNum') {
+      sourceSetter = setRightNumTerms;
+      targetSetter = setDenTerms;
+    } else if (currentType === 'rightDen') {
+      sourceSetter = setRightDenTerms;
+      targetSetter = setNumTerms;
+    }
+
+    if (sourceSetter && targetSetter) {
+      sourceSetter(prev => prev.filter(t => t.id !== term.id));
+      const newTerm = makeTerm(term.coeff, term.variable);
+      targetSetter(prev => [...prev, newTerm]);
     }
   };
 
   const handleStart = () => {
-    const generated = topic === 'divisions' ? generateDivisionLevels() : generateLevels();
+    const generated = topic === 'equations'
+      ? generateEquationLevels()
+      : topic === 'divisions'
+      ? generateDivisionLevels()
+      : generateLevels();
     setLevels(generated);
     setCurrentLevelIndex(0);
     loadLevel(generated[0]);
@@ -618,9 +716,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     });
   }, [activeFactorMenu]);
 
-  const compareAndCrossOutSlice = useCallback((numId, numIdx, denId, denIdx) => {
-    const termA = numTerms.find(t => t.id === numId);
-    const termB = denTerms.find(t => t.id === denId);
+  const compareAndCrossOutSlice = useCallback((numId, denId, side) => {
+    const isLeft = side === 'left';
+    const numList = isLeft ? numTerms : rightNumTerms;
+    const denList = isLeft ? denTerms : rightDenTerms;
+    const crossedNumSetter = isLeft ? setCrossedOutNum : setCrossedOutRightNum;
+    const crossedDenSetter = isLeft ? setCrossedOutDen : setCrossedOutRightDen;
+    const sliceNumSetter = isLeft ? setSlicedNum : setSlicedRightNum;
+    const sliceDenSetter = isLeft ? setSlicedDen : setSlicedRightDen;
+    const numSetter = isLeft ? setNumTerms : setRightNumTerms;
+    const denSetter = isLeft ? setDenTerms : setRightDenTerms;
+
+    const termA = numList.find(t => t.id === numId);
+    const termB = denList.find(t => t.id === denId);
 
     if (!termA || !termB) return;
 
@@ -629,17 +737,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       triggerFlash('success');
       setIsMatchingFading(true);
       
-      setCrossedOutNum(prev => [...prev, numId]);
-      setCrossedOutDen(prev => [...prev, denId]);
+      crossedNumSetter(prev => [...prev, numId]);
+      crossedDenSetter(prev => [...prev, denId]);
       
       setUserPresses(p => p + 1);
       
-      setSlicedNum(prev => prev.filter(x => x !== numId));
-      setSlicedDen(prev => prev.filter(x => x !== denId));
+      sliceNumSetter(prev => prev.filter(x => x !== numId));
+      sliceDenSetter(prev => prev.filter(x => x !== denId));
       
       setTimeout(() => {
-        setNumTerms(prev => prev.filter(t => t.id !== numId));
-        setDenTerms(prev => prev.filter(t => t.id !== denId));
+        numSetter(prev => prev.filter(t => t.id !== numId));
+        denSetter(prev => prev.filter(t => t.id !== denId));
         setCardAngles(prev => {
           const next = { ...prev };
           delete next[numId];
@@ -662,8 +770,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setIsMatchingFading(true);
       
       setTimeout(() => {
-        setSlicedNum(prev => prev.filter(x => x !== numId));
-        setSlicedDen(prev => prev.filter(x => x !== denId));
+        sliceNumSetter(prev => prev.filter(x => x !== numId));
+        sliceDenSetter(prev => prev.filter(x => x !== denId));
         setCardAngles(prev => {
           const next = { ...prev };
           delete next[numId];
@@ -673,7 +781,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         setIsMatchingFading(false);
       }, 400);
     }
-  }, [numTerms, denTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake]);
+  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake]);
 
   const tempSlicedNum = React.useRef(null);
   const tempSlicedDen = React.useRef(null);
@@ -711,13 +819,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     };
 
     const handleGlobalDown = (e) => {
-      if (isValidating || isMatchingFading || topic !== 'divisions') return;
+      if (isValidating || isMatchingFading || (topic !== 'divisions' && topic !== 'equations')) return;
       
       // If starting on a card, do not slice (allows horizontal dragging/reordering)
       if (
         e.target.closest('.term-card') || 
         e.target.closest('.dot-separator-btn') || 
         e.target.closest('.factor-menu-popover') ||
+        e.target.closest('.factor-menu-portal') ||
         e.target.closest('button')
       ) {
         isGlobalSlicing.current = false;
@@ -786,11 +895,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
             if (id && type) {
               if (type === 'num') {
                 if (!crossedOutNum.includes(id)) {
-                  tempSlicedNum.current = id;
+                  tempSlicedNum.current = { id, side: 'left' };
                 }
-              } else {
+              } else if (type === 'den') {
                 if (!crossedOutDen.includes(id)) {
-                  tempSlicedDen.current = id;
+                  tempSlicedDen.current = { id, side: 'left' };
+                }
+              } else if (type === 'rightNum') {
+                if (!crossedOutRightNum.includes(id)) {
+                  tempSlicedNum.current = { id, side: 'right' };
+                }
+              } else if (type === 'rightDen') {
+                if (!crossedOutRightDen.includes(id)) {
+                  tempSlicedDen.current = { id, side: 'right' };
                 }
               }
             }
@@ -803,23 +920,27 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       if (!isGlobalSlicing.current) return;
       isGlobalSlicing.current = false;
       
-      const numId = tempSlicedNum.current;
-      const denId = tempSlicedDen.current;
+      const numSlice = tempSlicedNum.current;
+      const denSlice = tempSlicedDen.current;
       
       // Reset slices if the slice begins and ends outside of a card, without crossing any card
       const endsOutside = !e || !e.target || !e.target.closest('.term-card');
-      const crossedAny = numId || denId;
+      const crossedAny = numSlice || denSlice;
       
       if (endsOutside && !crossedAny) {
         setSlicedNum([]);
         setSlicedDen([]);
         setCrossedOutNum([]);
         setCrossedOutDen([]);
+        setSlicedRightNum([]);
+        setSlicedRightDen([]);
+        setCrossedOutRightNum([]);
+        setCrossedOutRightDen([]);
         setCardAngles({});
         return;
       }
       
-      if (numId || denId) {
+      if (numSlice || denSlice) {
         unlockAudio();
         
         // Calculate the slice gesture's direction/angle
@@ -841,30 +962,35 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         
         // Save angles for crossed card IDs
         const anglesObj = {};
-        if (numId) anglesObj[numId] = angle;
-        if (denId) anglesObj[denId] = angle;
+        if (numSlice) anglesObj[numSlice.id] = angle;
+        if (denSlice) anglesObj[denSlice.id] = angle;
         setCardAngles(prev => ({ ...prev, ...anglesObj }));
         
-        let nextSlicedNum = slicedNumRef.current;
-        let nextSlicedDen = slicedDenRef.current;
+        const side = numSlice ? numSlice.side : denSlice.side;
+        if (numSlice && denSlice && numSlice.side !== denSlice.side) {
+          return; // invalid cross-side slice
+        }
+
+        const isLeft = side === 'left';
+        const sliceNumSetter = isLeft ? setSlicedNum : setSlicedRightNum;
+        const sliceDenSetter = isLeft ? setSlicedDen : setSlicedRightDen;
+        const sliceNumRef = isLeft ? slicedNumRef : slicedRightNumRef;
+        const sliceDenRef = isLeft ? slicedDenRef : slicedRightDenRef;
+
+        if (numSlice) {
+          sliceNumSetter([numSlice.id]);
+        }
+        if (denSlice) {
+          sliceDenSetter([denSlice.id]);
+        }
         
-        if (numId) {
-          nextSlicedNum = [numId];
-          setSlicedNum([numId]);
-        }
-        if (denId) {
-          nextSlicedDen = [denId];
-          setSlicedDen([denId]);
-        }
-        
-        // Evaluate matching if both numerator and denominator cards are active
-        const activeNumId = nextSlicedNum[0];
-        const activeDenId = nextSlicedDen[0];
-        if (activeNumId && activeDenId) {
-          const numIdx = numTermsRef.current.findIndex(t => t.id === activeNumId);
-          const denIdx = denTermsRef.current.findIndex(t => t.id === activeDenId);
-          compareAndCrossOutSlice(activeNumId, numIdx, activeDenId, denIdx);
-        }
+        setTimeout(() => {
+          const activeNumId = sliceNumRef.current[0];
+          const activeDenId = sliceDenRef.current[0];
+          if (activeNumId && activeDenId) {
+            compareAndCrossOutSlice(activeNumId, activeDenId, side);
+          }
+        }, 10);
       }
     };
 
@@ -876,7 +1002,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);
     };
-  }, [numTerms, denTerms, crossedOutNum, crossedOutDen, compareAndCrossOutSlice, topic, isValidating, isMatchingFading]);
+  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen, compareAndCrossOutSlice, topic, isValidating, isMatchingFading]);
 
 
   const handleCombine = (index) => {
@@ -916,17 +1042,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     if (isValidating) return;
     unlockAudio();
     
-    // Check if there are multiple terms in the numerator or denominator
-    // (meaning they are separated by dot separator buttons and not fully simplified/compacted)
-    const hasDotSeparators = topic === 'divisions' && (numTerms.length > 1 || denTerms.length > 1);
+    // Check if there are multiple terms in the numerator or denominator on either side
+    const hasDotSeparators = (topic === 'divisions' && (numTerms.length > 1 || denTerms.length > 1)) ||
+                            (topic === 'equations' && (numTerms.length > 1 || denTerms.length > 1 || rightNumTerms.length > 1 || rightDenTerms.length > 1));
     
     const isSimplified = topic === 'divisions'
       ? (isDivisionSimplified(numTerms, denTerms) && !hasDotSeparators)
+      : topic === 'equations'
+      ? isEquationSolved(numTerms, denTerms, rightNumTerms, rightDenTerms, unknownVar)
       : isFullySimplified(terms);
     
     if (isSimplified) {
       const elegant = topic === 'divisions'
         ? (checkElegance(numTerms) && checkElegance(denTerms))
+        : topic === 'equations'
+        ? (checkElegance(numTerms) && checkElegance(denTerms) && checkElegance(rightNumTerms) && checkElegance(rightDenTerms))
         : checkElegance(terms);
       if (elegant) {
         setIsElegantCompleted(true);
@@ -983,7 +1113,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         setTimeout(() => setShakeDotButtons(false), 500);
         showFeedback('Combine all multiplied terms first!', 'error');
       } else {
-        showFeedback(topic === 'divisions' ? 'Doh! There are still matching terms you can cross out!' : 'Unlike terms cannot be combined!', 'error');
+        if (topic === 'equations') {
+          showFeedback(`Isolate the variable '${unknownVar}' with coefficient 1 on one side!`, 'error');
+        } else {
+          showFeedback(topic === 'divisions' ? 'Doh! There are still matching terms you can cross out!' : 'Unlike terms cannot be combined!', 'error');
+        }
       }
       
       triggerFlash('error');
@@ -1056,19 +1190,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         const staticSignW = (idx === 0 && term.coeff < 0) ? 12 : 0;
         return acc + cardW + opW + staticSignW;
       }, 0);
-      const targetWidth = 260;
+      const targetWidth = topic === 'equations' ? 120 : 260;
       const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-      return Math.max(0.4, Math.min(2.0, calculatedScale));
+      return Math.max(topic === 'equations' ? 0.35 : 0.4, Math.min(2.0, calculatedScale));
     };
 
     if (topic === 'divisions') {
       const scaleNum = calculateScaleForList(numTerms);
       const scaleDen = calculateScaleForList(denTerms);
       return Math.min(scaleNum, scaleDen);
+    } else if (topic === 'equations') {
+      const scaleLeftNum = calculateScaleForList(numTerms);
+      const scaleLeftDen = calculateScaleForList(denTerms);
+      const scaleRightNum = calculateScaleForList(rightNumTerms);
+      const scaleRightDen = calculateScaleForList(rightDenTerms);
+      return Math.min(scaleLeftNum, scaleLeftDen, scaleRightNum, scaleRightDen);
     } else {
       return calculateScaleForList(terms);
     }
-  }, [topic, terms, numTerms, denTerms, getTermWidth]);
+  }, [topic, terms, numTerms, denTerms, rightNumTerms, rightDenTerms, getTermWidth]);
 
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
@@ -1138,13 +1278,482 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                   🌸 <span style={{ fontSize: '0.75rem', fontWeight: 800, marginLeft: '2px' }}>ELEGANT</span>
                 </div>
                 <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
-                  {topic === 'divisions' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
+                  {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
                 </div>
               </div>
 
               {/* Expression Dragging Area */}
-              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
-                {topic === 'divisions' ? (
+              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
+                {topic === 'equations' ? (
+                  <div className="equation-layout">
+                    {/* Left Side */}
+                    <div className="equation-side left-side">
+                      {denTerms.length === 0 ? (
+                        <Reorder.Group
+                          axis="x"
+                          values={numTerms}
+                          onReorder={setNumTerms}
+                          className="expression-list"
+                          style={{
+                            transform: `scale(${expressionScale})`,
+                            transformOrigin: 'center',
+                            zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
+                            position: 'relative'
+                          }}
+                        >
+                          <AnimatePresence mode="popLayout">
+                            {numTerms.length === 0 ? (
+                              <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                            ) : (
+                              numTerms.map((term, index) => {
+                                const oneChar = isOneChar(term);
+                                const isSliced = slicedNum.includes(term.id);
+                                const isCrossed = crossedOutNum.includes(term.id);
+                                return (
+                                  <Reorder.Item
+                                    key={term.id}
+                                    value={term}
+                                    className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                    whileDrag={{ scale: 1.06 }}
+                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    onDragStart={() => setIsDraggingTerm(true)}
+                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    style={{
+                                      zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                      position: 'relative'
+                                    }}
+                                  >
+                                    {index > 0 && (
+                                      <button
+                                        className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                        style={{ pointerEvents: 'auto' }}
+                                        onMouseDown={e => e.stopPropagation()}
+                                        onTouchStart={e => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleMultiplyAdjacent(index, 'num');
+                                        }}
+                                      >
+                                        ·
+                                      </button>
+                                    )}
+                                    <motion.div
+                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      data-id={term.id}
+                                      data-type="num"
+                                      data-index={index}
+                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      onTap={() => handleCardTap(term, 'num')}
+                                    >
+                                      {renderTermValue(term)}
+                                      {(isSliced || isCrossed) && (
+                                        <div
+                                          className="strike-line"
+                                          style={{
+                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                          }}
+                                        />
+                                      )}
+                                    </motion.div>
+                                  </Reorder.Item>
+                                );
+                              })
+                            )}
+                          </AnimatePresence>
+                        </Reorder.Group>
+                      ) : (
+                        <div className="division-container">
+                          {/* Numerator */}
+                          <Reorder.Group
+                            axis="x"
+                            values={numTerms}
+                            onReorder={setNumTerms}
+                            className="expression-list"
+                            style={{
+                              transform: `scale(${expressionScale})`,
+                              transformOrigin: 'center',
+                              zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
+                              position: 'relative'
+                            }}
+                          >
+                            <AnimatePresence mode="popLayout">
+                              {numTerms.length === 0 ? (
+                                <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                              ) : (
+                                numTerms.map((term, index) => {
+                                  const oneChar = isOneChar(term);
+                                  const isSliced = slicedNum.includes(term.id);
+                                  const isCrossed = crossedOutNum.includes(term.id);
+                                  return (
+                                    <Reorder.Item
+                                      key={term.id}
+                                      value={term}
+                                      className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                      whileDrag={{ scale: 1.06 }}
+                                      exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                      transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={() => setIsDraggingTerm(false)}
+                                      style={{
+                                        zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                        position: 'relative'
+                                      }}
+                                    >
+                                      {index > 0 && (
+                                        <button
+                                          className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                          onMouseDown={e => e.stopPropagation()}
+                                          onTouchStart={e => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleMultiplyAdjacent(index, 'num');
+                                          }}
+                                        >
+                                          ·
+                                        </button>
+                                      )}
+                                      <motion.div
+                                        className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                        data-id={term.id}
+                                        data-type="num"
+                                        data-index={index}
+                                        style={{ position: 'relative', pointerEvents: 'auto' }}
+                                        onTap={() => handleCardTap(term, 'num')}
+                                      >
+                                        {renderTermValue(term)}
+                                        {(isSliced || isCrossed) && (
+                                          <div
+                                            className="strike-line"
+                                            style={{
+                                              transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                            }}
+                                          />
+                                        )}
+                                      </motion.div>
+                                    </Reorder.Item>
+                                  );
+                                })
+                              )}
+                            </AnimatePresence>
+                          </Reorder.Group>
+                          {/* Division Line */}
+                          <div
+                            className="division-line"
+                            style={{
+                              visibility: (isValidating && denTerms.every(t => crossedOutDen.includes(t.id))) ? 'hidden' : 'visible'
+                            }}
+                          />
+                          {/* Denominator */}
+                          <Reorder.Group
+                            axis="x"
+                            values={denTerms}
+                            onReorder={setDenTerms}
+                            className="expression-list"
+                            style={{
+                              transform: `scale(${expressionScale})`,
+                              transformOrigin: 'center',
+                              zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
+                              position: 'relative'
+                            }}
+                          >
+                            <AnimatePresence mode="popLayout">
+                              {denTerms.map((term, index) => {
+                                const oneChar = isOneChar(term);
+                                const isSliced = slicedDen.includes(term.id);
+                                const isCrossed = crossedOutDen.includes(term.id);
+                                return (
+                                  <Reorder.Item
+                                    key={term.id}
+                                    value={term}
+                                    className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                    whileDrag={{ scale: 1.06 }}
+                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    onDragStart={() => setIsDraggingTerm(true)}
+                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    style={{
+                                      pointerEvents: 'none',
+                                      zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                      position: 'relative'
+                                    }}
+                                  >
+                                    {index > 0 && (
+                                      <button
+                                        className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                        style={{ pointerEvents: 'auto' }}
+                                        onMouseDown={e => e.stopPropagation()}
+                                        onTouchStart={e => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleMultiplyAdjacent(index, 'den');
+                                        }}
+                                      >
+                                        ·
+                                      </button>
+                                    )}
+                                    <motion.div
+                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      data-id={term.id}
+                                      data-type="den"
+                                      data-index={index}
+                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      onTap={() => handleCardTap(term, 'den')}
+                                    >
+                                      {renderTermValue(term)}
+                                      {(isSliced || isCrossed) && (
+                                        <div
+                                          className="strike-line"
+                                          style={{
+                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                          }}
+                                        />
+                                      )}
+                                    </motion.div>
+                                  </Reorder.Item>
+                                );
+                              })}
+                            </AnimatePresence>
+                          </Reorder.Group>
+                        </div>
+                      )}
+                    </div>
+                    {/* Equals Sign */}
+                    <div className="equals-sign">=</div>
+                    {/* Right Side */}
+                    <div className="equation-side right-side">
+                      {rightDenTerms.length === 0 ? (
+                        <Reorder.Group
+                          axis="x"
+                          values={rightNumTerms}
+                          onReorder={setRightNumTerms}
+                          className="expression-list"
+                          style={{
+                            transform: `scale(${expressionScale})`,
+                            transformOrigin: 'center',
+                            zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
+                            position: 'relative'
+                          }}
+                        >
+                          <AnimatePresence mode="popLayout">
+                            {rightNumTerms.length === 0 ? (
+                              <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                            ) : (
+                              rightNumTerms.map((term, index) => {
+                                const oneChar = isOneChar(term);
+                                const isSliced = slicedRightNum.includes(term.id);
+                                const isCrossed = crossedOutRightNum.includes(term.id);
+                                return (
+                                  <Reorder.Item
+                                    key={term.id}
+                                    value={term}
+                                    className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                    whileDrag={{ scale: 1.06 }}
+                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    onDragStart={() => setIsDraggingTerm(true)}
+                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    style={{
+                                      zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                      position: 'relative'
+                                    }}
+                                  >
+                                    {index > 0 && (
+                                      <button
+                                        className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                        style={{ pointerEvents: 'auto' }}
+                                        onMouseDown={e => e.stopPropagation()}
+                                        onTouchStart={e => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleMultiplyAdjacent(index, 'rightNum');
+                                        }}
+                                      >
+                                        ·
+                                      </button>
+                                    )}
+                                    <motion.div
+                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      data-id={term.id}
+                                      data-type="rightNum"
+                                      data-index={index}
+                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      onTap={() => handleCardTap(term, 'rightNum')}
+                                    >
+                                      {renderTermValue(term)}
+                                      {(isSliced || isCrossed) && (
+                                        <div
+                                          className="strike-line"
+                                          style={{
+                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                          }}
+                                        />
+                                      )}
+                                    </motion.div>
+                                  </Reorder.Item>
+                                );
+                              })
+                            )}
+                          </AnimatePresence>
+                        </Reorder.Group>
+                      ) : (
+                        <div className="division-container">
+                          {/* Numerator */}
+                          <Reorder.Group
+                            axis="x"
+                            values={rightNumTerms}
+                            onReorder={setRightNumTerms}
+                            className="expression-list"
+                            style={{
+                              transform: `scale(${expressionScale})`,
+                              transformOrigin: 'center',
+                              zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
+                              position: 'relative'
+                            }}
+                          >
+                            <AnimatePresence mode="popLayout">
+                              {rightNumTerms.length === 0 ? (
+                                <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                              ) : (
+                                rightNumTerms.map((term, index) => {
+                                  const oneChar = isOneChar(term);
+                                  const isSliced = slicedRightNum.includes(term.id);
+                                  const isCrossed = crossedOutRightNum.includes(term.id);
+                                  return (
+                                    <Reorder.Item
+                                      key={term.id}
+                                      value={term}
+                                      className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                      whileDrag={{ scale: 1.06 }}
+                                      exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                      transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={() => setIsDraggingTerm(false)}
+                                      style={{
+                                        zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                        position: 'relative'
+                                      }}
+                                    >
+                                      {index > 0 && (
+                                        <button
+                                          className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                          onMouseDown={e => e.stopPropagation()}
+                                          onTouchStart={e => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleMultiplyAdjacent(index, 'rightNum');
+                                          }}
+                                        >
+                                          ·
+                                        </button>
+                                      )}
+                                      <motion.div
+                                        className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                        data-id={term.id}
+                                        data-type="rightNum"
+                                        data-index={index}
+                                        style={{ position: 'relative', pointerEvents: 'auto' }}
+                                        onTap={() => handleCardTap(term, 'rightNum')}
+                                      >
+                                        {renderTermValue(term)}
+                                        {(isSliced || isCrossed) && (
+                                          <div
+                                            className="strike-line"
+                                            style={{
+                                              transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                            }}
+                                          />
+                                        )}
+                                      </motion.div>
+                                    </Reorder.Item>
+                                  );
+                                })
+                              )}
+                            </AnimatePresence>
+                          </Reorder.Group>
+                          {/* Division Line */}
+                          <div
+                            className="division-line"
+                            style={{
+                              visibility: (isValidating && rightDenTerms.every(t => crossedOutRightDen.includes(t.id))) ? 'hidden' : 'visible'
+                            }}
+                          />
+                          {/* Denominator */}
+                          <Reorder.Group
+                            axis="x"
+                            values={rightDenTerms}
+                            onReorder={setRightDenTerms}
+                            className="expression-list"
+                            style={{
+                              transform: `scale(${expressionScale})`,
+                              transformOrigin: 'center',
+                              zIndex: activeFactorMenu?.type === 'rightDen' ? 1001 : 1,
+                              position: 'relative'
+                            }}
+                          >
+                            <AnimatePresence mode="popLayout">
+                              {rightDenTerms.map((term, index) => {
+                                const oneChar = isOneChar(term);
+                                const isSliced = slicedRightDen.includes(term.id);
+                                const isCrossed = crossedOutRightDen.includes(term.id);
+                                return (
+                                  <Reorder.Item
+                                    key={term.id}
+                                    value={term}
+                                    className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                    whileDrag={{ scale: 1.06 }}
+                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    onDragStart={() => setIsDraggingTerm(true)}
+                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    style={{
+                                      pointerEvents: 'none',
+                                      zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                      position: 'relative'
+                                    }}
+                                  >
+                                    {index > 0 && (
+                                      <button
+                                        className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                        style={{ pointerEvents: 'auto' }}
+                                        onMouseDown={e => e.stopPropagation()}
+                                        onTouchStart={e => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleMultiplyAdjacent(index, 'rightDen');
+                                        }}
+                                      >
+                                        ·
+                                      </button>
+                                    )}
+                                    <motion.div
+                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      data-id={term.id}
+                                      data-type="rightDen"
+                                      data-index={index}
+                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      onTap={() => handleCardTap(term, 'rightDen')}
+                                    >
+                                      {renderTermValue(term)}
+                                      {(isSliced || isCrossed) && (
+                                        <div
+                                          className="strike-line"
+                                          style={{
+                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                          }}
+                                        />
+                                      )}
+                                    </motion.div>
+                                  </Reorder.Item>
+                                );
+                              })}
+                            </AnimatePresence>
+                          </Reorder.Group>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : topic === 'divisions' ? (
                   numTerms.length === 0 && denTerms.length === 0 ? (
                     <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
                   ) : (denTerms.length === 0) ? (
@@ -1453,11 +2062,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
       {/* Factor menu portal – renders outside all overflow:hidden containers */}
       {activeFactorMenu && popoverPos && (() => {
-        const allTerms = activeFactorMenu.type === 'den' ? denTerms : numTerms;
+        const allTerms = activeFactorMenu.type === 'den' ? denTerms
+                       : activeFactorMenu.type === 'num' ? numTerms
+                       : activeFactorMenu.type === 'rightDen' ? rightDenTerms
+                       : rightNumTerms;
         const activeTerm = allTerms.find(t => t.id === activeFactorMenu.cardId);
         if (!activeTerm) return null;
         const factors = getPrimeFactors(activeTerm.coeff);
-        if (factors.length === 0) return null;
+        
+        const showMove = topic === 'equations';
+        const hasFactors = factors.length > 0;
+        if (!showMove && !hasFactors) return null;
 
         // Filter out equivalent options, keeping only the one starting with the lower prime number on the left.
         // E.g., for 15, we show 3 · 5 and skip 5 · 3.
@@ -1498,6 +2113,27 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               touchAction: 'auto',
             }}
           >
+            {showMove && (
+              <button
+                className="factor-option-btn move-cross-btn"
+                style={{
+                  background: 'rgba(139, 92, 246, 0.1)',
+                  borderColor: 'rgba(139, 92, 246, 0.3)',
+                  color: 'var(--accent-purple)',
+                }}
+                onMouseDown={e => e.stopPropagation()}
+                onTouchStart={e => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMoveCrossSide(activeTerm, activeFactorMenu.type);
+                }}
+              >
+                {activeFactorMenu.type === 'num' ? '⇄ Move to Right Den'
+                 : activeFactorMenu.type === 'den' ? '⇄ Move to Right Num'
+                 : activeFactorMenu.type === 'rightNum' ? '⇄ Move to Left Den'
+                 : '⇄ Move to Left Num'}
+              </button>
+            )}
             {uniqueOptions.map(({ factor, other }) => {
               return (
                 <button

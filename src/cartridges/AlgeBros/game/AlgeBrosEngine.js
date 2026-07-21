@@ -238,3 +238,33 @@ export function multiplyTerms(termA, termB) {
   const newVar = serializeVariablePart(mergedMap);
   return makeTerm(newCoeff, newVar);
 }
+
+/**
+ * Checks if the equation is solved.
+ * Solved when:
+ * 1. Both sides are fully compacted (numerator length <= 1, denominator length <= 1).
+ * 2. The unknownVar is isolated:
+ *    - Left side is [unknownVar] (coeff 1) and leftDen is empty, AND right side has no unknownVar.
+ *    - OR right side is [unknownVar] (coeff 1) and rightDen is empty, AND left side has no unknownVar.
+ */
+export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVar) {
+  if (leftNum.length > 1 || leftDen.length > 1 || rightNum.length > 1 || rightDen.length > 1) {
+    return false;
+  }
+
+  const hasVar = (terms) => terms.some(t => t.variable === unknownVar);
+  const leftHasVar = hasVar(leftNum) || hasVar(leftDen);
+  const rightHasVar = hasVar(rightNum) || hasVar(rightDen);
+
+  const leftIsolated = leftNum.length === 1 && leftNum[0].coeff === 1 && leftNum[0].variable === unknownVar && leftDen.length === 0;
+  const rightIsolated = rightNum.length === 1 && rightNum[0].coeff === 1 && rightNum[0].variable === unknownVar && rightDen.length === 0;
+
+  if (leftIsolated && !rightHasVar) {
+    return true;
+  }
+  if (rightIsolated && !leftHasVar) {
+    return true;
+  }
+
+  return false;
+}

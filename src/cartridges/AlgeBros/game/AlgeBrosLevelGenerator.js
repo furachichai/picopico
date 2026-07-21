@@ -264,3 +264,77 @@ export function generateDivisionLevels() {
     };
   });
 }
+
+export function generateEquationLevels() {
+  const unknowns = ['x', 'y', 'z'];
+  const parameters = ['a', 'b', 'c'];
+
+  const xMapped = unknowns[Math.floor(Math.random() * unknowns.length)];
+  const yMapped = unknowns.filter(u => u !== xMapped)[Math.floor(Math.random() * 2)];
+  const zMapped = unknowns.filter(u => u !== xMapped && u !== yMapped)[0];
+
+  const aMapped = parameters[Math.floor(Math.random() * parameters.length)];
+  const bMapped = parameters.filter(p => p !== aMapped)[Math.floor(Math.random() * 2)];
+  const cMapped = parameters.filter(p => p !== aMapped && p !== bMapped)[0];
+
+  const mapStr = (str) => {
+    return str
+      .replace(/x/g, xMapped)
+      .replace(/y/g, yMapped)
+      .replace(/z/g, zMapped)
+      .replace(/a/g, aMapped)
+      .replace(/b/g, bMapped)
+      .replace(/c/g, cMapped);
+  };
+
+  const EQUATION_LEVEL_TEMPLATES = [
+    // 1. 2x = 6
+    { leftNum: ['2', 'x'], leftDen: [], rightNum: ['6'], rightDen: [] },
+    // 2. 3x = 12
+    { leftNum: ['3', 'x'], leftDen: [], rightNum: ['12'], rightDen: [] },
+    // 3. 5x = 20
+    { leftNum: ['5', 'x'], leftDen: [], rightNum: ['20'], rightDen: [] },
+    // 4. 4x = 2 (solution: x = 2/4 = 1/2)
+    { leftNum: ['4', 'x'], leftDen: [], rightNum: ['2'], rightDen: [] },
+    // 5. 2x = 3y
+    { leftNum: ['2', 'x'], leftDen: [], rightNum: ['3', 'y'], rightDen: [] },
+    // 6. 6x = 18
+    { leftNum: ['6', 'x'], leftDen: [], rightNum: ['18'], rightDen: [] },
+    // 7. 3x = 15y
+    { leftNum: ['3', 'x'], leftDen: [], rightNum: ['15', 'y'], rightDen: [] },
+    // 8. 2 · 3 · x = 12
+    { leftNum: ['2', '3', 'x'], leftDen: [], rightNum: ['12'], rightDen: [] },
+    // 9. 4x = 2y
+    { leftNum: ['4', 'x'], leftDen: [], rightNum: ['2', 'y'], rightDen: [] },
+    // 10. 6x = 42
+    { leftNum: ['6', 'x'], leftDen: [], rightNum: ['42'], rightDen: [] },
+  ];
+
+  return EQUATION_LEVEL_TEMPLATES.map((tpl, index) => {
+    const leftNum = tpl.leftNum.map(s => parseTermString(mapStr(s)));
+    const leftDen = tpl.leftDen.map(s => parseTermString(mapStr(s)));
+    const rightNum = tpl.rightNum.map(s => parseTermString(mapStr(s)));
+    const rightDen = tpl.rightDen.map(s => parseTermString(mapStr(s)));
+    
+    let minPresses = 3;
+    if (index === 0) minPresses = 3; // 2x = 6
+    else if (index === 1) minPresses = 3; // 3x = 12
+    else if (index === 2) minPresses = 3; // 5x = 20
+    else if (index === 3) minPresses = 3; // 4x = 2
+    else if (index === 4) minPresses = 1; // 2x = 3y
+    else if (index === 5) minPresses = 3; // 6x = 18
+    else if (index === 6) minPresses = 3; // 3x = 15y
+    else if (index === 7) minPresses = 5; // 2·3·x = 12
+    else if (index === 8) minPresses = 3; // 4x = 2y
+    else if (index === 9) minPresses = 3; // 6x = 42
+
+    return {
+      levelNum: index + 1,
+      initialLeftNum: leftNum,
+      initialLeftDen: leftDen,
+      initialRightNum: rightNum,
+      initialRightDen: rightDen,
+      minPresses
+    };
+  });
+}
