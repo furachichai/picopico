@@ -394,6 +394,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [dragHintState, setDragHintState] = useState(null); // { side, insertIndex, signHint } or null
   const [shakeDotButtons, setShakeDotButtons] = useState(false);
   const activeCardRef = useRef(null);
+  const justDraggedRef = useRef(false);
 
   const numTermsRef = React.useRef(numTerms);
   const denTermsRef = React.useRef(denTerms);
@@ -567,7 +568,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleCardTap = (term, type) => {
-    if (!term || term.coeff === 0) return;
+    if (!term || term.coeff === 0 || isDraggingTerm || justDraggedRef.current) return;
     const expMatch = term.variable ? term.variable.match(/^([a-zA-Z])\^(\d+)$/) : null;
     if (expMatch) {
       const base = expMatch[1];
@@ -797,13 +798,60 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         setDragHintState({ side, insertIndex, signHint });
       }
       return;
+    } else {
+      if (currentType === 'num' || currentType === 'rightNum') {
+        const sideClass = startedOnLeft ? '.left-side' : '.right-side';
+        const insertIndex = calculateInsertIndex(sideClass, dropX);
+        const currentList = startedOnLeft ? numTerms : rightNumTerms;
+        const groups = splitIntoAdditiveGroups(currentList);
+        const movingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
+        if (movingGroupIdx !== -1 && insertIndex !== movingGroupIdx && insertIndex !== movingGroupIdx + 1) {
+          const side = startedOnLeft ? 'leftNum' : 'rightNum';
+          const signHint = term.coeff < 0 ? '-' : '+';
+          setDragHintState({ side, insertIndex, signHint });
+          return;
+        }
+      }
     }
     setDragHintState(null);
+  };
+
+  const handleSameSideReorder = (term, currentType, dropX) => {
+    if (currentType !== 'num' && currentType !== 'rightNum') return;
+
+    const isLeft = currentType === 'num';
+    const sideClass = isLeft ? '.left-side' : '.right-side';
+    const setter = isLeft ? setNumTerms : setRightNumTerms;
+    const currentList = isLeft ? numTerms : rightNumTerms;
+
+    const groups = splitIntoAdditiveGroups(currentList);
+    const movingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
+    if (movingGroupIdx === -1) return;
+
+    const insertIndex = calculateInsertIndex(sideClass, dropX);
+
+    if (insertIndex !== movingGroupIdx && insertIndex !== movingGroupIdx + 1) {
+      playMerge();
+      setUserPresses(p => p + 1);
+      setter(prev => {
+        const prevGroups = splitIntoAdditiveGroups(prev);
+        const sourceIdx = prevGroups.findIndex(g => g.some(t => t.id === term.id));
+        if (sourceIdx === -1) return prev;
+
+        const [movingGroup] = prevGroups.splice(sourceIdx, 1);
+        const targetIdx = insertIndex > sourceIdx ? insertIndex - 1 : insertIndex;
+        prevGroups.splice(targetIdx, 0, movingGroup);
+        return prevGroups.flat();
+      });
+    }
   };
 
   const handleDragEndCross = (term, currentType, event, info) => {
     const hint = dragHintState;
     setDragHintState(null);
+    justDraggedRef.current = true;
+    setTimeout(() => { justDraggedRef.current = false; }, 200);
+
     if (!term || term.coeff === 0) return;
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) return;
@@ -844,6 +892,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
       const insertIndex = hint?.insertIndex ?? calculateInsertIndex(targetSideClass, dropX);
       handleMoveCrossSide(term, currentType, targetType, insertIndex);
+    } else {
+      handleSameSideReorder(term, currentType, dropX);
     }
   };
 
