@@ -393,6 +393,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [popoverPos, setPopoverPos] = useState(null);
   const [dragHintState, setDragHintState] = useState(null); // { side, insertIndex, signHint } or null
   const [shakeDotButtons, setShakeDotButtons] = useState(false);
+  const [draggingCardId, setDraggingCardId] = useState(null);
   const activeCardRef = useRef(null);
   const justDraggedRef = useRef(false);
 
@@ -764,56 +765,50 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     const equalsRect = equalsEl.getBoundingClientRect();
+    const centerX = equalsRect.left + equalsRect.width / 2;
 
     const dropX = info.point.x;
     const dropY = info.point.y;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
-    // Only display hint if pointer has partially crossed the equals sign area
-    const crossed = startedOnLeft
-      ? (dropX >= equalsRect.left)
-      : (dropX <= equalsRect.right);
 
-    if (crossed) {
-      const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
-      const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
-      const targetDenEl = document.querySelector(`.equation-side${targetSideClass} .division-container > .expression-list:last-child`);
-      const targetDenTerms = startedOnLeft ? rightDenTerms : denTerms;
+    // 1. Check if dragging into denominator region
+    const targetSideClassForDen = dropX <= centerX ? '.left-side' : '.right-side';
+    const targetNumEl = document.querySelector(`.equation-side${targetSideClassForDen} .expression-list`);
+    const targetDenEl = document.querySelector(`.equation-side${targetSideClassForDen} .division-container > .expression-list:last-child`);
+    const targetDenTerms = dropX <= centerX ? denTerms : rightDenTerms;
 
-      let isUnderTerm = false;
-      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
-        const denRect = targetDenEl.getBoundingClientRect();
-        isUnderTerm = dropY > (denRect.top - 4);
-      } else if (targetNumEl) {
-        const numRect = targetNumEl.getBoundingClientRect();
-        isUnderTerm = dropY > (numRect.bottom + 6);
-      }
-
-      if (isUnderTerm) {
-        setDragHintState({ side: startedOnLeft ? 'rightDen' : 'leftDen' });
-      } else {
-        const side = startedOnLeft ? 'rightNum' : 'leftNum';
-        const insertIndex = calculateInsertIndex(targetSideClass, dropX);
-        const signHint = term.coeff > 0 ? '-' : '+';
-        setDragHintState({ side, insertIndex, signHint });
-      }
-      return;
-    } else {
-      if (currentType === 'num' || currentType === 'rightNum') {
-        const sideClass = startedOnLeft ? '.left-side' : '.right-side';
-        const insertIndex = calculateInsertIndex(sideClass, dropX);
-        const currentList = startedOnLeft ? numTerms : rightNumTerms;
-        const groups = splitIntoAdditiveGroups(currentList);
-        const movingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
-        if (movingGroupIdx !== -1 && insertIndex !== movingGroupIdx && insertIndex !== movingGroupIdx + 1) {
-          const side = startedOnLeft ? 'leftNum' : 'rightNum';
-          const signHint = term.coeff < 0 ? '-' : '+';
-          setDragHintState({ side, insertIndex, signHint });
-          return;
-        }
-      }
+    let isUnderTerm = false;
+    if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+      const denRect = targetDenEl.getBoundingClientRect();
+      isUnderTerm = dropY > (denRect.top - 4);
+    } else if (targetNumEl) {
+      const numRect = targetNumEl.getBoundingClientRect();
+      isUnderTerm = dropY > (numRect.bottom + 6);
     }
-    setDragHintState(null);
+
+    if (isUnderTerm) {
+      const targetSide = dropX <= centerX ? 'leftDen' : 'rightDen';
+      setDragHintState({ side: targetSide });
+      return;
+    }
+
+    // 2. Numerator drop position (same side or cross side)
+    const isTargetLeft = dropX <= centerX;
+    const targetSideClass = isTargetLeft ? '.left-side' : '.right-side';
+    const side = isTargetLeft ? 'leftNum' : 'rightNum';
+
+    const insertIndex = calculateInsertIndex(targetSideClass, dropX);
+
+    const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
+    let signHint;
+    if (crossedSides) {
+      signHint = term.coeff > 0 ? '-' : '+';
+    } else {
+      signHint = term.coeff < 0 ? '-' : '+';
+    }
+
+    setDragHintState({ side, insertIndex, signHint });
   };
 
   const handleSameSideReorder = (term, currentType, dropX) => {
@@ -1671,15 +1666,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0.4}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
                                                 onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
                                                 onDragEnd={(e, info) => {
                                                   setIsDraggingTerm(false);
+                                                  setDraggingCardId(null);
                                                   handleDragEndCross(term, 'num', e, info);
                                                 }}
                                                 style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                                 onTap={() => handleCardTap(term, 'num')}
                                               >
+                                                {draggingCardId === term.id && term.coeff < 0 && (
+                                                  <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+                                                )}
                                                 {renderTermValue(term)}
                                                 {(isSliced || isCrossed) && (
                                                   <div
@@ -1893,15 +1892,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0.4}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
                                                 onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
                                                 onDragEnd={(e, info) => {
                                                   setIsDraggingTerm(false);
+                                                  setDraggingCardId(null);
                                                   handleDragEndCross(term, 'rightNum', e, info);
                                                 }}
                                                 style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                                 onTap={() => handleCardTap(term, 'rightNum')}
                                               >
+                                                {draggingCardId === term.id && term.coeff < 0 && (
+                                                  <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+                                                )}
                                                 {renderTermValue(term)}
                                                 {(isSliced || isCrossed) && (
                                                   <div
