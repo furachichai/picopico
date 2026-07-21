@@ -225,16 +225,16 @@
 .algebros-cartridge .term-card {
   display: flex;
   align-items: center;
-  height: 28px;
+  height: 40px;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 8px;
+  border-radius: 10px;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
   cursor: grab;
   position: relative;
-  transition: all 0.5s ease-in-out;
-  padding: 0 8px;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+  padding: 0 14px;
 }
 
 .algebros-cartridge .term-card.is-dragging {
@@ -243,6 +243,7 @@
   border-color: var(--accent-purple);
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
   z-index: 100;
+  transition: none !important;
 }
 
 /* Sign / Operator Button component */
@@ -303,7 +304,7 @@
 
 /* Term Content */
 .algebros-cartridge .term-value {
-  font-size: 1.0rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.5px;
@@ -311,7 +312,7 @@
 }
 
 .algebros-cartridge .term-value sup {
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   color: var(--text-main);
   margin-left: 1px;
 }

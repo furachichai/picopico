@@ -1197,7 +1197,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         chars = (isOne ? 0 : absCoeff.toString().length) + term.variable.length;
       }
     }
-    return 14 + chars * 8.5;
+    return 28 + chars * 12.5;
   }, []);
 
   const expressionScale = useMemo(() => {
