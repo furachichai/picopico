@@ -655,7 +655,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     return groups;
   };
 
-  const handleMoveCrossSideGroup = (group, targetTerm, sourceType, targetType) => {
+  const handleMoveCrossSide = (term, sourceType, targetType) => {
     setActiveFactorMenu(null);
     playMerge();
     setUserPresses(p => p + 1);
@@ -673,13 +673,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (sourceSetter && targetSetter) {
       if (isAdditiveTransposition) {
-        const targetGroupIds = new Set(group.map(t => t.id));
+        const getList = (t) => t === 'num' ? numTerms : rightNumTerms;
+        const sourceList = getList(sourceType);
+        
+        const groups = splitIntoAdditiveGroups(sourceList);
+        const targetGroup = groups.find(g => g.some(t => t.id === term.id)) || [term];
+        const targetGroupIds = new Set(targetGroup.map(t => t.id));
+
         sourceSetter(prev => {
           const remaining = prev.filter(t => !targetGroupIds.has(t.id));
           return remaining.length === 0 ? [{ coeff: 0 }] : remaining;
         });
 
-        const newTerms = group.map((t, idx) => {
+        const newTerms = targetGroup.map((t, idx) => {
           const newCoeff = idx === 0 ? -t.coeff : t.coeff;
           return makeTerm(newCoeff, t.variable);
         });
@@ -689,12 +695,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           return [...filtered, ...newTerms];
         });
       } else {
+        // Drop under term: move ONLY the dragged term to denominator
         sourceSetter(prev => {
-          const remaining = prev.filter(t => t.id !== targetTerm.id);
+          const remaining = prev.filter(t => t.id !== term.id);
           return remaining.length === 0 ? [{ coeff: 1 }] : remaining;
         });
-        const newCoeff = Math.abs(targetTerm.coeff);
-        const newTerm = makeTerm(newCoeff, targetTerm.variable);
+        const newCoeff = Math.abs(term.coeff);
+        const newTerm = makeTerm(newCoeff, term.variable);
         targetSetter(prev => {
           const filtered = prev.filter(t => t.coeff !== 0);
           return [...filtered, newTerm];
@@ -703,7 +710,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
-  const handleDragEndCrossGroup = (group, currentType, event, info) => {
+  const handleDragEndCross = (term, currentType, event, info) => {
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) return;
 
@@ -733,23 +740,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         targetType = startedOnLeft ? 'rightNum' : 'num';
       }
 
-      let targetTerm = group[0];
-      if (group.length > 1) {
-        let minDistance = Infinity;
-        group.forEach(t => {
-          const el = document.querySelector(`.term-card[data-id="${t.id}"]`);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const dist = Math.abs(dropX - (rect.left + rect.width / 2));
-            if (dist < minDistance) {
-              minDistance = dist;
-              targetTerm = t;
-            }
-          }
-        });
-      }
-
-      handleMoveCrossSideGroup(group, targetTerm, currentType, targetType);
+      handleMoveCrossSide(term, currentType, targetType);
     }
   };
 
@@ -1429,24 +1420,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
                             ) : (
                               splitIntoAdditiveGroups(numTerms).map((group) => (
-                                <motion.div
+                                <div
                                   key={`group-${group[0].id}`}
                                   className="term-group-wrapper"
-                                  drag
-                                  dragSnapToOrigin={true}
-                                  dragElastic={0.4}
-                                  whileDrag={{ scale: 1.1, zIndex: 10000 }}
-                                  onDragStart={() => setIsDraggingTerm(true)}
-                                  onDragEnd={(e, info) => {
-                                    setIsDraggingTerm(false);
-                                    handleDragEndCrossGroup(group, 'num', e, info);
-                                  }}
                                   style={{
                                     display: 'flex',
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    position: 'relative',
-                                    touchAction: 'none'
+                                    position: 'relative'
                                   }}
                                 >
                                   {group.map((term) => {
@@ -1483,12 +1464,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
                                           </button>
                                         )}
-                                        <div
+                                        <motion.div
                                           className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
                                           data-id={term.id}
                                           data-type="num"
                                           data-index={index}
+                                          drag
+                                          dragSnapToOrigin={true}
+                                          dragElastic={0.4}
+                                          whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                          onDragStart={() => setIsDraggingTerm(true)}
+                                          onDragEnd={(e, info) => {
+                                            setIsDraggingTerm(false);
+                                            handleDragEndCross(term, 'num', e, info);
+                                          }}
                                           style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                                          onTap={() => handleCardTap(term, 'num')}
                                           onClick={() => handleCardTap(term, 'num')}
                                         >
                                           {renderTermValue(term)}
@@ -1500,11 +1491,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               }}
                                             />
                                           )}
-                                        </div>
+                                        </motion.div>
                                       </div>
                                     );
                                   })}
-                                </motion.div>
+                                </div>
                               ))
                             )}
                           </AnimatePresence>
@@ -1570,7 +1561,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       onDragStart={() => setIsDraggingTerm(true)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
-                                        handleDragEndCrossGroup([term], 'den', e, info);
+                                        handleDragEndCross(term, 'den', e, info);
                                       }}
                                       style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'den')}
@@ -1611,24 +1602,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
                             ) : (
                               splitIntoAdditiveGroups(rightNumTerms).map((group) => (
-                                <motion.div
+                                <div
                                   key={`group-${group[0].id}`}
                                   className="term-group-wrapper"
-                                  drag
-                                  dragSnapToOrigin={true}
-                                  dragElastic={0.4}
-                                  whileDrag={{ scale: 1.1, zIndex: 10000 }}
-                                  onDragStart={() => setIsDraggingTerm(true)}
-                                  onDragEnd={(e, info) => {
-                                    setIsDraggingTerm(false);
-                                    handleDragEndCrossGroup(group, 'rightNum', e, info);
-                                  }}
                                   style={{
                                     display: 'flex',
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    position: 'relative',
-                                    touchAction: 'none'
+                                    position: 'relative'
                                   }}
                                 >
                                   {group.map((term) => {
@@ -1665,11 +1646,20 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
                                           </button>
                                         )}
-                                        <div
+                                        <motion.div
                                           className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
                                           data-id={term.id}
                                           data-type="rightNum"
                                           data-index={index}
+                                          drag
+                                          dragSnapToOrigin={true}
+                                          dragElastic={0.4}
+                                          whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                          onDragStart={() => setIsDraggingTerm(true)}
+                                          onDragEnd={(e, info) => {
+                                            setIsDraggingTerm(false);
+                                            handleDragEndCross(term, 'rightNum', e, info);
+                                          }}
                                           style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                           onTap={() => handleCardTap(term, 'rightNum')}
                                           onClick={() => handleCardTap(term, 'rightNum')}
@@ -1683,11 +1673,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               }}
                                             />
                                           )}
-                                        </div>
+                                        </motion.div>
                                       </div>
                                     );
                                   })}
-                                </motion.div>
+                                </div>
                               ))
                             )}
                           </AnimatePresence>
@@ -1753,7 +1743,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       onDragStart={() => setIsDraggingTerm(true)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
-                                        handleDragEndCrossGroup([term], 'rightDen', e, info);
+                                        handleDragEndCross(term, 'rightDen', e, info);
                                       }}
                                       style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'rightDen')}
