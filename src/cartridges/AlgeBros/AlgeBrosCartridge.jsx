@@ -806,6 +806,38 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setActiveFactorMenu(null);
     setIsDraggingTerm(true);
     setDraggingCardId(term.id);
+
+    // Snapshot group midpoints BEFORE any layout changes.
+    // We exclude the dragged group and adjust positions of groups after it.
+    const snapshotSide = (sideClass, termList) => {
+      const sideEl = document.querySelector(`.equation-side${sideClass} .expression-list`);
+      if (!sideEl) return { midpoints: [], draggingGroupIdx: -1 };
+      const groups = splitIntoAdditiveGroups(termList);
+      const groupEls = Array.from(sideEl.querySelectorAll(':scope > .term-group-wrapper'));
+      // Filter to real groups only (exclude any leftover placeholders)
+      const realEls = groupEls.filter(el =>
+        !el.querySelector('.drop-slot-placeholder') && !el.classList.contains('drop-slot-placeholder')
+      );
+
+      const draggingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
+      let dragGroupWidth = 0;
+      const midpoints = [];
+
+      for (let i = 0; i < realEls.length && i < groups.length; i++) {
+        const rect = realEls[i].getBoundingClientRect();
+        if (i === draggingGroupIdx) {
+          // Also account for the operator span before this group (~28px)
+          dragGroupWidth = rect.width + (i > 0 ? 28 : 0);
+          continue;
+        }
+        const adjustedLeft = (draggingGroupIdx >= 0 && i > draggingGroupIdx)
+          ? rect.left - dragGroupWidth
+          : rect.left;
+        midpoints.push(adjustedLeft + rect.width / 2);
+      }
+      return { midpoints, draggingGroupIdx };
+    };
+
     dragSessionRef.current = {
       termId: term.id,
       startX: info?.point?.x || 0,
@@ -813,7 +845,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       startType: currentType,
       lastSide: null,
       lastInsertIndex: null,
-      isUnlocked: false
+      isUnlocked: false,
+      leftSnapshot: snapshotSide('.left-side', numTerms),
+      rightSnapshot: snapshotSide('.right-side', rightNumTerms),
     };
   };
 
@@ -834,14 +868,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const dropX = info.point.x;
     const dropY = info.point.y;
 
-    const session = dragSessionRef.current || {
-      startX: dropX,
-      startY: dropY,
-      startType: currentType,
-      lastSide: null,
-      lastInsertIndex: null,
-      isUnlocked: false
-    };
+    const session = dragSessionRef.current;
+    if (!session) return;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
 
@@ -870,7 +898,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     // 2. Numerator drop position (same side or cross side)
     const isTargetLeft = dropX <= centerX;
-    const targetSideClass = isTargetLeft ? '.left-side' : '.right-side';
     const side = isTargetLeft ? 'leftNum' : 'rightNum';
     const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
 
@@ -886,20 +913,49 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       session.isUnlocked = true;
     }
 
+    // Use snapshot midpoints (frozen at drag start) instead of live DOM
+    const snapshot = isTargetLeft ? session.leftSnapshot : session.rightSnapshot;
+    const midpoints = snapshot?.midpoints || [];
+
     if (session.lastSide !== side) {
       session.lastSide = side;
       session.lastInsertIndex = null;
     }
 
-    const insertIndex = calculateInsertIndexWithHysteresis(targetSideClass, dropX, session.lastInsertIndex);
+    // Calculate insertIndex from static snapshot with hysteresis
+    let insertIndex;
+    const H = 28; // hysteresis buffer in px
+
+    if (session.lastInsertIndex !== null && session.lastInsertIndex >= 0 && session.lastInsertIndex <= midpoints.length) {
+      // Check if still within hysteresis zone of current slot
+      const li = session.lastInsertIndex;
+      const leftBound = li > 0 ? midpoints[li - 1] - H : -Infinity;
+      const rightBound = li < midpoints.length ? midpoints[li] + H : Infinity;
+      if (dropX >= leftBound && dropX <= rightBound) {
+        insertIndex = li;
+      }
+    }
+
+    if (insertIndex === undefined) {
+      // Fresh calculation from snapshot
+      insertIndex = midpoints.length; // default: after all
+      for (let i = 0; i < midpoints.length; i++) {
+        if (dropX < midpoints[i]) {
+          insertIndex = i;
+          break;
+        }
+      }
+    }
+
     session.lastInsertIndex = insertIndex;
 
     // Suppress hint if near original placement on same side
+    // The draggingGroupIdx is relative to the ORIGINAL groups (before the dragged group was removed from midpoints).
+    // insertIndex is relative to the midpoints array (which excludes the dragged group).
+    // So "near original" means insertIndex equals the draggingGroupIdx in the snapshot.
     if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
-      const currentList = startedOnLeft ? numTerms : rightNumTerms;
-      const groups = splitIntoAdditiveGroups(currentList);
-      const movingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
-      if (movingGroupIdx !== -1 && (insertIndex === movingGroupIdx || insertIndex === movingGroupIdx + 1)) {
+      const dgi = snapshot?.draggingGroupIdx;
+      if (dgi !== undefined && dgi >= 0 && insertIndex === dgi) {
         setDragHintState(null);
         return;
       }
