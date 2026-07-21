@@ -566,6 +566,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleCardTap = (term, type) => {
+    if (!term || term.coeff === 0) return;
     const expMatch = term.variable ? term.variable.match(/^([a-zA-Z])\^(\d+)$/) : null;
     if (expMatch) {
       const base = expMatch[1];
@@ -666,6 +667,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleMoveCrossSide = (term, sourceType, targetType) => {
+    if (!term || term.coeff === 0) return;
     setActiveFactorMenu(null);
     playMerge();
     setUserPresses(p => p + 1);
@@ -691,7 +693,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         const targetGroupIds = new Set(targetGroup.map(t => t.id));
 
         sourceSetter(prev => {
-          const remaining = prev.filter(t => !targetGroupIds.has(t.id));
+          const prevGroups = splitIntoAdditiveGroups(prev);
+          const prevTargetGroup = prevGroups.find(g => g.some(t => t.id === term.id)) || targetGroup;
+          const idsToRemove = new Set(prevTargetGroup.map(t => t.id));
+          const remaining = prev.filter(t => !idsToRemove.has(t.id));
           return remaining.length === 0 ? [{ coeff: 0 }] : remaining;
         });
 
@@ -724,6 +729,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleDragEndCross = (term, currentType, event, info) => {
+    if (!term || term.coeff === 0) return;
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) return;
 
@@ -732,9 +738,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     const dropX = info.point.x;
     const dropY = info.point.y;
+    const offsetX = info.offset?.x || 0;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
-    const crossed = startedOnLeft ? (dropX > centerX) : (dropX <= centerX);
+    const crossed = startedOnLeft
+      ? (dropX > centerX || offsetX > 40)
+      : (dropX <= centerX || offsetX < -40);
 
     if (crossed) {
       const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
@@ -1505,7 +1514,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           data-id={term.id}
                                           data-type="num"
                                           data-index={index}
-                                          drag
+                                          drag={term.coeff !== 0}
                                           dragSnapToOrigin={true}
                                           dragElastic={0.4}
                                           whileDrag={{ scale: 1.15, zIndex: 10000 }}
@@ -1516,7 +1525,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           }}
                                           style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                           onTap={() => handleCardTap(term, 'num')}
-                                          onClick={() => handleCardTap(term, 'num')}
                                         >
                                           {renderTermValue(term)}
                                           {(isSliced || isCrossed) && (
