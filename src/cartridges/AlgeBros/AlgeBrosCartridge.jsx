@@ -830,6 +830,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const cardEl = document.querySelector(`.term-card[data-id="${activeFactorMenu.cardId}"]`);
     if (!cardEl) {
       setPopoverPos(null);
+      setActiveFactorMenu(null);
       return;
     }
     activeCardRef.current = cardEl;
@@ -1398,36 +1399,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               exit={{ opacity: 0 }}
               style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}
             >
-              {/* Standalone Round Reset Button */}
-              <button
-                className="floating-reset-btn"
-                onClick={handleRestartLevel}
-                title="Restart level"
-                style={{
-                  position: 'absolute',
-                  top: '12px',
-                  right: '12px',
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.85)',
-                  border: '1px solid rgba(15, 23, 42, 0.12)',
-                  boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
-                  color: 'var(--text-main)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  zIndex: 100,
-                  fontSize: '1.1rem',
-                  fontWeight: 800
-                }}
-              >
-                ↺
-              </button>
-
               {/* HUD */}
-              <div className="hud-header" style={{ paddingRight: '44px' }}>
+              <div className="hud-header">
                 <div className="hud-badge">
                   LVL <span className="font-mono">{currentLevelIndex + 1} / 10</span>
                 </div>
@@ -1447,6 +1420,32 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                 <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
                   {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
                 </div>
+              </div>
+
+              {/* Sub-HUD Controls Bar (Below HUD) */}
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '2px', marginBottom: '6px', zIndex: 10 }}>
+                <button
+                  className="floating-reset-btn"
+                  onClick={handleRestartLevel}
+                  title="Restart level"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    border: '1px solid rgba(15, 23, 42, 0.12)',
+                    boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
+                    color: 'var(--text-main)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    fontWeight: 800
+                  }}
+                >
+                  ↺
+                </button>
               </div>
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
@@ -1528,7 +1527,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           dragSnapToOrigin={true}
                                           dragElastic={0.4}
                                           whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                          onDragStart={() => setIsDraggingTerm(true)}
+                                          onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                           onDragEnd={(e, info) => {
                                             setIsDraggingTerm(false);
                                             handleDragEndCross(term, 'num', e, info);
@@ -1612,7 +1611,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       dragSnapToOrigin={true}
                                       dragElastic={0.4}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
                                         handleDragEndCross(term, 'den', e, info);
@@ -1709,7 +1708,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           dragSnapToOrigin={true}
                                           dragElastic={0.4}
                                           whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                          onDragStart={() => setIsDraggingTerm(true)}
+                                          onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                           onDragEnd={(e, info) => {
                                             setIsDraggingTerm(false);
                                             handleDragEndCross(term, 'rightNum', e, info);
@@ -1794,7 +1793,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       dragSnapToOrigin={true}
                                       dragElastic={0.4}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
                                         handleDragEndCross(term, 'rightDen', e, info);
@@ -1850,7 +1849,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               whileDrag={{ scale: 1.06 }}
                               exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                               transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                              onDragStart={() => setIsDraggingTerm(true)}
+                              onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                               onDragEnd={() => setIsDraggingTerm(false)}
                               style={{
                                 zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -1924,7 +1923,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   whileDrag={{ scale: 1.06 }}
                                   exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                   transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                  onDragStart={() => setIsDraggingTerm(true)}
+                                  onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                   onDragEnd={() => setIsDraggingTerm(false)}
                                   style={{ pointerEvents: 'none' }}
                                 >
@@ -2003,7 +2002,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 whileDrag={{ scale: 1.06 }}
                                 exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                 transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                onDragStart={() => setIsDraggingTerm(true)}
+                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                 onDragEnd={() => setIsDraggingTerm(false)}
                                 style={{
                                   pointerEvents: 'none',
@@ -2078,7 +2077,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                             whileDrag={{ scale: 1.06 }}
                             exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                             transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                            onDragStart={() => setIsDraggingTerm(true)}
+                            onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                             onDragEnd={() => setIsDraggingTerm(false)}
                           >
                             {/* Sign button / text (outside the card box!) */}

@@ -225,8 +225,13 @@ export function getTermDecompositionOptions(term) {
     const otherCoeff = absCoeff / factor;
 
     // Option A: factor is constant, other keeps the variable (if any)
-    const splitA1 = makeTerm(factor * sign, null);
-    const splitB1 = makeTerm(otherCoeff, term.variable);
+    let splitA1 = makeTerm(factor * sign, null);
+    let splitB1 = makeTerm(otherCoeff, term.variable);
+    if (!splitA1.variable && !splitB1.variable && Math.abs(splitA1.coeff) > Math.abs(splitB1.coeff)) {
+      const temp = splitA1;
+      splitA1 = splitB1;
+      splitB1 = temp;
+    }
     const sig1 = `${splitA1.coeff},${splitA1.variable}|${splitB1.coeff},${splitB1.variable}`;
     if (!seenSignatures.has(sig1)) {
       seenSignatures.add(sig1);
@@ -235,8 +240,13 @@ export function getTermDecompositionOptions(term) {
 
     // Option B: if otherCoeff > 1 and has variable, factor keeps variable, other is constant
     if (hasVar && otherCoeff > 1) {
-      const splitA2 = makeTerm(factor * sign, term.variable);
-      const splitB2 = makeTerm(otherCoeff, null);
+      let splitA2 = makeTerm(factor * sign, term.variable);
+      let splitB2 = makeTerm(otherCoeff, null);
+      if (!splitA2.variable && !splitB2.variable && Math.abs(splitA2.coeff) > Math.abs(splitB2.coeff)) {
+        const temp = splitA2;
+        splitA2 = splitB2;
+        splitB2 = temp;
+      }
       const sig2 = `${splitA2.coeff},${splitA2.variable}|${splitB2.coeff},${splitB2.variable}`;
       if (!seenSignatures.has(sig2)) {
         seenSignatures.add(sig2);
