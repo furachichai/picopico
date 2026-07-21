@@ -394,9 +394,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [dragHintState, setDragHintState] = useState(null); // { side, insertIndex, signHint } or null
   const [shakeDotButtons, setShakeDotButtons] = useState(false);
   const [draggingCardId, setDraggingCardId] = useState(null);
+  const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
+  const [dragOverlayTerm, setDragOverlayTerm] = useState(null);
   const activeCardRef = useRef(null);
   const justDraggedRef = useRef(false);
   const dragSessionRef = useRef(null);
+  const cartridgeRef = useRef(null);
 
   const numTermsRef = React.useRef(numTerms);
   const denTermsRef = React.useRef(denTerms);
@@ -806,6 +809,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setActiveFactorMenu(null);
     setIsDraggingTerm(true);
     setDraggingCardId(term.id);
+    setDragOverlayTerm(term);
+    if (info?.point) {
+      setDragPos({ x: info.point.x, y: info.point.y });
+    }
 
     // Snapshot group midpoints BEFORE any layout changes.
     // We exclude the dragged group and adjust positions of groups after it.
@@ -867,29 +874,35 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     const dropX = info.point.x;
     const dropY = info.point.y;
+    setDragPos({ x: dropX, y: dropY });
 
     const session = dragSessionRef.current;
     if (!session) return;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
+    const isTargetLeft = dropX <= centerX;
+    const isSameSide = (startedOnLeft && isTargetLeft) || (!startedOnLeft && !isTargetLeft);
 
     // 1. Check if dragging into denominator region
-    const targetSideClassForDen = dropX <= centerX ? '.left-side' : '.right-side';
-    const targetNumEl = document.querySelector(`.equation-side${targetSideClassForDen} .expression-list`);
-    const targetDenEl = document.querySelector(`.equation-side${targetSideClassForDen} .division-container > .expression-list:last-child`);
-    const targetDenTerms = dropX <= centerX ? denTerms : rightDenTerms;
-
+    // A term can NEVER be dragged into the denominator under itself on the same side!
     let isUnderTerm = false;
-    if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
-      const denRect = targetDenEl.getBoundingClientRect();
-      isUnderTerm = dropY > (denRect.top - 4);
-    } else if (targetNumEl) {
-      const numRect = targetNumEl.getBoundingClientRect();
-      isUnderTerm = dropY > (numRect.bottom + 6);
+    if (!isSameSide) {
+      const targetSideClassForDen = isTargetLeft ? '.left-side' : '.right-side';
+      const targetNumEl = document.querySelector(`.equation-side${targetSideClassForDen} .expression-list`);
+      const targetDenEl = document.querySelector(`.equation-side${targetSideClassForDen} .division-container > .expression-list:last-child`);
+      const targetDenTerms = isTargetLeft ? denTerms : rightDenTerms;
+
+      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+        const denRect = targetDenEl.getBoundingClientRect();
+        isUnderTerm = dropY > (denRect.top - 4);
+      } else if (targetNumEl) {
+        const numRect = targetNumEl.getBoundingClientRect();
+        isUnderTerm = dropY > (numRect.bottom + 6);
+      }
     }
 
     if (isUnderTerm) {
-      const targetSide = dropX <= centerX ? 'leftDen' : 'rightDen';
+      const targetSide = isTargetLeft ? 'leftDen' : 'rightDen';
       session.lastSide = targetSide;
       session.lastInsertIndex = null;
       setDragHintState({ side: targetSide });
@@ -897,7 +910,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     // 2. Numerator drop position (same side or cross side)
-    const isTargetLeft = dropX <= centerX;
     const side = isTargetLeft ? 'leftNum' : 'rightNum';
     const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
 
@@ -1002,6 +1014,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleDragEndCross = (term, currentType, event, info) => {
+    setDragOverlayTerm(null);
+    setDraggingCardId(null);
+    setIsDraggingTerm(false);
     const hint = dragHintState;
     setDragHintState(null);
     dragSessionRef.current = null;
@@ -1650,7 +1665,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }
 
   return (
-    <div className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${flash === 'success' ? 'success-flash' : ''}`}>
+    <div ref={cartridgeRef} className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${flash === 'success' ? 'success-flash' : ''}`}>
       <ParticlesBG />
       
       <div className={`screen-container ${activeFactorMenu ? 'has-active-popover' : ''}`}>
@@ -1884,8 +1899,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 data-type="num"
                                                 data-index={index}
                                                 drag={term.coeff !== 0}
+                                                dragConstraints={cartridgeRef}
                                                 dragSnapToOrigin={true}
-                                                dragElastic={0.4}
+                                                dragElastic={0.1}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
@@ -1894,7 +1910,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'num', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', opacity: draggingCardId === term.id ? 0 : 1 }}
                                                 onTap={() => handleCardTap(term, 'num')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -2698,6 +2714,41 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           document.body
         );
       })()}
+
+      {/* Top-Level Drag Overlay Card */}
+      {isDraggingTerm && dragOverlayTerm && (
+        <div
+          className="drag-overlay-card-container"
+          style={{
+            position: 'fixed',
+            left: dragPos.x,
+            top: dragPos.y,
+            transform: 'translate(-50%, -50%) scale(1.15)',
+            zIndex: 99999999,
+            pointerEvents: 'none'
+          }}
+        >
+          <div
+            className={`term-card is-dragging ${isOneChar(dragOverlayTerm) ? 'one-char-card' : ''}`}
+            style={{
+              boxShadow: '0 12px 36px rgba(139, 92, 246, 0.45), 0 0 24px rgba(139, 92, 246, 0.25)',
+              background: '#ffffff',
+              borderColor: 'var(--accent-purple, #8b5cf6)',
+              color: 'var(--text-main, #1e1b4b)',
+              cursor: 'grabbing',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 14px'
+            }}
+          >
+            {dragOverlayTerm.coeff < 0 && (
+              <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+            )}
+            {renderTermValue(dragOverlayTerm)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
