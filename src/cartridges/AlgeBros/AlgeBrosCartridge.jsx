@@ -1622,7 +1622,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </div>
                                       )}
                                       {groupIdx > 0 && (
-                                        <span className="operator-static" style={{ margin: '0 4px', fontWeight: 800 }}>
+                                        <span
+                                          className="operator-static"
+                                          style={{
+                                            margin: '0 4px',
+                                            fontWeight: 800,
+                                            visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                          }}
+                                        >
                                           {group[0].coeff < 0 ? '-' : '+'}
                                         </span>
                                       )}
@@ -1653,12 +1660,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               }}
                                             >
                                               {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
-                                                <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
+                                                <span
+                                                  className="operator-static"
+                                                  style={{
+                                                    marginRight: '4px',
+                                                    fontWeight: 800,
+                                                    visibility: draggingCardId === term.id ? 'hidden' : 'visible'
+                                                  }}
+                                                >
+                                                  -
+                                                </span>
                                               )}
                                               {termIdx > 0 && (
                                                 <button
                                                   className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                                  style={{ pointerEvents: 'auto' }}
+                                                  style={{
+                                                    pointerEvents: 'auto',
+                                                    visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
+                                                  }}
                                                   onMouseDown={e => e.stopPropagation()}
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
@@ -1848,7 +1867,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </div>
                                       )}
                                       {groupIdx > 0 && (
-                                        <span className="operator-static" style={{ margin: '0 4px', fontWeight: 800 }}>
+                                        <span
+                                          className="operator-static"
+                                          style={{
+                                            margin: '0 4px',
+                                            fontWeight: 800,
+                                            visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                          }}
+                                        >
                                           {group[0].coeff < 0 ? '-' : '+'}
                                         </span>
                                       )}
@@ -1879,12 +1905,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               }}
                                             >
                                               {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
-                                                <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
+                                                <span
+                                                  className="operator-static"
+                                                  style={{
+                                                    marginRight: '4px',
+                                                    fontWeight: 800,
+                                                    visibility: draggingCardId === term.id ? 'hidden' : 'visible'
+                                                  }}
+                                                >
+                                                  -
+                                                </span>
                                               )}
                                               {termIdx > 0 && (
                                                 <button
                                                   className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                                  style={{ pointerEvents: 'auto' }}
+                                                  style={{
+                                                    pointerEvents: 'auto',
+                                                    visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
+                                                  }}
                                                   onMouseDown={e => e.stopPropagation()}
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
