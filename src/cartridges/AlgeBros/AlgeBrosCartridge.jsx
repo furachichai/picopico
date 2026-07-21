@@ -646,18 +646,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const crossed = startedOnLeft ? (dropX > centerX) : (dropX <= centerX);
 
     if (crossed) {
-      const targetSideEl = document.querySelector(`.equation-side.${startedOnLeft ? 'right-side' : 'left-side'}`);
+      const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
+      const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
+      
       let targetType;
-      if (targetSideEl) {
-        const targetRect = targetSideEl.getBoundingClientRect();
-        const targetCenterY = targetRect.top + targetRect.height / 2;
-        if (dropY < targetCenterY) {
-          targetType = startedOnLeft ? 'rightNum' : 'num';
-        } else {
+      if (targetNumEl) {
+        const numRect = targetNumEl.getBoundingClientRect();
+        // Check if dropY is strictly BELOW the bottom edge of the numerator terms
+        const isUnderTerm = dropY > (numRect.bottom + 6);
+        if (isUnderTerm) {
           targetType = startedOnLeft ? 'rightDen' : 'den';
+        } else {
+          targetType = startedOnLeft ? 'rightNum' : 'num';
         }
       } else {
-        targetType = startedOnLeft ? 'rightDen' : 'den';
+        targetType = startedOnLeft ? 'rightNum' : 'num';
       }
       handleMoveCrossSide(term, currentType, targetType);
     }
