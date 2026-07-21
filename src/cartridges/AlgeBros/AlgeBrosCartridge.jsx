@@ -801,6 +801,18 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const insertIndex = calculateInsertIndex(targetSideClass, dropX);
 
     const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
+
+    // Suppress hint if dragged term is near its original placement on the same side
+    if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
+      const currentList = startedOnLeft ? numTerms : rightNumTerms;
+      const groups = splitIntoAdditiveGroups(currentList);
+      const movingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
+      if (movingGroupIdx !== -1 && (insertIndex === movingGroupIdx || insertIndex === movingGroupIdx + 1)) {
+        setDragHintState(null);
+        return;
+      }
+    }
+
     let signHint;
     if (crossedSides) {
       signHint = term.coeff > 0 ? '-' : '+';
