@@ -71,7 +71,7 @@ function StartScreen({ onStart, topic, setTopic }) {
         <p className="start-subtitle" style={{ fontWeight: 800, color: 'var(--accent-purple)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>
           Select Topic:
         </p>
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '0', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
             className="hud-badge"
             style={{
@@ -133,62 +133,6 @@ function StartScreen({ onStart, topic, setTopic }) {
             📐 LIKE TERMS
           </button>
         </div>
-
-        {topic === 'equations' ? (
-          <>
-            <p className="start-subtitle">
-              Isolate the variable on one side of the equals sign to solve the equation!
-            </p>
-            <div className="rule-item">
-              <span className="rule-icon">⚖️</span>
-              <span>Tap a term, then click the arrow to move it to the other side's denominator.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">✖️</span>
-              <span>Decompose terms and cross out matching pairs to simplify.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">🎯</span>
-              <span>Get the variable isolated (e.g. x = 3) and click <strong>READY</strong>.</span>
-            </div>
-          </>
-        ) : topic === 'divisions' ? (
-          <>
-            <p className="start-subtitle">
-              Simplify fractions by crossing out identical terms on the top and bottom!
-            </p>
-            <div className="rule-item">
-              <span className="rule-icon">🫳</span>
-              <span>Drag cards horizontally in the top (numerator) or bottom (denominator) to reorder.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">✖️</span>
-              <span>Tap a card on top, then tap an identical card on the bottom to cross them out.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">🌸</span>
-              <span>Simplify completely and press <strong>READY</strong>. Keep them sorted alphabetically for the Elegance bonus!</span>
-            </div>
-          </>
-        ) : (
-          <>
-            <p className="start-subtitle">
-              Master the art of combining like terms through spatial dragging and operations!
-            </p>
-            <div className="rule-item">
-              <span className="rule-icon">🫳</span>
-              <span>Drag term cards left or right to reorder them. The sign and number move together.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">➕</span>
-              <span>Click the sign buttons (operators) between adjacent like terms to combine them.</span>
-            </div>
-            <div className="rule-item">
-              <span className="rule-icon">🎯</span>
-              <span>Combine all compatible terms and click <strong>READY</strong> to progress. Try to use minimum actions!</span>
-            </div>
-          </>
-        )}
       </div>
 
       <button
@@ -560,7 +504,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     playMerge();
-    const product = multiplyTerms(termA, termB);
+    const sharedGroupId = termA.groupId || termB.groupId;
+    const product = multiplyTerms(termA, termB, sharedGroupId);
     const setter = type === 'num' ? setNumTerms
                  : type === 'den' ? setDenTerms
                  : type === 'rightNum' ? setRightNumTerms
@@ -581,8 +526,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       if (exponent > 1) {
         setActiveFactorMenu(null);
         playMerge();
-        const splitA = makeTerm(term.coeff, exponent - 1 === 1 ? base : `${base}^${exponent - 1}`);
-        const splitB = makeTerm(1, base);
+        const splitA = makeTerm(term.coeff, exponent - 1 === 1 ? base : `${base}^${exponent - 1}`, term.groupId);
+        const splitB = makeTerm(1, base, term.groupId);
         const splitTerms = [splitA, splitB];
         const setter = type === 'num' ? setNumTerms
                      : type === 'den' ? setDenTerms
@@ -602,8 +547,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     if (Math.abs(term.coeff) > 1 && term.variable) {
       setActiveFactorMenu(null);
       playMerge();
-      const splitA = makeTerm(term.coeff, null);
-      const splitB = makeTerm(1, term.variable);
+      const splitA = makeTerm(term.coeff, null, term.groupId);
+      const splitB = makeTerm(1, term.variable, term.groupId);
       const setter = type === 'num' ? setNumTerms
                    : type === 'den' ? setDenTerms
                    : type === 'rightNum' ? setRightNumTerms
@@ -634,6 +579,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const handleDecompose = (term, splitA, splitB, type) => {
     setActiveFactorMenu(null);
     playMerge();
+    const targetGroup = term.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+    const splitAWithGroup = { ...splitA, groupId: splitA.groupId || targetGroup };
+    const splitBWithGroup = { ...splitB, groupId: splitB.groupId || targetGroup };
     const setter = type === 'num' ? setNumTerms
                  : type === 'den' ? setDenTerms
                  : type === 'rightNum' ? setRightNumTerms
@@ -642,7 +590,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const idx = prev.findIndex(t => t.id === term.id);
       if (idx === -1) return prev;
       const next = [...prev];
-      next.splice(idx, 1, splitA, splitB);
+      next.splice(idx, 1, splitAWithGroup, splitBWithGroup);
       return next;
     });
   };
@@ -754,6 +702,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const sourceSetter = getSetter(sourceType);
     const targetSetter = getSetter(targetType);
 
+    const isStandaloneOne = (list) => list.length === 1 && list[0].coeff === 1 && !list[0].variable;
+
     if (sourceSetter && targetSetter) {
       if (isAdditiveTransposition) {
         const getList = (t) => t === 'num' ? numTerms : rightNumTerms;
@@ -761,14 +711,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         
         const groups = splitIntoAdditiveGroups(sourceList);
         const targetGroup = groups.find(g => g.some(t => t.id === term.id)) || [term];
-        const targetGroupIds = new Set(targetGroup.map(t => t.id));
 
         sourceSetter(prev => {
           const prevGroups = splitIntoAdditiveGroups(prev);
           const prevTargetGroup = prevGroups.find(g => g.some(t => t.id === term.id)) || targetGroup;
           const idsToRemove = new Set(prevTargetGroup.map(t => t.id));
           const remaining = prev.filter(t => !idsToRemove.has(t.id));
-          return remaining.length === 0 ? [{ coeff: 0 }] : remaining;
+          return remaining.length === 0 ? [makeTerm(0, null)] : remaining;
         });
 
         const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
@@ -779,7 +728,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
         targetSetter(prev => {
           const filtered = prev.filter(t => t.coeff !== 0);
-          const existingGroups = splitIntoAdditiveGroups(filtered);
+          const filteredNoOne = isStandaloneOne(filtered) ? [] : filtered;
+          const existingGroups = splitIntoAdditiveGroups(filteredNoOne);
           const idxToInsert = (typeof insertIndex === 'number' && insertIndex >= 0)
             ? Math.min(insertIndex, existingGroups.length)
             : existingGroups.length;
@@ -787,19 +737,55 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           return existingGroups.flat();
         });
       } else {
-        // Drop under term: move ONLY the dragged term to denominator
+        // Moving to/from denominator across sides
         sourceSetter(prev => {
           const remaining = prev.filter(t => t.id !== term.id);
           if (sourceType === 'den' || sourceType === 'rightDen') {
             return remaining;
           }
-          return remaining.length === 0 ? [{ coeff: 1 }] : remaining;
+          return remaining.length === 0 ? [makeTerm(1, null)] : remaining;
         });
+
+        const isMovingToNumerator = targetType === 'num' || targetType === 'rightNum';
         const newCoeff = Math.abs(term.coeff);
-        const newTerm = makeTerm(newCoeff, term.variable);
+
         targetSetter(prev => {
           const filtered = prev.filter(t => t.coeff !== 0);
-          return [...filtered, newTerm];
+          if (isMovingToNumerator) {
+            if (filtered.length === 0 || isStandaloneOne(filtered)) {
+              // 1 * newTerm = newTerm, or replacing 0 with newTerm
+              const newTerm = makeTerm(newCoeff, term.variable);
+              return [newTerm];
+            } else {
+              const existingGroups = splitIntoAdditiveGroups(filtered);
+              const targetGroupIdx = (typeof insertIndex === 'number' && insertIndex >= 0 && insertIndex < existingGroups.length)
+                ? insertIndex
+                : 0;
+              const targetGroup = existingGroups[targetGroupIdx] || existingGroups[0];
+
+              // Remove redundant factor of 1 if targetGroup already has other factors
+              const oneIdx = targetGroup.findIndex(t => t.coeff === 1 && !t.variable);
+              if (oneIdx !== -1 && targetGroup.length > 1) {
+                targetGroup.splice(oneIdx, 1);
+              }
+
+              const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
+              targetGroup.push(newTerm);
+              return existingGroups.flat();
+            }
+          } else {
+            // Moving to denominator
+            if (filtered.length === 0 || isStandaloneOne(filtered)) {
+              const sharedGroupId = 'g_' + Math.random().toString(36).substr(2, 7);
+              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
+              return [newTerm];
+            } else {
+              const sharedGroupId = filtered[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
+              return [...filtered, newTerm];
+            }
+          }
         });
       }
     }
@@ -1158,7 +1144,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       sliceDenSetter(prev => prev.filter(x => x !== denId));
       
       setTimeout(() => {
-        numSetter(prev => prev.filter(t => t.id !== numId));
+        numSetter(prev => {
+          const remaining = prev.filter(t => t.id !== numId);
+          if (remaining.length === 0) {
+            return [makeTerm(1, null)];
+          }
+          return remaining;
+        });
         denSetter(prev => prev.filter(t => t.id !== denId));
         setCardAngles(prev => {
           const next = { ...prev };
@@ -1762,16 +1754,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 position: 'relative'
                               }}
                             >
-                              <AnimatePresence mode="popLayout">
+                              <AnimatePresence>
                                 {isLeftEmpty ? (
                                   dragHintState?.side === 'leftNum' ? (
                                     <motion.div
                                       key="hint-slot-num-left-empty"
-                                      layout
-                                      initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                      animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                      exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                      transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                      initial={{ opacity: 0, scale: 0.8 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      exit={{ opacity: 0, scale: 0.8 }}
+                                      transition={{ duration: 0.12 }}
                                       className="term-group-wrapper"
                                       style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                     >
@@ -1781,7 +1772,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       <div className="term-card drop-slot-placeholder" />
                                     </motion.div>
                                   ) : topic === 'equations' ? (
-                                    <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                    (denTerms.length > 0 && !isDenOne(denTerms)) ? (
+                                      <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                    ) : (
+                                      <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                    )
                                   ) : (
                                     <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
                                   )
@@ -1794,11 +1789,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       {showHintHere && (
                                         <motion.div
                                           key="hint-slot-num-left"
-                                          layout
-                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          initial={{ opacity: 0, scale: 0.8 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.8 }}
+                                          transition={{ duration: 0.12 }}
                                           className="term-group-wrapper"
                                           style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                         >
@@ -1823,8 +1817,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </span>
                                       )}
                                       <motion.div
-                                        layout
-                                        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
                                         className="term-group-wrapper"
                                         style={{
                                           display: 'flex',
@@ -1898,7 +1890,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'num', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1 }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0 : 1 }}
                                                 onTap={() => handleCardTap(term, 'num')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -1924,11 +1916,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 {dragHintState?.side === 'leftNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(numTerms).length && (
                                   <motion.div
                                     key="hint-slot-num-left-end"
-                                    layout
-                                    initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                    animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                    exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                    transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ duration: 0.12 }}
                                     className="term-group-wrapper"
                                     style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                   >
@@ -1961,7 +1952,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               position: 'relative'
                             }}
                           >
-                            <AnimatePresence mode="popLayout">
+                            <AnimatePresence>
                               {denTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
                                 const isSliced = slicedDen.includes(term.id);
@@ -1969,7 +1960,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 return (
                                   <motion.div
                                     key={term.id}
-                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
@@ -2050,16 +2040,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 position: 'relative'
                               }}
                             >
-                                  <AnimatePresence mode="popLayout">
+                                  <AnimatePresence>
                                     {isRightEmpty ? (
                                       dragHintState?.side === 'rightNum' ? (
                                         <motion.div
                                           key="hint-slot-num-right-empty"
-                                          layout
-                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          initial={{ opacity: 0, scale: 0.8 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.8 }}
+                                          transition={{ duration: 0.12 }}
                                           className="term-group-wrapper"
                                           style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                         >
@@ -2069,7 +2058,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           <div className="term-card drop-slot-placeholder" />
                                         </motion.div>
                                       ) : topic === 'equations' ? (
-                                        <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                        (denTerms.length > 0 && !isDenOne(denTerms)) ? (
+                                          <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                        ) : (
+                                          <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                        )
                                       ) : (
                                         <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
                                       )
@@ -2082,11 +2075,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       {showHintHere && (
                                         <motion.div
                                           key="hint-slot-num-right"
-                                          layout
-                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          initial={{ opacity: 0, scale: 0.8 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.8 }}
+                                          transition={{ duration: 0.12 }}
                                           className="term-group-wrapper"
                                           style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                         >
@@ -2111,15 +2103,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </span>
                                       )}
                                       <motion.div
-                                        layout
-                                        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
                                         className="term-group-wrapper"
                                         style={{
                                           display: 'flex',
                                           flexDirection: 'row',
                                           alignItems: 'center',
                                           position: 'relative',
-                                          width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
                                           overflow: 'visible',
                                           zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
                                         }}
@@ -2176,8 +2165,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 data-type="rightNum"
                                                 data-index={index}
                                                 drag={term.coeff !== 0}
+                                                dragConstraints={cartridgeRef}
                                                 dragSnapToOrigin={true}
-                                                dragElastic={0.4}
+                                                dragElastic={0.1}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
@@ -2186,7 +2176,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'rightNum', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0 : 1 }}
                                                 onTap={() => handleCardTap(term, 'rightNum')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -2212,11 +2202,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 {dragHintState?.side === 'rightNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(rightNumTerms).length && (
                                   <motion.div
                                     key="hint-slot-num-right-end"
-                                    layout
-                                    initial={{ width: 0, opacity: 0, scale: 0.6 }}
-                                    animate={{ width: 'auto', opacity: 1, scale: 1 }}
-                                    exit={{ width: 0, opacity: 0, scale: 0.6 }}
-                                    transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ duration: 0.12 }}
                                     className="term-group-wrapper"
                                     style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                   >
@@ -2249,7 +2238,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               position: 'relative'
                             }}
                           >
-                            <AnimatePresence mode="popLayout">
+                            <AnimatePresence>
                               {rightDenTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
                                 const isSliced = slicedRightDen.includes(term.id);
@@ -2257,7 +2246,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 return (
                                   <motion.div
                                     key={term.id}
-                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
@@ -2344,7 +2332,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         position: 'relative'
                       }}
                     >
-                      <AnimatePresence mode="popLayout">
+                      <AnimatePresence>
                         {numTerms.map((term, index) => {
                           const oneChar = isOneChar(term);
                           const isSliced = slicedNum.includes(term.id);
@@ -2415,7 +2403,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           transformOrigin: 'center'
                         }}
                       >
-                        <AnimatePresence mode="popLayout">
+                        <AnimatePresence>
                           {numTerms.length === 0 ? (
                             <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
                           ) : (
@@ -2497,7 +2485,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           position: 'relative'
                         }}
                       >
-                        <AnimatePresence mode="popLayout">
+                        <AnimatePresence>
                           {denTerms.map((term, index) => {
                             const oneChar = isOneChar(term);
                             const isSliced = slicedDen.includes(term.id);
@@ -2570,7 +2558,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                       transformOrigin: 'center'
                     }}
                   >
-                    <AnimatePresence mode="popLayout">
+                    <AnimatePresence>
                       {terms.map((term, index) => {
                         const isFirst = index === 0;
                         const formatted = formatTerm(term, isFirst);
@@ -2702,6 +2690,41 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           document.body
         );
       })()}
+
+      {isDraggingTerm && dragOverlayTerm && createPortal(
+        <div
+          className="drag-overlay-card-container"
+          style={{
+            position: 'fixed',
+            left: dragPos.x,
+            top: dragPos.y,
+            transform: 'translate(-50%, -50%) scale(1.15)',
+            zIndex: 99999999,
+            pointerEvents: 'none'
+          }}
+        >
+          <div
+            className={`term-card is-dragging ${isOneChar(dragOverlayTerm) ? 'one-char-card' : ''}`}
+            style={{
+              boxShadow: '0 12px 36px rgba(139, 92, 246, 0.45), 0 0 24px rgba(139, 92, 246, 0.25)',
+              background: '#ffffff',
+              borderColor: 'var(--accent-purple, #8b5cf6)',
+              color: 'var(--text-main, #1e1b4b)',
+              cursor: 'grabbing',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 14px'
+            }}
+          >
+            {dragOverlayTerm.coeff < 0 && (
+              <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+            )}
+            {renderTermValue(dragOverlayTerm)}
+          </div>
+        </div>,
+        document.body
+      )}
 
     </div>
   );

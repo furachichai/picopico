@@ -296,7 +296,7 @@ function serializeVariablePart(varMap) {
 /**
  * Multiplies two terms together, combining coefficients and variable exponents.
  */
-export function multiplyTerms(termA, termB) {
+export function multiplyTerms(termA, termB, groupId = null) {
   const newCoeff = termA.coeff * termB.coeff;
   
   const mapA = parseVariablePart(termA.variable);
@@ -308,7 +308,8 @@ export function multiplyTerms(termA, termB) {
   }
   
   const newVar = serializeVariablePart(mergedMap);
-  return makeTerm(newCoeff, newVar);
+  const targetGroupId = groupId || (termA && termB && termA.groupId === termB.groupId ? termA.groupId : (termA?.groupId || termB?.groupId || null));
+  return makeTerm(newCoeff, newVar, targetGroupId);
 }
 
 function gcd(a, b) {
