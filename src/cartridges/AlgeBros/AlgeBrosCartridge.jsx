@@ -880,21 +880,29 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const isTargetLeft = dropX <= centerX;
     const isSameSide = (startedOnLeft && isTargetLeft) || (!startedOnLeft && !isTargetLeft);
 
-    // 1. Check if dragging into denominator region
-    // A term can NEVER be dragged into the denominator under itself on the same side!
+    // 1. Check if dragging into denominator region or cross-side to a side with a fraction
     let isUnderTerm = false;
     if (!isSameSide) {
-      const targetSideClassForDen = isTargetLeft ? '.left-side' : '.right-side';
-      const targetNumEl = document.querySelector(`.equation-side${targetSideClassForDen} .expression-list`);
-      const targetDenEl = document.querySelector(`.equation-side${targetSideClassForDen} .division-container > .expression-list:last-child`);
       const targetDenTerms = isTargetLeft ? denTerms : rightDenTerms;
+      const hasTargetDen = targetDenTerms && targetDenTerms.length > 0 && !isDenOne(targetDenTerms);
 
-      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
-        const denRect = targetDenEl.getBoundingClientRect();
-        isUnderTerm = dropY > (denRect.top - 4);
-      } else if (targetNumEl) {
-        const numRect = targetNumEl.getBoundingClientRect();
-        isUnderTerm = dropY > (numRect.bottom + 6);
+      if (hasTargetDen && (currentType === 'num' || currentType === 'rightNum')) {
+        // When dragging a numerator term to a target side that HAS a denominator fraction,
+        // it cannot be dropped into the target numerator (which would invalidly divide it by the denominator).
+        // It MUST target the denominator!
+        isUnderTerm = true;
+      } else {
+        const targetSideClassForDen = isTargetLeft ? '.left-side' : '.right-side';
+        const targetNumEl = document.querySelector(`.equation-side${targetSideClassForDen} .expression-list`);
+        const targetDenEl = document.querySelector(`.equation-side${targetSideClassForDen} .division-container > .expression-list:last-child`);
+
+        if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+          const denRect = targetDenEl.getBoundingClientRect();
+          isUnderTerm = dropY > (denRect.top - 4);
+        } else if (targetNumEl) {
+          const numRect = targetNumEl.getBoundingClientRect();
+          isUnderTerm = dropY > (numRect.bottom + 6);
+        }
       }
     }
 
@@ -1017,16 +1025,26 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     if (crossed) {
       const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
       const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
-      const targetDenEl = document.querySelector(`.equation-side${targetSideClass} .division-container > .expression-list:last-child`);
       const targetDenTerms = startedOnLeft ? rightDenTerms : denTerms;
+      const hasTargetDen = targetDenTerms && targetDenTerms.length > 0 && !isDenOne(targetDenTerms);
 
       let isUnderTerm = false;
-      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
-        const denRect = targetDenEl.getBoundingClientRect();
-        isUnderTerm = dropY > (denRect.top - 4);
-      } else if (targetNumEl) {
-        const numRect = targetNumEl.getBoundingClientRect();
-        isUnderTerm = dropY > (numRect.bottom + 6);
+      if (hasTargetDen && (currentType === 'num' || currentType === 'rightNum')) {
+        // When dragging a numerator term to a target side that HAS a denominator fraction,
+        // it cannot be dropped into the target numerator. It MUST target the denominator!
+        isUnderTerm = true;
+      } else {
+        const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
+        const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
+        const targetDenEl = document.querySelector(`.equation-side${targetSideClass} .division-container > .expression-list:last-child`);
+
+        if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+          const denRect = targetDenEl.getBoundingClientRect();
+          isUnderTerm = dropY > (denRect.top - 4);
+        } else if (targetNumEl) {
+          const numRect = targetNumEl.getBoundingClientRect();
+          isUnderTerm = dropY > (numRect.bottom + 6);
+        }
       }
 
       let targetType;
