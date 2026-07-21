@@ -7,11 +7,12 @@
 /**
  * Generates a unique term object.
  */
-export function makeTerm(coeff, variable) {
+export function makeTerm(coeff, variable, groupId = null) {
   return {
     id: Math.random().toString(36).substr(2, 9) + '-' + Date.now().toString(36),
     coeff: Number(coeff),
     variable: variable || null, // null means constant
+    groupId: groupId || ('g_' + Math.random().toString(36).substr(2, 7) + '_' + Date.now().toString(36)),
   };
 }
 
@@ -99,7 +100,7 @@ export function combineTerms(termA, termB) {
     throw new Error('Cannot combine unlike terms');
   }
   const newCoeff = termA.coeff + termB.coeff;
-  return makeTerm(newCoeff, newCoeff === 0 ? null : termA.variable);
+  return makeTerm(newCoeff, newCoeff === 0 ? null : termA.variable, termA.groupId);
 }
 
 /**
@@ -203,15 +204,15 @@ export function getTermDecompositionOptions(term) {
   // 0. If term has negative coefficient (e.g. -6 or -2x), the ONLY primary option is to split off -1:
   // -1 · positiveTerm (e.g. -6 -> -1 · 6, -2x -> -1 · 2x)
   if (term.coeff < 0) {
-    const splitA = makeTerm(-1, null);
-    const splitB = makeTerm(absCoeff, term.variable);
+    const splitA = makeTerm(-1, null, term.groupId);
+    const splitB = makeTerm(absCoeff, term.variable, term.groupId);
     return [{ splitA, splitB }];
   }
 
   // 1. If term has a variable and coeff > 1, we can split into coeff · var (e.g. 5x -> 5 · x)
   if (hasVar && absCoeff > 1) {
-    const splitA = makeTerm(term.coeff, null);
-    const splitB = makeTerm(1, term.variable);
+    const splitA = makeTerm(term.coeff, null, term.groupId);
+    const splitB = makeTerm(1, term.variable, term.groupId);
     const sig = `${splitA.coeff},${splitA.variable}|${splitB.coeff},${splitB.variable}`;
     if (!seenSignatures.has(sig)) {
       seenSignatures.add(sig);
@@ -225,8 +226,8 @@ export function getTermDecompositionOptions(term) {
     const otherCoeff = absCoeff / factor;
 
     // Option A: factor is constant, other keeps the variable (if any)
-    let splitA1 = makeTerm(factor * sign, null);
-    let splitB1 = makeTerm(otherCoeff, term.variable);
+    let splitA1 = makeTerm(factor * sign, null, term.groupId);
+    let splitB1 = makeTerm(otherCoeff, term.variable, term.groupId);
     if (!splitA1.variable && !splitB1.variable && Math.abs(splitA1.coeff) > Math.abs(splitB1.coeff)) {
       const temp = splitA1;
       splitA1 = splitB1;
@@ -240,8 +241,8 @@ export function getTermDecompositionOptions(term) {
 
     // Option B: if otherCoeff > 1 and has variable, factor keeps variable, other is constant
     if (hasVar && otherCoeff > 1) {
-      let splitA2 = makeTerm(factor * sign, term.variable);
-      let splitB2 = makeTerm(otherCoeff, null);
+      let splitA2 = makeTerm(factor * sign, term.variable, term.groupId);
+      let splitB2 = makeTerm(otherCoeff, null, term.groupId);
       if (!splitA2.variable && !splitB2.variable && Math.abs(splitA2.coeff) > Math.abs(splitB2.coeff)) {
         const temp = splitA2;
         splitA2 = splitB2;

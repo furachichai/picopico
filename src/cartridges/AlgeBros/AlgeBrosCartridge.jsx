@@ -656,11 +656,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const groups = [];
     let currentGroup = [];
     sourceList.forEach((t, idx) => {
-      if (idx > 0 && t.coeff < 0) {
+      if (idx === 0) {
+        currentGroup.push(t);
+      } else if (t.groupId && currentGroup[0].groupId && t.groupId === currentGroup[0].groupId) {
+        currentGroup.push(t);
+      } else {
         if (currentGroup.length > 0) groups.push(currentGroup);
         currentGroup = [t];
-      } else {
-        currentGroup.push(t);
       }
     });
     if (currentGroup.length > 0) groups.push(currentGroup);
@@ -715,9 +717,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           return remaining.length === 0 ? [{ coeff: 0 }] : remaining;
         });
 
+        const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
         const newTerms = targetGroup.map((t, idx) => {
           const newCoeff = idx === 0 ? -t.coeff : t.coeff;
-          return makeTerm(newCoeff, t.variable);
+          return makeTerm(newCoeff, t.variable, sharedGroupId);
         });
 
         targetSetter(prev => {
@@ -1561,6 +1564,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           <div className="term-card drop-slot-placeholder" />
                                         </div>
                                       )}
+                                      {groupIdx > 0 && (
+                                        <span className="operator-static" style={{ margin: '0 4px', fontWeight: 800 }}>
+                                          {group[0].coeff < 0 ? '-' : '+'}
+                                        </span>
+                                      )}
                                       <div
                                         className="term-group-wrapper"
                                         style={{
@@ -1570,7 +1578,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           position: 'relative'
                                         }}
                                       >
-                                        {group.map((term) => {
+                                        {group.map((term, termIdx) => {
                                           const index = numTerms.findIndex(t => t.id === term.id);
                                           const oneChar = isOneChar(term);
                                           const isSliced = slicedNum.includes(term.id);
@@ -1587,10 +1595,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 alignItems: 'center'
                                               }}
                                             >
-                                              {index === 0 && topic === 'equations' && term.coeff < 0 && (
+                                              {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
                                                 <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
                                               )}
-                                              {index > 0 && (
+                                              {termIdx > 0 && (
                                                 <button
                                                   className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
                                                   style={{ pointerEvents: 'auto' }}
@@ -1778,6 +1786,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           <div className="term-card drop-slot-placeholder" />
                                         </div>
                                       )}
+                                      {groupIdx > 0 && (
+                                        <span className="operator-static" style={{ margin: '0 4px', fontWeight: 800 }}>
+                                          {group[0].coeff < 0 ? '-' : '+'}
+                                        </span>
+                                      )}
                                       <div
                                         className="term-group-wrapper"
                                         style={{
@@ -1787,7 +1800,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           position: 'relative'
                                         }}
                                       >
-                                        {group.map((term) => {
+                                        {group.map((term, termIdx) => {
                                           const index = rightNumTerms.findIndex(t => t.id === term.id);
                                           const oneChar = isOneChar(term);
                                           const isSliced = slicedRightNum.includes(term.id);
@@ -1804,10 +1817,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 alignItems: 'center'
                                               }}
                                             >
-                                              {index === 0 && topic === 'equations' && term.coeff < 0 && (
+                                              {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
                                                 <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
                                               )}
-                                              {index > 0 && (
+                                              {termIdx > 0 && (
                                                 <button
                                                   className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
                                                   style={{ pointerEvents: 'auto' }}
