@@ -11,6 +11,7 @@ import {
   isDivisionSimplified,
   makeTerm,
   getPrimeFactors,
+  getTermDecompositionOptions,
   multiplyTerms,
   isEquationSolved
 } from './game/AlgeBrosEngine';
@@ -581,29 +582,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     // Tapping a simple card
-    if (topic === 'equations') {
+    const decompOptions = getTermDecompositionOptions(term);
+    if (decompOptions.length > 0) {
       if (activeFactorMenu?.cardId === term.id) {
         setActiveFactorMenu(null);
       } else {
         setActiveFactorMenu({ cardId: term.id, type });
       }
-    } else if (!term.variable) {
-      const factors = getPrimeFactors(term.coeff);
-      if (factors.length > 0) {
-        if (activeFactorMenu?.cardId === term.id) {
-          setActiveFactorMenu(null);
-        } else {
-          setActiveFactorMenu({ cardId: term.id, type });
-        }
-      }
     }
   };
 
-  const handleDecompose = (term, factor, type) => {
+  const handleDecompose = (term, splitA, splitB, type) => {
     setActiveFactorMenu(null);
     playMerge();
-    const splitA = makeTerm(factor * Math.sign(term.coeff), null);
-    const splitB = makeTerm(Math.abs(term.coeff / factor), null);
     const setter = type === 'num' ? setNumTerms
                  : type === 'den' ? setDenTerms
                  : type === 'rightNum' ? setRightNumTerms
@@ -1950,22 +1941,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                        : rightNumTerms;
         const activeTerm = allTerms.find(t => t.id === activeFactorMenu.cardId);
         if (!activeTerm) return null;
-        const factors = getPrimeFactors(activeTerm.coeff);
-        
-        if (factors.length === 0) return null;
+        const options = getTermDecompositionOptions(activeTerm);
 
-        // Filter out equivalent options, keeping only the one starting with the lower prime number on the left.
-        // E.g., for 15, we show 3 · 5 and skip 5 · 3.
-        const seenSignatures = new Set();
-        const uniqueOptions = [];
-        for (const factor of factors) {
-          const other = Math.abs(activeTerm.coeff / factor);
-          const sig = [Math.min(factor, other), Math.max(factor, other)].join(',');
-          if (!seenSignatures.has(sig)) {
-            seenSignatures.add(sig);
-            uniqueOptions.push({ factor, other });
-          }
-        }
+        if (options.length === 0) return null;
+
+        const formatLabel = (t) => {
+          if (!t.variable) return `${t.coeff}`;
+          const absC = Math.abs(t.coeff);
+          return absC === 1 ? `${t.variable}` : `${absC}${t.variable}`;
+        };
 
         return createPortal(
           <div
@@ -1993,19 +1977,19 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               touchAction: 'auto',
             }}
           >
-            {uniqueOptions.map(({ factor, other }) => {
+            {options.map(({ splitA, splitB }, i) => {
               return (
                 <button
-                  key={factor}
+                  key={i}
                   className="factor-option-btn"
                   onMouseDown={e => e.stopPropagation()}
                   onTouchStart={e => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDecompose(activeTerm, factor, activeFactorMenu.type);
+                    handleDecompose(activeTerm, splitA, splitB, activeFactorMenu.type);
                   }}
                 >
-                  {factor} · {other}
+                  {formatLabel(splitA)} · {formatLabel(splitB)}
                 </button>
               );
             })}

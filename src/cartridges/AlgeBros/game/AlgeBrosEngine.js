@@ -188,6 +188,59 @@ export function getPrimeFactors(n) {
 }
 
 /**
+ * Returns all possible 2-factor decomposition options for a given term object.
+ * Handles both numerical prime factors and splitting variable parts (e.g. 5x -> 5 · x).
+ */
+export function getTermDecompositionOptions(term) {
+  if (!term) return [];
+  const absCoeff = Math.abs(term.coeff);
+  const sign = Math.sign(term.coeff) || 1;
+  const hasVar = !!term.variable;
+
+  const options = [];
+  const seenSignatures = new Set();
+
+  // 1. If term has a variable and coeff > 1, we can split into coeff · var (e.g. 5x -> 5 · x)
+  if (hasVar && absCoeff > 1) {
+    const splitA = makeTerm(absCoeff * sign, null);
+    const splitB = makeTerm(1, term.variable);
+    const sig = `${splitA.coeff},${splitA.variable}|${splitB.coeff},${splitB.variable}`;
+    if (!seenSignatures.has(sig)) {
+      seenSignatures.add(sig);
+      options.push({ splitA, splitB });
+    }
+  }
+
+  // 2. Numerical prime factors of absCoeff
+  const primeFactors = getPrimeFactors(absCoeff);
+  for (const factor of primeFactors) {
+    const otherCoeff = absCoeff / factor;
+
+    // Option A: factor is constant, other keeps the variable (if any)
+    const splitA1 = makeTerm(factor * sign, null);
+    const splitB1 = makeTerm(otherCoeff, term.variable);
+    const sig1 = `${splitA1.coeff},${splitA1.variable}|${splitB1.coeff},${splitB1.variable}`;
+    if (!seenSignatures.has(sig1)) {
+      seenSignatures.add(sig1);
+      options.push({ splitA: splitA1, splitB: splitB1 });
+    }
+
+    // Option B: if otherCoeff > 1 and has variable, factor keeps variable, other is constant
+    if (hasVar && otherCoeff > 1) {
+      const splitA2 = makeTerm(factor * sign, term.variable);
+      const splitB2 = makeTerm(otherCoeff, null);
+      const sig2 = `${splitA2.coeff},${splitA2.variable}|${splitB2.coeff},${splitB2.variable}`;
+      if (!seenSignatures.has(sig2)) {
+        seenSignatures.add(sig2);
+        options.push({ splitA: splitA2, splitB: splitB2 });
+      }
+    }
+  }
+
+  return options;
+}
+
+/**
  * Parses a variable string (like "x^2y", "ax", "z^3") into a map of { letter: exponent }
  */
 function parseVariablePart(varStr) {

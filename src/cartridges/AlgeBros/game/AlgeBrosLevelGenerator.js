@@ -291,25 +291,25 @@ export function generateEquationLevels() {
 
   const EQUATION_LEVEL_TEMPLATES = [
     // 1. 2x = 6
-    { leftNum: ['2', 'x'], leftDen: [], rightNum: ['6'], rightDen: [] },
+    { leftNum: ['2x'], leftDen: [], rightNum: ['6'], rightDen: [] },
     // 2. 3x = 12
-    { leftNum: ['3', 'x'], leftDen: [], rightNum: ['12'], rightDen: [] },
-    // 3. 5x = 20
-    { leftNum: ['5', 'x'], leftDen: [], rightNum: ['20'], rightDen: [] },
+    { leftNum: ['3x'], leftDen: [], rightNum: ['12'], rightDen: [] },
+    // 3. 5x = 30
+    { leftNum: ['5x'], leftDen: [], rightNum: ['30'], rightDen: [] },
     // 4. 4x = 2 (solution: x = 2/4 = 1/2)
-    { leftNum: ['4', 'x'], leftDen: [], rightNum: ['2'], rightDen: [] },
+    { leftNum: ['4x'], leftDen: [], rightNum: ['2'], rightDen: [] },
     // 5. 2x = 3y
-    { leftNum: ['2', 'x'], leftDen: [], rightNum: ['3', 'y'], rightDen: [] },
+    { leftNum: ['2x'], leftDen: [], rightNum: ['3y'], rightDen: [] },
     // 6. 6x = 18
-    { leftNum: ['6', 'x'], leftDen: [], rightNum: ['18'], rightDen: [] },
+    { leftNum: ['6x'], leftDen: [], rightNum: ['18'], rightDen: [] },
     // 7. 3x = 15y
-    { leftNum: ['3', 'x'], leftDen: [], rightNum: ['15', 'y'], rightDen: [] },
-    // 8. 2 · 3 · x = 12
-    { leftNum: ['2', '3', 'x'], leftDen: [], rightNum: ['12'], rightDen: [] },
+    { leftNum: ['3x'], leftDen: [], rightNum: ['15y'], rightDen: [] },
+    // 8. 6x = 24
+    { leftNum: ['6x'], leftDen: [], rightNum: ['24'], rightDen: [] },
     // 9. 4x = 2y
-    { leftNum: ['4', 'x'], leftDen: [], rightNum: ['2', 'y'], rightDen: [] },
+    { leftNum: ['4x'], leftDen: [], rightNum: ['2y'], rightDen: [] },
     // 10. 6x = 42
-    { leftNum: ['6', 'x'], leftDen: [], rightNum: ['42'], rightDen: [] },
+    { leftNum: ['6x'], leftDen: [], rightNum: ['42'], rightDen: [] },
   ];
 
   return EQUATION_LEVEL_TEMPLATES.map((tpl, index) => {
