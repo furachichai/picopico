@@ -1722,8 +1722,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    fontSize: '1rem',
-                    fontWeight: 800
                   }}
                 >
                   ↺
@@ -1735,6 +1733,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                   (() => {
                     const activeLeftTerms = numTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
                     const isLeftEmpty = activeLeftTerms.length === 0;
+                    const activeRightTerms = rightNumTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
+                    const isRightEmpty = activeRightTerms.length === 0;
+                    const isDraggingFromLeft = isDraggingTerm && (numTerms.some(t => t.id === draggingCardId) || denTerms.some(t => t.id === draggingCardId));
+                    const isDraggingFromRight = isDraggingTerm && (rightNumTerms.some(t => t.id === draggingCardId) || rightDenTerms.some(t => t.id === draggingCardId));
+
                     return (
                       <motion.div
                         className="equation-layout"
@@ -1745,13 +1748,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         }}
                       >
                         {/* Left Side */}
-                        <div className="equation-side left-side">
+                        <div className="equation-side left-side" style={{ zIndex: isDraggingFromLeft ? 99999 : 1, position: 'relative' }}>
                           <div className="division-container">
                             {/* Numerator */}
                             <div
                               className="expression-list"
                               style={{
-                                zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
+                                zIndex: isDraggingFromLeft ? 99999 : (activeFactorMenu?.type === 'num' ? 1001 : 1),
                                 position: 'relative'
                               }}
                             >
@@ -1825,7 +1828,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           alignItems: 'center',
                                           position: 'relative',
                                           width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
-                                          overflow: 'visible'
+                                          overflow: 'visible',
+                                          zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
                                         }}
                                       >
                                         {group.map((term, termIdx) => {
@@ -1838,7 +1842,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               key={term.id}
                                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                               style={{
-                                                zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                                zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
                                                 position: 'relative',
                                                 display: 'flex',
                                                 flexDirection: 'row',
@@ -2032,20 +2036,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     {/* Equals Sign */}
                     <div className="equals-sign">=</div>
                         {/* Right Side */}
-                        {(() => {
-                          const activeRightTerms = rightNumTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
-                          const isRightEmpty = activeRightTerms.length === 0;
-                          return (
-                            <div className="equation-side right-side">
-                              <div className="division-container">
-                                {/* Numerator */}
-                                <div
-                                  className="expression-list"
-                                  style={{
-                                    zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
-                                    position: 'relative'
-                                  }}
-                                >
+                        <div className="equation-side right-side" style={{ zIndex: isDraggingFromRight ? 99999 : 1, position: 'relative' }}>
+                          <div className="division-container">
+                            {/* Numerator */}
+                            <div
+                              className="expression-list"
+                              style={{
+                                zIndex: isDraggingFromRight ? 99999 : (activeFactorMenu?.type === 'rightNum' ? 1001 : 1),
+                                position: 'relative'
+                              }}
+                            >
                                   <AnimatePresence mode="popLayout">
                                     {isRightEmpty ? (
                                       dragHintState?.side === 'rightNum' ? (
@@ -2116,7 +2116,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           alignItems: 'center',
                                           position: 'relative',
                                           width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
-                                          overflow: 'visible'
+                                          overflow: 'visible',
+                                          zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
                                         }}
                                       >
                                         {group.map((term, termIdx) => {
@@ -2129,7 +2130,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                               key={term.id}
                                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                               style={{
-                                                zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                                zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
                                                 position: 'relative',
                                                 display: 'flex',
                                                 flexDirection: 'row',
@@ -2320,8 +2321,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         )}
                       </div>
                     </div>
-                  );
-                })()}
                   </motion.div>
                 );
               })()
