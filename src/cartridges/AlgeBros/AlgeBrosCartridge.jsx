@@ -1732,32 +1732,56 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
                 {topic === 'equations' ? (
-                  <motion.div
-                    className="equation-layout"
-                    style={{
-                      scale: expressionScale,
-                      transformOrigin: 'center',
-                      position: 'relative'
-                    }}
-                  >
-                    {/* Left Side */}
-                    <div className="equation-side left-side">
-                      <div className="division-container">
-                        {/* Numerator */}
-                        <div
-                          className="expression-list"
-                          style={{
-                            zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
-                            position: 'relative'
-                          }}
-                        >
-                          <AnimatePresence mode="popLayout">
-                            {numTerms.length === 0 && dragHintState?.side !== 'leftNum' ? (
-                              <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
-                            ) : (
-                              <>
-                                {splitIntoAdditiveGroups(numTerms).map((group, groupIdx) => {
-                                  const showHintHere = dragHintState?.side === 'leftNum' && dragHintState.insertIndex === groupIdx;
+                  (() => {
+                    const activeLeftTerms = numTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
+                    const isLeftEmpty = activeLeftTerms.length === 0;
+                    return (
+                      <motion.div
+                        className="equation-layout"
+                        style={{
+                          scale: expressionScale,
+                          transformOrigin: 'center',
+                          position: 'relative'
+                        }}
+                      >
+                        {/* Left Side */}
+                        <div className="equation-side left-side">
+                          <div className="division-container">
+                            {/* Numerator */}
+                            <div
+                              className="expression-list"
+                              style={{
+                                zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
+                                position: 'relative'
+                              }}
+                            >
+                              <AnimatePresence mode="popLayout">
+                                {isLeftEmpty ? (
+                                  dragHintState?.side === 'leftNum' ? (
+                                    <motion.div
+                                      key="hint-slot-num-left-empty"
+                                      layout
+                                      initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                      animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                      exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                      transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                      className="term-group-wrapper"
+                                      style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                    >
+                                      {dragHintState.signHint === '-' && (
+                                        <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
+                                      )}
+                                      <div className="term-card drop-slot-placeholder" />
+                                    </motion.div>
+                                  ) : topic === 'equations' ? (
+                                    <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                  ) : (
+                                    <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                  )
+                                ) : (
+                                  <>
+                                    {splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).map((group, groupIdx) => {
+                                      const showHintHere = dragHintState?.side === 'leftNum' && dragHintState.insertIndex === groupIdx;
                                   return (
                                     <React.Fragment key={`group-${group[0].id}`}>
                                       {showHintHere && (
@@ -2007,24 +2031,48 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     </div>
                     {/* Equals Sign */}
                     <div className="equals-sign">=</div>
-                    {/* Right Side */}
-                    <div className="equation-side right-side">
-                      <div className="division-container">
-                        {/* Numerator */}
-                        <div
-                          className="expression-list"
-                          style={{
-                            zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
-                            position: 'relative'
-                          }}
-                        >
-                          <AnimatePresence mode="popLayout">
-                            {rightNumTerms.length === 0 && dragHintState?.side !== 'rightNum' ? (
-                              <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
-                            ) : (
-                              <>
-                                {splitIntoAdditiveGroups(rightNumTerms).map((group, groupIdx) => {
-                                  const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
+                        {/* Right Side */}
+                        {(() => {
+                          const activeRightTerms = rightNumTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
+                          const isRightEmpty = activeRightTerms.length === 0;
+                          return (
+                            <div className="equation-side right-side">
+                              <div className="division-container">
+                                {/* Numerator */}
+                                <div
+                                  className="expression-list"
+                                  style={{
+                                    zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
+                                    position: 'relative'
+                                  }}
+                                >
+                                  <AnimatePresence mode="popLayout">
+                                    {isRightEmpty ? (
+                                      dragHintState?.side === 'rightNum' ? (
+                                        <motion.div
+                                          key="hint-slot-num-right-empty"
+                                          layout
+                                          initial={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          animate={{ width: 'auto', opacity: 1, scale: 1 }}
+                                          exit={{ width: 0, opacity: 0, scale: 0.6 }}
+                                          transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+                                          className="term-group-wrapper"
+                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                        >
+                                          {dragHintState.signHint === '-' && (
+                                            <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
+                                          )}
+                                          <div className="term-card drop-slot-placeholder" />
+                                        </motion.div>
+                                      ) : topic === 'equations' ? (
+                                        <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                      ) : (
+                                        <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                      )
+                                    ) : (
+                                      <>
+                                        {splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).map((group, groupIdx) => {
+                                          const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
                                   return (
                                     <React.Fragment key={`group-${group[0].id}`}>
                                       {showHintHere && (
@@ -2272,7 +2320,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         )}
                       </div>
                     </div>
+                  );
+                })()}
                   </motion.div>
+                );
+              })()
                 ) : topic === 'divisions' ? (
                   numTerms.length === 0 && denTerms.length === 0 ? (
                     <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
