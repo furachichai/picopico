@@ -1219,11 +1219,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const scaleDen = calculateScaleForList(denTerms);
       return Math.min(scaleNum, scaleDen);
     } else if (topic === 'equations') {
-      const scaleLeftNum = calculateScaleForList(numTerms);
-      const scaleLeftDen = calculateScaleForList(denTerms);
-      const scaleRightNum = calculateScaleForList(rightNumTerms);
-      const scaleRightDen = calculateScaleForList(rightDenTerms);
-      return Math.min(scaleLeftNum, scaleLeftDen, scaleRightNum, scaleRightDen);
+      return 1.0;
     } else {
       return calculateScaleForList(terms);
     }
@@ -1301,7 +1297,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                 </div>
               </div>
 
-              {/* Expression Dragging Area */}
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
                 {topic === 'equations' ? (
                   <div className="equation-layout">
@@ -1331,21 +1326,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     key={term.id}
                                     layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    drag
-                                    dragSnapToOrigin={true}
-                                    dragElastic={0.4}
-                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                    onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={(e, info) => {
-                                      setIsDraggingTerm(false);
-                                      handleDragEndCross(term, 'num', e, info);
-                                    }}
                                     style={{
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative',
-                                      touchAction: 'none'
+                                      position: 'relative'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1367,7 +1352,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       data-id={term.id}
                                       data-type="num"
                                       data-index={index}
-                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'num', e, info);
+                                      }}
+                                      style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'num')}
                                     >
                                       {renderTermValue(term)}
@@ -1415,22 +1409,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     key={term.id}
                                     layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    drag
-                                    dragSnapToOrigin={true}
-                                    dragElastic={0.4}
-                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                    onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={(e, info) => {
-                                      setIsDraggingTerm(false);
-                                      handleDragEndCross(term, 'den', e, info);
-                                    }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative',
-                                      touchAction: 'none'
+                                      position: 'relative'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1452,7 +1436,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       data-id={term.id}
                                       data-type="den"
                                       data-index={index}
-                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'den', e, info);
+                                      }}
+                                      style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'den')}
                                     >
                                       {renderTermValue(term)}
@@ -1501,21 +1494,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     key={term.id}
                                     layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    drag
-                                    dragSnapToOrigin={true}
-                                    dragElastic={0.4}
-                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                    onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={(e, info) => {
-                                      setIsDraggingTerm(false);
-                                      handleDragEndCross(term, 'rightNum', e, info);
-                                    }}
                                     style={{
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative',
-                                      touchAction: 'none'
+                                      position: 'relative'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1537,7 +1520,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       data-id={term.id}
                                       data-type="rightNum"
                                       data-index={index}
-                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'rightNum', e, info);
+                                      }}
+                                      style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'rightNum')}
                                     >
                                       {renderTermValue(term)}
@@ -1585,22 +1577,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     key={term.id}
                                     layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    drag
-                                    dragSnapToOrigin={true}
-                                    dragElastic={0.4}
-                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                                    onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={(e, info) => {
-                                      setIsDraggingTerm(false);
-                                      handleDragEndCross(term, 'rightDen', e, info);
-                                    }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative',
-                                      touchAction: 'none'
+                                      position: 'relative'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1622,7 +1604,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       data-id={term.id}
                                       data-type="rightDen"
                                       data-index={index}
-                                      style={{ position: 'relative', pointerEvents: 'auto' }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      onDragStart={() => setIsDraggingTerm(true)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'rightDen', e, info);
+                                      }}
+                                      style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                       onTap={() => handleCardTap(term, 'rightDen')}
                                     >
                                       {renderTermValue(term)}
