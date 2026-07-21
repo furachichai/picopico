@@ -743,11 +743,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 360px;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 8px;
+  padding: 0 4px;
 }
 
 .algebros-cartridge .equation-side {
@@ -755,7 +755,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 140px;
+  width: fit-content;
   flex-shrink: 0;
 }
 

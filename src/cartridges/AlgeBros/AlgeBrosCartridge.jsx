@@ -1210,11 +1210,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const scaleDen = calculateScaleForList(denTerms);
       return Math.min(scaleNum, scaleDen);
     } else if (topic === 'equations') {
-      const scaleLeftNum = calculateScaleForList(numTerms);
-      const scaleLeftDen = calculateScaleForList(denTerms);
-      const scaleRightNum = calculateScaleForList(rightNumTerms);
-      const scaleRightDen = calculateScaleForList(rightDenTerms);
-      return Math.min(scaleLeftNum, scaleLeftDen, scaleRightNum, scaleRightDen);
+      const getSideBaseWidth = (numList, denList) => {
+        const calcW = (list) => {
+          if (!list || list.length === 0) return 29;
+          return list.reduce((acc, term, idx) => {
+            const cardW = getTermWidth(term);
+            const opW = idx > 0 ? 26 : 0;
+            const signW = (idx === 0 && term.coeff < 0) ? 12 : 0;
+            return acc + cardW + opW + signW;
+          }, 0);
+        };
+        return Math.max(calcW(numList), calcW(denList));
+      };
+      const leftW = getSideBaseWidth(numTerms, denTerms);
+      const rightW = getSideBaseWidth(rightNumTerms, rightDenTerms);
+      const totalEqW = leftW + 28 + rightW;
+      const targetWidth = 310;
+      const calculatedScale = totalEqW > 0 ? targetWidth / totalEqW : 1;
+      return Math.max(0.45, Math.min(1.0, calculatedScale));
     } else {
       return calculateScaleForList(terms);
     }
@@ -1294,16 +1307,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
                 {topic === 'equations' ? (
-                  <div className="equation-layout">
+                  <motion.div
+                    className="equation-layout"
+                    style={{
+                      scale: expressionScale,
+                      transformOrigin: 'center',
+                      position: 'relative'
+                    }}
+                  >
                     {/* Left Side */}
                     <div className="equation-side left-side">
                       <div className="division-container">
                         {/* Numerator */}
-                        <motion.div
+                        <div
                           className="expression-list"
                           style={{
-                            scale: expressionScale,
-                            transformOrigin: 'center',
                             zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                             position: 'relative'
                           }}
@@ -1374,7 +1392,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               })
                             )}
                           </AnimatePresence>
-                        </motion.div>
+                        </div>
                         {/* Division Line */}
                         <div
                           className="division-line"
@@ -1385,11 +1403,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         />
                         {/* Denominator */}
                         {denTerms.length > 0 && (
-                          <motion.div
+                          <div
                             className="expression-list"
                             style={{
-                              scale: expressionScale,
-                              transformOrigin: 'center',
                               zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
                               position: 'relative'
                             }}
@@ -1457,7 +1473,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 );
                               })}
                             </AnimatePresence>
-                          </motion.div>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -1467,11 +1483,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     <div className="equation-side right-side">
                       <div className="division-container">
                         {/* Numerator */}
-                        <motion.div
+                        <div
                           className="expression-list"
                           style={{
-                            scale: expressionScale,
-                            transformOrigin: 'center',
                             zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
                             position: 'relative'
                           }}
@@ -1542,7 +1556,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               })
                             )}
                           </AnimatePresence>
-                        </motion.div>
+                        </div>
                         {/* Division Line */}
                         <div
                           className="division-line"
@@ -1553,11 +1567,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         />
                         {/* Denominator */}
                         {rightDenTerms.length > 0 && (
-                          <motion.div
+                          <div
                             className="expression-list"
                             style={{
-                              scale: expressionScale,
-                              transformOrigin: 'center',
                               zIndex: activeFactorMenu?.type === 'rightDen' ? 1001 : 1,
                               position: 'relative'
                             }}
@@ -1625,11 +1637,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 );
                               })}
                             </AnimatePresence>
-                          </motion.div>
+                          </div>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ) : topic === 'divisions' ? (
                   numTerms.length === 0 && denTerms.length === 0 ? (
                     <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
