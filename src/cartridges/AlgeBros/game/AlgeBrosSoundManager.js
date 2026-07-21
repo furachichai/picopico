@@ -101,3 +101,33 @@ export function playVictory() {
     }, i * 80);
   });
 }
+
+export function playPopFX() {
+  try {
+    const ctx = getContext();
+    const playPop = (delay) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      const startTime = ctx.currentTime + delay;
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, startTime);
+      osc.frequency.exponentialRampToValueAtTime(150, startTime + 0.12);
+      
+      gain.gain.setValueAtTime(0.25, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.12);
+      
+      osc.start(startTime);
+      osc.stop(startTime + 0.12);
+    };
+    
+    playPop(0);
+    playPop(0.08);
+  } catch (e) {
+    console.warn(e);
+  }
+}

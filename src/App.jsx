@@ -66,6 +66,31 @@ const AppContent = () => {
       setSelectedGame(null);
     }
   }, [state.view]);
+
+  React.useEffect(() => {
+    const handleFocusOut = (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+        // Force iOS Safari viewport recalculation
+        window.scrollTo(0, 0);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          // Toggle height to force layout redraw
+          if (document.body) {
+            document.body.style.height = '100.1%';
+            setTimeout(() => {
+              document.body.style.height = '100%';
+            }, 50);
+          }
+        }, 100);
+      }
+    };
+
+    document.addEventListener('focusout', handleFocusOut);
+    return () => {
+      document.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
+
   const [animating, setAnimating] = React.useState(false);
   const [prevView, setPrevView] = React.useState(null);
   const [direction, setDirection] = React.useState('forward'); // 'forward' or 'back'

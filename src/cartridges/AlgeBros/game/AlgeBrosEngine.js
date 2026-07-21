@@ -166,3 +166,75 @@ export function countMatchingPairs(numTerms, denTerms) {
 export function isDivisionSimplified(numTerms, denTerms) {
   return countMatchingPairs(numTerms, denTerms) === 0;
 }
+
+/**
+ * Calculates unique prime factors of a number (excluding 1 and itself).
+ */
+export function getPrimeFactors(n) {
+  const factors = [];
+  let temp = Math.abs(n);
+  let d = 2;
+  while (temp > 1) {
+    if (temp % d === 0) {
+      if (!factors.includes(d)) {
+        factors.push(d);
+      }
+      temp /= d;
+    } else {
+      d++;
+    }
+  }
+  return factors.filter(f => f !== 1 && f !== Math.abs(n));
+}
+
+/**
+ * Parses a variable string (like "x^2y", "ax", "z^3") into a map of { letter: exponent }
+ */
+function parseVariablePart(varStr) {
+  const result = {};
+  if (!varStr) return result;
+  const regex = /([a-zA-Z])(?:\^(\d+))?/g;
+  let match;
+  while ((match = regex.exec(varStr)) !== null) {
+    const letter = match[1];
+    const exp = match[2] ? parseInt(match[2], 10) : 1;
+    result[letter] = (result[letter] || 0) + exp;
+  }
+  return result;
+}
+
+/**
+ * Serializes a letter-exponent map back to a sorted string (like "x^2y")
+ */
+function serializeVariablePart(varMap) {
+  const sortedLetters = Object.keys(varMap).sort();
+  let result = '';
+  for (const letter of sortedLetters) {
+    const exp = varMap[letter];
+    if (exp === 0) continue;
+    if (exp === 1) {
+      result += letter;
+    } else {
+      result += `${letter}^${exp}`;
+    }
+  }
+  return result || null;
+}
+
+/**
+ * Multiplies two terms together, combining coefficients and variable exponents.
+ */
+export function multiplyTerms(termA, termB) {
+  const newCoeff = termA.coeff * termB.coeff;
+  
+  const mapA = parseVariablePart(termA.variable);
+  const mapB = parseVariablePart(termB.variable);
+  
+  const mergedMap = { ...mapA };
+  for (const letter in mapB) {
+    mergedMap[letter] = (mergedMap[letter] || 0) + mapB[letter];
+  }
+  
+  const newVar = serializeVariablePart(mergedMap);
+  return makeTerm(newCoeff, newVar);
+}

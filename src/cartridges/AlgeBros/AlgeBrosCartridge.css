@@ -32,6 +32,7 @@
   user-select: none;
   display: flex;
   flex-direction: column;
+  touch-action: none;
 }
 
 .algebros-cartridge * {
@@ -155,20 +156,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 48px;
-  margin-bottom: 20px;
+  margin-top: 72px;
+  margin-bottom: 12px;
+  gap: 6px;
   z-index: 10;
 }
 
 .algebros-cartridge .hud-badge {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
   font-weight: 700;
   backdrop-filter: blur(8px);
   color: var(--text-dim);
+  white-space: nowrap;
+  flex: 1;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .algebros-cartridge .hud-badge-highlight {
@@ -194,9 +202,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  padding: 60px 0;
   overflow-x: auto;
+  overflow-y: hidden !important;
   scrollbar-width: none;
+  touch-action: pan-x;
 }
 
 .algebros-cartridge .expression-wrapper::-webkit-scrollbar {
@@ -215,7 +225,7 @@
 .algebros-cartridge .term-card {
   display: flex;
   align-items: center;
-  height: 38px;
+  height: 28px;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 8px;
@@ -522,14 +532,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: fit-content;
+  margin: auto auto;
   gap: 12px;
-  margin: auto 0;
   z-index: 5;
+  touch-action: none;
 }
 
 .algebros-cartridge .division-line {
-  width: 85%;
+  width: calc(100% + 16px);
   height: 3px;
   background-color: var(--text-main);
   opacity: 0.8;
@@ -573,6 +584,11 @@
 .algebros-cartridge .term-card.is-crossed-out {
   position: relative;
   pointer-events: none !important;
+  animation: hintAndFade 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.algebros-cartridge .topic-divisions .one-char-card::after {
+  display: none !important;
 }
 
 @keyframes drawStrike {
@@ -584,4 +600,138 @@
     width: 120%;
     left: -10%;
   }
+}
+
+@keyframes hintAndFade {
+  0% {
+    transform: scale(1);
+    background-color: rgba(16, 185, 129, 0.05);
+    box-shadow: 0 0 0px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(1.15);
+    background-color: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Portal popover keyframes (used by the portal via inline style animation property) */
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 6px)) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
+.factor-menu-portal .factor-option-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #1e293b;
+  border-radius: 8px;
+  height: 36px !important;
+  min-width: 82px !important;
+  padding: 0 16px !important;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  touch-action: auto;
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.factor-menu-portal .factor-option-btn:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: #8b5cf6;
+  transform: translateY(-1px);
+}
+
+.factor-menu-portal .factor-option-btn:active {
+  transform: translateY(1px);
+}
+
+/* Grey out other elements when popover is active */
+.algebros-cartridge .screen-container.has-active-popover .term-card:not(.is-decomposing) {
+  opacity: 0.3 !important;
+  filter: grayscale(85%) blur(0.5px);
+  pointer-events: none !important;
+}
+
+/* Keep the decomposing card fully visible and interactive */
+.algebros-cartridge .screen-container.has-active-popover .term-card.is-decomposing {
+  opacity: 1 !important;
+  filter: none !important;
+  pointer-events: auto !important;
+  z-index: 10;
+}
+
+.algebros-cartridge .screen-container.has-active-popover .dot-separator-btn {
+  opacity: 0.1 !important;
+  pointer-events: none !important;
+}
+
+.algebros-cartridge .screen-container.has-active-popover .division-line {
+  opacity: 0.25 !important;
+}
+
+/* Dim HUD and bottom controls */
+.algebros-cartridge .screen-container.has-active-popover .hud-header,
+.algebros-cartridge .screen-container.has-active-popover .bottom-controls {
+  opacity: 0.35 !important;
+  pointer-events: none !important;
+  filter: grayscale(40%);
+}
+
+.algebros-cartridge .dot-separator-btn {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  opacity: 0.8;
+  margin: 0 8px;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease-in-out;
+  user-select: none;
+  touch-action: auto;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(8px);
+  pointer-events: auto !important;
+}
+
+.algebros-cartridge .dot-separator-btn:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.algebros-cartridge .dot-separator-btn:active {
+  transform: scale(0.9);
+}
+
+/* Wiggle animation for dot separator buttons when user validation fails due to un-combined terms */
+.algebros-cartridge .shake-dot-active {
+  animation: dotWiggle 0.5s ease-in-out !important;
+}
+
+@keyframes dotWiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  15%, 45%, 75% { transform: scale(1.15) translateX(-3px) rotate(-12deg); }
+  30%, 60%, 90% { transform: scale(1.15) translateX(3px) rotate(12deg); }
 }

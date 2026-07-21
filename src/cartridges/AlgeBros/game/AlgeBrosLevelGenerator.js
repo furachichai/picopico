@@ -188,32 +188,32 @@ function doesExpressionFit(terms) {
 
 const DIVISION_LEVEL_TEMPLATES = [
   {
-    num: ['7x', '14'],
-    den: ['14', 'b']
+    num: ['7x', '12'],
+    den: ['4', 'b']
   },
   {
     num: ['5a', 'y'],
-    den: ['y', '3']
+    den: ['y', '15']
   },
   {
-    num: ['x^2', 'c'],
-    den: ['x', 'c']
+    num: ['x^3', 'c'],
+    den: ['x^2', 'c']
   },
   {
-    num: ['2', '3a', '5'],
+    num: ['10', '3a', '5'],
     den: ['3a', '2']
   },
   {
     num: ['8z', '3'],
-    den: ['3', '8z']
+    den: ['3', '2']
   },
   {
     num: ['x', 'y^2', 'a'],
-    den: ['a', 'y^2', 'z']
+    den: ['a', 'y', 'z']
   },
   {
-    num: ['15', 'c', 'x'],
-    den: ['x', '15', 'c']
+    num: ['18', 'c', 'x'],
+    den: ['x', '6', 'c']
   },
   {
     num: ['2a', '7b', '3c'],
@@ -221,11 +221,11 @@ const DIVISION_LEVEL_TEMPLATES = [
   },
   {
     num: ['x^2', 'y^2', 'z^2'],
-    den: ['z^2', 'x^2', 'y^2']
+    den: ['z^2', 'x', 'y']
   },
   {
-    num: ['4', 'ax', '10'],
-    den: ['10', 'ax', '4']
+    num: ['12', 'ax', '10'],
+    den: ['15', 'ax', '4']
   }
 ];
 
