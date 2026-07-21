@@ -760,16 +760,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     const equalsRect = equalsEl.getBoundingClientRect();
-    const centerX = equalsRect.left + equalsRect.width / 2;
 
     const dropX = info.point.x;
     const dropY = info.point.y;
-    const offsetX = info.offset?.x || 0;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
+    // Only display hint if pointer has partially crossed the equals sign area
     const crossed = startedOnLeft
-      ? (dropX > centerX || offsetX > 40)
-      : (dropX <= centerX || offsetX < -40);
+      ? (dropX >= equalsRect.left)
+      : (dropX <= equalsRect.right);
 
     if (crossed) {
       const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
