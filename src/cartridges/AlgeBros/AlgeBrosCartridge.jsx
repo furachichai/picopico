@@ -659,14 +659,32 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       if (isAdditiveTransposition) {
         const getList = (t) => t === 'num' ? numTerms : rightNumTerms;
         const sourceList = getList(sourceType);
-        if (sourceList.length > 0) {
-          sourceSetter([]);
-          const newTerms = sourceList.map((t, idx) => {
-            const newCoeff = idx === 0 ? -t.coeff : t.coeff;
-            return makeTerm(newCoeff, t.variable);
-          });
-          targetSetter(prev => [...prev, ...newTerms]);
-        }
+        
+        // Split sourceList into additive term groups (factors multiplied together)
+        const groups = [];
+        let currentGroup = [];
+        sourceList.forEach((t, idx) => {
+          if (idx > 0 && t.coeff < 0) {
+            if (currentGroup.length > 0) groups.push(currentGroup);
+            currentGroup = [t];
+          } else {
+            currentGroup.push(t);
+          }
+        });
+        if (currentGroup.length > 0) groups.push(currentGroup);
+
+        const targetGroup = groups.find(g => g.some(t => t.id === term.id)) || [term];
+        const targetGroupIds = new Set(targetGroup.map(t => t.id));
+
+        // Remove only the targetGroup from sourceSetter
+        sourceSetter(prev => prev.filter(t => !targetGroupIds.has(t.id)));
+
+        // Flip leading sign of targetGroup and append to targetSetter
+        const newTerms = targetGroup.map((t, idx) => {
+          const newCoeff = idx === 0 ? -t.coeff : t.coeff;
+          return makeTerm(newCoeff, t.variable);
+        });
+        targetSetter(prev => [...prev, ...newTerms]);
       } else {
         sourceSetter(prev => prev.filter(t => t.id !== term.id));
         const newCoeff = Math.abs(term.coeff);
