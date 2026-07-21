@@ -391,7 +391,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [cardAngles, setCardAngles] = useState({}); // Stores line rotation angle per card ID
   const [activeFactorMenu, setActiveFactorMenu] = useState(null); // { cardId, type } or null
   const [popoverPos, setPopoverPos] = useState(null);
-  const [dragHintSide, setDragHintSide] = useState(null); // 'leftDen' | 'rightDen' | null // { top, left, cardWidth }
+  const [dragHintState, setDragHintState] = useState(null); // { side, insertIndex, signHint } or null
   const [shakeDotButtons, setShakeDotButtons] = useState(false);
   const activeCardRef = useRef(null);
 
@@ -750,12 +750,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
   const handleDragCross = (term, currentType, event, info) => {
     if (!term || term.coeff === 0) {
-      setDragHintSide(null);
+      setDragHintState(null);
       return;
     }
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) {
-      setDragHintSide(null);
+      setDragHintState(null);
       return;
     }
 
@@ -787,21 +787,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }
 
       if (isUnderTerm) {
-        setDragHintSide({ side: startedOnLeft ? 'rightDen' : 'leftDen' });
+        setDragHintState({ side: startedOnLeft ? 'rightDen' : 'leftDen' });
       } else {
         const side = startedOnLeft ? 'rightNum' : 'leftNum';
         const insertIndex = calculateInsertIndex(targetSideClass, dropX);
         const signHint = term.coeff > 0 ? '-' : '+';
-        setDragHintSide({ side, insertIndex, signHint });
+        setDragHintState({ side, insertIndex, signHint });
       }
       return;
     }
-    setDragHintSide(null);
+    setDragHintState(null);
   };
 
   const handleDragEndCross = (term, currentType, event, info) => {
-    const hint = dragHintSide;
-    setDragHintSide(null);
+    const hint = dragHintState;
+    setDragHintState(null);
     if (!term || term.coeff === 0) return;
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) return;
@@ -1544,7 +1544,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           }}
                         >
                           <AnimatePresence mode="popLayout">
-                            {numTerms.length === 0 && dragHintSide?.side !== 'leftNum' ? (
+                            {numTerms.length === 0 && dragHintState?.side !== 'leftNum' ? (
                               <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
                             ) : (
                               <>
