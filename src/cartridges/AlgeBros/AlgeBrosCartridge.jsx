@@ -612,7 +612,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     // Tapping a simple card
     const decompOptions = getTermDecompositionOptions(term);
-    if (decompOptions.length > 0) {
+    if (decompOptions.length === 1) {
+      handleDecompose(term, decompOptions[0].splitA, decompOptions[0].splitB, type);
+    } else if (decompOptions.length > 1) {
       if (activeFactorMenu?.cardId === term.id) {
         setActiveFactorMenu(null);
       } else {
@@ -816,6 +818,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       
       triggerFlash('error');
       triggerShake();
+      showFeedback('Only identical terms can be cancelled out!', 'error');
       setIsMatchingFading(true);
       
       setTimeout(() => {
