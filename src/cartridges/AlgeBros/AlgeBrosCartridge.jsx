@@ -1461,13 +1461,79 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
+const handleCombineEquationGroup = (groupIdx, type) => {
+  if (isValidating) return;
+  unlockAudio();
+
+  const getter = type === 'num' ? numTerms : rightNumTerms;
+  const setter = type === 'num' ? setNumTerms : setRightNumTerms;
+
+  const currentList = getter;
+  const groups = splitIntoAdditiveGroups(currentList.filter(t => t.coeff !== 0 || currentList.length === 1));
+
+  if (groupIdx <= 0 || groupIdx >= groups.length) return;
+
+  const groupA = groups[groupIdx - 1];
+  const groupB = groups[groupIdx];
+
+  if (!groupA || !groupB) return;
+
+  if (groupA.length > 1 || groupB.length > 1) {
+    setShakeDotButtons(true);
+    setTimeout(() => setShakeDotButtons(false), 500);
+    playWrong();
+    showFeedback('Multiply factors first before combining!', 'error');
+    return;
+  }
+
+  const termA = groupA[0];
+  const termB = groupB[0];
+
+  if (areLikeTerms(termA, termB)) {
+    playMerge();
+    setUserPresses(p => p + 1);
+    const combined = combineTerms(termA, termB);
+    showFeedback('Combined like terms!', 'success');
+    triggerFlash('success');
+
+    setter(prev => {
+      const prevGroups = splitIntoAdditiveGroups(prev);
+      const idxA = prevGroups.findIndex(g => g.some(t => t.id === termA.id));
+      const idxB = prevGroups.findIndex(g => g.some(t => t.id === termB.id));
+
+      if (idxA === -1 || idxB === -1) return prev;
+
+      const nextGroups = [...prevGroups];
+      if (combined.coeff === 0 && prevGroups.length > 2) {
+        nextGroups.splice(Math.min(idxA, idxB), 2);
+      } else {
+        nextGroups.splice(Math.min(idxA, idxB), 2, [combined]);
+      }
+      return nextGroups.flat();
+    });
+  } else {
+    setMistakes(m => m + 1);
+    setIsLevelPerfect(false);
+    playWrong();
+    if ('vibrate' in navigator) {
+      navigator.vibrate([100, 50, 100]);
+    }
+    showFeedback('Unlike terms cannot be combined!', 'error');
+    triggerFlash('error');
+    triggerShake();
+  }
+};
+
   const handleValidate = () => {
     if (isValidating) return;
     unlockAudio();
     
-    // Check if there are multiple terms in the numerator or denominator on either side
+    // Check if there are leftover decomposed factors (same term split into multiple cards) still needing
+    // to be re-multiplied. For equations, a numerator can legitimately have multiple INDEPENDENT additive
+    // terms sharing one denominator (e.g. x = 7/2 - 3/2), so that alone isn't "unmerged factors".
+    const hasUnmergedFactors = (list) => splitIntoAdditiveGroups(list).some(g => g.length > 1);
     const hasDotSeparators = (topic === 'divisions' && (numTerms.length > 1 || denTerms.length > 1)) ||
-                            (topic === 'equations' && (numTerms.length > 1 || denTerms.length > 1 || rightNumTerms.length > 1 || rightDenTerms.length > 1));
+                            (topic === 'equations' && (hasUnmergedFactors(numTerms) || denTerms.length > 1 || hasUnmergedFactors(rightNumTerms) || rightDenTerms.length > 1));
     
     const isSimplified = topic === 'divisions'
       ? (isDivisionSimplified(numTerms, denTerms) && !hasDotSeparators)
@@ -1749,6 +1815,46 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     const isLeftEmpty = activeLeftTerms.length === 0;
                     const activeRightTerms = rightNumTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
                     const isRightEmpty = activeRightTerms.length === 0;
+                    // When a side has multiple independent additive terms, a shared denominator divides
+                    // ALL of them at once (e.g. (7-3)/2 = 7/2 - 3/2), so it's mirrored under each term
+                    // instead of shown once under the whole row.
+                    const leftNumGroupCount = splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).length;
+                    const rightNumGroupCount = splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).length;
+                    const showLeftDenMirrors = leftNumGroupCount > 1 && ((denTerms.length > 0 && !isDenOne(denTerms)) || dragHintState?.side === 'leftDen');
+                    const showRightDenMirrors = rightNumGroupCount > 1 && ((rightDenTerms.length > 0 && !isDenOne(rightDenTerms)) || dragHintState?.side === 'rightDen');
+                    const renderDenMirror = (denList) => (
+                      <div
+                        className="denominator-mirror"
+                        style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          pointerEvents: 'none',
+                          marginTop: '6px',
+                          zIndex: 0
+                        }}
+                      >
+                        <div className="division-line" style={{ width: '100%' }} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', marginTop: '6px' }}>
+                          {denList.length > 0 && !isDenOne(denList) ? (
+                            denList.map((dt, dIdx) => (
+                              <React.Fragment key={dt.id}>
+                                {dIdx > 0 && <span className="dot-separator" style={{ fontSize: '1rem', margin: '0 2px' }}>·</span>}
+                                <div className={`term-card ${isOneChar(dt) ? 'one-char-card' : ''}`} style={{ cursor: 'default' }}>
+                                  {renderTermValue(dt)}
+                                </div>
+                              </React.Fragment>
+                            ))
+                          ) : (
+                            <div className="term-card drop-slot-placeholder" />
+                          )}
+                        </div>
+                      </div>
+                    );
                     const isDraggingFromLeft = isDraggingTerm && (numTerms.some(t => t.id === draggingCardId) || denTerms.some(t => t.id === draggingCardId));
                     const isDraggingFromRight = isDraggingTerm && (rightNumTerms.some(t => t.id === draggingCardId) || rightDenTerms.some(t => t.id === draggingCardId));
 
@@ -1823,16 +1929,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </motion.div>
                                       )}
                                       {groupIdx > 0 && (
-                                        <span
-                                          className="operator-static"
+                                        <button
+                                          className="operator-btn"
                                           style={{
+                                            pointerEvents: 'auto',
                                             margin: '0 4px',
-                                            fontWeight: 800,
                                             visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                          }}
+                                          onMouseDown={(e) => e.stopPropagation()}
+                                          onTouchStart={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCombineEquationGroup(groupIdx, 'num');
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
-                                        </span>
+                                        </button>
                                       )}
                                       <motion.div
                                         className="term-group-wrapper"
@@ -1927,6 +2039,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             </div>
                                           );
                                         })}
+                                        {showLeftDenMirrors && renderDenMirror(denTerms)}
                                       </motion.div>
                                     </React.Fragment>
                                   );
@@ -1957,12 +2070,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: (denTerms.length === 0 || isDenOne(denTerms)) && dragHintState?.side !== 'leftDen' ? 'none' : 'block',
+                            display: showLeftDenMirrors || ((denTerms.length === 0 || isDenOne(denTerms)) && dragHintState?.side !== 'leftDen') ? 'none' : 'block',
                             visibility: (isValidating && denTerms.every(t => crossedOutDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {((denTerms.length > 0 && !isDenOne(denTerms)) || dragHintState?.side === 'leftDen') && (
+                        {!showLeftDenMirrors && ((denTerms.length > 0 && !isDenOne(denTerms)) || dragHintState?.side === 'leftDen') && (
                           <div
                             className="expression-list"
                             style={{
@@ -2109,16 +2222,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         </motion.div>
                                       )}
                                       {groupIdx > 0 && (
-                                        <span
-                                          className="operator-static"
+                                        <button
+                                          className="operator-btn"
                                           style={{
+                                            pointerEvents: 'auto',
                                             margin: '0 4px',
-                                            fontWeight: 800,
                                             visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                          }}
+                                          onMouseDown={(e) => e.stopPropagation()}
+                                          onTouchStart={(e) => e.stopPropagation()}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCombineEquationGroup(groupIdx, 'rightNum');
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
-                                        </span>
+                                        </button>
                                       )}
                                       <motion.div
                                         className="term-group-wrapper"
@@ -2213,6 +2332,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                             </div>
                                           );
                                         })}
+                                        {showRightDenMirrors && renderDenMirror(rightDenTerms)}
                                       </motion.div>
                                     </React.Fragment>
                                   );
@@ -2243,12 +2363,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: (rightDenTerms.length === 0 || isDenOne(rightDenTerms)) && dragHintState?.side !== 'rightDen' ? 'none' : 'block',
+                            display: showRightDenMirrors || ((rightDenTerms.length === 0 || isDenOne(rightDenTerms)) && dragHintState?.side !== 'rightDen') ? 'none' : 'block',
                             visibility: (isValidating && rightDenTerms.every(t => crossedOutRightDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {((rightDenTerms.length > 0 && !isDenOne(rightDenTerms)) || dragHintState?.side === 'rightDen') && (
+                        {!showRightDenMirrors && ((rightDenTerms.length > 0 && !isDenOne(rightDenTerms)) || dragHintState?.side === 'rightDen') && (
                           <div
                             className="expression-list"
                             style={{

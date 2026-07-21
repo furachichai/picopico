@@ -325,15 +325,18 @@ function gcd(a, b) {
 
 function isFractionSimplified(numTerms, denTerms) {
   if (numTerms.length === 0 || denTerms.length === 0) return true;
-  const numTerm = numTerms[0];
-  const denTerm = denTerms[0];
+  // A shared denominator applies to every additive numerator term at once (e.g. (7-3)/2 = 7/2 - 3/2),
+  // so it's only simplified once none of those terms share a common factor with any denominator factor.
+  for (const numTerm of numTerms) {
+    for (const denTerm of denTerms) {
+      if (gcd(numTerm.coeff, denTerm.coeff) > 1) return false;
 
-  if (gcd(numTerm.coeff, denTerm.coeff) > 1) return false;
-
-  const numVars = parseVariablePart(numTerm.variable);
-  const denVars = parseVariablePart(denTerm.variable);
-  for (const letter in numVars) {
-    if (denVars[letter] > 0) return false;
+      const numVars = parseVariablePart(numTerm.variable);
+      const denVars = parseVariablePart(denTerm.variable);
+      for (const letter in numVars) {
+        if (denVars[letter] > 0) return false;
+      }
+    }
   }
 
   return true;
@@ -342,17 +345,14 @@ function isFractionSimplified(numTerms, denTerms) {
 /**
  * Checks if the equation is solved.
  * Solved when:
- * 1. Both sides are fully compacted (numerator length <= 1, denominator length <= 1).
- * 2. The unknownVar is isolated:
- *    - Left side is [unknownVar] (coeff 1) and leftDen is empty, AND right side has no unknownVar.
- *    - OR right side is [unknownVar] (coeff 1) and rightDen is empty, AND left side has no unknownVar.
- * 3. The non-isolated side fraction is fully simplified.
+ * 1. The isolated side (the one holding the unknown) is compacted to exactly [unknownVar] with coeff 1
+ *    and an empty denominator.
+ * 2. The other side has no unknownVar left. It may still hold multiple additive terms sharing one
+ *    denominator (e.g. x = 7/2 - 3/2), since a denominator divides every term on that side at once.
+ * 3. That other side's fraction is fully simplified (no common factor between any of its numerator
+ *    terms and its denominator).
  */
 export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVar) {
-  if (leftNum.length > 1 || leftDen.length > 1 || rightNum.length > 1 || rightDen.length > 1) {
-    return false;
-  }
-
   const hasVar = (terms) => terms.some(t => t.variable && t.variable.includes(unknownVar));
   const leftHasVar = hasVar(leftNum) || hasVar(leftDen);
   const rightHasVar = hasVar(rightNum) || hasVar(rightDen);

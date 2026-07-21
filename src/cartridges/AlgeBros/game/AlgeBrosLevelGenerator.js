@@ -302,14 +302,14 @@ export function generateEquationLevels() {
     { leftNum: ['2x'], leftDen: [], rightNum: ['3y'], rightDen: [] },
     // 6. 6x = 18
     { leftNum: ['6x'], leftDen: [], rightNum: ['18'], rightDen: [] },
-    // 7. 3x = 15y
-    { leftNum: ['3x'], leftDen: [], rightNum: ['15y'], rightDen: [] },
-    // 8. 6x = 24
-    { leftNum: ['6x'], leftDen: [], rightNum: ['24'], rightDen: [] },
-    // 9. 4x = 2y
-    { leftNum: ['4x'], leftDen: [], rightNum: ['2y'], rightDen: [] },
-    // 10. 6x = 42
-    { leftNum: ['6x'], leftDen: [], rightNum: ['42'], rightDen: [] },
+    // 7. 2x + 3 = 9 (transpose +3 across, then divide by 2: x = 9/2 - 3/2)
+    { leftNum: ['2x', '3'], leftDen: [], rightNum: ['9'], rightDen: [] },
+    // 8. 3x - 4 = 5 (transpose -4 across as +4, then divide by 3: x = 5/3 + 4/3)
+    { leftNum: ['3x', '-4'], leftDen: [], rightNum: ['5'], rightDen: [] },
+    // 9. 5x + 2 = 7y (transpose +2 across, then divide by 5: x = 7y/5 - 2/5)
+    { leftNum: ['5x', '2'], leftDen: [], rightNum: ['7y'], rightDen: [] },
+    // 10. 7 = 2x + 3 (variable on the right; transpose +3 across, then divide by 2: x = 7/2 - 3/2)
+    { leftNum: ['7'], leftDen: [], rightNum: ['2x', '3'], rightDen: [] },
   ];
 
   return EQUATION_LEVEL_TEMPLATES.map((tpl, index) => {
@@ -325,10 +325,10 @@ export function generateEquationLevels() {
     else if (index === 3) minPresses = 3; // 4x = 2
     else if (index === 4) minPresses = 1; // 2x = 3y
     else if (index === 5) minPresses = 3; // 6x = 18
-    else if (index === 6) minPresses = 3; // 3x = 15y
-    else if (index === 7) minPresses = 5; // 2·3·x = 12
-    else if (index === 8) minPresses = 3; // 4x = 2y
-    else if (index === 9) minPresses = 3; // 6x = 42
+    else if (index === 6) minPresses = 2; // 2x + 3 = 9 (transpose + divide)
+    else if (index === 7) minPresses = 2; // 3x - 4 = 5 (transpose + divide)
+    else if (index === 8) minPresses = 2; // 5x + 2 = 7y (transpose + divide)
+    else if (index === 9) minPresses = 2; // 7 = 2x + 3 (transpose + divide)
 
     return {
       levelNum: index + 1,
