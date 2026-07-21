@@ -256,6 +256,29 @@
   padding: 0 4px !important;
 }
 
+/* Drag drop slot hint placeholder */
+.algebros-cartridge .term-card.drop-slot-placeholder {
+  border: 2px dashed #8b5cf6 !important;
+  background: rgba(139, 92, 246, 0.12) !important;
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.25) !important;
+  min-width: 38px;
+  height: 36px;
+  border-radius: 8px;
+  pointer-events: none !important;
+  animation: pulseSlotHint 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseSlotHint {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
 /* Sign / Operator Button component */
 .algebros-cartridge .operator-btn {
   width: 20px;

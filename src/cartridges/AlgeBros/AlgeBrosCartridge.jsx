@@ -390,7 +390,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
   const [cardAngles, setCardAngles] = useState({}); // Stores line rotation angle per card ID
   const [activeFactorMenu, setActiveFactorMenu] = useState(null); // { cardId, type } or null
-  const [popoverPos, setPopoverPos] = useState(null); // { top, left, cardWidth }
+  const [popoverPos, setPopoverPos] = useState(null);
+  const [dragHintSide, setDragHintSide] = useState(null); // 'leftDen' | 'rightDen' | null // { top, left, cardWidth }
   const [shakeDotButtons, setShakeDotButtons] = useState(false);
   const activeCardRef = useRef(null);
 
@@ -728,7 +729,54 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
+  const handleDragCross = (term, currentType, event, info) => {
+    if (!term || term.coeff === 0) {
+      setDragHintSide(null);
+      return;
+    }
+    const equalsEl = document.querySelector('.equals-sign');
+    if (!equalsEl) {
+      setDragHintSide(null);
+      return;
+    }
+
+    const equalsRect = equalsEl.getBoundingClientRect();
+    const centerX = equalsRect.left + equalsRect.width / 2;
+
+    const dropX = info.point.x;
+    const dropY = info.point.y;
+    const offsetX = info.offset?.x || 0;
+
+    const startedOnLeft = currentType === 'num' || currentType === 'den';
+    const crossed = startedOnLeft
+      ? (dropX > centerX || offsetX > 40)
+      : (dropX <= centerX || offsetX < -40);
+
+    if (crossed) {
+      const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
+      const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
+      const targetDenEl = document.querySelector(`.equation-side${targetSideClass} .division-container > .expression-list:last-child`);
+      const targetDenTerms = startedOnLeft ? rightDenTerms : denTerms;
+
+      let isUnderTerm = false;
+      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+        const denRect = targetDenEl.getBoundingClientRect();
+        isUnderTerm = dropY > (denRect.top - 4);
+      } else if (targetNumEl) {
+        const numRect = targetNumEl.getBoundingClientRect();
+        isUnderTerm = dropY > (numRect.bottom + 6);
+      }
+
+      if (isUnderTerm) {
+        setDragHintSide(startedOnLeft ? 'rightDen' : 'leftDen');
+        return;
+      }
+    }
+    setDragHintSide(null);
+  };
+
   const handleDragEndCross = (term, currentType, event, info) => {
+    setDragHintSide(null);
     if (!term || term.coeff === 0) return;
     const equalsEl = document.querySelector('.equals-sign');
     if (!equalsEl) return;
@@ -1528,6 +1576,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           dragElastic={0.4}
                                           whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                           onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                          onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
                                           onDragEnd={(e, info) => {
                                             setIsDraggingTerm(false);
                                             handleDragEndCross(term, 'num', e, info);
@@ -1557,12 +1606,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: (denTerms.length === 0 || isDenOne(denTerms)) ? 'none' : 'block',
+                            display: (denTerms.length === 0 || isDenOne(denTerms)) && dragHintSide !== 'leftDen' ? 'none' : 'block',
                             visibility: (isValidating && denTerms.every(t => crossedOutDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {denTerms.length > 0 && !isDenOne(denTerms) && (
+                        {((denTerms.length > 0 && !isDenOne(denTerms)) || dragHintSide === 'leftDen') && (
                           <div
                             className="expression-list"
                             style={{
@@ -1603,7 +1652,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       </button>
                                     )}
                                     <motion.div
-                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
                                       data-id={term.id}
                                       data-type="den"
                                       data-index={index}
@@ -1612,6 +1661,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       dragElastic={0.4}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                      onDrag={(e, info) => handleDragCross(term, 'den', e, info)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
                                         handleDragEndCross(term, 'den', e, info);
@@ -1632,6 +1682,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   </motion.div>
                                 );
                               })}
+                              {dragHintSide === 'leftDen' && (
+                                <div key="hint-slot-left" className="term-item-wrapper" style={{ pointerEvents: 'none' }}>
+                                  {denTerms.length > 0 && !isDenOne(denTerms) && (
+                                    <button className="dot-separator-btn" style={{ pointerEvents: 'none', opacity: 0.4 }}>·</button>
+                                  )}
+                                  <div className="term-card drop-slot-placeholder" />
+                                </div>
+                              )}
                             </AnimatePresence>
                           </div>
                         )}
@@ -1709,6 +1767,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           dragElastic={0.4}
                                           whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                           onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                          onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
                                           onDragEnd={(e, info) => {
                                             setIsDraggingTerm(false);
                                             handleDragEndCross(term, 'rightNum', e, info);
@@ -1739,12 +1798,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: (rightDenTerms.length === 0 || isDenOne(rightDenTerms)) ? 'none' : 'block',
+                            display: (rightDenTerms.length === 0 || isDenOne(rightDenTerms)) && dragHintSide !== 'rightDen' ? 'none' : 'block',
                             visibility: (isValidating && rightDenTerms.every(t => crossedOutRightDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {rightDenTerms.length > 0 && !isDenOne(rightDenTerms) && (
+                        {((rightDenTerms.length > 0 && !isDenOne(rightDenTerms)) || dragHintSide === 'rightDen') && (
                           <div
                             className="expression-list"
                             style={{
@@ -1785,7 +1844,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       </button>
                                     )}
                                     <motion.div
-                                      className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                      className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
                                       data-id={term.id}
                                       data-type="rightDen"
                                       data-index={index}
@@ -1794,6 +1853,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       dragElastic={0.4}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                      onDrag={(e, info) => handleDragCross(term, 'rightDen', e, info)}
                                       onDragEnd={(e, info) => {
                                         setIsDraggingTerm(false);
                                         handleDragEndCross(term, 'rightDen', e, info);
@@ -1814,6 +1874,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   </motion.div>
                                 );
                               })}
+                              {dragHintSide === 'rightDen' && (
+                                <div key="hint-slot-right" className="term-item-wrapper" style={{ pointerEvents: 'none' }}>
+                                  {rightDenTerms.length > 0 && !isDenOne(rightDenTerms) && (
+                                    <button className="dot-separator-btn" style={{ pointerEvents: 'none', opacity: 0.4 }}>·</button>
+                                  )}
+                                  <div className="term-card drop-slot-placeholder" />
+                                </div>
+                              )}
                             </AnimatePresence>
                           </div>
                         )}
