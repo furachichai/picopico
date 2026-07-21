@@ -521,16 +521,45 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
   const handleMultiplyAdjacent = (index, type) => {
     setActiveFactorMenu(null);
+    const getList = () => type === 'num' ? numTerms
+                        : type === 'den' ? denTerms
+                        : type === 'rightNum' ? rightNumTerms
+                        : rightDenTerms;
+
+    const list = getList();
+    const termA = list[index - 1];
+    const termB = list[index];
+    if (!termA || !termB) return;
+
+    if (topic === 'equations' && termB.coeff < 0) {
+      if (areLikeTerms(termA, termB)) {
+        playMerge();
+        const combined = combineTerms(termA, termB);
+        const setter = type === 'num' ? setNumTerms
+                     : type === 'den' ? setDenTerms
+                     : type === 'rightNum' ? setRightNumTerms
+                     : setRightDenTerms;
+        setter(prev => {
+          const next = [...prev];
+          next.splice(index - 1, 2, combined);
+          return next;
+        });
+      } else {
+        playWrong();
+        setShakeDotButtons(true);
+        setTimeout(() => setShakeDotButtons(false), 500);
+      }
+      return;
+    }
+
     playMerge();
+    const product = multiplyTerms(termA, termB);
     const setter = type === 'num' ? setNumTerms
                  : type === 'den' ? setDenTerms
                  : type === 'rightNum' ? setRightNumTerms
                  : setRightDenTerms;
     setter(prev => {
       const next = [...prev];
-      const termA = next[index - 1];
-      const termB = next[index];
-      const product = multiplyTerms(termA, termB);
       next.splice(index - 1, 2, product);
       return next;
     });
