@@ -646,6 +646,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
+  const handleDragEndCross = (term, currentType, event, info) => {
+    const equalsEl = document.querySelector('.equals-sign');
+    const containerEl = document.querySelector('.equation-layout');
+    if (!equalsEl || !containerEl) return;
+
+    const equalsRect = equalsEl.getBoundingClientRect();
+    const centerX = equalsRect.left + equalsRect.width / 2;
+
+    // Framer motion screen coordinates
+    const dropX = info.point.x;
+
+    const startedOnLeft = currentType === 'num' || currentType === 'den';
+    const crossed = startedOnLeft ? (dropX > centerX) : (dropX <= centerX);
+
+    if (crossed) {
+      handleMoveCrossSide(term, currentType);
+    }
+  };
+
   const handleStart = () => {
     const generated = topic === 'equations'
       ? generateEquationLevels()
@@ -1289,10 +1308,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     {/* Left Side */}
                     <div className="equation-side left-side">
                       {denTerms.length === 0 ? (
-                        <Reorder.Group
-                          axis="x"
-                          values={numTerms}
-                          onReorder={setNumTerms}
+                        <div
                           className="expression-list"
                           style={{
                             transform: `scale(${expressionScale})`,
@@ -1310,18 +1326,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 const isSliced = slicedNum.includes(term.id);
                                 const isCrossed = crossedOutNum.includes(term.id);
                                 return (
-                                  <Reorder.Item
+                                  <motion.div
                                     key={term.id}
-                                    value={term}
+                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    whileDrag={{ scale: 1.06 }}
+                                    drag
+                                    dragSnapToOrigin={true}
+                                    dragElastic={0.4}
+                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                     onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    onDragEnd={(e, info) => {
+                                      setIsDraggingTerm(false);
+                                      handleDragEndCross(term, 'num', e, info);
+                                    }}
                                     style={{
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative'
+                                      position: 'relative',
+                                      touchAction: 'none'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1356,19 +1379,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         />
                                       )}
                                     </motion.div>
-                                  </Reorder.Item>
+                                  </motion.div>
                                 );
                               })
                             )}
                           </AnimatePresence>
-                        </Reorder.Group>
+                        </div>
                       ) : (
                         <div className="division-container">
                           {/* Numerator */}
-                          <Reorder.Group
-                            axis="x"
-                            values={numTerms}
-                            onReorder={setNumTerms}
+                          <div
                             className="expression-list"
                             style={{
                               transform: `scale(${expressionScale})`,
@@ -1386,18 +1406,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   const isSliced = slicedNum.includes(term.id);
                                   const isCrossed = crossedOutNum.includes(term.id);
                                   return (
-                                    <Reorder.Item
+                                    <motion.div
                                       key={term.id}
-                                      value={term}
+                                      layout
                                       className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                      whileDrag={{ scale: 1.06 }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                       transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                       onDragStart={() => setIsDraggingTerm(true)}
-                                      onDragEnd={() => setIsDraggingTerm(false)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'num', e, info);
+                                      }}
                                       style={{
                                         zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                        position: 'relative'
+                                        position: 'relative',
+                                        touchAction: 'none'
                                       }}
                                     >
                                       {index > 0 && (
@@ -1431,12 +1458,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           />
                                         )}
                                       </motion.div>
-                                    </Reorder.Item>
+                                    </motion.div>
                                   );
                                 })
                               )}
                             </AnimatePresence>
-                          </Reorder.Group>
+                          </div>
                           {/* Division Line */}
                           <div
                             className="division-line"
@@ -1445,10 +1472,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                             }}
                           />
                           {/* Denominator */}
-                          <Reorder.Group
-                            axis="x"
-                            values={denTerms}
-                            onReorder={setDenTerms}
+                          <div
                             className="expression-list"
                             style={{
                               transform: `scale(${expressionScale})`,
@@ -1463,19 +1487,26 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 const isSliced = slicedDen.includes(term.id);
                                 const isCrossed = crossedOutDen.includes(term.id);
                                 return (
-                                  <Reorder.Item
+                                  <motion.div
                                     key={term.id}
-                                    value={term}
+                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    whileDrag={{ scale: 1.06 }}
+                                    drag
+                                    dragSnapToOrigin={true}
+                                    dragElastic={0.4}
+                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                     onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    onDragEnd={(e, info) => {
+                                      setIsDraggingTerm(false);
+                                      handleDragEndCross(term, 'den', e, info);
+                                    }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative'
+                                      position: 'relative',
+                                      touchAction: 'none'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1510,11 +1541,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         />
                                       )}
                                     </motion.div>
-                                  </Reorder.Item>
+                                  </motion.div>
                                 );
                               })}
                             </AnimatePresence>
-                          </Reorder.Group>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1523,10 +1554,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     {/* Right Side */}
                     <div className="equation-side right-side">
                       {rightDenTerms.length === 0 ? (
-                        <Reorder.Group
-                          axis="x"
-                          values={rightNumTerms}
-                          onReorder={setRightNumTerms}
+                        <div
                           className="expression-list"
                           style={{
                             transform: `scale(${expressionScale})`,
@@ -1544,18 +1572,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 const isSliced = slicedRightNum.includes(term.id);
                                 const isCrossed = crossedOutRightNum.includes(term.id);
                                 return (
-                                  <Reorder.Item
+                                  <motion.div
                                     key={term.id}
-                                    value={term}
+                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    whileDrag={{ scale: 1.06 }}
+                                    drag
+                                    dragSnapToOrigin={true}
+                                    dragElastic={0.4}
+                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                     onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    onDragEnd={(e, info) => {
+                                      setIsDraggingTerm(false);
+                                      handleDragEndCross(term, 'rightNum', e, info);
+                                    }}
                                     style={{
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative'
+                                      position: 'relative',
+                                      touchAction: 'none'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1590,19 +1625,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         />
                                       )}
                                     </motion.div>
-                                  </Reorder.Item>
+                                  </motion.div>
                                 );
                               })
                             )}
                           </AnimatePresence>
-                        </Reorder.Group>
+                        </div>
                       ) : (
                         <div className="division-container">
                           {/* Numerator */}
-                          <Reorder.Group
-                            axis="x"
-                            values={rightNumTerms}
-                            onReorder={setRightNumTerms}
+                          <div
                             className="expression-list"
                             style={{
                               transform: `scale(${expressionScale})`,
@@ -1620,18 +1652,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   const isSliced = slicedRightNum.includes(term.id);
                                   const isCrossed = crossedOutRightNum.includes(term.id);
                                   return (
-                                    <Reorder.Item
+                                    <motion.div
                                       key={term.id}
-                                      value={term}
+                                      layout
                                       className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                      whileDrag={{ scale: 1.06 }}
+                                      drag
+                                      dragSnapToOrigin={true}
+                                      dragElastic={0.4}
+                                      whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                       transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                       onDragStart={() => setIsDraggingTerm(true)}
-                                      onDragEnd={() => setIsDraggingTerm(false)}
+                                      onDragEnd={(e, info) => {
+                                        setIsDraggingTerm(false);
+                                        handleDragEndCross(term, 'rightNum', e, info);
+                                      }}
                                       style={{
                                         zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                        position: 'relative'
+                                        position: 'relative',
+                                        touchAction: 'none'
                                       }}
                                     >
                                       {index > 0 && (
@@ -1665,12 +1704,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           />
                                         )}
                                       </motion.div>
-                                    </Reorder.Item>
+                                    </motion.div>
                                   );
                                 })
                               )}
                             </AnimatePresence>
-                          </Reorder.Group>
+                          </div>
                           {/* Division Line */}
                           <div
                             className="division-line"
@@ -1679,10 +1718,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                             }}
                           />
                           {/* Denominator */}
-                          <Reorder.Group
-                            axis="x"
-                            values={rightDenTerms}
-                            onReorder={setRightDenTerms}
+                          <div
                             className="expression-list"
                             style={{
                               transform: `scale(${expressionScale})`,
@@ -1697,19 +1733,26 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 const isSliced = slicedRightDen.includes(term.id);
                                 const isCrossed = crossedOutRightDen.includes(term.id);
                                 return (
-                                  <Reorder.Item
+                                  <motion.div
                                     key={term.id}
-                                    value={term}
+                                    layout
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    whileDrag={{ scale: 1.06 }}
+                                    drag
+                                    dragSnapToOrigin={true}
+                                    dragElastic={0.4}
+                                    whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                                     transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                                     onDragStart={() => setIsDraggingTerm(true)}
-                                    onDragEnd={() => setIsDraggingTerm(false)}
+                                    onDragEnd={(e, info) => {
+                                      setIsDraggingTerm(false);
+                                      handleDragEndCross(term, 'rightDen', e, info);
+                                    }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                      position: 'relative'
+                                      position: 'relative',
+                                      touchAction: 'none'
                                     }}
                                   >
                                     {index > 0 && (
@@ -1744,11 +1787,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         />
                                       )}
                                     </motion.div>
-                                  </Reorder.Item>
+                                  </motion.div>
                                 );
                               })}
                             </AnimatePresence>
-                          </Reorder.Group>
+                          </div>
                         </div>
                       )}
                     </div>

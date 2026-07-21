@@ -239,6 +239,33 @@ export function multiplyTerms(termA, termB) {
   return makeTerm(newCoeff, newVar);
 }
 
+function gcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    const t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
+}
+
+function isFractionSimplified(numTerms, denTerms) {
+  if (numTerms.length === 0 || denTerms.length === 0) return true;
+  const numTerm = numTerms[0];
+  const denTerm = denTerms[0];
+
+  if (gcd(numTerm.coeff, denTerm.coeff) > 1) return false;
+
+  const numVars = parseVariablePart(numTerm.variable);
+  const denVars = parseVariablePart(denTerm.variable);
+  for (const letter in numVars) {
+    if (denVars[letter] > 0) return false;
+  }
+
+  return true;
+}
+
 /**
  * Checks if the equation is solved.
  * Solved when:
@@ -246,13 +273,14 @@ export function multiplyTerms(termA, termB) {
  * 2. The unknownVar is isolated:
  *    - Left side is [unknownVar] (coeff 1) and leftDen is empty, AND right side has no unknownVar.
  *    - OR right side is [unknownVar] (coeff 1) and rightDen is empty, AND left side has no unknownVar.
+ * 3. The non-isolated side fraction is fully simplified.
  */
 export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVar) {
   if (leftNum.length > 1 || leftDen.length > 1 || rightNum.length > 1 || rightDen.length > 1) {
     return false;
   }
 
-  const hasVar = (terms) => terms.some(t => t.variable === unknownVar);
+  const hasVar = (terms) => terms.some(t => t.variable && t.variable.includes(unknownVar));
   const leftHasVar = hasVar(leftNum) || hasVar(leftDen);
   const rightHasVar = hasVar(rightNum) || hasVar(rightDen);
 
@@ -260,10 +288,10 @@ export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVa
   const rightIsolated = rightNum.length === 1 && rightNum[0].coeff === 1 && rightNum[0].variable === unknownVar && rightDen.length === 0;
 
   if (leftIsolated && !rightHasVar) {
-    return true;
+    return isFractionSimplified(rightNum, rightDen);
   }
   if (rightIsolated && !leftHasVar) {
-    return true;
+    return isFractionSimplified(leftNum, leftDen);
   }
 
   return false;

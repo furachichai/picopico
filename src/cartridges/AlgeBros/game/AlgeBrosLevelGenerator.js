@@ -269,9 +269,11 @@ export function generateEquationLevels() {
   const unknowns = ['x', 'y', 'z'];
   const parameters = ['a', 'b', 'c'];
 
-  const xMapped = unknowns[Math.floor(Math.random() * unknowns.length)];
-  const yMapped = unknowns.filter(u => u !== xMapped)[Math.floor(Math.random() * 2)];
-  const zMapped = unknowns.filter(u => u !== xMapped && u !== yMapped)[0];
+  // Make the main variable 'x' 80% of the time, and y or z the other 20% of the time
+  const isX = Math.random() < 0.8;
+  const xMapped = isX ? 'x' : (Math.random() < 0.5 ? 'y' : 'z');
+  const yMapped = xMapped === 'x' ? 'y' : 'x';
+  const zMapped = xMapped === 'z' ? 'y' : 'z';
 
   const aMapped = parameters[Math.floor(Math.random() * parameters.length)];
   const bMapped = parameters.filter(p => p !== aMapped)[Math.floor(Math.random() * 2)];
