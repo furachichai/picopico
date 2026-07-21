@@ -1753,6 +1753,127 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     <div className="equation-side right-side">
                       <div className="division-container">
                         {/* Numerator */}
+                        <div
+                          className="expression-list"
+                          style={{
+                            zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
+                            position: 'relative'
+                          }}
+                        >
+                          <AnimatePresence mode="popLayout">
+                            {rightNumTerms.length === 0 && dragHintState?.side !== 'rightNum' ? (
+                              <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                            ) : (
+                              <>
+                                {splitIntoAdditiveGroups(rightNumTerms).map((group, groupIdx) => {
+                                  const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
+                                  return (
+                                    <React.Fragment key={`group-${group[0].id}`}>
+                                      {showHintHere && (
+                                        <div key="hint-slot-num-right" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                          {(groupIdx > 0 || dragHintState.signHint === '-') && (
+                                            <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                              {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                            </span>
+                                          )}
+                                          <div className="term-card drop-slot-placeholder" />
+                                        </div>
+                                      )}
+                                      <div
+                                        className="term-group-wrapper"
+                                        style={{
+                                          display: 'flex',
+                                          flexDirection: 'row',
+                                          alignItems: 'center',
+                                          position: 'relative'
+                                        }}
+                                      >
+                                        {group.map((term) => {
+                                          const index = rightNumTerms.findIndex(t => t.id === term.id);
+                                          const oneChar = isOneChar(term);
+                                          const isSliced = slicedRightNum.includes(term.id);
+                                          const isCrossed = crossedOutRightNum.includes(term.id);
+                                          return (
+                                            <div
+                                              key={term.id}
+                                              className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                              style={{
+                                                zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                                                position: 'relative',
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                              }}
+                                            >
+                                              {index === 0 && topic === 'equations' && term.coeff < 0 && (
+                                                <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800 }}>-</span>
+                                              )}
+                                              {index > 0 && (
+                                                <button
+                                                  className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                                  style={{ pointerEvents: 'auto' }}
+                                                  onMouseDown={e => e.stopPropagation()}
+                                                  onTouchStart={e => e.stopPropagation()}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMultiplyAdjacent(index, 'rightNum');
+                                                  }}
+                                                >
+                                                  {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
+                                                </button>
+                                              )}
+                                              <motion.div
+                                                className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                                data-id={term.id}
+                                                data-type="rightNum"
+                                                data-index={index}
+                                                drag={term.coeff !== 0}
+                                                dragSnapToOrigin={true}
+                                                dragElastic={0.4}
+                                                whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
+                                                onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
+                                                onDragEnd={(e, info) => {
+                                                  setIsDraggingTerm(false);
+                                                  handleDragEndCross(term, 'rightNum', e, info);
+                                                }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                                                onTap={() => handleCardTap(term, 'rightNum')}
+                                              >
+                                                {renderTermValue(term)}
+                                                {(isSliced || isCrossed) && (
+                                                  <div
+                                                    className="strike-line"
+                                                    style={{
+                                                      transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                                    }}
+                                                  />
+                                                )}
+                                              </motion.div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </React.Fragment>
+                                  );
+                                })}
+                                {dragHintState?.side === 'rightNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(rightNumTerms).length && (
+                                  <div key="hint-slot-num-right-end" className="term-group-wrapper" style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    {(splitIntoAdditiveGroups(rightNumTerms).length > 0 || dragHintState.signHint === '-') && (
+                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                        {splitIntoAdditiveGroups(rightNumTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                      </span>
+                                    )}
+                                    <div className="term-card drop-slot-placeholder" />
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        {/* Division Line */}
+                        <div
+                          className="division-line"
                           style={{
                             display: (rightDenTerms.length === 0 || isDenOne(rightDenTerms)) && dragHintState?.side !== 'rightDen' ? 'none' : 'block',
                             visibility: (isValidating && rightDenTerms.every(t => crossedOutRightDen.includes(t.id))) ? 'hidden' : 'visible'
