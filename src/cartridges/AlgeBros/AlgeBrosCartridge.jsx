@@ -1188,21 +1188,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         chars = (isOne ? 0 : absCoeff.toString().length) + term.variable.length;
       }
     }
-    return 28 + chars * 12.5;
-  }, []);
+    return topic === 'equations' ? (18 + chars * 11) : (28 + chars * 12.5);
+  }, [topic]);
 
   const expressionScale = useMemo(() => {
     const calculateScaleForList = (list) => {
-      if (!list || list.length === 0) return 1.6;
+      if (!list || list.length === 0) return 1.0;
       const totalBaseWidth = list.reduce((acc, term, idx) => {
         const cardW = getTermWidth(term);
-        const opW = idx > 0 ? 32 : 0;
+        const opW = idx > 0 ? (topic === 'equations' ? 26 : 38) : 0;
         const staticSignW = (idx === 0 && term.coeff < 0) ? 12 : 0;
         return acc + cardW + opW + staticSignW;
       }, 0);
-      const targetWidth = topic === 'equations' ? 120 : 260;
+      const targetWidth = topic === 'equations' ? 140 : 260;
       const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-      return Math.max(topic === 'equations' ? 0.35 : 0.4, Math.min(topic === 'equations' ? 1.0 : 2.0, calculatedScale));
+      return Math.max(topic === 'equations' ? 0.6 : 0.4, Math.min(1.0, calculatedScale));
     };
 
     if (topic === 'divisions') {
