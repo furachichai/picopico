@@ -1396,10 +1396,38 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+              style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}
             >
+              {/* Standalone Round Reset Button */}
+              <button
+                className="floating-reset-btn"
+                onClick={handleRestartLevel}
+                title="Restart level"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '50%',
+                  background: 'rgba(255, 255, 255, 0.85)',
+                  border: '1px solid rgba(15, 23, 42, 0.12)',
+                  boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
+                  color: 'var(--text-main)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 100,
+                  fontSize: '1.1rem',
+                  fontWeight: 800
+                }}
+              >
+                ↺
+              </button>
+
               {/* HUD */}
-              <div className="hud-header">
+              <div className="hud-header" style={{ paddingRight: '44px' }}>
                 <div className="hud-badge">
                   LVL <span className="font-mono">{currentLevelIndex + 1} / 10</span>
                 </div>
@@ -1419,24 +1447,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                 <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
                   {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
                 </div>
-                <button
-                  className="hud-badge restart-btn"
-                  onClick={handleRestartLevel}
-                  title="Restart level"
-                  style={{
-                    cursor: 'pointer',
-                    padding: '0 10px',
-                    background: 'rgba(255,255,255,0.85)',
-                    border: '1px solid rgba(15,23,42,0.12)',
-                    color: 'var(--text-main)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  <span style={{ fontSize: '1rem', fontWeight: 800 }}>↺</span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>RESET</span>
-                </button>
               </div>
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
@@ -1510,7 +1520,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           </button>
                                         )}
                                         <motion.div
-                                          className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                          className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
                                           data-id={term.id}
                                           data-type="num"
                                           data-index={index}

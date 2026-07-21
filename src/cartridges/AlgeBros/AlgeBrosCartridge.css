@@ -246,6 +246,16 @@
   transition: none !important;
 }
 
+.algebros-cartridge .term-card.is-zero {
+  background: transparent !important;
+  border: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  cursor: default !important;
+  padding: 0 4px !important;
+}
+
 /* Sign / Operator Button component */
 .algebros-cartridge .operator-btn {
   width: 20px;
