@@ -639,6 +639,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     });
   };
 
+  const isDenOne = (terms) => terms && terms.length === 1 && terms[0].coeff === 1 && !terms[0].variable;
+
+  const handleRestartLevel = () => {
+    setActiveFactorMenu(null);
+    playPopFX();
+    if (levels[currentLevelIndex]) {
+      loadLevel(levels[currentLevelIndex]);
+    }
+  };
+
   const splitIntoAdditiveGroups = (sourceList) => {
     if (!sourceList || sourceList.length === 0) return [];
     const groups = [];
@@ -1400,6 +1410,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                 <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
                   {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
                 </div>
+                <button
+                  className="hud-badge restart-btn"
+                  onClick={handleRestartLevel}
+                  title="Restart level"
+                  style={{
+                    cursor: 'pointer',
+                    padding: '0 10px',
+                    background: 'rgba(255,255,255,0.85)',
+                    border: '1px solid rgba(15,23,42,0.12)',
+                    color: 'var(--text-main)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <span style={{ fontSize: '1rem', fontWeight: 800 }}>↺</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>RESET</span>
+                </button>
               </div>
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
@@ -1512,12 +1540,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: denTerms.length === 0 ? 'none' : 'block',
+                            display: (denTerms.length === 0 || isDenOne(denTerms)) ? 'none' : 'block',
                             visibility: (isValidating && denTerms.every(t => crossedOutDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {denTerms.length > 0 && (
+                        {denTerms.length > 0 && !isDenOne(denTerms) && (
                           <div
                             className="expression-list"
                             style={{
@@ -1694,12 +1722,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         <div
                           className="division-line"
                           style={{
-                            display: rightDenTerms.length === 0 ? 'none' : 'block',
+                            display: (rightDenTerms.length === 0 || isDenOne(rightDenTerms)) ? 'none' : 'block',
                             visibility: (isValidating && rightDenTerms.every(t => crossedOutRightDen.includes(t.id))) ? 'hidden' : 'visible'
                           }}
                         />
                         {/* Denominator */}
-                        {rightDenTerms.length > 0 && (
+                        {rightDenTerms.length > 0 && !isDenOne(rightDenTerms) && (
                           <div
                             className="expression-list"
                             style={{
@@ -1925,11 +1953,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                       <div
                         className="division-line"
                         style={{
+                          display: (denTerms.length === 0 || isDenOne(denTerms)) ? 'none' : 'block',
                           visibility: (isValidating && denTerms.every(t => crossedOutDen.includes(t.id))) ? 'hidden' : 'visible'
                         }}
                       />
 
                       {/* Denominator */}
+                      {denTerms.length > 0 && !isDenOne(denTerms) && (
                       <Reorder.Group
                         axis="x"
                         values={denTerms}
@@ -2001,6 +2031,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                           })}
                         </AnimatePresence>
                       </Reorder.Group>
+                      )}
                     </div>
                   )
                 ) : (
