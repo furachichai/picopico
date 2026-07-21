@@ -1309,10 +1309,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     <div className="equation-side left-side">
                       <div className="division-container">
                         {/* Numerator */}
-                        <div
+                        <motion.div
                           className="expression-list"
                           style={{
-                            transform: `scale(${expressionScale})`,
+                            scale: expressionScale,
                             transformOrigin: 'center',
                             zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                             position: 'relative'
@@ -1385,7 +1385,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               })
                             )}
                           </AnimatePresence>
-                        </div>
+                        </motion.div>
                         {/* Division Line */}
                         <div
                           className="division-line"
@@ -1396,10 +1396,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         />
                         {/* Denominator */}
                         {denTerms.length > 0 && (
-                          <div
+                          <motion.div
                             className="expression-list"
                             style={{
-                              transform: `scale(${expressionScale})`,
+                              scale: expressionScale,
                               transformOrigin: 'center',
                               zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
                               position: 'relative'
@@ -1469,7 +1469,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 );
                               })}
                             </AnimatePresence>
-                          </div>
+                          </motion.div>
                         )}
                       </div>
                     </div>
@@ -1479,10 +1479,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     <div className="equation-side right-side">
                       <div className="division-container">
                         {/* Numerator */}
-                        <div
+                        <motion.div
                           className="expression-list"
                           style={{
-                            transform: `scale(${expressionScale})`,
+                            scale: expressionScale,
                             transformOrigin: 'center',
                             zIndex: activeFactorMenu?.type === 'rightNum' ? 1001 : 1,
                             position: 'relative'
@@ -1555,7 +1555,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               })
                             )}
                           </AnimatePresence>
-                        </div>
+                        </motion.div>
                         {/* Division Line */}
                         <div
                           className="division-line"
@@ -1566,10 +1566,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         />
                         {/* Denominator */}
                         {rightDenTerms.length > 0 && (
-                          <div
+                          <motion.div
                             className="expression-list"
                             style={{
-                              transform: `scale(${expressionScale})`,
+                              scale: expressionScale,
                               transformOrigin: 'center',
                               zIndex: activeFactorMenu?.type === 'rightDen' ? 1001 : 1,
                               position: 'relative'
@@ -1639,7 +1639,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 );
                               })}
                             </AnimatePresence>
-                          </div>
+                          </motion.div>
                         )}
                       </div>
                     </div>
@@ -1654,7 +1654,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                       onReorder={setNumTerms}
                       className="expression-list"
                       style={{
-                        transform: `scale(${expressionScale})`,
+                        scale: expressionScale,
                         transformOrigin: 'center',
                         zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                         position: 'relative'
@@ -1727,7 +1727,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         onReorder={setNumTerms}
                         className="expression-list"
                         style={{
-                          transform: `scale(${expressionScale})`,
+                          scale: expressionScale,
                           transformOrigin: 'center'
                         }}
                       >
@@ -1805,7 +1805,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                         onReorder={setDenTerms}
                         className="expression-list"
                         style={{
-                          transform: `scale(${expressionScale})`,
+                          scale: expressionScale,
                           transformOrigin: 'center',
                           zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
                           position: 'relative'
@@ -1879,7 +1879,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                     onReorder={setTerms}
                     className="expression-list"
                     style={{
-                      transform: `scale(${expressionScale})`,
+                      scale: expressionScale,
                       transformOrigin: 'center'
                     }}
                   >
