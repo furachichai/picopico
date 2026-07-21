@@ -200,15 +200,12 @@ export function getTermDecompositionOptions(term) {
   const options = [];
   const seenSignatures = new Set();
 
-  // 0. If term has negative coefficient (e.g. -2 or -2x), offer splitting negative sign: -1 · positiveTerm
+  // 0. If term has negative coefficient (e.g. -6 or -2x), the ONLY primary option is to split off -1:
+  // -1 · positiveTerm (e.g. -6 -> -1 · 6, -2x -> -1 · 2x)
   if (term.coeff < 0) {
     const splitA = makeTerm(-1, null);
     const splitB = makeTerm(absCoeff, term.variable);
-    const sig = `${splitA.coeff},${splitA.variable}|${splitB.coeff},${splitB.variable}`;
-    if (!seenSignatures.has(sig)) {
-      seenSignatures.add(sig);
-      options.push({ splitA, splitB });
-    }
+    return [{ splitA, splitB }];
   }
 
   // 1. If term has a variable and coeff > 1, we can split into coeff · var (e.g. 5x -> 5 · x)

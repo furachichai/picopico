@@ -644,6 +644,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     playMerge();
     setUserPresses(p => p + 1);
 
+    const isAdditiveTransposition = (sourceType === 'num' && targetType === 'rightNum') ||
+                                    (sourceType === 'rightNum' && targetType === 'num');
+
     const getSetter = (t) => t === 'num' ? setNumTerms
                            : t === 'den' ? setDenTerms
                            : t === 'rightNum' ? setRightNumTerms
@@ -653,12 +656,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const targetSetter = getSetter(targetType);
 
     if (sourceSetter && targetSetter) {
-      sourceSetter(prev => prev.filter(t => t.id !== term.id));
-      const isAdditiveTransposition = (sourceType === 'num' && targetType === 'rightNum') ||
-                                      (sourceType === 'rightNum' && targetType === 'num');
-      const newCoeff = isAdditiveTransposition ? -term.coeff : Math.abs(term.coeff);
-      const newTerm = makeTerm(newCoeff, term.variable);
-      targetSetter(prev => [...prev, newTerm]);
+      if (isAdditiveTransposition) {
+        const getList = (t) => t === 'num' ? numTerms : rightNumTerms;
+        const sourceList = getList(sourceType);
+        if (sourceList.length > 0) {
+          sourceSetter([]);
+          const newTerms = sourceList.map((t, idx) => {
+            const newCoeff = idx === 0 ? -t.coeff : t.coeff;
+            return makeTerm(newCoeff, t.variable);
+          });
+          targetSetter(prev => [...prev, ...newTerms]);
+        }
+      } else {
+        sourceSetter(prev => prev.filter(t => t.id !== term.id));
+        const newCoeff = Math.abs(term.coeff);
+        const newTerm = makeTerm(newCoeff, term.variable);
+        targetSetter(prev => [...prev, newTerm]);
+      }
     }
   };
 
