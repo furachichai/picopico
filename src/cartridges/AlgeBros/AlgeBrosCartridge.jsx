@@ -698,6 +698,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         // Drop under term: move ONLY the dragged term to denominator
         sourceSetter(prev => {
           const remaining = prev.filter(t => t.id !== term.id);
+          if (sourceType === 'den' || sourceType === 'rightDen') {
+            return remaining;
+          }
           return remaining.length === 0 ? [{ coeff: 1 }] : remaining;
         });
         const newCoeff = Math.abs(term.coeff);
@@ -726,16 +729,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     if (crossed) {
       const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
       const targetNumEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
-      
-      let targetType;
-      if (targetNumEl) {
+      const targetDenEl = document.querySelector(`.equation-side${targetSideClass} .division-container > .expression-list:last-child`);
+      const targetDenTerms = startedOnLeft ? rightDenTerms : denTerms;
+
+      let isUnderTerm = false;
+      if (targetDenTerms && targetDenTerms.length > 0 && targetDenEl) {
+        const denRect = targetDenEl.getBoundingClientRect();
+        isUnderTerm = dropY > (denRect.top - 4);
+      } else if (targetNumEl) {
         const numRect = targetNumEl.getBoundingClientRect();
-        const isUnderTerm = dropY > (numRect.bottom + 6);
-        if (isUnderTerm) {
-          targetType = startedOnLeft ? 'rightDen' : 'den';
-        } else {
-          targetType = startedOnLeft ? 'rightNum' : 'num';
-        }
+        isUnderTerm = dropY > (numRect.bottom + 6);
+      }
+
+      let targetType;
+      if (isUnderTerm) {
+        targetType = startedOnLeft ? 'rightDen' : 'den';
       } else {
         targetType = startedOnLeft ? 'rightNum' : 'num';
       }
