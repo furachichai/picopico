@@ -1672,7 +1672,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           display: 'flex',
                                           flexDirection: 'row',
                                           alignItems: 'center',
-                                          position: 'relative'
+                                          position: 'relative',
+                                          width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
+                                          overflow: 'visible'
                                         }}
                                       >
                                         {group.map((term, termIdx) => {
@@ -1937,7 +1939,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           display: 'flex',
                                           flexDirection: 'row',
                                           alignItems: 'center',
-                                          position: 'relative'
+                                          position: 'relative',
+                                          width: group.some(t => t.id === draggingCardId) ? 0 : 'auto',
+                                          overflow: 'visible'
                                         }}
                                       >
                                         {group.map((term, termIdx) => {
