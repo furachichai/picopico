@@ -1489,7 +1489,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           data-type="num"
                                           data-index={index}
                                           style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
-                                          onTap={() => handleCardTap(term, 'num')}
+                                          onClick={() => handleCardTap(term, 'num')}
                                         >
                                           {renderTermValue(term)}
                                           {(isSliced || isCrossed) && (
@@ -1672,6 +1672,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           data-index={index}
                                           style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                           onTap={() => handleCardTap(term, 'rightNum')}
+                                          onClick={() => handleCardTap(term, 'rightNum')}
                                         >
                                           {renderTermValue(term)}
                                           {(isSliced || isCrossed) && (
