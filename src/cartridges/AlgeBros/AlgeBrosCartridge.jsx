@@ -396,6 +396,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [draggingCardId, setDraggingCardId] = useState(null);
   const activeCardRef = useRef(null);
   const justDraggedRef = useRef(false);
+  const dragSessionRef = useRef(null);
 
   const numTermsRef = React.useRef(numTerms);
   const denTermsRef = React.useRef(denTerms);
@@ -672,6 +673,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const calculateInsertIndex = (targetSideClass, dropX) => {
+    return calculateInsertIndexWithHysteresis(targetSideClass, dropX, null);
+  };
+
+  const calculateInsertIndexWithHysteresis = (targetSideClass, dropX, lastInsertIndex) => {
     const sideEl = document.querySelector(`.equation-side${targetSideClass} .expression-list`);
     if (!sideEl) return 0;
 
@@ -694,13 +699,35 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (realGroupEls.length === 0) return 0;
 
-    for (let i = 0; i < realGroupEls.length; i++) {
-      const rect = realGroupEls[i].getBoundingClientRect();
+    const midXList = realGroupEls.map((el, i) => {
+      const rect = el.getBoundingClientRect();
       const isShifted = placeholderIdx !== -1 && i >= placeholderIdx;
       const naturalLeft = isShifted ? (rect.left - placeholderWidth) : rect.left;
-      const naturalMidX = naturalLeft + rect.width / 2;
+      return naturalLeft + rect.width / 2;
+    });
 
-      if (dropX < naturalMidX) {
+    const numSlots = realGroupEls.length + 1;
+
+    if (lastInsertIndex !== null && lastInsertIndex !== undefined && lastInsertIndex >= 0 && lastInsertIndex < numSlots) {
+      const H = 24; // 24px hysteresis buffer
+
+      let leftBound = -Infinity;
+      if (lastInsertIndex > 0) {
+        leftBound = midXList[lastInsertIndex - 1] - H;
+      }
+
+      let rightBound = Infinity;
+      if (lastInsertIndex < realGroupEls.length) {
+        rightBound = midXList[lastInsertIndex] + H;
+      }
+
+      if (dropX >= leftBound && dropX <= rightBound) {
+        return lastInsertIndex;
+      }
+    }
+
+    for (let i = 0; i < midXList.length; i++) {
+      if (dropX < midXList[i]) {
         return i;
       }
     }
@@ -775,6 +802,21 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
+  const handleDragStartInit = (term, currentType, event, info) => {
+    setActiveFactorMenu(null);
+    setIsDraggingTerm(true);
+    setDraggingCardId(term.id);
+    dragSessionRef.current = {
+      termId: term.id,
+      startX: info?.point?.x || 0,
+      startY: info?.point?.y || 0,
+      startType: currentType,
+      lastSide: null,
+      lastInsertIndex: null,
+      isUnlocked: false
+    };
+  };
+
   const handleDragCross = (term, currentType, event, info) => {
     if (!term || term.coeff === 0) {
       setDragHintState(null);
@@ -791,6 +833,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     const dropX = info.point.x;
     const dropY = info.point.y;
+
+    const session = dragSessionRef.current || {
+      startX: dropX,
+      startY: dropY,
+      startType: currentType,
+      lastSide: null,
+      lastInsertIndex: null,
+      isUnlocked: false
+    };
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
 
@@ -811,6 +862,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (isUnderTerm) {
       const targetSide = dropX <= centerX ? 'leftDen' : 'rightDen';
+      session.lastSide = targetSide;
+      session.lastInsertIndex = null;
       setDragHintState({ side: targetSide });
       return;
     }
@@ -819,12 +872,29 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const isTargetLeft = dropX <= centerX;
     const targetSideClass = isTargetLeft ? '.left-side' : '.right-side';
     const side = isTargetLeft ? 'leftNum' : 'rightNum';
-
-    const insertIndex = calculateInsertIndex(targetSideClass, dropX);
-
     const crossedSides = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
 
-    // Suppress hint if dragged term is near its original placement on the same side
+    // Initial deadzone lock-in near original start position when on same side
+    if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
+      const dist = Math.hypot(dropX - session.startX, dropY - session.startY);
+      if (!session.isUnlocked && dist < 36) {
+        setDragHintState(null);
+        return;
+      }
+      session.isUnlocked = true;
+    } else {
+      session.isUnlocked = true;
+    }
+
+    if (session.lastSide !== side) {
+      session.lastSide = side;
+      session.lastInsertIndex = null;
+    }
+
+    const insertIndex = calculateInsertIndexWithHysteresis(targetSideClass, dropX, session.lastInsertIndex);
+    session.lastInsertIndex = insertIndex;
+
+    // Suppress hint if near original placement on same side
     if (!crossedSides && (currentType === 'num' || currentType === 'rightNum')) {
       const currentList = startedOnLeft ? numTerms : rightNumTerms;
       const groups = splitIntoAdditiveGroups(currentList);
@@ -878,6 +948,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const handleDragEndCross = (term, currentType, event, info) => {
     const hint = dragHintState;
     setDragHintState(null);
+    dragSessionRef.current = null;
     justDraggedRef.current = true;
     setTimeout(() => { justDraggedRef.current = false; }, 200);
 
@@ -1732,7 +1803,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0.4}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
+                                                onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
                                                 onDragEnd={(e, info) => {
                                                   setIsDraggingTerm(false);
@@ -1999,7 +2070,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0.4}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
-                                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
+                                                onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
                                                 onDragEnd={(e, info) => {
                                                   setIsDraggingTerm(false);
