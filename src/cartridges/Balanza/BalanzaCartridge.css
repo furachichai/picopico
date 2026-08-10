@@ -273,6 +273,37 @@
   cursor: default;
 }
 
+/* Move feedback. Rearranging (merge / decompose / transpose) never moves the beam —
+   it only pulses the written equation. Adding or removing weight re-tilts the beam and
+   flashes the plate that changed. That contrast is the lesson. */
+.balanza-equation-line.is-rearranged {
+  animation: balanzaRearranged 0.45s ease-out;
+}
+
+@keyframes balanzaRearranged {
+  0%, 100% { transform: scale(1); color: var(--text-main); }
+  35%      { transform: scale(1.06); color: var(--beam-teal); }
+}
+
+.balanza-plate-items.is-weight-changed {
+  animation: balanzaWeightChanged 0.45s ease-out;
+}
+
+@keyframes balanzaWeightChanged {
+  0%, 100% { filter: none; }
+  30%      { filter: drop-shadow(0 0 10px rgba(242, 183, 5, 0.9)); }
+}
+
+.balanza-plate-items.is-rejected {
+  animation: balanzaRejected 0.4s ease-out;
+}
+
+@keyframes balanzaRejected {
+  0%, 100%   { transform: translateX(0); }
+  20%, 60%   { transform: translateX(-6px); }
+  40%, 80%   { transform: translateX(6px); }
+}
+
 .balanza-drag-overlay {
   font-size: 1.7rem;
 }

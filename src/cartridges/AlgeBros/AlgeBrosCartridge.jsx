@@ -13,7 +13,11 @@ import {
   getPrimeFactors,
   getTermDecompositionOptions,
   multiplyTerms,
-  isEquationSolved
+  isEquationSolved,
+  isEquivalentTransformation,
+  canMoveToDenominator,
+  findDistributiveCancel,
+  splitIntoAdditiveGroups
 } from './game/AlgeBrosEngine';
 import { generateLevels, generateDivisionLevels, generateEquationLevels } from './game/AlgeBrosLevelGenerator';
 import {
@@ -408,6 +412,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     perfectLevels: 0
   });
 
+  // The level's starting equation, used as the baseline for the equivalence guard.
+  const originalEquationRef = useRef(null);
+
   const triggerShake = useCallback(() => {
     setShake(true);
     setTimeout(() => setShake(false), 500);
@@ -448,6 +455,15 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       
       const firstVarTerm = (levelObj.initialLeftNum || []).find(t => t.variable);
       setUnknownVar(firstVarTerm ? firstVarTerm.variable : 'x');
+
+      // Baseline for the equivalence guard: every later state must have the same
+      // solution set as this one.
+      originalEquationRef.current = {
+        leftNum: levelObj.initialLeftNum || [],
+        leftDen: levelObj.initialLeftDen || [],
+        rightNum: levelObj.initialRightNum || [],
+        rightDen: levelObj.initialRightDen || [],
+      };
     } else {
       setTerms(levelObj.initialTerms || []);
     }
@@ -605,24 +621,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
-  const splitIntoAdditiveGroups = (sourceList) => {
-    if (!sourceList || sourceList.length === 0) return [];
-    const groups = [];
-    let currentGroup = [];
-    sourceList.forEach((t, idx) => {
-      if (idx === 0) {
-        currentGroup.push(t);
-      } else if (t.groupId && currentGroup[0].groupId && t.groupId === currentGroup[0].groupId) {
-        currentGroup.push(t);
-      } else {
-        if (currentGroup.length > 0) groups.push(currentGroup);
-        currentGroup = [t];
-      }
-    });
-    if (currentGroup.length > 0) groups.push(currentGroup);
-    return groups;
-  };
-
   const calculateInsertIndex = (targetSideClass, dropX) => {
     return calculateInsertIndexWithHysteresis(targetSideClass, dropX, null);
   };
@@ -685,109 +683,131 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     return realGroupEls.length;
   };
 
+  /* ── Equation-equivalence guard ──────────────────────────────────────────────
+   * Every equations-mode mutation builds a candidate state and commits it here.
+   * The candidate is checked against the LEVEL'S ORIGINAL equation (not merely the
+   * previous step) so a small per-step error can never accumulate unnoticed.
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  const EQ_KEY = { num: 'leftNum', den: 'leftDen', rightNum: 'rightNum', rightDen: 'rightDen' };
+
+  const currentEquationState = () => ({
+    leftNum: [...numTerms],
+    leftDen: [...denTerms],
+    rightNum: [...rightNumTerms],
+    rightDen: [...rightDenTerms],
+  });
+
+  const rejectMove = (message) => {
+    setMistakes(m => m + 1);
+    setIsLevelPerfect(false);
+    playWrong();
+    if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+    showFeedback(message, 'error');
+    triggerFlash('error');
+    triggerShake();
+  };
+
+  const commitEquationMove = (candidate) => {
+    const baseline = originalEquationRef.current;
+    if (baseline && !isEquivalentTransformation(baseline, candidate)) {
+      // Should be unreachable: the per-operation rules (D, C, T, F) are meant to catch
+      // every illegal move first. Log loudly so a wrongly-blocked LEGAL move surfaces as
+      // a bug report instead of a mystery no-op.
+      console.error('[algeBROS] Rejected move: it would change the equation\'s solution set.', {
+        original: baseline,
+        candidate,
+      });
+      rejectMove('That move would change the equation.');
+      return false;
+    }
+    setNumTerms(candidate.leftNum);
+    setDenTerms(candidate.leftDen);
+    setRightNumTerms(candidate.rightNum);
+    setRightDenTerms(candidate.rightDen);
+    return true;
+  };
+
   const handleMoveCrossSide = (term, sourceType, targetType, insertIndex = null) => {
     if (!term || term.coeff === 0) return;
     setActiveFactorMenu(null);
-    playMerge();
-    setUserPresses(p => p + 1);
 
     const isAdditiveTransposition = (sourceType === 'num' && targetType === 'rightNum') ||
                                     (sourceType === 'rightNum' && targetType === 'num');
 
-    const getSetter = (t) => t === 'num' ? setNumTerms
-                           : t === 'den' ? setDenTerms
-                           : t === 'rightNum' ? setRightNumTerms
-                           : setRightDenTerms;
-
-    const sourceSetter = getSetter(sourceType);
-    const targetSetter = getSetter(targetType);
-
     const isStandaloneOne = (list) => list.length === 1 && list[0].coeff === 1 && !list[0].variable;
 
-    if (sourceSetter && targetSetter) {
-      if (isAdditiveTransposition) {
-        const getList = (t) => t === 'num' ? numTerms : rightNumTerms;
-        const sourceList = getList(sourceType);
-        
-        const groups = splitIntoAdditiveGroups(sourceList);
-        const targetGroup = groups.find(g => g.some(t => t.id === term.id)) || [term];
+    // Build a CANDIDATE state, then let commitEquationMove decide whether it's legal.
+    const candidate = currentEquationState();
+    const listOf = (t) => candidate[EQ_KEY[t]];
+    const setList = (t, next) => { candidate[EQ_KEY[t]] = next; };
 
-        sourceSetter(prev => {
-          const prevGroups = splitIntoAdditiveGroups(prev);
-          const prevTargetGroup = prevGroups.find(g => g.some(t => t.id === term.id)) || targetGroup;
-          const idsToRemove = new Set(prevTargetGroup.map(t => t.id));
-          const remaining = prev.filter(t => !idsToRemove.has(t.id));
-          return remaining.length === 0 ? [makeTerm(0, null)] : remaining;
-        });
+    if (isAdditiveTransposition) {
+      const sourceList = listOf(sourceType);
+      const groups = splitIntoAdditiveGroups(sourceList);
+      const movingGroup = groups.find(g => g.some(t => t.id === term.id)) || [term];
+      const idsToRemove = new Set(movingGroup.map(t => t.id));
 
-        const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
-        const newTerms = targetGroup.map((t, idx) => {
-          const newCoeff = idx === 0 ? -t.coeff : t.coeff;
-          return makeTerm(newCoeff, t.variable, sharedGroupId);
-        });
+      const remaining = sourceList.filter(t => !idsToRemove.has(t.id));
+      setList(sourceType, remaining.length === 0 ? [makeTerm(0, null)] : remaining);
 
-        targetSetter(prev => {
-          const filtered = prev.filter(t => t.coeff !== 0);
-          const filteredNoOne = isStandaloneOne(filtered) ? [] : filtered;
-          const existingGroups = splitIntoAdditiveGroups(filteredNoOne);
-          const idxToInsert = (typeof insertIndex === 'number' && insertIndex >= 0)
-            ? Math.min(insertIndex, existingGroups.length)
-            : existingGroups.length;
-          existingGroups.splice(idxToInsert, 0, newTerms);
-          return existingGroups.flat();
-        });
+      // Rule T: negate ONLY the first card of the group. Negating every factor would
+      // give (-2)*(-x) = +2x and quietly cancel the sign flip out.
+      const sharedGroupId = movingGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+      const newTerms = movingGroup.map((t, idx) => makeTerm(idx === 0 ? -t.coeff : t.coeff, t.variable, sharedGroupId));
+
+      const targetFiltered = listOf(targetType).filter(t => t.coeff !== 0);
+      const targetNoOne = isStandaloneOne(targetFiltered) ? [] : targetFiltered;
+      const existingGroups = splitIntoAdditiveGroups(targetNoOne);
+      const idxToInsert = (typeof insertIndex === 'number' && insertIndex >= 0)
+        ? Math.min(insertIndex, existingGroups.length)
+        : existingGroups.length;
+      existingGroups.splice(idxToInsert, 0, newTerms);
+      setList(targetType, existingGroups.flat());
+    } else {
+      // Moving to/from a denominator across sides.
+      const sourceRemaining = listOf(sourceType).filter(t => t.id !== term.id);
+      setList(
+        sourceType,
+        (sourceType === 'den' || sourceType === 'rightDen')
+          ? sourceRemaining
+          : (sourceRemaining.length === 0 ? [makeTerm(1, null)] : sourceRemaining)
+      );
+
+      const isMovingToNumerator = targetType === 'num' || targetType === 'rightNum';
+      const newCoeff = Math.abs(term.coeff);
+      const filtered = listOf(targetType).filter(t => t.coeff !== 0);
+
+      if (isMovingToNumerator) {
+        if (filtered.length === 0 || isStandaloneOne(filtered)) {
+          setList(targetType, [makeTerm(newCoeff, term.variable)]);
+        } else {
+          const existingGroups = splitIntoAdditiveGroups(filtered);
+          const targetGroupIdx = (typeof insertIndex === 'number' && insertIndex >= 0 && insertIndex < existingGroups.length)
+            ? insertIndex
+            : 0;
+          const targetGroup = [...(existingGroups[targetGroupIdx] || existingGroups[0])];
+          const oneIdx = targetGroup.findIndex(t => t.coeff === 1 && !t.variable);
+          if (oneIdx !== -1 && targetGroup.length > 1) targetGroup.splice(oneIdx, 1);
+          const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+          targetGroup.push(makeTerm(newCoeff, term.variable, sharedGroupId));
+          existingGroups[targetGroupIdx] = targetGroup;
+          setList(targetType, existingGroups.flat());
+        }
       } else {
-        // Moving to/from denominator across sides
-        sourceSetter(prev => {
-          const remaining = prev.filter(t => t.id !== term.id);
-          if (sourceType === 'den' || sourceType === 'rightDen') {
-            return remaining;
-          }
-          return remaining.length === 0 ? [makeTerm(1, null)] : remaining;
-        });
-
-        const isMovingToNumerator = targetType === 'num' || targetType === 'rightNum';
-        const newCoeff = Math.abs(term.coeff);
-
-        targetSetter(prev => {
-          const filtered = prev.filter(t => t.coeff !== 0);
-          if (isMovingToNumerator) {
-            if (filtered.length === 0 || isStandaloneOne(filtered)) {
-              // 1 * newTerm = newTerm, or replacing 0 with newTerm
-              const newTerm = makeTerm(newCoeff, term.variable);
-              return [newTerm];
-            } else {
-              const existingGroups = splitIntoAdditiveGroups(filtered);
-              const targetGroupIdx = (typeof insertIndex === 'number' && insertIndex >= 0 && insertIndex < existingGroups.length)
-                ? insertIndex
-                : 0;
-              const targetGroup = existingGroups[targetGroupIdx] || existingGroups[0];
-
-              // Remove redundant factor of 1 if targetGroup already has other factors
-              const oneIdx = targetGroup.findIndex(t => t.coeff === 1 && !t.variable);
-              if (oneIdx !== -1 && targetGroup.length > 1) {
-                targetGroup.splice(oneIdx, 1);
-              }
-
-              const sharedGroupId = targetGroup[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
-              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
-              targetGroup.push(newTerm);
-              return existingGroups.flat();
-            }
-          } else {
-            // Moving to denominator
-            if (filtered.length === 0 || isStandaloneOne(filtered)) {
-              const sharedGroupId = 'g_' + Math.random().toString(36).substr(2, 7);
-              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
-              return [newTerm];
-            } else {
-              const sharedGroupId = filtered[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
-              const newTerm = makeTerm(newCoeff, term.variable, sharedGroupId);
-              return [...filtered, newTerm];
-            }
-          }
-        });
+        if (filtered.length === 0 || isStandaloneOne(filtered)) {
+          const sharedGroupId = 'g_' + Math.random().toString(36).substr(2, 7);
+          setList(targetType, [makeTerm(newCoeff, term.variable, sharedGroupId)]);
+        } else {
+          const sharedGroupId = filtered[0]?.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+          setList(targetType, [...filtered, makeTerm(newCoeff, term.variable, sharedGroupId)]);
+        }
       }
+    }
+
+    if (commitEquationMove(candidate)) {
+      playMerge();
+      setUserPresses(p => p + 1);
     }
   };
 
@@ -907,10 +927,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
 
     if (isUnderTerm) {
+      // Rule D preview: don't promise a denominator drop the drop handler will reject.
+      const sourceNum = currentType === 'num' ? numTerms : rightNumTerms;
+      const denyByRuleD = (currentType === 'num' || currentType === 'rightNum') && !canMoveToDenominator(sourceNum);
       const targetSide = isTargetLeft ? 'leftDen' : 'rightDen';
-      session.lastSide = targetSide;
+      session.lastSide = denyByRuleD ? null : targetSide;
       session.lastInsertIndex = null;
-      setDragHintState({ side: targetSide });
+      setDragHintState(denyByRuleD ? null : { side: targetSide });
       return;
     }
 
@@ -1054,6 +1077,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         targetType = startedOnLeft ? 'rightNum' : 'num';
       }
 
+      // Rule D: dividing a side must divide the WHOLE side, so a factor can only leave a
+      // numerator that is a single additive group. Otherwise "2x + 3 = 9" would become
+      // "x + 3 = 9/2", which has a different solution.
+      if ((targetType === 'den' || targetType === 'rightDen')) {
+        const sourceNum = currentType === 'num' ? numTerms : rightNumTerms;
+        if ((currentType === 'num' || currentType === 'rightNum') && !canMoveToDenominator(sourceNum)) {
+          rejectMove('Move or combine the other terms on that side first — dividing splits the whole side.');
+          return;
+        }
+      }
+
       const insertIndex = hint?.insertIndex ?? calculateInsertIndex(targetSideClass, dropX);
       handleMoveCrossSide(term, currentType, targetType, insertIndex);
     } else {
@@ -1148,63 +1182,86 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (!termA || !termB) return;
 
-    if (areEqualTerms(termA, termB)) {
-      playPopFX();
-      triggerFlash('success');
-      setIsMatchingFading(true);
-      
-      crossedNumSetter(prev => [...prev, numId]);
-      crossedDenSetter(prev => [...prev, denId]);
-      
-      setUserPresses(p => p + 1);
-      
+    const clearSliceVisuals = () => {
       sliceNumSetter(prev => prev.filter(x => x !== numId));
       sliceDenSetter(prev => prev.filter(x => x !== denId));
-      
-      setTimeout(() => {
-        numSetter(prev => {
-          const remaining = prev.filter(t => t.id !== numId);
-          if (remaining.length === 0) {
-            return [makeTerm(1, null)];
-          }
-          return remaining;
-        });
-        denSetter(prev => prev.filter(t => t.id !== denId));
-        setCardAngles(prev => {
-          const next = { ...prev };
-          delete next[numId];
-          delete next[denId];
-          return next;
-        });
-        setIsMatchingFading(false);
-      }, 300);
-    } else {
+      setCardAngles(prev => {
+        const next = { ...prev };
+        delete next[numId];
+        delete next[denId];
+        return next;
+      });
+      setIsMatchingFading(false);
+    };
+
+    const failCancel = (message) => {
       setMistakes(m => m + 1);
       setIsLevelPerfect(false);
       playWrong();
-      
-      if ('vibrate' in navigator) {
-        navigator.vibrate([100, 50, 100]);
-      }
-      
+      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
       triggerFlash('error');
       triggerShake();
-      showFeedback('Only identical terms can be cancelled out!', 'error');
+      showFeedback(message, 'error');
       setIsMatchingFading(true);
-      
-      setTimeout(() => {
-        sliceNumSetter(prev => prev.filter(x => x !== numId));
-        sliceDenSetter(prev => prev.filter(x => x !== denId));
-        setCardAngles(prev => {
-          const next = { ...prev };
-          delete next[numId];
-          delete next[denId];
-          return next;
-        });
-        setIsMatchingFading(false);
-      }, 400);
+      setTimeout(clearSliceVisuals, 300);
+    };
+
+    if (!areEqualTerms(termA, termB)) {
+      failCancel('Only identical terms can be cancelled out!');
+      return;
     }
-  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake]);
+
+    // Rule C: in `equations` the numerator is a SUM and the denominator divides every
+    // additive term at once, so a cancel must be DISTRIBUTIVE — the factor has to be
+    // exposed in every group, and it's removed from all of them plus the denominator in
+    // one atomic action. (In `divisions` the numerator is a PRODUCT, so one pair is right.)
+    let numIdsToCancel = [numId];
+    if (topic === 'equations') {
+      const picks = findDistributiveCancel(numList, termB);
+      if (!picks) {
+        failCancel(`Every term on top needs a factor of ${formatTerm(termB, true).value} first!`);
+        return;
+      }
+      numIdsToCancel = picks;
+    }
+
+    const pickSet = new Set(numIdsToCancel);
+    const nextNum = topic === 'equations'
+      ? splitIntoAdditiveGroups(numList.filter(t => t.coeff !== 0)).map(group => {
+          const kept = group.filter(t => !pickSet.has(t.id));
+          // A group emptied by the cancel is worth 1, not nothing: (2 + …)/2 -> 1 + …
+          return kept.length > 0 ? kept : [makeTerm(1, null, group[0].groupId)];
+        }).flat()
+      : (() => {
+          const remaining = numList.filter(t => t.id !== numId);
+          return remaining.length === 0 ? [makeTerm(1, null)] : remaining;
+        })();
+    const nextDen = denList.filter(t => t.id !== denId);
+
+    playPopFX();
+    triggerFlash('success');
+    setIsMatchingFading(true);
+
+    crossedNumSetter(prev => [...prev, ...numIdsToCancel]);
+    crossedDenSetter(prev => [...prev, denId]);
+
+    setUserPresses(p => p + 1);
+
+    sliceNumSetter(prev => prev.filter(x => x !== numId));
+    sliceDenSetter(prev => prev.filter(x => x !== denId));
+
+    setTimeout(() => {
+      numSetter(nextNum);
+      denSetter(nextDen);
+      setCardAngles(prev => {
+        const next = { ...prev };
+        numIdsToCancel.forEach(id => delete next[id]);
+        delete next[denId];
+        return next;
+      });
+      setIsMatchingFading(false);
+    }, 300);
+  }, [topic, numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake, showFeedback]);
 
   const tempSlicedNum = React.useRef(null);
   const tempSlicedDen = React.useRef(null);

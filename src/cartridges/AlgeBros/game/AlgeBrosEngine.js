@@ -323,6 +323,134 @@ function gcd(a, b) {
   return a;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Equation-equivalence layer.
+ *
+ * Every legal algebraic operation turns "A = B" into "A' = B'" such that
+ *     (A' - B') = k * (A - B)   for some NONZERO constant k, for all variable values.
+ * Transposing a term is k = 1. Dividing both sides by d is k = 1/d. Cancelling a
+ * common factor d is k = 1/d. Decomposing/recombining is k = 1. Anything that cannot
+ * be written this way has changed the solution set and must be rejected.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+export const EQUIV_EPS = 1e-9;
+
+/** Splits a flat term list into additive groups (consecutive same-groupId runs). */
+export function splitIntoAdditiveGroups(sourceList) {
+  if (!sourceList || sourceList.length === 0) return [];
+  const groups = [];
+  let currentGroup = [];
+  sourceList.forEach((t, idx) => {
+    if (idx === 0) {
+      currentGroup.push(t);
+    } else if (t.groupId && currentGroup[0].groupId && t.groupId === currentGroup[0].groupId) {
+      currentGroup.push(t);
+    } else {
+      if (currentGroup.length > 0) groups.push(currentGroup);
+      currentGroup = [t];
+    }
+  });
+  if (currentGroup.length > 0) groups.push(currentGroup);
+  return groups;
+}
+
+/** Collects every distinct variable letter appearing anywhere in the equation. */
+export function collectVariableLetters(...termLists) {
+  const letters = new Set();
+  termLists.flat().forEach(t => {
+    Object.keys(parseVariablePart(t.variable)).forEach(l => letters.add(l));
+  });
+  return Array.from(letters);
+}
+
+function evaluateTerm(term, assignment) {
+  const vars = parseVariablePart(term.variable);
+  let value = term.coeff;
+  for (const letter in vars) {
+    value *= Math.pow(assignment[letter] ?? 1, vars[letter]);
+  }
+  return value;
+}
+
+/**
+ * Value of one side: the numerator is a SUM of additive groups (each group being a
+ * PRODUCT of its factors), all divided by the denominator, itself a PRODUCT.
+ * Returns null when the denominator evaluates to zero (probe is unusable).
+ */
+export function evaluateSide(numTerms, denTerms, assignment) {
+  const numerator = splitIntoAdditiveGroups(numTerms)
+    .reduce((sum, group) => sum + group.reduce((prod, t) => prod * evaluateTerm(t, assignment), 1), 0);
+  const denominator = denTerms.reduce((prod, t) => prod * evaluateTerm(t, assignment), 1);
+  if (Math.abs(denominator) < EQUIV_EPS) return null;
+  return numerator / denominator;
+}
+
+/** left - right for a given probe assignment; null if any denominator is zero. */
+export function equationDelta(state, assignment) {
+  const left = evaluateSide(state.leftNum, state.leftDen, assignment);
+  const right = evaluateSide(state.rightNum, state.rightDen, assignment);
+  if (left === null || right === null) return null;
+  return left - right;
+}
+
+const PROBE_VALUES = [1.7, -2.3, 0.6, 3.4];
+
+/**
+ * True when `after` has the same solution set as `before`, i.e. their deltas are
+ * related by one nonzero constant across several probe assignments.
+ */
+export function isEquivalentTransformation(before, after) {
+  const letters = collectVariableLetters(
+    before.leftNum, before.leftDen, before.rightNum, before.rightDen,
+    after.leftNum, after.leftDen, after.rightNum, after.rightDen
+  );
+
+  const ratios = [];
+  for (let i = 0; i < PROBE_VALUES.length; i++) {
+    const assignment = {};
+    letters.forEach((letter, j) => {
+      assignment[letter] = PROBE_VALUES[(i + j) % PROBE_VALUES.length];
+    });
+
+    const d0 = equationDelta(before, assignment);
+    const d1 = equationDelta(after, assignment);
+    if (d0 === null || d1 === null) continue;     // unusable probe (zero denominator)
+    if (Math.abs(d0) < EQUIV_EPS) continue;       // probe happens to be a solution
+    ratios.push(d1 / d0);
+  }
+
+  if (ratios.length === 0) return true;           // nothing testable; don't block the player
+  if (Math.abs(ratios[0]) < EQUIV_EPS) return false;  // k must be nonzero
+  return ratios.every(r => Math.abs(r - ratios[0]) < 1e-6);
+}
+
+/**
+ * Rule D: dividing a side must divide the WHOLE side. Moving a factor into a
+ * denominator is only valid when the source numerator is a single additive group —
+ * otherwise only one term of the sum would get divided (2x + 3 = 9 -> x + 3 = 9/2).
+ */
+export function canMoveToDenominator(sourceNumTerms) {
+  return splitIntoAdditiveGroups(sourceNumTerms.filter(t => t.coeff !== 0)).length <= 1;
+}
+
+/**
+ * Rule C: a factor may only be cancelled against a shared denominator when it is
+ * exposed as a factor in EVERY additive group of that numerator, so the cancel can be
+ * applied to all of them at once. Returns the indices of the matching factor in each
+ * group, or null when the cancel is not (yet) legal.
+ */
+export function findDistributiveCancel(numTerms, denTerm) {
+  const groups = splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0));
+  if (groups.length === 0) return null;
+  const picks = [];
+  for (const group of groups) {
+    const match = group.find(t => areEqualTerms(t, denTerm));
+    if (!match) return null;      // this group hasn't exposed the factor yet
+    picks.push(match.id);
+  }
+  return picks;
+}
+
 function isFractionSimplified(numTerms, denTerms) {
   if (numTerms.length === 0 || denTerms.length === 0) return true;
   // A shared denominator applies to every additive numerator term at once (e.g. (7-3)/2 = 7/2 - 3/2),

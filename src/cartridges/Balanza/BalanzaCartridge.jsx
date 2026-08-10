@@ -10,12 +10,21 @@ import {
   parseWeights,
   parseMenuInventory,
   plateTotal,
+  plateDelta,
+  nearlyEqual,
   computeTiltAngle,
   buildEquationLineText,
 } from './game/BalanzaEngine';
+import { unlockAudio, playSelect, playMerge, playWrong } from '../AlgeBros/game/AlgeBrosSoundManager';
 import './BalanzaCartridge.css';
 
 const HIT_PADDING = 26;
+
+// Move categories. A PRESERVING move (merge / decompose / transpose) is a pure
+// rearrangement and must never change plateDelta — so the beam never moves for one.
+// A CHANGING move (supply menu add / remove) deliberately alters the balance.
+const MOVE_PRESERVING = 'preserving';
+const MOVE_CHANGING = 'changing';
 
 function rectContainsPoint(rect, x, y, padding = 0) {
   if (!rect) return false;
@@ -88,6 +97,8 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
 
   const [hasInteracted, setHasInteracted] = useState(false);
   const hasCompletedRef = useRef(false);
+  const [moveFlash, setMoveFlash] = useState(null); // { category, side, nonce }
+  const moveNonceRef = useRef(0);
 
   const [draggingKey, setDraggingKey] = useState(null);
   const [dragOverlayTerm, setDragOverlayTerm] = useState(null);
@@ -109,10 +120,16 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     if (preview) return;
     if (!hasInteracted || hasCompletedRef.current) return;
     if (leftPlate.length === 0 || rightPlate.length === 0) return;
-    if (leftTotal !== rightTotal) return;
+    if (!nearlyEqual(leftTotal, rightTotal)) return;
     hasCompletedRef.current = true;
     onComplete?.();
   }, [preview, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, onComplete]);
+
+  useEffect(() => {
+    if (!moveFlash) return;
+    const timer = setTimeout(() => setMoveFlash(null), 450);
+    return () => clearTimeout(timer);
+  }, [moveFlash]);
 
   if (preview) {
     return (
@@ -134,7 +151,6 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   }
 
   const plateArrayForSide = (side) => (side === 'left' ? leftPlate : rightPlate);
-  const setPlateForSide = (side) => (side === 'left' ? setLeftPlate : setRightPlate);
   const plateRefForSide = (side) => (side === 'left' ? leftPlateRef : rightPlateRef);
 
   const applyZeroFilter = (terms) => (showZeroTiles ? terms : terms.filter(t => t.coeff !== 0));
@@ -185,23 +201,63 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     setRightPlate(parseBalanzaExpression(config.rightPlateText));
     setMenuItems(parseMenuInventory(config.menuText));
     setHasInteracted(false);
+    setMoveFlash(null);
     hasCompletedRef.current = false;
   };
 
+  /** Builds a candidate state with one side replaced. */
+  const withSide = (side, terms) => ({
+    left: side === 'left' ? terms : leftPlate,
+    right: side === 'left' ? rightPlate : terms,
+    menu: menuItems,
+  });
+
+  /**
+   * The single chokepoint every mutation goes through. A PRESERVING move must leave
+   * plateDelta unchanged; if it doesn't, the move is rejected outright and the state is
+   * left untouched, so the scale can never drift into a state that misrepresents the
+   * equation. Rejections are logged loudly so a wrongly-blocked legal move shows up as a
+   * visible bug rather than a mystery no-op.
+   */
+  const commitMove = (next, category, flashSide = null) => {
+    const before = plateDelta(leftPlate, rightPlate, weights);
+    const after = plateDelta(next.left, next.right, weights);
+
+    if (category === MOVE_PRESERVING && !nearlyEqual(before, after)) {
+      console.error('[Balanza] Rejected move: a rearrangement changed the balance.', {
+        deltaBefore: before,
+        deltaAfter: after,
+        before: { left: leftPlate, right: rightPlate },
+        after: { left: next.left, right: next.right },
+      });
+      unlockAudio();
+      playWrong();
+      setMoveFlash({ category: 'rejected', side: flashSide, nonce: ++moveNonceRef.current });
+      return false;
+    }
+
+    setLeftPlate(next.left);
+    setRightPlate(next.right);
+    if (next.menu) setMenuItems(next.menu);
+    setHasInteracted(true);
+    unlockAudio();
+    if (category === MOVE_PRESERVING) playSelect(); else playMerge();
+    setMoveFlash({ category, side: flashSide, nonce: ++moveNonceRef.current });
+    return true;
+  };
+
   const handleTileTap = (side, termId) => {
-    const term = plateArrayForSide(side).find(t => t.id === termId);
+    const terms = plateArrayForSide(side);
+    const term = terms.find(t => t.id === termId);
     if (!term || term.variable === null || Math.abs(term.coeff) <= 1) return;
     const unitSign = term.coeff < 0 ? -1 : 1;
     const count = Math.abs(term.coeff);
     const units = Array.from({ length: count }, () => makeTerm(unitSign, term.variable));
-    setPlateForSide(side)(prev => {
-      const idx = prev.findIndex(t => t.id === termId);
-      if (idx === -1) return prev;
-      const next = [...prev];
-      next.splice(idx, 1, ...units);
-      return next;
-    });
-    setHasInteracted(true);
+    const idx = terms.findIndex(t => t.id === termId);
+    if (idx === -1) return;
+    const nextTerms = [...terms];
+    nextTerms.splice(idx, 1, ...units);
+    commitMove(withSide(side, nextTerms), MOVE_PRESERVING, side);
   };
 
   const handleTileDragStart = (e, info, source) => {
@@ -230,15 +286,16 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     const zone = resolveDropZone(info.point.x, info.point.y);
     if (!zone) return;
 
+    // Supply menu -> plate. Deliberately CHANGES the balance.
     if (source.origin === 'menu') {
       if (zone === 'menu') return;
       const menuItem = menuItems.find(m => m.key === source.key);
       if (!menuItem || menuItem.available <= 0) return;
       const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, null);
       const incoming = makeTerm(menuItem.unitCoeff, menuItem.variable);
-      setPlateForSide(zone)(prev => mergeOrAddToPlate(prev, incoming, collisionId));
-      setMenuItems(prev => prev.map(m => (m.key === source.key ? { ...m, available: m.available - 1 } : m)));
-      setHasInteracted(true);
+      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId);
+      const nextMenu = menuItems.map(m => (m.key === source.key ? { ...m, available: m.available - 1 } : m));
+      commitMove({ ...withSide(zone, nextPlate), menu: nextMenu }, MOVE_CHANGING, zone);
       return;
     }
 
@@ -246,38 +303,45 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     const term = plateArrayForSide(sourceSide).find(t => t.id === source.termId);
     if (!term) return;
 
+    // Plate -> supply menu. Deliberately CHANGES the balance.
     if (zone === 'menu') {
       const menuIdx = findMenuRowIndexForTerm(term);
       if (menuIdx === -1) return;
-      setPlateForSide(sourceSide)(prev => applyZeroFilter(prev.filter(t => t.id !== term.id)));
-      setMenuItems(prev => prev.map((m, i) => (i === menuIdx ? { ...m, available: m.available + Math.abs(term.coeff) } : m)));
-      setHasInteracted(true);
+      const nextPlate = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
+      const nextMenu = menuItems.map((m, i) => (
+        i === menuIdx ? { ...m, available: m.available + Math.abs(term.coeff) } : m
+      ));
+      commitMove({ ...withSide(sourceSide, nextPlate), menu: nextMenu }, MOVE_CHANGING, sourceSide);
       return;
     }
 
+    // Same-plate merge onto a matching tile. PRESERVING (coeffs just add).
     if (zone === sourceSide) {
       const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, term.id);
       if (!collisionId) return;
-      setPlateForSide(sourceSide)(prev => {
-        const targetIdx = prev.findIndex(t => t.id === collisionId);
-        if (targetIdx === -1 || !areLikeTerms(prev[targetIdx], term)) return prev;
-        const merged = combineTerms(prev[targetIdx], term);
-        const next = prev.filter(t => t.id !== term.id);
-        const mergeIdx = next.findIndex(t => t.id === collisionId);
-        next.splice(mergeIdx, 1, merged);
-        return applyZeroFilter(next);
-      });
-      setHasInteracted(true);
+      const terms = plateArrayForSide(sourceSide);
+      const targetIdx = terms.findIndex(t => t.id === collisionId);
+      if (targetIdx === -1 || !areLikeTerms(terms[targetIdx], term)) return;
+      const merged = combineTerms(terms[targetIdx], term);
+      const nextTerms = terms.filter(t => t.id !== term.id);
+      const mergeIdx = nextTerms.findIndex(t => t.id === collisionId);
+      nextTerms.splice(mergeIdx, 1, merged);
+      commitMove(withSide(sourceSide, applyZeroFilter(nextTerms)), MOVE_PRESERVING, sourceSide);
       return;
     }
 
-    // Cross-plate transpose: negate coeff, remove from source, merge-or-add into target.
+    // Cross-plate transpose. PRESERVING: the source loses v and the target gains -v,
+    // so (L - v) - (R - v) = L - R. The negation is exactly what makes this legal.
     const otherSide = zone;
     const flipped = makeTerm(-term.coeff, term.variable);
     const collisionId = findCollisionTermId(otherSide, info.point.x, info.point.y, null);
-    setPlateForSide(sourceSide)(prev => applyZeroFilter(prev.filter(t => t.id !== term.id)));
-    setPlateForSide(otherSide)(prev => mergeOrAddToPlate(prev, flipped, collisionId));
-    setHasInteracted(true);
+    const nextSource = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
+    const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), flipped, collisionId);
+    commitMove({
+      left: sourceSide === 'left' ? nextSource : nextTarget,
+      right: sourceSide === 'left' ? nextTarget : nextSource,
+      menu: menuItems,
+    }, MOVE_PRESERVING, otherSide);
   };
 
   return (
@@ -285,7 +349,9 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
       <div className="balanza-top-bar">
         <button className="balanza-restart-btn" onClick={handleRestart} title="Restart">↺</button>
       </div>
-      <div className="balanza-equation-line">{equationLineText}</div>
+      <div className={`balanza-equation-line ${moveFlash?.category === MOVE_PRESERVING ? 'is-rearranged' : ''}`}>
+        {equationLineText}
+      </div>
 
       <Scale
         tiltAngle={tiltAngle}
@@ -300,6 +366,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
         onDrag={handleTileDrag}
         onDragEnd={handleTileDragEnd}
         onTileTap={handleTileTap}
+        moveFlash={moveFlash}
       />
 
       <div ref={menuRef} className="balanza-menu">
@@ -329,14 +396,20 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   );
 }
 
-function Scale({ tiltAngle, leftPlate, rightPlate, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileTap }) {
+function Scale({ tiltAngle, leftPlate, rightPlate, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileTap, moveFlash }) {
   const noop = () => {};
+  const flashClass = (side) => {
+    if (!moveFlash || moveFlash.side !== side) return '';
+    if (moveFlash.category === 'rejected') return 'is-rejected';
+    if (moveFlash.category === MOVE_CHANGING) return 'is-weight-changed';
+    return '';
+  };
   return (
     <div className="balanza-scale-wrap">
       <div className="balanza-scale-assembly">
       <div className="balanza-beam" style={{ transform: `rotate(${tiltAngle}deg)` }}>
         <div className="balanza-plate-assembly balanza-plate-assembly-left">
-          <div ref={leftPlateRef} className="balanza-plate-items">
+          <div ref={leftPlateRef} className={`balanza-plate-items ${flashClass('left')}`}>
             {leftPlate.map(term => (
               <PlateTile
                 key={term.id}
@@ -357,7 +430,7 @@ function Scale({ tiltAngle, leftPlate, rightPlate, showZeroTiles, draggingKey, c
         </div>
         <div className="balanza-pivot-dot" />
         <div className="balanza-plate-assembly balanza-plate-assembly-right">
-          <div ref={rightPlateRef} className="balanza-plate-items">
+          <div ref={rightPlateRef} className={`balanza-plate-items ${flashClass('right')}`}>
             {rightPlate.map(term => (
               <PlateTile
                 key={term.id}

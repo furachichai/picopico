@@ -6,7 +6,9 @@
  * duplicating them, since Balanza terms are structurally identical - `variable`
  * just as happily holds an emoji string as a letter.
  */
-import { makeTerm, combineTerms, areLikeTerms, formatTerm } from '../../AlgeBros/game/AlgeBrosEngine';
+// Explicit .js extension so this module also loads under plain Node (used by
+// scripts/test-equation-invariants.mjs); Vite resolves it identically.
+import { makeTerm, combineTerms, areLikeTerms, formatTerm } from '../../AlgeBros/game/AlgeBrosEngine.js';
 
 export { makeTerm, combineTerms, areLikeTerms, formatTerm };
 
@@ -114,6 +116,24 @@ export function termValue(term, weights) {
 
 export function plateTotal(terms, weights) {
   return terms.reduce((sum, t) => sum + termValue(t, weights), 0);
+}
+
+/** Tolerance for every weight comparison. Weights may be fractional (parseFloat),
+ *  and 0.1 * 3 !== 0.3 in floating point, so exact === would make some perfectly
+ *  balanced scales impossible to balance. */
+export const EPS = 1e-9;
+
+export function nearlyEqual(a, b) {
+  return Math.abs(a - b) < EPS;
+}
+
+/**
+ * The scale's whole state as one number. This is the quantity the equivalence
+ * invariant is written in terms of: merging, decomposing and transposing must
+ * leave it EXACTLY unchanged; only supply-menu moves may change it.
+ */
+export function plateDelta(leftTerms, rightTerms, weights) {
+  return plateTotal(leftTerms, weights) - plateTotal(rightTerms, weights);
 }
 
 const MAX_TILT_DEG = 18;
