@@ -1,0 +1,282 @@
+/* ─── Balanza styling scoped under .balanza-cartridge ─── */
+
+.balanza-cartridge {
+  --wood-dark: #6b4118;
+  --wood-mid: #9c6a34;
+  --wood-light: #d9a066;
+  --beam-teal: #1f7a6c;
+  --beam-gold: #f6c744;
+  --plate-bg: #efe0bd;
+  --plate-rim: #8a5a2a;
+  --text-main: #2b1d0e;
+
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #fffaf0;
+  color: var(--text-main);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  touch-action: none;
+}
+
+.balanza-cartridge * {
+  box-sizing: border-box;
+}
+
+.balanza-top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px;
+  margin-top: 72px;
+}
+
+.balanza-restart-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.balanza-equation-line {
+  margin-top: 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-align: center;
+  min-height: 1.8rem;
+  letter-spacing: 0.02em;
+  padding: 0 12px;
+}
+
+.balanza-scale-wrap {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-scale-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.balanza-beam {
+  position: relative;
+  width: 200px;
+  height: 9px;
+  background: linear-gradient(180deg, #fde58a 0%, var(--beam-gold) 35%, var(--beam-teal) 100%);
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transform-origin: center center;
+  transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1);
+  z-index: 2;
+}
+
+.balanza-pivot-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff2c4, var(--wood-dark) 75%);
+  border: 2px solid var(--beam-gold);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+}
+
+/* Plate assembly: sits ABOVE the beam (rigid, not hanging), stacked
+   items-row / dish / strut from top to bottom so the strut meets the beam. */
+.balanza-plate-assembly {
+  position: absolute;
+  bottom: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.balanza-plate-assembly-left {
+  left: 0;
+  transform: translateX(-50%);
+}
+
+.balanza-plate-assembly-right {
+  right: 0;
+  transform: translateX(50%);
+}
+
+.balanza-plate-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100px;
+  min-height: 34px;
+  padding: 2px 4px;
+  margin-bottom: -6px;
+  z-index: 2;
+}
+
+/* Shallow dish viewed at an angle, like a real balance pan resting on its arm */
+.balanza-dish {
+  width: 100px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff7e6 0%, var(--plate-bg) 55%, #d9c096 100%);
+  border: 2px solid var(--plate-rim);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), inset 0 -3px 4px rgba(139, 90, 42, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.6);
+}
+
+.balanza-strut {
+  width: 6px;
+  height: 16px;
+  background: linear-gradient(90deg, var(--wood-dark), var(--wood-light), var(--wood-dark));
+  border-radius: 2px;
+}
+
+.balanza-post {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 96px solid var(--wood-mid);
+  filter: drop-shadow(2px 0 0 rgba(0, 0, 0, 0.08));
+}
+
+.balanza-post::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 6px;
+  height: 96px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.balanza-base {
+  position: relative;
+  width: 150px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--wood-light), var(--wood-mid) 60%, var(--wood-dark));
+  border-radius: 6px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.balanza-base::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.18), transparent 70%);
+}
+
+/* Plate tiles - big enough for touch, but restrained so plates stay compact */
+.balanza-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: grab;
+  position: relative;
+  touch-action: none;
+}
+
+.balanza-tile.is-zero {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.balanza-tile-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.08em;
+  transition: filter 0.3s ease;
+}
+
+.balanza-tile-sign {
+  font-size: 0.4em;
+  font-weight: 800;
+}
+
+.balanza-tile-value {
+  font-size: 1em;
+}
+
+/* Bottom draggable inventory menu */
+.balanza-menu {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 96px;
+  width: 100%;
+}
+
+.balanza-menu-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  cursor: grab;
+  touch-action: none;
+}
+
+.balanza-menu-tile-glyph {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.balanza-menu-tile-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.balanza-menu-tile.is-empty {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.balanza-drag-overlay {
+  font-size: 1.7rem;
+}
+
+.balanza-drag-overlay .balanza-tile-inner {
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+}

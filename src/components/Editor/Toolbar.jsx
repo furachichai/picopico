@@ -293,6 +293,24 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>algeBROS</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'Balanza',
+                                                config: {
+                                                    weightsText: '',
+                                                    leftPlateText: '🍎, 🍎',
+                                                    rightPlateText: '🍎',
+                                                    menuText: '2x🍎',
+                                                    showZeroTiles: false
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>⚖️ Balanza</button>
                             </div>
                         )}
                     </div>

@@ -8,6 +8,7 @@ import LessonsPage from './components/Home/LessonsPage';
 import Dashboard from './components/Home/Dashboard';
 import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
+import BalanzaCartridge from './cartridges/Balanza/BalanzaCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
@@ -235,6 +236,34 @@ const AppContent = () => {
             </div>
           );
         }
+        if (selectedGame === 'balanza') {
+          return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#ffffff' }}>
+              <BalanzaCartridge
+                config={{
+                  weightsText: '',
+                  leftPlateText: '🍎, 🍎',
+                  rightPlateText: '🍎',
+                  menuText: '2x🍎',
+                  showZeroTiles: false
+                }}
+                onComplete={() => {}}
+              />
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: 'rgba(0,0,0,0.08)', border: 'none',
+                  borderRadius: '50%', width: 40, height: 40,
+                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        }
         return (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
@@ -328,6 +357,38 @@ const AppContent = () => {
                   <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>algeBROS</h3>
                   <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
                     Learn to simplify equations by dragging and combining like terms.
+                  </p>
+                </div>
+              </div>
+
+              {/* Balanza Game Card */}
+              <div
+                onClick={() => setSelectedGame('balanza')}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(242, 183, 5, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <div style={{
+                  fontSize: '2.5rem', background: 'rgba(242, 183, 5, 0.1)', width: '64px', height: '64px',
+                  borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(242, 183, 5, 0.2)'
+                }}>
+                  ⚖️
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>Balanza</h3>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                    Balance a two-plate scale by dragging emojis to see an equation come into equilibrium.
                   </p>
                 </div>
               </div>

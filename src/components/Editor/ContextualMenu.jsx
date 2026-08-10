@@ -3,6 +3,7 @@ import './ContextualMenu.css';
 import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Player/PEMExpressionPool';
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 import { getSymbolSvg } from '../../utils/symbols';
+import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
 
 const evaluateMathExpression = (expr) => {
     try {
@@ -179,6 +180,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const [showLevelsEditor, setShowLevelsEditor] = useState(false);
     const [levelsText, setLevelsText] = useState('');
     const [levelsOriginalText, setLevelsOriginalText] = useState('');
+    const [showBalanzaMenuEditor, setShowBalanzaMenuEditor] = useState(false);
+    const [balanzaMenuText, setBalanzaMenuText] = useState('');
+    const [balanzaMenuOriginalText, setBalanzaMenuOriginalText] = useState('');
 
     // Saved selection for per-letter quiz formatting
     const savedSelectionRef = useRef(null);
@@ -1261,6 +1265,140 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 />
                             </div>
                         </>
+                    )}
+
+                    {/* Balanza Settings */}
+                    {element.cartridgeType === 'Balanza' && (
+                        <>
+                            <div className="menu-group">
+                                <label>Left Plate</label>
+                                <input
+                                    type="text"
+                                    value={element.config?.leftPlateText || ''}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, leftPlateText: e.target.value } })}
+                                    placeholder="e.g. 2🍎"
+                                    style={{ width: '110px' }}
+                                />
+                            </div>
+                            <div className="menu-group">
+                                <label>Right Plate</label>
+                                <input
+                                    type="text"
+                                    value={element.config?.rightPlateText || ''}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, rightPlateText: e.target.value } })}
+                                    placeholder="e.g. 🍌"
+                                    style={{ width: '110px' }}
+                                />
+                            </div>
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.showZeroTiles || false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, showZeroTiles: e.target.checked } })}
+                                    />
+                                    Show cancelled-to-zero tiles
+                                </label>
+                            </div>
+                            <div className="menu-group">
+                                <button
+                                    className="btn-secondary"
+                                    style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}
+                                    onClick={() => {
+                                        const currentText = element.config?.menuText || '';
+                                        setBalanzaMenuText(currentText);
+                                        setBalanzaMenuOriginalText(currentText);
+                                        setShowBalanzaMenuEditor(true);
+                                    }}
+                                >
+                                    🧺 MENU SUPPLY
+                                </button>
+                            </div>
+                            <div className="menu-group" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '6px' }}>
+                                <label>Weights (default 1)</label>
+                                {collectUsedSymbols(element.config?.leftPlateText || '', element.config?.rightPlateText || '', element.config?.menuText || '').map(symbol => {
+                                    const weights = parseWeights(element.config?.weightsText || '');
+                                    const current = weights[symbol] ?? 1;
+                                    return (
+                                        <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span style={{ fontSize: '1.1rem', width: '28px', textAlign: 'center' }}>{symbol}</span>
+                                            <input
+                                                type="number"
+                                                value={current}
+                                                onChange={(e) => {
+                                                    const nextWeights = { ...weights, [symbol]: parseFloat(e.target.value) || 0 };
+                                                    const nextText = Object.entries(nextWeights)
+                                                        .filter(([, w]) => w !== 1)
+                                                        .map(([s, w]) => `${s}=${w}`)
+                                                        .join('\n');
+                                                    onChange('cartridge', { config: { ...element.config, weightsText: nextText } });
+                                                }}
+                                                style={{ width: '60px' }}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
+
+                    {/* Balanza Menu Supply Editor Modal */}
+                    {showBalanzaMenuEditor && element.cartridgeType === 'Balanza' && (
+                        <div style={{
+                            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                            background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+                            zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '20px'
+                        }} onClick={() => { setShowBalanzaMenuEditor(false); setBalanzaMenuText(balanzaMenuOriginalText); }}>
+                            <div style={{
+                                background: '#1e1b3a', border: '1px solid rgba(167,139,250,0.4)',
+                                borderRadius: '16px', padding: '20px', width: '100%', maxWidth: '360px',
+                                maxHeight: '80vh', display: 'flex', flexDirection: 'column', gap: '12px',
+                                boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
+                            }} onClick={(e) => e.stopPropagation()}>
+                                <div style={{ color: 'white', fontWeight: 800, fontSize: '0.9rem', letterSpacing: '2px', textAlign: 'center' }}>MENU SUPPLY</div>
+                                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem' }}>One per line: &lt;count&gt;x&lt;emoji or number&gt;, e.g. 3x🍎</div>
+                                <textarea
+                                    value={balanzaMenuText}
+                                    onChange={(e) => setBalanzaMenuText(e.target.value)}
+                                    spellCheck={false}
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    style={{
+                                        width: '100%', minHeight: '200px', maxHeight: '50vh',
+                                        background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(167,139,250,0.3)',
+                                        borderRadius: '8px', color: '#e2e8f0', fontFamily: "'Courier New', monospace",
+                                        fontSize: '0.85rem', padding: '12px', resize: 'vertical',
+                                        outline: 'none', lineHeight: '1.6', boxSizing: 'border-box'
+                                    }}
+                                />
+                                {balanzaMenuText !== balanzaMenuOriginalText && (
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button
+                                            onClick={() => { setBalanzaMenuText(balanzaMenuOriginalText); setShowBalanzaMenuEditor(false); }}
+                                            style={{
+                                                flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                                background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)',
+                                                letterSpacing: '1px'
+                                            }}
+                                        >CANCEL</button>
+                                        <button
+                                            onClick={() => {
+                                                onChange('cartridge', { config: { ...element.config, menuText: balanzaMenuText } });
+                                                setShowBalanzaMenuEditor(false);
+                                            }}
+                                            style={{
+                                                flex: 1, padding: '10px', border: 'none', borderRadius: '10px',
+                                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                                background: '#8b5cf6', color: 'white', letterSpacing: '1px'
+                                            }}
+                                        >SAVE</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     )}
 
                     {/* Potiondas Settings */}
