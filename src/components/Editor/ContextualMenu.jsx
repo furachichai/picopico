@@ -5,6 +5,13 @@ import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/P
 import { getSymbolSvg } from '../../utils/symbols';
 import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
 
+const EMOJI_CATEGORIES = [
+    { name: 'Fruits & Food', items: ['🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🥑', '🍆', '🥕', '🌽', '🥒', '🥦', '🧄', '🧅', '🍄', '🍔', '🍕', '🍦', '🍩', '🍪', '🍰', '🍫', '🍿'] },
+    { name: 'Objects & Toys', items: ['🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🚗', '🚀', '🛸', '🔔', '🔑', '📦', '🎨', '🎲', '🎯', '🧸', '💡', '📚', '✏️', '🏆', '👑'] },
+    { name: 'Animals & Nature', items: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🌸', '🌻', '🌲'] },
+    { name: 'Math & Symbols', items: ['➕', '➖', '✖️', '➗', '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '⬛', '⬜', '🔺', '🔹', '🔶', '💯', '❓', '❗', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'] }
+];
+
 const evaluateMathExpression = (expr) => {
     try {
         if (!expr) return null;
@@ -183,6 +190,36 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const [showBalanzaMenuEditor, setShowBalanzaMenuEditor] = useState(false);
     const [balanzaMenuText, setBalanzaMenuText] = useState('');
     const [balanzaMenuOriginalText, setBalanzaMenuOriginalText] = useState('');
+
+    const [emojiPickerTarget, setEmojiPickerTarget] = useState(null); // 'left' | 'right' | 'menu' | null
+    const [recentEmojis, setRecentEmojis] = useState(() => {
+        try {
+            const saved = localStorage.getItem('pico_recent_emojis');
+            if (saved) return JSON.parse(saved);
+        } catch (e) {}
+        return ['🍎', '🍌', '🍊', '🍉', '🍓', '⭐', '🎈', '📦', '🍔', '🚀'];
+    });
+
+    const handleSelectEmoji = (emoji) => {
+        if (!emojiPickerTarget) return;
+
+        setRecentEmojis(prev => {
+            const next = [emoji, ...prev.filter(e => e !== emoji)].slice(0, 12);
+            try { localStorage.setItem('pico_recent_emojis', JSON.stringify(next)); } catch (e) {}
+            return next;
+        });
+
+        const configKey = emojiPickerTarget === 'left'
+            ? 'leftPlateText'
+            : emojiPickerTarget === 'right'
+                ? 'rightPlateText'
+                : 'menuText';
+
+        const currentVal = element.config?.[configKey] || '';
+        const nextVal = currentVal ? `${currentVal}, ${emoji}` : emoji;
+
+        onChange('cartridge', { config: { ...element.config, [configKey]: nextVal } });
+    };
 
     // Saved selection for per-letter quiz formatting
     const savedSelectionRef = useRef(null);
@@ -1270,25 +1307,114 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     {/* Balanza Settings */}
                     {element.cartridgeType === 'Balanza' && (
                         <>
-                            <div className="menu-group">
-                                <label>Left Plate</label>
+                            {/* Left Plate Row */}
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Left Plate</label>
                                 <input
                                     type="text"
                                     value={element.config?.leftPlateText || ''}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, leftPlateText: e.target.value } })}
                                     placeholder="e.g. 2🍎"
-                                    style={{ width: '110px' }}
+                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
                                 />
+                                <button
+                                    type="button"
+                                    title="Open Emoji Picker"
+                                    onClick={() => setEmojiPickerTarget('left')}
+                                    style={{
+                                        height: '28px', width: '28px', minWidth: '28px', padding: 0, borderRadius: '6px', border: '1px solid #cbd5e1',
+                                        background: '#f8fafc', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}
+                                >😊</button>
+                                <button
+                                    type="button"
+                                    title={element.config?.lockLeftPlate ? "Left Plate Locked" : "Left Plate Unlocked"}
+                                    onClick={() => onChange('cartridge', { config: { ...element.config, lockLeftPlate: !element.config?.lockLeftPlate } })}
+                                    style={{
+                                        height: '28px', width: '28px', minWidth: '28px', padding: 0, borderRadius: '6px',
+                                        border: element.config?.lockLeftPlate ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                                        background: element.config?.lockLeftPlate ? '#fee2e2' : '#f8fafc',
+                                        cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}
+                                >
+                                    {element.config?.lockLeftPlate ? '🔒' : '🔓'}
+                                </button>
                             </div>
-                            <div className="menu-group">
-                                <label>Right Plate</label>
+
+                            {/* Right Plate Row */}
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Right Plate</label>
                                 <input
                                     type="text"
                                     value={element.config?.rightPlateText || ''}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, rightPlateText: e.target.value } })}
                                     placeholder="e.g. 🍌"
-                                    style={{ width: '110px' }}
+                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
                                 />
+                                <button
+                                    type="button"
+                                    title="Open Emoji Picker"
+                                    onClick={() => setEmojiPickerTarget('right')}
+                                    style={{
+                                        height: '28px', width: '28px', minWidth: '28px', padding: 0, borderRadius: '6px', border: '1px solid #cbd5e1',
+                                        background: '#f8fafc', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}
+                                >😊</button>
+                                <button
+                                    type="button"
+                                    title={element.config?.lockRightPlate ? "Right Plate Locked" : "Right Plate Unlocked"}
+                                    onClick={() => onChange('cartridge', { config: { ...element.config, lockRightPlate: !element.config?.lockRightPlate } })}
+                                    style={{
+                                        height: '28px', width: '28px', minWidth: '28px', padding: 0, borderRadius: '6px',
+                                        border: element.config?.lockRightPlate ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                                        background: element.config?.lockRightPlate ? '#fee2e2' : '#f8fafc',
+                                        cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}
+                                >
+                                    {element.config?.lockRightPlate ? '🔒' : '🔓'}
+                                </button>
+                            </div>
+
+                            {/* Bottom Supply Row */}
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Supply Menu</label>
+                                <input
+                                    type="text"
+                                    value={element.config?.menuText || ''}
+                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, menuText: e.target.value } })}
+                                    placeholder="e.g. 2🍎, 3🍌"
+                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
+                                />
+                                <button
+                                    type="button"
+                                    title="Open Emoji Picker"
+                                    onClick={() => setEmojiPickerTarget('menu')}
+                                    style={{
+                                        height: '28px', width: '28px', minWidth: '28px', padding: 0, borderRadius: '6px', border: '1px solid #cbd5e1',
+                                        background: '#f8fafc', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}
+                                >😊</button>
+                            </div>
+
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.freeMovement !== false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, freeMovement: e.target.checked } })}
+                                    />
+                                    🖐️ Free
+                                </label>
+                            </div>
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.showEquation !== false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, showEquation: e.target.checked } })}
+                                    />
+                                    📐 Equation
+                                </label>
                             </div>
                             <div className="menu-group">
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
@@ -1297,49 +1423,128 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         checked={element.config?.showZeroTiles || false}
                                         onChange={(e) => onChange('cartridge', { config: { ...element.config, showZeroTiles: e.target.checked } })}
                                     />
-                                    Show cancelled-to-zero tiles
+                                    Zero
                                 </label>
                             </div>
                             <div className="menu-group">
-                                <button
-                                    className="btn-secondary"
-                                    style={{ width: '100%', padding: '8px', fontWeight: 700, letterSpacing: '1px' }}
-                                    onClick={() => {
-                                        const currentText = element.config?.menuText || '';
-                                        setBalanzaMenuText(currentText);
-                                        setBalanzaMenuOriginalText(currentText);
-                                        setShowBalanzaMenuEditor(true);
-                                    }}
-                                >
-                                    🧺 MENU SUPPLY
-                                </button>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.confetti !== false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, confetti: e.target.checked } })}
+                                    />
+                                    🎉 Confetti
+                                </label>
                             </div>
-                            <div className="menu-group" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '6px' }}>
-                                <label>Weights (default 1)</label>
-                                {collectUsedSymbols(element.config?.leftPlateText || '', element.config?.rightPlateText || '', element.config?.menuText || '').map(symbol => {
-                                    const weights = parseWeights(element.config?.weightsText || '');
-                                    const current = weights[symbol] ?? 1;
-                                    return (
-                                        <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <span style={{ fontSize: '1.1rem', width: '28px', textAlign: 'center' }}>{symbol}</span>
-                                            <input
-                                                type="number"
-                                                value={current}
-                                                onChange={(e) => {
-                                                    const nextWeights = { ...weights, [symbol]: parseFloat(e.target.value) || 0 };
-                                                    const nextText = Object.entries(nextWeights)
-                                                        .filter(([, w]) => w !== 1)
-                                                        .map(([s, w]) => `${s}=${w}`)
-                                                        .join('\n');
-                                                    onChange('cartridge', { config: { ...element.config, weightsText: nextText } });
-                                                }}
-                                                style={{ width: '60px' }}
-                                            />
-                                        </div>
-                                    );
-                                })}
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                                <label style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700 }}>Weights (default 5)</label>
+                                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                                    {collectUsedSymbols(element.config?.leftPlateText || '', element.config?.rightPlateText || '', element.config?.menuText || '').map(symbol => {
+                                        const weights = parseWeights(element.config?.weightsText || '');
+                                        const current = weights[symbol] ?? 5;
+                                        return (
+                                            <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '2px 4px' }}>
+                                                <span style={{ fontSize: '1rem' }}>{symbol}</span>
+                                                <input
+                                                    type="number"
+                                                    value={current}
+                                                    onChange={(e) => {
+                                                        const nextWeights = { ...weights, [symbol]: parseFloat(e.target.value) || 0 };
+                                                        const nextText = Object.entries(nextWeights)
+                                                            .filter(([, w]) => w !== 5)
+                                                            .map(([s, w]) => `${s}=${w}`)
+                                                            .join('\n');
+                                                        onChange('cartridge', { config: { ...element.config, weightsText: nextText } });
+                                                    }}
+                                                    style={{ width: '42px', padding: '2px 4px', fontSize: '0.85rem' }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </>
+                    )}
+
+                    {/* Emoji Selection Modal */}
+                    {emojiPickerTarget && element.cartridgeType === 'Balanza' && (
+                        <div
+                            style={{
+                                position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                                background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)',
+                                zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                padding: '16px'
+                            }}
+                            onClick={() => setEmojiPickerTarget(null)}
+                        >
+                            <div
+                                style={{
+                                    background: '#1e1b3a', border: '1px solid rgba(167,139,250,0.4)',
+                                    borderRadius: '16px', padding: '16px', width: '100%', maxWidth: '380px',
+                                    maxHeight: '85vh', display: 'flex', flexDirection: 'column', gap: '12px',
+                                    boxShadow: '0 12px 32px rgba(0,0,0,0.6)', color: 'white'
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+                                    <span style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px' }}>
+                                        SELECT EMOJI ({emojiPickerTarget.toUpperCase()})
+                                    </span>
+                                    <button
+                                        onClick={() => setEmojiPickerTarget(null)}
+                                        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', cursor: 'pointer' }}
+                                    >✕</button>
+                                </div>
+
+                                <div style={{ overflowY: 'auto', maxHeight: '50vh', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '4px' }}>
+                                    {EMOJI_CATEGORIES.map(category => (
+                                        <div key={category.name}>
+                                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>{category.name}</div>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px' }}>
+                                                {category.items.map(emoji => (
+                                                    <button
+                                                        key={emoji}
+                                                        type="button"
+                                                        onClick={() => handleSelectEmoji(emoji)}
+                                                        style={{
+                                                            background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
+                                                            borderRadius: '8px', fontSize: '1.4rem', padding: '6px 0',
+                                                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                            transition: 'transform 0.1s, background 0.1s'
+                                                        }}
+                                                    >
+                                                        {emoji}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#facc15', letterSpacing: '0.5px' }}>
+                                        ⏱️ RECENTLY USED:
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
+                                        {recentEmojis.map(emoji => (
+                                            <button
+                                                key={`recent-${emoji}`}
+                                                type="button"
+                                                onClick={() => handleSelectEmoji(emoji)}
+                                                style={{
+                                                    background: 'rgba(250, 204, 21, 0.15)', border: '1px solid rgba(250, 204, 21, 0.4)',
+                                                    borderRadius: '8px', fontSize: '1.3rem', minWidth: '36px', height: '36px',
+                                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                {emoji}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )}
 
                     {/* Balanza Menu Supply Editor Modal */}

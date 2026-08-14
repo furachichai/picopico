@@ -1,0 +1,93 @@
+{
+  "id": "lessons/2361-01 Algebra Scale/lesson.json",
+  "title": "01 Algebra Scale",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 0,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "",
+          "leftPlateText": "💡",
+          "rightPlateText": "",
+          "menuText": "2x🍎",
+          "showZeroTiles": false,
+          "lockLeftPlate": true
+        }
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-08-14T13:04:20.617Z",
+  "updatedAt": "2026-08-14T15:09:05.755Z",
+  "path": "lessons/2361-01 Algebra Scale/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_lightbulb.png",
+  "cardColor": "#14B8A6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "name": "2361-01 Algebra Scale",
+  "type": "file",
+  "visible": true,
+  "order": 2361,
+  "content": {
+    "id": "lessons/2361-01 Algebra Scale/lesson.json",
+    "title": "01 Algebra Scale",
+    "slides": [
+      {
+        "id": "slide-1",
+        "background": "#E1F5FE",
+        "elements": [],
+        "order": 0,
+        "cartridge": {
+          "type": "Balanza",
+          "config": {
+            "weightsText": "",
+            "leftPlateText": "💡",
+            "rightPlateText": "",
+            "menuText": "2x🍎",
+            "showZeroTiles": false,
+            "lockLeftPlate": true
+          }
+        }
+      }
+    ],
+    "author": "User",
+    "createdAt": "2026-08-14T13:04:20.617Z",
+    "updatedAt": "2026-08-14T13:06:52.362Z",
+    "path": "lessons/2361-01 Algebra Scale/lesson.json",
+    "textPreset": null,
+    "description": "",
+    "icon": "icon_lightbulb.png",
+    "cardColor": "#14B8A6",
+    "translations": {
+      "en": {
+        "title": "",
+        "description": ""
+      }
+    }
+  },
+  "status": "completed",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": true,
+    "lastPlayed": 1786718704551
+  }
+}

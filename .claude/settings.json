@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/test-equation-invariants.mjs)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(sed -i '' \"s/waitUntil: 'networkidle'/waitUntil: 'domcontentloaded'/\" .tmp-verify.cjs)",
+      "Bash(sed -i '' \"s/await page.waitForTimeout\\(400\\);\\\\n  await page.getByText\\('GAME'/await page.waitForTimeout\\(900\\);\\\\n  await page.getByText\\('GAME'/\" .tmp-verify.cjs)",
+      "Bash(node .tmp-verify.cjs)",
+      "Bash(git restore *)",
+      "Bash(brew list *)",
+      "Bash(ffmpeg -i /tmp/flash-video/*.webm -vf fps=25 /tmp/flash-video/frame-%03d.png -y)",
+      "Bash(python3 -)",
+      "Bash(pip3 install *)",
+      "Bash(ffmpeg -i page*.webm -vf \"signalstats,metadata=print:file=stats.txt\" -f null -)",
+      "Bash(ffprobe -v quiet -select_streams v -show_entries stream=r_frame_rate,duration,nb_frames page*.webm)",
+      "Bash(mkdir -p hi)",
+      "Bash(ffmpeg -i page*.webm -vf fps=50 hi/f-%03d.png -y)",
+      "Bash(node .tmp-flash-instrument.cjs)",
+      "Bash(curl -sf http://localhost:5173)",
+      "Bash(node .tmp-flash-verify.cjs)",
+      "Bash(node -e ' *)",
+      "Bash(rm -rf /tmp/flash-video-after)",
+      "Bash(mkdir -p /tmp/flash-video-after)",
+      "Bash(node .tmp-flash-video-verify.cjs)",
+      "Bash(ffmpeg -i page*.webm -vf fps=25 frame-%03d.png -y)",
+      "Bash(node .tmp-flash-repro2.cjs)",
+      "Bash(awk 'NR<=3 || /view-slide/')",
+      "Bash(awk -F= '{ if \\($2+0 < 90\\) print \"DARKFRAME\", $0 }')",
+      "Bash(sed -n '1p;$p')",
+      "Bash(ffmpeg -i page*.webm -vf fps=25 fr/f-%03d.png -y)"
+    ]
+  }
+}

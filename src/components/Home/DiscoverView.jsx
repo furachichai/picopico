@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import { Home, Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
@@ -7,18 +7,37 @@ import QuizPlayer from '../Player/QuizPlayer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { saveLessonProgress } from '../../utils/storage';
 
+// The app's view-transition system remounts the outgoing view (its exit animation
+// renders in a fresh wrapper React can't reconcile against the prior mount), so this
+// component gets torn down and rebuilt every time the player swipes into a lesson.
+// EVERY piece of state that affects what's on screen must survive that remount, or
+// the exiting view visibly snaps to a default during the 400ms exit animation:
+//  - cachedLessons: without it the remount refetches and renders an empty feed (dark flash)
+//  - cachedIndex: without it the remount renders lesson 1 instead of the lesson the
+//    player was actually on (wrong-content flash — worse than the dark one)
+//  - cachedHasVerticallySwiped: keeps the onboarding peek-hint from re-arming
+// Side benefit: returning to the feed later restores the player's scroll position.
+let cachedLessons = null;
+let cachedIndex = 0;
+let cachedHasVerticallySwiped = false;
+
 const DiscoverView = () => {
     const { dispatch } = useEditor();
     const { t } = useTranslation();
-    const [lessons, setLessons] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [scale, setScale] = useState(1);
+    const [lessons, setLessons] = useState(() => cachedLessons || []);
+    const [currentIndex, setCurrentIndex] = useState(() => cachedIndex);
+    // Estimate synchronously from the viewport so a remount never has to render a
+    // frame at the default/wrong scale before the ResizeObserver below corrects it.
+    const [scale, setScale] = useState(() => {
+        if (typeof window === 'undefined') return 1;
+        return Math.min(window.innerWidth / 360, window.innerHeight / 640);
+    });
     const containerRef = useRef(null);
     const touchStartRef = useRef(null);
     const dragAxis = useRef(null); // 'horizontal' or 'vertical'
 
     const [hasInteracted, setHasInteracted] = useState(false); // Kept for legacy or general "invoked" state if needed, but logic split below
-    const [hasVerticallySwiped, setHasVerticallySwiped] = useState(false);
+    const [hasVerticallySwiped, setHasVerticallySwiped] = useState(() => cachedHasVerticallySwiped);
     const [interactionToken, setInteractionToken] = useState(0); // Used to reset timers
 
     const [hintOffset, setHintOffset] = useState(0);
@@ -28,6 +47,11 @@ const DiscoverView = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragY, setDragY] = useState(0);
     const [dragX, setDragX] = useState(0);
+
+    // Mirror screen-affecting state into the module-level cache (see comment above
+    // the component) so the exit-animation remount reproduces this exact frame.
+    useEffect(() => { cachedIndex = currentIndex; }, [currentIndex]);
+    useEffect(() => { cachedHasVerticallySwiped = hasVerticallySwiped; }, [hasVerticallySwiped]);
 
     // Fetch lessons on mount
     useEffect(() => {
@@ -47,20 +71,25 @@ const DiscoverView = () => {
 
                 const flatList = [];
                 const traverse = (items) => {
+                    if (!Array.isArray(items)) return;
                     items.forEach(item => {
-                        if (item.type === 'directory') {
-                            if (item.children) traverse(item.children);
-                        } else if (item.name.endsWith('.json')) {
-                            flatList.push({ ...item, id: item.path }); // Use path as unique ID
+                        if (item.type === 'directory' && item.children) {
+                            traverse(item.children);
+                        } else if (item.visible !== false) {
+                            flatList.push(item);
                         }
                     });
                 };
                 traverse(data);
 
-                let loadedLessons;
-                if (isDev) {
-                    // Fetch each lesson individually on dev server
-                    loadedLessons = await Promise.all(flatList.map(async (l) => {
+                let loadedLessons = await Promise.all(flatList.map(async (l) => {
+                    if (l.content && l.content.slides && l.content.slides.length > 0) {
+                        return { ...l.content, path: l.path || l.id };
+                    }
+                    if (l.slides && l.slides.length > 0) {
+                        return { ...l, path: l.path || l.id };
+                    }
+                    if (isDev && l.path) {
                         try {
                             const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
                             const content = await res.json();
@@ -68,11 +97,9 @@ const DiscoverView = () => {
                         } catch (e) {
                             return null;
                         }
-                    }));
-                } else {
-                    // Use embedded content from static JSON on Vercel
-                    loadedLessons = flatList.map(l => ({ ...l.content, path: l.path }));
-                }
+                    }
+                    return null;
+                }));
 
                 // Load Local Lessons (Mobile/Offline support)
                 try {
@@ -87,12 +114,17 @@ const DiscoverView = () => {
                 }
 
                 // Filter valid lessons
-                setLessons(loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0));
+                const filtered = loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0);
+                cachedLessons = filtered;
+                setLessons(filtered);
             } catch (error) {
                 console.error('Error loading discover feed:', error);
             }
         };
-        fetchLessons();
+        // A remount (e.g. this view exiting mid swipe-to-lesson transition) already has
+        // the last-fetched list from the lazy useState initializer above — no need to
+        // block on the network again for a copy that's about to be thrown away anyway.
+        if (!cachedLessons) fetchLessons();
     }, []);
 
     // Hint Animation Logic
@@ -140,8 +172,11 @@ const DiscoverView = () => {
         };
     }, [interactionToken, hasVerticallySwiped, currentIndex, lessons]); // Re-run on interaction or nav
 
-    // Responsive Scale
-    useEffect(() => {
+    // Responsive Scale. useLayoutEffect (not useEffect) so this — and the ResizeObserver's
+    // own initial updateScale() call below — resolve before the browser paints. The lazy
+    // useState above already estimates a close value; this corrects it before the user
+    // can see a frame at the wrong scale, which matters most right after a remount.
+    useLayoutEffect(() => {
         const updateScale = () => {
             if (!containerRef.current) return;
             const { width, height } = containerRef.current.getBoundingClientRect();
@@ -184,6 +219,7 @@ const DiscoverView = () => {
     const enterLesson = () => {
         markInteraction(false);
         const lesson = lessons[currentIndex];
+        if (!lesson) return;
         // Merge path if missing in content
         const fullLesson = { ...lesson };
 
@@ -196,15 +232,11 @@ const DiscoverView = () => {
         dispatch({ type: 'LOAD_LESSON', payload: fullLesson });
 
         // If lesson has > 1 slides, start at index 1 (0-based)
-        if (fullLesson.slides.length > 1) {
+        if (fullLesson.slides && fullLesson.slides.length > 1) {
             dispatch({ type: 'SET_CURRENT_SLIDE', payload: fullLesson.slides[1].id });
         }
 
-        // Defer view switch by one frame so the lesson data is committed
-        // before the transition animation starts (prevents flash glitch)
-        requestAnimationFrame(() => {
-            dispatch({ type: 'SET_VIEW', payload: 'player' });
-        });
+        dispatch({ type: 'SET_VIEW', payload: 'player' });
     };
 
     // Keyboard controls
@@ -253,28 +285,34 @@ const DiscoverView = () => {
     };
 
     const handleEnd = (clientX, clientY) => {
-        setIsDragging(false);
-        setDragX(0); // Reset for snap
-        setDragY(0);
+        if (!touchStartRef.current) {
+            setIsDragging(false);
+            setDragX(0);
+            setDragY(0);
+            return;
+        }
 
-        if (!touchStartRef.current) return;
         const deltaX = clientX - touchStartRef.current.x;
         const deltaY = clientY - touchStartRef.current.y;
+        touchStartRef.current = null;
 
         // Determine dominant axis
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // Horizontal
-            if (Math.abs(deltaX) > 50) {
-                // Swipe Right (Finger moves right) -> Previous Slide / Hint
-                // Swipe Left (Finger moves left) -> Enter
-                if (deltaX < -50) enterLesson();
+            if (deltaX < -50) {
+                // Swipe to enter lesson - smoothly hand off directly to player without snap-back
+                enterLesson();
+                return;
             }
         } else {
             // Vertical
             if (deltaY < -50) nextLesson();
             else if (deltaY > 50) prevLesson();
         }
-        touchStartRef.current = null;
+
+        setIsDragging(false);
+        setDragX(0);
+        setDragY(0);
     };
 
     // Touch Wrappers

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -241,7 +241,14 @@ const Player = () => {
     const [bannerFadingOut, setBannerFadingOut] = useState(false);
     const bannerTimeoutRef = useRef(null);
     const bannerFadeTimeoutRef = useRef(null);
-    const [scale, setScale] = useState(1);
+    // Estimate synchronously from the viewport so the first painted frame (e.g. while
+    // this view slides in during the app's view transition) is already at the right
+    // size, instead of rendering at scale 1 and visibly jumping when the
+    // ResizeObserver below delivers the measured value.
+    const [scale, setScale] = useState(() => {
+        if (typeof window === 'undefined') return 1;
+        return Math.min(window.innerWidth / 360, window.innerHeight / 640);
+    });
     const viewportRef = useRef(null);
 
     // ── Web Audio SFX ──
@@ -328,8 +335,9 @@ const Player = () => {
         };
     }, [currentSlideIndex]);
 
-    // Handle responsive scaling
-    useEffect(() => {
+    // Handle responsive scaling. useLayoutEffect so the measured correction lands
+    // before paint — the lazy useState above only estimates from the window.
+    useLayoutEffect(() => {
         const updateScale = () => {
             if (!viewportRef.current) return;
             const { width, height } = viewportRef.current.getBoundingClientRect();

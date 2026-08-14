@@ -114,6 +114,8 @@ const AppContent = () => {
         animDir = 'back';
       } else if (from === 'discover' && to === 'dashboard') {
         animDir = 'back';
+      } else if (from === 'discover' && to === 'player') {
+        shouldAnimate = false;
       }
 
       setDirection(animDir);

@@ -27,18 +27,29 @@
   flex-direction: column;
   align-items: center;
   touch-action: none;
+  padding-top: 72px;
 }
 
 .balanza-cartridge * {
   box-sizing: border-box;
 }
 
-.balanza-top-bar {
+.balanza-header-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+  margin-top: 5vh;
+  z-index: 10;
+}
+
+.balanza-top-row {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 0 16px;
-  margin-top: 72px;
+  align-items: center;
+  min-height: 32px;
 }
 
 .balanza-restart-btn {
@@ -54,16 +65,21 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 10;
 }
 
 .balanza-equation-line {
   margin-top: 10px;
-  font-size: 1.3rem;
+  font-size: clamp(0.95rem, 4vw, 1.35rem);
   font-weight: 800;
   text-align: center;
-  min-height: 1.8rem;
   letter-spacing: 0.02em;
-  padding: 0 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95%;
+  min-height: 1.8rem;
+  line-height: 1.3;
 }
 
 .balanza-scale-wrap {
@@ -76,55 +92,89 @@
 }
 
 .balanza-scale-assembly {
+  position: relative;
+  width: min(520px, 92vw);
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.balanza-beam {
-  position: relative;
-  width: 200px;
-  height: 9px;
-  background: linear-gradient(180deg, #fde58a 0%, var(--beam-gold) 35%, var(--beam-teal) 100%);
-  border-radius: 5px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  transform-origin: center center;
+.balanza-base-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+}
+
+.balanza-beam-wrap {
+  position: absolute;
+  left: 50%;
+  top: 28.75%;
+  width: 81.54%;
+  transform-origin: 49.5% 61.5%;
   transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1);
   z-index: 2;
 }
 
-.balanza-pivot-dot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff2c4, var(--wood-dark) 75%);
-  border: 2px solid var(--beam-gold);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  z-index: 3;
+.balanza-beam-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Plate assembly: sits ABOVE the beam (rigid, not hanging), stacked
-   items-row / dish / strut from top to bottom so the strut meets the beam. */
+/* Plate assemblies positioned on left and right brackets of beam */
 .balanza-plate-assembly {
   position: absolute;
-  bottom: 100%;
+  width: 47.17%;
+  transform-origin: 49.5% 70%;
+  transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
+  z-index: 3;
 }
 
 .balanza-plate-assembly-left {
-  left: 0;
-  transform: translateX(-50%);
+  left: 4.25%;
+  top: 55.0%;
 }
 
 .balanza-plate-assembly-right {
-  right: 0;
-  transform: translateX(50%);
+  left: 95.65%;
+  top: 55.0%;
+}
+
+.balanza-plate-lock-badge {
+  position: absolute;
+  top: -14px;
+  right: 4px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #ffffff;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.balanza-plate-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .balanza-plate-items {
@@ -132,71 +182,39 @@
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: center;
-  gap: 2px;
-  max-width: 100px;
-  min-height: 34px;
-  padding: 2px 4px;
-  margin-bottom: -6px;
+  gap: 4px;
+  width: 90%;
+  min-height: 44px;
+  padding: 4px 6px;
+  margin-bottom: -6%;
   z-index: 2;
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+  border-radius: 12px;
 }
 
-/* Shallow dish viewed at an angle, like a real balance pan resting on its arm */
-.balanza-dish {
-  width: 100px;
-  height: 26px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #fff7e6 0%, var(--plate-bg) 55%, #d9c096 100%);
-  border: 2px solid var(--plate-rim);
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), inset 0 -3px 4px rgba(139, 90, 42, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.6);
+.balanza-tile.is-locked {
+  cursor: not-allowed !important;
+  opacity: 0.85;
 }
 
-.balanza-strut {
-  width: 6px;
-  height: 16px;
-  background: linear-gradient(90deg, var(--wood-dark), var(--wood-light), var(--wood-dark));
-  border-radius: 2px;
+.balanza-plate-items.is-weight-changed {
+  animation: balanzaFlashGain 0.45s ease-out;
 }
 
-.balanza-post {
-  position: relative;
-  width: 0;
-  height: 0;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 96px solid var(--wood-mid);
-  filter: drop-shadow(2px 0 0 rgba(0, 0, 0, 0.08));
+.balanza-plate-items.is-rejected {
+  animation: balanzaFlashReject 0.45s ease-out;
 }
 
-.balanza-post::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -3px;
-  width: 6px;
-  height: 96px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+@keyframes balanzaFlashGain {
+  0% { filter: drop-shadow(0 0 12px #22c55e); }
+  50% { filter: drop-shadow(0 0 20px #4ade80); }
+  100% { filter: drop-shadow(0 0 0px transparent); }
 }
 
-.balanza-base {
-  position: relative;
-  width: 150px;
-  height: 20px;
-  background: linear-gradient(180deg, var(--wood-light), var(--wood-mid) 60%, var(--wood-dark));
-  border-radius: 6px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.balanza-base::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 170px;
-  height: 12px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.18), transparent 70%);
+@keyframes balanzaFlashReject {
+  0% { filter: drop-shadow(0 0 12px #ef4444); }
+  50% { filter: drop-shadow(0 0 20px #f87171); }
+  100% { filter: drop-shadow(0 0 0px transparent); }
 }
 
 /* Plate tiles - big enough for touch, but restrained so plates stay compact */

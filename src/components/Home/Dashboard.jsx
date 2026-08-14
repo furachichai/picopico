@@ -533,6 +533,14 @@ const Dashboard = () => {
         </button>
         <button
           className="nav-item"
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
+          style={{ color: '#EC4899' }}
+        >
+          <Compass size={36} strokeWidth={1.5} />
+          <span className="nav-label">FEED</span>
+        </button>
+        <button
+          className="nav-item"
           onClick={() => dispatch({ type: 'SET_VIEW', payload: 'game' })}
           style={{ color: '#F59E0B' }}
         >

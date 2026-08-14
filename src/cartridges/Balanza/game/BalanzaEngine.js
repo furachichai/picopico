@@ -68,21 +68,40 @@ export function parseWeights(weightsText) {
  */
 export function parseMenuInventory(menuText) {
   if (!menuText) return [];
-  return menuText.split('\n').map(line => line.trim()).filter(Boolean).map((line, idx) => {
-    const match = line.match(/^(\d+)x(.+)$/);
-    if (!match) return null;
-    const count = parseInt(match[1], 10);
-    const rest = match[2].trim();
+  const tokens = menuText.split(/[\n,]/).map(line => line.trim()).filter(Boolean);
+  const items = [];
+
+  tokens.forEach((tok, idx) => {
+    let count = 1;
+    let rest = tok;
+
+    const matchX = tok.match(/^(\d+)\s*x\s*(.+)$/i);
+    if (matchX) {
+      count = parseInt(matchX[1], 10);
+      rest = matchX[2].trim();
+    } else {
+      const matchLeadingNum = tok.match(/^(\d+)(.+)$/);
+      if (matchLeadingNum) {
+        count = parseInt(matchLeadingNum[1], 10);
+        rest = matchLeadingNum[2].trim();
+      }
+    }
+
     const isNumber = /^\d+$/.test(rest);
     const variable = isNumber ? null : rest;
     const unitCoeff = isNumber ? parseInt(rest, 10) : 1;
-    return {
-      key: `${variable ?? 'num' + unitCoeff}-${idx}`,
-      variable,
-      unitCoeff,
-      available: count,
-    };
-  }).filter(Boolean);
+
+    for (let i = 0; i < count; i++) {
+      items.push({
+        key: `menu-${idx}-${i}`,
+        variable,
+        unitCoeff,
+        available: 1,
+      });
+    }
+  });
+
+  return items;
 }
 
 /**
@@ -103,11 +122,11 @@ export function collectUsedSymbols(leftPlateText, rightPlateText, menuText) {
 
 /**
  * Weight of a single symbol. Plain numbers (variable === null) are their own
- * weight; symbolic tokens default to 1 unless overridden in the weights map.
+ * weight; symbolic tokens default to 5 unless overridden in the weights map.
  */
 export function weightOf(variable, weights) {
   if (variable === null || variable === undefined) return 1;
-  return weights[variable] ?? 1;
+  return weights[variable] ?? 5;
 }
 
 export function termValue(term, weights) {
