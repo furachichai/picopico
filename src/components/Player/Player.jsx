@@ -403,6 +403,49 @@ const Player = () => {
         }, 450);
     };
 
+    // ── Hotzone gestures: tap OR swipe, both starting inside a hotzone column ──
+    // Pointer capture is what keeps a swipe from touching anything else on the slide:
+    // once the gesture starts in a hotzone, every subsequent pointer event is routed to
+    // that hotzone element, so buttons/quiz inputs under the finger's path never get
+    // pressed, hovered, or focused. preventDefault() on pointerdown additionally stops
+    // the browser's default focus handling (e.g. blurring a focused text field) and the
+    // synthesized mouse events on touch devices.
+    const SWIPE_TRIGGER = 40;  // min horizontal travel (px) to count as a swipe
+    const TAP_TOLERANCE = 12;  // max travel (px) still treated as a tap
+
+    const swipeRef = useRef(null);
+
+    const handleZonePointerDown = (zone) => (e) => {
+        e.currentTarget.setPointerCapture?.(e.pointerId);
+        e.preventDefault();
+        e.stopPropagation();
+        swipeRef.current = { zone, startX: e.clientX, startY: e.clientY };
+    };
+
+    const handleZonePointerUp = (e) => {
+        const gesture = swipeRef.current;
+        swipeRef.current = null;
+        if (!gesture) return;
+        e.stopPropagation();
+
+        const dx = e.clientX - gesture.startX;
+        const dy = e.clientY - gesture.startY;
+
+        if (Math.abs(dx) >= SWIPE_TRIGGER && Math.abs(dx) > Math.abs(dy)) {
+            // Directional swipe: dragging left pulls the next slide in, dragging right
+            // the previous one — regardless of which column the gesture started in.
+            handleHotzoneNav(dx < 0 ? 'next' : 'prev');
+        } else if (Math.abs(dx) <= TAP_TOLERANCE && Math.abs(dy) <= TAP_TOLERANCE) {
+            // A plain tap keeps the original zone semantics (left = prev, right = next).
+            handleHotzoneNav(gesture.zone === 'left' ? 'prev' : 'next');
+        }
+        // Anything in between (short or mostly-vertical drags) deliberately does nothing.
+    };
+
+    const handleZonePointerCancel = () => {
+        swipeRef.current = null;
+    };
+
     // Check for NL or Field Quiz in current slide to adjust hotzones
     const hasNL = currentSlide?.elements?.some(
         el => el.type === 'quiz' && (el.metadata?.quizType === 'nl' || el.metadata?.quizType === 'field')
@@ -485,12 +528,12 @@ const Player = () => {
                             ...hotzoneStyle,
                             left: 0,
                             borderRight: debugMode ? '1px solid red' : 'none',
-                            pointerEvents: hasCartridge ? 'none' : 'auto'
+                            pointerEvents: hasCartridge ? 'none' : 'auto',
+                            touchAction: 'none'
                         }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleHotzoneNav('prev');
-                        }}
+                        onPointerDown={handleZonePointerDown('left')}
+                        onPointerUp={handleZonePointerUp}
+                        onPointerCancel={handleZonePointerCancel}
                         title={debugMode ? "Prev Slide" : ""}
                     />
 
@@ -500,12 +543,12 @@ const Player = () => {
                             ...hotzoneStyle,
                             right: 0,
                             borderLeft: debugMode ? '1px solid red' : 'none',
-                            pointerEvents: (hasCartridge || hasQuiz) ? 'none' : 'auto'
+                            pointerEvents: (hasCartridge || hasQuiz) ? 'none' : 'auto',
+                            touchAction: 'none'
                         }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleHotzoneNav('next');
-                        }}
+                        onPointerDown={handleZonePointerDown('right')}
+                        onPointerUp={handleZonePointerUp}
+                        onPointerCancel={handleZonePointerCancel}
                         title={debugMode ? "Next Slide" : ""}
                     />
 
