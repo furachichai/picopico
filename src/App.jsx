@@ -59,7 +59,6 @@ class ErrorBoundary extends React.Component {
 
 const AppContent = () => {
   const { state, dispatch } = useEditor();
-  const [displayView, setDisplayView] = React.useState(state.view);
   const [selectedGame, setSelectedGame] = React.useState(null);
 
   React.useEffect(() => {
@@ -92,51 +91,40 @@ const AppContent = () => {
     };
   }, []);
 
-  const [animating, setAnimating] = React.useState(false);
-  const [prevView, setPrevView] = React.useState(null);
-  const [direction, setDirection] = React.useState('forward'); // 'forward' or 'back'
-
-  // Ref to track previous state.view to detect changes
-  const lastStateView = React.useRef(state.view);
+  // View transitions render a stack of views, each in a container KEYED BY VIEW NAME.
+  // During a transition both the outgoing and incoming views are in the stack; when the
+  // outgoing entry flips from 'current' to 'exiting' its key is unchanged, so React
+  // reconciles the SAME component instance and only the animation class changes. The
+  // previous implementation rendered the outgoing view in a separate "prev" wrapper,
+  // which remounted it from scratch — resetting its state mid-exit (the Discover feed
+  // visibly snapped to its default lesson) and burning the whole 400ms animation window
+  // on mounting two view trees at once (so the incoming view seemed to pop in).
+  const [viewStack, setViewStack] = React.useState([{ name: state.view, phase: 'current' }]);
+  const currentViewRef = React.useRef(state.view);
+  const transitionTimeoutRef = React.useRef(null);
 
   React.useEffect(() => {
-    if (state.view !== lastStateView.current) {
-      const from = lastStateView.current;
-      const to = state.view;
+    if (currentViewRef.current === state.view) return;
+    const from = currentViewRef.current;
+    const to = state.view;
+    currentViewRef.current = to;
 
-      // Determine animation direction
-      let animDir = 'forward'; // Default: Slide In (Discover -> Player, etc)
-      let shouldAnimate = true;
+    // Returning to the dashboard reads as "back" (slide right); everything else is "forward"
+    const animDir = (to === 'dashboard' && (from === 'player' || from === 'game' || from === 'discover'))
+      ? 'back'
+      : 'forward';
 
-      if (from === 'player' && (to === 'dashboard')) {
-        animDir = 'back'; // Slide Out (Player -> Dashboard)
-      } else if (from === 'game' && to === 'dashboard') {
-        animDir = 'back';
-      } else if (from === 'discover' && to === 'dashboard') {
-        animDir = 'back';
-      } else if (from === 'discover' && to === 'player') {
-        shouldAnimate = false;
-      }
-
-      setDirection(animDir);
-      setPrevView(from);
-      setDisplayView(to);
-
-      if (shouldAnimate) {
-        setAnimating(true);
-        const timeout = setTimeout(() => {
-          setAnimating(false);
-          setPrevView(null);
-        }, 400); // 400ms matches CSS animation
-        lastStateView.current = to;
-        return () => clearTimeout(timeout);
-      } else {
-        setAnimating(false);
-        setPrevView(null);
-        lastStateView.current = to;
-      }
-    }
+    clearTimeout(transitionTimeoutRef.current);
+    setViewStack([
+      { name: from, phase: 'exiting', direction: animDir },
+      { name: to, phase: 'entering', direction: animDir },
+    ]);
+    transitionTimeoutRef.current = setTimeout(() => {
+      setViewStack([{ name: to, phase: 'current' }]);
+    }, 400); // matches the CSS animation duration
   }, [state.view]);
+
+  React.useEffect(() => () => clearTimeout(transitionTimeoutRef.current), []);
 
 
   // Prevent iOS Pinch-to-Zoom
@@ -413,17 +401,20 @@ const AppContent = () => {
         backgroundColor: '#1a202c',
         zIndex: -5
       }} />
-      {/* Exiting View */}
-      {animating && prevView && (
-        <div key="prev" className={`view-container ${direction === 'forward' ? 'view-slide-exit' : 'view-pop-exit'}`}>
-          {renderView(prevView)}
-        </div>
-      )}
-
-      {/* Entering View (or Current Static) */}
-      <div key="current" className={`view-container ${animating ? (direction === 'forward' ? 'view-slide-enter' : 'view-pop-enter') : ''}`}>
-        {renderView(displayView)}
-      </div>
+      {/* View stack: keys are view names, so a view keeps its mounted instance across
+          phase changes (current -> exiting) and only its animation class updates. */}
+      {viewStack.map(v => {
+        const animClass = v.phase === 'exiting'
+          ? (v.direction === 'forward' ? 'view-slide-exit' : 'view-pop-exit')
+          : v.phase === 'entering'
+            ? (v.direction === 'forward' ? 'view-slide-enter' : 'view-pop-enter')
+            : '';
+        return (
+          <div key={v.name} className={`view-container ${animClass}`}>
+            {renderView(v.name)}
+          </div>
+        );
+      })}
     </div>
   );
 };
