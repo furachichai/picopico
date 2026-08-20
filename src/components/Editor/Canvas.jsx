@@ -228,6 +228,65 @@ const Canvas = (props) => {
     }
   }, [props.onEditElement]);
 
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    const rawData = e.dataTransfer.getData('application/json');
+    let src = '';
+    if (rawData) {
+      try {
+        const parsed = JSON.parse(rawData);
+        if (parsed.src) src = parsed.src;
+      } catch (err) {
+        // ignore
+      }
+    }
+    if (!src) {
+      src = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('text/uri-list');
+    }
+    if (!src) return;
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const dropX = ((e.clientX - rect.left) / rect.width) * 100;
+    const dropY = ((e.clientY - rect.top) / rect.height) * 100;
+
+    const img = new Image();
+    img.onload = () => {
+      const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
+      const targetWidthPercent = 40;
+      const targetWidthPx = 360 * (targetWidthPercent / 100);
+      const targetHeightPx = targetWidthPx / aspectRatio;
+      const targetHeightPercent = (targetHeightPx / 640) * 100;
+
+      dispatch({
+        type: 'ADD_ELEMENT',
+        payload: {
+          type: 'image',
+          content: src,
+          x: Math.max(0, Math.min(100 - targetWidthPercent, dropX - targetWidthPercent / 2)),
+          y: Math.max(0, Math.min(100 - targetHeightPercent, dropY - targetHeightPercent / 2)),
+          metadata: {
+            width: targetWidthPercent,
+            height: targetHeightPercent
+          }
+        }
+      });
+    };
+    img.onerror = () => {
+      dispatch({
+        type: 'ADD_ELEMENT',
+        payload: {
+          type: 'image',
+          content: src,
+          x: Math.max(0, dropX - 20),
+          y: Math.max(0, dropY - 20),
+          metadata: { width: 40, height: 40 }
+        }
+      });
+    };
+    img.src = src;
+  }, [dispatch]);
+
   return (
     <div className="canvas-container" ref={containerRef}>
       {/* Wrapper: position:relative so pointers can sit outside the overflow:hidden canvas */}
@@ -242,6 +301,8 @@ const Canvas = (props) => {
             position: 'relative'
           }}
           onPointerDown={handlePointerDown}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background Layer */}

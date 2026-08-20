@@ -35,8 +35,8 @@ const ASSETS = {
 
 // Load custom characters from src/assets/characters
 // Force HMR reload - triggering glob re-eval
-const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true });
-const customCharacterList = Object.values(customCharacters).map(mod => mod.default);
+const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customCharacterList = Object.values(customCharacters);
 
 // Load custom images from src/assets/images
 const customImages = import.meta.glob('../../assets/images/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
@@ -181,7 +181,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             // Pre-load image to get dimensions
             const img = new Image();
             img.onload = () => {
-                const aspectRatio = img.naturalWidth / img.naturalHeight;
+                const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
                 // Target width: 40% of screen width (360px)
                 const targetWidthPercent = 40;
                 const targetWidthPx = 360 * (targetWidthPercent / 100);
@@ -196,6 +196,20 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         metadata: {
                             width: targetWidthPercent,
                             height: targetHeightPercent
+                        }
+                    }
+                });
+                onClose();
+            };
+            img.onerror = () => {
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        type: ELEMENT_TYPES.IMAGE,
+                        content: item,
+                        metadata: {
+                            width: 40,
+                            height: 40
                         }
                     }
                 });
@@ -296,9 +310,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                 <div
                                     key={index}
                                     className="asset-item custom"
+                                    draggable
+                                    onDragStart={(e) => {
+                                        e.dataTransfer.setData('text/plain', src);
+                                        e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
+                                    }}
                                     onClick={() => handleSelect(src)}
                                 >
-                                    <img src={src} alt="character" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                    <img src={src} alt="character" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                 </div>
                             ))
                         ) : (
@@ -314,9 +333,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                 <div
                                     key={index}
                                     className="asset-item custom"
+                                    draggable
+                                    onDragStart={(e) => {
+                                        e.dataTransfer.setData('text/plain', src);
+                                        e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
+                                    }}
                                     onClick={() => handleSelect(src)}
                                 >
-                                    <img src={src} alt="object" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                    <img src={src} alt="object" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                 </div>
                             ))
                         ) : (
