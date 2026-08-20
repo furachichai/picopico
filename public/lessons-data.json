@@ -120122,6 +120122,151 @@
       "title": "01 Algebra Scale",
       "slides": [
         {
+          "id": "slide-1787238227179",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1787238327442",
+              "type": "balloon",
+              "content": "This lab has been abandoned for years...",
+              "x": 57.777777777777764,
+              "y": 25.625,
+              "width": 52.22222222222223,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -45,
+                  "y": 83
+                }
+              }
+            },
+            {
+              "id": "el-1787238293982",
+              "type": "image",
+              "content": "/src/assets/characters/yara_walking_flashlight_high.png",
+              "x": 36.11111111111111,
+              "y": 64.21875,
+              "width": 40,
+              "height": 35.47169811320755,
+              "rotation": 0,
+              "scale": 1.7308537748106367,
+              "metadata": {
+                "width": 40,
+                "height": 35.47169811320755
+              }
+            },
+            {
+              "id": "el-1787238283073",
+              "type": "image",
+              "content": "/src/assets/characters/pesto%20asking%20question.png?t=1787235433901",
+              "x": 81.66666666666666,
+              "y": 80.9375,
+              "width": 40,
+              "height": 25.981132075471695,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 25.981132075471695,
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1787238361425",
+              "type": "balloon",
+              "content": "Maybe we should leave...",
+              "x": 66.66666666666667,
+              "y": 61.25,
+              "width": 40,
+              "height": 13.125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 15,
+                  "y": 57
+                }
+              }
+            }
+          ],
+          "order": 0
+        },
+        {
+          "id": "slide-1787238392532",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1787238406175",
+              "type": "image",
+              "content": "/src/assets/characters/yara_investigating_flashlight.png",
+              "x": 53.888888888888886,
+              "y": 68.4375,
+              "width": 40,
+              "height": 32.69880715705765,
+              "rotation": 0,
+              "scale": 1.925823986750886,
+              "metadata": {
+                "width": 40,
+                "height": 32.69880715705765
+              }
+            },
+            {
+              "id": "el-1787238413891",
+              "type": "balloon",
+              "content": "Look closely!<div><br></div><div>This lab used to be full of expensive ingredients.</div>",
+              "x": 41.666666666666664,
+              "y": 27.1875,
+              "width": 60,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 29,
+                  "y": 76
+                }
+              }
+            }
+          ],
+          "order": 1
+        },
+        {
+          "id": "slide-1787238498915",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1787238521502",
+              "type": "image",
+              "content": "/src/assets/characters/pesto%20jumping.png?t=1787235433901",
+              "x": 31.38888888888889,
+              "y": 68.28125,
+              "width": 40,
+              "height": 26.642384105960264,
+              "rotation": 0,
+              "scale": 1.5080782160742598,
+              "metadata": {
+                "width": 40,
+                "height": 26.642384105960264
+              }
+            }
+          ],
+          "order": 2
+        },
+        {
           "id": "slide-1",
           "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
@@ -120142,7 +120287,7 @@
               }
             }
           ],
-          "order": 0,
+          "order": 3,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -120180,7 +120325,7 @@
               }
             }
           ],
-          "order": 1,
+          "order": 4,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -120197,7 +120342,7 @@
           "id": "slide-1786889005313",
           "background": "#E1F5FE",
           "elements": [],
-          "order": 2,
+          "order": 5,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -120215,7 +120360,7 @@
           "id": "slide-1787155168603",
           "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
           "elements": [],
-          "order": 3,
+          "order": 6,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -120276,13 +120421,13 @@
               }
             }
           ],
-          "order": 4
+          "order": 7
         },
         {
           "id": "slide-1787155484327",
           "background": "#E1F5FE",
           "elements": [],
-          "order": 5,
+          "order": 8,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -120340,13 +120485,13 @@
               }
             }
           ],
-          "order": 6,
+          "order": 9,
           "cartridge": null
         }
       ],
       "author": "User",
       "createdAt": "2026-08-14T13:04:20.617Z",
-      "updatedAt": "2026-08-19T16:41:50.482Z",
+      "updatedAt": "2026-08-20T15:09:15.895Z",
       "path": "lessons/2361-01 Algebra Scale/lesson.json",
       "textPreset": null,
       "description": "",
@@ -120368,7 +120513,7 @@
         "slides": [
           {
             "id": "slide-1",
-            "background": "#E1F5FE",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
             "elements": [
               {
                 "id": "el-1787152902933",
@@ -120392,13 +120537,16 @@
               "type": "Balanza",
               "config": {
                 "weightsText": "",
-                "leftPlateText": "💡",
+                "leftPlateText": " 🍉",
                 "rightPlateText": "",
-                "menuText": "🍎",
+                "menuText": "🍍",
                 "showZeroTiles": false,
-                "lockLeftPlate": true,
+                "lockLeftPlate": false,
                 "showEquation": false
               }
+            },
+            "backgroundSettings": {
+              "opacity": 0.35
             }
           },
           {
@@ -120429,7 +120577,7 @@
                 "weightsText": "",
                 "leftPlateText": "",
                 "rightPlateText": "",
-                "menuText": "🎁,🎁",
+                "menuText": "🎁, 🎮",
                 "showZeroTiles": false,
                 "showEquation": false
               }
@@ -120443,7 +120591,7 @@
             "cartridge": {
               "type": "Balanza",
               "config": {
-                "weightsText": "🏀=10",
+                "weightsText": "🏀=10\n🎾=3\n⚽=7",
                 "leftPlateText": "",
                 "rightPlateText": "",
                 "menuText": "🎾, ⚽,🏀",
@@ -120454,24 +120602,28 @@
             }
           },
           {
+            "id": "slide-1787155168603",
+            "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+            "elements": [],
+            "order": 3,
+            "cartridge": {
+              "type": "Balanza",
+              "config": {
+                "weightsText": "",
+                "leftPlateText": "",
+                "rightPlateText": "",
+                "menuText": "📦x, 💎",
+                "showZeroTiles": false
+              }
+            },
+            "backgroundSettings": {
+              "opacity": 0.39
+            }
+          },
+          {
             "id": "slide-1786889106713",
             "background": "#E1F5FE",
             "elements": [
-              {
-                "id": "el-1786889184132",
-                "type": "text",
-                "content": "What's the create's value?",
-                "x": 49.02777777777778,
-                "y": 21.5625,
-                "width": 45.89121245555713,
-                "height": 7.8125,
-                "rotation": 0,
-                "scale": 1.8961620658490272,
-                "metadata": {
-                  "textAlign": "center",
-                  "fontFamily": "\"Fira Sans\""
-                }
-              },
               {
                 "id": "el-1786889111450",
                 "type": "quiz",
@@ -120485,7 +120637,7 @@
                 "metadata": {
                   "fontFamily": "\"Fira Sans\"",
                   "options": [
-                    "One moustache",
+                    "One diamond",
                     "12 grams",
                     "a + b",
                     "It's impossible to know"
@@ -120497,9 +120649,40 @@
                   "quizType": "classic",
                   "visualMode": false
                 }
+              },
+              {
+                "id": "el-1786889184132",
+                "type": "text",
+                "content": "What's the crate's value?",
+                "x": 49.02777777777778,
+                "y": 21.5625,
+                "width": 45.89121245555713,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8961620658490272,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\""
+                }
               }
             ],
-            "order": 3
+            "order": 4
+          },
+          {
+            "id": "slide-1787155484327",
+            "background": "#E1F5FE",
+            "elements": [],
+            "order": 5,
+            "cartridge": {
+              "type": "Balanza",
+              "config": {
+                "weightsText": "📦x=11\n👑=7\n🗝️=3\n💰=11",
+                "leftPlateText": "",
+                "rightPlateText": "",
+                "menuText": "📦x, 💰, 🗝️, 👑",
+                "showZeroTiles": false
+              }
+            }
           },
           {
             "id": "slide-1786889519905",
@@ -120533,12 +120716,12 @@
                 "metadata": {
                   "fontFamily": "\"Fira Sans\"",
                   "options": [
-                    "1 cake",
-                    "1ball",
-                    "1 cake + 1 ball",
-                    "2 balls"
+                    "1 crown",
+                    "1 key",
+                    "1 key + 1 bag",
+                    "1 bag of money"
                   ],
-                  "correctIndex": 0,
+                  "correctIndex": 1,
                   "correctIndices": [
                     0
                   ],
@@ -120547,13 +120730,13 @@
                 }
               }
             ],
-            "order": 4,
+            "order": 6,
             "cartridge": null
           }
         ],
         "author": "User",
         "createdAt": "2026-08-14T13:04:20.617Z",
-        "updatedAt": "2026-08-19T15:25:32.264Z",
+        "updatedAt": "2026-08-19T16:41:50.482Z",
         "path": "lessons/2361-01 Algebra Scale/lesson.json",
         "textPreset": null,
         "description": "",
@@ -120576,7 +120759,24 @@
             {
               "id": "slide-1",
               "background": "#E1F5FE",
-              "elements": [],
+              "elements": [
+                {
+                  "id": "el-1787152902933",
+                  "type": "text",
+                  "content": "Balance the scale",
+                  "x": 49.30555555555555,
+                  "y": 20.3125,
+                  "width": 56.388888888888886,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8586316360533637,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#00BFA5"
+                  }
+                }
+              ],
               "order": 0,
               "cartridge": {
                 "type": "Balanza",
@@ -120586,14 +120786,32 @@
                   "rightPlateText": "",
                   "menuText": "🍎",
                   "showZeroTiles": false,
-                  "lockLeftPlate": true
+                  "lockLeftPlate": true,
+                  "showEquation": false
                 }
               }
             },
             {
               "id": "slide-1786888937383",
               "background": "#E1F5FE",
-              "elements": [],
+              "elements": [
+                {
+                  "id": "el-1787152948605-019mju1y3",
+                  "type": "text",
+                  "content": "Balance the scale",
+                  "x": 51.30555555555555,
+                  "y": 22.3125,
+                  "width": 56.388888888888886,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8586316360533637,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\"",
+                    "backgroundColor": "#00BFA5"
+                  }
+                }
+              ],
               "order": 1,
               "cartridge": {
                 "type": "Balanza",
@@ -120601,7 +120819,7 @@
                   "weightsText": "",
                   "leftPlateText": "",
                   "rightPlateText": "",
-                  "menuText": "🎁, 💎",
+                  "menuText": "🎁,🎁",
                   "showZeroTiles": false,
                   "showEquation": false
                 }
@@ -120616,11 +120834,11 @@
                 "type": "Balanza",
                 "config": {
                   "weightsText": "🏀=10",
-                  "leftPlateText": "🏀",
+                  "leftPlateText": "",
                   "rightPlateText": "",
-                  "menuText": "🎾, ⚽",
+                  "menuText": "🎾, ⚽,🏀",
                   "showZeroTiles": false,
-                  "lockLeftPlate": true,
+                  "lockLeftPlate": false,
                   "showEquation": false
                 }
               }
@@ -120725,7 +120943,7 @@
           ],
           "author": "User",
           "createdAt": "2026-08-14T13:04:20.617Z",
-          "updatedAt": "2026-08-16T14:12:37.758Z",
+          "updatedAt": "2026-08-19T15:25:32.264Z",
           "path": "lessons/2361-01 Algebra Scale/lesson.json",
           "textPreset": null,
           "description": "",
@@ -120756,16 +120974,148 @@
                     "weightsText": "",
                     "leftPlateText": "💡",
                     "rightPlateText": "",
-                    "menuText": "2x🍎",
+                    "menuText": "🍎",
                     "showZeroTiles": false,
                     "lockLeftPlate": true
                   }
                 }
+              },
+              {
+                "id": "slide-1786888937383",
+                "background": "#E1F5FE",
+                "elements": [],
+                "order": 1,
+                "cartridge": {
+                  "type": "Balanza",
+                  "config": {
+                    "weightsText": "",
+                    "leftPlateText": "",
+                    "rightPlateText": "",
+                    "menuText": "🎁, 💎",
+                    "showZeroTiles": false,
+                    "showEquation": false
+                  }
+                }
+              },
+              {
+                "id": "slide-1786889005313",
+                "background": "#E1F5FE",
+                "elements": [],
+                "order": 2,
+                "cartridge": {
+                  "type": "Balanza",
+                  "config": {
+                    "weightsText": "🏀=10",
+                    "leftPlateText": "🏀",
+                    "rightPlateText": "",
+                    "menuText": "🎾, ⚽",
+                    "showZeroTiles": false,
+                    "lockLeftPlate": true,
+                    "showEquation": false
+                  }
+                }
+              },
+              {
+                "id": "slide-1786889106713",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1786889184132",
+                    "type": "text",
+                    "content": "What's the create's value?",
+                    "x": 49.02777777777778,
+                    "y": 21.5625,
+                    "width": 45.89121245555713,
+                    "height": 7.8125,
+                    "rotation": 0,
+                    "scale": 1.8961620658490272,
+                    "metadata": {
+                      "textAlign": "center",
+                      "fontFamily": "\"Fira Sans\""
+                    }
+                  },
+                  {
+                    "id": "el-1786889111450",
+                    "type": "quiz",
+                    "content": "Quiz",
+                    "x": 50,
+                    "y": 81.875,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\"",
+                      "options": [
+                        "One moustache",
+                        "12 grams",
+                        "a + b",
+                        "It's impossible to know"
+                      ],
+                      "correctIndex": 0,
+                      "correctIndices": [
+                        0
+                      ],
+                      "quizType": "classic",
+                      "visualMode": false
+                    }
+                  }
+                ],
+                "order": 3
+              },
+              {
+                "id": "slide-1786889519905",
+                "background": "#E1F5FE",
+                "elements": [
+                  {
+                    "id": "el-1786889519905-nlxh15b8m",
+                    "type": "text",
+                    "content": "What's x value?",
+                    "x": 49.02777777777778,
+                    "y": 21.5625,
+                    "width": 45.89121245555713,
+                    "height": 7.8125,
+                    "rotation": 0,
+                    "scale": 1.8961620658490272,
+                    "metadata": {
+                      "textAlign": "center",
+                      "fontFamily": "\"Fira Sans\""
+                    }
+                  },
+                  {
+                    "id": "el-1786889519905-3u9kfeefz",
+                    "type": "quiz",
+                    "content": "Quiz",
+                    "x": 50,
+                    "y": 81.875,
+                    "width": 20,
+                    "height": 10,
+                    "rotation": 0,
+                    "scale": 1,
+                    "metadata": {
+                      "fontFamily": "\"Fira Sans\"",
+                      "options": [
+                        "1 cake",
+                        "1ball",
+                        "1 cake + 1 ball",
+                        "2 balls"
+                      ],
+                      "correctIndex": 0,
+                      "correctIndices": [
+                        0
+                      ],
+                      "quizType": "classic",
+                      "visualMode": false
+                    }
+                  }
+                ],
+                "order": 4,
+                "cartridge": null
               }
             ],
             "author": "User",
             "createdAt": "2026-08-14T13:04:20.617Z",
-            "updatedAt": "2026-08-14T13:06:52.362Z",
+            "updatedAt": "2026-08-16T14:12:37.758Z",
             "path": "lessons/2361-01 Algebra Scale/lesson.json",
             "textPreset": null,
             "description": "",
@@ -120776,6 +121126,62 @@
                 "title": "",
                 "description": ""
               }
+            },
+            "name": "2361-01 Algebra Scale",
+            "type": "file",
+            "visible": true,
+            "order": 2361,
+            "content": {
+              "id": "lessons/2361-01 Algebra Scale/lesson.json",
+              "title": "01 Algebra Scale",
+              "slides": [
+                {
+                  "id": "slide-1",
+                  "background": "#E1F5FE",
+                  "elements": [],
+                  "order": 0,
+                  "cartridge": {
+                    "type": "Balanza",
+                    "config": {
+                      "weightsText": "",
+                      "leftPlateText": "💡",
+                      "rightPlateText": "",
+                      "menuText": "2x🍎",
+                      "showZeroTiles": false,
+                      "lockLeftPlate": true
+                    }
+                  }
+                }
+              ],
+              "author": "User",
+              "createdAt": "2026-08-14T13:04:20.617Z",
+              "updatedAt": "2026-08-14T13:06:52.362Z",
+              "path": "lessons/2361-01 Algebra Scale/lesson.json",
+              "textPreset": null,
+              "description": "",
+              "icon": "icon_lightbulb.png",
+              "cardColor": "#14B8A6",
+              "translations": {
+                "en": {
+                  "title": "",
+                  "description": ""
+                }
+              }
+            },
+            "status": "completed",
+            "statusIcon": {
+              "type": {},
+              "key": null,
+              "props": {
+                "size": 24
+              },
+              "_owner": null,
+              "_store": {}
+            },
+            "progress": {
+              "lastSlideIndex": 0,
+              "completed": true,
+              "lastPlayed": 1786718704551
             }
           },
           "status": "completed",
@@ -120789,12 +121195,12 @@
             "_store": {}
           },
           "progress": {
-            "lastSlideIndex": 0,
+            "lastSlideIndex": 3,
             "completed": true,
-            "lastPlayed": 1786718704551
+            "lastPlayed": 1786889228753
           }
         },
-        "status": "completed",
+        "status": "active",
         "statusIcon": {
           "type": {},
           "key": null,
@@ -120805,9 +121211,9 @@
           "_store": {}
         },
         "progress": {
-          "lastSlideIndex": 3,
-          "completed": true,
-          "lastPlayed": 1786889228753
+          "lastSlideIndex": 2,
+          "completed": false,
+          "lastPlayed": 1787153923619
         }
       },
       "status": "active",
@@ -120821,9 +121227,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 2,
+        "lastSlideIndex": 1,
         "completed": false,
-        "lastPlayed": 1787153923619
+        "lastPlayed": 1787157704201
       }
     }
   },
