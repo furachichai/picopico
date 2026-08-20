@@ -120450,7 +120450,9 @@
           "order": 7,
           "backgroundSettings": {
             "grayscale": true,
-            "tintColor": "rgba(148, 163, 184, 0.4)"
+            "tintColor": "rgba(192, 132, 252, 0.4)",
+            "opacity": 0.67,
+            "brightness": 95
           }
         },
         {
@@ -120672,7 +120674,7 @@
       ],
       "author": "User",
       "createdAt": "2026-08-14T13:04:20.617Z",
-      "updatedAt": "2026-08-20T16:09:11.265Z",
+      "updatedAt": "2026-08-20T16:17:20.549Z",
       "path": "lessons/2361-01 Algebra Scale/lesson.json",
       "textPreset": null,
       "description": "",

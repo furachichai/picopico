@@ -97,6 +97,9 @@ const classifyAsset = (src) => {
     if (filename.includes('yara')) {
         return 'yara';
     }
+    if (filename.includes('robot') || filename.includes('juicer')) {
+        return 'robot';
+    }
     if (
         filename.startsWith('whole_') || 
         filename.startsWith('part_') || 
@@ -124,6 +127,7 @@ const CATEGORIES = [
     { id: 'dilla', name: 'Dilla' },
     { id: 'wizard', name: 'Wizard' },
     { id: 'yara', name: 'Yara' },
+    { id: 'robot', name: 'Robot' },
     { id: 'objects', name: 'Objects' },
     { id: 'other', name: 'Other' },
     { id: 'all', name: 'All' }
