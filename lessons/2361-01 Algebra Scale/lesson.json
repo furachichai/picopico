@@ -23,42 +23,6 @@
           }
         },
         {
-          "id": "el-1787238327442",
-          "type": "balloon",
-          "content": "This <b>lab</b> has been <b>abandoned</b> for years...",
-          "x": 54.44444444444443,
-          "y": 28.90625,
-          "width": 52.22222222222223,
-          "height": 20,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Noto Sans\"",
-            "fontSize": 16,
-            "tailPos": {
-              "x": -45,
-              "y": 83
-            }
-          }
-        },
-        {
-          "id": "el-1787238293982",
-          "type": "image",
-          "content": "/src/assets/characters/yara_walking_flashlight_high.png",
-          "x": 31.944444444444443,
-          "y": 67.1875,
-          "width": 40,
-          "height": 35.47169811320755,
-          "rotation": 0,
-          "scale": 1.7308537748106367,
-          "metadata": {
-            "width": 40,
-            "height": 35.47169811320755
-          }
-        },
-        {
           "id": "el-1787238361425",
           "type": "balloon",
           "content": "Maybe we should <b>leave</b>...",
@@ -78,11 +42,49 @@
               "y": 57
             }
           }
+        },
+        {
+          "id": "el-1787238293982",
+          "type": "image",
+          "content": "/src/assets/characters/yara_walking_flashlight_high.png",
+          "x": 31.944444444444443,
+          "y": 67.1875,
+          "width": 40,
+          "height": 35.47169811320755,
+          "rotation": 0,
+          "scale": 1.7308537748106367,
+          "metadata": {
+            "width": 40,
+            "height": 35.47169811320755
+          }
+        },
+        {
+          "id": "el-1787238327442",
+          "type": "balloon",
+          "content": "This <b>lab</b> has been <b>abandoned</b> for years...",
+          "x": 54.44444444444443,
+          "y": 28.90625,
+          "width": 52.22222222222223,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -45,
+              "y": 83
+            }
+          }
         }
       ],
       "order": 0,
       "backgroundSettings": {
-        "opacity": 0.74
+        "opacity": 0.55,
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)"
       }
     },
     {
@@ -90,24 +92,9 @@
       "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_clutter.png?t=1787239736544\")",
       "elements": [
         {
-          "id": "el-1787238406175",
-          "type": "image",
-          "content": "/src/assets/characters/yara_investigating_flashlight.png",
-          "x": 75.55555555555556,
-          "y": 74.84375,
-          "width": 40,
-          "height": 32.69880715705765,
-          "rotation": 0,
-          "scale": 1.732468575549723,
-          "metadata": {
-            "width": 40,
-            "height": 32.69880715705765
-          }
-        },
-        {
           "id": "el-1787238413891",
           "type": "balloon",
-          "content": "Look closely!<div><br></div><div>This lab used to be full of <b>expensive</b> materials.</div>",
+          "content": "Look closely!<div><br></div><div>It used to be full of <b>expensive</b> materials.</div>",
           "x": 39.72222222222222,
           "y": 39.21875,
           "width": 60,
@@ -124,11 +111,28 @@
               "y": 76
             }
           }
+        },
+        {
+          "id": "el-1787238406175",
+          "type": "image",
+          "content": "/src/assets/characters/yara_investigating_flashlight.png",
+          "x": 75.55555555555556,
+          "y": 74.84375,
+          "width": 40,
+          "height": 32.69880715705765,
+          "rotation": 0,
+          "scale": 1.732468575549723,
+          "metadata": {
+            "width": 40,
+            "height": 32.69880715705765
+          }
         }
       ],
       "order": 1,
       "backgroundSettings": {
-        "opacity": 0.55
+        "opacity": 0.55,
+        "grayscale": true,
+        "tintColor": "rgba(103, 232, 249, 0.4)"
       }
     },
     {
@@ -157,6 +161,21 @@
           }
         },
         {
+          "id": "el-1787238938346",
+          "type": "image",
+          "content": "/src/assets/characters/balanza_wooden_scale.png",
+          "x": 69.72222222222221,
+          "y": 76.40625,
+          "width": 40,
+          "height": 12.2625,
+          "rotation": 1.572999261946066,
+          "scale": 1.8881819841022822,
+          "metadata": {
+            "width": 40,
+            "height": 12.2625
+          }
+        },
+        {
           "id": "el-1787238521502",
           "type": "image",
           "content": "/src/assets/characters/pesto%20jumping.png?t=1787235433901",
@@ -171,24 +190,14 @@
             "height": 26.642384105960264,
             "flipX": false
           }
-        },
-        {
-          "id": "el-1787238938346",
-          "type": "image",
-          "content": "/src/assets/characters/balanza_wooden_scale.png",
-          "x": 69.44444444444443,
-          "y": 76.71875,
-          "width": 40,
-          "height": 12.2625,
-          "rotation": 1.572999261946066,
-          "scale": 1.5912313919082297,
-          "metadata": {
-            "width": 40,
-            "height": 12.2625
-          }
         }
       ],
-      "order": 2
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.62,
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)"
+      }
     },
     {
       "id": "slide-1",
@@ -300,6 +309,32 @@
       }
     },
     {
+      "id": "slide-1787242082252",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_crates_foreground.png\")",
+      "elements": [
+        {
+          "id": "el-1787242090557",
+          "type": "image",
+          "content": "/src/assets/characters/yara_prying_crate.png",
+          "x": 48.05555555555556,
+          "y": 72.1875,
+          "width": 40,
+          "height": 23.317039106145252,
+          "rotation": 0,
+          "scale": 2.269069416067087,
+          "metadata": {
+            "width": 40,
+            "height": 23.317039106145252
+          }
+        }
+      ],
+      "order": 7,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(148, 163, 184, 0.4)"
+      }
+    },
+    {
       "id": "slide-1786889106713",
       "background": "#E1F5FE",
       "elements": [
@@ -345,13 +380,13 @@
           }
         }
       ],
-      "order": 7
+      "order": 8
     },
     {
       "id": "slide-1787155484327",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 8,
+      "order": 9,
       "cartridge": {
         "type": "Balanza",
         "config": {
@@ -361,6 +396,109 @@
           "menuText": "📦x, 💰, 🗝️, 👑",
           "showZeroTiles": false
         }
+      }
+    },
+    {
+      "id": "slide-1787239866079",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_office_desk.png?t=1787239736544\")",
+      "elements": [
+        {
+          "id": "el-1787239930917",
+          "type": "balloon",
+          "content": "I think I found the scientist...",
+          "x": 43.88888888888889,
+          "y": 56.09375,
+          "width": 40,
+          "height": 14.374999999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -15,
+              "y": 72
+            }
+          }
+        },
+        {
+          "id": "el-1787240190832",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%235A5A5A%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 75.55555555555554,
+          "y": 83.90625,
+          "width": 40,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-circle",
+            "symbolColor": "#5A5A5A",
+            "opacity": 0.59
+          }
+        },
+        {
+          "id": "el-1787239877699",
+          "type": "image",
+          "content": "/src/assets/characters/skeleton_scientist_slumped.png",
+          "x": 76.3888888888889,
+          "y": 64.21875,
+          "width": 40,
+          "height": 37.41028708133972,
+          "rotation": 0,
+          "scale": 1.199978550217749,
+          "metadata": {
+            "width": 40,
+            "height": 37.41028708133972,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1787240220693",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%235A5A5A%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 33.611111111111114,
+          "y": 93.125,
+          "width": 40,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 0.9186416270909946,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-circle",
+            "symbolColor": "#5A5A5A",
+            "opacity": 0.61
+          }
+        },
+        {
+          "id": "el-1787239921216",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20scratching%20head_back.png?t=1787235433901",
+          "x": 28.333333333333332,
+          "y": 83.125,
+          "width": 40,
+          "height": 29.21282798833819,
+          "rotation": 0,
+          "scale": 0.8533590959842381,
+          "metadata": {
+            "width": 40,
+            "height": 29.21282798833819,
+            "flipX": true
+          }
+        }
+      ],
+      "order": 10,
+      "backgroundSettings": {
+        "opacity": 0.62,
+        "grayscale": true,
+        "tintColor": "rgba(253, 164, 175, 0.4)"
       }
     },
     {
@@ -409,13 +547,13 @@
           }
         }
       ],
-      "order": 9,
+      "order": 11,
       "cartridge": null
     }
   ],
   "author": "User",
   "createdAt": "2026-08-14T13:04:20.617Z",
-  "updatedAt": "2026-08-20T15:30:16.081Z",
+  "updatedAt": "2026-08-20T16:09:11.265Z",
   "path": "lessons/2361-01 Algebra Scale/lesson.json",
   "textPreset": null,
   "description": "",
@@ -435,6 +573,203 @@
     "id": "lessons/2361-01 Algebra Scale/lesson.json",
     "title": "01 Algebra Scale",
     "slides": [
+      {
+        "id": "slide-1787238227179",
+        "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_hallway.png\")",
+        "elements": [
+          {
+            "id": "el-1787238283073",
+            "type": "image",
+            "content": "/src/assets/characters/pesto%20asking%20question.png?t=1787235433901",
+            "x": 79.99999999999999,
+            "y": 83.75,
+            "width": 40,
+            "height": 25.981132075471695,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "width": 40,
+              "height": 25.981132075471695,
+              "flipX": true
+            }
+          },
+          {
+            "id": "el-1787238361425",
+            "type": "balloon",
+            "content": "Maybe we should <b>leave</b>...",
+            "x": 66.66666666666667,
+            "y": 61.25,
+            "width": 40,
+            "height": 13.125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 15,
+                "y": 57
+              }
+            }
+          },
+          {
+            "id": "el-1787238293982",
+            "type": "image",
+            "content": "/src/assets/characters/yara_walking_flashlight_high.png",
+            "x": 31.944444444444443,
+            "y": 67.1875,
+            "width": 40,
+            "height": 35.47169811320755,
+            "rotation": 0,
+            "scale": 1.7308537748106367,
+            "metadata": {
+              "width": 40,
+              "height": 35.47169811320755
+            }
+          },
+          {
+            "id": "el-1787238327442",
+            "type": "balloon",
+            "content": "This <b>lab</b> has been <b>abandoned</b> for years...",
+            "x": 54.44444444444443,
+            "y": 28.90625,
+            "width": 52.22222222222223,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -45,
+                "y": 83
+              }
+            }
+          }
+        ],
+        "order": 0,
+        "backgroundSettings": {
+          "opacity": 0.55,
+          "grayscale": true,
+          "tintColor": "rgba(192, 132, 252, 0.4)"
+        }
+      },
+      {
+        "id": "slide-1787238392532",
+        "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_clutter.png?t=1787239736544\")",
+        "elements": [
+          {
+            "id": "el-1787238413891",
+            "type": "balloon",
+            "content": "Look closely!<div><br></div><div>It used to be full of <b>expensive</b> materials.</div>",
+            "x": 39.72222222222222,
+            "y": 39.21875,
+            "width": 60,
+            "height": 20,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": 29,
+                "y": 76
+              }
+            }
+          },
+          {
+            "id": "el-1787238406175",
+            "type": "image",
+            "content": "/src/assets/characters/yara_investigating_flashlight.png",
+            "x": 75.55555555555556,
+            "y": 74.84375,
+            "width": 40,
+            "height": 32.69880715705765,
+            "rotation": 0,
+            "scale": 1.732468575549723,
+            "metadata": {
+              "width": 40,
+              "height": 32.69880715705765
+            }
+          }
+        ],
+        "order": 1,
+        "backgroundSettings": {
+          "opacity": 0.55,
+          "grayscale": true,
+          "tintColor": "rgba(103, 232, 249, 0.4)"
+        }
+      },
+      {
+        "id": "slide-1787238498915",
+        "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_microscope.png\")",
+        "elements": [
+          {
+            "id": "el-1787238560549",
+            "type": "balloon",
+            "content": "I found something!",
+            "x": 33.88888888888889,
+            "y": 49.6875,
+            "width": 40,
+            "height": 14.374999999999998,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -28,
+                "y": 104
+              }
+            }
+          },
+          {
+            "id": "el-1787238938346",
+            "type": "image",
+            "content": "/src/assets/characters/balanza_wooden_scale.png",
+            "x": 69.72222222222221,
+            "y": 76.40625,
+            "width": 40,
+            "height": 12.2625,
+            "rotation": 1.572999261946066,
+            "scale": 1.8881819841022822,
+            "metadata": {
+              "width": 40,
+              "height": 12.2625
+            }
+          },
+          {
+            "id": "el-1787238521502",
+            "type": "image",
+            "content": "/src/assets/characters/pesto%20jumping.png?t=1787235433901",
+            "x": 23.055555555555557,
+            "y": 84.0625,
+            "width": 40,
+            "height": 26.642384105960264,
+            "rotation": 0,
+            "scale": 1.5080782160742598,
+            "metadata": {
+              "width": 40,
+              "height": 26.642384105960264,
+              "flipX": false
+            }
+          }
+        ],
+        "order": 2,
+        "backgroundSettings": {
+          "opacity": 0.62,
+          "grayscale": true,
+          "tintColor": "rgba(192, 132, 252, 0.4)"
+        }
+      },
       {
         "id": "slide-1",
         "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
@@ -456,7 +791,7 @@
             }
           }
         ],
-        "order": 0,
+        "order": 3,
         "cartridge": {
           "type": "Balanza",
           "config": {
@@ -494,7 +829,7 @@
             }
           }
         ],
-        "order": 1,
+        "order": 4,
         "cartridge": {
           "type": "Balanza",
           "config": {
@@ -511,7 +846,7 @@
         "id": "slide-1786889005313",
         "background": "#E1F5FE",
         "elements": [],
-        "order": 2,
+        "order": 5,
         "cartridge": {
           "type": "Balanza",
           "config": {
@@ -529,7 +864,7 @@
         "id": "slide-1787155168603",
         "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
         "elements": [],
-        "order": 3,
+        "order": 6,
         "cartridge": {
           "type": "Balanza",
           "config": {
@@ -590,13 +925,13 @@
             }
           }
         ],
-        "order": 4
+        "order": 7
       },
       {
         "id": "slide-1787155484327",
         "background": "#E1F5FE",
         "elements": [],
-        "order": 5,
+        "order": 8,
         "cartridge": {
           "type": "Balanza",
           "config": {
@@ -606,6 +941,109 @@
             "menuText": "📦x, 💰, 🗝️, 👑",
             "showZeroTiles": false
           }
+        }
+      },
+      {
+        "id": "slide-1787239866079",
+        "background": "url(\"/src/assets/backgrounds/bkg_abandoned_office_desk.png?t=1787239736544\")",
+        "elements": [
+          {
+            "id": "el-1787239930917",
+            "type": "balloon",
+            "content": "I think I found the scientist...",
+            "x": 43.88888888888889,
+            "y": 56.09375,
+            "width": 40,
+            "height": 14.374999999999998,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "backgroundColor": "#ffffff",
+              "color": "#000000",
+              "fontFamily": "\"Noto Sans\"",
+              "fontSize": 16,
+              "tailPos": {
+                "x": -15,
+                "y": 72
+              }
+            }
+          },
+          {
+            "id": "el-1787240190832",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%235A5A5A%22%20%2F%3E%0A%3C%2Fsvg%3E",
+            "x": 75.55555555555554,
+            "y": 83.90625,
+            "width": 40,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 1,
+            "metadata": {
+              "width": 40,
+              "height": 40,
+              "isSymbol": true,
+              "symbolType": "shape-circle",
+              "symbolColor": "#5A5A5A",
+              "opacity": 0.59
+            }
+          },
+          {
+            "id": "el-1787239877699",
+            "type": "image",
+            "content": "/src/assets/characters/skeleton_scientist_slumped.png",
+            "x": 76.3888888888889,
+            "y": 64.21875,
+            "width": 40,
+            "height": 37.41028708133972,
+            "rotation": 0,
+            "scale": 1.199978550217749,
+            "metadata": {
+              "width": 40,
+              "height": 37.41028708133972,
+              "flipX": true
+            }
+          },
+          {
+            "id": "el-1787240220693",
+            "type": "image",
+            "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%235A5A5A%22%20%2F%3E%0A%3C%2Fsvg%3E",
+            "x": 33.611111111111114,
+            "y": 93.125,
+            "width": 40,
+            "height": 7.8125,
+            "rotation": 0,
+            "scale": 0.9186416270909946,
+            "metadata": {
+              "width": 40,
+              "height": 40,
+              "isSymbol": true,
+              "symbolType": "shape-circle",
+              "symbolColor": "#5A5A5A",
+              "opacity": 0.61
+            }
+          },
+          {
+            "id": "el-1787239921216",
+            "type": "image",
+            "content": "/src/assets/characters/pesto%20scratching%20head_back.png?t=1787235433901",
+            "x": 28.333333333333332,
+            "y": 83.125,
+            "width": 40,
+            "height": 29.21282798833819,
+            "rotation": 0,
+            "scale": 0.8533590959842381,
+            "metadata": {
+              "width": 40,
+              "height": 29.21282798833819,
+              "flipX": true
+            }
+          }
+        ],
+        "order": 9,
+        "backgroundSettings": {
+          "opacity": 0.62,
+          "grayscale": true,
+          "tintColor": "rgba(253, 164, 175, 0.4)"
         }
       },
       {
@@ -654,13 +1092,13 @@
             }
           }
         ],
-        "order": 6,
+        "order": 10,
         "cartridge": null
       }
     ],
     "author": "User",
     "createdAt": "2026-08-14T13:04:20.617Z",
-    "updatedAt": "2026-08-19T16:41:50.482Z",
+    "updatedAt": "2026-08-20T15:47:37.689Z",
     "path": "lessons/2361-01 Algebra Scale/lesson.json",
     "textPreset": null,
     "description": "",
@@ -682,7 +1120,7 @@
       "slides": [
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
               "id": "el-1787152902933",
@@ -706,13 +1144,16 @@
             "type": "Balanza",
             "config": {
               "weightsText": "",
-              "leftPlateText": "💡",
+              "leftPlateText": " 🍉",
               "rightPlateText": "",
-              "menuText": "🍎",
+              "menuText": "🍍",
               "showZeroTiles": false,
-              "lockLeftPlate": true,
+              "lockLeftPlate": false,
               "showEquation": false
             }
+          },
+          "backgroundSettings": {
+            "opacity": 0.35
           }
         },
         {
@@ -743,7 +1184,7 @@
               "weightsText": "",
               "leftPlateText": "",
               "rightPlateText": "",
-              "menuText": "🎁,🎁",
+              "menuText": "🎁, 🎮",
               "showZeroTiles": false,
               "showEquation": false
             }
@@ -757,7 +1198,7 @@
           "cartridge": {
             "type": "Balanza",
             "config": {
-              "weightsText": "🏀=10",
+              "weightsText": "🏀=10\n🎾=3\n⚽=7",
               "leftPlateText": "",
               "rightPlateText": "",
               "menuText": "🎾, ⚽,🏀",
@@ -768,24 +1209,28 @@
           }
         },
         {
+          "id": "slide-1787155168603",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+          "elements": [],
+          "order": 3,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "📦x, 💎",
+              "showZeroTiles": false
+            }
+          },
+          "backgroundSettings": {
+            "opacity": 0.39
+          }
+        },
+        {
           "id": "slide-1786889106713",
           "background": "#E1F5FE",
           "elements": [
-            {
-              "id": "el-1786889184132",
-              "type": "text",
-              "content": "What's the create's value?",
-              "x": 49.02777777777778,
-              "y": 21.5625,
-              "width": 45.89121245555713,
-              "height": 7.8125,
-              "rotation": 0,
-              "scale": 1.8961620658490272,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\""
-              }
-            },
             {
               "id": "el-1786889111450",
               "type": "quiz",
@@ -799,7 +1244,7 @@
               "metadata": {
                 "fontFamily": "\"Fira Sans\"",
                 "options": [
-                  "One moustache",
+                  "One diamond",
                   "12 grams",
                   "a + b",
                   "It's impossible to know"
@@ -811,9 +1256,40 @@
                 "quizType": "classic",
                 "visualMode": false
               }
+            },
+            {
+              "id": "el-1786889184132",
+              "type": "text",
+              "content": "What's the crate's value?",
+              "x": 49.02777777777778,
+              "y": 21.5625,
+              "width": 45.89121245555713,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1.8961620658490272,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
             }
           ],
-          "order": 3
+          "order": 4
+        },
+        {
+          "id": "slide-1787155484327",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 5,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "📦x=11\n👑=7\n🗝️=3\n💰=11",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "📦x, 💰, 🗝️, 👑",
+              "showZeroTiles": false
+            }
+          }
         },
         {
           "id": "slide-1786889519905",
@@ -847,12 +1323,12 @@
               "metadata": {
                 "fontFamily": "\"Fira Sans\"",
                 "options": [
-                  "1 cake",
-                  "1ball",
-                  "1 cake + 1 ball",
-                  "2 balls"
+                  "1 crown",
+                  "1 key",
+                  "1 key + 1 bag",
+                  "1 bag of money"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "correctIndices": [
                   0
                 ],
@@ -861,13 +1337,13 @@
               }
             }
           ],
-          "order": 4,
+          "order": 6,
           "cartridge": null
         }
       ],
       "author": "User",
       "createdAt": "2026-08-14T13:04:20.617Z",
-      "updatedAt": "2026-08-19T15:25:32.264Z",
+      "updatedAt": "2026-08-19T16:41:50.482Z",
       "path": "lessons/2361-01 Algebra Scale/lesson.json",
       "textPreset": null,
       "description": "",
@@ -890,7 +1366,24 @@
           {
             "id": "slide-1",
             "background": "#E1F5FE",
-            "elements": [],
+            "elements": [
+              {
+                "id": "el-1787152902933",
+                "type": "text",
+                "content": "Balance the scale",
+                "x": 49.30555555555555,
+                "y": 20.3125,
+                "width": 56.388888888888886,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8586316360533637,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#00BFA5"
+                }
+              }
+            ],
             "order": 0,
             "cartridge": {
               "type": "Balanza",
@@ -900,14 +1393,32 @@
                 "rightPlateText": "",
                 "menuText": "🍎",
                 "showZeroTiles": false,
-                "lockLeftPlate": true
+                "lockLeftPlate": true,
+                "showEquation": false
               }
             }
           },
           {
             "id": "slide-1786888937383",
             "background": "#E1F5FE",
-            "elements": [],
+            "elements": [
+              {
+                "id": "el-1787152948605-019mju1y3",
+                "type": "text",
+                "content": "Balance the scale",
+                "x": 51.30555555555555,
+                "y": 22.3125,
+                "width": 56.388888888888886,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8586316360533637,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#00BFA5"
+                }
+              }
+            ],
             "order": 1,
             "cartridge": {
               "type": "Balanza",
@@ -915,7 +1426,7 @@
                 "weightsText": "",
                 "leftPlateText": "",
                 "rightPlateText": "",
-                "menuText": "🎁, 💎",
+                "menuText": "🎁,🎁",
                 "showZeroTiles": false,
                 "showEquation": false
               }
@@ -930,11 +1441,11 @@
               "type": "Balanza",
               "config": {
                 "weightsText": "🏀=10",
-                "leftPlateText": "🏀",
+                "leftPlateText": "",
                 "rightPlateText": "",
-                "menuText": "🎾, ⚽",
+                "menuText": "🎾, ⚽,🏀",
                 "showZeroTiles": false,
-                "lockLeftPlate": true,
+                "lockLeftPlate": false,
                 "showEquation": false
               }
             }
@@ -1039,7 +1550,7 @@
         ],
         "author": "User",
         "createdAt": "2026-08-14T13:04:20.617Z",
-        "updatedAt": "2026-08-16T14:12:37.758Z",
+        "updatedAt": "2026-08-19T15:25:32.264Z",
         "path": "lessons/2361-01 Algebra Scale/lesson.json",
         "textPreset": null,
         "description": "",
@@ -1070,16 +1581,148 @@
                   "weightsText": "",
                   "leftPlateText": "💡",
                   "rightPlateText": "",
-                  "menuText": "2x🍎",
+                  "menuText": "🍎",
                   "showZeroTiles": false,
                   "lockLeftPlate": true
                 }
               }
+            },
+            {
+              "id": "slide-1786888937383",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 1,
+              "cartridge": {
+                "type": "Balanza",
+                "config": {
+                  "weightsText": "",
+                  "leftPlateText": "",
+                  "rightPlateText": "",
+                  "menuText": "🎁, 💎",
+                  "showZeroTiles": false,
+                  "showEquation": false
+                }
+              }
+            },
+            {
+              "id": "slide-1786889005313",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 2,
+              "cartridge": {
+                "type": "Balanza",
+                "config": {
+                  "weightsText": "🏀=10",
+                  "leftPlateText": "🏀",
+                  "rightPlateText": "",
+                  "menuText": "🎾, ⚽",
+                  "showZeroTiles": false,
+                  "lockLeftPlate": true,
+                  "showEquation": false
+                }
+              }
+            },
+            {
+              "id": "slide-1786889106713",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1786889184132",
+                  "type": "text",
+                  "content": "What's the create's value?",
+                  "x": 49.02777777777778,
+                  "y": 21.5625,
+                  "width": 45.89121245555713,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8961620658490272,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1786889111450",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 81.875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "One moustache",
+                      "12 grams",
+                      "a + b",
+                      "It's impossible to know"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "classic",
+                    "visualMode": false
+                  }
+                }
+              ],
+              "order": 3
+            },
+            {
+              "id": "slide-1786889519905",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1786889519905-nlxh15b8m",
+                  "type": "text",
+                  "content": "What's x value?",
+                  "x": 49.02777777777778,
+                  "y": 21.5625,
+                  "width": 45.89121245555713,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8961620658490272,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1786889519905-3u9kfeefz",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 81.875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "1 cake",
+                      "1ball",
+                      "1 cake + 1 ball",
+                      "2 balls"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "classic",
+                    "visualMode": false
+                  }
+                }
+              ],
+              "order": 4,
+              "cartridge": null
             }
           ],
           "author": "User",
           "createdAt": "2026-08-14T13:04:20.617Z",
-          "updatedAt": "2026-08-14T13:06:52.362Z",
+          "updatedAt": "2026-08-16T14:12:37.758Z",
           "path": "lessons/2361-01 Algebra Scale/lesson.json",
           "textPreset": null,
           "description": "",
@@ -1090,6 +1733,62 @@
               "title": "",
               "description": ""
             }
+          },
+          "name": "2361-01 Algebra Scale",
+          "type": "file",
+          "visible": true,
+          "order": 2361,
+          "content": {
+            "id": "lessons/2361-01 Algebra Scale/lesson.json",
+            "title": "01 Algebra Scale",
+            "slides": [
+              {
+                "id": "slide-1",
+                "background": "#E1F5FE",
+                "elements": [],
+                "order": 0,
+                "cartridge": {
+                  "type": "Balanza",
+                  "config": {
+                    "weightsText": "",
+                    "leftPlateText": "💡",
+                    "rightPlateText": "",
+                    "menuText": "2x🍎",
+                    "showZeroTiles": false,
+                    "lockLeftPlate": true
+                  }
+                }
+              }
+            ],
+            "author": "User",
+            "createdAt": "2026-08-14T13:04:20.617Z",
+            "updatedAt": "2026-08-14T13:06:52.362Z",
+            "path": "lessons/2361-01 Algebra Scale/lesson.json",
+            "textPreset": null,
+            "description": "",
+            "icon": "icon_lightbulb.png",
+            "cardColor": "#14B8A6",
+            "translations": {
+              "en": {
+                "title": "",
+                "description": ""
+              }
+            }
+          },
+          "status": "completed",
+          "statusIcon": {
+            "type": {},
+            "key": null,
+            "props": {
+              "size": 24
+            },
+            "_owner": null,
+            "_store": {}
+          },
+          "progress": {
+            "lastSlideIndex": 0,
+            "completed": true,
+            "lastPlayed": 1786718704551
           }
         },
         "status": "completed",
@@ -1103,12 +1802,12 @@
           "_store": {}
         },
         "progress": {
-          "lastSlideIndex": 0,
+          "lastSlideIndex": 3,
           "completed": true,
-          "lastPlayed": 1786718704551
+          "lastPlayed": 1786889228753
         }
       },
-      "status": "completed",
+      "status": "active",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -1119,9 +1818,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 3,
-        "completed": true,
-        "lastPlayed": 1786889228753
+        "lastSlideIndex": 2,
+        "completed": false,
+        "lastPlayed": 1787153923619
       }
     },
     "status": "active",
@@ -1135,12 +1834,12 @@
       "_store": {}
     },
     "progress": {
-      "lastSlideIndex": 2,
+      "lastSlideIndex": 1,
       "completed": false,
-      "lastPlayed": 1787153923619
+      "lastPlayed": 1787157704201
     }
   },
-  "status": "active",
+  "status": "completed",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -1151,8 +1850,8 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 1,
-    "completed": false,
-    "lastPlayed": 1787157704201
+    "lastSlideIndex": 10,
+    "completed": true,
+    "lastPlayed": 1787242072266
   }
 }
