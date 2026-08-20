@@ -17,7 +17,7 @@
   bottom: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background: #fffaf0;
+  background: transparent;
   color: var(--text-main);
   font-family: 'Outfit', 'Inter', sans-serif;
   overflow: hidden;
@@ -28,6 +28,21 @@
   align-items: center;
   touch-action: none;
   padding-top: 72px;
+}
+
+.balanza-bg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .balanza-cartridge * {
@@ -41,7 +56,8 @@
   align-items: center;
   padding: 0 16px;
   margin-top: 5vh;
-  z-index: 10;
+  z-index: 100;
+  position: relative;
 }
 
 .balanza-top-row {
@@ -50,26 +66,60 @@
   justify-content: flex-end;
   align-items: center;
   min-height: 32px;
+  z-index: 101;
 }
 
 .balanza-restart-btn {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
   color: var(--text-main);
   font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 101;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.balanza-restart-btn:hover {
+  transform: rotate(-30deg) scale(1.05);
+  background: #ffffff;
+}
+
+.balanza-equation-frame {
+  margin-top: 6px;
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.95) 0%, rgba(253, 230, 138, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid #f59e0b;
+  border-radius: 999px;
+  padding: 6px 20px;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2), 0 1px 3px rgba(15, 23, 42, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 95%;
+  z-index: 102;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.balanza-footer-equation-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 16px 8px 16px;
+  z-index: 100;
+  position: relative;
 }
 
 .balanza-equation-line {
-  margin-top: 10px;
+  margin: 0;
   font-size: clamp(0.95rem, 4vw, 1.35rem);
   font-weight: 800;
   text-align: center;
@@ -77,9 +127,25 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 95%;
-  min-height: 1.8rem;
   line-height: 1.3;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-eq-comp {
+  margin: 0 0.45em;
+  display: inline-block;
+  font-weight: 900;
+}
+
+.balanza-eq-comp.is-equal {
+  color: #22c55e;
+}
+
+.balanza-eq-comp.is-unequal {
+  color: #ef4444;
 }
 
 .balanza-scale-wrap {
@@ -217,16 +283,25 @@
   100% { filter: drop-shadow(0 0 0px transparent); }
 }
 
-/* Plate tiles - big enough for touch, but restrained so plates stay compact */
+/* Plate tiles - big enough for touch, with emojis 20% larger on the plate */
 .balanza-tile {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.7rem;
+  font-size: 2.05rem;
   line-height: 1;
   cursor: grab;
   position: relative;
   touch-action: none;
+}
+
+.balanza-plate-items .balanza-tile {
+  font-size: 2.05rem;
+}
+
+.balanza-plate-items .balanza-crate-img {
+  width: 35px;
+  height: 35px;
 }
 
 .balanza-tile.is-zero {
@@ -250,6 +325,37 @@
   font-size: 1em;
 }
 
+.balanza-glyph-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.balanza-glyph-coeff {
+  font-size: 0.9em;
+  font-weight: 800;
+}
+
+.balanza-crate-img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  vertical-align: middle;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+  user-select: none;
+}
+
+.balanza-menu-crate-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  vertical-align: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Bottom draggable inventory menu */
 .balanza-menu {
   display: flex;
@@ -265,14 +371,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: relative;
   gap: 2px;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 23, 42, 0.1);
+  min-width: 54px;
+  min-height: 58px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(15, 23, 42, 0.14);
   border-radius: 14px;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
-  cursor: grab;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  user-select: none;
+  overflow: visible;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.balanza-menu-tile-static-slot {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.85;
+}
+
+.balanza-menu-tile-draggable-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   touch-action: none;
+  cursor: grab;
+  width: 100%;
+  height: 100%;
+}
+
+.balanza-menu-tile-draggable-glyph:active {
+  cursor: grabbing;
 }
 
 .balanza-menu-tile-glyph {
@@ -284,23 +423,26 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: #64748b;
+  z-index: 1;
 }
 
 .balanza-menu-tile.is-empty {
-  opacity: 0.3;
-  cursor: default;
+  background: rgba(226, 232, 240, 0.55);
+  border: 1.5px dashed rgba(148, 163, 184, 0.45);
+  box-shadow: none;
+  opacity: 0.8;
 }
 
 /* Move feedback. Rearranging (merge / decompose / transpose) never moves the beam —
    it only pulses the written equation. Adding or removing weight re-tilts the beam and
    flashes the plate that changed. That contrast is the lesson. */
-.balanza-equation-line.is-rearranged {
+.balanza-equation-frame.is-rearranged {
   animation: balanzaRearranged 0.45s ease-out;
 }
 
 @keyframes balanzaRearranged {
-  0%, 100% { transform: scale(1); color: var(--text-main); }
-  35%      { transform: scale(1.06); color: var(--beam-teal); }
+  0%, 100% { transform: scale(1); border-color: #f6c744; }
+  35%      { transform: scale(1.06); border-color: var(--beam-teal); box-shadow: 0 6px 20px rgba(31, 122, 108, 0.35); }
 }
 
 .balanza-plate-items.is-weight-changed {
@@ -322,10 +464,87 @@
   40%, 80%   { transform: translateX(6px); }
 }
 
-.balanza-drag-overlay {
-  font-size: 1.7rem;
+.balanza-tile-glyph-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-.balanza-drag-overlay .balanza-tile-inner {
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+.balanza-drag-overlay {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+  user-select: none;
+}
+
+.balanza-drag-overlay .balanza-crate-img {
+  width: 58px;
+  height: 58px;
+}
+
+.balanza-drag-overlay .balanza-tile-card {
+  transform: scale(1.4);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.balanza-drag-overlay .balanza-tile-glyph-container {
+  transform: scale(1.4);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Polaroid Photo Mode */
+.balanza-photo-card {
+  position: relative;
+  background: #ffffff;
+  padding: 16px 16px 28px 16px;
+  border-radius: 4px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.2), 0 3px 10px rgba(15, 23, 42, 0.08);
+  transform: rotate(-1.5deg);
+  width: min(350px, 94vw);
+  margin: 12px auto;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.balanza-photo-inner {
+  position: relative;
+  width: 100%;
+  background: #faf8f5;
+  border-radius: 2px;
+  overflow: hidden;
+  filter: contrast(97%) brightness(98%) sepia(8%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 28px 14px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.balanza-photo-inner .balanza-scale-wrap {
+  flex: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-photo-inner .balanza-scale-assembly {
+  width: 82%;
+  max-width: 250px;
+}
+
+.balanza-photo-inner .balanza-tile-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: default;
 }

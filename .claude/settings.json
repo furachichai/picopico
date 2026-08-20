@@ -27,7 +27,12 @@
       "Bash(awk 'NR<=3 || /view-slide/')",
       "Bash(awk -F= '{ if \\($2+0 < 90\\) print \"DARKFRAME\", $0 }')",
       "Bash(sed -n '1p;$p')",
-      "Bash(ffmpeg -i page*.webm -vf fps=25 fr/f-%03d.png -y)"
+      "Bash(ffmpeg -i page*.webm -vf fps=25 fr/f-%03d.png -y)",
+      "Bash(git checkout *)",
+      "Bash(node .tmp-radical-verify.cjs)",
+      "Bash(ffmpeg -i page*.webm -vf fps=25 f-%03d.png -y)",
+      "Bash(node .tmp-back-verify.cjs)",
+      "Bash(node .tmp-swipe-nav-verify.cjs)"
     ]
   }
 }

@@ -14,7 +14,7 @@ const SaveLessonModal = ({ isOpen, onSave, onClose, initialName }) => {
     };
 
     return (
-        <div className="modal-overlay" style={{
+        <div className="modal-overlay" onClick={onClose} style={{
             position: 'fixed',
             top: 0,
             left: 0,
@@ -26,7 +26,7 @@ const SaveLessonModal = ({ isOpen, onSave, onClose, initialName }) => {
             alignItems: 'center',
             zIndex: 2000
         }}>
-            <div className="modal-content" style={{
+            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
                 backgroundColor: 'white',
                 padding: '20px',
                 borderRadius: '8px',

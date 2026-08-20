@@ -21,8 +21,8 @@ const QuizModal = ({ initialData, onSave, onClose }) => {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="quiz-modal">
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="quiz-modal" onClick={(e) => e.stopPropagation()}>
                 <h3>Edit Quiz</h3>
 
                 <div className="form-group">

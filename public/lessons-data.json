@@ -120108,5 +120108,814 @@
       "cardColor": "#14B8A6",
       "hashtag": "#OrderOfOperations"
     }
+  },
+  {
+    "name": "2361-01 Algebra Scale",
+    "type": "file",
+    "path": "lessons/2361-01 Algebra Scale/lesson.json",
+    "title": "01 Algebra Scale",
+    "description": "",
+    "visible": true,
+    "order": 2361,
+    "content": {
+      "id": "lessons/2361-01 Algebra Scale/lesson.json",
+      "title": "01 Algebra Scale",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+          "elements": [
+            {
+              "id": "el-1787152902933",
+              "type": "text",
+              "content": "Balance the scale",
+              "x": 49.30555555555555,
+              "y": 20.3125,
+              "width": 56.388888888888886,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1.8586316360533637,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#00BFA5"
+              }
+            }
+          ],
+          "order": 0,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": " 🍉",
+              "rightPlateText": "",
+              "menuText": "🍍",
+              "showZeroTiles": false,
+              "lockLeftPlate": false,
+              "showEquation": false
+            }
+          },
+          "backgroundSettings": {
+            "opacity": 0.35
+          }
+        },
+        {
+          "id": "slide-1786888937383",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1787152948605-019mju1y3",
+              "type": "text",
+              "content": "Balance the scale",
+              "x": 51.30555555555555,
+              "y": 22.3125,
+              "width": 56.388888888888886,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1.8586316360533637,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "backgroundColor": "#00BFA5"
+              }
+            }
+          ],
+          "order": 1,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "🎁, 🎮",
+              "showZeroTiles": false,
+              "showEquation": false
+            }
+          }
+        },
+        {
+          "id": "slide-1786889005313",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 2,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "🏀=10\n🎾=3\n⚽=7",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "🎾, ⚽,🏀",
+              "showZeroTiles": false,
+              "lockLeftPlate": false,
+              "showEquation": false
+            }
+          }
+        },
+        {
+          "id": "slide-1787155168603",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+          "elements": [],
+          "order": 3,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "📦x, 💎",
+              "showZeroTiles": false
+            }
+          },
+          "backgroundSettings": {
+            "opacity": 0.39
+          }
+        },
+        {
+          "id": "slide-1786889106713",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1786889111450",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 81.875,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "One diamond",
+                  "12 grams",
+                  "a + b",
+                  "It's impossible to know"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1786889184132",
+              "type": "text",
+              "content": "What's the crate's value?",
+              "x": 49.02777777777778,
+              "y": 21.5625,
+              "width": 45.89121245555713,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1.8961620658490272,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            }
+          ],
+          "order": 4
+        },
+        {
+          "id": "slide-1787155484327",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 5,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "📦x=11\n👑=7\n🗝️=3\n💰=11",
+              "leftPlateText": "",
+              "rightPlateText": "",
+              "menuText": "📦x, 💰, 🗝️, 👑",
+              "showZeroTiles": false
+            }
+          }
+        },
+        {
+          "id": "slide-1786889519905",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1786889519905-nlxh15b8m",
+              "type": "text",
+              "content": "What's x value?",
+              "x": 49.02777777777778,
+              "y": 21.5625,
+              "width": 45.89121245555713,
+              "height": 7.8125,
+              "rotation": 0,
+              "scale": 1.8961620658490272,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1786889519905-3u9kfeefz",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 81.875,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "1 crown",
+                  "1 key",
+                  "1 key + 1 bag",
+                  "1 bag of money"
+                ],
+                "correctIndex": 1,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 6,
+          "cartridge": null
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-08-14T13:04:20.617Z",
+      "updatedAt": "2026-08-19T16:41:50.482Z",
+      "path": "lessons/2361-01 Algebra Scale/lesson.json",
+      "textPreset": null,
+      "description": "",
+      "icon": "icon_lightbulb.png",
+      "cardColor": "#14B8A6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      },
+      "name": "2361-01 Algebra Scale",
+      "type": "file",
+      "visible": true,
+      "order": 2361,
+      "content": {
+        "id": "lessons/2361-01 Algebra Scale/lesson.json",
+        "title": "01 Algebra Scale",
+        "slides": [
+          {
+            "id": "slide-1",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1787152902933",
+                "type": "text",
+                "content": "Balance the scale",
+                "x": 49.30555555555555,
+                "y": 20.3125,
+                "width": 56.388888888888886,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8586316360533637,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#00BFA5"
+                }
+              }
+            ],
+            "order": 0,
+            "cartridge": {
+              "type": "Balanza",
+              "config": {
+                "weightsText": "",
+                "leftPlateText": "💡",
+                "rightPlateText": "",
+                "menuText": "🍎",
+                "showZeroTiles": false,
+                "lockLeftPlate": true,
+                "showEquation": false
+              }
+            }
+          },
+          {
+            "id": "slide-1786888937383",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1787152948605-019mju1y3",
+                "type": "text",
+                "content": "Balance the scale",
+                "x": 51.30555555555555,
+                "y": 22.3125,
+                "width": 56.388888888888886,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8586316360533637,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\"",
+                  "backgroundColor": "#00BFA5"
+                }
+              }
+            ],
+            "order": 1,
+            "cartridge": {
+              "type": "Balanza",
+              "config": {
+                "weightsText": "",
+                "leftPlateText": "",
+                "rightPlateText": "",
+                "menuText": "🎁,🎁",
+                "showZeroTiles": false,
+                "showEquation": false
+              }
+            }
+          },
+          {
+            "id": "slide-1786889005313",
+            "background": "#E1F5FE",
+            "elements": [],
+            "order": 2,
+            "cartridge": {
+              "type": "Balanza",
+              "config": {
+                "weightsText": "🏀=10",
+                "leftPlateText": "",
+                "rightPlateText": "",
+                "menuText": "🎾, ⚽,🏀",
+                "showZeroTiles": false,
+                "lockLeftPlate": false,
+                "showEquation": false
+              }
+            }
+          },
+          {
+            "id": "slide-1786889106713",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1786889184132",
+                "type": "text",
+                "content": "What's the create's value?",
+                "x": 49.02777777777778,
+                "y": 21.5625,
+                "width": 45.89121245555713,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8961620658490272,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1786889111450",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 81.875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "One moustache",
+                    "12 grams",
+                    "a + b",
+                    "It's impossible to know"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "classic",
+                  "visualMode": false
+                }
+              }
+            ],
+            "order": 3
+          },
+          {
+            "id": "slide-1786889519905",
+            "background": "#E1F5FE",
+            "elements": [
+              {
+                "id": "el-1786889519905-nlxh15b8m",
+                "type": "text",
+                "content": "What's x value?",
+                "x": 49.02777777777778,
+                "y": 21.5625,
+                "width": 45.89121245555713,
+                "height": 7.8125,
+                "rotation": 0,
+                "scale": 1.8961620658490272,
+                "metadata": {
+                  "textAlign": "center",
+                  "fontFamily": "\"Fira Sans\""
+                }
+              },
+              {
+                "id": "el-1786889519905-3u9kfeefz",
+                "type": "quiz",
+                "content": "Quiz",
+                "x": 50,
+                "y": 81.875,
+                "width": 20,
+                "height": 10,
+                "rotation": 0,
+                "scale": 1,
+                "metadata": {
+                  "fontFamily": "\"Fira Sans\"",
+                  "options": [
+                    "1 cake",
+                    "1ball",
+                    "1 cake + 1 ball",
+                    "2 balls"
+                  ],
+                  "correctIndex": 0,
+                  "correctIndices": [
+                    0
+                  ],
+                  "quizType": "classic",
+                  "visualMode": false
+                }
+              }
+            ],
+            "order": 4,
+            "cartridge": null
+          }
+        ],
+        "author": "User",
+        "createdAt": "2026-08-14T13:04:20.617Z",
+        "updatedAt": "2026-08-19T15:25:32.264Z",
+        "path": "lessons/2361-01 Algebra Scale/lesson.json",
+        "textPreset": null,
+        "description": "",
+        "icon": "icon_lightbulb.png",
+        "cardColor": "#14B8A6",
+        "translations": {
+          "en": {
+            "title": "",
+            "description": ""
+          }
+        },
+        "name": "2361-01 Algebra Scale",
+        "type": "file",
+        "visible": true,
+        "order": 2361,
+        "content": {
+          "id": "lessons/2361-01 Algebra Scale/lesson.json",
+          "title": "01 Algebra Scale",
+          "slides": [
+            {
+              "id": "slide-1",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 0,
+              "cartridge": {
+                "type": "Balanza",
+                "config": {
+                  "weightsText": "",
+                  "leftPlateText": "💡",
+                  "rightPlateText": "",
+                  "menuText": "🍎",
+                  "showZeroTiles": false,
+                  "lockLeftPlate": true
+                }
+              }
+            },
+            {
+              "id": "slide-1786888937383",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 1,
+              "cartridge": {
+                "type": "Balanza",
+                "config": {
+                  "weightsText": "",
+                  "leftPlateText": "",
+                  "rightPlateText": "",
+                  "menuText": "🎁, 💎",
+                  "showZeroTiles": false,
+                  "showEquation": false
+                }
+              }
+            },
+            {
+              "id": "slide-1786889005313",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 2,
+              "cartridge": {
+                "type": "Balanza",
+                "config": {
+                  "weightsText": "🏀=10",
+                  "leftPlateText": "🏀",
+                  "rightPlateText": "",
+                  "menuText": "🎾, ⚽",
+                  "showZeroTiles": false,
+                  "lockLeftPlate": true,
+                  "showEquation": false
+                }
+              }
+            },
+            {
+              "id": "slide-1786889106713",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1786889184132",
+                  "type": "text",
+                  "content": "What's the create's value?",
+                  "x": 49.02777777777778,
+                  "y": 21.5625,
+                  "width": 45.89121245555713,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8961620658490272,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1786889111450",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 81.875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "One moustache",
+                      "12 grams",
+                      "a + b",
+                      "It's impossible to know"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "classic",
+                    "visualMode": false
+                  }
+                }
+              ],
+              "order": 3
+            },
+            {
+              "id": "slide-1786889519905",
+              "background": "#E1F5FE",
+              "elements": [
+                {
+                  "id": "el-1786889519905-nlxh15b8m",
+                  "type": "text",
+                  "content": "What's x value?",
+                  "x": 49.02777777777778,
+                  "y": 21.5625,
+                  "width": 45.89121245555713,
+                  "height": 7.8125,
+                  "rotation": 0,
+                  "scale": 1.8961620658490272,
+                  "metadata": {
+                    "textAlign": "center",
+                    "fontFamily": "\"Fira Sans\""
+                  }
+                },
+                {
+                  "id": "el-1786889519905-3u9kfeefz",
+                  "type": "quiz",
+                  "content": "Quiz",
+                  "x": 50,
+                  "y": 81.875,
+                  "width": 20,
+                  "height": 10,
+                  "rotation": 0,
+                  "scale": 1,
+                  "metadata": {
+                    "fontFamily": "\"Fira Sans\"",
+                    "options": [
+                      "1 cake",
+                      "1ball",
+                      "1 cake + 1 ball",
+                      "2 balls"
+                    ],
+                    "correctIndex": 0,
+                    "correctIndices": [
+                      0
+                    ],
+                    "quizType": "classic",
+                    "visualMode": false
+                  }
+                }
+              ],
+              "order": 4,
+              "cartridge": null
+            }
+          ],
+          "author": "User",
+          "createdAt": "2026-08-14T13:04:20.617Z",
+          "updatedAt": "2026-08-16T14:12:37.758Z",
+          "path": "lessons/2361-01 Algebra Scale/lesson.json",
+          "textPreset": null,
+          "description": "",
+          "icon": "icon_lightbulb.png",
+          "cardColor": "#14B8A6",
+          "translations": {
+            "en": {
+              "title": "",
+              "description": ""
+            }
+          },
+          "name": "2361-01 Algebra Scale",
+          "type": "file",
+          "visible": true,
+          "order": 2361,
+          "content": {
+            "id": "lessons/2361-01 Algebra Scale/lesson.json",
+            "title": "01 Algebra Scale",
+            "slides": [
+              {
+                "id": "slide-1",
+                "background": "#E1F5FE",
+                "elements": [],
+                "order": 0,
+                "cartridge": {
+                  "type": "Balanza",
+                  "config": {
+                    "weightsText": "",
+                    "leftPlateText": "💡",
+                    "rightPlateText": "",
+                    "menuText": "2x🍎",
+                    "showZeroTiles": false,
+                    "lockLeftPlate": true
+                  }
+                }
+              }
+            ],
+            "author": "User",
+            "createdAt": "2026-08-14T13:04:20.617Z",
+            "updatedAt": "2026-08-14T13:06:52.362Z",
+            "path": "lessons/2361-01 Algebra Scale/lesson.json",
+            "textPreset": null,
+            "description": "",
+            "icon": "icon_lightbulb.png",
+            "cardColor": "#14B8A6",
+            "translations": {
+              "en": {
+                "title": "",
+                "description": ""
+              }
+            }
+          },
+          "status": "completed",
+          "statusIcon": {
+            "type": {},
+            "key": null,
+            "props": {
+              "size": 24
+            },
+            "_owner": null,
+            "_store": {}
+          },
+          "progress": {
+            "lastSlideIndex": 0,
+            "completed": true,
+            "lastPlayed": 1786718704551
+          }
+        },
+        "status": "completed",
+        "statusIcon": {
+          "type": {},
+          "key": null,
+          "props": {
+            "size": 24
+          },
+          "_owner": null,
+          "_store": {}
+        },
+        "progress": {
+          "lastSlideIndex": 3,
+          "completed": true,
+          "lastPlayed": 1786889228753
+        }
+      },
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 2,
+        "completed": false,
+        "lastPlayed": 1787153923619
+      }
+    }
+  },
+  {
+    "name": "6554-Untitled Lesson",
+    "type": "file",
+    "path": "lessons/6554-Untitled Lesson/lesson.json",
+    "title": "Untitled Lesson",
+    "description": "",
+    "visible": true,
+    "order": 6554,
+    "content": {
+      "id": "draft-1",
+      "title": "Untitled Lesson",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": "🍎, 🍎",
+              "rightPlateText": "🍎",
+              "menuText": "2x🍎",
+              "showZeroTiles": false,
+              "lockLeftPlate": false
+            }
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-08-17T16:02:09.210Z",
+      "updatedAt": "2026-08-17T18:49:27.477Z",
+      "path": "lessons/6554-Untitled Lesson/lesson.json",
+      "textPreset": null,
+      "description": "",
+      "icon": "icon_textbook.png",
+      "cardColor": "#8B5CF6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      }
+    }
+  },
+  {
+    "name": "9195-Untitled Lesson",
+    "type": "file",
+    "path": "lessons/9195-Untitled Lesson/lesson.json",
+    "title": "Untitled Lesson",
+    "description": "",
+    "visible": true,
+    "order": 9195,
+    "content": {
+      "id": "lessons/9195-Untitled Lesson/lesson.json",
+      "title": "Untitled Lesson",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "",
+              "leftPlateText": "🍎, 🍎, 📦x",
+              "rightPlateText": "🍎, 📦",
+              "menuText": "2x🍎",
+              "showZeroTiles": false
+            }
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-08-16T14:31:56.022Z",
+      "updatedAt": "2026-08-16T14:50:39.195Z",
+      "path": "lessons/9195-Untitled Lesson/lesson.json",
+      "textPreset": null,
+      "description": "",
+      "icon": "icon_textbook.png",
+      "cardColor": "#8B5CF6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      }
+    }
   }
 ]

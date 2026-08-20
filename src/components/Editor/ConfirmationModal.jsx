@@ -4,7 +4,7 @@ const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel, confirmText =
     if (!isOpen) return null;
 
     return (
-        <div style={{
+        <div onClick={onCancel} style={{
             position: 'fixed',
             top: 0,
             left: 0,
@@ -16,7 +16,7 @@ const ConfirmationModal = ({ isOpen, message, onConfirm, onCancel, confirmText =
             alignItems: 'center',
             zIndex: 2000,
         }}>
-            <div style={{
+            <div onClick={(e) => e.stopPropagation()} style={{
                 backgroundColor: 'white',
                 padding: '24px',
                 borderRadius: '20px',

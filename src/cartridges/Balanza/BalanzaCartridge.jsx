@@ -33,21 +33,52 @@ function rectContainsPoint(rect, x, y, padding = 0) {
          y >= rect.top - padding && y <= rect.bottom + padding;
 }
 
-function TileGlyph({ term }) {
+const CRATE_MAP = {
+  '📦x': '/assets/balanza/crate_x.png',
+  'x📦': '/assets/balanza/crate_x.png',
+  'crate_x': '/assets/balanza/crate_x.png',
+  '[x]': '/assets/balanza/crate_x.png',
+  'x': '/assets/balanza/crate_x.png',
+  '📦?': '/assets/balanza/crate_q.png',
+  '?📦': '/assets/balanza/crate_q.png',
+  'crate_q': '/assets/balanza/crate_q.png',
+  '[?]': '/assets/balanza/crate_q.png',
+  '?': '/assets/balanza/crate_q.png',
+  '📦': '/assets/balanza/crate.png',
+  'crate': '/assets/balanza/crate.png',
+  'box': '/assets/balanza/crate.png'
+};
+
+function TileGlyph({ term, isOverlay = false }) {
   const isNeg = term.coeff < 0;
   const isZero = term.coeff === 0;
+  const crateSrc = term.variable ? CRATE_MAP[term.variable] : null;
+  const absCoeff = Math.abs(term.coeff);
+
+  if (crateSrc) {
+    return (
+      <div className={`balanza-tile-glyph-container ${isOverlay ? 'is-overlay' : ''}`}>
+        <span className="balanza-glyph-wrapper">
+          {isNeg && <span className="balanza-tile-sign">-</span>}
+          {absCoeff !== 1 && <span className="balanza-glyph-coeff">{absCoeff}</span>}
+          <img src={crateSrc} alt={term.variable} className="balanza-crate-img" draggable={false} />
+        </span>
+      </div>
+    );
+  }
+
   const formatted = formatTerm(term, true);
   const text = (formatted.sign === '-' ? '-' : '') + formatted.value;
   return (
-    <div className={`balanza-tile-card ${isNeg ? 'is-negative' : ''} ${isZero ? 'is-zero' : ''}`}>
+    <div className={`balanza-tile-card ${isNeg ? 'is-negative' : ''} ${isZero ? 'is-zero' : ''} ${isOverlay ? 'is-overlay' : ''}`}>
       <span className="balanza-tile-text">{text}</span>
     </div>
   );
 }
 
-function PlateTile({ term, side, isLocked, showZeroTiles, onDragStart, onDrag, onDragEnd, onTap, isDragging, cartridgeRef }) {
+function PlateTile({ term, side, isLocked, isLevelComplete, showZeroTiles, onDragStart, onDrag, onDragEnd, onTap, isDragging, cartridgeRef }) {
   const isZero = term.coeff === 0;
-  const disabled = isZero || isLocked;
+  const disabled = isZero || isLocked || isLevelComplete;
   if (isZero && !showZeroTiles) return null;
   return (
     <motion.div
@@ -57,7 +88,7 @@ function PlateTile({ term, side, isLocked, showZeroTiles, onDragStart, onDrag, o
       dragConstraints={cartridgeRef}
       dragElastic={0.15}
       dragSnapToOrigin
-      whileDrag={disabled ? {} : { scale: 1.08 }}
+      whileDrag={disabled ? {} : { scale: 1.45, zIndex: 9999 }}
       onDragStart={(e, info) => !disabled && onDragStart(e, info, { origin: side, termId: term.id })}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
@@ -69,31 +100,88 @@ function PlateTile({ term, side, isLocked, showZeroTiles, onDragStart, onDrag, o
   );
 }
 
-function MenuTile({ item, cartridgeRef, isDragging, onDragStart, onDrag, onDragEnd }) {
-  const disabled = item.available <= 0;
+function MenuTile({ item, isLevelComplete, isDragging, onDragStart }) {
+  const isCurrentlyDragging = isDragging === `menu-${item.key}`;
+  const effectiveAvailable = isCurrentlyDragging ? item.available - 1 : item.available;
+  const isEmpty = effectiveAvailable <= 0;
+  const disabled = item.available <= 0 || isLevelComplete;
   const previewTerm = makeTerm(item.unitCoeff, item.variable);
-  return (
-    <motion.div
-      className={`balanza-menu-tile ${disabled ? 'is-empty' : ''}`}
-      drag={!disabled}
-      dragConstraints={cartridgeRef}
-      dragElastic={0.15}
-      dragSnapToOrigin
-      whileDrag={disabled ? {} : { scale: 1.08 }}
-      onDragStart={(e, info) => !disabled && onDragStart(e, info, { origin: 'menu', key: item.key, variable: item.variable, unitCoeff: item.unitCoeff })}
-      onDrag={onDrag}
-      onDragEnd={onDragEnd}
-      style={{
-        opacity: isDragging === `menu-${item.key}` ? 0 : disabled ? 0.35 : 1,
-        filter: disabled ? 'grayscale(100%)' : 'none',
-        pointerEvents: disabled ? 'none' : 'auto',
-        touchAction: 'none'
-      }}
-    >
-      <span className="balanza-menu-tile-glyph">{previewTerm.variable ?? previewTerm.coeff}</span>
-      {item.available >= 2 && <span className="balanza-menu-tile-count">×{item.available}</span>}
-    </motion.div>
+  const crateSrc = item.variable ? CRATE_MAP[item.variable] : null;
+
+  const glyphContent = (
+    <span className="balanza-menu-tile-glyph">
+      {crateSrc ? (
+        <img src={crateSrc} alt={item.variable} className="balanza-menu-crate-img" draggable={false} />
+      ) : (
+        previewTerm.variable ?? previewTerm.coeff
+      )}
+    </span>
   );
+
+  const handlePointerDown = (e) => {
+    if (disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    onDragStart(e, { point: { x: e.clientX, y: e.clientY } }, {
+      origin: 'menu',
+      key: item.key,
+      variable: item.variable,
+      unitCoeff: item.unitCoeff
+    });
+  };
+
+  return (
+    <div className={`balanza-menu-tile ${isEmpty ? 'is-empty' : ''}`}>
+      {/* If dragging and there are items remaining, show static glyph in the white card space */}
+      {isCurrentlyDragging && effectiveAvailable > 0 && (
+        <div className="balanza-menu-tile-static-slot">
+          {glyphContent}
+        </div>
+      )}
+
+      {/* Draggable handle - only the object is dragged, the card space stays in the menu */}
+      {!isEmpty && (
+        <div
+          className="balanza-menu-tile-draggable-glyph"
+          onPointerDown={handlePointerDown}
+          style={{
+            opacity: isCurrentlyDragging ? 0 : 1,
+            cursor: disabled ? 'default' : 'grab',
+            touchAction: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          {glyphContent}
+        </div>
+      )}
+
+      {effectiveAvailable >= 2 && <span className="balanza-menu-tile-count">×{effectiveAvailable}</span>}
+    </div>
+  );
+}
+
+function EquationLine({ text }) {
+  if (!text) return null;
+  const parts = text.split(/\s+([=><])\s+/);
+  if (parts.length === 3) {
+    const [left, comp, right] = parts;
+    const isEq = comp === '=';
+    const isComp = comp === '>' || comp === '<';
+    return (
+      <div className="balanza-equation-line">
+        <span className="balanza-eq-side">{left}</span>
+        <span className={`balanza-eq-comp ${isEq ? 'is-equal' : ''} ${isComp ? 'is-unequal' : ''}`}>
+          {comp}
+        </span>
+        <span className="balanza-eq-side">{right}</span>
+      </div>
+    );
+  }
+  return <div className="balanza-equation-line">{text}</div>;
 }
 
 export default function BalanzaCartridge({ config = {}, onComplete, preview = false }) {
@@ -130,7 +218,9 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   const leftTotal = useMemo(() => plateTotal(leftPlate, weights), [leftPlate, weights]);
   const rightTotal = useMemo(() => plateTotal(rightPlate, weights), [rightPlate, weights]);
   const tiltAngle = useMemo(() => computeTiltAngle(leftTotal, rightTotal), [leftTotal, rightTotal]);
-  const equationLineText = useMemo(() => buildEquationLineText(leftPlate, rightPlate), [leftPlate, rightPlate]);
+  const equationLineText = useMemo(() => buildEquationLineText(leftPlate, rightPlate, leftTotal, rightTotal), [leftPlate, rightPlate, leftTotal, rightTotal]);
+
+  const isLevelComplete = hasInteracted && leftPlate.length > 0 && rightPlate.length > 0 && nearlyEqual(leftTotal, rightTotal);
 
   useEffect(() => {
     if (preview) return;
@@ -147,7 +237,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
       hasFiredConfettiRef.current = false;
       return;
     }
-    const isBalanced = nearlyEqual(leftTotal, rightTotal);
+    const isBalanced = leftPlate.length > 0 && rightPlate.length > 0 && nearlyEqual(leftTotal, rightTotal);
     if (isBalanced && !hasFiredConfettiRef.current) {
       hasFiredConfettiRef.current = true;
       if (config.confetti !== false) {
@@ -156,7 +246,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     } else if (!isBalanced) {
       hasFiredConfettiRef.current = false;
     }
-  }, [preview, hasInteracted, leftTotal, rightTotal, config.confetti]);
+  }, [preview, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, config.confetti]);
 
   useEffect(() => {
     if (!moveFlash) return;
@@ -164,12 +254,86 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     return () => clearTimeout(timer);
   }, [moveFlash]);
 
+  useEffect(() => {
+    setLeftPlate(parseBalanzaExpression(config.leftPlateText));
+  }, [config.leftPlateText]);
+
+  useEffect(() => {
+    setRightPlate(parseBalanzaExpression(config.rightPlateText));
+  }, [config.rightPlateText]);
+
+  useEffect(() => {
+    setMenuItems(parseMenuInventory(config.menuText));
+  }, [config.menuText]);
+
+  const bgImage = config.background || config.backgroundImage || config.globalBackground;
+  const bgStyle = useMemo(() => {
+    if (!bgImage) return null;
+    const formatted = bgImage.startsWith('url(') || bgImage.startsWith('linear-gradient(') || bgImage.startsWith('radial-gradient(')
+      ? bgImage.replaceAll('/src/assets/', '/assets/')
+      : `url(${bgImage.replaceAll('/src/assets/', '/assets/')})`;
+    return {
+      backgroundImage: formatted,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    };
+  }, [bgImage]);
+
+  const isPhotoMode = !!(config.photoMode || config.isPhoto || config.photo);
+  const equationPos = config.equationPosition || (config.showEquation === false ? 'off' : 'up');
+  const showEquationUp = equationPos === 'up';
+  const showEquationDown = equationPos === 'down';
+
   if (preview) {
+    if (isPhotoMode) {
+      return (
+        <div className="balanza-cartridge is-photo-mode" style={{ pointerEvents: 'none' }}>
+          {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
+          {showEquationUp && equationLineText && (
+            <div className="balanza-header-area" style={{ marginTop: '2vh' }}>
+              <div className="balanza-equation-frame">
+                <EquationLine text={equationLineText} />
+              </div>
+            </div>
+          )}
+          <div className="balanza-photo-card">
+            <div className="balanza-photo-inner">
+              <Scale
+                tiltAngle={tiltAngle}
+                leftPlate={leftPlate}
+                rightPlate={rightPlate}
+                isLeftLocked={false}
+                isRightLocked={false}
+                showZeroTiles={showZeroTiles}
+                draggingKey={null}
+                cartridgeRef={cartridgeRef}
+                leftPlateRef={leftPlateRef}
+                rightPlateRef={rightPlateRef}
+              />
+            </div>
+          </div>
+          {showEquationDown && equationLineText && (
+            <div className="balanza-footer-equation-area">
+              <div className="balanza-equation-frame">
+                <EquationLine text={equationLineText} />
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div className="balanza-cartridge" style={{ pointerEvents: 'none' }}>
+        {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
         <div className="balanza-header-area">
           <div className="balanza-top-row"></div>
-          {showEquation && <div className="balanza-equation-line">{equationLineText}</div>}
+          {showEquationUp && equationLineText && (
+            <div className="balanza-equation-frame">
+              <EquationLine text={equationLineText} />
+            </div>
+          )}
         </div>
         <Scale
           tiltAngle={tiltAngle}
@@ -182,8 +346,19 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
           cartridgeRef={cartridgeRef}
           leftPlateRef={leftPlateRef}
           rightPlateRef={rightPlateRef}
-          noop
         />
+        {showEquationDown && equationLineText && (
+          <div className="balanza-footer-equation-area">
+            <div className="balanza-equation-frame">
+              <EquationLine text={equationLineText} />
+            </div>
+          </div>
+        )}
+        <div className="balanza-menu">
+          {menuItems.map(item => (
+            <MenuTile key={item.key} item={item} cartridgeRef={cartridgeRef} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -193,7 +368,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
 
   const applyZeroFilter = (terms) => (showZeroTiles ? terms : terms.filter(t => t.coeff !== 0));
 
-  function mergeOrAddToPlate(terms, incoming, collisionId) {
+  function mergeOrAddToPlate(terms, incoming, collisionId, dropX = null, side = null) {
     if (collisionId) {
       const idx = terms.findIndex(t => t.id === collisionId);
       if (idx !== -1 && areLikeTerms(terms[idx], incoming)) {
@@ -201,6 +376,21 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
         const next = [...terms];
         next.splice(idx, 1, merged);
         return applyZeroFilter(next);
+      }
+    }
+    if (dropX !== null && side) {
+      const container = plateRefForSide(side).current;
+      if (container) {
+        const cardEls = Array.from(container.querySelectorAll('[data-term-id]'));
+        for (let i = 0; i < cardEls.length; i++) {
+          const rect = cardEls[i].getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          if (dropX < centerX) {
+            const next = [...terms];
+            next.splice(i, 0, incoming);
+            return applyZeroFilter(next);
+          }
+        }
       }
     }
     return applyZeroFilter([...terms, incoming]);
@@ -277,7 +467,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   };
 
   const handleTileTap = (side, termId) => {
-    if (isSideLocked(side)) return;
+    if (isLevelComplete || isSideLocked(side)) return;
     const terms = plateArrayForSide(side);
     const term = terms.find(t => t.id === termId);
     if (!term || term.variable === null || Math.abs(term.coeff) <= 1) return;
@@ -292,6 +482,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   };
 
   const handleTileDragStart = (e, info, source) => {
+    if (isLevelComplete) return;
     if (source.origin !== 'menu' && isSideLocked(source.origin)) return;
     setIsDraggingItem(true);
     dragSourceRef.current = source;
@@ -300,7 +491,23 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
       : plateArrayForSide(source.origin).find(t => t.id === source.termId);
     setDragOverlayTerm(overlay || null);
     setDraggingKey(source.origin === 'menu' ? `menu-${source.key}` : source.termId);
-    if (info?.point) setDragPos(info.point);
+    const pt = info?.point || (e ? { x: e.clientX, y: e.clientY } : { x: 0, y: 0 });
+    setDragPos(pt);
+
+    if (source.origin === 'menu') {
+      const handleMove = (moveEvt) => {
+        setDragPos({ x: moveEvt.clientX, y: moveEvt.clientY });
+      };
+      const handleUp = (upEvt) => {
+        window.removeEventListener('pointermove', handleMove);
+        window.removeEventListener('pointerup', handleUp);
+        window.removeEventListener('pointercancel', handleUp);
+        handleTileDragEnd(upEvt, { point: { x: upEvt.clientX, y: upEvt.clientY } });
+      };
+      window.addEventListener('pointermove', handleMove);
+      window.addEventListener('pointerup', handleUp);
+      window.addEventListener('pointercancel', handleUp);
+    }
   };
 
   const handleTileDrag = (e, info) => {
@@ -333,7 +540,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
       if (!menuItem || menuItem.available <= 0) return;
       const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, null);
       const incoming = makeTerm(menuItem.unitCoeff, menuItem.variable);
-      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId);
+      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId, info.point.x, zone);
       const nextMenu = menuItems.map(m => (m.key === source.key ? { ...m, available: m.available - 1 } : m));
       commitMove({ ...withSide(zone, nextPlate), menu: nextMenu }, MOVE_CHANGING, zone);
       return;
@@ -343,30 +550,72 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     const term = plateArrayForSide(sourceSide).find(t => t.id === source.termId);
     if (!term) return;
 
-    // Plate -> supply menu. Deliberately CHANGES the balance.
-    if (zone === 'menu') {
+    // Plate -> supply menu or dragged outside plates. Deliberately CHANGES the balance.
+    if (zone === 'menu' || !zone) {
       const menuIdx = findMenuRowIndexForTerm(term);
-      if (menuIdx === -1) return;
       const nextPlate = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
-      const nextMenu = menuItems.map((m, i) => (
-        i === menuIdx ? { ...m, available: m.available + Math.abs(term.coeff) } : m
-      ));
+      let nextMenu;
+      if (menuIdx !== -1) {
+        nextMenu = menuItems.map((m, i) => (
+          i === menuIdx ? { ...m, available: m.available + Math.abs(term.coeff) } : m
+        ));
+      } else {
+        const newKey = `menu-${Date.now()}-${term.variable ?? 'num'}`;
+        nextMenu = [
+          ...menuItems,
+          {
+            key: newKey,
+            variable: term.variable,
+            unitCoeff: term.variable ? 1 : Math.abs(term.coeff),
+            available: term.variable ? Math.abs(term.coeff) : 1,
+          }
+        ];
+      }
       commitMove({ ...withSide(sourceSide, nextPlate), menu: nextMenu }, MOVE_CHANGING, sourceSide);
       return;
     }
 
-    // Same-plate merge onto a matching tile. PRESERVING (coeffs just add).
+    // Same-plate move: merge if dropped on like term, or reorder horizontally. PRESERVING.
     if (zone === sourceSide) {
       const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, term.id);
-      if (!collisionId) return;
       const terms = plateArrayForSide(sourceSide);
-      const targetIdx = terms.findIndex(t => t.id === collisionId);
-      if (targetIdx === -1 || !areLikeTerms(terms[targetIdx], term)) return;
-      const merged = combineTerms(terms[targetIdx], term);
-      const nextTerms = terms.filter(t => t.id !== term.id);
-      const mergeIdx = nextTerms.findIndex(t => t.id === collisionId);
-      nextTerms.splice(mergeIdx, 1, merged);
-      commitMove(withSide(sourceSide, applyZeroFilter(nextTerms)), MOVE_PRESERVING, sourceSide);
+      if (collisionId) {
+        const targetIdx = terms.findIndex(t => t.id === collisionId);
+        if (targetIdx !== -1 && areLikeTerms(terms[targetIdx], term)) {
+          const merged = combineTerms(terms[targetIdx], term);
+          const nextTerms = terms.filter(t => t.id !== term.id);
+          const mergeIdx = nextTerms.findIndex(t => t.id === collisionId);
+          nextTerms.splice(mergeIdx, 1, merged);
+          commitMove(withSide(sourceSide, applyZeroFilter(nextTerms)), MOVE_PRESERVING, sourceSide);
+          return;
+        }
+      }
+
+      // Reorder items horizontally on the same plate
+      const container = plateRefForSide(sourceSide).current;
+      const otherItems = terms.filter(t => t.id !== term.id);
+      if (container && otherItems.length > 0) {
+        let insertIdx = otherItems.length;
+        const cardEls = Array.from(container.querySelectorAll('[data-term-id]'))
+          .filter(el => el.getAttribute('data-term-id') !== term.id);
+
+        for (let i = 0; i < cardEls.length; i++) {
+          const rect = cardEls[i].getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          if (info.point.x < centerX) {
+            insertIdx = i;
+            break;
+          }
+        }
+
+        const nextTerms = [...otherItems];
+        nextTerms.splice(insertIdx, 0, term);
+        const orderChanged = nextTerms.some((t, i) => t.id !== terms[i]?.id);
+        if (orderChanged) {
+          commitMove(withSide(sourceSide, nextTerms), MOVE_PRESERVING, sourceSide);
+          return;
+        }
+      }
       return;
     }
 
@@ -377,7 +626,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     const targetTerm = makeTerm(targetCoeff, term.variable);
     const collisionId = findCollisionTermId(otherSide, info.point.x, info.point.y, null);
     const nextSource = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
-    const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId);
+    const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId, info.point.x, otherSide);
     const moveCategory = freeMovement ? MOVE_CHANGING : MOVE_PRESERVING;
     commitMove({
       left: sourceSide === 'left' ? nextSource : nextTarget,
@@ -386,15 +635,61 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
     }, moveCategory, otherSide);
   };
 
+  if (isPhotoMode) {
+    return (
+      <div ref={cartridgeRef} className="balanza-cartridge is-photo-mode">
+        {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
+        {showEquationUp && equationLineText && (
+          <div className="balanza-header-area" style={{ marginTop: '2vh' }}>
+            <div className="balanza-equation-frame">
+              <EquationLine text={equationLineText} />
+            </div>
+          </div>
+        )}
+
+        <div className="balanza-photo-card">
+          <div className="balanza-photo-inner">
+            <Scale
+              tiltAngle={tiltAngle}
+              leftPlate={leftPlate}
+              rightPlate={rightPlate}
+              isLeftLocked={false}
+              isRightLocked={false}
+              showZeroTiles={showZeroTiles}
+              draggingKey={null}
+              cartridgeRef={cartridgeRef}
+              leftPlateRef={leftPlateRef}
+              rightPlateRef={rightPlateRef}
+              onDragStart={null}
+              onDrag={null}
+              onDragEnd={null}
+              onTileTap={null}
+              moveFlash={null}
+            />
+          </div>
+        </div>
+
+        {showEquationDown && equationLineText && (
+          <div className="balanza-footer-equation-area">
+            <div className="balanza-equation-frame">
+              <EquationLine text={equationLineText} />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div ref={cartridgeRef} className="balanza-cartridge">
+      {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
       <div className="balanza-header-area">
         <div className="balanza-top-row">
           <button className="balanza-restart-btn" onClick={handleRestart} title="Restart">↺</button>
         </div>
-        {showEquation && (
-          <div className={`balanza-equation-line ${moveFlash?.category === MOVE_PRESERVING ? 'is-rearranged' : ''}`}>
-            {equationLineText}
+        {showEquationUp && equationLineText && (
+          <div className={`balanza-equation-frame ${moveFlash?.category === MOVE_PRESERVING ? 'is-rearranged' : ''}`}>
+            <EquationLine text={equationLineText} />
           </div>
         )}
       </div>
@@ -405,6 +700,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
         rightPlate={rightPlate}
         isLeftLocked={isLeftLocked}
         isRightLocked={isRightLocked}
+        isLevelComplete={isLevelComplete}
         showZeroTiles={showZeroTiles}
         draggingKey={draggingKey}
         cartridgeRef={cartridgeRef}
@@ -417,16 +713,22 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
         moveFlash={moveFlash}
       />
 
+      {showEquationDown && equationLineText && (
+        <div className="balanza-footer-equation-area">
+          <div className={`balanza-equation-frame ${moveFlash?.category === MOVE_PRESERVING ? 'is-rearranged' : ''}`}>
+            <EquationLine text={equationLineText} />
+          </div>
+        </div>
+      )}
+
       <div ref={menuRef} className="balanza-menu">
         {menuItems.map(item => (
           <MenuTile
             key={item.key}
             item={item}
-            cartridgeRef={cartridgeRef}
+            isLevelComplete={isLevelComplete}
             isDragging={draggingKey}
             onDragStart={handleTileDragStart}
-            onDrag={handleTileDrag}
-            onDragEnd={handleTileDragEnd}
           />
         ))}
       </div>
@@ -436,7 +738,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
           className="balanza-drag-overlay"
           style={{ position: 'fixed', left: dragPos.x, top: dragPos.y, transform: 'translate(-50%, -50%)', zIndex: 99999999, pointerEvents: 'none' }}
         >
-          <TileGlyph term={dragOverlayTerm} />
+          <TileGlyph term={dragOverlayTerm} isOverlay={true} />
         </div>,
         document.body
       )}
@@ -444,7 +746,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   );
 }
 
-function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileTap, moveFlash }) {
+function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, isLevelComplete, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileTap, moveFlash }) {
   const noop = () => {};
   const flashClass = (side) => {
     if (!moveFlash || moveFlash.side !== side) return '';
@@ -478,14 +780,6 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
             className={`balanza-plate-assembly balanza-plate-assembly-left ${isLeftLocked ? 'is-locked-plate' : ''}`}
             style={{ transform: `translate(-49.5%, -70%) rotate(${-tiltAngle}deg)` }}
           >
-            {isLeftLocked && (
-              <div className="balanza-plate-lock-badge" title="Plate is locked">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-              </div>
-            )}
             <div ref={leftPlateRef} className={`balanza-plate-items ${flashClass('left')}`}>
               {leftPlate.map(term => (
                 <PlateTile
@@ -493,6 +787,7 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
                   term={term}
                   side="left"
                   isLocked={isLeftLocked}
+                  isLevelComplete={isLevelComplete}
                   showZeroTiles={showZeroTiles}
                   isDragging={draggingKey}
                   cartridgeRef={cartridgeRef}
@@ -515,14 +810,6 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
             className={`balanza-plate-assembly balanza-plate-assembly-right ${isRightLocked ? 'is-locked-plate' : ''}`}
             style={{ transform: `translate(-49.5%, -70%) rotate(${-tiltAngle}deg)` }}
           >
-            {isRightLocked && (
-              <div className="balanza-plate-lock-badge" title="Plate is locked">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-              </div>
-            )}
             <div ref={rightPlateRef} className={`balanza-plate-items ${flashClass('right')}`}>
               {rightPlate.map(term => (
                 <PlateTile
@@ -530,6 +817,7 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
                   term={term}
                   side="right"
                   isLocked={isRightLocked}
+                  isLevelComplete={isLevelComplete}
                   showZeroTiles={showZeroTiles}
                   isDragging={draggingKey}
                   cartridgeRef={cartridgeRef}

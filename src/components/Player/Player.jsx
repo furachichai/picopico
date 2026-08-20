@@ -212,12 +212,9 @@ const Player = () => {
             const isticker = slide?.elements?.find(el => el.type === 'isticker');
             if (isticker) {
                 setWiggleIStickerId(isticker.id);
-                playTone('fail');
                 setTimeout(() => setWiggleIStickerId(null), 500);
-            } else {
-                // If it's a quiz or cartridge blocking
-                playTone('fail');
             }
+            triggerSlideShake();
             return;
         }
         if (currentSlideIndex < slides.length - 1) {
@@ -232,6 +229,8 @@ const Player = () => {
         if (currentSlideIndex > 0) {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev - 1);
+        } else {
+            triggerSlideShake();
         }
     };
 
@@ -375,24 +374,64 @@ const Player = () => {
 
     const [isNavigating, setIsNavigating] = useState(false);
 
-    // Debounced Navigation Handler (touch/hotzone — strict rules)
+    // Helper to detect if a touch or click target is an interactive control or draggable game piece
+    const isInteractiveElement = (target) => {
+        if (!target || !(target instanceof Element)) return false;
+
+        // Specific interactive elements and controls only (never broad full-stage wrappers)
+        const interactiveSelector = 
+            'button, input, select, textarea, a, label, summary, ' +
+            '[role="button"], [role="slider"], [role="checkbox"], [role="radio"], [role="tab"], [role="switch"], [role="link"], ' +
+            '.balanza-tile, .balanza-menu-tile, .balanza-restart-btn, ' +
+            '.algebros-card, .algebros-slot, .algebros-op-btn, ' +
+            '.fraction-slice, .swipe-card, ' +
+            '.quiz-option, .chatquiz-option-btn, .match-card, .conecta-item, .nl-knob-player, .quiz-ready-btn, ' +
+            '.isticker-container, .popup-character, img[alt="popup"], ' +
+            '[data-interactive="true"], ' +
+            '.fullscreen-toggle, .player-top-controls, .player-nav-btn, .close-btn, .edit-btn';
+
+        if (target.closest(interactiveSelector)) return true;
+
+        return false;
+    };
+
+    const [isShakingSlide, setIsShakingSlide] = useState(false);
+    const shakeTimeoutRef = useRef(null);
+
+    const triggerSlideShake = () => {
+        playTone('fail');
+        setIsShakingSlide(true);
+        if (shakeTimeoutRef.current) clearTimeout(shakeTimeoutRef.current);
+        shakeTimeoutRef.current = setTimeout(() => {
+            setIsShakingSlide(false);
+        }, 450);
+    };
+
+    // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
 
         // Determine what kind of interactive is on the current slide
         const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
+        const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
         if (direction === 'next') {
-            // Forward is ALWAYS blocked when there's an unsolved quiz or cartridge
-            if (hasCartridge || hasQuiz) return;
+            // Forward is blocked when there's an unsolved quiz, cartridge, isticker, stripper, or at last slide
+            if (hasCartridge || hasQuiz || hasISticker || stripperBlocking || currentSlideIndex >= slides.length - 1) {
+                triggerSlideShake();
+                return;
+            }
             setIsNavigating(true);
             nextSlide(false);
         } else {
             // Backward:
             //   - Cartridge/game: BLOCKED (can't leave mid-game)
-            //   - Quiz: ALLOWED (can go back)
-            if (hasCartridge) return;
+            //   - At first slide: BLOCKED (no previous slide)
+            if (hasCartridge || currentSlideIndex === 0) {
+                triggerSlideShake();
+                return;
+            }
             setIsNavigating(true);
             prevSlide();
         }
@@ -403,63 +442,53 @@ const Player = () => {
         }, 450);
     };
 
-    // ── Hotzone gestures: tap OR swipe, both starting inside a hotzone column ──
-    // Pointer capture is what keeps a swipe from touching anything else on the slide:
-    // once the gesture starts in a hotzone, every subsequent pointer event is routed to
-    // that hotzone element, so buttons/quiz inputs under the finger's path never get
-    // pressed, hovered, or focused. preventDefault() on pointerdown additionally stops
-    // the browser's default focus handling (e.g. blurring a focused text field) and the
-    // synthesized mouse events on touch devices.
-    const SWIPE_TRIGGER = 40;  // min horizontal travel (px) to count as a swipe
+    // ── Slide Navigation Gestures: Swipe anywhere or Tap vertical border columns ──
+    const SWIPE_TRIGGER = 35;  // min horizontal travel (px) to count as a swipe
     const TAP_TOLERANCE = 12;  // max travel (px) still treated as a tap
 
     const swipeRef = useRef(null);
 
-    const handleZonePointerDown = (zone) => (e) => {
-        e.currentTarget.setPointerCapture?.(e.pointerId);
-        e.preventDefault();
-        e.stopPropagation();
-        swipeRef.current = { zone, startX: e.clientX, startY: e.clientY };
+    const handlePointerDown = (e) => {
+        if (isInteractiveElement(e.target)) {
+            swipeRef.current = null;
+            return;
+        }
+        swipeRef.current = { startX: e.clientX, startY: e.clientY, startTime: Date.now() };
     };
 
-    const handleZonePointerUp = (e) => {
+    const handlePointerUp = (e) => {
         const gesture = swipeRef.current;
         swipeRef.current = null;
         if (!gesture) return;
-        e.stopPropagation();
 
         const dx = e.clientX - gesture.startX;
         const dy = e.clientY - gesture.startY;
 
         if (Math.abs(dx) >= SWIPE_TRIGGER && Math.abs(dx) > Math.abs(dy)) {
-            // Directional swipe: dragging left pulls the next slide in, dragging right
-            // the previous one — regardless of which column the gesture started in.
+            // Horizontal swipe anywhere across the slide:
+            // Swiping left pulls next slide in, swiping right pulls previous slide
             handleHotzoneNav(dx < 0 ? 'next' : 'prev');
         } else if (Math.abs(dx) <= TAP_TOLERANCE && Math.abs(dy) <= TAP_TOLERANCE) {
-            // A plain tap keeps the original zone semantics (left = prev, right = next).
-            handleHotzoneNav(gesture.zone === 'left' ? 'prev' : 'next');
+            // Tap vertical border columns to navigate:
+            // Left border column navigates back; Right border column navigates forward.
+            const viewportRect = viewportRef.current?.getBoundingClientRect() || { left: 0, width: window.innerWidth };
+            const stageWidth = 360 * scale;
+            const stageLeft = viewportRect.left + (viewportRect.width - stageWidth) / 2;
+            const stageRight = stageLeft + stageWidth;
+
+            const isLeftBorder = e.clientX <= (stageLeft + stageWidth * 0.20) || e.clientX < stageLeft;
+            const isRightBorder = e.clientX >= (stageRight - stageWidth * 0.20) || e.clientX > stageRight;
+
+            if (isLeftBorder) {
+                handleHotzoneNav('prev');
+            } else if (isRightBorder) {
+                handleHotzoneNav('next');
+            }
         }
-        // Anything in between (short or mostly-vertical drags) deliberately does nothing.
     };
 
-    const handleZonePointerCancel = () => {
+    const handlePointerCancel = () => {
         swipeRef.current = null;
-    };
-
-    // Check for NL or Field Quiz in current slide to adjust hotzones
-    const hasNL = currentSlide?.elements?.some(
-        el => el.type === 'quiz' && (el.metadata?.quizType === 'nl' || el.metadata?.quizType === 'field')
-    );
-
-    // Hotzone Styles (Base)
-    const hotzoneStyle = {
-        position: 'absolute',
-        top: '80px', // Start below progress bar (approx 72px)
-        bottom: hasNL ? '25%' : 0, // Shorten hotzones for NL to allow knob interaction
-        width: '15%', // 15% of STAGE width (54px of 360px)
-        zIndex: 100, // Above stickers (10), below Buttons
-        cursor: 'pointer',
-        backgroundColor: debugMode ? 'rgba(255, 0, 0, 0.2)' : 'transparent',
     };
 
     // Determine active interactive elements
@@ -505,7 +534,10 @@ const Player = () => {
             <div
                 className={`player-viewport ${hasCartridge ? 'has-cartridge' : ''}`}
                 ref={viewportRef}
-            // Removed touch handlers
+                onPointerDown={handlePointerDown}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerCancel}
+                style={{ touchAction: 'pan-y' }}
             >
                 {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
@@ -521,126 +553,37 @@ const Player = () => {
                     pointerEvents: 'none', // Pass clicks through
                     zIndex: 2000
                 }}>
-                    {/* Hotzones - Left (Prev) and Right (Next) - INSIDE STAGE */}
-                    <div
-                        className="hotzone-left"
-                        style={{
-                            ...hotzoneStyle,
-                            left: 0,
-                            borderRight: debugMode ? '1px solid red' : 'none',
-                            pointerEvents: hasCartridge ? 'none' : 'auto',
-                            touchAction: 'none'
-                        }}
-                        onPointerDown={handleZonePointerDown('left')}
-                        onPointerUp={handleZonePointerUp}
-                        onPointerCancel={handleZonePointerCancel}
-                        title={debugMode ? "Prev Slide" : ""}
-                    />
-
-                    <div
-                        className="hotzone-right"
-                        style={{
-                            ...hotzoneStyle,
-                            right: 0,
-                            borderLeft: debugMode ? '1px solid red' : 'none',
-                            pointerEvents: (hasCartridge || hasQuiz) ? 'none' : 'auto',
-                            touchAction: 'none'
-                        }}
-                        onPointerDown={handleZonePointerDown('right')}
-                        onPointerUp={handleZonePointerUp}
-                        onPointerCancel={handleZonePointerCancel}
-                        title={debugMode ? "Next Slide" : ""}
-                    />
-
-                    {/* Navigation Buttons */}
+                    {/* Top Controls Bar - Vertically centered between top edge (0px) and progress bar (64px / 10%) */}
                     <div style={{
                         position: 'absolute',
-                        top: '16px',
-                        left: '16px',
-                        pointerEvents: 'auto', // Re-enable clicks
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '64px',
                         display: 'flex',
-                        gap: '10px'
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0 16px',
+                        boxSizing: 'border-box',
+                        pointerEvents: 'none',
+                        zIndex: 2000
                     }}>
-                        <button
-                            onClick={handleMenu}
-                            title={t('player.menu')}
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.95)',
-                                border: '1px solid rgba(0,0,0,0.1)',
-                                borderRadius: '50%',
-                                width: '44px',
-                                height: '44px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                padding: 0,
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                            }}
-                        >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                                <path d="M18 6 6 18" />
-                                <path d="m6 6 12 12" />
-                            </svg>
-                        </button>
-
-                        <FullscreenToggle style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            border: '1px solid rgba(0,0,0,0.1)',
-                            borderRadius: '50%',
-                            width: '44px',
-                            height: '44px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                            color: '#334155',
-                            padding: 0
-                        }} />
-                    </div>
-
-                    <div style={{
-                        position: 'absolute',
-                        top: '16px',
-                        right: '16px',
-                        pointerEvents: 'auto',
-                        display: 'flex',
-                        gap: '8px'
-                    }}>
-                        {/* Language Flag Toggle */}
-                        <button
-                            onClick={() => {
-                                const codes = SUPPORTED_LANGUAGES.map(l => l.code);
-                                const idx = codes.indexOf(language);
-                                const nextLang = codes[(idx + 1) % codes.length];
-                                setLanguage(nextLang);
-                            }}
-                            title={`Language: ${SUPPORTED_LANGUAGES.find(l => l.code === language)?.label}`}
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.95)',
-                                border: '1px solid rgba(0,0,0,0.1)',
-                                borderRadius: '50%',
-                                width: '44px',
-                                height: '44px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                padding: 0,
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                                fontSize: '22px'
-                            }}
-                        >
-                            {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag}
-                        </button>
-
-                        {!state.readOnly && (
+                        {/* Navigation / System Buttons */}
+                        <div style={{
+                            pointerEvents: 'auto',
+                            display: 'flex',
+                            gap: '10px',
+                            alignItems: 'center'
+                        }}>
                             <button
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
-                                title={t('common.edit')}
+                                onClick={handleMenu}
+                                title={t('player.menu')}
                                 style={{
                                     background: 'rgba(255, 255, 255, 0.95)',
                                     border: '1px solid rgba(0,0,0,0.1)',
                                     borderRadius: '50%',
-                                    width: '44px',
-                                    height: '44px',
+                                    width: '40px',
+                                    height: '40px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -649,12 +592,83 @@ const Player = () => {
                                     boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                 }}
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                                    <path d="m15 5 4 4" />
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
                                 </svg>
                             </button>
-                        )}
+
+                            <FullscreenToggle style={{
+                                background: 'rgba(255, 255, 255, 0.95)',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                                color: '#334155',
+                                padding: 0
+                            }} />
+                        </div>
+
+                        {/* Action / Context Buttons */}
+                        <div style={{
+                            pointerEvents: 'auto',
+                            display: 'flex',
+                            gap: '8px',
+                            alignItems: 'center'
+                        }}>
+                            {/* Language Flag Toggle */}
+                            <button
+                                onClick={() => {
+                                    const codes = SUPPORTED_LANGUAGES.map(l => l.code);
+                                    const idx = codes.indexOf(language);
+                                    const nextLang = codes[(idx + 1) % codes.length];
+                                    setLanguage(nextLang);
+                                }}
+                                title={`Language: ${SUPPORTED_LANGUAGES.find(l => l.code === language)?.label}`}
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.95)',
+                                    border: '1px solid rgba(0,0,0,0.1)',
+                                    borderRadius: '50%',
+                                    width: '40px',
+                                    height: '40px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                                    fontSize: '20px'
+                                }}
+                            >
+                                {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag}
+                            </button>
+
+                            {!state.readOnly && (
+                                <button
+                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
+                                    title={t('common.edit')}
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid rgba(0,0,0,0.1)',
+                                        borderRadius: '50%',
+                                        width: '40px',
+                                        height: '40px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                    }}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                        <path d="m15 5 4 4" />
+                                    </svg>
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     {banner && (
@@ -685,7 +699,7 @@ const Player = () => {
                     return (
                         <div
                             key={slide.id}
-                            className={`player-slide player-stage-scaled ${positionClass} ${showNavHint && positionClass === 'slide-active' ? 'nav-hint-nudge' : ''} ${showNavHint && positionClass === 'slide-next' ? 'nav-hint-peek' : ''}`}
+                            className={`player-slide player-stage-scaled ${positionClass} ${isShakingSlide && positionClass === 'slide-active' ? 'slide-shake' : ''} ${showNavHint && positionClass === 'slide-active' ? 'nav-hint-nudge' : ''} ${showNavHint && positionClass === 'slide-next' ? 'nav-hint-peek' : ''}`}
                             style={{
                                 transformOrigin: 'center center',
                                 width: '360px',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
-import { Home, Heart, MessageCircle, Bookmark, Share2 } from 'lucide-react';
+import { Home } from 'lucide-react';
 import Balloon from '../Editor/Balloon';
 import QuizPlayer from '../Player/QuizPlayer';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
@@ -316,14 +316,18 @@ const DiscoverView = () => {
     };
 
     // Touch Wrappers
-    const handleTouchStart = (e) => handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    const handleTouchStart = (e) => {
+        if (e.target?.closest?.('button, a, input, select, textarea, [role="button"], .cartridge-container, .minigame-player, .quiz-player, .isticker-container, .player-popup')) return;
+        handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    };
     const handleTouchMove = (e) => handleMove(e.touches[0].clientX, e.touches[0].clientY);
     const handleTouchEnd = (e) => handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 
-
-
     // Mouse Wrappers
-    const handleMouseDown = (e) => handleStart(e.clientX, e.clientY);
+    const handleMouseDown = (e) => {
+        if (e.target?.closest?.('button, a, input, select, textarea, [role="button"], .cartridge-container, .minigame-player, .quiz-player, .isticker-container, .player-popup')) return;
+        handleStart(e.clientX, e.clientY);
+    };
     const handleMouseMove = (e) => isDragging && handleMove(e.clientX, e.clientY);
     const handleMouseUp = (e) => handleEnd(e.clientX, e.clientY);
 
@@ -553,43 +557,7 @@ const DiscoverView = () => {
                             }}>
                                 {/* Slide 0 */}
                                 {lesson.slides && lesson.slides.length > 0 ? (
-                                    <>
-                                        {renderSlide(lesson.slides[0], { left: 0 })}
-                                        {/* Social Icons Sidebar */}
-                                        <div style={{
-                                            position: 'absolute',
-                                            right: '4px',
-                                            bottom: '100px', // Adjust as needed
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '20px',
-                                            zIndex: 20, // Above slide content
-                                            alignItems: 'center'
-                                        }}>
-                                            {[
-                                                { icon: <Heart size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Like' },
-                                                { icon: <MessageCircle size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Comment' },
-                                                { icon: <Bookmark size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Save' },
-                                                { icon: <Share2 size={26} fill="#E2E8F0" color="#E2E8F0" />, label: 'Share' }
-                                            ].map((item, idx) => (
-                                                <div key={idx} style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center',
-                                                    gap: '4px',
-                                                    cursor: 'pointer',
-                                                    opacity: 0.9
-                                                }}>
-                                                    <div style={{
-                                                        // filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
-                                                    }}>
-                                                        {item.icon}
-                                                    </div>
-                                                    <span style={{ fontSize: '12px', fontWeight: '600' }}>{/* Label if needed */}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </>
+                                    renderSlide(lesson.slides[0], { left: 0 })
                                 ) : null}
 
                                 {/* Slide 1 */}

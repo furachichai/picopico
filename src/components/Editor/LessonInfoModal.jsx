@@ -165,7 +165,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
     const isTranslating = activeLangTab !== 'es';
 
     return (
-        <div className="modal-overlay" style={{
+        <div className="modal-overlay" onClick={onClose} style={{
             position: 'fixed',
             top: 0, left: 0, right: 0, bottom: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -175,7 +175,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
             zIndex: 2000,
             fontFamily: "'Inter', sans-serif"
         }}>
-            <div className="modal-content" style={{
+            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
                 backgroundColor: 'white',
                 padding: '24px',
                 borderRadius: '16px',

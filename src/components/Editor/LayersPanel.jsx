@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './LayersPanel.css';
 import { useDraggable } from '../../hooks/useDraggable';
 
@@ -67,6 +67,23 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
     const [dropIndex, setDropIndex] = useState(null); // visual drop indicator position
     const listRef = useRef(null);
     const { popupRef, dragHandlers, style } = useDraggable('layersPanel');
+
+    // Close on tap / click outside when open
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleOutsideClick = (e) => {
+            if (popupRef.current && !popupRef.current.contains(e.target) && !e.target.closest('.layers-toggle-tab')) {
+                onToggle();
+            }
+        };
+        const timer = setTimeout(() => {
+            window.addEventListener('pointerdown', handleOutsideClick);
+        }, 50);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('pointerdown', handleOutsideClick);
+        };
+    }, [isOpen, onToggle]);
 
     // Separate pinned (quiz/isticker/game) from draggable elements
     // Display order: reversed array (top of z-stack = top of list)

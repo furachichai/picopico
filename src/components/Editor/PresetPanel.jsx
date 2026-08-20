@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import './PresetPanel.css';
 import { useDraggable } from '../../hooks/useDraggable';
@@ -20,6 +20,22 @@ const PresetPanel = ({ onClose }) => {
     const { state, dispatch } = useEditor();
     const existing = state.lesson.textPreset || {};
     const { popupRef, dragHandlers, style } = useDraggable('presetPanel');
+
+    // Close on tap / click outside
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (popupRef.current && !popupRef.current.contains(e.target)) {
+                onClose();
+            }
+        };
+        const timer = setTimeout(() => {
+            window.addEventListener('pointerdown', handleOutsideClick);
+        }, 50);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('pointerdown', handleOutsideClick);
+        };
+    }, [onClose]);
 
     const [textFont, setTextFont] = useState(existing.text?.fontFamily || '"HVD Comic Serif Pro", sans-serif');
     const [textSize, setTextSize] = useState(existing.text?.fontSize || 24);

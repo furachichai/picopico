@@ -69,9 +69,9 @@ export function parseWeights(weightsText) {
 export function parseMenuInventory(menuText) {
   if (!menuText) return [];
   const tokens = menuText.split(/[\n,]/).map(line => line.trim()).filter(Boolean);
-  const items = [];
+  const itemsMap = new Map();
 
-  tokens.forEach((tok, idx) => {
+  tokens.forEach((tok) => {
     let count = 1;
     let rest = tok;
 
@@ -90,18 +90,21 @@ export function parseMenuInventory(menuText) {
     const isNumber = /^\d+$/.test(rest);
     const variable = isNumber ? null : rest;
     const unitCoeff = isNumber ? parseInt(rest, 10) : 1;
+    const key = `${variable ?? 'num'}_${unitCoeff}`;
 
-    for (let i = 0; i < count; i++) {
-      items.push({
-        key: `menu-${idx}-${i}`,
+    if (itemsMap.has(key)) {
+      itemsMap.get(key).available += count;
+    } else {
+      itemsMap.set(key, {
+        key,
         variable,
         unitCoeff,
-        available: 1,
+        available: count,
       });
     }
   });
 
-  return items;
+  return Array.from(itemsMap.values());
 }
 
 /**
@@ -168,16 +171,50 @@ export function computeTiltAngle(leftTotal, rightTotal) {
 }
 
 /**
- * Builds the live "equation line" text, e.g. "🍎 + 🍎 = 🍌", reusing AlgeBros'
- * formatTerm for consistent sign/value formatting.
+ * Builds the live "equation line" text, e.g. "2x + 3 = 11", rendering 'x'
+ * directly for crate tokens instead of showing the crate emoji/icon.
  */
-export function buildEquationLineText(leftTerms, rightTerms) {
+export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTotal) {
+  if (!leftTerms?.length && !rightTerms?.length) {
+    return '';
+  }
+
+  const formatBalanzaEqVariable = (v) => {
+    if (!v) return v;
+    // When rendering the x crate in the equation, just display the x
+    if (v === '📦x' || v === 'x📦' || v === 'crate_x' || v === '[x]' || v === 'x') {
+      return 'x';
+    }
+    if (v === '📦?' || v === '?📦' || v === 'crate_q' || v === '[?]' || v === '?') {
+      return '?';
+    }
+    if (v === '📦' || v === 'crate' || v === 'box') {
+      return 'x';
+    }
+    // Clean any residual crate emoji or prefix
+    const cleaned = v.replace(/📦/g, '').replace(/^crate_/g, '').trim();
+    return cleaned || 'x';
+  };
+
   const sideText = (terms) => {
-    if (terms.length === 0) return '0';
+    if (!terms || terms.length === 0) return '0';
     return terms.map((t, idx) => {
-      const { sign, value } = formatTerm(t, idx === 0);
+      const cleanTerm = { ...t, variable: formatBalanzaEqVariable(t.variable) };
+      const { sign, value } = formatTerm(cleanTerm, idx === 0);
       return idx === 0 ? `${sign}${value}` : ` ${sign} ${value}`;
     }).join('');
   };
-  return `${sideText(leftTerms)}  =  ${sideText(rightTerms)}`;
+
+  let comparator = '=';
+  if (typeof leftTotal === 'number' && typeof rightTotal === 'number') {
+    if (leftTotal > rightTotal + 0.001) {
+      comparator = '>';
+    } else if (leftTotal < rightTotal - 0.001) {
+      comparator = '<';
+    } else {
+      comparator = '=';
+    }
+  }
+
+  return `${sideText(leftTerms)}  ${comparator}  ${sideText(rightTerms)}`;
 }

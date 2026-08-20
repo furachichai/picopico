@@ -5,11 +5,78 @@ import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/P
 import { getSymbolSvg } from '../../utils/symbols';
 import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
 
+const CRATE_MAP = {
+    '📦x': '/assets/balanza/crate_x.png',
+    'x📦': '/assets/balanza/crate_x.png',
+    'crate_x': '/assets/balanza/crate_x.png',
+    '[x]': '/assets/balanza/crate_x.png',
+    'x': '/assets/balanza/crate_x.png',
+    '📦?': '/assets/balanza/crate_q.png',
+    '?📦': '/assets/balanza/crate_q.png',
+    'crate_q': '/assets/balanza/crate_q.png',
+    '[?]': '/assets/balanza/crate_q.png',
+    '?': '/assets/balanza/crate_q.png',
+    '📦': '/assets/balanza/crate.png',
+    'crate': '/assets/balanza/crate.png',
+    'box': '/assets/balanza/crate.png'
+};
+
+const renderEmojiOrCrate = (emoji, size = 26) => {
+    const crateSrc = CRATE_MAP[emoji];
+    if (crateSrc) {
+        return <img src={crateSrc} alt={emoji} style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', verticalAlign: 'middle', pointerEvents: 'none' }} />;
+    }
+    return <span>{emoji}</span>;
+};
+
 const EMOJI_CATEGORIES = [
-    { name: 'Fruits & Food', items: ['🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🥑', '🍆', '🥕', '🌽', '🥒', '🥦', '🧄', '🧅', '🍄', '🍔', '🍕', '🍦', '🍩', '🍪', '🍰', '🍫', '🍿'] },
-    { name: 'Objects & Toys', items: ['🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🚗', '🚀', '🛸', '🔔', '🔑', '📦', '🎨', '🎲', '🎯', '🧸', '💡', '📚', '✏️', '🏆', '👑'] },
-    { name: 'Animals & Nature', items: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🌸', '🌻', '🌲'] },
-    { name: 'Math & Symbols', items: ['➕', '➖', '✖️', '➗', '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '⬛', '⬜', '🔺', '🔹', '🔶', '💯', '❓', '❗', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'] }
+    {
+        name: '📦 Crates & Mystery Boxes (Algebra)',
+        items: ['📦x', '📦', '📦?', '🧰', '🧱', '🪵', '🧺', '💼', '🪨', '💎', '🪙', '🧪', '⚗️', '🔮', '🏺', '🗝️', '💰', '🏆', '👑', '🏅', '🎖️']
+    },
+    {
+        name: '🍎 Fruits, Vegetables & Food',
+        items: [
+            '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🥑',
+            '🍆', '🥕', '🌽', '🥒', '🥦', '🧄', '🧅', '🍄', '🥜', '🌰', '🍞', '🥐', '🥖', '🥨', '🥞', '🧇', '🧀', '🍖',
+            '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯', '🫔', '🥗', '🍲', '🍜', '🍝', '🍠', '🍣', '🍤',
+            '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍿', '☕', '🍵', '🧃', '🥤'
+        ]
+    },
+    {
+        name: '🐶 Animals & Wildlife',
+        items: [
+            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦',
+            '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐜', '🦗', '🕷️', '🐢',
+            '🐍', '🦎', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍',
+            '🦧', '🦣', '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🦬', '🐃', '🐂', '🐄', '🐎', '🐖', '🐏', '🐑', '🦙', '🐐', '🦌'
+        ]
+    },
+    {
+        name: '🎈 Objects, Sports & Toys',
+        items: [
+            '🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '✨', '⚡', '⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🥏',
+            '🎱', '🪀', '🏓', '🏸', '🏒', '🥊', '🥋', '🛹', '🛼', '🚗', '🚕', '🚙', '🚌', '🏎️', '🚓', '🚑', '🚒', '🚐',
+            '🛻', '🚚', '🚛', '🚜', '🛵', '🏍️', '🛺', '🚲', '🛴', '🚀', '🛸', '🚁', '✈️', '⛵', '🚤', '🚢', '🔔', '🔑',
+            '🎨', '🎲', '🎯', '🧸', '💡', '📚', '✏️', '🖍️', '🖌️', '📏', '📐', '✂️', '📌', '📎', '🔒', '🔓', '🧲', '🔭', '🔬', '🕹️', '🎮', '🧩', '🎸', '🎹', '🎺', '🎻', '🥁'
+        ]
+    },
+    {
+        name: '🌸 Nature, Plants & Weather',
+        items: [
+            '🌸', '🌺', '🌻', '🌹', '🌷', '🌼', '💐', '🌾', '🌿', '🍀', '🍁', '🍂', '🍃', '🌲', '🌳', '🌴', '🌵', '🌱',
+            '🪴', '🍄', '🌰', '🌍', '🌎', '🌏', '🌕', '🌙', '⭐', '🌟', '💫', '🪐', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️',
+            '🌧️', '⛈️', '🌩️', '🌨️', '❄️', '☃️', '⛄', '🌬️', '💨', '🌪️', '🌈', '🌊', '💧'
+        ]
+    },
+    {
+        name: '➕ Math, Numbers & Shapes',
+        items: [
+            '➕', '➖', '✖️', '➗', '🟰', '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🟤', '⬛', '⬜', '🔺', '🔻', '🔹', '🔶',
+            '🔷', '🔸', '💠', '🔘', '⚪', '⚫', '🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬛', '⬜', '💯', '❓', '❗',
+            '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟', '🔢', '🔣'
+        ]
+    }
 ];
 
 const evaluateMathExpression = (expr) => {
@@ -1406,15 +1473,44 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     🖐️ Free
                                 </label>
                             </div>
-                            <div className="menu-group">
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={element.config?.showEquation !== false}
-                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, showEquation: e.target.checked } })}
-                                    />
-                                    📐 Equation
-                                </label>
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Equation</label>
+                                <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '2px', border: '1px solid #cbd5e1' }}>
+                                    {['up', 'down', 'off'].map((pos) => {
+                                        const currentPos = element.config?.equationPosition || (element.config?.showEquation === false ? 'off' : 'up');
+                                        const isActive = currentPos === pos;
+                                        const labels = { up: '⬆️ Up', down: '⬇️ Down', off: '🚫 Off' };
+                                        return (
+                                            <button
+                                                key={pos}
+                                                type="button"
+                                                onClick={() => {
+                                                    onChange('cartridge', {
+                                                        config: {
+                                                            ...element.config,
+                                                            equationPosition: pos,
+                                                            showEquation: pos !== 'off'
+                                                        }
+                                                    });
+                                                }}
+                                                style={{
+                                                    padding: '3px 8px',
+                                                    fontSize: '0.72rem',
+                                                    fontWeight: isActive ? 700 : 500,
+                                                    background: isActive ? '#ffffff' : 'transparent',
+                                                    color: isActive ? '#0f172a' : '#64748b',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {labels[pos]}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
                             <div className="menu-group">
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
@@ -1430,11 +1526,73 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                                     <input
                                         type="checkbox"
+                                        checked={!!element.config?.photoMode}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, photoMode: e.target.checked } })}
+                                    />
+                                    📸 Photo
+                                </label>
+                            </div>
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
                                         checked={element.config?.confetti !== false}
                                         onChange={(e) => onChange('cartridge', { config: { ...element.config, confetti: e.target.checked } })}
                                     />
                                     🎉 Confetti
                                 </label>
+                            </div>
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Background</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <button
+                                        type="button"
+                                        className="btn-secondary"
+                                        onClick={() => {
+                                            if (onOpenLibrary) {
+                                                onOpenLibrary('custom-bg', (selectedImage) => {
+                                                    onChange('cartridge', { config: { ...element.config, background: selectedImage } });
+                                                });
+                                            }
+                                        }}
+                                        style={{ fontSize: '0.75rem', padding: '4px 8px', fontWeight: 'bold' }}
+                                        title="Choose Background from Library"
+                                    >
+                                        🖼️ LIBRARY
+                                    </button>
+                                    <label
+                                        className="btn-secondary"
+                                        style={{ fontSize: '0.75rem', padding: '4px 8px', cursor: 'pointer', margin: 0, display: 'inline-flex', alignItems: 'center' }}
+                                        title="Upload Custom Image"
+                                    >
+                                        📁 UPLOAD
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
+                                                const reader = new FileReader();
+                                                reader.onload = (ev) => {
+                                                    onChange('cartridge', { config: { ...element.config, background: ev.target.result } });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }}
+                                            style={{ display: 'none' }}
+                                        />
+                                    </label>
+                                    {element.config?.background && (
+                                        <button
+                                            type="button"
+                                            className="btn-icon"
+                                            onClick={() => onChange('cartridge', { config: { ...element.config, background: null } })}
+                                            title="Clear Background"
+                                            style={{ fontSize: '0.85rem' }}
+                                        >
+                                            ❌
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                             <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                                 <label style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700 }}>Weights (default 5)</label>
@@ -1444,7 +1602,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         const current = weights[symbol] ?? 5;
                                         return (
                                             <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '2px 4px' }}>
-                                                <span style={{ fontSize: '1rem' }}>{symbol}</span>
+                                                <span style={{ fontSize: '1rem', display: 'flex', alignItems: 'center' }}>
+                                                    {renderEmojiOrCrate(symbol, 20)}
+                                                </span>
                                                 <input
                                                     type="number"
                                                     value={current}
@@ -1506,6 +1666,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                         key={emoji}
                                                         type="button"
                                                         onClick={() => handleSelectEmoji(emoji)}
+                                                        title={emoji}
                                                         style={{
                                                             background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
                                                             borderRadius: '8px', fontSize: '1.4rem', padding: '6px 0',
@@ -1513,7 +1674,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                             transition: 'transform 0.1s, background 0.1s'
                                                         }}
                                                     >
-                                                        {emoji}
+                                                        {renderEmojiOrCrate(emoji, 28)}
                                                     </button>
                                                 ))}
                                             </div>
@@ -1531,6 +1692,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                 key={`recent-${emoji}`}
                                                 type="button"
                                                 onClick={() => handleSelectEmoji(emoji)}
+                                                title={emoji}
                                                 style={{
                                                     background: 'rgba(250, 204, 21, 0.15)', border: '1px solid rgba(250, 204, 21, 0.4)',
                                                     borderRadius: '8px', fontSize: '1.3rem', minWidth: '36px', height: '36px',
@@ -1538,7 +1700,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                     flexShrink: 0
                                                 }}
                                             >
-                                                {emoji}
+                                                {renderEmojiOrCrate(emoji, 24)}
                                             </button>
                                         ))}
                                     </div>

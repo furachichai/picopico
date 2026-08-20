@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
@@ -12,7 +12,32 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
     const [showQ2Menu, setShowQ2Menu] = useState(false);
     const [showGameMenu, setShowGameMenu] = useState(false);
     const [showIStickerMenu, setShowIStickerMenu] = useState(false);
-    const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+    const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);
+
+    const hasAnyDropdown = showQuizMenu || showQ2Menu || showGameMenu || showIStickerMenu || showSymbolsMenu;
+
+    // Close open toolbar submenus when clicking outside
+    useEffect(() => {
+        if (!hasAnyDropdown) return;
+        const handleOutsideClick = (e) => {
+            if (!e.target.closest('.toolbar-dropdown-container')) {
+                setShowQuizMenu(false);
+                setShowQ2Menu(false);
+                setShowGameMenu(false);
+                setShowIStickerMenu(false);
+                setShowSymbolsMenu(false);
+            }
+        };
+        const timer = setTimeout(() => {
+            window.addEventListener('pointerdown', handleOutsideClick);
+        }, 50);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('pointerdown', handleOutsideClick);
+        };
+    }, [hasAnyDropdown]);
+
+    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
     const currentBackground = currentSlide?.background || '#ffffff';
     // Ensure it's a hex code for the color input. If it's a gradient or url, we can't show it in type="color".
     // We'll fallback to black or white if it's not a hex.

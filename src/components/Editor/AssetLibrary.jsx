@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './AssetLibrary.css';
 import { useEditor } from '../../context/EditorContext';
@@ -94,6 +94,9 @@ const classifyAsset = (src) => {
     if (filename.includes('wizard')) {
         return 'wizard';
     }
+    if (filename.includes('yara')) {
+        return 'yara';
+    }
     if (
         filename.startsWith('whole_') || 
         filename.startsWith('part_') || 
@@ -120,6 +123,7 @@ const CATEGORIES = [
     { id: 'sales', name: 'Sales' },
     { id: 'dilla', name: 'Dilla' },
     { id: 'wizard', name: 'Wizard' },
+    { id: 'yara', name: 'Yara' },
     { id: 'objects', name: 'Objects' },
     { id: 'other', name: 'Other' },
     { id: 'all', name: 'All' }
@@ -131,6 +135,24 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const [activeTab, setActiveTab] = useState(initialTab);
     const [activeSubCategory, setActiveSubCategory] = useState('all');
     const { popupRef, dragHandlers, style } = useDraggable('assetLibrary');
+
+    // Close on tap / click outside
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (popupRef.current && !popupRef.current.contains(e.target)) {
+                // Ensure the click wasn't on a toolbar open button
+                if (e.target?.closest?.('.toolbar-btn, .btn-secondary, .btn-primary')) return;
+                onClose();
+            }
+        };
+        const timer = setTimeout(() => {
+            window.addEventListener('pointerdown', handleOutsideClick);
+        }, 50);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('pointerdown', handleOutsideClick);
+        };
+    }, [onClose]);
 
     // If allowedTabs is provided, filter the available tabs
     // otherwise show all
