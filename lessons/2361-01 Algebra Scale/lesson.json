@@ -4,14 +4,30 @@
   "slides": [
     {
       "id": "slide-1787238227179",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_hallway.png\")",
       "elements": [
+        {
+          "id": "el-1787238283073",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20asking%20question.png?t=1787235433901",
+          "x": 79.99999999999999,
+          "y": 83.75,
+          "width": 40,
+          "height": 25.981132075471695,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 25.981132075471695,
+            "flipX": true
+          }
+        },
         {
           "id": "el-1787238327442",
           "type": "balloon",
-          "content": "This lab has been abandoned for years...",
-          "x": 57.777777777777764,
-          "y": 25.625,
+          "content": "This <b>lab</b> has been <b>abandoned</b> for years...",
+          "x": 54.44444444444443,
+          "y": 28.90625,
           "width": 52.22222222222223,
           "height": 20,
           "rotation": 0,
@@ -31,8 +47,8 @@
           "id": "el-1787238293982",
           "type": "image",
           "content": "/src/assets/characters/yara_walking_flashlight_high.png",
-          "x": 36.11111111111111,
-          "y": 64.21875,
+          "x": 31.944444444444443,
+          "y": 67.1875,
           "width": 40,
           "height": 35.47169811320755,
           "rotation": 0,
@@ -43,25 +59,9 @@
           }
         },
         {
-          "id": "el-1787238283073",
-          "type": "image",
-          "content": "/src/assets/characters/pesto%20asking%20question.png?t=1787235433901",
-          "x": 81.66666666666666,
-          "y": 80.9375,
-          "width": 40,
-          "height": 25.981132075471695,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 40,
-            "height": 25.981132075471695,
-            "flipX": true
-          }
-        },
-        {
           "id": "el-1787238361425",
           "type": "balloon",
-          "content": "Maybe we should leave...",
+          "content": "Maybe we should <b>leave</b>...",
           "x": 66.66666666666667,
           "y": 61.25,
           "width": 40,
@@ -80,22 +80,25 @@
           }
         }
       ],
-      "order": 0
+      "order": 0,
+      "backgroundSettings": {
+        "opacity": 0.74
+      }
     },
     {
       "id": "slide-1787238392532",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_clutter.png?t=1787239736544\")",
       "elements": [
         {
           "id": "el-1787238406175",
           "type": "image",
           "content": "/src/assets/characters/yara_investigating_flashlight.png",
-          "x": 53.888888888888886,
-          "y": 68.4375,
+          "x": 75.55555555555556,
+          "y": 74.84375,
           "width": 40,
           "height": 32.69880715705765,
           "rotation": 0,
-          "scale": 1.925823986750886,
+          "scale": 1.732468575549723,
           "metadata": {
             "width": 40,
             "height": 32.69880715705765
@@ -104,9 +107,9 @@
         {
           "id": "el-1787238413891",
           "type": "balloon",
-          "content": "Look closely!<div><br></div><div>This lab used to be full of expensive ingredients.</div>",
-          "x": 41.666666666666664,
-          "y": 27.1875,
+          "content": "Look closely!<div><br></div><div>This lab used to be full of <b>expensive</b> materials.</div>",
+          "x": 39.72222222222222,
+          "y": 39.21875,
           "width": 60,
           "height": 20,
           "rotation": 0,
@@ -123,25 +126,65 @@
           }
         }
       ],
-      "order": 1
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.55
+      }
     },
     {
       "id": "slide-1787238498915",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_microscope.png\")",
       "elements": [
+        {
+          "id": "el-1787238560549",
+          "type": "balloon",
+          "content": "I found something!",
+          "x": 33.88888888888889,
+          "y": 49.6875,
+          "width": 40,
+          "height": 14.374999999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -28,
+              "y": 104
+            }
+          }
+        },
         {
           "id": "el-1787238521502",
           "type": "image",
           "content": "/src/assets/characters/pesto%20jumping.png?t=1787235433901",
-          "x": 31.38888888888889,
-          "y": 68.28125,
+          "x": 23.055555555555557,
+          "y": 84.0625,
           "width": 40,
           "height": 26.642384105960264,
           "rotation": 0,
           "scale": 1.5080782160742598,
           "metadata": {
             "width": 40,
-            "height": 26.642384105960264
+            "height": 26.642384105960264,
+            "flipX": false
+          }
+        },
+        {
+          "id": "el-1787238938346",
+          "type": "image",
+          "content": "/src/assets/characters/balanza_wooden_scale.png",
+          "x": 69.44444444444443,
+          "y": 76.71875,
+          "width": 40,
+          "height": 12.2625,
+          "rotation": 1.572999261946066,
+          "scale": 1.5912313919082297,
+          "metadata": {
+            "width": 40,
+            "height": 12.2625
           }
         }
       ],
@@ -372,7 +415,7 @@
   ],
   "author": "User",
   "createdAt": "2026-08-14T13:04:20.617Z",
-  "updatedAt": "2026-08-20T15:09:15.895Z",
+  "updatedAt": "2026-08-20T15:30:16.081Z",
   "path": "lessons/2361-01 Algebra Scale/lesson.json",
   "textPreset": null,
   "description": "",

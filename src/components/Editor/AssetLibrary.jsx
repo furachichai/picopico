@@ -67,8 +67,8 @@ const customObjectsList = [...filteredStaticObjects, ...customObjectsListGlob];
 const combinedImageList = [...customCharacterList, ...customImageList, ...customGraphicsList, ...customObjectsList];
 
 // Load custom backgrounds from src/assets/backgrounds
-const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true });
-const customBackgroundList = Object.values(customBackgrounds).map(mod => mod.default);
+const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customBackgroundList = Object.values(customBackgrounds);
 
 const classifyAsset = (src) => {
     if (!src) return 'other';

@@ -120246,21 +120246,58 @@
         },
         {
           "id": "slide-1787238498915",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_microscope.png\")",
           "elements": [
+            {
+              "id": "el-1787238560549",
+              "type": "balloon",
+              "content": "I found something!",
+              "x": 33.88888888888889,
+              "y": 49.6875,
+              "width": 40,
+              "height": 14.374999999999998,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -28,
+                  "y": 104
+                }
+              }
+            },
             {
               "id": "el-1787238521502",
               "type": "image",
               "content": "/src/assets/characters/pesto%20jumping.png?t=1787235433901",
-              "x": 31.38888888888889,
-              "y": 68.28125,
+              "x": 23.055555555555557,
+              "y": 84.0625,
               "width": 40,
               "height": 26.642384105960264,
               "rotation": 0,
               "scale": 1.5080782160742598,
               "metadata": {
                 "width": 40,
-                "height": 26.642384105960264
+                "height": 26.642384105960264,
+                "flipX": false
+              }
+            },
+            {
+              "id": "el-1787238938346",
+              "type": "image",
+              "content": "/src/assets/characters/balanza_wooden_scale.png",
+              "x": 69.44444444444443,
+              "y": 76.71875,
+              "width": 40,
+              "height": 12.2625,
+              "rotation": 1.572999261946066,
+              "scale": 1.5912313919082297,
+              "metadata": {
+                "width": 40,
+                "height": 12.2625
               }
             }
           ],
@@ -120491,7 +120528,7 @@
       ],
       "author": "User",
       "createdAt": "2026-08-14T13:04:20.617Z",
-      "updatedAt": "2026-08-20T15:09:15.895Z",
+      "updatedAt": "2026-08-20T15:28:32.907Z",
       "path": "lessons/2361-01 Algebra Scale/lesson.json",
       "textPreset": null,
       "description": "",
