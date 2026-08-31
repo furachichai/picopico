@@ -426,7 +426,27 @@ const Canvas = (props) => {
                   <AlgeBrosCartridge config={currentSlide.cartridge.config} preview={true} />
                 )}
                 {currentSlide.cartridge.type === 'Balanza' && (
-                  <BalanzaCartridge config={currentSlide.cartridge.config} preview={true} />
+                  <BalanzaCartridge
+                    config={currentSlide.cartridge.config}
+                    preview={true}
+                    isSelected={state.selectedElementId === 'cartridge'}
+                    onSelect={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' })}
+                    onConfigChange={(newConfig) => {
+                      dispatch({ type: 'SAVE_HISTORY' });
+                      dispatch({
+                        type: 'UPDATE_SLIDE',
+                        payload: {
+                          cartridge: {
+                            ...currentSlide.cartridge,
+                            config: {
+                              ...currentSlide.cartridge.config,
+                              ...newConfig
+                            }
+                          }
+                        }
+                      });
+                    }}
+                  />
                 )}
                 {currentSlide.cartridge.type === 'Potiondas' && (
                   <PotiondasThumbnail config={currentSlide.cartridge.config} />

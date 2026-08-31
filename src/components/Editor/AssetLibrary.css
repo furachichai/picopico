@@ -196,3 +196,121 @@
         opacity: 1;
     }
 }
+
+/* Last Background Bar */
+.library-last-bg-bar {
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+    width: 100%;
+}
+
+.last-bg-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #fdf4ff 0%, #f5f3ff 100%);
+    border: 1.5px solid #d8b4fe;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.08);
+    text-align: left;
+}
+
+.last-bg-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fae8ff 0%, #ede9fe 100%);
+    border-color: #8b5cf6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.18);
+}
+
+.last-bg-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.last-bg-btn.disabled,
+.last-bg-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8fafc;
+    border-color: #e2e8f0;
+    box-shadow: none;
+}
+
+.last-bg-btn-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.last-bg-badge {
+    background: #8b5cf6;
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
+    flex-shrink: 0;
+}
+
+.last-bg-preview-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #fff;
+    position: relative;
+}
+
+.last-bg-thumb {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.last-bg-thumb.empty {
+    background: #e2e8f0;
+}
+
+.last-bg-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.last-bg-title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #4c1d95;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.last-bg-subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #7c3aed;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.last-bg-action-icon {
+    font-size: 1rem;
+    color: #8b5cf6;
+    flex-shrink: 0;
+    margin-left: 8px;
+}

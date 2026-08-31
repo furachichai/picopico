@@ -82,7 +82,7 @@ const classifyAsset = (src) => {
     if (filename.includes('chef')) {
         return 'chef';
     }
-    if (filename.includes('pesto') || filename.includes('pest')) {
+    if (filename.includes('pesto') || filename.includes('pest') || filename.includes('robot') || filename.includes('juicer')) {
         return 'pesto';
     }
     if (filename.includes('sales') || filename.includes('alien') || filename.includes('salesman')) {
@@ -96,9 +96,6 @@ const classifyAsset = (src) => {
     }
     if (filename.includes('yara')) {
         return 'yara';
-    }
-    if (filename.includes('robot') || filename.includes('juicer')) {
-        return 'robot';
     }
     if (
         filename.startsWith('whole_') || 
@@ -127,18 +124,83 @@ const CATEGORIES = [
     { id: 'dilla', name: 'Dilla' },
     { id: 'wizard', name: 'Wizard' },
     { id: 'yara', name: 'Yara' },
-    { id: 'robot', name: 'Robot' },
     { id: 'objects', name: 'Objects' },
     { id: 'other', name: 'Other' },
     { id: 'all', name: 'All' }
 ];
 
 const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSelect = null }) => {
-    const { dispatch } = useEditor();
+    const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(initialTab);
-    const [activeSubCategory, setActiveSubCategory] = useState('all');
+
+    // Persist last selected image category tag
+    const savedTag = (() => {
+        try {
+            return localStorage.getItem('picopico_last_image_tag') || 'all';
+        } catch {
+            return 'all';
+        }
+    })();
+    const [activeSubCategory, setActiveSubCategory] = useState(() => {
+        return CATEGORIES.some(c => c.id === savedTag) ? savedTag : 'all';
+    });
+
+    const handleSubCategoryChange = (catId) => {
+        setActiveSubCategory(catId);
+        try {
+            localStorage.setItem('picopico_last_image_tag', catId);
+        } catch {
+            // ignore
+        }
+    };
+
     const { popupRef, dragHandlers, style } = useDraggable('assetLibrary');
+
+    // Find last background data
+    const getLastBackground = () => {
+        if (state.lastAppliedBackground?.background) {
+            return state.lastAppliedBackground;
+        }
+        try {
+            const saved = localStorage.getItem('picopico_last_background');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed?.background) return parsed;
+            }
+        } catch {
+            // ignore
+        }
+        // Fallback: check previous slides
+        const currentIdx = state.lesson?.slides?.findIndex(s => s.id === state.currentSlideId);
+        if (currentIdx !== undefined && currentIdx >= 0) {
+            for (let i = currentIdx - 1; i >= 0; i--) {
+                const s = state.lesson.slides[i];
+                if (s.background) {
+                    return { background: s.background, backgroundSettings: s.backgroundSettings ? { ...s.backgroundSettings } : {} };
+                }
+            }
+            for (const s of (state.lesson?.slides || [])) {
+                if (s.background) {
+                    return { background: s.background, backgroundSettings: s.backgroundSettings ? { ...s.backgroundSettings } : {} };
+                }
+            }
+        }
+        return null;
+    };
+
+    const lastBg = getLastBackground();
+
+    const handleApplyLastBackground = () => {
+        if (!lastBg || !lastBg.background) return;
+
+        if (onSelect) {
+            onSelect(lastBg.background);
+        } else {
+            dispatch({ type: 'APPLY_LAST_BACKGROUND', payload: lastBg });
+        }
+        onClose();
+    };
 
     // Close on tap / click outside
     useEffect(() => {
@@ -289,13 +351,73 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             </div>
 
             <div className="library-content">
+                {(activeTab === 'custom-bg' || activeTab === 'backgrounds') && (
+                    <div className="library-last-bg-bar">
+                        <button
+                            type="button"
+                            className={`last-bg-btn ${!lastBg ? 'disabled' : ''}`}
+                            onClick={handleApplyLastBackground}
+                            disabled={!lastBg}
+                            title={lastBg ? "Apply last background with its customized settings" : "No previous background available"}
+                        >
+                            <div className="last-bg-btn-left">
+                                <span className="last-bg-badge">LAST</span>
+                                <div className="last-bg-preview-wrapper">
+                                    {lastBg?.background ? (
+                                        (lastBg.background.includes('url') || lastBg.background.includes('gradient')) ? (
+                                            <div className="last-bg-thumb">
+                                                <div
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: 0, left: 0, width: '100%', height: '100%',
+                                                        backgroundImage: lastBg.background.replaceAll('/src/assets/', '/assets/'),
+                                                        backgroundSize: lastBg.backgroundSettings?.sizeMode === 'custom'
+                                                            ? `${lastBg.backgroundSettings?.size ?? 100}%`
+                                                            : (lastBg.backgroundSettings?.sizeMode || 'cover'),
+                                                        backgroundPosition: `${lastBg.backgroundSettings?.positionX ?? 50}% ${lastBg.backgroundSettings?.positionY ?? 50}%`,
+                                                        backgroundRepeat: 'no-repeat',
+                                                        opacity: lastBg.backgroundSettings?.opacity ?? 1,
+                                                        filter: `grayscale(${lastBg.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${lastBg.backgroundSettings?.brightness ?? 100}%)`,
+                                                        transform: `scale(${lastBg.backgroundSettings?.flipX ? -1 : 1}, ${lastBg.backgroundSettings?.flipY ? -1 : 1})`
+                                                    }}
+                                                />
+                                                {lastBg.backgroundSettings?.grayscale && lastBg.backgroundSettings?.tintColor && lastBg.backgroundSettings.tintColor !== 'transparent' && (
+                                                    <div
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: 0, left: 0, width: '100%', height: '100%',
+                                                            backgroundColor: lastBg.backgroundSettings.tintColor,
+                                                            mixBlendMode: 'color'
+                                                        }}
+                                                    />
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="last-bg-thumb" style={{ backgroundColor: lastBg.background }} />
+                                        )
+                                    ) : (
+                                        <div className="last-bg-thumb empty" />
+                                    )}
+                                </div>
+                                <div className="last-bg-text-col">
+                                    <span className="last-bg-title">Apply Last Background</span>
+                                    <span className="last-bg-subtitle">
+                                        {lastBg ? 'Includes customized scale, position & filters' : 'No previous background recorded'}
+                                    </span>
+                                </div>
+                            </div>
+                            <span className="last-bg-action-icon">⚡</span>
+                        </button>
+                    </div>
+                )}
+
                 {activeTab === 'custom' && (
                     <div className="library-subcategories">
                         {CATEGORIES.map(cat => (
                             <button
                                 key={cat.id}
                                 className={`subcategory-pill ${activeSubCategory === cat.id ? 'active' : ''}`}
-                                onClick={() => setActiveSubCategory(cat.id)}
+                                onClick={() => handleSubCategoryChange(cat.id)}
                             >
                                 {cat.name}
                             </button>

@@ -3,6 +3,25 @@ import { ELEMENT_TYPES } from '../types';
 
 const EditorContext = createContext();
 
+const getSavedLastBackground = () => {
+    try {
+        const saved = localStorage.getItem('picopico_last_background');
+        return saved ? JSON.parse(saved) : null;
+    } catch {
+        return null;
+    }
+};
+
+const saveLastBackground = (bgData) => {
+    try {
+        if (bgData && bgData.background) {
+            localStorage.setItem('picopico_last_background', JSON.stringify(bgData));
+        }
+    } catch {
+        // ignore
+    }
+};
+
 const initialState = {
     lesson: {
         id: 'draft-1',
@@ -31,6 +50,7 @@ const initialState = {
     translationMode: null, // null | { lang: 'en' | 'pt', draft: { [slideId]: { [elementId]: { content } }, lessonTitle: '', lessonDescription: '' } }
     showGuides: true, // Grid guides in editor
     past: [], // History stack for undoing operations
+    lastAppliedBackground: getSavedLastBackground(),
 };
 
 const pushToPast = (state) => {
@@ -143,9 +163,16 @@ const editorReducer = (state, action) => {
         }
 
         case 'UPDATE_SLIDE_BACKGROUND': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            const bgData = {
+                background: action.payload,
+                backgroundSettings: currentSlide?.backgroundSettings ? { ...currentSlide.backgroundSettings } : {}
+            };
+            saveLastBackground(bgData);
             return {
                 ...state,
                 isDirty: true,
+                lastAppliedBackground: bgData,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
@@ -320,12 +347,19 @@ const editorReducer = (state, action) => {
             const backgroundElement = action.payload;
             if (!backgroundElement || backgroundElement.type !== 'background') return state;
 
+            const bgData = {
+                background: backgroundElement.background,
+                backgroundSettings: backgroundElement.metadata ? { ...backgroundElement.metadata } : {}
+            };
+            saveLastBackground(bgData);
+
             const newPast = pushToPast(state);
             
             return {
                 ...state,
                 past: newPast,
                 isDirty: true,
+                lastAppliedBackground: bgData,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) => {
@@ -339,6 +373,8 @@ const editorReducer = (state, action) => {
                         // Background should typically be the first element (lowest z-index)
                         return {
                             ...slide,
+                            background: backgroundElement.background,
+                            backgroundSettings: backgroundElement.metadata ? { ...backgroundElement.metadata } : slide.backgroundSettings,
                             elements: [newBgElement, ...otherElements]
                         };
                     })
@@ -346,10 +382,75 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'APPLY_LAST_BACKGROUND': {
+            let bgData = action.payload || state.lastAppliedBackground || getSavedLastBackground();
+            if (!bgData || !bgData.background) {
+                const currentIdx = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
+                for (let i = currentIdx - 1; i >= 0; i--) {
+                    const s = state.lesson.slides[i];
+                    if (s.background) {
+                        bgData = {
+                            background: s.background,
+                            backgroundSettings: s.backgroundSettings ? { ...s.backgroundSettings } : {}
+                        };
+                        break;
+                    }
+                }
+                if (!bgData) {
+                    for (const s of state.lesson.slides) {
+                        if (s.background) {
+                            bgData = {
+                                background: s.background,
+                                backgroundSettings: s.backgroundSettings ? { ...s.backgroundSettings } : {}
+                            };
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!bgData || !bgData.background) return state;
+
+            saveLastBackground(bgData);
+            const newPast = pushToPast(state);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lastAppliedBackground: bgData,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? {
+                                ...slide,
+                                background: bgData.background,
+                                backgroundSettings: bgData.backgroundSettings ? { ...bgData.backgroundSettings } : {}
+                            }
+                            : slide
+                    ),
+                },
+            };
+        }
+
         case 'UPDATE_SLIDE': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            let newLastBg = state.lastAppliedBackground;
+            if (action.payload && (action.payload.background !== undefined || action.payload.backgroundSettings !== undefined)) {
+                const bg = action.payload.background !== undefined ? action.payload.background : currentSlide?.background;
+                const settings = action.payload.backgroundSettings !== undefined ? action.payload.backgroundSettings : currentSlide?.backgroundSettings;
+                if (bg) {
+                    newLastBg = {
+                        background: bg,
+                        backgroundSettings: settings ? { ...settings } : {}
+                    };
+                    saveLastBackground(newLastBg);
+                }
+            }
             return {
                 ...state,
                 isDirty: true,
+                lastAppliedBackground: newLastBg,
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>

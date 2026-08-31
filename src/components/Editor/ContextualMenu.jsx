@@ -1522,8 +1522,8 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     Zero
                                 </label>
                             </div>
-                            <div className="menu-group">
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                            <div className="menu-group" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', margin: 0 }}>
                                     <input
                                         type="checkbox"
                                         checked={!!element.config?.photoMode}
@@ -1531,6 +1531,17 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     />
                                     📸 Photo
                                 </label>
+                                {!!element.config?.photoMode && (
+                                    <button
+                                        type="button"
+                                        className="btn-secondary"
+                                        style={{ fontSize: '0.72rem', padding: '2px 8px', height: '26px' }}
+                                        title="Reset photo position to center"
+                                        onClick={() => onChange('cartridge', { config: { ...element.config, photoX: 50, photoY: 50 } })}
+                                    >
+                                        🎯 Center
+                                    </button>
+                                )}
                             </div>
                             <div className="menu-group">
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>

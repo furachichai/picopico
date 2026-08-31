@@ -184,7 +184,14 @@ function EquationLine({ text }) {
   return <div className="balanza-equation-line">{text}</div>;
 }
 
-export default function BalanzaCartridge({ config = {}, onComplete, preview = false }) {
+export default function BalanzaCartridge({
+  config = {},
+  onComplete,
+  preview = false,
+  isSelected = false,
+  onSelect,
+  onConfigChange
+}) {
   const weights = useMemo(() => parseWeights(config.weightsText), [config.weightsText]);
   const showZeroTiles = !!config.showZeroTiles;
   const freeMovement = config.freeMovement !== false && config.allowFreeMovement !== false;
@@ -214,6 +221,73 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   const leftPlateRef = useRef(null);
   const rightPlateRef = useRef(null);
   const menuRef = useRef(null);
+
+  // Draggable photo mode in editor
+  const [localPhotoPos, setLocalPhotoPos] = useState({
+    x: config.photoX ?? 50,
+    y: config.photoY ?? 50,
+  });
+  const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
+
+  useEffect(() => {
+    if (!isDraggingPhoto) {
+      setLocalPhotoPos({
+        x: config.photoX ?? 50,
+        y: config.photoY ?? 50,
+      });
+    }
+  }, [config.photoX, config.photoY, isDraggingPhoto]);
+
+  const handlePhotoPointerDown = (e) => {
+    if (!preview) return;
+    e.stopPropagation();
+    e.preventDefault();
+
+    onSelect?.();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startPosX = localPhotoPos.x;
+    const startPosY = localPhotoPos.y;
+
+    const parent = cartridgeRef.current?.closest('.slide-canvas') || cartridgeRef.current;
+    const parentRect = parent ? parent.getBoundingClientRect() : { width: 360, height: 640 };
+
+    setIsDraggingPhoto(true);
+
+    let currentPosX = startPosX;
+    let currentPosY = startPosY;
+
+    const handlePointerMove = (moveEvent) => {
+      moveEvent.preventDefault();
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+
+      const dxPct = (dx / parentRect.width) * 100;
+      const dyPct = (dy / parentRect.height) * 100;
+
+      currentPosX = Math.max(5, Math.min(95, Math.round((startPosX + dxPct) * 10) / 10));
+      currentPosY = Math.max(5, Math.min(95, Math.round((startPosY + dyPct) * 10) / 10));
+
+      setLocalPhotoPos({ x: currentPosX, y: currentPosY });
+    };
+
+    const handlePointerUp = () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      setIsDraggingPhoto(false);
+
+      if (currentPosX !== startPosX || currentPosY !== startPosY) {
+        onConfigChange?.({
+          photoX: currentPosX,
+          photoY: currentPosY,
+        });
+      }
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  };
 
   const leftTotal = useMemo(() => plateTotal(leftPlate, weights), [leftPlate, weights]);
   const rightTotal = useMemo(() => plateTotal(rightPlate, weights), [rightPlate, weights]);
@@ -288,7 +362,7 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   if (preview) {
     if (isPhotoMode) {
       return (
-        <div className="balanza-cartridge is-photo-mode" style={{ pointerEvents: 'none' }}>
+        <div ref={cartridgeRef} className="balanza-cartridge is-photo-mode" style={{ pointerEvents: 'none' }}>
           {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
           {showEquationUp && equationLineText && (
             <div className="balanza-header-area" style={{ marginTop: '2vh' }}>
@@ -297,7 +371,19 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
               </div>
             </div>
           )}
-          <div className="balanza-photo-card">
+          <div
+            className={`balanza-photo-card ${isSelected ? 'is-selected' : ''} ${isDraggingPhoto ? 'is-dragging' : ''}`}
+            style={{
+              left: `${localPhotoPos.x}%`,
+              top: `${localPhotoPos.y}%`,
+              transform: `translate(-50%, -50%) rotate(${config.photoRotation ?? -1.5}deg) scale(${config.photoScale ?? 1})`,
+              pointerEvents: 'auto',
+              cursor: isDraggingPhoto ? 'grabbing' : 'grab',
+              touchAction: 'none',
+              zIndex: isDraggingPhoto ? 100 : 10,
+            }}
+            onPointerDown={handlePhotoPointerDown}
+          >
             <div className="balanza-photo-inner">
               <Scale
                 tiltAngle={tiltAngle}
@@ -636,6 +722,8 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
   };
 
   if (isPhotoMode) {
+    const px = config.photoX ?? 50;
+    const py = config.photoY ?? 50;
     return (
       <div ref={cartridgeRef} className="balanza-cartridge is-photo-mode">
         {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
@@ -647,7 +735,14 @@ export default function BalanzaCartridge({ config = {}, onComplete, preview = fa
           </div>
         )}
 
-        <div className="balanza-photo-card">
+        <div
+          className="balanza-photo-card"
+          style={{
+            left: `${px}%`,
+            top: `${py}%`,
+            transform: `translate(-50%, -50%) rotate(${config.photoRotation ?? -1.5}deg) scale(${config.photoScale ?? 1})`,
+          }}
+        >
           <div className="balanza-photo-inner">
             <Scale
               tiltAngle={tiltAngle}
