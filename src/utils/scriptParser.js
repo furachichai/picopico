@@ -436,7 +436,7 @@ function buildNarrativeElements(parsed, elements, nextElId, textPreset) {
         elements.push({
             id: nextElId(),
             type: 'balloon',
-            content: `<b>${d.character}:</b> ${d.text}`,
+            content: d.text,
             x: pos.x,
             y: yPos,
             width: 65,
@@ -444,6 +444,7 @@ function buildNarrativeElements(parsed, elements, nextElId, textPreset) {
             rotation: 0,
             scale: 1,
             metadata: {
+                speaker: d.character,
                 backgroundColor: '#ffffff',
                 color: '#000000',
                 fontFamily: textPreset?.balloon?.fontFamily || '"Fira Sans"',
