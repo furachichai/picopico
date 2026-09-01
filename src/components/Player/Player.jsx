@@ -908,6 +908,22 @@ const Player = () => {
                                     element.metadata?.quizType === 'conecta'
                                 );
 
+                                const hasQuizOnSlide = slide.elements?.some(el => el.type === 'quiz');
+                                const isQuestionTextOnQuizSlide = element.type === 'text' && hasQuizOnSlide && element.y < 40;
+
+                                let effectiveScale = element.scale ?? 1;
+                                let effectiveWidth = element.width;
+                                let effectiveY = element.y;
+
+                                if (isQuestionTextOnQuizSlide) {
+                                    if (element.width && effectiveScale > 1 && (element.width * effectiveScale > 90)) {
+                                        effectiveScale = Math.min(effectiveScale, 90 / element.width);
+                                    }
+                                    if (effectiveY < 20) {
+                                        effectiveY = 22;
+                                    }
+                                }
+
                                 try {
                                     return (
                                         <div
@@ -915,30 +931,36 @@ const Player = () => {
                                             className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
                                             style={{
                                                 left: isFullScreenQuiz ? '50%' : `${element.x}%`,
-                                                top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${element.y}%`),
-                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
-                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
-                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
+                                                top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${effectiveY}%`),
+                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
+                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
+                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`,
                                                 zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))),
                                                 pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
                                             }}
                                         >
-                                            {element.type === 'text' && (
+                                            {(element.type === 'text' || element.type === 'collectible') && (
                                                 <div
-                                                    className="player-text"
+                                                    className={element.type === 'collectible' ? "player-collectible" : "player-text"}
                                                     style={{
-                                                        fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
-                                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                                        fontWeight: element.metadata?.fontWeight || 'normal',
+                                                        fontFamily: element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
+                                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (isQuestionTextOnQuizSlide ? '20px' : (element.type === 'collectible' ? '18px' : '16px')),
+                                                        fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : (isQuestionTextOnQuizSlide ? '600' : 'normal')),
                                                         fontStyle: element.metadata?.fontStyle || 'normal',
                                                         textDecoration: element.metadata?.textDecoration || 'none',
-                                                        color: element.metadata?.color || 'black',
-                                                        backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                                                        borderRadius: element.metadata?.borderRadius || '8px',
-                                                        border: element.metadata?.border || 'none',
+                                                        color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
+                                                        backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
+                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : (isQuestionTextOnQuizSlide ? '0 8px' : '0')),
+                                                        borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
+                                                        border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
+                                                        boxShadow: element.type === 'collectible' ? '0 8px 32px rgba(0, 0, 0, 0.35)' : undefined,
+                                                        backdropFilter: element.type === 'collectible' ? 'blur(8px)' : undefined,
                                                         textAlign: element.metadata?.textAlign || 'center',
-                                                        lineHeight: 1,
+                                                        lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1.35),
+                                                        boxSizing: 'border-box',
+                                                        maxWidth: '100%',
+                                                        whiteSpace: 'pre-wrap',
+                                                        wordBreak: 'break-word',
                                                     }}
                                                     dangerouslySetInnerHTML={{ __html: formatExponents(
                                                         (language !== 'es' && element.translations?.[language]?.content) || element.content

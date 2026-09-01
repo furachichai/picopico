@@ -386,20 +386,20 @@ const DiscoverView = () => {
                             pointerEvents: 'none' // Preview only
                         }}
                     >
-                        {element.type === 'text' && (
+                        {(element.type === 'text' || element.type === 'collectible') && (
                             <div
                                 style={{
-                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
-                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    color: element.metadata?.color || 'black',
-                                    backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                                    padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                                    borderRadius: element.metadata?.borderRadius || '8px',
-                                    border: element.metadata?.border || 'none',
-                                    lineHeight: 1,
+                                    fontFamily: element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
+                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (element.type === 'collectible' ? '18px' : '16px'),
+                                    color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
+                                    backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
+                                    padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1rem' : '0'),
+                                    borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
+                                    border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
+                                    lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1.3),
                                     whiteSpace: 'pre-wrap',
                                     textAlign: element.metadata?.textAlign || 'center',
-                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : 'normal'),
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none'
                                 }}

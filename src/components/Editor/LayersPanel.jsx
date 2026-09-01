@@ -20,6 +20,7 @@ const getTypeIcon = (element) => {
         case 'isticker': return '🧩';
         case 'game': return '🎮';
         case 'popup': return '📌';
+        case 'collectible': return '🃏';
         default: return '◻️';
     }
 };
@@ -38,6 +39,10 @@ const getElementName = (element) => {
         case 'text': {
             const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
             return raw.length > 0 ? (raw.length > 22 ? raw.slice(0, 22) + '…' : raw) : 'Text';
+        }
+        case 'collectible': {
+            const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
+            return raw.length > 0 ? 'Card: ' + (raw.length > 16 ? raw.slice(0, 16) + '…' : raw) : 'Collectible Card';
         }
         case 'balloon': {
             const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();

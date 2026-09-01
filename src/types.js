@@ -39,4 +39,5 @@ export const ELEMENT_TYPES = {
     ISTICKER: 'isticker',
     LINE: 'line',
     POPUP: 'popup',
+    COLLECTIBLE: 'collectible',
 };

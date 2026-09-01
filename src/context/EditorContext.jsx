@@ -973,7 +973,7 @@ const editorReducer = (state, action) => {
             const newSlides = state.lesson.slides.map(slide => ({
                 ...slide,
                 elements: slide.elements.map(el => {
-                    if (el.type === 'text' && preset.text) {
+                    if ((el.type === 'text' || el.type === 'collectible') && preset.text) {
                         let content = el.content || '';
                         if (preset.mathOperatorColor) content = colorMathOps(content, preset.mathOperatorColor);
                         return {
@@ -1052,6 +1052,47 @@ const editorReducer = (state, action) => {
                 isDirty: false,
             };
 
+        case 'IMPORT_SCRIPT': {
+            const { slides: newScriptSlides, title: scriptTitle, snapshot } = action.payload;
+
+            // Add snapshot to history (cap at 5)
+            const existingSnapshots = state.lesson._snapshots || [];
+            const updatedSnapshots = [snapshot, ...existingSnapshots].slice(0, 5);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: newScriptSlides,
+                    ...(scriptTitle && { title: scriptTitle }),
+                    _snapshots: updatedSnapshots,
+                },
+                currentSlideId: newScriptSlides[0]?.id || 'slide-1',
+                selectedElementId: null,
+                selectedElementIds: [],
+            };
+        }
+
+        case 'RESTORE_SNAPSHOT': {
+            const snapshotIndex = action.payload ?? 0;
+            const snapshots = state.lesson._snapshots || [];
+            const target = snapshots[snapshotIndex];
+            if (!target || !target.slides) return state;
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: target.slides,
+                },
+                currentSlideId: target.slides[0]?.id || 'slide-1',
+                selectedElementId: null,
+                selectedElementIds: [],
+            };
+        }
+
         // ─── Translation Mode Actions ───
         case 'START_TRANSLATION': {
             const lang = action.payload; // 'en' | 'pt'
@@ -1060,7 +1101,7 @@ const editorReducer = (state, action) => {
             state.lesson.slides.forEach(slide => {
                 draft[slide.id] = {};
                 slide.elements.forEach(el => {
-                    if (el.type === 'text' || el.type === 'balloon') {
+                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') {
                         draft[slide.id][el.id] = {
                             content: el.translations?.[lang]?.content || el.content
                         };
@@ -1118,7 +1159,7 @@ const editorReducer = (state, action) => {
                 elements: slide.elements.map(el => {
                     const draftEntry = draft[slide.id]?.[el.id];
                     if (!draftEntry) return el;
-                    if (el.type === 'text' || el.type === 'balloon') {
+                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') {
                         return {
                             ...el,
                             translations: {

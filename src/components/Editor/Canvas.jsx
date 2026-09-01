@@ -74,8 +74,8 @@ const Canvas = (props) => {
     if (state.translationMode) {
       const el = currentSlide?.elements.find(e => e.id === id);
       if (!el) return;
-      // Text/balloon content is translatable
-      if ((el.type === 'text' || el.type === 'balloon') && 'content' in updates) {
+      // Text/balloon/collectible content is translatable
+      if ((el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') && 'content' in updates) {
         dispatch({
           type: 'UPDATE_TRANSLATION',
           payload: {
@@ -460,7 +460,7 @@ const Canvas = (props) => {
             let displayElement = element;
             if (state.translationMode) {
               const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
-              if (draft && (element.type === 'text' || element.type === 'balloon')) {
+              if (draft && (element.type === 'text' || element.type === 'balloon' || element.type === 'collectible')) {
                 displayElement = { ...element, content: draft.content };
               }
               if (draft && element.type === 'quiz') {

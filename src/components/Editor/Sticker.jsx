@@ -336,8 +336,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
-                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : (element.type === 'text' && !element.width ? 'auto' : `${element.width}%`)),
-                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
+                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
+                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
             }}
@@ -364,9 +364,9 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             <div className="sticker-content" style={{
                 pointerEvents: (element.metadata?.quizType === 'chatquiz') ? 'auto' : undefined
             }}>
-                {element.type === 'text' && (
+                {(element.type === 'text' || element.type === 'collectible') && (
                     <div
-                        className="sticker-text"
+                        className={element.type === 'collectible' ? "sticker-collectible" : "sticker-text"}
                         contentEditable
                         suppressContentEditableWarning
                         onInput={(e) => {
@@ -384,24 +384,29 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             }
                         }}
                         style={{
-                            fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
-                            fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                            fontWeight: element.metadata?.fontWeight || 'normal',
+                            fontFamily: element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
+                            fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (element.type === 'collectible' ? '18px' : '16px'),
+                            fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : 'normal'),
                             fontStyle: element.metadata?.fontStyle || 'normal',
                             textDecoration: element.metadata?.textDecoration || 'none',
-                            color: element.metadata?.color || 'black',
-                            backgroundColor: element.metadata?.backgroundColor || 'transparent',
-                            padding: element.metadata?.backgroundColor ? '0.5rem' : '0',
-                            borderRadius: element.metadata?.borderRadius || '8px',
-                            border: element.metadata?.border || 'none',
+                            color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
+                            backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
+                            padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
+                            borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
+                            border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
+                            boxShadow: element.type === 'collectible' ? '0 8px 32px rgba(0, 0, 0, 0.35)' : undefined,
+                            backdropFilter: element.type === 'collectible' ? 'blur(8px)' : undefined,
                             textAlign: element.metadata?.textAlign || 'center',
-                            lineHeight: element.metadata?.lineHeight ?? 1,
+                            lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1),
                             position: 'relative',
                             outline: 'none',
                             cursor: 'text',
                             userSelect: 'text',
                             pointerEvents: isSelected ? 'auto' : 'none',
                             minWidth: '50px', // Ensure it's clickable if empty
+                            boxSizing: 'border-box',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
                         }}
                     />
                 )}
@@ -650,8 +655,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         onTouchStart={(e) => handleStart(e, 'resize')}
                     />
 
-                    {/* East Resize (Text only) */}
-                    {element.type === 'text' && (
+                    {/* East Resize (Text and Collectible) */}
+                    {(element.type === 'text' || element.type === 'collectible') && (
                         <div
                             className="handle resize-handle e"
                             style={{
@@ -669,8 +674,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         />
                     )}
                     
-                    {/* West Resize (Text only) */}
-                    {element.type === 'text' && (
+                    {/* West Resize (Text and Collectible) */}
+                    {(element.type === 'text' || element.type === 'collectible') && (
                         <div
                             className="handle resize-handle w"
                             style={{

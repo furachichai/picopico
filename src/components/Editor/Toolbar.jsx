@@ -4,6 +4,7 @@ import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { Gamepad2 } from 'lucide-react';
 import { getSymbolSvg } from '../../utils/symbols';
+import ScriptImportModal from './ScriptImportModal';
 
 const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
     const { state, dispatch } = useEditor();
@@ -13,6 +14,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
     const [showGameMenu, setShowGameMenu] = useState(false);
     const [showIStickerMenu, setShowIStickerMenu] = useState(false);
     const [showSymbolsMenu, setShowSymbolsMenu] = useState(false);
+    const [showScriptImport, setShowScriptImport] = useState(false);
 
     const hasAnyDropdown = showQuizMenu || showQ2Menu || showGameMenu || showIStickerMenu || showSymbolsMenu;
 
@@ -581,9 +583,15 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     )}
                 </div>
                 <div className="toolbar-section" style={{ display: 'flex', gap: '6px', alignItems: 'center', borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '8px' }}>
+                    <button className="btn-secondary" onClick={() => setShowScriptImport(true)} title="Import Script" style={{ fontSize: '0.75rem', fontWeight: 700, padding: '4px 8px', letterSpacing: '0.3px' }}>📝</button>
                     <button className="btn-danger" onClick={onDeleteSlide} disabled={state.lesson.slides.length <= 1} title="Delete Slide" style={{ fontSize: '1.2rem' }}>🗑️</button>
                 </div>
             </div>
+
+            <ScriptImportModal
+                isOpen={showScriptImport}
+                onClose={() => setShowScriptImport(false)}
+            />
         </>
     );
 };

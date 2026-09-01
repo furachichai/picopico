@@ -247,7 +247,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     if (!element) return null;
 
     const { metadata = {} } = element; // Ensure metadata exists
-    const isTextType = element.type === 'balloon' || element.type === 'text';
+    const isTextType = element.type === 'balloon' || element.type === 'text' || element.type === 'collectible';
     const isImageType = element.type === 'image';
 
     const [activeCardIndex, setActiveCardIndex] = useState(element.config?.previewIndex || 0);
