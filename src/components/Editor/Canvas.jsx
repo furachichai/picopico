@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react';
 import { useEditor } from '../../context/EditorContext';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import Sticker from './Sticker';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
@@ -9,6 +10,7 @@ import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
+import SaveAssetModal from './SaveAssetModal';
 
 /**
  * Canvas Component
@@ -27,6 +29,15 @@ const Canvas = (props) => {
   const marqueeRef = useRef(null);
   const [scale, setScale] = useState(1);
   const [marquee, setMarquee] = useState(null);
+
+  // Ingestion & Dropzone states
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [saveModalData, setSaveModalData] = useState({
+    items: [],
+    createdElementIds: [],
+    initialCategory: 'characters'
+  });
 
   // Memoize current slide lookup to avoid recalculating on every render
   const currentSlide = useMemo(() =>
@@ -216,6 +227,162 @@ const Canvas = (props) => {
     window.addEventListener('pointerup', handlePointerUp);
   }, [dispatch, currentSlide, state.selectedElementIds]);
 
+  const handleIngestImages = useCallback(async (files, dropCoords = null) => {
+    const validFiles = Array.from(files).filter(f => f && f.type && f.type.startsWith('image/'));
+    if (validFiles.length === 0) return;
+
+    // Read all files asynchronously and get their dimensions
+    const readAndLoad = (file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = e.target.result;
+          const img = new Image();
+          img.onload = () => {
+            resolve({
+              file,
+              dataUrl,
+              naturalWidth: img.naturalWidth,
+              naturalHeight: img.naturalHeight,
+              filename: file.name || 'image'
+            });
+          };
+          img.onerror = () => {
+            resolve({
+              file,
+              dataUrl,
+              naturalWidth: 400,
+              naturalHeight: 400,
+              filename: file.name || 'image'
+            });
+          };
+          img.src = dataUrl;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    };
+
+    const loadedImages = (await Promise.all(validFiles.map(readAndLoad))).filter(Boolean);
+    if (loadedImages.length === 0) return;
+
+    const baseX = dropCoords ? dropCoords.x : 50;
+    const baseY = dropCoords ? dropCoords.y : 50;
+
+    const elementIds = [];
+    const modalItems = [];
+
+    loadedImages.forEach((item, idx) => {
+      const newElementId = `el-${Date.now()}-${idx}`;
+      elementIds.push(newElementId);
+
+      const aspectRatio = (item.naturalWidth && item.naturalHeight) ? (item.naturalWidth / item.naturalHeight) : 1;
+      const targetWidthPercent = 40;
+      const targetWidthPx = 360 * (targetWidthPercent / 100);
+      const targetHeightPx = targetWidthPx / aspectRatio;
+      const targetHeightPercent = (targetHeightPx / 640) * 100;
+
+      // Stagger slightly if multiple items dropped at once
+      const offset = loadedImages.length > 1 ? (idx * 4 - (loadedImages.length - 1) * 2) : 0;
+      const posX = dropCoords
+        ? Math.max(0, Math.min(100 - targetWidthPercent, (baseX + offset) - targetWidthPercent / 2))
+        : Math.max(0, Math.min(100 - targetWidthPercent, 30 + (idx * 5)));
+      const posY = dropCoords
+        ? Math.max(0, Math.min(100 - targetHeightPercent, (baseY + offset) - targetHeightPercent / 2))
+        : Math.max(0, Math.min(100 - targetHeightPercent, 30 + (idx * 5)));
+
+      dispatch({
+        type: 'ADD_ELEMENT',
+        payload: {
+          id: newElementId,
+          type: 'image',
+          content: item.dataUrl,
+          x: posX,
+          y: posY,
+          metadata: {
+            width: targetWidthPercent,
+            height: targetHeightPercent
+          }
+        }
+      });
+
+      modalItems.push({
+        dataUrl: item.dataUrl,
+        filename: item.filename,
+        dimensions: { width: item.naturalWidth, height: item.naturalHeight }
+      });
+    });
+
+    // Check saved category or smart suggestion from filenames
+    let savedCat = null;
+    try {
+      savedCat = localStorage.getItem('picopico_last_save_category');
+    } catch {
+      // ignore
+    }
+
+    let cat = savedCat || 'characters';
+    if (!savedCat) {
+      const hasObjectNames = loadedImages.some(img => {
+        const fname = img.filename.toLowerCase();
+        return (
+          fname.startsWith('whole_') ||
+          fname.startsWith('part_') ||
+          fname.startsWith('item_') ||
+          fname.includes('soup') ||
+          fname.includes('counter') ||
+          fname.includes('bowl') ||
+          fname.includes('prop')
+        );
+      });
+
+      if (hasObjectNames) {
+        cat = 'objects';
+      } else if (loadedImages.some(img => img.filename.toLowerCase().includes('bg') || img.filename.toLowerCase().includes('background'))) {
+        cat = 'backgrounds';
+      }
+    }
+
+    setSaveModalData({
+      items: modalItems,
+      createdElementIds: elementIds,
+      initialCategory: cat
+    });
+    setSaveModalOpen(true);
+  }, [dispatch]);
+
+  // Global paste handler for images
+  useEffect(() => {
+    const handlePaste = (e) => {
+      const activeEl = document.activeElement;
+      const isInput = activeEl && (
+        activeEl.tagName === 'INPUT' ||
+        activeEl.tagName === 'TEXTAREA' ||
+        activeEl.isContentEditable ||
+        activeEl.closest?.('[contenteditable="true"]')
+      );
+      if (isInput) return;
+
+      if (e.clipboardData && e.clipboardData.items) {
+        const pasteFiles = [];
+        for (let i = 0; i < e.clipboardData.items.length; i++) {
+          const item = e.clipboardData.items[i];
+          if (item.type && item.type.startsWith('image/')) {
+            const file = item.getAsFile();
+            if (file) pasteFiles.push(file);
+          }
+        }
+        if (pasteFiles.length > 0) {
+          e.preventDefault();
+          handleIngestImages(pasteFiles);
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [handleIngestImages]);
+
   // Stable callback for deleting an element
   const handleDelete = useCallback((id) => {
     dispatch({ type: 'DELETE_ELEMENT', payload: id });
@@ -230,62 +397,142 @@ const Canvas = (props) => {
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
-    const rawData = e.dataTransfer.getData('application/json');
-    let src = '';
-    if (rawData) {
-      try {
-        const parsed = JSON.parse(rawData);
-        if (parsed.src) src = parsed.src;
-      } catch (err) {
-        // ignore
-      }
-    }
-    if (!src) {
-      src = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('text/uri-list');
-    }
-    if (!src) return;
+    setIsDraggingOver(false);
 
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
     const dropX = ((e.clientX - rect.left) / rect.width) * 100;
     const dropY = ((e.clientY - rect.top) / rect.height) * 100;
 
-    const img = new Image();
-    img.onload = () => {
-      const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
-      const targetWidthPercent = 40;
-      const targetWidthPx = 360 * (targetWidthPercent / 100);
-      const targetHeightPx = targetWidthPx / aspectRatio;
-      const targetHeightPercent = (targetHeightPx / 640) * 100;
+    // Check for internal library drag data FIRST — browsers also populate
+    // e.dataTransfer.files when dragging <img> elements, which would
+    // incorrectly trigger the desktop-file ingestion path.
+    const rawData = e.dataTransfer.getData('application/json');
+    if (rawData) {
+      try {
+        const parsed = JSON.parse(rawData);
+        if (parsed.src) {
+          const src = parsed.src;
+          const img = new Image();
+          img.onload = () => {
+            const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
+            const targetWidthPercent = 40;
+            const targetWidthPx = 360 * (targetWidthPercent / 100);
+            const targetHeightPx = targetWidthPx / aspectRatio;
+            const targetHeightPercent = (targetHeightPx / 640) * 100;
 
-      dispatch({
-        type: 'ADD_ELEMENT',
-        payload: {
-          type: 'image',
-          content: src,
-          x: Math.max(0, Math.min(100 - targetWidthPercent, dropX - targetWidthPercent / 2)),
-          y: Math.max(0, Math.min(100 - targetHeightPercent, dropY - targetHeightPercent / 2)),
-          metadata: {
-            width: targetWidthPercent,
-            height: targetHeightPercent
+            dispatch({
+              type: 'ADD_ELEMENT',
+              payload: {
+                type: 'image',
+                content: src,
+                x: Math.max(0, Math.min(100 - targetWidthPercent, dropX - targetWidthPercent / 2)),
+                y: Math.max(0, Math.min(100 - targetHeightPercent, dropY - targetHeightPercent / 2)),
+                metadata: {
+                  width: targetWidthPercent,
+                  height: targetHeightPercent,
+                  ...(parsed.category && { category: parsed.category })
+                }
+              }
+            });
+          };
+          img.onerror = () => {
+            dispatch({
+              type: 'ADD_ELEMENT',
+              payload: {
+                type: 'image',
+                content: src,
+                x: Math.max(0, dropX - 20),
+                y: Math.max(0, dropY - 20),
+                metadata: { width: 40, height: 40, ...(parsed.category && { category: parsed.category }) }
+              }
+            });
+          };
+          img.src = src;
+          return;
+        }
+      } catch (err) {
+        // ignore, fall through
+      }
+    }
+
+    // Check for text/plain fallback (e.g. URL dragged from text)
+    const textSrc = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('text/uri-list');
+    if (textSrc && (textSrc.startsWith('/') || textSrc.startsWith('http'))) {
+      const img = new Image();
+      img.onload = () => {
+        const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
+        const targetWidthPercent = 40;
+        const targetWidthPx = 360 * (targetWidthPercent / 100);
+        const targetHeightPx = targetWidthPx / aspectRatio;
+        const targetHeightPercent = (targetHeightPx / 640) * 100;
+
+        dispatch({
+          type: 'ADD_ELEMENT',
+          payload: {
+            type: 'image',
+            content: textSrc,
+            x: Math.max(0, Math.min(100 - targetWidthPercent, dropX - targetWidthPercent / 2)),
+            y: Math.max(0, Math.min(100 - targetHeightPercent, dropY - targetHeightPercent / 2)),
+            metadata: {
+              width: targetWidthPercent,
+              height: targetHeightPercent
+            }
           }
-        }
-      });
-    };
-    img.onerror = () => {
-      dispatch({
-        type: 'ADD_ELEMENT',
-        payload: {
-          type: 'image',
-          content: src,
-          x: Math.max(0, dropX - 20),
-          y: Math.max(0, dropY - 20),
-          metadata: { width: 40, height: 40 }
-        }
-      });
-    };
-    img.src = src;
-  }, [dispatch]);
+        });
+      };
+      img.onerror = () => {
+        dispatch({
+          type: 'ADD_ELEMENT',
+          payload: {
+            type: 'image',
+            content: textSrc,
+            x: Math.max(0, dropX - 20),
+            y: Math.max(0, dropY - 20),
+            metadata: { width: 40, height: 40 }
+          }
+        });
+      };
+      img.src = textSrc;
+      return;
+    }
+
+    // Native dragged files from desktop / Finder (only if no internal data)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const imgFiles = Array.from(e.dataTransfer.files).filter(f => f && f.type && f.type.startsWith('image/'));
+      if (imgFiles.length > 0) {
+        handleIngestImages(imgFiles, { x: dropX, y: dropY });
+        return;
+      }
+    }
+  }, [dispatch, handleIngestImages]);
+
+  const handleSaveAssetSuccess = (savedResult) => {
+    setSaveModalOpen(false);
+    const results = Array.isArray(savedResult) ? savedResult : (savedResult ? [savedResult] : []);
+    results.forEach((res, idx) => {
+      const elId = saveModalData.createdElementIds?.[idx] || (idx === 0 ? saveModalData.createdElementId : null);
+      if (res?.url && elId) {
+        dispatch({
+          type: 'UPDATE_ELEMENT',
+          payload: {
+            id: elId,
+            updates: {
+              content: res.url
+            }
+          }
+        });
+      }
+    });
+
+    if (results.length > 0) {
+      try {
+        window.dispatchEvent(new CustomEvent('picopico-asset-saved', { detail: results }));
+      } catch {
+        // ignore
+      }
+    }
+  };
 
   return (
     <div className="canvas-container" ref={containerRef}>
@@ -301,10 +548,48 @@ const Canvas = (props) => {
             position: 'relative'
           }}
           onPointerDown={handlePointerDown}
-          onDragOver={(e) => e.preventDefault()}
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (e.dataTransfer.types.includes('Files')) {
+              setIsDraggingOver(true);
+            }
+          }}
+          onDragLeave={(e) => {
+            if (canvasRef.current && !canvasRef.current.contains(e.relatedTarget)) {
+              setIsDraggingOver(false);
+            }
+          }}
           onDrop={handleDrop}
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Dropzone visual indicator */}
+          {isDraggingOver && (
+            <div style={{
+              position: 'absolute',
+              top: 0, left: 0, width: '100%', height: '100%',
+              border: '3px dashed #8b5cf6',
+              backgroundColor: 'rgba(139, 92, 246, 0.15)',
+              zIndex: 99999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+              backdropFilter: 'blur(2px)'
+            }}>
+              <div style={{
+                background: '#8b5cf6',
+                color: 'white',
+                padding: '10px 20px',
+                borderRadius: '24px',
+                fontWeight: '700',
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: '0.95rem',
+                boxShadow: '0 6px 16px rgba(139, 92, 246, 0.4)'
+              }}>
+                📥 Drop Image Here to Add
+              </div>
+            </div>
+          )}
           {/* Background Layer */}
           {currentSlide?.background && (currentSlide.background.includes('url') || currentSlide.background.includes('gradient')) && (
             <div
@@ -319,7 +604,7 @@ const Canvas = (props) => {
                 style={{
                   position: 'absolute',
                   top: 0, left: 0, width: '100%', height: '100%',
-                  backgroundImage: currentSlide.background ? currentSlide.background.replaceAll('/src/assets/', '/assets/') : currentSlide.background,
+                  backgroundImage: currentSlide.background ? resolveAssetUrl(currentSlide.background) : currentSlide.background,
                   backgroundSize: currentSlide.backgroundSettings?.sizeMode === 'custom'
                     ? `${currentSlide.backgroundSettings?.size ?? 100}%`
                     : (currentSlide.backgroundSettings?.sizeMode || 'cover'),
@@ -570,6 +855,15 @@ const Canvas = (props) => {
           </div>
         ))}
       </div>
+
+      {/* Save Asset Modal for Pasted / Dropped Images */}
+      <SaveAssetModal
+        isOpen={saveModalOpen}
+        items={saveModalData.items}
+        initialCategory={saveModalData.initialCategory}
+        onSave={handleSaveAssetSuccess}
+        onCancel={() => setSaveModalOpen(false)}
+      />
     </div>
   );
 };

@@ -1,0 +1,16 @@
+# Ignore nested/legacy projects
+SeptemberWeb
+PEMDAS
+
+# Ignore deleted asset backups
+.deleted_assets
+
+# Scratch and utility scripts
+scratch/
+scratch.js
+crop.py
+prompts/
+
+# Git and OS
+.git
+.DS_Store

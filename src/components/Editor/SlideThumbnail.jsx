@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import Sticker from './Sticker';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { deserializeLevels, DEFAULT_LEVELS } from '../../cartridges/Potiondas/Potiondas';
@@ -123,7 +124,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                 left: 0,
                                 width: '100%',
                                 height: '100%',
-                                backgroundImage: slide.background ? slide.background.replaceAll('/src/assets/', '/assets/') : slide.background,
+                                backgroundImage: slide.background ? resolveAssetUrl(slide.background) : slide.background,
                                 backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
                                     ? `${slide.backgroundSettings?.size ?? 100}%`
                                     : (slide.backgroundSettings?.sizeMode || 'cover'),

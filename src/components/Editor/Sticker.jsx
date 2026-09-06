@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import './Sticker.css';
 import QuizEditor from './QuizEditor';
 import Balloon from './Balloon';
+import ResultField from '../ResultField/ResultField';
+import NumberLine from '../NumberLine/NumberLine';
+import CharacterShadow from './CharacterShadow';
 import { useEditor } from '../../context/EditorContext';
 
 /**
@@ -68,7 +72,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             onSelect(element.id, isMultiSelectModifier);
         }
 
-        if (element.metadata?.locked) {
+        if (element.metadata?.locked && !(element.type === 'result_field' && type === 'move')) {
             return;
         }
 
@@ -225,8 +229,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 }
 
                 // Min dimensions
-                const newWidthPx = Math.max(50, currentWidthPx + dW); // Min 50px
-                const newHeightPx = Math.max(50, currentHeightPx + dH); // Min 50px
+                const newWidthPx = Math.max(30, currentWidthPx + dW); // Min 30px
+                const newHeightPx = Math.max(30, currentHeightPx + dH); // Min 30px
 
                 // Actual delta used (in case of min clamping)
                 const actualDw = newWidthPx - currentWidthPx;
@@ -332,12 +336,12 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
     return (
         <div
             ref={stickerRef}
-            className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''}`}
+            className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
-                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
-                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
+                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
+                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
                 zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
             }}
@@ -367,7 +371,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 {(element.type === 'text' || element.type === 'collectible') && (
                     <div
                         className={element.type === 'collectible' ? "sticker-collectible" : "sticker-text"}
-                        contentEditable
+                        contentEditable={!element.metadata?.locked}
                         suppressContentEditableWarning
                         onInput={(e) => {
                             // Capture innerHTML to preserve per-character color spans
@@ -400,9 +404,9 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1),
                             position: 'relative',
                             outline: 'none',
-                            cursor: 'text',
-                            userSelect: 'text',
-                            pointerEvents: isSelected ? 'auto' : 'none',
+                            cursor: element.metadata?.locked ? 'default' : 'text',
+                            userSelect: element.metadata?.locked ? 'none' : 'text',
+                            pointerEvents: isSelected && !element.metadata?.locked ? 'auto' : 'none',
                             minWidth: '50px', // Ensure it's clickable if empty
                             boxSizing: 'border-box',
                             whiteSpace: 'pre-wrap',
@@ -492,7 +496,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             onChange={onChange}
                             isSelected={isSelected}
                         />
-                        {isSelected && !translationMode && (
+                        {isSelected && !translationMode && !element.metadata?.locked && (
                             <div
                                 className="handle tail-handle"
                                 style={{
@@ -517,19 +521,24 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     </>
                 )}
                 {element.type === 'image' && (
-                    <img
-                        src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''}
-                        alt="sticker"
-                        draggable="false"
-                        style={{
-                            transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
-                            opacity: element.metadata?.opacity ?? 1,
-                            filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
-                        }}
-                    />
+                    <>
+                        <CharacterShadow element={element} />
+                        <img
+                            src={resolveAssetUrl(element.content)}
+                            alt="sticker"
+                            draggable="false"
+                            style={{
+                                position: 'relative',
+                                zIndex: 1,
+                                transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
+                                opacity: element.metadata?.opacity ?? 1,
+                                filter: `brightness(${element.metadata?.brightness ?? 100}%)`,
+                                width: '100%',
+                                height: '100%',
+                                objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
+                            }}
+                        />
+                    </>
                 )}
                 {element.type === 'popup' && (
                     <img
@@ -564,6 +573,17 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         />
                     </div>
                 )}
+                {element.type === 'result_field' && (
+                    <ResultField
+                        element={element}
+                        slide={state?.lesson?.slides?.find(s => s.id === state.currentSlideId)}
+                        isPlayMode={false}
+                        isSelected={isSelected}
+                    />
+                )}
+                {element.type === 'number_line' && (
+                    <NumberLine element={element} />
+                )}
                 {element.type === 'game' && (
                     <div className="sticker-game-preview">
                         🎮 Minigame: {element.metadata?.gameId}
@@ -595,7 +615,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             </div>
 
             {/* Lock icon for locked elements — always clickable so user can select them */}
-            {element.metadata?.locked && !isSelected && !readOnly && (
+            {element.metadata?.locked && !isSelected && !readOnly && element.type !== 'result_field' && (
                 <div
                     onClick={(e) => {
                         e.stopPropagation();
@@ -655,8 +675,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         onTouchStart={(e) => handleStart(e, 'resize')}
                     />
 
-                    {/* East Resize (Text and Collectible) */}
-                    {(element.type === 'text' || element.type === 'collectible') && (
+                    {/* East Resize */}
+                    {(element.type === 'text' || element.type === 'collectible' || element.type === 'number_line') && (
                         <div
                             className="handle resize-handle e"
                             style={{
@@ -674,8 +694,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         />
                     )}
                     
-                    {/* West Resize (Text and Collectible) */}
-                    {(element.type === 'text' || element.type === 'collectible') && (
+                    {/* West Resize */}
+                    {(element.type === 'text' || element.type === 'collectible' || element.type === 'number_line') && (
                         <div
                             className="handle resize-handle w"
                             style={{
@@ -690,6 +710,44 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             }}
                             onMouseDown={(e) => handleStart(e, 'resize-w')}
                             onTouchStart={(e) => handleStart(e, 'resize-w')}
+                        />
+                    )}
+
+                    {/* North Resize */}
+                    {element.type === 'number_line' && (
+                        <div
+                            className="handle resize-handle n"
+                            style={{
+                                top: 0, left: '50%', marginLeft: '-6px', marginTop: '-6px',
+                                cursor: 'ns-resize',
+                                position: 'absolute',
+                                width: '12px', height: '12px',
+                                backgroundColor: 'white',
+                                border: '1px solid #3b82f6',
+                                pointerEvents: 'auto',
+                                transform: `scale(${1 / element.scale})`
+                            }}
+                            onMouseDown={(e) => handleStart(e, 'resize-n')}
+                            onTouchStart={(e) => handleStart(e, 'resize-n')}
+                        />
+                    )}
+
+                    {/* South Resize */}
+                    {element.type === 'number_line' && (
+                        <div
+                            className="handle resize-handle s"
+                            style={{
+                                bottom: 0, left: '50%', marginLeft: '-6px', marginBottom: '-6px',
+                                cursor: 'ns-resize',
+                                position: 'absolute',
+                                width: '12px', height: '12px',
+                                backgroundColor: 'white',
+                                border: '1px solid #3b82f6',
+                                pointerEvents: 'auto',
+                                transform: `scale(${1 / element.scale})`
+                            }}
+                            onMouseDown={(e) => handleStart(e, 'resize-s')}
+                            onTouchStart={(e) => handleStart(e, 'resize-s')}
                         />
                     )}
 

@@ -5,8 +5,8 @@
     left: calc(50% + 40px);
     transform: translateX(-50%);
     width: 90%;
-    max-width: 450px;
-    height: 500px;
+    max-width: 480px;
+    height: 520px;
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
@@ -15,6 +15,12 @@
     z-index: 100;
     border: 1px solid #eee;
     animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.asset-library.dragging-over {
+    border: 2px dashed #8b5cf6;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 @keyframes slideUp {
@@ -30,17 +36,77 @@
 }
 
 .library-header {
-    padding: 1rem 1.5rem;
+    padding: 0.9rem 1.25rem;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.library-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .library-header h3 {
     margin: 0;
     color: var(--color-primary);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.library-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    border-radius: 20px;
+    color: #7c3aed;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.15s ease;
+}
+
+.library-upload-btn:hover {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+    transform: translateY(-1px);
+}
+
+.library-upload-btn span {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.library-recycle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 50%;
+    color: #059669;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.library-recycle-btn:hover {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px) rotate(45deg);
 }
 
 .close-btn {
@@ -65,22 +131,27 @@
 
 .library-tabs {
     display: flex;
-    padding: 1rem;
-    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    gap: 0.4rem;
     background: #fffaf0;
+    overflow-x: auto;
 }
 
 .library-tabs button {
     flex: 1;
-    padding: 0.5rem;
+    min-width: fit-content;
+    padding: 0.4rem 0.6rem;
     background: white;
     border: 1px solid #eee;
     border-radius: 8px;
     color: #777;
     font-weight: 700;
-    font-size: 0.9rem;
-    height: 40px;
+    font-size: 0.85rem;
+    height: 38px;
     box-shadow: 0 2px 0 #eee;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
 }
 
 .library-tabs button.active {
@@ -98,8 +169,8 @@
 
 .assets-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 0.85rem;
 }
 
 .asset-item {
@@ -108,16 +179,79 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.1s;
-    border: 1px solid #eee;
-    background: white;
+    border-radius: 10px;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    position: relative;
+    padding: 4px;
+    box-sizing: border-box;
 }
 
 .asset-item:hover {
     transform: scale(1.05);
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #8b5cf6;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.18);
+}
+
+.asset-item.custom-bg {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Hover Actions Overlay */
+.asset-item-actions {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 5;
+}
+
+.asset-item:hover .asset-item-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.asset-action-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.asset-action-btn.info-btn {
+    background: #ffffff;
+    color: #3b82f6;
+    border: 1px solid #e2e8f0;
+}
+
+.asset-action-btn.info-btn:hover {
+    background: #eff6ff;
+    transform: scale(1.15);
+}
+
+.asset-action-btn.delete-btn {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+}
+
+.asset-action-btn.delete-btn:hover {
+    background: #ef4444;
+    color: #ffffff;
+    transform: scale(1.15);
 }
 
 .asset-item.character {

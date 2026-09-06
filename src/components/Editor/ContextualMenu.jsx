@@ -4,6 +4,10 @@ import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Pla
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 import { getSymbolSvg } from '../../utils/symbols';
 import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
+import { useEditor } from '../../context/EditorContext';
+import { ELEMENT_TYPES } from '../../types';
+import { SUPPORTED_QUIZ_TYPES } from '../../utils/ResultFieldUtils';
+import { isCharacterElement } from '../../utils/characterShadow';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -181,7 +185,7 @@ const COLORS = [
     '#FFFFFF', '#C8C8C8', '#969696', '#5A5A5A', '#000000', '#D6DCE5',
 ];
 
-const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center' }) => {
+const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background" }) => {
     const [isOpen, setIsOpen] = useState(false);
     
     return (
@@ -220,6 +224,71 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                         boxShadow: '0 8px 32px rgba(0,0,0,0.25)', display: 'grid',
                         gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', zIndex: 100,
                     }}>
+                        {allowNone && (
+                            <div
+                                className="color-swatch-none"
+                                title={noneLabel}
+                                style={{
+                                    gridColumn: '1 / -1',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    padding: '6px 10px',
+                                    borderRadius: '8px',
+                                    border: '1.5px dashed #cbd5e1',
+                                    backgroundColor: '#f8fafc',
+                                    cursor: 'pointer',
+                                    fontSize: '0.8rem',
+                                    fontWeight: '600',
+                                    color: '#475569',
+                                    marginBottom: '4px',
+                                    transition: 'all 0.15s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                                    e.currentTarget.style.borderColor = '#f87171';
+                                    e.currentTarget.style.color = '#dc2626';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#f8fafc';
+                                    e.currentTarget.style.borderColor = '#cbd5e1';
+                                    e.currentTarget.style.color = '#475569';
+                                }}
+                                onMouseDown={(e) => {
+                                    if (onMouseDownItem) onMouseDownItem(e, 'transparent');
+                                }}
+                                onClick={(e) => {
+                                    if (onSelect) onSelect('transparent', e);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                <span style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '16px',
+                                    height: '16px',
+                                    borderRadius: '50%',
+                                    border: '2px solid #ef4444',
+                                    position: 'relative',
+                                    background: '#ffffff',
+                                    boxSizing: 'border-box'
+                                }}>
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '-1px',
+                                        right: '-1px',
+                                        height: '2px',
+                                        backgroundColor: '#ef4444',
+                                        transform: 'rotate(-45deg)',
+                                        transformOrigin: 'center'
+                                    }} />
+                                </span>
+                                <span>{noneLabel}</span>
+                            </div>
+                        )}
                         {COLORS.map(c => (
                             <div
                                 key={c}
@@ -242,13 +311,34 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
 };
 
 const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false }) => {
+    const { state, dispatch } = useEditor();
     const [applyToAllChecked, setApplyToAllChecked] = useState(false);
 
     if (!element) return null;
 
+    const currentSlide = state?.lesson?.slides?.find(s => s.id === state.currentSlideId);
+    const existingResultField = currentSlide?.elements?.find(el => el.type === ELEMENT_TYPES.RESULT_FIELD);
+
+    const handleToggleResultField = () => {
+        if (!existingResultField) {
+            dispatch({
+                type: 'ADD_ELEMENT',
+                payload: {
+                    type: ELEMENT_TYPES.RESULT_FIELD,
+                    content: '',
+                    metadata: { locked: true }
+                }
+            });
+        } else {
+            dispatch({ type: 'SELECT_ELEMENT', payload: existingResultField.id });
+        }
+    };
+
     const { metadata = {} } = element; // Ensure metadata exists
     const isTextType = element.type === 'balloon' || element.type === 'text' || element.type === 'collectible';
     const isImageType = element.type === 'image';
+    const isCharacter = isImageType && isCharacterElement(element);
+    const hasShadow = metadata.hasShadow !== false;
 
     const [activeCardIndex, setActiveCardIndex] = useState(element.config?.previewIndex || 0);
     const [showLevelsEditor, setShowLevelsEditor] = useState(false);
@@ -483,6 +573,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         <ColorPickerDropdown
                             label="Text BG"
                             color="#ffc800"
+                            allowNone={true}
                             children={<span style={{fontSize:'12px'}}>A</span>}
                             onMouseDownItem={(e, c) => {
                                 e.preventDefault();
@@ -495,14 +586,54 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         : container.closest?.('[contenteditable="true"]');
                                     if (editableEl) {
                                         document.execCommand('hiliteColor', false, c);
+                                        const cleanedHtml = (c === 'transparent' || c === 'none')
+                                            ? editableEl.innerHTML.replace(/background-color:\s*(?:transparent|rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\)|inherit);?/gi, '')
+                                            : editableEl.innerHTML;
+                                        editableEl.innerHTML = cleanedHtml;
                                         const optionIndex = editableEl.dataset.optionIndex;
                                         if (optionIndex !== undefined) {
                                             const currentOptions = [...(element.metadata?.options || [])];
-                                            currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                            currentOptions[parseInt(optionIndex)] = cleanedHtml;
                                             onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
                                         } else {
-                                            onChange(element.id, { content: editableEl.innerHTML });
+                                            onChange(element.id, { content: cleanedHtml });
                                         }
+                                        return;
+                                    }
+                                }
+                                if (c === 'transparent' || c === 'none') {
+                                    if (element.content) {
+                                        const cleaned = element.content
+                                            .replace(/background-color:\s*[^;"]+;?/gi, '')
+                                            .replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1');
+                                        onChange(element.id, { content: cleaned });
+                                    }
+                                    if (element.metadata?.options) {
+                                        const currentOptions = (element.metadata.options || []).map(opt =>
+                                            typeof opt === 'string'
+                                                ? opt.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                                : opt
+                                        );
+                                        onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
+                                    }
+                                }
+                            }}
+                            onSelect={(c) => {
+                                const sel = window.getSelection();
+                                if ((!sel || sel.rangeCount === 0 || sel.isCollapsed) && (c === 'transparent' || c === 'none')) {
+                                    if (element.content) {
+                                        const cleaned = element.content
+                                            .replace(/background-color:\s*[^;"]+;?/gi, '')
+                                            .replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1');
+                                        onChange(element.id, { content: cleaned });
+                                    }
+                                    if (element.metadata?.options) {
+                                        const currentOptions = (element.metadata.options || []).map(opt =>
+                                            typeof opt === 'string'
+                                                ? opt.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                                : opt
+                                        );
+                                        onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
                                     }
                                 }
                             }}
@@ -807,6 +938,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
             {isImageType && (
                 <>
+                    {isCharacter && (
+                        <div className="menu-group">
+                            <label>Shadow</label>
+                            <button
+                                className={`btn-icon ${hasShadow ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ hasShadow: !hasShadow })}
+                                title={hasShadow ? "Turn off shadow" : "Turn on shadow"}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <ellipse cx="12" cy="15" rx="8" ry="3.5" fill="currentColor" fillOpacity={hasShadow ? "0.85" : "0.3"} stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+
                     <div className="menu-group">
                         <label>Flip</label>
                         <div style={{ display: 'flex', gap: '5px' }}>
@@ -976,6 +1122,224 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         />
                     </div>
                     
+                    <div className="menu-group">
+                        <label>Layer</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'backward')}
+                                title="Send Backward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬇️
+                            </button>
+                            <button
+                                className="btn-icon"
+                                onClick={() => onReorderElement && onReorderElement(element.id, 'forward')}
+                                title="Bring Forward"
+                                style={{ fontSize: '1rem' }}
+                            >
+                                ⬆️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
+            {element.type === 'number_line' && (
+                <>
+                    {/* Orientation */}
+                    <div className="menu-group">
+                        <label>Orientation</label>
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            <button
+                                className={`btn-icon ${metadata.orientation !== 'vertical' ? 'active' : ''}`}
+                                onClick={() => {
+                                    if (metadata.orientation === 'vertical') {
+                                        onChange(element.id, {
+                                            width: Math.max(element.height || 60, 60),
+                                            height: 14,
+                                            metadata: { ...metadata, orientation: 'horizontal' }
+                                        });
+                                    }
+                                }}
+                                title="Horizontal"
+                                style={{ fontSize: '1rem', width: '36px', height: '36px' }}
+                            >
+                                ↔️
+                            </button>
+                            <button
+                                className={`btn-icon ${metadata.orientation === 'vertical' ? 'active' : ''}`}
+                                onClick={() => {
+                                    if (metadata.orientation !== 'vertical') {
+                                        onChange(element.id, {
+                                            width: 16,
+                                            height: Math.max(element.width || 60, 50),
+                                            metadata: { ...metadata, orientation: 'vertical' }
+                                        });
+                                    }
+                                }}
+                                title="Vertical"
+                                style={{ fontSize: '1rem', width: '36px', height: '36px' }}
+                            >
+                                ↕️
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Arrows Toggle */}
+                    <div className="menu-group">
+                        <label>Arrows</label>
+                        <button
+                            className={`btn-icon ${(metadata.showArrows ?? true) ? 'active' : ''}`}
+                            onClick={() => updateMetadata({ showArrows: !(metadata.showArrows ?? true) })}
+                            title={(metadata.showArrows ?? true) ? "Arrows On (Click to start/end at marks)" : "Arrows Off (Click to add arrows)"}
+                            style={{ fontSize: '0.95rem', fontWeight: 'bold', width: '42px', height: '36px' }}
+                        >
+                            {(metadata.showArrows ?? true) ? '⇄' : '|—|'}
+                        </button>
+                    </div>
+
+                    {/* Numbers 4-state Mode Button */}
+                    <div className="menu-group">
+                        <label>Numbers</label>
+                        {(() => {
+                            const mode = metadata.numberColorMode || ((metadata.showNumbers ?? true) ? 'match' : 'invisible');
+                            const nextMode = mode === 'match' ? 'invisible' : mode === 'invisible' ? 'black' : mode === 'black' ? 'white' : 'match';
+                            const titles = {
+                                match: 'Numbers: Same color as line (Tap to hide)',
+                                invisible: 'Numbers: Invisible (Tap for Black)',
+                                black: 'Numbers: Black with white outline (Tap for White)',
+                                white: 'Numbers: White with black outline (Tap for Line Color)'
+                            };
+
+                            return (
+                                <button
+                                    className={`btn-icon ${mode !== 'invisible' ? 'active' : ''}`}
+                                    onClick={() => updateMetadata({
+                                        numberColorMode: nextMode,
+                                        showNumbers: nextMode !== 'invisible'
+                                    })}
+                                    title={titles[mode]}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        minWidth: '58px',
+                                        height: '36px',
+                                        padding: '0 6px',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {mode === 'match' && (
+                                        <span style={{ color: metadata.symbolColor || '#8B5CF6', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                            🎨 123
+                                        </span>
+                                    )}
+                                    {mode === 'invisible' && (
+                                        <span style={{ color: '#94A3B8' }}>
+                                            — —
+                                        </span>
+                                    )}
+                                    {mode === 'black' && (
+                                        <span style={{
+                                            color: '#000000',
+                                            textShadow: '-1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '3px'
+                                        }}>
+                                            ⚫ 123
+                                        </span>
+                                    )}
+                                    {mode === 'white' && (
+                                        <span style={{
+                                            color: '#FFFFFF',
+                                            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '3px'
+                                        }}>
+                                            ⚪ 123
+                                        </span>
+                                    )}
+                                </button>
+                            );
+                        })()}
+                    </div>
+
+                    {/* Start Number */}
+                    <div className="menu-group">
+                        <label>Start</label>
+                        <input
+                            type="number"
+                            value={metadata.startNumber ?? 0}
+                            onChange={(e) => {
+                                const val = parseFloat(e.target.value);
+                                updateMetadata({ startNumber: isNaN(val) ? 0 : val });
+                            }}
+                            style={{ width: '55px' }}
+                        />
+                    </div>
+
+                    {/* End Number */}
+                    <div className="menu-group">
+                        <label>End</label>
+                        <input
+                            type="number"
+                            value={metadata.endNumber ?? 10}
+                            onChange={(e) => {
+                                const val = parseFloat(e.target.value);
+                                updateMetadata({ endNumber: isNaN(val) ? 10 : val });
+                            }}
+                            style={{ width: '55px' }}
+                        />
+                    </div>
+
+                    {/* Step */}
+                    <div className="menu-group">
+                        <label>Step</label>
+                        <input
+                            type="number"
+                            min="0.1"
+                            step="any"
+                            value={metadata.step ?? 1}
+                            onChange={(e) => {
+                                const val = parseFloat(e.target.value);
+                                updateMetadata({ step: isNaN(val) || val <= 0 ? 1 : val });
+                            }}
+                            style={{ width: '50px' }}
+                        />
+                    </div>
+
+                    {/* Line Color */}
+                    <div className="menu-group">
+                        <label>Color</label>
+                        <ColorPickerDropdown
+                            color={metadata.symbolColor || '#8B5CF6'}
+                            onSelect={(c) => updateMetadata({ symbolColor: c })}
+                        />
+                    </div>
+
+                    {/* Thickness */}
+                    <div className="menu-group">
+                        <label>Thickness</label>
+                        <input
+                            type="range"
+                            min="1"
+                            max="8"
+                            value={metadata.thickness ?? 3}
+                            onChange={(e) => updateMetadata({ thickness: parseInt(e.target.value) })}
+                            style={{ width: '60px' }}
+                            title={`${metadata.thickness ?? 3}px`}
+                        />
+                    </div>
+
+                    {/* Layer */}
                     <div className="menu-group">
                         <label>Layer</label>
                         <div style={{ display: 'flex', gap: '5px' }}>
@@ -2039,6 +2403,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 <ColorPickerDropdown
                     label="Text BG"
                     color="#ffc800"
+                    allowNone={true}
                     children={<span style={{fontSize:'12px'}}>A</span>}
                     onMouseDownItem={(e, c) => {
                         e.preventDefault();
@@ -2051,18 +2416,64 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 : container.closest?.('[contenteditable="true"]');
                             if (editableEl) {
                                 document.execCommand('hiliteColor', false, c);
+                                const cleanedHtml = (c === 'transparent' || c === 'none')
+                                    ? editableEl.innerHTML.replace(/background-color:\s*(?:transparent|rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\)|inherit);?/gi, '')
+                                    : editableEl.innerHTML;
+                                editableEl.innerHTML = cleanedHtml;
                                 const optionIndex = editableEl.dataset.optionIndex;
                                 const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
                                 if (optionIndex !== undefined) {
                                     const currentOptions = [...(element.metadata?.options || [])];
-                                    currentOptions[parseInt(optionIndex)] = editableEl.innerHTML;
+                                    currentOptions[parseInt(optionIndex)] = cleanedHtml;
                                     onChange(element.id, { metadata: { ...element.metadata, options: currentOptions } });
                                 } else if (matchAnswerIndex !== undefined) {
                                     const currentAnswers = [...(element.metadata?.matchAnswers || [])];
-                                    currentAnswers[parseInt(matchAnswerIndex)] = editableEl.innerHTML;
+                                    currentAnswers[parseInt(matchAnswerIndex)] = cleanedHtml;
                                     onChange(element.id, { metadata: { ...element.metadata, matchAnswers: currentAnswers } });
                                 }
+                                return;
                             }
+                        }
+                        if (c === 'transparent' || c === 'none') {
+                            const currentOptions = (element.metadata?.options || []).map(opt =>
+                                typeof opt === 'string'
+                                    ? opt.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                    : opt
+                            );
+                            const currentAnswers = (element.metadata?.matchAnswers || []).map(ans =>
+                                typeof ans === 'string'
+                                    ? ans.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                    : ans
+                            );
+                            onChange(element.id, {
+                                metadata: {
+                                    ...element.metadata,
+                                    options: currentOptions,
+                                    ...(element.metadata?.matchAnswers ? { matchAnswers: currentAnswers } : {})
+                                }
+                            });
+                        }
+                    }}
+                    onSelect={(c) => {
+                        const sel = window.getSelection();
+                        if ((!sel || sel.rangeCount === 0 || sel.isCollapsed) && (c === 'transparent' || c === 'none')) {
+                            const currentOptions = (element.metadata?.options || []).map(opt =>
+                                typeof opt === 'string'
+                                    ? opt.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                    : opt
+                            );
+                            const currentAnswers = (element.metadata?.matchAnswers || []).map(ans =>
+                                typeof ans === 'string'
+                                    ? ans.replace(/background-color:\s*[^;"]+;?/gi, '').replace(/<mark[^>]*>(.*?)<\/mark>/gi, '$1')
+                                    : ans
+                            );
+                            onChange(element.id, {
+                                metadata: {
+                                    ...element.metadata,
+                                    options: currentOptions,
+                                    ...(element.metadata?.matchAnswers ? { matchAnswers: currentAnswers } : {})
+                                }
+                            });
                         }
                     }}
                 />
@@ -2090,6 +2501,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         style={{ fontSize: '0.8rem', padding: '4px 10px', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}
                     >
                         🎨 Presets
+                    </button>
+                )}
+                {SUPPORTED_QUIZ_TYPES.includes(metadata.quizType || 'classic') && metadata.quizType !== 'nl' && (
+                    <button
+                        className={`btn-secondary ${existingResultField ? 'active' : ''}`}
+                        onClick={handleToggleResultField}
+                        title={existingResultField ? "Select Result Field" : "Add Result Field"}
+                        style={{ fontSize: '0.8rem', padding: '4px 10px', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
+                    >
+                        🔲 {existingResultField ? 'Result Field ✓' : 'Result Field'}
                     </button>
                 )}
                 </>
@@ -2456,6 +2877,18 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {metadata.nlConfig?.hideLabels ? 'Ends' : 'All'}
                         </button>
                     </div>
+
+                    <div className="menu-group">
+                        <label>Result</label>
+                        <button
+                            className={`btn-secondary ${existingResultField ? 'active' : ''}`}
+                            onClick={handleToggleResultField}
+                            title={existingResultField ? "Select Result Field" : "Add Result Field"}
+                            style={{ fontSize: '0.8rem', padding: '4px 8px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                            🔲 {existingResultField ? 'Field ✓' : 'Add Field'}
+                        </button>
+                    </div>
                 </>
             )}
 
@@ -2616,11 +3049,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             ↩️
                         </button>
                     )}
-                    {!translationMode && element.type === 'image' && (
+                    {!translationMode && (element.type === 'image' || element.type === 'result_field' || element.type === 'number_line' || isTextType) && (
                         <button 
                             className={`btn-icon ${metadata.locked ? 'active' : ''}`} 
                             onClick={() => updateMetadata({ locked: !metadata.locked })} 
-                            title={metadata.locked ? "Unlock Image" : "Lock Image"}
+                            title={metadata.locked ? (isTextType ? "Unlock Text" : "Unlock (Enable Rotate & Scale)") : (isTextType ? "Lock Text" : "Lock (Fixed Size)")}
                             style={{ backgroundColor: metadata.locked ? '#ffcccc' : undefined }}
                         >
                             {metadata.locked ? '🔒' : '🔓'}

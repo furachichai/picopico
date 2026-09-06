@@ -14,10 +14,14 @@ import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
 import Balloon from '../Editor/Balloon';
+import ResultField from '../ResultField/ResultField';
+import NumberLine from '../NumberLine/NumberLine';
+import CharacterShadow from '../Editor/CharacterShadow';
 import ErrorBoundary from '../ErrorBoundary';
 import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
 import FullscreenToggle from '../FullscreenToggle';
 import { X, Pencil } from 'lucide-react';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import './Player.css';
 
 const Player = () => {
@@ -44,6 +48,7 @@ const Player = () => {
     const touchStartRef = useRef(null);
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
     const [solvedSlides, setSolvedSlides] = useState(new Set()); // Track slides whose quiz/cartridge is complete
+    const [solvedAnswers, setSolvedAnswers] = useState({}); // Track solved answers for result field
 
     // Stripper state
     const [stripperStep, setStripperStep] = useState(0); // Current revealed strip index
@@ -737,7 +742,7 @@ const Player = () => {
                                             left: 0,
                                             width: '100%',
                                             height: '100%',
-                                            backgroundImage: slide.background.replaceAll('/src/assets/', '/assets/'),
+                                            backgroundImage: resolveAssetUrl(slide.background),
                                             backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
                                                 ? `${slide.backgroundSettings?.size ?? 100}%`
                                                 : (slide.backgroundSettings?.sizeMode || 'cover'),
@@ -932,8 +937,8 @@ const Player = () => {
                                             style={{
                                                 left: isFullScreenQuiz ? '50%' : `${element.x}%`,
                                                 top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${effectiveY}%`),
-                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
-                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
+                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
+                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
                                                 transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`,
                                                 zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))),
                                                 pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
@@ -1043,18 +1048,23 @@ const Player = () => {
                                                 );
                                             })()}
                                             {element.type === 'image' && (
-                                                <img 
-                                                    src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} 
-                                                    alt="content" 
-                                                    style={{
-                                                        transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
-                                                        opacity: element.metadata?.opacity ?? 1,
-                                                        filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined,
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
-                                                    }} 
-                                                />
+                                                <>
+                                                    <CharacterShadow element={element} />
+                                                    <img 
+                                                        src={resolveAssetUrl(element.content)} 
+                                                        alt="content" 
+                                                        style={{
+                                                            position: 'relative',
+                                                            zIndex: 1,
+                                                            transform: `scale(${element.metadata?.flipX ? -1 : 1}, ${element.metadata?.flipY ? -1 : 1})`,
+                                                            opacity: element.metadata?.opacity ?? 1,
+                                                            filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined,
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain'
+                                                        }} 
+                                                    />
+                                                </>
                                             )}
                                             {element.type === 'quiz' && (
                                                 <QuizPlayer
@@ -1080,6 +1090,9 @@ const Player = () => {
                                                              nextSlide(true);
                                                          }
                                                      }}
+                                                    onSolve={(answer) => {
+                                                        setSolvedAnswers(prev => ({ ...prev, [index]: answer }));
+                                                    }}
                                                     onBanner={handleBanner}
                                                     disabled={isNavigating}
                                                     debugMode={debugMode}
@@ -1087,6 +1100,19 @@ const Player = () => {
                                                 />
                                             )}
                                             {element.type === 'game' && <MinigamePlayer data={element} />}
+                                            {element.type === 'result_field' && (
+                                                <ResultField
+                                                    element={element}
+                                                    slide={slide}
+                                                    isSolved={solvedSlides.has(index)}
+                                                    solvedAnswer={solvedAnswers[index]}
+                                                    isPlayMode={true}
+                                                    language={language}
+                                                />
+                                            )}
+                                            {element.type === 'number_line' && (
+                                                <NumberLine element={element} />
+                                            )}
                                             {element.type === 'balloon' && (
                                                 <Balloon
                                                     element={language !== 'es' && element.translations?.[language]?.content

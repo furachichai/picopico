@@ -40,4 +40,6 @@ export const ELEMENT_TYPES = {
     LINE: 'line',
     POPUP: 'popup',
     COLLECTIBLE: 'collectible',
+    RESULT_FIELD: 'result_field',
+    NUMBER_LINE: 'number_line',
 };

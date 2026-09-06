@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import './AssetLibrary.css';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { useDraggable } from '../../hooks/useDraggable';
+import SaveAssetModal from './SaveAssetModal';
+import AssetInfoModal from './AssetInfoModal';
+import ConfirmationModal from './ConfirmationModal';
+import RecycleBinModal from './RecycleBinModal';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 
 const ASSETS = {
     emojis: [
@@ -34,7 +39,6 @@ const ASSETS = {
 };
 
 // Load custom characters from src/assets/characters
-// Force HMR reload - triggering glob re-eval
 const customCharacters = import.meta.glob('../../assets/characters/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
 const customCharacterList = Object.values(customCharacters);
 
@@ -72,7 +76,6 @@ const customBackgroundList = Object.values(customBackgrounds);
 
 const classifyAsset = (src) => {
     if (!src) return 'other';
-    // If it is a webpack/vite module object, try to read the default path
     const url = typeof src === 'object' ? src.default || '' : src;
     const filename = url.split('/').pop().toLowerCase();
     
@@ -133,6 +136,30 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(initialTab);
+    const fileInputRef = useRef(null);
+    const contentRef = useRef(null);
+
+    const handleTabClick = (tab) => {
+        if (activeTab === tab) {
+            contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            setActiveTab(tab);
+            contentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    };
+
+    // Dynamic locally added / deleted assets and server disk assets
+    const [locallyAdded, setLocallyAdded] = useState([]);
+    const [deletedUrls, setDeletedUrls] = useState(new Set());
+    const [serverAssets, setServerAssets] = useState(null);
+
+    // Modal states
+    const [saveModalOpen, setSaveModalOpen] = useState(false);
+    const [saveModalData, setSaveModalData] = useState({ items: [], initialCategory: 'characters' });
+    const [infoModalAsset, setInfoModalAsset] = useState(null);
+    const [deleteTarget, setDeleteTarget] = useState(null);
+    const [recycleModalOpen, setRecycleModalOpen] = useState(false);
+    const [isDraggingOver, setIsDraggingOver] = useState(false);
 
     // Persist last selected image category tag
     const savedTag = (() => {
@@ -147,13 +174,39 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     });
 
     const handleSubCategoryChange = (catId) => {
+        const isSame = activeSubCategory === catId;
         setActiveSubCategory(catId);
+        contentRef.current?.scrollTo({ top: 0, behavior: isSame ? 'smooth' : 'auto' });
         try {
             localStorage.setItem('picopico_last_image_tag', catId);
         } catch {
             // ignore
         }
     };
+
+    // Live asset sync from server
+    const fetchServerAssets = useCallback(async () => {
+        try {
+            const res = await fetch('/api/assets/list');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.assets) {
+                    setServerAssets(data.assets);
+                }
+            }
+        } catch (err) {
+            console.warn('Could not fetch server assets:', err);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchServerAssets();
+        const handleSaved = () => {
+            fetchServerAssets();
+        };
+        window.addEventListener('picopico-asset-saved', handleSaved);
+        return () => window.removeEventListener('picopico-asset-saved', handleSaved);
+    }, [fetchServerAssets]);
 
     const { popupRef, dragHandlers, style } = useDraggable('assetLibrary');
 
@@ -171,7 +224,6 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         } catch {
             // ignore
         }
-        // Fallback: check previous slides
         const currentIdx = state.lesson?.slides?.findIndex(s => s.id === state.currentSlideId);
         if (currentIdx !== undefined && currentIdx >= 0) {
             for (let i = currentIdx - 1; i >= 0; i--) {
@@ -205,9 +257,11 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     // Close on tap / click outside
     useEffect(() => {
         const handleOutsideClick = (e) => {
+            // Never close library if any sub-modal is open
+            if (deleteTarget || saveModalOpen || infoModalAsset || recycleModalOpen) return;
+
             if (popupRef.current && !popupRef.current.contains(e.target)) {
-                // Ensure the click wasn't on a toolbar open button
-                if (e.target?.closest?.('.toolbar-btn, .btn-secondary, .btn-primary')) return;
+                if (e.target?.closest?.('.toolbar-btn, .btn-secondary, .btn-primary, .save-asset-modal, .save-asset-modal-overlay, .asset-info-modal, .asset-info-modal-overlay, .confirmation-modal, .confirmation-modal-overlay, .recycle-modal, .recycle-modal-overlay')) return;
                 onClose();
             }
         };
@@ -218,17 +272,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             clearTimeout(timer);
             window.removeEventListener('pointerdown', handleOutsideClick);
         };
-    }, [onClose]);
+    }, [onClose, deleteTarget, saveModalOpen, infoModalAsset, recycleModalOpen]);
 
-    // If allowedTabs is provided, filter the available tabs
-    // otherwise show all
     const showTab = (tabName) => {
         if (!allowedTabs) return true;
         return allowedTabs.includes(tabName);
     };
 
     const handleSelect = (item) => {
-        // If external handler provided, use it and close
         if (onSelect) {
             onSelect(item);
             onClose();
@@ -236,19 +287,13 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
 
         if (activeTab === 'backgrounds' || activeTab === 'custom-bg') {
-            // Check if it's a URL (custom bg) or a color/gradient
-            const payload = item.startsWith('http') || item.startsWith('data:') || item.startsWith('/') ? `url("${item}")` : item;
-            // If it's already a url() string (from ASSETS.backgrounds), use it as is
             const finalPayload = item.includes('url(') || item.startsWith('#') || item.startsWith('linear-gradient') ? item : `url("${item}")`;
-
             dispatch({ type: 'UPDATE_SLIDE_BACKGROUND', payload: finalPayload });
             onClose();
         } else if (activeTab === 'gifs' || activeTab === 'custom' || activeTab === 'custom-objects') {
-            // Pre-load image to get dimensions
             const img = new Image();
             img.onload = () => {
                 const aspectRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
-                // Target width: 40% of screen width (360px)
                 const targetWidthPercent = 40;
                 const targetWidthPx = 360 * (targetWidthPercent / 100);
                 const targetHeightPx = targetWidthPx / aspectRatio;
@@ -261,7 +306,9 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         content: item,
                         metadata: {
                             width: targetWidthPercent,
-                            height: targetHeightPercent
+                            height: targetHeightPercent,
+                            ...(activeTab === 'custom' && { category: 'characters' }),
+                            ...(activeTab === 'custom-objects' && { category: 'objects' })
                         }
                     }
                 });
@@ -275,7 +322,9 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         content: item,
                         metadata: {
                             width: 40,
-                            height: 40
+                            height: 40,
+                            ...(activeTab === 'custom' && { category: 'characters' }),
+                            ...(activeTab === 'custom-objects' && { category: 'objects' })
                         }
                     }
                 });
@@ -292,10 +341,184 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
     };
 
+    // Open file upload / save modal (supports batch files)
+    const handleFilesChosen = async (fileList) => {
+        if (!fileList || fileList.length === 0) return;
+        const validFiles = Array.from(fileList).filter(f => f && f.type && f.type.startsWith('image/'));
+        if (validFiles.length === 0) return;
+
+        let savedCat = null;
+        try {
+            savedCat = localStorage.getItem('picopico_last_save_category');
+        } catch {
+            // ignore
+        }
+
+        let defCategory = savedCat || 'characters';
+        if (activeTab === 'custom-objects') {
+            defCategory = 'objects';
+        } else if (activeTab === 'custom-bg') {
+            defCategory = 'backgrounds';
+        } else if (activeTab === 'custom') {
+            if (activeSubCategory === 'objects') {
+                defCategory = 'objects';
+            } else if (savedCat) {
+                defCategory = savedCat;
+            } else if (activeSubCategory !== 'all' && activeSubCategory !== 'other') {
+                defCategory = 'characters';
+            }
+        }
+
+        // Read all images to data URLs
+        const readPromises = validFiles.map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    resolve({
+                        dataUrl: e.target.result,
+                        filename: file.name
+                    });
+                };
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(file);
+            });
+        });
+
+        const items = (await Promise.all(readPromises)).filter(Boolean);
+        if (items.length === 0) return;
+
+        setSaveModalData({
+            items,
+            initialCategory: defCategory
+        });
+        setSaveModalOpen(true);
+    };
+
+    const handleSaveSuccess = (savedResult) => {
+        setSaveModalOpen(false);
+        const results = Array.isArray(savedResult) ? savedResult : (savedResult ? [savedResult] : []);
+        const newUrls = results.map(r => r.url).filter(Boolean);
+        if (newUrls.length > 0) {
+            setLocallyAdded(prev => [...newUrls, ...prev]);
+
+            // If user imported objects while on the custom images tab, switch to Objects subcategory pill
+            const savedCategory = results[0]?.category;
+            if (savedCategory === 'objects' && activeTab === 'custom') {
+                handleSubCategoryChange('objects');
+            }
+        }
+    };
+
+    // Delete asset handler
+    const handleDeleteConfirm = async () => {
+        if (!deleteTarget) return;
+        const targetSrc = deleteTarget.src;
+
+        try {
+            const res = await fetch('/api/assets/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: targetSrc })
+            });
+
+            if (res.ok) {
+                setDeletedUrls(prev => new Set([...prev, targetSrc]));
+            } else {
+                const err = await res.json().catch(() => ({}));
+                alert(`Could not delete asset: ${err.error || 'Server error'}`);
+            }
+        } catch (e) {
+            console.error('Error deleting asset:', e);
+            alert(`Delete failed: ${e.message}`);
+        } finally {
+            setDeleteTarget(null);
+            if (infoModalAsset === targetSrc) {
+                setInfoModalAsset(null);
+            }
+        }
+    };
+
+    // Helper to merge and deduplicate assets by basename
+    const mergeWithServer = useCallback((staticList, serverList = []) => {
+        const map = new Map();
+        for (const url of staticList) {
+            const src = typeof url === 'object' ? url?.default || '' : url;
+            const fname = src ? src.split('/').pop().split('?')[0] : '';
+            if (fname) map.set(fname, src);
+        }
+        for (const url of serverList) {
+            const fname = url ? url.split('/').pop().split('?')[0] : '';
+            if (fname) map.set(fname, url);
+        }
+        for (const url of locallyAdded) {
+            const fname = url ? url.split('/').pop().split('?')[0] : '';
+            if (fname) map.set(fname, url);
+        }
+        return Array.from(map.values());
+    }, [locallyAdded]);
+
+    // Filter combined list by deletions and additions
+    const allImages = mergeWithServer(combinedImageList, serverAssets?.allImages).filter(url => !deletedUrls.has(url));
+    const allBackgrounds = mergeWithServer(customBackgroundList, serverAssets?.allBackgrounds).filter(url => !deletedUrls.has(url));
+    const allObjects = mergeWithServer(customObjectsList, serverAssets?.allObjects).filter(url => !deletedUrls.has(url));
+
     return (
-        <div ref={popupRef} style={style} className={`asset-library ${allowedTabs && allowedTabs.includes('custom-bg') ? 'bg-library' : ''}`}>
+        <div
+            ref={popupRef}
+            style={style}
+            className={`asset-library ${allowedTabs && allowedTabs.includes('custom-bg') ? 'bg-library' : ''} ${isDraggingOver ? 'dragging-over' : ''}`}
+            onDragOver={(e) => {
+                if (e.dataTransfer.types.includes('Files')) {
+                    e.preventDefault();
+                    setIsDraggingOver(true);
+                }
+            }}
+            onDragLeave={(e) => {
+                if (popupRef.current && !popupRef.current.contains(e.relatedTarget)) {
+                    setIsDraggingOver(false);
+                }
+            }}
+            onDrop={(e) => {
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    e.preventDefault();
+                    setIsDraggingOver(false);
+                    handleFilesChosen(e.dataTransfer.files);
+                }
+            }}
+        >
             <div className="library-header" {...dragHandlers}>
-                <h3>{t('library.title')}</h3>
+                <div className="library-header-left">
+                    <h3>{t('library.title')}</h3>
+                    <button
+                        type="button"
+                        className="library-upload-btn"
+                        onClick={() => fileInputRef.current?.click()}
+                        title="Upload image(s) to project folder"
+                    >
+                        <span>+</span> Upload
+                    </button>
+                    <button
+                        type="button"
+                        className="library-recycle-btn"
+                        onClick={() => setRecycleModalOpen(true)}
+                        title="Recycle Bin (Restore deleted assets)"
+                    >
+                        <span>♻️</span>
+                    </button>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files.length > 0) {
+                                handleFilesChosen(e.target.files);
+                                e.target.value = '';
+                            }
+                        }}
+                    />
+                </div>
                 <button className="close-btn" onClick={onClose}>×</button>
             </div>
 
@@ -303,7 +526,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('custom') && (
                     <button
                         className={activeTab === 'custom' ? 'active' : ''}
-                        onClick={() => setActiveTab('custom')}
+                        onClick={() => handleTabClick('custom')}
                     >
                         {t('library.imgs')}
                     </button>
@@ -311,7 +534,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('custom-objects') && (
                     <button
                         className={activeTab === 'custom-objects' ? 'active' : ''}
-                        onClick={() => setActiveTab('custom-objects')}
+                        onClick={() => handleTabClick('custom-objects')}
                     >
                         {t('library.objects')}
                     </button>
@@ -319,7 +542,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('custom-bg') && (
                     <button
                         className={activeTab === 'custom-bg' ? 'active' : ''}
-                        onClick={() => setActiveTab('custom-bg')}
+                        onClick={() => handleTabClick('custom-bg')}
                     >
                         {t('library.bkgs')}
                     </button>
@@ -327,7 +550,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('emojis') && (
                     <button
                         className={activeTab === 'emojis' ? 'active' : ''}
-                        onClick={() => setActiveTab('emojis')}
+                        onClick={() => handleTabClick('emojis')}
                     >
                         {t('library.emojis')}
                     </button>
@@ -335,7 +558,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('backgrounds') && (
                     <button
                         className={activeTab === 'backgrounds' ? 'active' : ''}
-                        onClick={() => setActiveTab('backgrounds')}
+                        onClick={() => handleTabClick('backgrounds')}
                     >
                         {t('library.colors')}
                     </button>
@@ -343,14 +566,14 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 {showTab('gifs') && (
                     <button
                         className={activeTab === 'gifs' ? 'active' : ''}
-                        onClick={() => setActiveTab('gifs')}
+                        onClick={() => handleTabClick('gifs')}
                     >
                         {t('library.gifs')}
                     </button>
                 )}
             </div>
 
-            <div className="library-content">
+            <div className="library-content" ref={contentRef}>
                 {(activeTab === 'custom-bg' || activeTab === 'backgrounds') && (
                     <div className="library-last-bg-bar">
                         <button
@@ -370,7 +593,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                                     style={{
                                                         position: 'absolute',
                                                         top: 0, left: 0, width: '100%', height: '100%',
-                                                        backgroundImage: lastBg.background.replaceAll('/src/assets/', '/assets/'),
+                                                        backgroundImage: resolveAssetUrl(lastBg.background),
                                                         backgroundSize: lastBg.backgroundSettings?.sizeMode === 'custom'
                                                             ? `${lastBg.backgroundSettings?.size ?? 100}%`
                                                             : (lastBg.backgroundSettings?.sizeMode || 'cover'),
@@ -427,71 +650,139 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
 
                 <div className="assets-grid">
                     {activeTab === 'custom' && (() => {
-                        const filtered = combinedImageList.filter(src => {
+                        const filtered = allImages.filter(src => {
                             if (activeSubCategory === 'all') return true;
                             return classifyAsset(src) === activeSubCategory;
                         });
                         return filtered.length > 0 ? (
-                            filtered.map((src, index) => (
-                                <div
-                                    key={index}
-                                    className="asset-item custom"
-                                    draggable
-                                    onDragStart={(e) => {
-                                        e.dataTransfer.setData('text/plain', src);
-                                        e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
-                                    }}
-                                    onClick={() => handleSelect(src)}
-                                >
-                                    <img src={src} alt="character" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                </div>
-                            ))
+                            filtered.map((src, index) => {
+                                const filename = src.split('/').pop();
+                                return (
+                                    <div
+                                        key={`${src}-${index}`}
+                                        className="asset-item custom"
+                                        draggable
+                                        onDragStart={(e) => {
+                                            e.dataTransfer.setData('text/plain', src);
+                                            e.dataTransfer.setData('application/json', JSON.stringify({
+                                                type: 'image',
+                                                src,
+                                                category: activeTab === 'custom' ? 'characters' : (activeTab === 'custom-objects' ? 'objects' : undefined)
+                                            }));
+                                        }}
+                                        onClick={() => handleSelect(src)}
+                                    >
+                                        <img src={src} alt="character" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn info-btn"
+                                                title="View asset info"
+                                                onClick={() => setInfoModalAsset(src)}
+                                            >
+                                                ℹ️
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn delete-btn"
+                                                title="Delete asset"
+                                                onClick={() => setDeleteTarget({ src, filename })}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
-                                No images found in this category.
+                                No images found in this category.<br />
+                                Click <strong>+ Upload</strong> or drop images here.
                             </div>
                         );
                     })()}
 
                     {activeTab === 'custom-objects' && (
-                        customObjectsList.length > 0 ? (
-                            customObjectsList.map((src, index) => (
-                                <div
-                                    key={index}
-                                    className="asset-item custom"
-                                    draggable
-                                    onDragStart={(e) => {
-                                        e.dataTransfer.setData('text/plain', src);
-                                        e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
-                                    }}
-                                    onClick={() => handleSelect(src)}
-                                >
-                                    <img src={src} alt="object" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                </div>
-                            ))
+                        allObjects.length > 0 ? (
+                            allObjects.map((src, index) => {
+                                const filename = src.split('/').pop();
+                                return (
+                                    <div
+                                        key={`${src}-${index}`}
+                                        className="asset-item custom"
+                                        draggable
+                                        onDragStart={(e) => {
+                                            e.dataTransfer.setData('text/plain', src);
+                                            e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
+                                        }}
+                                        onClick={() => handleSelect(src)}
+                                    >
+                                        <img src={src} alt="object" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn info-btn"
+                                                title="View asset info"
+                                                onClick={() => setInfoModalAsset(src)}
+                                            >
+                                                ℹ️
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn delete-btn"
+                                                title="Delete asset"
+                                                onClick={() => setDeleteTarget({ src, filename })}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
                                 No objects found. <br />
-                                Add images to <code>public/assets/objects</code> or <code>src/assets/objects</code>
+                                Click <strong>+ Upload</strong> or drop images into <code>src/assets/objects</code>
                             </div>
                         )
                     )}
 
                     {activeTab === 'custom-bg' && (
-                        customBackgroundList.length > 0 ? (
-                            customBackgroundList.map((src, index) => (
-                                <div
-                                    key={index}
-                                    className="asset-item custom-bg"
-                                    onClick={() => handleSelect(src)}
-                                >
-                                    <img src={src} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
-                                </div>
-                            ))
+                        allBackgrounds.length > 0 ? (
+                            allBackgrounds.map((src, index) => {
+                                const filename = src.split('/').pop();
+                                return (
+                                    <div
+                                        key={`${src}-${index}`}
+                                        className="asset-item custom-bg"
+                                        onClick={() => handleSelect(src)}
+                                    >
+                                        <img src={src} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
+                                        <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn info-btn"
+                                                title="View asset info"
+                                                onClick={() => setInfoModalAsset(src)}
+                                            >
+                                                ℹ️
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="asset-action-btn delete-btn"
+                                                title="Delete asset"
+                                                onClick={() => setDeleteTarget({ src, filename })}
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
                                 {t('library.noBackgrounds')} <br />
-                                {t('library.addBackgrounds')} <code>src/assets/backgrounds</code>
+                                Click <strong>+ Upload</strong> or drop images into <code>src/assets/backgrounds</code>
                             </div>
                         )
                     )}
@@ -526,6 +817,62 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                     ))}
                 </div>
             </div>
+
+            {/* Save Asset Modal */}
+            <SaveAssetModal
+                isOpen={saveModalOpen}
+                items={saveModalData.items}
+                initialCategory={saveModalData.initialCategory}
+                onSave={handleSaveSuccess}
+                onCancel={() => setSaveModalOpen(false)}
+            />
+
+            {/* Info Modal */}
+            <AssetInfoModal
+                isOpen={!!infoModalAsset}
+                src={infoModalAsset}
+                onClose={() => setInfoModalAsset(null)}
+                onDeleteRequest={(src, filename) => {
+                    setDeleteTarget({ src, filename });
+                }}
+                onCategoryChanged={(data) => {
+                    // Update list
+                    if (data?.newUrl) {
+                        setLocallyAdded(prev => [data.newUrl, ...prev.filter(u => u !== infoModalAsset)]);
+                    }
+                }}
+            />
+
+            {/* Delete Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={!!deleteTarget}
+                message={`Are you sure you want to delete "${deleteTarget?.filename || 'this asset'}" from the project library?`}
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => setDeleteTarget(null)}
+                confirmText="Delete"
+                cancelText="Keep"
+            />
+
+            {/* Recycle Bin / Trash Modal */}
+            <RecycleBinModal
+                isOpen={recycleModalOpen}
+                onClose={() => setRecycleModalOpen(false)}
+                onAssetRestored={(restored) => {
+                    if (restored?.restoredUrl) {
+                        setDeletedUrls(prev => {
+                            const next = new Set(prev);
+                            next.delete(restored.restoredUrl);
+                            for (const u of next) {
+                                if (u.includes(restored.filename)) {
+                                    next.delete(u);
+                                }
+                            }
+                            return next;
+                        });
+                        setLocallyAdded(prev => [restored.restoredUrl, ...prev.filter(u => u !== restored.restoredUrl)]);
+                    }
+                }}
+            />
         </div>
     );
 };

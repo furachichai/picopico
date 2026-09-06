@@ -405,8 +405,8 @@ const Editor = () => {
         // If clicking inside a contentEditable (text edit), do nothing
         if (e.target.isContentEditable || e.target.closest('[contenteditable="true"]')) return;
 
-        // If we are clicking on the toolbar or slidestrip while they are disabled, we might want to deselect?
-        // Or if we click anywhere else.
+        // If clicking inside the asset library or its submodals, do nothing
+        if (e.target.closest('.asset-library, .confirmation-modal-overlay, .confirmation-modal, .save-asset-modal-overlay, .save-asset-modal, .asset-info-modal-overlay, .asset-info-modal, .recycle-modal-overlay, .recycle-modal')) return;
 
         // If an element is selected, any click outside it (and outside the menu) should deselect
         if (state.selectedElementId) {
@@ -653,21 +653,46 @@ const Editor = () => {
             }
 
             // Paste element(s) (Cmd+V / Ctrl+V)
+            // Don't eagerly preventDefault — let the native 'paste' event fire so
+            // Canvas's clipboard-image handler can work. Only intercept if the
+            // clipboard actually contains PicoPico element-copy JSON.
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'v') {
-                e.preventDefault();
+                const processCopyData = (text) => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data._picopicoCopy) {
+                            if (data.elements && data.elements.length > 0) {
+                                dispatch({ type: 'PASTE_ELEMENTS', payload: data.elements });
+                                return true;
+                            } else if (data.element) {
+                                dispatch({ type: 'PASTE_ELEMENT', payload: data.element });
+                                return true;
+                            }
+                        }
+                    } catch { /* not our data — let native paste event handle it */ }
+                    return false;
+                };
+
                 if (navigator.clipboard && typeof navigator.clipboard.readText === 'function') {
                     navigator.clipboard.readText().then(text => {
+                        const pasted = processCopyData(text);
+                        if (!pasted) {
+                            try {
+                                const fallback = localStorage.getItem('picopico-copied-element');
+                                if (fallback) processCopyData(fallback);
+                            } catch {}
+                        }
+                    }).catch(() => {
                         try {
-                            const data = JSON.parse(text);
-                            if (data._picopicoCopy) {
-                                if (data.elements && data.elements.length > 0) {
-                                    dispatch({ type: 'PASTE_ELEMENTS', payload: data.elements });
-                                } else if (data.element) {
-                                    dispatch({ type: 'PASTE_ELEMENT', payload: data.element });
-                                }
-                            }
-                        } catch { /* not our data, ignore */ }
-                    }).catch(() => {});
+                            const fallback = localStorage.getItem('picopico-copied-element');
+                            if (fallback) processCopyData(fallback);
+                        } catch {}
+                    });
+                } else {
+                    try {
+                        const fallback = localStorage.getItem('picopico-copied-element');
+                        if (fallback) processCopyData(fallback);
+                    } catch {}
                 }
                 return;
             }

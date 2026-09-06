@@ -17,6 +17,7 @@ import {
   buildEquationLineText,
 } from './game/BalanzaEngine';
 import { unlockAudio, playSelect, playMerge, playWrong } from '../AlgeBros/game/AlgeBrosSoundManager';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import './BalanzaCartridge.css';
 
 const HIT_PADDING = 26;
@@ -343,9 +344,10 @@ export default function BalanzaCartridge({
   const bgImage = config.background || config.backgroundImage || config.globalBackground;
   const bgStyle = useMemo(() => {
     if (!bgImage) return null;
-    const formatted = bgImage.startsWith('url(') || bgImage.startsWith('linear-gradient(') || bgImage.startsWith('radial-gradient(')
-      ? bgImage.replaceAll('/src/assets/', '/assets/')
-      : `url(${bgImage.replaceAll('/src/assets/', '/assets/')})`;
+    const resolved = resolveAssetUrl(bgImage);
+    const formatted = resolved.startsWith('url(') || resolved.startsWith('linear-gradient(') || resolved.startsWith('radial-gradient(')
+      ? resolved
+      : `url(${resolved})`;
     return {
       backgroundImage: formatted,
       backgroundSize: 'cover',

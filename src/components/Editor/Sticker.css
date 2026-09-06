@@ -14,6 +14,11 @@
     cursor: grabbing;
 }
 
+.sticker.is-locked,
+.sticker.is-locked.selected {
+    cursor: default;
+}
+
 /* Visual border only on content to avoid box model issues with transform */
 .sticker.selected .sticker-content {
     outline: 2px dashed var(--color-secondary);

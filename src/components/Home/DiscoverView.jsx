@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Home } from 'lucide-react';
 import Balloon from '../Editor/Balloon';
 import QuizPlayer from '../Player/QuizPlayer';
+import ResultField from '../ResultField/ResultField';
+import NumberLine from '../NumberLine/NumberLine';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { saveLessonProgress } from '../../utils/storage';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 
 // The app's view-transition system remounts the outgoing view (its exit animation
 // renders in a fresh wrapper React can't reconcile against the prior mount), so this
@@ -334,7 +337,7 @@ const DiscoverView = () => {
     // Render a single slide (simplified for Mask integration)
     const renderSlide = (slide, additionalStyle = {}) => {
         if (!slide) return null;
-        const mappedBackground = slide.background ? slide.background.replaceAll('/src/assets/', '/assets/') : slide.background;
+        const mappedBackground = slide.background ? resolveAssetUrl(slide.background) : slide.background;
         return (
             <div
                 key={slide.id}
@@ -406,12 +409,23 @@ const DiscoverView = () => {
                                 dangerouslySetInnerHTML={{ __html: element.content }}
                             />
                         )}
-                        {element.type === 'image' && <img src={element.content ? element.content.replaceAll('/src/assets/', '/assets/') : ''} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                        {element.type === 'image' && <img src={resolveAssetUrl(element.content)} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                         {element.type === 'balloon' && (
                             <Balloon
                                 element={element}
                                 readOnly={true}
                             />
+                        )}
+                        {element.type === 'result_field' && (
+                            <ResultField
+                                element={element}
+                                slide={currentSlide}
+                                isPlayMode={true}
+                                isSolved={true}
+                            />
+                        )}
+                        {element.type === 'number_line' && (
+                            <NumberLine element={element} />
                         )}
                         {element.type === 'quiz' && (
                             <div style={{ pointerEvents: 'none' }}>
@@ -520,7 +534,7 @@ const DiscoverView = () => {
                             height: '110%',
                             zIndex: -1,
                             backgroundColor: (lesson.slides && lesson.slides[0]?.background && !lesson.slides[0].background.includes('url') && !lesson.slides[0].background.includes('gradient')) ? lesson.slides[0].background : '#1a202c',
-                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? lesson.slides[0].background.replaceAll('/src/assets/', '/assets/') : 'none',
+                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? resolveAssetUrl(lesson.slides[0].background) : 'none',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             filter: 'blur(20px) brightness(0.8)', // Blur to make it distinct from content

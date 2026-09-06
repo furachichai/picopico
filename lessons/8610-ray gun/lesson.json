@@ -1,0 +1,80 @@
+{
+  "id": "lessons/8610-ray gun/lesson.json",
+  "title": "ray gun",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"https://images.unsplash.com/photo-1557683316-973673baf926?w=400&q=80\")",
+      "elements": [
+        {
+          "id": "el-1788648707317",
+          "type": "number_line",
+          "x": 93.61111111111111,
+          "y": 55.703125,
+          "width": 16,
+          "height": 43.40897511749059,
+          "rotation": 0,
+          "scale": 1.980091484113357,
+          "metadata": {
+            "orientation": "vertical",
+            "startNumber": 0,
+            "endNumber": 8,
+            "step": 1,
+            "showNumbers": true,
+            "numberColorMode": "white",
+            "showArrows": false,
+            "symbolColor": "#F57C00",
+            "thickness": 3
+          }
+        },
+        {
+          "id": "el-1788649163921",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_looking_down_worried_scared.png",
+          "x": 90.27777777777777,
+          "y": 57.5,
+          "width": 40,
+          "height": 27.44505494505495,
+          "rotation": 0,
+          "scale": 2.9878804871995843,
+          "metadata": {
+            "width": 40,
+            "height": 27.44505494505495,
+            "flipX": true,
+            "opacity": 0.64
+          }
+        },
+        {
+          "id": "el-1788649279043",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_laughing.png",
+          "x": 18.333333333333336,
+          "y": 79.84375,
+          "width": 40,
+          "height": 55.42207792207792,
+          "rotation": 0,
+          "scale": 0.6010650657689637,
+          "metadata": {
+            "width": 40,
+            "height": 55.42207792207792
+          }
+        }
+      ],
+      "order": 0
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-05T22:50:47.219Z",
+  "updatedAt": "2026-09-05T23:01:38.610Z",
+  "path": "lessons/8610-ray gun/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  }
+}

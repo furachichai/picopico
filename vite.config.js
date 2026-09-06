@@ -14,7 +14,7 @@ export default defineConfig({
     lessonManagerPlugin(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'assets/**/*'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'PicoPico Lessons',
         short_name: 'PicoPico',
@@ -43,8 +43,9 @@ export default defineConfig({
         ]
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webp}'],
+        // Only precache core application shell (HTML, CSS, JS, SVG, icons)
+        // Images are cached on-demand below to avoid multi-hundred-megabyte downloads on every visit
+        globPatterns: ['**/*.{js,css,html,ico,svg}'],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/assets/'),
@@ -52,8 +53,11 @@ export default defineConfig({
             options: {
               cacheName: 'assets-cache',
               expiration: {
-                maxEntries: 100,
+                maxEntries: 150,
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
               }
             }
           }

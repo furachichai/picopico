@@ -1,0 +1,1372 @@
+{
+  "id": "draft-1788356342548",
+  "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
+  "slides": [
+    {
+      "id": "slide-1788356352358",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356352361",
+          "type": "text",
+          "content": "Safe A: **2x + 3 = 9**\nSafe B: **2(x + 3) = 2x + 6**\nSafe C: **2x + 3 = 2x + 7**",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        },
+        {
+          "id": "el-1788356363527",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_green.png",
+          "x": 27.777777777777775,
+          "y": 42.03125,
+          "width": 40,
+          "height": 22.268041237113398,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 22.268041237113398
+          }
+        },
+        {
+          "id": "el-1788356408588",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 26.422018348623855,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 26.422018348623855,
+            "flipX": false
+          }
+        },
+        {
+          "id": "el-1788356575165",
+          "type": "image",
+          "content": "/src/assets/characters/yara_back_view.png",
+          "x": 84.16666666666667,
+          "y": 83.125,
+          "width": 40,
+          "height": 32.24729241877257,
+          "rotation": 0,
+          "scale": 1.5203969958392725,
+          "metadata": {
+            "width": 40,
+            "height": 32.24729241877257
+          }
+        },
+        {
+          "id": "el-1788356352359",
+          "type": "balloon",
+          "content": "Wait, why am I learning to crack safes?",
+          "x": 66.11111111111111,
+          "y": 25.15625,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -51,
+              "y": 76
+            }
+          }
+        },
+        {
+          "id": "el-1788356352360",
+          "type": "balloon",
+          "content": "It's \"educational\".",
+          "x": 30.555555555555557,
+          "y": 72.9375,
+          "width": 53.888888888888886,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 49,
+              "y": 56
+            }
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1788356352359",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356462973-zrq9hnryl",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_wink.png",
+          "x": 80.05555555555556,
+          "y": 87.78125,
+          "width": 40,
+          "height": 21.253012048192772,
+          "rotation": 0,
+          "scale": 1.7058109964684862,
+          "metadata": {
+            "width": 40,
+            "height": 21.253012048192772,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788356352459",
+          "type": "balloon",
+          "content": "Educational how, exactly?",
+          "x": 43.05555555555556,
+          "y": 25.46875,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 134,
+              "y": 36
+            }
+          }
+        },
+        {
+          "id": "el-1788356352460",
+          "type": "balloon",
+          "content": "You'll thank me.<div>Probably around 3am.</div><div>Somewhere with cameras.</div>",
+          "x": 36.25000000000001,
+          "y": 71.21875,
+          "width": 69.16666666666667,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 48,
+              "y": 71
+            }
+          }
+        },
+        {
+          "id": "el-1788356516083",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_green.png",
+          "x": 10.833333333333334,
+          "y": 46.09375,
+          "width": 40,
+          "height": 22.268041237113398,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 22.268041237113398
+          }
+        },
+        {
+          "id": "el-1788356502498",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_brown.png",
+          "x": 49.16666666666667,
+          "y": 45.625,
+          "width": 40,
+          "height": 23.36842105263158,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 23.36842105263158
+          }
+        },
+        {
+          "id": "el-1788356484619",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_scratches_head.png",
+          "x": 80.27777777777777,
+          "y": 48.125,
+          "width": 40,
+          "height": 31.58571428571429,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.58571428571429
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1788356352360",
+      "background": "url(\"/src/assets/backgrounds/bkg_soup.jpg\")",
+      "elements": [
+        {
+          "id": "el-1788356620357-tdyi668hc",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_green.png",
+          "x": 12.833333333333334,
+          "y": 48.09375,
+          "width": 40,
+          "height": 22.268041237113398,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 22.268041237113398
+          }
+        },
+        {
+          "id": "el-1788356624906-1joynme2r",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_brown.png",
+          "x": 51.16666666666667,
+          "y": 47.625,
+          "width": 40,
+          "height": 23.36842105263158,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 23.36842105263158
+          }
+        },
+        {
+          "id": "el-1788356640225",
+          "type": "image",
+          "content": "/src/assets/characters/yara_back_view.png",
+          "x": 84.16666666666666,
+          "y": 85.78125,
+          "width": 40,
+          "height": 32.24729241877257,
+          "rotation": 0,
+          "scale": 1.4860799485818712,
+          "metadata": {
+            "width": 40,
+            "height": 32.24729241877257
+          }
+        },
+        {
+          "id": "el-1788356665425",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_grey.png",
+          "x": 89.44444444444444,
+          "y": 47.8125,
+          "width": 40,
+          "height": 21.62621359223301,
+          "rotation": 0,
+          "scale": 1.0870704908473792,
+          "metadata": {
+            "width": 40,
+            "height": 21.62621359223301
+          }
+        },
+        {
+          "id": "el-1788356715615",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_front.png",
+          "x": 24.444444444444443,
+          "y": 82.03125,
+          "width": 40,
+          "height": 23.677130044843047,
+          "rotation": 0,
+          "scale": 1.4841157232786586,
+          "metadata": {
+            "width": 40,
+            "height": 23.677130044843047
+          }
+        },
+        {
+          "id": "el-1788356352559",
+          "type": "balloon",
+          "content": "Crack all three before sunrise.",
+          "x": 65.41666666666667,
+          "y": 54.6875,
+          "width": 51.388888888888886,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 5,
+              "y": 73
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.25
+      }
+    },
+    {
+      "id": "slide-1788356352361",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356799028",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_jumps_in_joy.png",
+          "x": 67.77777777777777,
+          "y": 78.4375,
+          "width": 40,
+          "height": 20.556213017751485,
+          "rotation": 0,
+          "scale": 1.839678257438566,
+          "metadata": {
+            "width": 40,
+            "height": 20.556213017751485
+          }
+        },
+        {
+          "id": "el-1788356352659",
+          "type": "balloon",
+          "content": "One and done!",
+          "x": 20.277777777777786,
+          "y": 62.1875,
+          "width": 41.11111111111111,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 87,
+              "y": 7
+            }
+          }
+        },
+        {
+          "id": "el-1788356791222",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_green_open.png",
+          "x": 50.83333333333333,
+          "y": 37.34375,
+          "width": 40,
+          "height": 22.5,
+          "rotation": 0,
+          "scale": 1.754071282242483,
+          "metadata": {
+            "width": 40,
+            "height": 22.5
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1788356352362",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356352759",
+          "type": "balloon",
+          "content": "Why does this one open for... everything?",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1788356352363",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788357006224",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_opening_safe.png",
+          "x": 51.111111111111114,
+          "y": 74.21875,
+          "width": 40,
+          "height": 22.5,
+          "rotation": 0,
+          "scale": 2.390367444258825,
+          "metadata": {
+            "width": 40,
+            "height": 22.5,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788356352859",
+          "type": "balloon",
+          "content": "That lock doesn't care what you enter.",
+          "x": 58.61111111111111,
+          "y": 39.53125,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "slide-1788356352364",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356352959",
+          "type": "balloon",
+          "content": "*(sweating)* It has to be one of these...",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1788356352365",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353059",
+          "type": "balloon",
+          "content": "Some locks can't be picked. No number opens that one.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1788356842070",
+          "type": "image",
+          "content": "/src/assets/objects/whole_safe_brown.png",
+          "x": 30.277777777777775,
+          "y": 73.4375,
+          "width": 40,
+          "height": 23.36842105263158,
+          "rotation": 0,
+          "scale": 1.6277206551830217,
+          "metadata": {
+            "width": 40,
+            "height": 23.36842105263158
+          }
+        },
+        {
+          "id": "el-1788356866317",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_tired_against_wall.png",
+          "x": 79.72222222222221,
+          "y": 79.0625,
+          "width": 40,
+          "height": 25.242998352553542,
+          "rotation": 0,
+          "scale": 1.3364012028847352,
+          "metadata": {
+            "width": 40,
+            "height": 25.242998352553542
+          }
+        },
+        {
+          "id": "el-1788356353060",
+          "type": "balloon",
+          "content": "You could've told me!",
+          "x": 73.47222222222223,
+          "y": 50.75,
+          "width": 40.27777777777778,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -18,
+              "y": 74
+            }
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1788356352366",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353159",
+          "type": "balloon",
+          "content": "You'd have known if you'd simplified first instead of guessing all night.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1788356352367",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353259",
+          "type": "balloon",
+          "content": "Simplify before you touch a dial. Every equation lands in one of three piles.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 9
+    },
+    {
+      "id": "slide-1788356352368",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353359",
+          "type": "balloon",
+          "content": "If x survives, there's exactly one number that works.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 10
+    },
+    {
+      "id": "slide-1788356352369",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353459",
+          "type": "text",
+          "content": "5x + 2 = 17 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356353460",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "No solution",
+              "Infinitely many",
+              "One solution",
+              "Two solutions"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 11
+    },
+    {
+      "id": "slide-1788356352370",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353559",
+          "type": "balloon",
+          "content": "The x's cancel and what's left is just true. Every number works.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 12
+    },
+    {
+      "id": "slide-1788356352371",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353659",
+          "type": "text",
+          "content": "3(x + 2) = 3x + 6 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356353660",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "No solution",
+              "Infinitely many",
+              "One solution",
+              "Zero solutions"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 13
+    },
+    {
+      "id": "slide-1788356352372",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353759",
+          "type": "balloon",
+          "content": "The x's cancel too — but this time you're left with a lie. 3 is never 7.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 14
+    },
+    {
+      "id": "slide-1788356352373",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353859",
+          "type": "text",
+          "content": "4x + 1 = 4x + 9 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356353860",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Infinitely many",
+              "One solution",
+              "x = 8",
+              "No solution"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 15
+    },
+    {
+      "id": "slide-1788356352374",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356353959",
+          "type": "balloon",
+          "content": "Simplify. See what's left. That's your answer.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 16
+    },
+    {
+      "id": "slide-1788356352375",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354059",
+          "type": "text",
+          "content": "x + 5 = x + 5 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356354060",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Infinitely many",
+              "No solution",
+              "One solution",
+              "x = 5"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 17
+    },
+    {
+      "id": "slide-1788356352376",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354159",
+          "type": "text",
+          "content": "2x − 3 = 2x + 4 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356354160",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Infinitely many",
+              "One solution",
+              "x = 7",
+              "No solution"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 18
+    },
+    {
+      "id": "slide-1788356352377",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354259",
+          "type": "text",
+          "content": "6x = 18 — how many solutions?",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356354260",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "No solution",
+              "One solution",
+              "Infinitely many",
+              "Two solutions"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 19
+    },
+    {
+      "id": "slide-1788356352378",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354360",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "One solution",
+              "No solution",
+              "Infinitely many",
+              "x = −4"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788356354359",
+          "type": "text",
+          "content": "4(x − 1) = 4x − 4&nbsp;<div><span style=\"font-weight: normal;\">How many solutions?</span></div>",
+          "x": 50.27777777777778,
+          "y": 21.84375,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        }
+      ],
+      "order": 20
+    },
+    {
+      "id": "slide-1788356352379",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354460",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "No solution",
+              "Infinitely many",
+              "One solution",
+              "x = 7"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788356354459",
+          "type": "text",
+          "content": "x + 9 = x + 2&nbsp;<div><span style=\"font-weight: normal;\"> How many solutions?</span></div>",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        }
+      ],
+      "order": 21
+    },
+    {
+      "id": "slide-1788356352380",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354560",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Infinitely many",
+              "No solution",
+              "No real answer",
+              "One solution"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788356354559",
+          "type": "text",
+          "content": "7x + 1 = 15 &nbsp;<div><span style=\"font-weight: normal;\">How many solutions?</span></div>",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        }
+      ],
+      "order": 22
+    },
+    {
+      "id": "slide-1788356352381",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354659",
+          "type": "text",
+          "content": "\"No solution\" means…",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356354660",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "x equals zero",
+              "No number makes both sides equal",
+              "Every number makes both sides equal",
+              "The equation was written wrong"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 23
+    },
+    {
+      "id": "slide-1788356352382",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1788356354759",
+          "type": "text",
+          "content": "\"Infinitely many solutions\" means…",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788356354760",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Every number makes both sides equal",
+              "No number works",
+              "x must equal infinity",
+              "There's a mistake somewhere"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 24
+    },
+    {
+      "id": "slide-1788356352383",
+      "background": "#1a1a2e",
+      "elements": [
+        {
+          "id": "el-1788356354859",
+          "type": "collectible",
+          "content": "Simplify the equation and see what's left:\n<b>Variable remains</b> (like x = 3) → <b>one solution</b>\n<b>A true statement</b> (like 6 = 6) → <b>infinitely many solutions</b>\n<b>A false statement</b> (like 3 = 7) → <b>no solution</b>",
+          "x": 50,
+          "y": 50,
+          "width": 82,
+          "height": 60,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Outfit\", sans-serif",
+            "fontSize": 18,
+            "color": "#ffffff",
+            "textAlign": "center",
+            "backgroundColor": "rgba(255, 255, 255, 0.08)",
+            "borderRadius": "16px",
+            "border": "1px solid rgba(255, 255, 255, 0.15)",
+            "lineHeight": 1.4
+          }
+        }
+      ],
+      "order": 25
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-02T13:39:02.548Z",
+  "updatedAt": "2026-09-02T13:57:47.960Z",
+  "path": "lessons/0312-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
+  "textPreset": null,
+  "_snapshots": [
+    {
+      "timestamp": "2026-09-02T13:39:12.357Z",
+      "reason": "Before script import",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0
+        }
+      ]
+    }
+  ],
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#22D3EE",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  }
+}

@@ -513,6 +513,65 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                         ✏️ Add Line
                                     </button>
                                 </div>
+
+                                {/* Number Lines */}
+                                <div>
+                                    <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '4px', fontWeight: 'bold', textTransform: 'uppercase' }}>Number Lines</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                                        <button 
+                                            onClick={() => {
+                                                dispatch({
+                                                    type: 'ADD_ELEMENT',
+                                                    payload: {
+                                                        type: ELEMENT_TYPES.NUMBER_LINE,
+                                                        metadata: {
+                                                            orientation: 'horizontal',
+                                                            startNumber: 0,
+                                                            endNumber: 10,
+                                                            step: 1,
+                                                            showNumbers: true,
+                                                            numberColorMode: 'match',
+                                                            showArrows: true,
+                                                            symbolColor: '#8B5CF6',
+                                                            thickness: 3
+                                                        }
+                                                    }
+                                                });
+                                                setShowSymbolsMenu(false);
+                                            }}
+                                            style={{ height: '40px', borderRadius: '8px', backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '4px 8px', border: '1px solid #E2E8F0', fontWeight: 'bold', color: '#334155', fontSize: '0.8rem', cursor: 'pointer' }}
+                                            title="Add Horizontal Number Line"
+                                        >
+                                            ↔️ Horizontal
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                dispatch({
+                                                    type: 'ADD_ELEMENT',
+                                                    payload: {
+                                                        type: ELEMENT_TYPES.NUMBER_LINE,
+                                                        metadata: {
+                                                            orientation: 'vertical',
+                                                            startNumber: 0,
+                                                            endNumber: 10,
+                                                            step: 1,
+                                                            showNumbers: true,
+                                                            numberColorMode: 'match',
+                                                            showArrows: true,
+                                                            symbolColor: '#8B5CF6',
+                                                            thickness: 3
+                                                        }
+                                                    }
+                                                });
+                                                setShowSymbolsMenu(false);
+                                            }}
+                                            style={{ height: '40px', borderRadius: '8px', backgroundColor: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '4px 8px', border: '1px solid #E2E8F0', fontWeight: 'bold', color: '#334155', fontSize: '0.8rem', cursor: 'pointer' }}
+                                            title="Add Vertical Number Line"
+                                        >
+                                            ↕️ Vertical
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>

@@ -21,6 +21,8 @@ const getTypeIcon = (element) => {
         case 'game': return '🎮';
         case 'popup': return '📌';
         case 'collectible': return '🃏';
+        case 'result_field': return '🔲';
+        case 'number_line': return '📏';
         default: return '◻️';
     }
 };
@@ -43,6 +45,11 @@ const getElementName = (element) => {
         case 'collectible': {
             const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
             return raw.length > 0 ? 'Card: ' + (raw.length > 16 ? raw.slice(0, 16) + '…' : raw) : 'Collectible Card';
+        }
+        case 'result_field': return 'Result Field';
+        case 'number_line': {
+            const isVert = element.metadata?.orientation === 'vertical';
+            return `Number Line (${isVert ? '↕️' : '↔️'} ${element.metadata?.startNumber ?? 0}..${element.metadata?.endNumber ?? 10})`;
         }
         case 'balloon': {
             const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
@@ -70,8 +77,41 @@ const getElementName = (element) => {
 const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onToggleLock, onToggleVisibility, isOpen, onToggle, onReorder }) => {
     const [dragState, setDragState] = useState(null); // { elementId, startIndex }
     const [dropIndex, setDropIndex] = useState(null); // visual drop indicator position
+    const [copiedId, setCopiedId] = useState(null);
+    const copyTimeoutRef = useRef(null);
     const listRef = useRef(null);
     const { popupRef, dragHandlers, style } = useDraggable('layersPanel');
+
+    const handleCopy = (e, element) => {
+        e.stopPropagation();
+        if (!element) return;
+        const payload = JSON.stringify({ _picopicoCopy: true, elements: [element] });
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            navigator.clipboard.writeText(payload).catch((err) => {
+                console.error('Failed to write to clipboard', err);
+            });
+        }
+        try {
+            localStorage.setItem('picopico-copied-element', payload);
+        } catch {}
+
+        setCopiedId(element.id);
+        if (copyTimeoutRef.current) {
+            clearTimeout(copyTimeoutRef.current);
+        }
+        copyTimeoutRef.current = setTimeout(() => {
+            setCopiedId(null);
+        }, 1500);
+    };
+
+    useEffect(() => {
+        return () => {
+            if (copyTimeoutRef.current) {
+                clearTimeout(copyTimeoutRef.current);
+            }
+        };
+    }, []);
 
     // Close on tap / click outside when open
     useEffect(() => {
@@ -225,7 +265,23 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                 <div className="layer-drag-handle pinned" title="Pinned">📌</div>
                                 <div className="layer-type-icon">{getTypeIcon(element)}</div>
                                 <span className="layer-name">{getElementName(element)}</span>
-                                <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden) ? 'has-active' : ''}`}>
+                                <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
+                                    <button
+                                        className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
+                                        onClick={(e) => handleCopy(e, element)}
+                                        title={copiedId === element.id ? 'Copied to clipboard!' : 'Copy to clipboard'}
+                                    >
+                                        {copiedId === element.id ? (
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
+                                        ) : (
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                            </svg>
+                                        )}
+                                    </button>
                                     <button
                                         className={`layer-action-btn ${element.metadata?.hidden ? 'active' : ''}`}
                                         onClick={(e) => { e.stopPropagation(); onToggleVisibility(element.id); }}
@@ -274,7 +330,7 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                     </div>
                                     <div className="layer-type-icon">{getTypeIcon(element)}</div>
                                     <span className="layer-name">{getElementName(element)}</span>
-                                    <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden) ? 'has-active' : ''}`}>
+                                    <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
                                         <button
                                             className="layer-action-btn"
                                             disabled={isTopDraggable}
@@ -290,6 +346,22 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                             title="Move Down"
                                         >
                                             ▼
+                                        </button>
+                                        <button
+                                            className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
+                                            onClick={(e) => handleCopy(e, element)}
+                                            title={copiedId === element.id ? 'Copied to clipboard!' : 'Copy to clipboard'}
+                                        >
+                                            {copiedId === element.id ? (
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="20 6 9 17 4 12" />
+                                                </svg>
+                                            ) : (
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                                </svg>
+                                            )}
                                         </button>
                                         <button
                                             className={`layer-action-btn ${element.metadata?.hidden ? 'active' : ''}`}

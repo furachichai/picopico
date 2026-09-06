@@ -191,13 +191,13 @@ const editorReducer = (state, action) => {
             const newPast = pushToPast(state);
 
             const baseElement = {
-                id: `el-${Date.now()}`,
+                id: action.payload.id || `el-${Date.now()}`,
                 type: action.payload.type,
                 content: action.payload.content,
-                x: 50, // Center
-                y: action.payload.type === 'quiz'
+                x: action.payload.x !== undefined ? action.payload.x : 50, // Center
+                y: action.payload.y !== undefined ? action.payload.y : (action.payload.type === 'quiz'
                     ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 75))
-                    : 50,
+                    : 50),
                 width: action.payload.metadata?.width || 20,
                 height: action.payload.metadata?.height || 10,
                 rotation: 0,
@@ -251,6 +251,35 @@ const editorReducer = (state, action) => {
                 baseElement.y = 50;
                 elementMetadata = {
                     popupText: 'Hello from the popup!',
+                    ...elementMetadata
+                };
+            }
+
+            if (action.payload.type === 'result_field') {
+                baseElement.x = 50;
+                baseElement.y = 35;
+                elementMetadata = {
+                    locked: true,
+                    ...elementMetadata
+                };
+            }
+
+            if (action.payload.type === 'number_line') {
+                const isVertical = action.payload.metadata?.orientation === 'vertical';
+                baseElement.width = action.payload.metadata?.width || (isVertical ? 15 : 65);
+                baseElement.height = action.payload.metadata?.height || (isVertical ? 55 : 12);
+                baseElement.x = 50;
+                baseElement.y = 50;
+                elementMetadata = {
+                    orientation: isVertical ? 'vertical' : 'horizontal',
+                    startNumber: 0,
+                    endNumber: 10,
+                    step: 1,
+                    showNumbers: true,
+                    numberColorMode: 'match',
+                    showArrows: true,
+                    symbolColor: '#8B5CF6',
+                    thickness: 3,
                     ...elementMetadata
                 };
             }

@@ -433,7 +433,7 @@ const generateFieldChoices = (segments) => {
     return choices.sort((a, b) => a - b);
 };
 
-const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true }) => {
+const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true, onSolve }) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
     // -------------------------------------------------------------------------
@@ -860,6 +860,19 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         playSound('correct');
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         if (onBanner) onBanner('correct', 'Topo!');
+        
+        let resolvedAnswer = '';
+        if (quizType === 'nl') {
+            resolvedAnswer = String(rawCorrect);
+        } else if (quizType === '4sq') {
+            resolvedAnswer = correctIndices.length > 1
+                ? correctIndices.map(i => options[i]).filter(Boolean).join(', ')
+                : (options[correctIndices[0]] || '');
+        } else {
+            resolvedAnswer = options[correctIndex] !== undefined ? String(options[correctIndex]) : '';
+        }
+        if (onSolve) onSolve(resolvedAnswer);
+
         // Mark slide solved but do NOT auto-advance — user taps to move forward
         if (onNext) onNext();
     };

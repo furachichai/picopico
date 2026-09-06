@@ -1,0 +1,100 @@
+.result-field {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+
+    /* Visual aesthetic: Light blue with darker light blue contour */
+    background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+    border: 2.5px solid #38BDF8;
+    border-radius: 11px;
+    box-shadow: 0 3px 8px rgba(56, 189, 248, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+    color: #0369A1;
+    font-family: 'Outfit', 'Nunito', 'Fira Sans', sans-serif;
+    font-weight: 800;
+    line-height: 1;
+    padding: 0 4px;
+    letter-spacing: -0.5px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.result-field.is-square {
+    padding: 0;
+    aspect-ratio: 1 / 1;
+}
+
+/* Play mode styles */
+.result-field-player {
+    pointer-events: none; /* User specified: not draggable in play mode */
+}
+
+.result-field-player.empty {
+    /* Pure empty contour box waiting for player to solve the quiz */
+    background: #E0F2FE;
+    border-color: #38BDF8;
+}
+
+.result-field-player.solved {
+    background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+    border-color: #0284C7;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.result-field-content-pop {
+    animation: resultPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@keyframes resultPop {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.18);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Editor mode styles */
+.result-field-editor {
+    cursor: move;
+}
+
+.result-field-editor-badge {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0284C7;
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.result-field-placeholder {
+    color: #7DD3FC;
+    font-style: italic;
+    font-size: 18px;
+    opacity: 0.8;
+}

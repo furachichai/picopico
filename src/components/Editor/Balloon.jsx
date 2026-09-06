@@ -185,17 +185,17 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                 {/* Editable Element: Handles text content */}
                 <div
                     ref={textRef}
-                    contentEditable={!readOnly}
+                    contentEditable={!readOnly && !element.metadata?.locked}
                     suppressContentEditableWarning
                     onInput={handleInput}
                     onPaste={(e) => {
-                        if (readOnly) return;
+                        if (readOnly || element.metadata?.locked) return;
                         e.preventDefault();
                         const text = e.clipboardData.getData('text/plain');
                         document.execCommand('insertText', false, text);
                     }}
                     onBlur={() => {
-                        if (!readOnly && textRef.current) {
+                        if (!readOnly && !element.metadata?.locked && textRef.current) {
                             onChange(element.id, { content: textRef.current.innerHTML });
                         }
                     }}
@@ -207,10 +207,10 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         textDecoration: element.metadata?.textDecoration || 'none',
                         color: element.metadata?.color || 'black',
                         outline: 'none',
-                        cursor: readOnly ? 'default' : 'text',
-                        userSelect: readOnly ? 'none' : 'text',
+                        cursor: (readOnly || element.metadata?.locked) ? 'default' : 'text',
+                        userSelect: (readOnly || element.metadata?.locked) ? 'none' : 'text',
                         // Let's stick to that logic for the input itself.
-                        pointerEvents: readOnly ? 'none' : (isSelected ? 'auto' : 'none'),
+                        pointerEvents: (readOnly || element.metadata?.locked) ? 'none' : (isSelected ? 'auto' : 'none'),
                         whiteSpace: 'pre-wrap',
                         textAlign: element.metadata?.textAlign || 'center',
                         lineHeight: element.metadata?.lineHeight ?? 1,
