@@ -600,8 +600,8 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                                         backgroundPosition: `${lastBg.backgroundSettings?.positionX ?? 50}% ${lastBg.backgroundSettings?.positionY ?? 50}%`,
                                                         backgroundRepeat: 'no-repeat',
                                                         opacity: lastBg.backgroundSettings?.opacity ?? 1,
-                                                        filter: `grayscale(${lastBg.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${lastBg.backgroundSettings?.brightness ?? 100}%)`,
-                                                        transform: `scale(${lastBg.backgroundSettings?.flipX ? -1 : 1}, ${lastBg.backgroundSettings?.flipY ? -1 : 1})`
+                                                        filter: `grayscale(${lastBg.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${lastBg.backgroundSettings?.brightness ?? 100}%) blur(${lastBg.backgroundSettings?.blur ?? 0}px)`,
+                                                        transform: `scale(${(lastBg.backgroundSettings?.flipX ? -1 : 1) * ((lastBg.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(lastBg.backgroundSettings?.flipY ? -1 : 1) * ((lastBg.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`
                                                     }}
                                                 />
                                                 {lastBg.backgroundSettings?.grayscale && lastBg.backgroundSettings?.tintColor && lastBg.backgroundSettings.tintColor !== 'transparent' && (

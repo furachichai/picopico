@@ -1,3 +1,5 @@
+import { ensureBalloonsAboveImages } from './layerUtils';
+
 /**
  * scriptParser.js
  * 
@@ -320,7 +322,7 @@ export function buildLessonSlides(parsedSlides, textPreset = null) {
         return {
             id: slideId,
             background: parsed.type === 'collectible' ? '#1a1a2e' : '#E1F5FE',
-            elements,
+            elements: ensureBalloonsAboveImages(elements),
             order: index,
         };
     });
@@ -360,7 +362,7 @@ function buildQuizElements(parsed, elements, nextElId, textPreset) {
         type: 'quiz',
         content: 'Quiz',
         x: 50,
-        y: 75,
+        y: 78.59375,
         width: 20,
         height: 10,
         rotation: 0,

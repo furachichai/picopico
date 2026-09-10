@@ -3,6 +3,7 @@ import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
 import { Home } from 'lucide-react';
 import Balloon from '../Editor/Balloon';
+import Banner from '../Editor/Banner';
 import QuizPlayer from '../Player/QuizPlayer';
 import ResultField from '../ResultField/ResultField';
 import NumberLine from '../NumberLine/NumberLine';
@@ -378,7 +379,7 @@ const DiscoverView = () => {
                         style={{
                             position: 'absolute',
                             left: `${element.x}%`,
-                            top: `${element.y}%`,
+                            top: `${(element.type === 'quiz' && element.y === 75) ? 78.59375 : element.y}%`,
                             width: element.type === 'quiz' ? '360px' : `${element.width}%`, // Full width for quiz
                             height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
                             transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
@@ -410,6 +411,12 @@ const DiscoverView = () => {
                             />
                         )}
                         {element.type === 'image' && <img src={resolveAssetUrl(element.content)} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                        {element.type === 'banner' && (
+                            <Banner
+                                element={element}
+                                readOnly={true}
+                            />
+                        )}
                         {element.type === 'balloon' && (
                             <Balloon
                                 element={element}
@@ -419,7 +426,7 @@ const DiscoverView = () => {
                         {element.type === 'result_field' && (
                             <ResultField
                                 element={element}
-                                slide={currentSlide}
+                                slide={slide}
                                 isPlayMode={true}
                                 isSolved={true}
                             />
@@ -427,6 +434,28 @@ const DiscoverView = () => {
                         {element.type === 'number_line' && (
                             <NumberLine element={element} />
                         )}
+                        {element.type === 'line' && (() => {
+                            const thickness = element.metadata?.height || 10;
+                            const color = element.metadata?.symbolColor || '#8B5CF6';
+                            const isCurved = !!element.metadata?.isCurved;
+                            if (isCurved) {
+                                const curvature = element.metadata?.curvature ?? -40;
+                                const curveSkew = element.metadata?.curveSkew ?? 0;
+                                const widthPx = (element.width / 100) * 360;
+                                const heightPx = (element.height / 100) * 640;
+                                const y0 = heightPx / 2;
+                                const mx = widthPx / 2 + curveSkew;
+                                const my = y0 + curvature;
+                                const cx = 2 * mx - widthPx / 2;
+                                const cy = 2 * my - y0;
+                                return (
+                                    <svg style={{ width: '100%', height: '100%', overflow: 'visible' }} viewBox={`0 0 ${widthPx} ${heightPx}`}>
+                                        <path d={`M 0 ${y0} Q ${cx} ${cy} ${widthPx} ${y0}`} fill="none" stroke={color} strokeWidth={thickness} strokeLinecap="round" />
+                                    </svg>
+                                );
+                            }
+                            return <div style={{ width: '100%', height: `${thickness}px`, backgroundColor: color, borderRadius: `${thickness / 2}px` }} />;
+                        })()}
                         {element.type === 'quiz' && (
                             <div style={{ pointerEvents: 'none' }}>
                                 <QuizPlayer

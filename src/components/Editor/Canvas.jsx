@@ -11,6 +11,7 @@ import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
 import SaveAssetModal from './SaveAssetModal';
+import Rulers from './Rulers';
 
 /**
  * Canvas Component
@@ -45,6 +46,128 @@ const Canvas = (props) => {
     [lesson.slides, currentSlideId]
   );
 
+  // Rulers and Guides State
+  const [cursorPos, setCursorPos] = useState({ x: null, y: null });
+  const [activeGuideDrag, setActiveGuideDrag] = useState(null);
+
+  const showGrid = state.guideMode ? (state.guideMode === 'grid' || state.guideMode === 'both') : !!state.showGuides;
+  const showCustomGuides = state.guideMode ? (state.guideMode === 'guides' || state.guideMode === 'both') : true;
+
+  const slideGuides = currentSlide?.guides || { horizontal: [], vertical: [] };
+  const horizontalGuides = slideGuides.horizontal || [];
+  const verticalGuides = slideGuides.vertical || [];
+
+  const handleStartGuideDrag = (axis, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
+    const rect = canvasEl.getBoundingClientRect();
+
+    let initialPos = 0;
+    if (axis === 'horizontal') {
+      const rawY = ((e.clientY - rect.top) / rect.height) * 100;
+      initialPos = Math.max(0, Math.min(100, rawY));
+    } else {
+      const rawX = ((e.clientX - rect.left) / rect.width) * 100;
+      initialPos = Math.max(0, Math.min(100, rawX));
+    }
+
+    setActiveGuideDrag({
+      axis,
+      pos: initialPos,
+      isNew: true,
+      isOutOfBounds: false,
+      clientX: e.clientX,
+      clientY: e.clientY
+    });
+  };
+
+  const handleExistingGuidePointerDown = (axis, index, initialPos, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setActiveGuideDrag({
+      axis,
+      pos: initialPos,
+      isNew: false,
+      existingIndex: index,
+      isOutOfBounds: false,
+      clientX: e.clientX,
+      clientY: e.clientY
+    });
+  };
+
+  useEffect(() => {
+    if (!activeGuideDrag) return;
+
+    const handlePointerMove = (e) => {
+      const canvasEl = canvasRef.current;
+      if (!canvasEl) return;
+      const rect = canvasEl.getBoundingClientRect();
+
+      let pos = 0;
+      let isOutOfBounds = false;
+
+      if (activeGuideDrag.axis === 'horizontal') {
+        const rawY = ((e.clientY - rect.top) / rect.height) * 100;
+        pos = Math.max(0, Math.min(100, rawY));
+        if (e.clientY < rect.top || e.clientY > rect.bottom || e.clientX < rect.left - 50 || e.clientX > rect.right + 50) {
+          isOutOfBounds = true;
+        }
+      } else {
+        const rawX = ((e.clientX - rect.left) / rect.width) * 100;
+        pos = Math.max(0, Math.min(100, rawX));
+        if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top - 50 || e.clientY > rect.bottom + 50) {
+          isOutOfBounds = true;
+        }
+      }
+
+      setActiveGuideDrag(prev => prev ? {
+        ...prev,
+        pos,
+        isOutOfBounds,
+        clientX: e.clientX,
+        clientY: e.clientY
+      } : null);
+    };
+
+    const handlePointerUp = () => {
+      setActiveGuideDrag(current => {
+        if (current) {
+          const { axis, pos, isNew, existingIndex, isOutOfBounds } = current;
+          if (isOutOfBounds) {
+            if (!isNew && existingIndex !== undefined) {
+              dispatch({
+                type: 'REMOVE_SLIDE_GUIDE',
+                payload: { axis, index: existingIndex }
+              });
+            }
+          } else {
+            if (isNew) {
+              dispatch({
+                type: 'ADD_SLIDE_GUIDE',
+                payload: { axis, position: pos }
+              });
+            } else if (existingIndex !== undefined) {
+              dispatch({
+                type: 'UPDATE_SLIDE_GUIDE',
+                payload: { axis, index: existingIndex, position: pos }
+              });
+            }
+          }
+        }
+        return null;
+      });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [activeGuideDrag, dispatch]);
+
   // Handle responsive scaling
   useEffect(() => {
     const updateScale = () => {
@@ -75,9 +198,14 @@ const Canvas = (props) => {
   if (!currentSlide) return <div className="canvas-error">No slide selected</div>;
 
   // Stable callback for selecting an element
-  const handleSelect = useCallback((id, isShift = false) => {
-    dispatch({ type: 'SELECT_ELEMENT', payload: { id, isShift } });
+  const handleSelect = useCallback((id, isShift = false, isAlt = false) => {
+    dispatch({ type: 'SELECT_ELEMENT', payload: { id, isShift, isAlt } });
   }, [dispatch]);
+
+  useEffect(() => {
+    window.__EDITOR_DISPATCH__ = dispatch;
+    window.__EDITOR_STATE__ = state;
+  }, [dispatch, state]);
 
   // Stable callback for updating an element
   const handleChange = useCallback((id, updates) => {
@@ -85,8 +213,8 @@ const Canvas = (props) => {
     if (state.translationMode) {
       const el = currentSlide?.elements.find(e => e.id === id);
       if (!el) return;
-      // Text/balloon/collectible content is translatable
-      if ((el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') && 'content' in updates) {
+      // Text/balloon/collectible/banner content is translatable
+      if ((el.type === 'text' || el.type === 'balloon' || el.type === 'collectible' || el.type === 'banner') && 'content' in updates) {
         dispatch({
           type: 'UPDATE_TRANSLATION',
           payload: {
@@ -536,32 +664,43 @@ const Canvas = (props) => {
 
   return (
     <div className="canvas-container" ref={containerRef}>
-      {/* Wrapper: position:relative so pointers can sit outside the overflow:hidden canvas */}
-      <div style={{ position: 'relative', width: '360px', height: '640px', flexShrink: 0 }}>
-        <div
-          ref={canvasRef}
-          className="slide-canvas"
-          style={{
-            width: '360px',
-            height: '640px',
-            overflow: 'hidden',
-            position: 'relative'
-          }}
-          onPointerDown={handlePointerDown}
-          onDragOver={(e) => {
-            e.preventDefault();
-            if (e.dataTransfer.types.includes('Files')) {
-              setIsDraggingOver(true);
-            }
-          }}
-          onDragLeave={(e) => {
-            if (canvasRef.current && !canvasRef.current.contains(e.relatedTarget)) {
-              setIsDraggingOver(false);
-            }
-          }}
-          onDrop={handleDrop}
-          onClick={(e) => e.stopPropagation()}
-        >
+      <Rulers onStartGuideDrag={handleStartGuideDrag} cursorPos={cursorPos}>
+        {/* Wrapper: position:relative so pointers can sit outside the overflow:hidden canvas */}
+        <div style={{ position: 'relative', width: '360px', height: '640px', flexShrink: 0 }}>
+          <div
+            ref={canvasRef}
+            className="slide-canvas"
+            style={{
+              width: '360px',
+              height: '640px',
+              overflow: 'hidden',
+              position: 'relative'
+            }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={(e) => {
+              const rect = canvasRef.current?.getBoundingClientRect();
+              if (rect) {
+                setCursorPos({
+                  x: Math.round(e.clientX - rect.left),
+                  y: Math.round(e.clientY - rect.top)
+                });
+              }
+            }}
+            onPointerLeave={() => setCursorPos({ x: null, y: null })}
+            onDragOver={(e) => {
+              e.preventDefault();
+              if (e.dataTransfer.types.includes('Files')) {
+                setIsDraggingOver(true);
+              }
+            }}
+            onDragLeave={(e) => {
+              if (canvasRef.current && !canvasRef.current.contains(e.relatedTarget)) {
+                setIsDraggingOver(false);
+              }
+            }}
+            onDrop={handleDrop}
+            onClick={(e) => e.stopPropagation()}
+          >
           {/* Dropzone visual indicator */}
           {isDraggingOver && (
             <div style={{
@@ -597,7 +736,8 @@ const Canvas = (props) => {
                 position: 'absolute',
                 top: 0, left: 0, width: '100%', height: '100%',
                 zIndex: 0,
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                overflow: 'hidden'
               }}
             >
               <div
@@ -611,8 +751,8 @@ const Canvas = (props) => {
                   backgroundPosition: `${currentSlide.backgroundSettings?.positionX ?? 50}% ${currentSlide.backgroundSettings?.positionY ?? 50}%`,
                   backgroundRepeat: 'no-repeat',
                   opacity: currentSlide.backgroundSettings?.opacity ?? 1,
-                  filter: `grayscale(${currentSlide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%)`,
-                  transform: `scale(${currentSlide.backgroundSettings?.flipX ? -1 : 1}, ${currentSlide.backgroundSettings?.flipY ? -1 : 1})`
+                  filter: `grayscale(${currentSlide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${currentSlide.backgroundSettings?.brightness ?? 100}%) blur(${currentSlide.backgroundSettings?.blur ?? 0}px)`,
+                  transform: `scale(${(currentSlide.backgroundSettings?.flipX ? -1 : 1) * ((currentSlide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(currentSlide.backgroundSettings?.flipY ? -1 : 1) * ((currentSlide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`
                 }}
               />
               {currentSlide.backgroundSettings?.grayscale && currentSlide.backgroundSettings?.tintColor && currentSlide.backgroundSettings.tintColor !== 'transparent' && (
@@ -639,7 +779,7 @@ const Canvas = (props) => {
           )}
 
           {/* Alignment Guides */}
-          {state.showGuides && (
+          {showGrid && (
             <div className="editor-guides" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
               <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '1px', backgroundColor: 'rgba(255, 100, 100, 0.5)' }} />
               <div style={{ position: 'absolute', top: 0, left: '50%', width: '1px', height: '100%', backgroundColor: 'rgba(255, 100, 100, 0.5)' }} />
@@ -649,6 +789,75 @@ const Canvas = (props) => {
                   <div style={{ position: 'absolute', top: 0, left: `${percent}%`, width: '1px', height: '100%', borderLeft: '1px dashed rgba(255, 100, 100, 0.3)' }} />
                 </React.Fragment>
               ))}
+            </div>
+          )}
+
+          {/* Keynote-Style Green Guide Lines */}
+          {showCustomGuides && (
+            <>
+              {horizontalGuides.map((pos, idx) => {
+                if (activeGuideDrag && !activeGuideDrag.isNew && activeGuideDrag.axis === 'horizontal' && activeGuideDrag.existingIndex === idx) {
+                  return null;
+                }
+                return (
+                  <div
+                    key={`h-guide-${idx}`}
+                    className="slide-guide-line horizontal"
+                    style={{ top: `${pos}%` }}
+                    title={`Horizontal Guide: ${Math.round((pos / 100) * 640)}px (${pos}%) - Drag to move, or drag outside slide to remove`}
+                    onPointerDown={(e) => handleExistingGuidePointerDown('horizontal', idx, pos, e)}
+                  >
+                    <div className="guide-line-core" />
+                  </div>
+                );
+              })}
+              {verticalGuides.map((pos, idx) => {
+                if (activeGuideDrag && !activeGuideDrag.isNew && activeGuideDrag.axis === 'vertical' && activeGuideDrag.existingIndex === idx) {
+                  return null;
+                }
+                return (
+                  <div
+                    key={`v-guide-${idx}`}
+                    className="slide-guide-line vertical"
+                    style={{ left: `${pos}%` }}
+                    title={`Vertical Guide: ${Math.round((pos / 100) * 360)}px (${pos}%) - Drag to move, or drag outside slide to remove`}
+                    onPointerDown={(e) => handleExistingGuidePointerDown('vertical', idx, pos, e)}
+                  >
+                    <div className="guide-line-core" />
+                  </div>
+                );
+              })}
+            </>
+          )}
+
+          {/* Active Guide Dragging Overlay */}
+          {activeGuideDrag && (
+            <div
+              className={`slide-guide-line ${activeGuideDrag.axis} ${activeGuideDrag.isOutOfBounds ? 'out-of-bounds' : ''}`}
+              style={{
+                [activeGuideDrag.axis === 'horizontal' ? 'top' : 'left']: `${activeGuideDrag.pos}%`
+              }}
+            >
+              <div className="guide-line-core" />
+              <div
+                className={`guide-drag-tooltip ${activeGuideDrag.isOutOfBounds ? 'delete-hint' : ''}`}
+                style={{
+                  position: 'fixed',
+                  left: `${activeGuideDrag.clientX + 14}px`,
+                  top: `${activeGuideDrag.clientY - 12}px`
+                }}
+              >
+                <span className="dot" />
+                {activeGuideDrag.isOutOfBounds ? (
+                  <span>{activeGuideDrag.isNew ? 'Release to cancel' : 'Release outside to remove'}</span>
+                ) : (
+                  <span>
+                    {activeGuideDrag.axis === 'horizontal'
+                      ? `Y: ${Math.round((activeGuideDrag.pos / 100) * 640)}px (${Math.round(activeGuideDrag.pos)}%)`
+                      : `X: ${Math.round((activeGuideDrag.pos / 100) * 360)}px (${Math.round(activeGuideDrag.pos)}%)`}
+                  </span>
+                )}
+              </div>
             </div>
           )}
 
@@ -682,7 +891,7 @@ const Canvas = (props) => {
           ))}
 
           {/* Progress Bar */}
-          <div className="editor-progress-bar">
+          <div className="editor-progress-bar player-progress-bar">
             {Array.from({ length: props.totalSlides }).map((_, index) => (
               <div
                 key={index}
@@ -745,7 +954,7 @@ const Canvas = (props) => {
             let displayElement = element;
             if (state.translationMode) {
               const draft = state.translationMode.draft[currentSlide.id]?.[element.id];
-              if (draft && (element.type === 'text' || element.type === 'balloon' || element.type === 'collectible')) {
+              if (draft && (element.type === 'text' || element.type === 'balloon' || element.type === 'collectible' || element.type === 'banner')) {
                 displayElement = { ...element, content: draft.content };
               }
               if (draft && element.type === 'quiz') {
@@ -855,6 +1064,7 @@ const Canvas = (props) => {
           </div>
         ))}
       </div>
+      </Rulers>
 
       {/* Save Asset Modal for Pasted / Dropped Images */}
       <SaveAssetModal

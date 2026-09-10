@@ -190,9 +190,9 @@ const Dashboard = () => {
           --primary-dark: #7C3AED;
           --secondary: #FACC15;
           --secondary-dark: #EAB308;
-          --bg: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
-          --text: #F8FAFC;
-          --text-light: #CBD5E1;
+          --bg: #ffffff;
+          --text: #1E293B;
+          --text-light: #64748B;
           --white: #ffffff;
           --radius: 20px;
           --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -238,7 +238,7 @@ const Dashboard = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 3px solid var(--white);
+          border: 2px solid #E2E8F0;
           box-shadow: var(--shadow);
           color: var(--primary);
         }
@@ -278,8 +278,8 @@ const Dashboard = () => {
         .lesson-path {
           display: flex;
           flex-direction: column;
-          gap: 16px;
-          padding-bottom: 20px;
+          gap: 18px;
+          padding-bottom: 24px;
         }
 
         .lesson-card {
@@ -287,26 +287,34 @@ const Dashboard = () => {
           display: flex;
           align-items: stretch;
           background: #8B5CF6; /* Purple background from mockup */
-          border-radius: 16px;
+          border-radius: 20px;
+          border: 3.5px solid #000000;
+          box-shadow: 6px 6px 0px #000000;
           overflow: hidden;
-          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
           cursor: pointer;
           min-height: 160px;
-          box-shadow: var(--shadow);
+          box-sizing: border-box;
         }
 
         .lesson-card:active {
-          transform: scale(0.97);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          transform: translate(3px, 3px);
+          box-shadow: 3px 3px 0px #000000;
         }
 
         .lesson-card-preview {
-          width: 90px;
+          width: 98px;
           min-height: 160px;
           flex-shrink: 0;
-          background: #333;
+          background: transparent;
           position: relative;
           overflow: hidden;
+          border-right: 3.5px solid #000000;
+        }
+
+        .lesson-card-preview > div {
+          width: 100% !important;
+          height: 100% !important;
         }
 
         .lesson-icon-box {
@@ -496,7 +504,7 @@ const Dashboard = () => {
                 >
                   <div className="lesson-card-preview">
                      {lesson.content?.slides?.[0] ? (
-                         <SlideThumbnail slide={lesson.content.slides[0]} hideTextAndBalloons={true} />
+                         <SlideThumbnail slide={lesson.content.slides[0]} hideTextAndBalloons={true} cover={true} />
                      ) : (
                          <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                      )}

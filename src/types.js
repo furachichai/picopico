@@ -42,4 +42,5 @@ export const ELEMENT_TYPES = {
     COLLECTIBLE: 'collectible',
     RESULT_FIELD: 'result_field',
     NUMBER_LINE: 'number_line',
+    BANNER: 'banner',
 };

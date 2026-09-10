@@ -57,21 +57,23 @@
 .lesson-card {
     background: white;
     padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    border-radius: 20px;
+    border: 3.5px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
     cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.1s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
 }
 
 .lesson-card:active {
-    transform: scale(0.98);
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0px #000000;
 }
 
 .lesson-card.current-draft {
     background: white;
-    border: 2px solid var(--color-primary);
-    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.1);
+    border: 3.5px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
 }
 
 .lesson-card h3 {

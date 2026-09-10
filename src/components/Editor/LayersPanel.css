@@ -312,3 +312,9 @@
     font-size: 0.75rem;
     font-style: italic;
 }
+
+.layer-group-indicator {
+    font-size: 11px;
+    margin-left: 4px;
+    opacity: 0.8;
+}

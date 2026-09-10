@@ -160,6 +160,7 @@ const parseFieldExpression = (expression) => {
 };
 
 const FONTS = [
+    { name: 'Bangers (Comic)', value: '"Bangers", cursive, sans-serif' },
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
     { name: 'Outfit', value: 'Outfit' },
     { name: 'Nunito', value: 'Nunito' },
@@ -181,11 +182,11 @@ const COLORS = [
     '#2196F3', '#00BFA5', '#4CAF50', '#FFC107', '#F44336', '#E91E8F',
     // Row 3 — Dark
     '#0D47A1', '#00897B', '#2E7D32', '#F57C00', '#C62828', '#880E4F',
-    // Row 4 — Neutrals
-    '#FFFFFF', '#C8C8C8', '#969696', '#5A5A5A', '#000000', '#D6DCE5',
+    // Row 4 — Neutrals & Paper tone
+    '#FFFFFF', '#f6efdd', '#C8C8C8', '#969696', '#5A5A5A', '#000000',
 ];
 
-const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background" }) => {
+const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background", extraColors = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
     
     return (
@@ -224,6 +225,47 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                         boxShadow: '0 8px 32px rgba(0,0,0,0.25)', display: 'grid',
                         gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', zIndex: 100,
                     }}>
+                        {extraColors && extraColors.length > 0 && (
+                            <div style={{
+                                gridColumn: '1 / -1',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '8px',
+                                paddingBottom: '8px',
+                                marginBottom: '6px',
+                                borderBottom: '1px solid #e2e8f0'
+                            }}>
+                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                    Paper / Theme
+                                </span>
+                                <div style={{ display: 'flex', gap: '6px' }}>
+                                    {extraColors.map(c => (
+                                        <div
+                                            key={c}
+                                            className={`color-swatch ${color === c ? 'active' : ''}`}
+                                            title={c === '#f6efdd' ? 'Default Paper Dark Yellow (#f6efdd)' : (c === '#fff875' ? 'Sticky Note Yellow (#fff875)' : c)}
+                                            style={{
+                                                backgroundColor: c,
+                                                width: '28px',
+                                                height: '28px',
+                                                borderRadius: '6px',
+                                                border: color === c ? '2.5px solid #2563eb' : '1.5px solid rgba(0,0,0,0.18)',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                                            }}
+                                            onMouseDown={(e) => {
+                                                if (onMouseDownItem) onMouseDownItem(e, c);
+                                            }}
+                                            onClick={(e) => {
+                                                if (onSelect) onSelect(c, e);
+                                                setIsOpen(false);
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         {allowNone && (
                             <div
                                 className="color-swatch-none"
@@ -310,7 +352,7 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
     );
 };
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false, canGroup = false, isGrouped = false, onGroup, onUngroup }) => {
     const { state, dispatch } = useEditor();
     const [applyToAllChecked, setApplyToAllChecked] = useState(false);
 
@@ -335,7 +377,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     };
 
     const { metadata = {} } = element; // Ensure metadata exists
-    const isTextType = element.type === 'balloon' || element.type === 'text' || element.type === 'collectible';
+    const isTextType = element.type === 'balloon' || element.type === 'text' || element.type === 'collectible' || element.type === 'banner';
     const isImageType = element.type === 'image';
     const isCharacter = isImageType && isCharacterElement(element);
     const hasShadow = metadata.hasShadow !== false;
@@ -660,11 +702,122 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
                     <div className="menu-group" style={{ flexDirection: 'row', alignItems: 'flex-end', gap: '10px' }}>
                         <ColorPickerDropdown
-                            label={element.type === 'balloon' ? 'Bubble' : 'Background'}
-                            color={metadata.backgroundColor || '#ffffff'}
+                            label={element.type === 'balloon' ? 'Bubble' : (element.type === 'banner' ? 'Card' : 'Background')}
+                            color={metadata.backgroundColor || (element.type === 'banner' && metadata.skin === 'paper' ? '#f6efdd' : (element.type === 'banner' && metadata.skin === 'sticky' ? '#fff875' : '#ffffff'))}
                             onSelect={(c) => updateMetadata({ backgroundColor: c })}
                             align="left"
+                            extraColors={element.type === 'banner' ? ['#f6efdd', '#fff875'] : undefined}
                         />
+                        {element.type === 'banner' && (() => {
+                            const currentSkin = metadata.skin || 'comic';
+                            const skins = [
+                                { id: 'comic', icon: '🪧', label: 'Comic Box', defaultBg: '#ffffff' },
+                                { id: 'paper', icon: '📜', label: 'Taped Paper', defaultBg: '#f6efdd' },
+                                { id: 'sticky', icon: '📝', label: 'Sticky Note', defaultBg: '#fff875' },
+                                { id: 'notebook', icon: '📓', label: 'Notebook Paper', defaultBg: '#ffffff' },
+                            ];
+                            const currSkinObj = skins.find(s => s.id === currentSkin) || skins[0];
+
+                            const shadowMode = (() => {
+                                if (metadata.hasShadow === false || metadata.shadow === 'none') return 'none';
+                                if (metadata.shadow === 'black') return 'black';
+                                return 'grey'; // default is grey (moire)
+                            })();
+
+                            const hasTape = Boolean(metadata.showTape ?? (metadata.hideTape !== undefined ? !metadata.hideTape : false));
+
+                            return (
+                                <>
+                                    <div className="menu-group">
+                                        <label>Skin</label>
+                                        <button
+                                            className="btn-icon active"
+                                            onClick={() => {
+                                                const currIdx = skins.findIndex(s => s.id === currentSkin);
+                                                const nextSkin = skins[(currIdx + 1) % skins.length];
+                                                const updates = { skin: nextSkin.id };
+                                                const prevDefaultBg = skins[currIdx >= 0 ? currIdx : 0].defaultBg;
+                                                if (!metadata.backgroundColor || metadata.backgroundColor === prevDefaultBg) {
+                                                    updates.backgroundColor = nextSkin.defaultBg;
+                                                }
+                                                updateMetadata(updates);
+                                            }}
+                                            title={`Skin: ${currSkinObj.label} (${currSkinObj.icon}) - Click to cycle`}
+                                            style={{ fontSize: '1.1rem', minWidth: '36px', padding: '4px 6px' }}
+                                        >
+                                            {currSkinObj.icon}
+                                        </button>
+                                    </div>
+                                    <div className="menu-group">
+                                        <label>Tape</label>
+                                        <button
+                                            className={`btn-icon ${hasTape ? 'active' : ''}`}
+                                            onClick={() => updateMetadata({ showTape: !hasTape, hideTape: hasTape })}
+                                            title={hasTape ? "Hide Scotch Tape" : "Show Scotch Tape"}
+                                            style={{ fontSize: '1rem', minWidth: '34px', padding: '4px 6px' }}
+                                        >
+                                            🩹
+                                        </button>
+                                    </div>
+                                    <ColorPickerDropdown
+                                        label="Border"
+                                        color={metadata.borderColor || '#000000'}
+                                        onSelect={(c) => updateMetadata({ borderColor: c })}
+                                    />
+                                    <div className="menu-group">
+                                        <label>Shadow</label>
+                                        <button
+                                            className={`btn-icon ${shadowMode !== 'none' ? 'active' : ''}`}
+                                            onClick={() => {
+                                                const nextShadow = shadowMode === 'grey' ? 'black' : (shadowMode === 'black' ? 'none' : 'grey');
+                                                updateMetadata({
+                                                    shadow: nextShadow,
+                                                    hasShadow: nextShadow !== 'none',
+                                                });
+                                            }}
+                                            title={`Shadow: ${shadowMode === 'grey' ? 'Grey (Moire)' : (shadowMode === 'black' ? 'Black' : 'None')} (Click to cycle)`}
+                                            style={{ fontSize: '1rem', minWidth: '34px', padding: '4px 6px' }}
+                                        >
+                                            {shadowMode === 'grey' ? '◽' : (shadowMode === 'black' ? '⬛' : '⬜')}
+                                        </button>
+                                    </div>
+                                </>
+                            );
+                        })()}
+                        {element.type === 'balloon' && (() => {
+                            const shadowMode = (() => {
+                                if (metadata.hasShadow === false || metadata.shadow === 'none') return 'none';
+                                if (metadata.shadow === 'black') return 'black';
+                                return 'grey'; // default is grey (moire)
+                            })();
+
+                            return (
+                                <>
+                                    <ColorPickerDropdown
+                                        label="Border"
+                                        color={metadata.borderColor || '#000000'}
+                                        onSelect={(c) => updateMetadata({ borderColor: c })}
+                                    />
+                                    <div className="menu-group">
+                                        <label>Shadow</label>
+                                        <button
+                                            className={`btn-icon ${shadowMode !== 'none' ? 'active' : ''}`}
+                                            onClick={() => {
+                                                const nextShadow = shadowMode === 'grey' ? 'black' : (shadowMode === 'black' ? 'none' : 'grey');
+                                                updateMetadata({
+                                                    shadow: nextShadow,
+                                                    hasShadow: nextShadow !== 'none',
+                                                });
+                                            }}
+                                            title={`Shadow: ${shadowMode === 'grey' ? 'Grey (Moire)' : (shadowMode === 'black' ? 'Black' : 'None')} (Click to cycle)`}
+                                            style={{ fontSize: '1rem', minWidth: '34px', padding: '4px 6px' }}
+                                        >
+                                            {shadowMode === 'grey' ? '◽' : (shadowMode === 'black' ? '⬛' : '⬜')}
+                                        </button>
+                                    </div>
+                                </>
+                            );
+                        })()}
                         {element.type === 'background' && onOpenLibrary && (
                             <button
                                 className="btn-secondary"
@@ -925,6 +1078,22 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     </div>
 
                     <div className="menu-group">
+                        <label>Blur</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="range"
+                                min="0"
+                                max="25"
+                                value={metadata.blur ?? 0}
+                                onChange={(e) => updateMetadata({ blur: parseInt(e.target.value) || 0 })}
+                                style={{ width: '80px' }}
+                                title={metadata.blur ? `${metadata.blur}px` : '0px'}
+                            />
+                            <span style={{ fontSize: '0.75rem', minWidth: '28px', color: '#666' }}>{metadata.blur ?? 0}px</span>
+                        </div>
+                    </div>
+
+                    <div className="menu-group">
                         <label>Actions</label>
                         <button className="btn-delete" onClick={() => updateMetadata({ backgroundColor: '#ffffff' })} title="Clear Image">
                             🗑️ Image
@@ -1065,6 +1234,89 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
             {element.type === 'line' && (
                 <>
+                    <div className="menu-group">
+                        <label>Line Style</label>
+                        <div style={{ display: 'flex', gap: '3px', background: 'rgba(0,0,0,0.06)', padding: '2px', borderRadius: '6px' }}>
+                            <button
+                                type="button"
+                                className={`btn-toggle ${!metadata.isCurved ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ isCurved: false })}
+                                style={{
+                                    padding: '3px 8px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: !metadata.isCurved ? '700' : 'normal',
+                                    backgroundColor: !metadata.isCurved ? '#8B5CF6' : 'transparent',
+                                    color: !metadata.isCurved ? 'white' : '#475569',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px'
+                                }}
+                                title="Straight Line"
+                            >
+                                ━ Straight
+                            </button>
+                            <button
+                                type="button"
+                                className={`btn-toggle ${metadata.isCurved ? 'active' : ''}`}
+                                onClick={() => updateMetadata({ isCurved: true, curvature: metadata.curvature ?? -40, curveSkew: metadata.curveSkew ?? 0 })}
+                                style={{
+                                    padding: '3px 8px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: metadata.isCurved ? '700' : 'normal',
+                                    backgroundColor: metadata.isCurved ? '#8B5CF6' : 'transparent',
+                                    color: metadata.isCurved ? 'white' : '#475569',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px'
+                                }}
+                                title="3-Point Bézier Curve"
+                            >
+                                ⌒ Curve
+                            </button>
+                        </div>
+                    </div>
+
+                    {metadata.isCurved && (
+                        <div className="menu-group">
+                            <label>Curvature ({metadata.curvature ?? -40}px)</label>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                <input
+                                    type="range"
+                                    min="-120"
+                                    max="120"
+                                    value={metadata.curvature ?? -40}
+                                    onChange={(e) => updateMetadata({ curvature: parseInt(e.target.value) })}
+                                    style={{ width: '75px' }}
+                                    title="Adjust Curvature Depth"
+                                />
+                                <button
+                                    type="button"
+                                    className="btn-icon"
+                                    onClick={() => updateMetadata({ curvature: -(metadata.curvature ?? -40) })}
+                                    title="Flip / Invert Curve Direction"
+                                    style={{ fontSize: '0.85rem', padding: '2px 5px', minWidth: '24px' }}
+                                >
+                                    ⇅
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn-icon"
+                                    onClick={() => updateMetadata({ curvature: -40, curveSkew: 0 })}
+                                    title="Reset Curvature"
+                                    style={{ fontSize: '0.85rem', padding: '2px 5px', minWidth: '24px' }}
+                                >
+                                    ⟲
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="menu-group">
                         <label>Line Thickness</label>
                         <input
@@ -2504,14 +2756,60 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     </button>
                 )}
                 {SUPPORTED_QUIZ_TYPES.includes(metadata.quizType || 'classic') && metadata.quizType !== 'nl' && (
-                    <button
-                        className={`btn-secondary ${existingResultField ? 'active' : ''}`}
-                        onClick={handleToggleResultField}
-                        title={existingResultField ? "Select Result Field" : "Add Result Field"}
-                        style={{ fontSize: '0.8rem', padding: '4px 10px', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}
-                    >
-                        🔲 {existingResultField ? 'Result Field ✓' : 'Result Field'}
-                    </button>
+                    <div className="menu-group">
+                        <label>Result</label>
+                        <button
+                            className={`btn-icon ${existingResultField ? 'active' : ''}`}
+                            onClick={handleToggleResultField}
+                            title={existingResultField ? "Select Result Field" : "Add Result Field"}
+                            style={{
+                                width: '34px',
+                                height: '34px',
+                                padding: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '8px',
+                                background: existingResultField ? '#E0F2FE' : '#F1F5F9',
+                                border: existingResultField ? '1.5px solid #0284C7' : '1.5px solid transparent',
+                                boxShadow: existingResultField ? '0 0 0 2px rgba(2, 132, 199, 0.25)' : 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
+                            }}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1.5" y="1.5" width="17" height="17" rx="4" fill="#0284C7" stroke="#0369A1" strokeWidth="1" />
+                                <path d="M5.5 10.5L8.5 13.5L14.5 7" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                )}
+                {!translationMode && (metadata.quizType === 'classic' || !metadata.quizType) && (
+                    <div className="menu-group">
+                        <label>Answer</label>
+                        <button
+                            className="btn-secondary"
+                            onClick={() => {
+                                const currentOptions = metadata.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+                                const newOptions = [...currentOptions, `Option ${currentOptions.length + 1}`];
+                                updateMetadata({ options: newOptions });
+                            }}
+                            title="+ ANSWER"
+                            style={{
+                                fontSize: '0.78rem',
+                                padding: '4px 8px',
+                                height: '34px',
+                                fontWeight: 700,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                whiteSpace: 'nowrap',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            + ANSWER
+                        </button>
+                    </div>
                 )}
                 </>
             )}
@@ -2881,12 +3179,28 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group">
                         <label>Result</label>
                         <button
-                            className={`btn-secondary ${existingResultField ? 'active' : ''}`}
+                            className={`btn-icon ${existingResultField ? 'active' : ''}`}
                             onClick={handleToggleResultField}
                             title={existingResultField ? "Select Result Field" : "Add Result Field"}
-                            style={{ fontSize: '0.8rem', padding: '4px 8px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                            style={{
+                                width: '34px',
+                                height: '34px',
+                                padding: 0,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '8px',
+                                background: existingResultField ? '#E0F2FE' : '#F1F5F9',
+                                border: existingResultField ? '1.5px solid #0284C7' : '1.5px solid transparent',
+                                boxShadow: existingResultField ? '0 0 0 2px rgba(2, 132, 199, 0.25)' : 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
+                            }}
                         >
-                            🔲 {existingResultField ? 'Field ✓' : 'Add Field'}
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1.5" y="1.5" width="17" height="17" rx="4" fill="#0284C7" stroke="#0369A1" strokeWidth="1" />
+                                <path d="M5.5 10.5L8.5 13.5L14.5 7" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                         </button>
                     </div>
                 </>
@@ -3035,15 +3349,41 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
-                    {onToggleGuides && (
-                        <button 
-                            className={`btn-icon ${showGuides ? 'active' : ''}`} 
-                            onClick={onToggleGuides} 
-                            title={showGuides ? "Hide Guides" : "Show Guides"}
-                        >
-                            ⊞
-                        </button>
-                    )}
+                    {onToggleGuides && (() => {
+                        const mode = state?.guideMode || (showGuides ? 'grid' : 'none');
+                        const isBoth = mode === 'both';
+                        const isGuides = mode === 'guides';
+                        const isNone = mode === 'none';
+
+                        let titleText = 'Grid (tap for Grid + Guides)';
+                        if (isBoth) titleText = 'Grid + Guides (tap for Guides only)';
+                        else if (isGuides) titleText = 'Guides only (tap to hide all)';
+                        else if (isNone) titleText = 'No guides (tap for Grid)';
+
+                        return (
+                            <button 
+                                className={`btn-icon ${!isNone ? 'active' : ''} guide-mode-btn mode-${mode}`} 
+                                onClick={onToggleGuides} 
+                                title={titleText}
+                                style={{ position: 'relative' }}
+                            >
+                                {isGuides ? '📏' : '⊞'}
+                                {isBoth && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '4px',
+                                        right: '4px',
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#10B981',
+                                        border: '1px solid white',
+                                        boxShadow: '0 0 2px rgba(0,0,0,0.3)'
+                                    }} />
+                                )}
+                            </button>
+                        );
+                    })()}
                     {onUndo && element.type !== 'cartridge' && element.type !== 'background' && (
                         <button className="btn-icon" onClick={onUndo} title="Undo Changes">
                             ↩️
@@ -3062,6 +3402,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     {!translationMode && element.type !== 'cartridge' && element.type !== 'quiz' && (
                         <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
                             ❐
+                        </button>
+                    )}
+                    {!translationMode && canGroup && onGroup && (
+                        <button className="btn-icon" onClick={onGroup} title="Group Elements (Cmd+G)">
+                            🔗
+                        </button>
+                    )}
+                    {!translationMode && isGrouped && onUngroup && (
+                        <button className="btn-icon" onClick={onUngroup} title="Ungroup Elements (Cmd+G)">
+                            ⛓️‍💥
                         </button>
                     )}
                     {!translationMode && (

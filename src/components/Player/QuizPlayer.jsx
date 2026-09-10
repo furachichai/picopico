@@ -124,7 +124,7 @@ function validateOperationNoParen(ast, tappedNodeId) {
 }
 
 
-const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents, baseStyle }) => {
+const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents, baseStyle, colors }) => {
     const textRef = React.useRef(null);
 
     React.useLayoutEffect(() => {
@@ -164,6 +164,7 @@ const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDra
             id={`sq-el-${sq.id}`}
             className={`quiz-option-match ${sq.type} ${cardShape === 'circle' ? 'circle' : 'square'} ${isDragging ? 'dragging' : ''} ${isFlashing ? 'flash-red' : ''} ${sq.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''} ${sq.merging ? 'merging' : ''}`}
             style={{
+                backgroundColor: colors ? colors[sq.pairIndex % colors.length] : undefined,
                 pointerEvents: (isSolved || isFailed || disabled || isMatched || sq.merging) ? 'none' : 'auto',
                 transform: (() => {
                     let s = 1;
@@ -445,7 +446,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const correctIndex = data.metadata?.correctIndex ?? 0;
     const correctIndices = data.metadata?.correctIndices || [correctIndex];
     const isMultiSelect = quizType === '4sq' && correctIndices.length > 1;
-    const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
+    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#48FF3E'];
     const maxAttempts = Math.max(1, options.length - 1);
 
     // NL Data
@@ -3621,6 +3622,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             handleMatchDragStart={handleMatchDragStart}
                             formatExponents={formatExponents}
                             baseStyle={baseStyle}
+                            colors={colors}
                         />
                     ))}
                 </div>
@@ -4011,11 +4013,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 style={{
                                     backgroundColor: colors[index % colors.length],
                                     pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto',
-                                    fontFamily: data.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontFamily: data.metadata?.fontFamily || "'Bangers', cursive, sans-serif",
                                     fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
                                     fontWeight: data.metadata?.fontWeight || undefined,
-                                    fontStyle: data.metadata?.fontStyle || undefined,
-                                    textDecoration: data.metadata?.textDecoration || undefined
+                                    fontStyle: data.metadata?.fontStyle || 'italic',
+                                    textDecoration: data.metadata?.textDecoration || undefined,
+                                    color: data.metadata?.color || '#000000'
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();

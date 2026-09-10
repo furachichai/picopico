@@ -296,14 +296,27 @@ const Editor = () => {
             dispatch({ type: 'UPDATE_SLIDE', payload: { cartridge: null } });
             dispatch({ type: 'SELECT_ELEMENT', payload: null });
         } else {
-            dispatch({ type: 'DELETE_ELEMENT', payload: id });
+            const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                ? state.selectedElementIds
+                : (state.selectedElementId ? [state.selectedElementId] : []);
+            const validIds = selectedIds.filter(selId => selId !== 'background' && selId !== 'cartridge');
+            if (validIds.length > 1 && validIds.includes(id)) {
+                dispatch({ type: 'DELETE_ELEMENTS', payload: validIds });
+            } else {
+                dispatch({ type: 'DELETE_ELEMENT', payload: id });
+            }
         }
     };
 
     const handleContextMenuDuplicate = () => {
-        const sel = state.lesson.slides.find(s => s.id === state.currentSlideId)?.elements.find(e => e.id === state.selectedElementId);
-        if (sel && sel.id !== 'cartridge') {
-            dispatch({ type: 'DUPLICATE_ELEMENT', payload: sel.id });
+        const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+            ? state.selectedElementIds
+            : (state.selectedElementId ? [state.selectedElementId] : []);
+        const validIds = selectedIds.filter(id => id !== 'background' && id !== 'cartridge');
+        if (validIds.length > 1) {
+            dispatch({ type: 'DUPLICATE_ELEMENTS', payload: validIds });
+        } else if (validIds.length === 1) {
+            dispatch({ type: 'DUPLICATE_ELEMENT', payload: validIds[0] });
         }
     };
 
@@ -644,9 +657,14 @@ const Editor = () => {
                     const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
                     const elementsToCopy = slide?.elements.filter(el => validIds.includes(el.id));
                     
-                    if (elementsToCopy && elementsToCopy.length > 0 && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    if (elementsToCopy && elementsToCopy.length > 0) {
                         const payload = JSON.stringify({ _picopicoCopy: true, elements: elementsToCopy });
-                        navigator.clipboard.writeText(payload).catch(() => {});
+                        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                            navigator.clipboard.writeText(payload).catch(() => {});
+                        }
+                        try {
+                            localStorage.setItem('picopico-copied-element', payload);
+                        } catch {}
                     }
                 }
                 return;
@@ -697,9 +715,48 @@ const Editor = () => {
                 return;
             }
 
-            if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedElementId) {
+            // Group / Ungroup (Cmd+G / Ctrl+G / Cmd+Shift+G)
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'g') {
                 e.preventDefault();
-                handleContextMenuDelete(state.selectedElementId);
+                const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                    ? state.selectedElementIds
+                    : (state.selectedElementId ? [state.selectedElementId] : []);
+                const validIds = selectedIds.filter(id => id && id !== 'background' && id !== 'cartridge');
+                if (validIds.length === 0) return;
+
+                const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                const selElements = slide?.elements.filter(el => validIds.includes(el.id)) || [];
+
+                if (e.shiftKey) {
+                    // Explicit Ungroup (Cmd+Shift+G)
+                    dispatch({ type: 'UNGROUP_ELEMENTS', payload: validIds });
+                    return;
+                }
+
+                // Toggle Group / Ungroup (Cmd+G)
+                const groupIds = new Set(selElements.map(el => el.metadata?.groupId).filter(Boolean));
+                const allGroupedInSameGroup = selElements.length > 0 && groupIds.size === 1 && selElements.every(el => el.metadata?.groupId);
+
+                if (allGroupedInSameGroup) {
+                    dispatch({ type: 'UNGROUP_ELEMENTS', payload: validIds });
+                } else if (selElements.length >= 2) {
+                    dispatch({ type: 'GROUP_ELEMENTS', payload: validIds });
+                }
+                return;
+            }
+
+            // Delete selected element(s)
+            if ((e.key === 'Delete' || e.key === 'Backspace') && (state.selectedElementId || (state.selectedElementIds && state.selectedElementIds.length > 0))) {
+                e.preventDefault();
+                const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                    ? state.selectedElementIds
+                    : (state.selectedElementId ? [state.selectedElementId] : []);
+                const validIds = selectedIds.filter(id => id && id !== 'background' && id !== 'cartridge');
+                if (validIds.length > 1) {
+                    dispatch({ type: 'DELETE_ELEMENTS', payload: validIds });
+                } else if (validIds.length === 1) {
+                    handleContextMenuDelete(validIds[0]);
+                }
             }
 
             // Arrow keys: move selected element, or navigate slides if nothing selected
@@ -1042,62 +1099,99 @@ const Editor = () => {
                         totalSlides={state.lesson.slides.length}
                     />
 
-                    {/* Floating Context Menu — appears above quiz when keyboard is visible */}
-                    {isKeyboardVisible && selectedElement?.type === 'quiz' && (
-                        <div className="floating-context-menu" style={{
-                            bottom: `${100 - (selectedElement.y || 50)}%`
-                        }}>
-                            <ContextualMenu
-                                element={selectedElement}
-                                onChange={handleContextMenuChange}
-                                onDelete={handleContextMenuDelete}
-                                onDuplicate={handleContextMenuDuplicate}
-                                onOpenLibrary={handleContextMenuOpenLibrary}
-                                onOpenPresets={() => setShowPresetPanel(true)}
-                                onReorderElement={handleReorderElement}
-                                onUndo={handleUndo}
-                                onApplyBackgroundToAll={handleApplyBackgroundToAll}
-                                showGuides={state.showGuides}
-                                onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-                                translationMode={isTranslating}
-                            />
-                        </div>
-                    )}
+                    {/* Compute group/ungroup capabilities for selected elements */}
+                    {(() => {
+                        const activeSelectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                            ? state.selectedElementIds
+                            : (state.selectedElementId ? [state.selectedElementId] : []);
+                        const validActiveSelectedElements = currentSlide?.elements.filter(el => activeSelectedIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+                        const activeGroupIds = new Set(validActiveSelectedElements.map(el => el.metadata?.groupId).filter(Boolean));
+                        const isCurrentSelectionGrouped = validActiveSelectedElements.length > 0 && activeGroupIds.size === 1 && validActiveSelectedElements.every(el => el.metadata?.groupId);
+                        const canCurrentSelectionGroup = validActiveSelectedElements.length >= 2 && !isCurrentSelectionGrouped;
 
-                    {/* Layers Panel */}
-                    {!isTranslating && (
-                        <LayersPanel
-                            elements={currentSlide?.elements || []}
-                            selectedElementIds={state.selectedElementIds}
-                            onSelect={(id, isMulti) => dispatch({ type: 'SELECT_ELEMENT', payload: isMulti ? { id, isShift: true } : id })}
-                            onReorderTo={handleReorderElementTo}
-                            onToggleLock={handleToggleLock}
-                            onToggleVisibility={handleToggleVisibility}
-                            isOpen={showLayersPanel}
-                            onToggle={() => setShowLayersPanel(prev => !prev)}
-                            onReorder={(id, direction) => dispatch({ type: 'REORDER_ELEMENT', payload: { elementId: id, direction } })}
-                        />
-                    )}
+                        return (
+                            <>
+                                {/* Floating Context Menu — appears above quiz when keyboard is visible */}
+                                {isKeyboardVisible && selectedElement?.type === 'quiz' && (
+                                    <div className="floating-context-menu" style={{
+                                        bottom: `${100 - (selectedElement.y || 50)}%`
+                                    }}>
+                                        <ContextualMenu
+                                            element={selectedElement}
+                                            onChange={handleContextMenuChange}
+                                            onDelete={handleContextMenuDelete}
+                                            onDuplicate={handleContextMenuDuplicate}
+                                            canGroup={canCurrentSelectionGroup}
+                                            isGrouped={isCurrentSelectionGrouped}
+                                            onGroup={() => dispatch({ type: 'GROUP_ELEMENTS', payload: activeSelectedIds })}
+                                            onUngroup={() => dispatch({ type: 'UNGROUP_ELEMENTS', payload: activeSelectedIds })}
+                                            onOpenLibrary={handleContextMenuOpenLibrary}
+                                            onOpenPresets={() => setShowPresetPanel(true)}
+                                            onReorderElement={handleReorderElement}
+                                            onUndo={handleUndo}
+                                            onApplyBackgroundToAll={handleApplyBackgroundToAll}
+                                            showGuides={state.showGuides}
+                                            guideMode={state.guideMode}
+                                            onToggleGuides={() => dispatch({ type: 'CYCLE_GUIDE_MODE' })}
+                                            translationMode={isTranslating}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Layers Panel */}
+                                {!isTranslating && (
+                                    <LayersPanel
+                                        elements={currentSlide?.elements || []}
+                                        selectedElementIds={state.selectedElementIds}
+                                        onSelect={(id, isMulti, isAlt) => dispatch({ type: 'SELECT_ELEMENT', payload: typeof id === 'object' ? id : { id, isShift: !!isMulti, isAlt: !!isAlt } })}
+                                        onReorderTo={handleReorderElementTo}
+                                        onToggleLock={handleToggleLock}
+                                        onToggleVisibility={handleToggleVisibility}
+                                        isOpen={showLayersPanel}
+                                        onToggle={() => setShowLayersPanel(prev => !prev)}
+                                        onReorder={(id, direction) => dispatch({ type: 'REORDER_ELEMENT', payload: { elementId: id, direction } })}
+                                    />
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
 
                 <div className={`bottom-menus ${(isKeyboardVisible && selectedElement?.type === 'quiz') || (isTranslating && (!selectedElement || !['text', 'balloon', 'quiz'].includes(selectedElement.type))) ? 'hidden-menus' : ''}`}>
                     {/* SlideStrip Removed */}
                     {selectedElement ? (
                         (!isTranslating || ['text', 'balloon', 'quiz'].includes(selectedElement.type)) ? (
-                            <ContextualMenu
-                                element={selectedElement}
-                                onChange={handleContextMenuChange}
-                                onDelete={handleContextMenuDelete}
-                                onDuplicate={handleContextMenuDuplicate}
-                                onOpenLibrary={handleContextMenuOpenLibrary}
-                                onOpenPresets={() => setShowPresetPanel(true)}
-                                onReorderElement={handleReorderElement}
-                                onUndo={handleUndo}
-                                onApplyBackgroundToAll={handleApplyBackgroundToAll}
-                                showGuides={state.showGuides}
-                                onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-                                translationMode={isTranslating}
-                            />
+                            (() => {
+                                const activeSelectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
+                                    ? state.selectedElementIds
+                                    : (state.selectedElementId ? [state.selectedElementId] : []);
+                                const validActiveSelectedElements = currentSlide?.elements.filter(el => activeSelectedIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+                                const activeGroupIds = new Set(validActiveSelectedElements.map(el => el.metadata?.groupId).filter(Boolean));
+                                const isCurrentSelectionGrouped = validActiveSelectedElements.length > 0 && activeGroupIds.size === 1 && validActiveSelectedElements.every(el => el.metadata?.groupId);
+                                const canCurrentSelectionGroup = validActiveSelectedElements.length >= 2 && !isCurrentSelectionGrouped;
+
+                                return (
+                                    <ContextualMenu
+                                        element={selectedElement}
+                                        onChange={handleContextMenuChange}
+                                        onDelete={handleContextMenuDelete}
+                                        onDuplicate={handleContextMenuDuplicate}
+                                        canGroup={canCurrentSelectionGroup}
+                                        isGrouped={isCurrentSelectionGrouped}
+                                        onGroup={() => dispatch({ type: 'GROUP_ELEMENTS', payload: activeSelectedIds })}
+                                        onUngroup={() => dispatch({ type: 'UNGROUP_ELEMENTS', payload: activeSelectedIds })}
+                                        onOpenLibrary={handleContextMenuOpenLibrary}
+                                        onOpenPresets={() => setShowPresetPanel(true)}
+                                        onReorderElement={handleReorderElement}
+                                        onUndo={handleUndo}
+                                        onApplyBackgroundToAll={handleApplyBackgroundToAll}
+                                        showGuides={state.showGuides}
+                                        guideMode={state.guideMode}
+                                        onToggleGuides={() => dispatch({ type: 'CYCLE_GUIDE_MODE' })}
+                                        translationMode={isTranslating}
+                                    />
+                                );
+                            })()
                         ) : null
                     ) : !isTranslating ? (
                         <Toolbar

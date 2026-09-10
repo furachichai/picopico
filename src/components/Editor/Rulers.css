@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Apple Keynote Rulers & Guides Styles
+   ========================================================================== */
+
+.canvas-with-rulers {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.canvas-rulers-top-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 22px;
+}
+
+.canvas-rulers-bottom-row {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+/* Corner (0,0) Origin */
+.ruler-corner {
+    width: 22px;
+    height: 22px;
+    background: #F8FAFC;
+    border-right: 1px solid #CBD5E1;
+    border-bottom: 1px solid #CBD5E1;
+    border-top: 1px solid #E2E8F0;
+    border-left: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 700;
+    color: #94A3B8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+    cursor: default;
+    border-top-left-radius: 4px;
+}
+
+/* Rulers */
+.ruler-bar {
+    background: #F8FAFC;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.ruler-bar.horizontal {
+    width: 360px;
+    height: 22px;
+    border-top: 1px solid #E2E8F0;
+    border-bottom: 1px solid #CBD5E1;
+    border-right: 1px solid #E2E8F0;
+    cursor: ns-resize;
+}
+
+.ruler-bar.horizontal:hover {
+    background: #F1F5F9;
+}
+
+.ruler-bar.vertical {
+    width: 22px;
+    height: 640px;
+    border-left: 1px solid #E2E8F0;
+    border-right: 1px solid #CBD5E1;
+    border-bottom: 1px solid #E2E8F0;
+    cursor: ew-resize;
+}
+
+.ruler-bar.vertical:hover {
+    background: #F1F5F9;
+}
+
+.ruler-svg {
+    display: block;
+    pointer-events: none;
+}
+
+/* Cursor position tracker on ruler */
+.ruler-cursor-indicator {
+    position: absolute;
+    pointer-events: none;
+    background: #10B981;
+    z-index: 5;
+}
+
+.ruler-cursor-indicator.horizontal {
+    top: 0;
+    width: 1px;
+    height: 100%;
+}
+
+.ruler-cursor-indicator.vertical {
+    left: 0;
+    height: 1px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   Green Guide Lines
+   ========================================================================== */
+
+.slide-guide-line {
+    position: absolute;
+    z-index: 920;
+    pointer-events: auto;
+    transition: box-shadow 0.15s ease;
+}
+
+.slide-guide-line.horizontal {
+    left: 0;
+    width: 100%;
+    height: 14px;
+    margin-top: -7px;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+}
+
+.slide-guide-line.vertical {
+    top: 0;
+    height: 100%;
+    width: 14px;
+    margin-left: -7px;
+    cursor: ew-resize;
+    display: flex;
+    justify-content: center;
+}
+
+/* The actual 1.5px visible line */
+.guide-line-core {
+    background-color: #10B981;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 0 4px rgba(16, 185, 129, 0.3);
+    position: relative;
+    pointer-events: none;
+}
+
+.slide-guide-line.horizontal .guide-line-core {
+    width: 100%;
+    height: 1.5px;
+}
+
+.slide-guide-line.vertical .guide-line-core {
+    height: 100%;
+    width: 1.5px;
+}
+
+.slide-guide-line:hover .guide-line-core {
+    background-color: #059669;
+    box-shadow: 0 0 4px #10B981, 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* When dragged out of canvas / marked for deletion */
+.slide-guide-line.out-of-bounds .guide-line-core {
+    background-color: #EF4444 !important;
+    opacity: 0.5;
+    box-shadow: 0 0 4px rgba(239, 68, 68, 0.8) !important;
+}
+
+/* Coordinates tooltip shown during drag */
+.guide-drag-tooltip {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 3px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 10000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.guide-drag-tooltip.delete-hint {
+    background: rgba(239, 68, 68, 0.9);
+}
+
+.guide-drag-tooltip .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10B981;
+}
+
+.guide-drag-tooltip.delete-hint .dot {
+    background: #FFFFFF;
+}

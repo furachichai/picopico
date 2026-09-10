@@ -11,7 +11,44 @@
     font-family: 'Nunito', sans-serif;
 }
 
-/* Navigation Buttons Overlay */
+/* Navigation Buttons Overlay / Top Controls (Play Mode) */
+.player-top-btn {
+    background: #ffffff !important;
+    border: 3px solid #000000 !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    box-shadow: 3.5px 3.5px 0px #000000 !important;
+    color: #000000 !important;
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.player-top-btn:hover {
+    transform: scale(1.06) !important;
+    box-shadow: 4.5px 4.5px 0px #000000 !important;
+}
+
+.player-top-btn:active {
+    transform: translate(2px, 2px) !important;
+    box-shadow: 1.5px 1.5px 0px #000000 !important;
+}
+
+.player-top-btn svg {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
 .player-nav-btn {
     position: absolute;
     top: 8px;

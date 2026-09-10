@@ -206,7 +206,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const visualMode = element.metadata?.visualMode || false;
     const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7'];
 
-    const colors = ['#3A86FF', '#4ECDC4', '#9B72CF', '#FF8C00', '#00B4D8', '#8338EC'];
+    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#48FF3E'];
 
     const { popupRef, dragHandlers, style } = useDraggable('stickerPicker');
 
@@ -792,7 +792,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                 </div>
                 {options.map((option, index) => (
                     <div key={index} className="quiz-option-row match-row">
-                        <div className="quiz-option-2 match-column question-col" style={{ backgroundColor: '#3A86FF' }}>
+                        <div className="quiz-option-2 match-column question-col" style={{ backgroundColor: colors[index % colors.length] }}>
                             <div
                                 contentEditable
                                 suppressContentEditableWarning
@@ -816,13 +816,13 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     fontWeight: element.metadata?.fontWeight || 'normal',
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none',
-                                    color: element.metadata?.color || 'white'
+                                    color: element.metadata?.color || '#000000'
                                 }}
                                 data-placeholder={`Q ${index + 1}`}
                             />
                         </div>
                         <div className="match-arrow-divider">↔</div>
-                        <div className="quiz-option-2 match-column answer-col" style={{ backgroundColor: '#9B72CF' }}>
+                        <div className="quiz-option-2 match-column answer-col" style={{ backgroundColor: colors[index % colors.length] }}>
                             <div
                                 contentEditable
                                 suppressContentEditableWarning
@@ -847,7 +847,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     fontWeight: element.metadata?.fontWeight || 'normal',
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none',
-                                    color: element.metadata?.color || 'white'
+                                    color: element.metadata?.color || '#000000'
                                 }}
                                 data-placeholder={`A ${index + 1}`}
                             />
@@ -1010,54 +1010,55 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     // -------------------------------------------------------------------------
     return (
         <div className={`quiz-editor-2 ${getContainerClass()}`} onMouseDown={(e) => e.stopPropagation()}>
-            {options.map((option, index) => (
-                <div key={index} className={`quiz-option-row ${quizType === '4sq' ? (index % 2 === 0 ? 'column-left' : 'column-right') : ''}`}>
-                    {/* Hide remove button for TF and 4SQ (fixed options) */}
-                    {quizType !== 'tf' && quizType !== '4sq' && options.length > 1 && (
-                        <button className="remove-btn-2" onClick={() => removeOption(index)} title="Remove option">×</button>
-                    )}
-
-                    <div
-                        className={`quiz-option-2 ${isCorrect(index) ? 'correct' : ''}`}
-                        style={{ backgroundColor: colors[index % colors.length] }}
-                    >
-                        {quizType === 'tf' && visualMode ? (
-                            <div className="visual-preview">
-                                <img
-                                    src={getThumbImage(index)}
-                                    alt={index === 0 ? 'True' : 'False'}
-                                />
-                            </div>
-                        ) : (
-                            <div
-                                contentEditable
-                                suppressContentEditableWarning
-                                className="option-input-2"
-                                data-option-index={index}
-                                onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
-                                onPaste={(e) => {
-                                    e.preventDefault();
-                                    const text = e.clipboardData.getData('text/plain');
-                                    document.execCommand('insertText', false, text);
-                                }}
-                                ref={(el) => {
-                                    if (el && el.innerHTML !== option && document.activeElement !== el) {
-                                        el.innerHTML = option;
-                                    }
-                                }}
-                                style={{
-                                    resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
-                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
-                                    fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    fontWeight: element.metadata?.fontWeight || 'normal',
-                                    fontStyle: element.metadata?.fontStyle || 'normal',
-                                    textDecoration: element.metadata?.textDecoration || 'none',
-                                    color: element.metadata?.color || 'white'
-                                }}
-                                data-placeholder={`Option ${index + 1}`}
-                            />
+            {options.map((option, index) => {
+                return (
+                    <div key={index} className={`quiz-option-row ${quizType === '4sq' ? (index % 2 === 0 ? 'column-left' : 'column-right') : ''}`}>
+                        {/* Hide remove button for TF and 4SQ (fixed options) */}
+                        {quizType !== 'tf' && quizType !== '4sq' && options.length > 1 && (
+                            <button className="remove-btn-2" onClick={() => removeOption(index)} title="Remove option">×</button>
                         )}
-                    </div>
+
+                        <div
+                            className={`quiz-option-2 ${isCorrect(index) ? 'correct' : ''}`}
+                            style={{ backgroundColor: colors[index % colors.length] }}
+                        >
+                            {quizType === 'tf' && visualMode ? (
+                                <div className="visual-preview">
+                                    <img
+                                        src={getThumbImage(index)}
+                                        alt={index === 0 ? 'True' : 'False'}
+                                    />
+                                </div>
+                            ) : (
+                                <div
+                                    contentEditable
+                                    suppressContentEditableWarning
+                                    className="option-input-2"
+                                    data-option-index={index}
+                                    onInput={(e) => handleOptionChange(index, e.currentTarget.innerHTML)}
+                                    onPaste={(e) => {
+                                        e.preventDefault();
+                                        const text = e.clipboardData.getData('text/plain');
+                                        document.execCommand('insertText', false, text);
+                                    }}
+                                    ref={(el) => {
+                                        if (el && el.innerHTML !== option && document.activeElement !== el) {
+                                            el.innerHTML = option;
+                                        }
+                                    }}
+                                    style={{
+                                        resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
+                                        fontFamily: element.metadata?.fontFamily || "'Bangers', cursive, sans-serif",
+                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '18px',
+                                        fontWeight: element.metadata?.fontWeight || 'normal',
+                                        fontStyle: element.metadata?.fontStyle || 'italic',
+                                        textDecoration: element.metadata?.textDecoration || 'none',
+                                        color: element.metadata?.color || '#000000'
+                                    }}
+                                    data-placeholder={`Option ${index + 1}`}
+                                />
+                            )}
+                        </div>
 
                     <input
                         type={quizType === '4sq' ? 'checkbox' : 'radio'}
@@ -1072,33 +1073,8 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         title="Mark as correct answer"
                     />
                 </div>
-            ))}
-
-            {/* Add answer button for classic quiz */}
-            {quizType === 'classic' && (
-                <button
-                    className="quiz-add-answer-btn"
-                    onClick={() => {
-                        const newOptions = [...options, `Option ${options.length + 1}`];
-                        onChange(element.id, { options: newOptions });
-                    }}
-                    style={{
-                        width: '100%',
-                        padding: '10px',
-                        border: '2px dashed rgba(255,255,255,0.4)',
-                        borderRadius: '12px',
-                        background: 'rgba(255,255,255,0.1)',
-                        color: 'rgba(255,255,255,0.7)',
-                        fontWeight: 700,
-                        fontSize: '0.9rem',
-                        cursor: 'pointer',
-                        marginTop: '8px',
-                        transition: 'all 0.2s'
-                    }}
-                >
-                    + Add Answer
-                </button>
-            )}
+            );
+        })}
         </div>
     );
 };

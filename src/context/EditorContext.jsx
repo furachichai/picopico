@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer } from 'react';
 import { ELEMENT_TYPES } from '../types';
+import { ensureBalloonsAboveImages } from '../utils/layerUtils';
 
 const EditorContext = createContext();
 
@@ -48,7 +49,8 @@ const initialState = {
     view: 'dashboard', // 'dashboard', 'editor', 'player', 'slides'
     readOnly: false, // Default to false, will be set on mount
     translationMode: null, // null | { lang: 'en' | 'pt', draft: { [slideId]: { [elementId]: { content } }, lessonTitle: '', lessonDescription: '' } }
-    showGuides: true, // Grid guides in editor
+    guideMode: 'both', // 'grid' | 'both' | 'guides' | 'none'
+    showGuides: true, // Legacy compatibility (true when guideMode is 'grid' or 'both')
     past: [], // History stack for undoing operations
     lastAppliedBackground: getSavedLastBackground(),
 };
@@ -95,6 +97,8 @@ const clampPopupSticker = (el) => {
     };
 };
 
+const GUIDE_MODES = ['grid', 'both', 'guides', 'none'];
+
 const editorReducer = (state, action) => {
     switch (action.type) {
         case 'SAVE_HISTORY':
@@ -103,7 +107,130 @@ const editorReducer = (state, action) => {
                 past: pushToPast(state)
             };
         case 'TOGGLE_GUIDES':
-            return { ...state, showGuides: !state.showGuides };
+        case 'CYCLE_GUIDE_MODE': {
+            const currentMode = state.guideMode || (state.showGuides ? 'grid' : 'none');
+            const currentIndex = GUIDE_MODES.indexOf(currentMode);
+            const nextMode = GUIDE_MODES[(currentIndex + 1) % GUIDE_MODES.length];
+            return {
+                ...state,
+                guideMode: nextMode,
+                showGuides: nextMode === 'grid' || nextMode === 'both'
+            };
+        }
+        case 'SET_GUIDE_MODE': {
+            const nextMode = action.payload;
+            return {
+                ...state,
+                guideMode: nextMode,
+                showGuides: nextMode === 'grid' || nextMode === 'both'
+            };
+        }
+        case 'ADD_SLIDE_GUIDE': {
+            const { axis, position } = action.payload;
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const existingGuides = currentSlide.guides || { horizontal: [], vertical: [] };
+            const axisGuides = [...(existingGuides[axis] || [])];
+            const cleanPos = Math.round(position * 10) / 10;
+
+            if (axisGuides.some(p => Math.abs(p - cleanPos) < 0.3)) {
+                return state;
+            }
+            axisGuides.push(cleanPos);
+            axisGuides.sort((a, b) => a - b);
+
+            const updatedSlide = {
+                ...currentSlide,
+                guides: {
+                    ...existingGuides,
+                    [axis]: axisGuides
+                }
+            };
+
+            let nextGuideMode = state.guideMode || 'both';
+            if (nextGuideMode === 'none') nextGuideMode = 'guides';
+            else if (nextGuideMode === 'grid') nextGuideMode = 'both';
+
+            return {
+                ...state,
+                isDirty: true,
+                past: pushToPast(state),
+                guideMode: nextGuideMode,
+                showGuides: nextGuideMode === 'grid' || nextGuideMode === 'both',
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(s => s.id === state.currentSlideId ? updatedSlide : s)
+                }
+            };
+        }
+        case 'UPDATE_SLIDE_GUIDE': {
+            const { axis, index, position } = action.payload;
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide || !currentSlide.guides || !currentSlide.guides[axis]) return state;
+
+            const axisGuides = [...currentSlide.guides[axis]];
+            if (index < 0 || index >= axisGuides.length) return state;
+
+            const cleanPos = Math.round(position * 10) / 10;
+            axisGuides[index] = cleanPos;
+            axisGuides.sort((a, b) => a - b);
+
+            return {
+                ...state,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(s => s.id === state.currentSlideId ? {
+                        ...currentSlide,
+                        guides: {
+                            ...currentSlide.guides,
+                            [axis]: axisGuides
+                        }
+                    } : s)
+                }
+            };
+        }
+        case 'REMOVE_SLIDE_GUIDE': {
+            const { axis, index } = action.payload;
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide || !currentSlide.guides || !currentSlide.guides[axis]) return state;
+
+            const axisGuides = currentSlide.guides[axis].filter((_, i) => i !== index);
+
+            return {
+                ...state,
+                isDirty: true,
+                past: pushToPast(state),
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(s => s.id === state.currentSlideId ? {
+                        ...currentSlide,
+                        guides: {
+                            ...currentSlide.guides,
+                            [axis]: axisGuides
+                        }
+                    } : s)
+                }
+            };
+        }
+        case 'CLEAR_SLIDE_GUIDES': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            return {
+                ...state,
+                isDirty: true,
+                past: pushToPast(state),
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(s => s.id === state.currentSlideId ? {
+                        ...currentSlide,
+                        guides: { horizontal: [], vertical: [] }
+                    } : s)
+                }
+            };
+        }
         case 'SET_VIEW':
             return { ...state, view: action.payload };
 
@@ -196,7 +323,7 @@ const editorReducer = (state, action) => {
                 content: action.payload.content,
                 x: action.payload.x !== undefined ? action.payload.x : 50, // Center
                 y: action.payload.y !== undefined ? action.payload.y : (action.payload.type === 'quiz'
-                    ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 75))
+                    ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 78.59375))
                     : 50),
                 width: action.payload.metadata?.width || 20,
                 height: action.payload.metadata?.height || 10,
@@ -297,7 +424,7 @@ const editorReducer = (state, action) => {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
                         slide.id === state.currentSlideId
-                            ? { ...slide, elements: [...slide.elements, newElement] }
+                            ? { ...slide, elements: ensureBalloonsAboveImages([...slide.elements, newElement]) }
                             : slide
                     ),
                 },
@@ -313,12 +440,16 @@ const editorReducer = (state, action) => {
             const newPast = pushToPast(state);
 
             const source = action.payload;
+            const pastedMetadata = { ...source.metadata };
+            delete pastedMetadata.manualZ;
+            delete pastedMetadata.groupId;
+
             const pastedElement = clampPopupSticker({
                 ...source,
-                id: `el-${Date.now()}`,
-                x: Math.min((source.x || 50) + 2, 95),
-                y: Math.min((source.y || 50) + 2, 95),
-                metadata: { ...source.metadata },
+                id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+                x: Math.min((source.x || 50) + 3, 95),
+                y: Math.min((source.y || 50) + 3, 95),
+                metadata: pastedMetadata,
             });
 
             return {
@@ -329,7 +460,7 @@ const editorReducer = (state, action) => {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
                         slide.id === state.currentSlideId
-                            ? { ...slide, elements: [...slide.elements, pastedElement] }
+                            ? { ...slide, elements: ensureBalloonsAboveImages([...slide.elements, pastedElement]) }
                             : slide
                     ),
                 },
@@ -345,13 +476,29 @@ const editorReducer = (state, action) => {
             const newPast = pushToPast(state);
 
             const sources = action.payload;
-            const pastedElements = sources.map(source => clampPopupSticker({
-                ...source,
-                id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                x: Math.min((source.x || 50) + 2, 95),
-                y: Math.min((source.y || 50) + 2, 95),
-                metadata: { ...source.metadata },
-            }));
+            // Build unique new group IDs for any groups present in the pasted payload
+            const groupMap = {};
+            sources.forEach(source => {
+                const gid = source?.metadata?.groupId;
+                if (gid && !groupMap[gid]) {
+                    groupMap[gid] = `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                }
+            });
+
+            const pastedElements = sources.map((source, index) => {
+                const pastedMeta = { ...source.metadata };
+                delete pastedMeta.manualZ;
+                if (pastedMeta.groupId && groupMap[pastedMeta.groupId]) {
+                    pastedMeta.groupId = groupMap[pastedMeta.groupId];
+                }
+                return clampPopupSticker({
+                    ...source,
+                    id: `el-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 6)}`,
+                    x: Math.min((source.x || 50) + 3, 95),
+                    y: Math.min((source.y || 50) + 3, 95),
+                    metadata: pastedMeta,
+                });
+            });
 
             const pastedIds = pastedElements.map(el => el.id);
 
@@ -363,7 +510,7 @@ const editorReducer = (state, action) => {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
                         slide.id === state.currentSlideId
-                            ? { ...slide, elements: [...slide.elements, ...pastedElements] }
+                            ? { ...slide, elements: ensureBalloonsAboveImages([...slide.elements, ...pastedElements]) }
                             : slide
                     ),
                 },
@@ -534,11 +681,20 @@ const editorReducer = (state, action) => {
             const newReorderIndex = direction === 'forward' ? reorderIndex + 1 : reorderIndex - 1;
             if (newReorderIndex < 0 || newReorderIndex >= reorderElements.length) return state;
 
+            const newPast = pushToPast(state);
             const [movedElement] = reorderElements.splice(reorderIndex, 1);
-            reorderElements.splice(newReorderIndex, 0, movedElement);
+            const updatedMoved = {
+                ...movedElement,
+                metadata: {
+                    ...movedElement.metadata,
+                    manualZ: true,
+                },
+            };
+            reorderElements.splice(newReorderIndex, 0, updatedMoved);
 
             return {
                 ...state,
+                past: newPast,
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
@@ -565,7 +721,14 @@ const editorReducer = (state, action) => {
 
             const newPast = pushToPast(state);
             const [moved] = moveElements.splice(fromIndex, 1);
-            moveElements.splice(clampedTo, 0, moved);
+            const updatedMoved = {
+                ...moved,
+                metadata: {
+                    ...moved.metadata,
+                    manualZ: true,
+                },
+            };
+            moveElements.splice(clampedTo, 0, updatedMoved);
 
             return {
                 ...state,
@@ -730,10 +893,12 @@ const editorReducer = (state, action) => {
         case 'SELECT_ELEMENT': {
             let selectedId;
             let isShift = false;
+            let isAlt = false;
 
             if (action.payload && typeof action.payload === 'object') {
                 selectedId = action.payload.id;
                 isShift = action.payload.isShift;
+                isAlt = action.payload.isAlt;
             } else {
                 selectedId = action.payload;
             }
@@ -769,6 +934,16 @@ const editorReducer = (state, action) => {
                 };
             }
 
+            // If element has groupId and user is NOT holding Alt/Option, select all elements in the group
+            let targetIds = [selectedId];
+            const groupId = elementToSelect.metadata?.groupId;
+            if (groupId && !isAlt) {
+                const groupMembers = currentSlide.elements.filter(el => el.metadata?.groupId === groupId).map(el => el.id);
+                if (groupMembers.length > 0) {
+                    targetIds = groupMembers;
+                }
+            }
+
             // Let's compute the new selectedElementIds
             let newSelectedIds = [...(state.selectedElementIds || [])];
             
@@ -777,63 +952,29 @@ const editorReducer = (state, action) => {
             newSelectedIds = newSelectedIds.filter(id => currentSlideElementIds.includes(id));
 
             if (isShift) {
-                if (newSelectedIds.includes(selectedId)) {
-                    // Deselect
-                    newSelectedIds = newSelectedIds.filter(id => id !== selectedId);
+                const isAlreadySelected = newSelectedIds.includes(selectedId);
+                if (isAlreadySelected) {
+                    // Deselect the target IDs
+                    newSelectedIds = newSelectedIds.filter(id => !targetIds.includes(id));
                 } else {
-                    // Select
-                    newSelectedIds.push(selectedId);
+                    // Add all target IDs
+                    targetIds.forEach(id => {
+                        if (!newSelectedIds.includes(id)) {
+                            newSelectedIds.push(id);
+                        }
+                    });
                 }
             } else {
-                // Select only this one
-                newSelectedIds = [selectedId];
+                // Select only target IDs
+                newSelectedIds = [...targetIds];
             }
 
             const primarySelectedId = newSelectedIds.length > 0 ? newSelectedIds[newSelectedIds.length - 1] : null;
 
-            // If deselecting, or if selecting a locked element, we don't need to reorder elements
-            if (!newSelectedIds.includes(selectedId) || elementToSelect.metadata?.locked) {
-                return {
-                    ...state,
-                    selectedElementId: primarySelectedId,
-                    selectedElementIds: newSelectedIds
-                };
-            }
-
-            // If element is already last (visually on top), just select
-            if (elementIndex === currentSlide.elements.length - 1) {
-                const snapshot = { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex };
-                return {
-                    ...state,
-                    selectedElementId: primarySelectedId,
-                    selectedElementIds: newSelectedIds,
-                    undoSnapshot: snapshot
-                };
-            }
-
-            const snapshot = { element: JSON.parse(JSON.stringify(elementToSelect)), originalIndex: elementIndex };
-
-            // Move element to end of array (top of stack)
-            const newElements = [...currentSlide.elements];
-            const [movedElement] = newElements.splice(elementIndex, 1);
-            newElements.push(movedElement);
-
-            const newSlides = [...state.lesson.slides];
-            newSlides[currentSlideIndex] = {
-                ...currentSlide,
-                elements: newElements
-            };
-
             return {
                 ...state,
-                isDirty: true,
-                lesson: {
-                    ...state.lesson,
-                    slides: newSlides
-                },
                 selectedElementId: primarySelectedId,
-                selectedElementIds: newSelectedIds,
-                undoSnapshot: snapshot
+                selectedElementIds: newSelectedIds
             };
         }
 
@@ -875,6 +1016,121 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'DELETE_ELEMENTS': {
+            const idsToDelete = action.payload;
+            if (!idsToDelete || idsToDelete.length === 0) return state;
+
+            const newPast = pushToPast(state);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? {
+                                ...slide,
+                                elements: slide.elements.filter((el) => !idsToDelete.includes(el.id)),
+                            }
+                            : slide
+                    ),
+                },
+                selectedElementId: null,
+                selectedElementIds: [],
+            };
+        }
+
+        case 'GROUP_ELEMENTS': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const ids = action.payload || state.selectedElementIds || [];
+            const validElements = currentSlide.elements.filter(el => ids.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge');
+            if (validElements.length < 2) return state;
+
+            const newPast = pushToPast(state);
+            const newGroupId = `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+
+            const newElements = currentSlide.elements.map(el => {
+                if (ids.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') {
+                    return {
+                        ...el,
+                        metadata: {
+                            ...el.metadata,
+                            groupId: newGroupId
+                        }
+                    };
+                }
+                return el;
+            });
+
+            const groupMemberIds = validElements.map(el => el.id);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(slide =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: newElements }
+                            : slide
+                    )
+                },
+                selectedElementId: groupMemberIds[groupMemberIds.length - 1],
+                selectedElementIds: groupMemberIds
+            };
+        }
+
+        case 'UNGROUP_ELEMENTS': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const ids = action.payload || state.selectedElementIds || [];
+            if (ids.length === 0) return state;
+
+            // Find any groupIds represented by the specified ids
+            const targetGroupIds = new Set();
+            currentSlide.elements.forEach(el => {
+                if (ids.includes(el.id) && el.metadata?.groupId) {
+                    targetGroupIds.add(el.metadata.groupId);
+                }
+            });
+
+            if (targetGroupIds.size === 0) return state;
+
+            const newPast = pushToPast(state);
+
+            const newElements = currentSlide.elements.map(el => {
+                if (el.metadata?.groupId && targetGroupIds.has(el.metadata.groupId)) {
+                    const newMeta = { ...el.metadata };
+                    delete newMeta.groupId;
+                    return {
+                        ...el,
+                        metadata: newMeta
+                    };
+                }
+                return el;
+            });
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map(slide =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: newElements }
+                            : slide
+                    )
+                }
+            };
+        }
+
         case 'MOVE_ELEMENTS': {
             const { ids, dx, dy } = action.payload;
             return {
@@ -910,12 +1166,24 @@ const editorReducer = (state, action) => {
 
             const newPast = pushToPast(state);
 
+            const dupMetadata = { ...elementToDuplicate.metadata };
+            delete dupMetadata.manualZ;
+
             const newElement = clampPopupSticker({
                 ...elementToDuplicate,
                 id: `el-${Date.now()}`,
                 x: elementToDuplicate.x + 5,
                 y: elementToDuplicate.y + 5,
+                metadata: dupMetadata,
             });
+
+            const originalIndex = currentSlide.elements.findIndex(el => el.id === action.payload);
+            const newElements = [...currentSlide.elements];
+            if (originalIndex !== -1) {
+                newElements.splice(originalIndex + 1, 0, newElement);
+            } else {
+                newElements.push(newElement);
+            }
 
             return {
                 ...state,
@@ -925,12 +1193,65 @@ const editorReducer = (state, action) => {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) =>
                         slide.id === state.currentSlideId
-                            ? { ...slide, elements: [...slide.elements, newElement] }
+                            ? { ...slide, elements: ensureBalloonsAboveImages(newElements) }
                             : slide
                     ),
                 },
                 selectedElementId: newElement.id,
                 selectedElementIds: [newElement.id],
+            };
+        }
+
+        case 'DUPLICATE_ELEMENTS': {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (!currentSlide) return state;
+
+            const idsToDuplicate = action.payload;
+            const elementsToDuplicate = currentSlide.elements.filter(el => idsToDuplicate.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge');
+            if (elementsToDuplicate.length === 0) return state;
+
+            const newPast = pushToPast(state);
+
+            // Remap any groupIds to new unique IDs
+            const groupMap = {};
+            elementsToDuplicate.forEach(el => {
+                const gid = el.metadata?.groupId;
+                if (gid && !groupMap[gid]) {
+                    groupMap[gid] = `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                }
+            });
+
+            const duplicatedElements = elementsToDuplicate.map((el, index) => {
+                const dupMeta = { ...el.metadata };
+                delete dupMeta.manualZ;
+                if (dupMeta.groupId && groupMap[dupMeta.groupId]) {
+                    dupMeta.groupId = groupMap[dupMeta.groupId];
+                }
+                return clampPopupSticker({
+                    ...el,
+                    id: `el-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 6)}`,
+                    x: Math.min((el.x || 50) + 3, 95),
+                    y: Math.min((el.y || 50) + 3, 95),
+                    metadata: dupMeta,
+                });
+            });
+
+            const duplicatedIds = duplicatedElements.map(el => el.id);
+
+            return {
+                ...state,
+                past: newPast,
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) =>
+                        slide.id === state.currentSlideId
+                            ? { ...slide, elements: ensureBalloonsAboveImages([...slide.elements, ...duplicatedElements]) }
+                            : slide
+                    ),
+                },
+                selectedElementId: duplicatedIds[duplicatedIds.length - 1],
+                selectedElementIds: duplicatedIds,
             };
         }
 
@@ -1061,8 +1382,14 @@ const editorReducer = (state, action) => {
         case 'LOAD_LESSON':
             return {
                 ...state,
-                lesson: action.payload,
-                currentSlideId: action.payload.slides[0]?.id || 'slide-1',
+                lesson: {
+                    ...action.payload,
+                    slides: (action.payload.slides || []).map(slide => ({
+                        ...slide,
+                        elements: ensureBalloonsAboveImages(slide.elements || [])
+                    }))
+                },
+                currentSlideId: action.payload.slides?.[0]?.id || 'slide-1',
                 selectedElementId: null,
                 selectedElementIds: [],
                 isDirty: false,
@@ -1093,7 +1420,10 @@ const editorReducer = (state, action) => {
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
-                    slides: newScriptSlides,
+                    slides: newScriptSlides.map(slide => ({
+                        ...slide,
+                        elements: ensureBalloonsAboveImages(slide.elements || [])
+                    })),
                     ...(scriptTitle && { title: scriptTitle }),
                     _snapshots: updatedSnapshots,
                 },
@@ -1130,7 +1460,7 @@ const editorReducer = (state, action) => {
             state.lesson.slides.forEach(slide => {
                 draft[slide.id] = {};
                 slide.elements.forEach(el => {
-                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') {
+                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible' || el.type === 'banner') {
                         draft[slide.id][el.id] = {
                             content: el.translations?.[lang]?.content || el.content
                         };
@@ -1188,7 +1518,7 @@ const editorReducer = (state, action) => {
                 elements: slide.elements.map(el => {
                     const draftEntry = draft[slide.id]?.[el.id];
                     if (!draftEntry) return el;
-                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible') {
+                    if (el.type === 'text' || el.type === 'balloon' || el.type === 'collectible' || el.type === 'banner') {
                         return {
                             ...el,
                             translations: {

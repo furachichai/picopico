@@ -51,7 +51,7 @@ export const PotiondasThumbnail = ({ config }) => {
     );
 };
 
-const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false }) => {
+const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false, cover = false }) => {
     const containerRef = useRef(null);
     const [scale, setScale] = useState(1);
 
@@ -67,8 +67,13 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
             const scaleX = containerWidth / BASE_WIDTH;
             const scaleY = containerHeight / BASE_HEIGHT;
 
-            // Use the smaller scale to fit entirely within the container
-            setScale(Math.min(scaleX, scaleY));
+            if (cover) {
+                // Cover mode + 6% overshoot to eliminate any letterboxing or top/bottom gap lines
+                setScale(Math.max(scaleX, scaleY) * 1.06);
+            } else {
+                // Use the smaller scale to fit entirely within the container
+                setScale(Math.min(scaleX, scaleY));
+            }
         };
 
         const observer = new ResizeObserver(updateScale);
@@ -78,7 +83,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
         }
 
         return () => observer.disconnect();
-    }, []);
+    }, [cover]);
 
     return (
         <div
@@ -88,7 +93,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                 height,
                 position: 'relative',
                 overflow: 'hidden',
-                backgroundColor: '#eee' // Placeholder background
+                backgroundColor: 'transparent'
             }}
         >
             <div
@@ -114,7 +119,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                             width: '100%',
                             height: '100%',
                             zIndex: 0,
-                            pointerEvents: 'none'
+                            pointerEvents: 'none',
+                            overflow: 'hidden'
                         }}
                     >
                         <div
@@ -131,8 +137,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                 backgroundPosition: `${slide.backgroundSettings?.positionX ?? 50}% ${slide.backgroundSettings?.positionY ?? 50}%`,
                                 backgroundRepeat: 'no-repeat',
                                 opacity: slide.backgroundSettings?.opacity ?? 1,
-                                filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
-                                transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                                filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%) blur(${slide.backgroundSettings?.blur ?? 0}px)`,
+                                transform: `scale(${(slide.backgroundSettings?.flipX ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(slide.backgroundSettings?.flipY ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`,
                             }}
                         />
                         {slide.backgroundSettings?.grayscale && slide.backgroundSettings?.tintColor && slide.backgroundSettings.tintColor !== 'transparent' && (
@@ -214,7 +220,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                     </div>
                 )}
                 {slide.elements
-                    .filter(el => !hideTextAndBalloons || (el.type !== 'text' && el.type !== 'balloon'))
+                    .filter(el => !hideTextAndBalloons || (el.type !== 'text' && el.type !== 'balloon' && el.type !== 'banner'))
                     .map(element => (
                     <Sticker
                         key={element.id}

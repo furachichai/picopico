@@ -62,6 +62,34 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
             }
         });
     };
+    const handleAddBanner = () => {
+        dispatch({
+            type: 'ADD_ELEMENT',
+            payload: {
+                type: ELEMENT_TYPES.BANNER,
+                content: '',
+                width: 80,
+                height: 14,
+                rotation: 0,
+                scale: 1,
+                metadata: {
+                    fontFamily: '"Bangers", cursive, sans-serif',
+                    fontSize: 26,
+                    fontStyle: 'normal',
+                    fontWeight: 'normal',
+                    color: '#00b0ff',
+                    textAlign: 'center',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#000000',
+                    shadow: 'grey',
+                    hasShadow: true,
+                    borderRadius: 20,
+                    skin: 'comic',
+                    showTape: false,
+                }
+            }
+        });
+    };
     const handleAddQuiz = (type = 'classic') => {
         setShowQuizMenu(false);
         setShowQ2Menu(false);
@@ -154,6 +182,9 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                 type: ELEMENT_TYPES.BALLOON,
                                 content: 'Hello!',
                                 metadata: {
+                                    shadow: 'grey',
+                                    hasShadow: true,
+                                    borderColor: '#000000',
                                     ...(preset?.balloon?.fontFamily && { fontFamily: preset.balloon.fontFamily }),
                                     ...(preset?.balloon?.fontSize && { fontSize: preset.balloon.fontSize }),
                                     ...(preset?.balloon?.color && { color: preset.balloon.color }),
@@ -161,6 +192,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                             }
                         });
                     }} title={t('editor.addBalloon')} style={{ fontSize: '1.2rem' }}>💬</button>
+                    <button className="btn-secondary" onClick={handleAddBanner} title="Add Comic Banner Card" style={{ fontSize: '1.2rem' }}>🪧</button>
 
                     <div className="toolbar-dropdown-container" style={{ position: 'relative' }}>
                         <button
@@ -642,6 +674,41 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     )}
                 </div>
                 <div className="toolbar-section" style={{ display: 'flex', gap: '6px', alignItems: 'center', borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '8px' }}>
+                    {(() => {
+                        const mode = state?.guideMode || 'both';
+                        const isBoth = mode === 'both';
+                        const isGuides = mode === 'guides';
+                        const isNone = mode === 'none';
+
+                        let titleText = 'Grid (tap for Grid + Guides)';
+                        if (isBoth) titleText = 'Grid + Guides (tap for Guides only)';
+                        else if (isGuides) titleText = 'Guides only (tap to hide all)';
+                        else if (isNone) titleText = 'No guides (tap for Grid)';
+
+                        return (
+                            <button
+                                className={`btn-icon ${!isNone ? 'active' : ''} guide-mode-btn mode-${mode}`}
+                                onClick={() => dispatch({ type: 'CYCLE_GUIDE_MODE' })}
+                                title={titleText}
+                                style={{ position: 'relative', fontSize: '1.1rem', padding: '6px' }}
+                            >
+                                {isGuides ? '📏' : '⊞'}
+                                {isBoth && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '4px',
+                                        right: '4px',
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#10B981',
+                                        border: '1px solid white',
+                                        boxShadow: '0 0 2px rgba(0,0,0,0.3)'
+                                    }} />
+                                )}
+                            </button>
+                        );
+                    })()}
                     <button className="btn-secondary" onClick={() => setShowScriptImport(true)} title="Import Script" style={{ fontSize: '0.75rem', fontWeight: 700, padding: '4px 8px', letterSpacing: '0.3px' }}>📝</button>
                     <button className="btn-danger" onClick={onDeleteSlide} disabled={state.lesson.slides.length <= 1} title="Delete Slide" style={{ fontSize: '1.2rem' }}>🗑️</button>
                 </div>

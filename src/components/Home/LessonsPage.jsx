@@ -268,7 +268,7 @@ const LessonsPage = () => {
                             >
                                 <div className="lesson-card-preview">
                                     {item.content?.slides?.[0] ? (
-                                        <SlideThumbnail slide={item.content.slides[0]} />
+                                        <SlideThumbnail slide={item.content.slides[0]} cover={true} />
                                     ) : (
                                         <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                     )}
@@ -313,7 +313,7 @@ const LessonsPage = () => {
                         >
                             <div className="lesson-card-preview">
                                 {item.content?.slides?.[0] ? (
-                                    <SlideThumbnail slide={item.content.slides[0]} />
+                                    <SlideThumbnail slide={item.content.slides[0]} cover={true} />
                                 ) : (
                                     <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                 )}

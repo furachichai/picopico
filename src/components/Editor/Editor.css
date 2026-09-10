@@ -448,15 +448,16 @@ input[type="color"] {
     top: 10%;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
-    height: 6px;
+    width: 90%;
+    height: 8px;
     z-index: 1000;
     display: flex;
     gap: 4px;
     pointer-events: none;
+    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-.progress-segment {
+.editor-progress-bar .progress-segment {
     flex: 1;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.1);
@@ -464,9 +465,10 @@ input[type="color"] {
     transition: background-color 0.3s ease;
 }
 
-.progress-segment.active {
-    background-color: var(--primary);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.editor-progress-bar .progress-segment.active {
+    background-color: #8A2BE2;
+    /* Violet matching player mode */
+    box-shadow: 0 2px 0 rgba(138, 43, 226, 0.4) inset;
 }
 
 /* Cartridge Container */
@@ -563,4 +565,11 @@ input[type="color"] {
     /* Reset absolute positioning */
     top: auto;
     right: auto;
+}
+
+/* Comic Banner Text */
+.comic-banner-text:empty:before {
+    content: attr(data-placeholder);
+    color: rgba(0, 0, 0, 0.35);
+    pointer-events: none;
 }

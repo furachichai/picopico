@@ -3,6 +3,7 @@ import { resolveAssetUrl } from '../../utils/assetUrl';
 import './Sticker.css';
 import QuizEditor from './QuizEditor';
 import Balloon from './Balloon';
+import Banner from './Banner';
 import ResultField from '../ResultField/ResultField';
 import NumberLine from '../NumberLine/NumberLine';
 import CharacterShadow from './CharacterShadow';
@@ -56,21 +57,16 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         }
 
         const isMultiSelectModifier = e.shiftKey || e.metaKey || e.ctrlKey;
+        const isAlt = e.altKey;
 
         // ChatQuiz: no dragging, resizing, or rotating — it fills the stage
         const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
-            if (!isSelected || isMultiSelectModifier) onSelect(element.id, isMultiSelectModifier);
             return;
         }
 
         e.stopPropagation();
-
-        // Only select if not already selected to avoid re-triggering selection logic unnecessarily
-        if (!isSelected || isMultiSelectModifier) {
-            onSelect(element.id, isMultiSelectModifier);
-        }
 
         if (element.metadata?.locked && !(element.type === 'result_field' && type === 'move')) {
             return;
@@ -98,6 +94,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         const startHeight = element.height;
         const startRotation = element.rotation;
         const startScale = element.scale;
+        const startCurvature = element.metadata?.curvature ?? -40;
+        const startCurveSkew = element.metadata?.curveSkew ?? 0;
 
         // For rotation calculation
         const rect = stickerRef.current.getBoundingClientRect();
@@ -315,6 +313,22 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     y: newYPct,
                     rotation: newAngle
                 });
+            } else if (type === 'line-curve') {
+                // Curvature handle dragging
+                const localDelta = rotatePoint(dx, dy, -startRotation);
+                const localDx = localDelta.x / startScale;
+                const localDy = localDelta.y / startScale;
+
+                const newCurvature = Math.max(-200, Math.min(200, Math.round(startCurvature + localDy)));
+                const newSkew = Math.max(-150, Math.min(150, Math.round(startCurveSkew + localDx)));
+
+                onChange(element.id, {
+                    metadata: {
+                        ...element.metadata,
+                        curvature: newCurvature,
+                        curveSkew: newSkew
+                    }
+                });
             }
         };
 
@@ -325,6 +339,12 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             document.removeEventListener('mouseup', handleEnd);
             document.removeEventListener('touchmove', handleMove);
             document.removeEventListener('touchend', handleEnd);
+
+            // If user clicked without dragging on an already selected element while multiple items were selected,
+            // isolate selection on release (respecting group membership or Alt drill-down)
+            if (!historySaved && !isMultiSelectModifier && (state.selectedElementIds?.length > 1 || isAlt)) {
+                onSelect(element.id, false, isAlt);
+            }
         };
 
         document.addEventListener('mousemove', handleMove);
@@ -336,14 +356,14 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
     return (
         <div
             ref={stickerRef}
-            className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
+            className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.groupId ? 'is-grouped' : ''} ${element.type === 'line' ? 'is-line' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
-                top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${element.y}%`,
+                top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${(element.type === 'quiz' && element.y === 75) ? 78.59375 : element.y}%`,
                 width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
                 transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))),
+                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (elementIndex + 1000) : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1)))),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
@@ -351,14 +371,15 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 // Capture phase fires parent-first, before child stopPropagation
                 // Support Cmd/Ctrl and Shift keys for toggling multi-selection
                 const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
+                const isAlt = e.altKey;
                 if (!isSelected || isMulti) {
-                    onSelect(element.id, isMulti);
+                    onSelect(element.id, isMulti, isAlt);
                 }
             }}
             onTouchStartCapture={(e) => {
                 const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
                 if (!isSelected || isMulti) {
-                    onSelect(element.id, isMulti);
+                    onSelect(element.id, isMulti, false);
                 }
             }}
             onDoubleClick={() => {
@@ -418,6 +439,118 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     const thickness = element.metadata?.height || 10;
                     const color = element.metadata?.symbolColor || '#8B5CF6';
                     const lineType = element.metadata?.lineType || 'normal';
+                    const isCurved = !!element.metadata?.isCurved;
+
+                    if (isCurved) {
+                        const curvature = element.metadata?.curvature ?? -40;
+                        const curveSkew = element.metadata?.curveSkew ?? 0;
+                        const widthPx = (element.width / 100) * 360;
+                        const heightPx = (element.height / 100) * 640;
+                        const y0 = heightPx / 2;
+
+                        const mx = widthPx / 2 + curveSkew;
+                        const my = y0 + curvature;
+
+                        // Quadratic Bézier control point: P1 = 2*M - 0.5*(P0 + P2)
+                        const cx = 2 * mx - widthPx / 2;
+                        const cy = 2 * my - y0;
+
+                        const pathData = `M 0 ${y0} Q ${cx} ${cy} ${widthPx} ${y0}`;
+
+                        let strokeDash = undefined;
+                        let strokeLinecap = 'round';
+                        let filter = undefined;
+
+                        if (lineType === 'dotted') {
+                            strokeDash = `${Math.max(1, thickness * 0.15)} ${thickness * 1.6}`;
+                            strokeLinecap = 'round';
+                        } else if (lineType === 'cutting') {
+                            strokeDash = `${thickness * 2.5} ${thickness * 1.5}`;
+                            strokeLinecap = 'butt';
+                        } else if (lineType === 'pencil') {
+                            filter = 'url(#pencil-filter-curved)';
+                        } else if (lineType === 'ink') {
+                            filter = 'url(#ink-filter-curved)';
+                        }
+
+                        // Tangent angles for arrow caps
+                        let vxStart = 0 - cx;
+                        let vyStart = y0 - cy;
+                        if (vxStart === 0 && vyStart === 0) { vxStart = -1; vyStart = 0; }
+                        const thetaStart = Math.atan2(vyStart, vxStart) * (180 / Math.PI);
+
+                        let vxEnd = widthPx - cx;
+                        let vyEnd = y0 - cy;
+                        if (vxEnd === 0 && vyEnd === 0) { vxEnd = 1; vyEnd = 0; }
+                        const thetaEnd = Math.atan2(vyEnd, vxEnd) * (180 / Math.PI);
+
+                        const arrowSize = Math.max(16, thickness * 2.2);
+
+                        return (
+                            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                <svg
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        overflow: 'visible',
+                                        pointerEvents: 'none'
+                                    }}
+                                    viewBox={`0 0 ${widthPx} ${heightPx}`}
+                                >
+                                    <defs>
+                                        <filter id="pencil-filter-curved" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+                                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+                                        </filter>
+                                        <filter id="ink-filter-curved" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
+                                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+                                        </filter>
+                                    </defs>
+
+                                    {/* Bézier curve path */}
+                                    <path
+                                        d={pathData}
+                                        fill="none"
+                                        stroke={color}
+                                        strokeWidth={thickness}
+                                        strokeDasharray={strokeDash}
+                                        strokeLinecap={strokeLinecap}
+                                        filter={filter}
+                                    />
+
+                                    {/* Start Cap */}
+                                    {element.metadata?.startCap === 'arrow' && (
+                                        <g transform={`translate(0, ${y0}) rotate(${thetaStart})`}>
+                                            <polygon
+                                                points={`0,0 ${arrowSize},${-arrowSize * 0.45} ${arrowSize * 0.75},0 ${arrowSize},${arrowSize * 0.45}`}
+                                                fill={color}
+                                            />
+                                        </g>
+                                    )}
+                                    {element.metadata?.startCap === 'circle' && (
+                                        <circle cx={0} cy={y0} r={thickness * 0.9} fill={color} />
+                                    )}
+
+                                    {/* End Cap */}
+                                    {element.metadata?.endCap === 'arrow' && (
+                                        <g transform={`translate(${widthPx}, ${y0}) rotate(${thetaEnd})`}>
+                                            <polygon
+                                                points={`0,0 ${-arrowSize},${-arrowSize * 0.45} ${-arrowSize * 0.75},0 ${-arrowSize},${arrowSize * 0.45}`}
+                                                fill={color}
+                                            />
+                                        </g>
+                                    )}
+                                    {element.metadata?.endCap === 'circle' && (
+                                        <circle cx={widthPx} cy={y0} r={thickness * 0.9} fill={color} />
+                                    )}
+                                </svg>
+                            </div>
+                        );
+                    }
 
                     let lineStyle = {
                         width: '100%',
@@ -489,6 +622,14 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                         </div>
                     );
                 })()}
+                {element.type === 'banner' && (
+                    <Banner
+                        element={element}
+                        onChange={onChange}
+                        isSelected={isSelected}
+                        readOnly={readOnly}
+                    />
+                )}
                 {element.type === 'balloon' && (
                     <>
                         <Balloon
@@ -644,7 +785,13 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 </div>
             )}
 
-            {isSelected && !translationMode && element.type !== 'quiz' && element.type !== 'balloon' && !element.metadata?.locked && (
+            {isSelected && element.metadata?.groupId && (
+                <div className="sticker-group-badge" title="Grouped (Cmd+G to ungroup)">
+                    🔗
+                </div>
+            )}
+
+            {isSelected && !translationMode && (!state.selectedElementIds || state.selectedElementIds.length <= 1) && element.type !== 'quiz' && element.type !== 'balloon' && element.type !== 'line' && !element.metadata?.locked && (
                 <div className="sticker-controls">
                     {/* Top Left Resize */}
                     <div
@@ -763,7 +910,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 </div>
             )}
 
-            {isSelected && !translationMode && element.type === 'quiz' && element.metadata?.quizType === 'field' && !element.metadata?.locked && (
+            {isSelected && !translationMode && (!state.selectedElementIds || state.selectedElementIds.length <= 1) && element.type === 'quiz' && element.metadata?.quizType === 'field' && !element.metadata?.locked && (
                 <div className="sticker-controls">
                     {/* Rotate Handle for Field Quiz */}
                     <div
@@ -778,9 +925,44 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             )}
 
 
-            {isSelected && !translationMode && element.type === 'line' && (
+            {isSelected && !translationMode && (!state.selectedElementIds || state.selectedElementIds.length <= 1) && element.type === 'line' && (
                 <div className="sticker-controls">
-                    {/* Line Start Handle */}
+                    {/* If curved, render dashed guideline between the 3 points */}
+                    {element.metadata?.isCurved && (() => {
+                        const curvature = element.metadata?.curvature ?? -40;
+                        const curveSkew = element.metadata?.curveSkew ?? 0;
+                        const widthPx = (element.width / 100) * 360;
+                        const heightPx = (element.height / 100) * 640;
+                        const y0 = heightPx / 2;
+                        const mx = widthPx / 2 + curveSkew;
+                        const my = y0 + curvature;
+
+                        return (
+                            <svg
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    overflow: 'visible',
+                                    pointerEvents: 'none'
+                                }}
+                                viewBox={`0 0 ${widthPx} ${heightPx}`}
+                            >
+                                <polyline
+                                    points={`0,${y0} ${mx},${my} ${widthPx},${y0}`}
+                                    fill="none"
+                                    stroke="#8B5CF6"
+                                    strokeWidth="1.5"
+                                    strokeDasharray="4 3"
+                                    opacity="0.6"
+                                />
+                            </svg>
+                        );
+                    })()}
+
+                    {/* Point 1: Line Start Handle */}
                     <div
                         className="handle resize-handle w"
                         style={{
@@ -792,13 +974,51 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             backgroundColor: 'white',
                             border: '2px solid #3b82f6',
                             pointerEvents: 'auto',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                             transform: `scale(${1 / element.scale})`
                         }}
                         onMouseDown={(e) => handleStart(e, 'line-start')}
                         onTouchStart={(e) => handleStart(e, 'line-start')}
+                        title="Start Point (Point 1)"
                     />
+
+                    {/* Point 2: Curvature Apex Handle (when curved) */}
+                    {element.metadata?.isCurved && (() => {
+                        const curvature = element.metadata?.curvature ?? -40;
+                        const curveSkew = element.metadata?.curveSkew ?? 0;
+                        return (
+                            <div
+                                className="handle curve-handle"
+                                style={{
+                                    left: `calc(50% + ${curveSkew}px)`,
+                                    top: `calc(50% + ${curvature}px)`,
+                                    marginLeft: '-11px',
+                                    marginTop: '-11px',
+                                    cursor: 'grab',
+                                    position: 'absolute',
+                                    width: '22px',
+                                    height: '22px',
+                                    borderRadius: '50%',
+                                    backgroundColor: '#8B5CF6',
+                                    border: '2.5px solid white',
+                                    boxShadow: '0 2px 8px rgba(139, 92, 246, 0.65)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    pointerEvents: 'auto',
+                                    zIndex: 10,
+                                    transform: `scale(${1 / element.scale})`
+                                }}
+                                onMouseDown={(e) => handleStart(e, 'line-curve')}
+                                onTouchStart={(e) => handleStart(e, 'line-curve')}
+                                title="Curvature Control (Point 2) — Drag to change curvature"
+                            >
+                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'white' }} />
+                            </div>
+                        );
+                    })()}
                     
-                    {/* Line End Handle */}
+                    {/* Point 3: Line End Handle */}
                     <div
                         className="handle resize-handle e"
                         style={{
@@ -810,15 +1030,28 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             backgroundColor: 'white',
                             border: '2px solid #3b82f6',
                             pointerEvents: 'auto',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                             transform: `scale(${1 / element.scale})`
                         }}
                         onMouseDown={(e) => handleStart(e, 'line-end')}
                         onTouchStart={(e) => handleStart(e, 'line-end')}
+                        title="End Point (Point 3)"
                     />
+
+                    {/* Rotate Handle */}
+                    <div
+                        className="handle rotate-handle"
+                        style={{ transform: `scale(${1 / element.scale})` }}
+                        onMouseDown={(e) => handleStart(e, 'rotate')}
+                        onTouchStart={(e) => handleStart(e, 'rotate')}
+                        title="Rotate"
+                    >
+                        ↻
+                    </div>
                 </div>
             )}
 
-            {isSelected && !translationMode && (element.type === 'balloon' || (element.type === 'image' && element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-'))) && (
+            {isSelected && !translationMode && (!state.selectedElementIds || state.selectedElementIds.length <= 1) && (element.type === 'balloon' || element.type === 'banner' || (element.type === 'image' && element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-'))) && (
                 <div className="sticker-controls">
                     {/* North Resize */}
                     <div

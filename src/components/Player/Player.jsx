@@ -14,6 +14,7 @@ import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
 import Balloon from '../Editor/Balloon';
+import Banner from '../Editor/Banner';
 import ResultField from '../ResultField/ResultField';
 import NumberLine from '../NumberLine/NumberLine';
 import CharacterShadow from '../Editor/CharacterShadow';
@@ -583,43 +584,22 @@ const Player = () => {
                             <button
                                 onClick={handleMenu}
                                 title={t('player.menu')}
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.95)',
-                                    border: '1px solid rgba(0,0,0,0.1)',
-                                    borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    padding: 0,
-                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                                }}
+                                className="player-top-btn"
                             >
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12" />
+                                    <polyline points="12 19 5 12 12 5" />
                                 </svg>
                             </button>
 
-                            <FullscreenToggle style={{
-                                background: 'rgba(255, 255, 255, 0.95)',
-                                border: '1px solid rgba(0,0,0,0.1)',
-                                borderRadius: '50%',
-                                width: '40px',
-                                height: '40px',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                                color: '#334155',
-                                padding: 0
-                            }} />
+                            <FullscreenToggle className="player-top-btn" />
                         </div>
 
                         {/* Action / Context Buttons */}
                         <div style={{
                             pointerEvents: 'auto',
                             display: 'flex',
-                            gap: '8px',
+                            gap: '10px',
                             alignItems: 'center'
                         }}>
                             {/* Language Flag Toggle */}
@@ -631,20 +611,8 @@ const Player = () => {
                                     setLanguage(nextLang);
                                 }}
                                 title={`Language: ${SUPPORTED_LANGUAGES.find(l => l.code === language)?.label}`}
-                                style={{
-                                    background: 'rgba(255, 255, 255, 0.95)',
-                                    border: '1px solid rgba(0,0,0,0.1)',
-                                    borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    padding: 0,
-                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                                    fontSize: '20px'
-                                }}
+                                className="player-top-btn"
+                                style={{ fontSize: '20px' }}
                             >
                                 {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag}
                             </button>
@@ -653,21 +621,9 @@ const Player = () => {
                                 <button
                                     onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
                                     title={t('common.edit')}
-                                    style={{
-                                        background: 'rgba(255, 255, 255, 0.95)',
-                                        border: '1px solid rgba(0,0,0,0.1)',
-                                        borderRadius: '50%',
-                                        width: '40px',
-                                        height: '40px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        padding: 0,
-                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                                    }}
+                                    className="player-top-btn"
                                 >
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#334155' }}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                                         <path d="m15 5 4 4" />
                                     </svg>
@@ -732,7 +688,8 @@ const Player = () => {
                                         width: '100%',
                                         height: '100%',
                                         zIndex: 0,
-                                        pointerEvents: 'none'
+                                        pointerEvents: 'none',
+                                        overflow: 'hidden'
                                     }}
                                 >
                                     <div
@@ -749,8 +706,8 @@ const Player = () => {
                                             backgroundPosition: `${slide.backgroundSettings?.positionX ?? 50}% ${slide.backgroundSettings?.positionY ?? 50}%`,
                                             backgroundRepeat: 'no-repeat',
                                             opacity: slide.backgroundSettings?.opacity ?? 1,
-                                            filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%)`,
-                                            transform: `scale(${slide.backgroundSettings?.flipX ? -1 : 1}, ${slide.backgroundSettings?.flipY ? -1 : 1})`,
+                                            filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%) blur(${slide.backgroundSettings?.blur ?? 0}px)`,
+                                            transform: `scale(${(slide.backgroundSettings?.flipX ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(slide.backgroundSettings?.flipY ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`,
                                         }}
                                     />
                                     {slide.backgroundSettings?.grayscale && slide.backgroundSettings?.tintColor && slide.backgroundSettings.tintColor !== 'transparent' && (
@@ -913,21 +870,9 @@ const Player = () => {
                                     element.metadata?.quizType === 'conecta'
                                 );
 
-                                const hasQuizOnSlide = slide.elements?.some(el => el.type === 'quiz');
-                                const isQuestionTextOnQuizSlide = element.type === 'text' && hasQuizOnSlide && element.y < 40;
-
                                 let effectiveScale = element.scale ?? 1;
                                 let effectiveWidth = element.width;
                                 let effectiveY = element.y;
-
-                                if (isQuestionTextOnQuizSlide) {
-                                    if (element.width && effectiveScale > 1 && (element.width * effectiveScale > 90)) {
-                                        effectiveScale = Math.min(effectiveScale, 90 / element.width);
-                                    }
-                                    if (effectiveY < 20) {
-                                        effectiveY = 22;
-                                    }
-                                }
 
                                 try {
                                     return (
@@ -936,11 +881,11 @@ const Player = () => {
                                             className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
                                             style={{
                                                 left: isFullScreenQuiz ? '50%' : `${element.x}%`,
-                                                top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${effectiveY}%`),
+                                                top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`),
                                                 width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
                                                 height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
                                                 transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`,
-                                                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))),
+                                                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1)))),
                                                 pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
                                             }}
                                         >
@@ -949,19 +894,19 @@ const Player = () => {
                                                     className={element.type === 'collectible' ? "player-collectible" : "player-text"}
                                                     style={{
                                                         fontFamily: element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
-                                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (isQuestionTextOnQuizSlide ? '20px' : (element.type === 'collectible' ? '18px' : '16px')),
-                                                        fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : (isQuestionTextOnQuizSlide ? '600' : 'normal')),
+                                                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (element.type === 'collectible' ? '18px' : '16px'),
+                                                        fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : 'normal'),
                                                         fontStyle: element.metadata?.fontStyle || 'normal',
                                                         textDecoration: element.metadata?.textDecoration || 'none',
                                                         color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
                                                         backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
-                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : (isQuestionTextOnQuizSlide ? '0 8px' : '0')),
+                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
                                                         borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
                                                         border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
                                                         boxShadow: element.type === 'collectible' ? '0 8px 32px rgba(0, 0, 0, 0.35)' : undefined,
                                                         backdropFilter: element.type === 'collectible' ? 'blur(8px)' : undefined,
                                                         textAlign: element.metadata?.textAlign || 'center',
-                                                        lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1.35),
+                                                        lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1),
                                                         boxSizing: 'border-box',
                                                         maxWidth: '100%',
                                                         whiteSpace: 'pre-wrap',
@@ -976,6 +921,113 @@ const Player = () => {
                                                 const thickness = element.metadata?.height || 10;
                                                 const color = element.metadata?.symbolColor || '#8B5CF6';
                                                 const lineType = element.metadata?.lineType || 'normal';
+                                                const isCurved = !!element.metadata?.isCurved;
+
+                                                if (isCurved) {
+                                                    const curvature = element.metadata?.curvature ?? -40;
+                                                    const curveSkew = element.metadata?.curveSkew ?? 0;
+                                                    const widthPx = (element.width / 100) * 360;
+                                                    const heightPx = (element.height / 100) * 640;
+                                                    const y0 = heightPx / 2;
+
+                                                    const mx = widthPx / 2 + curveSkew;
+                                                    const my = y0 + curvature;
+
+                                                    const cx = 2 * mx - widthPx / 2;
+                                                    const cy = 2 * my - y0;
+
+                                                    const pathData = `M 0 ${y0} Q ${cx} ${cy} ${widthPx} ${y0}`;
+
+                                                    let strokeDash = undefined;
+                                                    let strokeLinecap = 'round';
+                                                    let filter = undefined;
+
+                                                    if (lineType === 'dotted') {
+                                                        strokeDash = `${Math.max(1, thickness * 0.15)} ${thickness * 1.6}`;
+                                                        strokeLinecap = 'round';
+                                                    } else if (lineType === 'cutting') {
+                                                        strokeDash = `${thickness * 2.5} ${thickness * 1.5}`;
+                                                        strokeLinecap = 'butt';
+                                                    } else if (lineType === 'pencil') {
+                                                        filter = 'url(#pencil-filter-curved-player)';
+                                                    } else if (lineType === 'ink') {
+                                                        filter = 'url(#ink-filter-curved-player)';
+                                                    }
+
+                                                    let vxStart = 0 - cx;
+                                                    let vyStart = y0 - cy;
+                                                    if (vxStart === 0 && vyStart === 0) { vxStart = -1; vyStart = 0; }
+                                                    const thetaStart = Math.atan2(vyStart, vxStart) * (180 / Math.PI);
+
+                                                    let vxEnd = widthPx - cx;
+                                                    let vyEnd = y0 - cy;
+                                                    if (vxEnd === 0 && vyEnd === 0) { vxEnd = 1; vyEnd = 0; }
+                                                    const thetaEnd = Math.atan2(vyEnd, vxEnd) * (180 / Math.PI);
+
+                                                    const arrowSize = Math.max(16, thickness * 2.2);
+
+                                                    return (
+                                                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                                            <svg
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    width: '100%',
+                                                                    height: '100%',
+                                                                    overflow: 'visible',
+                                                                    pointerEvents: 'none'
+                                                                }}
+                                                                viewBox={`0 0 ${widthPx} ${heightPx}`}
+                                                            >
+                                                                <defs>
+                                                                    <filter id="pencil-filter-curved-player" x="-20%" y="-20%" width="140%" height="140%">
+                                                                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+                                                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+                                                                    </filter>
+                                                                    <filter id="ink-filter-curved-player" x="-20%" y="-20%" width="140%" height="140%">
+                                                                        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
+                                                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+                                                                    </filter>
+                                                                </defs>
+
+                                                                <path
+                                                                    d={pathData}
+                                                                    fill="none"
+                                                                    stroke={color}
+                                                                    strokeWidth={thickness}
+                                                                    strokeDasharray={strokeDash}
+                                                                    strokeLinecap={strokeLinecap}
+                                                                    filter={filter}
+                                                                />
+
+                                                                {element.metadata?.startCap === 'arrow' && (
+                                                                    <g transform={`translate(0, ${y0}) rotate(${thetaStart})`}>
+                                                                        <polygon
+                                                                            points={`0,0 ${arrowSize},${-arrowSize * 0.45} ${arrowSize * 0.75},0 ${arrowSize},${arrowSize * 0.45}`}
+                                                                            fill={color}
+                                                                        />
+                                                                    </g>
+                                                                )}
+                                                                {element.metadata?.startCap === 'circle' && (
+                                                                    <circle cx={0} cy={y0} r={thickness * 0.9} fill={color} />
+                                                                )}
+
+                                                                {element.metadata?.endCap === 'arrow' && (
+                                                                    <g transform={`translate(${widthPx}, ${y0}) rotate(${thetaEnd})`}>
+                                                                        <polygon
+                                                                            points={`0,0 ${-arrowSize},${-arrowSize * 0.45} ${-arrowSize * 0.75},0 ${-arrowSize},${arrowSize * 0.45}`}
+                                                                            fill={color}
+                                                                        />
+                                                                    </g>
+                                                                )}
+                                                                {element.metadata?.endCap === 'circle' && (
+                                                                    <circle cx={widthPx} cy={y0} r={thickness * 0.9} fill={color} />
+                                                                )}
+                                                            </svg>
+                                                        </div>
+                                                    );
+                                                }
 
                                                 let lineStyle = {
                                                     width: '100%',
@@ -1113,7 +1165,16 @@ const Player = () => {
                                             {element.type === 'number_line' && (
                                                 <NumberLine element={element} />
                                             )}
-                                            {element.type === 'balloon' && (
+                                             {element.type === 'banner' && (
+                                                 <Banner
+                                                     element={language !== 'es' && element.translations?.[language]?.content
+                                                         ? { ...element, content: element.translations[language].content }
+                                                         : element
+                                                     }
+                                                     readOnly={true}
+                                                 />
+                                             )}
+                                             {element.type === 'balloon' && (
                                                 <Balloon
                                                     element={language !== 'es' && element.translations?.[language]?.content
                                                         ? { ...element, content: element.translations[language].content }

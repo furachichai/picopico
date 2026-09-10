@@ -155,15 +155,65 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     }
 
     const backgroundColor = element.metadata?.backgroundColor || '#ffffff';
+    const borderColor = element.metadata?.borderColor || '#000000';
+
+    const shadowMode = (() => {
+        if (element.metadata?.hasShadow === false || element.metadata?.shadow === 'none') return 'none';
+        if (element.metadata?.shadow === 'black') return 'black';
+        return 'grey'; // grey (moire) is default
+    })();
 
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <svg
                 viewBox={`0 0 ${w} ${h}`}
                 preserveAspectRatio="none"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.1))' }}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    overflow: 'visible',
+                    zIndex: 0,
+                    pointerEvents: 'none',
+                }}
             >
-                <path d={path} fill={backgroundColor} stroke="black" strokeWidth="2" strokeLinejoin="round" />
+                <defs>
+                    <pattern id={`balloon-moire-${element.id}`} x="0" y="0" width="3.5" height="3.5" patternUnits="userSpaceOnUse">
+                        <rect width="3.5" height="3.5" fill="#a8a8a8" />
+                        <circle cx="1.75" cy="1.75" r="1.15" fill="#222222" />
+                    </pattern>
+                </defs>
+
+                {/* Grey (Moire) Halftone Shadow */}
+                {shadowMode === 'grey' && (
+                    <g transform="translate(3.5, 3.5)">
+                        <path
+                            d={path}
+                            fill={`url(#balloon-moire-${element.id})`}
+                            stroke="#222222"
+                            strokeWidth="1.5"
+                            strokeLinejoin="round"
+                        />
+                    </g>
+                )}
+
+                {/* Solid Black Drop Shadow */}
+                {shadowMode === 'black' && (
+                    <g transform="translate(5, 5)">
+                        <path
+                            d={path}
+                            fill="#000000"
+                            stroke="#000000"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                        />
+                    </g>
+                )}
+
+                {/* Main Balloon Body */}
+                <path d={path} fill={backgroundColor} stroke={borderColor} strokeWidth="2" strokeLinejoin="round" />
             </svg>
 
             {/* Text Container: Handles centering */}

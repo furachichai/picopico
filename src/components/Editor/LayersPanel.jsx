@@ -5,7 +5,7 @@ import { useDraggable } from '../../hooks/useDraggable';
 /**
  * Determines if an element type is "pinned" (always on top, cannot be reordered).
  */
-const isPinnedType = (type) => ['quiz', 'isticker', 'game'].includes(type);
+const isPinnedType = (type) => ['quiz', 'isticker', 'game', 'result_field'].includes(type);
 
 /**
  * Gets an icon for the element type.
@@ -15,8 +15,9 @@ const getTypeIcon = (element) => {
         case 'image': return '🖼️';
         case 'text': return '📝';
         case 'balloon': return '💬';
+        case 'banner': return '🪧';
         case 'quiz': return '🎯';
-        case 'line': return '━';
+        case 'line': return element.metadata?.isCurved ? '⌒' : '━';
         case 'isticker': return '🧩';
         case 'game': return '🎮';
         case 'popup': return '📌';
@@ -32,6 +33,11 @@ const getTypeIcon = (element) => {
  */
 const getElementName = (element) => {
     switch (element.type) {
+        case 'banner': {
+            const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
+            const badge = element.metadata?.badgeText ? `[${element.metadata.badgeText}] ` : '';
+            return badge + (raw.length > 0 ? (raw.length > 18 ? raw.slice(0, 18) + '…' : raw) : 'Banner Card');
+        }
         case 'image': {
             const path = element.content || '';
             const filename = path.split('/').pop() || 'Image';
@@ -60,7 +66,7 @@ const getElementName = (element) => {
             const labels = { mc: 'Multiple Choice', tf: 'True/False', nl: 'Number Line', chatquiz: 'Chat Quiz', pem: 'PEMDAS', match: 'Match', conecta: 'Conecta' };
             return `Quiz — ${labels[qt] || qt}`;
         }
-        case 'line': return 'Line';
+        case 'line': return element.metadata?.isCurved ? 'Curve (Bézier)' : 'Line';
         case 'isticker': {
             const st = element.metadata?.stickerType || '';
             if (st === 'expression_scanner_001') return 'iSticker — Scanner';
@@ -141,7 +147,7 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
     const handleRowClick = (e, elementId) => {
         e.stopPropagation();
         const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
-        onSelect(elementId, isMulti);
+        onSelect(elementId, isMulti, e.altKey);
     };
 
     // ─── Drag-to-Reorder (pointer-based) ───
@@ -158,7 +164,7 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
 
         // Select immediately on pointerdown (matches Figma/design tool behavior)
         const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
-        onSelect(element.id, isMulti);
+        onSelect(element.id, isMulti, e.altKey);
 
         const startY = e.clientY;
         setDragState({ elementId: element.id, displayIndex });
@@ -264,7 +270,10 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                             >
                                 <div className="layer-drag-handle pinned" title="Pinned">📌</div>
                                 <div className="layer-type-icon">{getTypeIcon(element)}</div>
-                                <span className="layer-name">{getElementName(element)}</span>
+                                <span className="layer-name">
+                                    {getElementName(element)}
+                                    {element.metadata?.groupId && <span className="layer-group-indicator" title="Grouped element">🔗</span>}
+                                </span>
                                 <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
                                     <button
                                         className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
@@ -329,7 +338,10 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                         ⠿
                                     </div>
                                     <div className="layer-type-icon">{getTypeIcon(element)}</div>
-                                    <span className="layer-name">{getElementName(element)}</span>
+                                    <span className="layer-name">
+                                        {getElementName(element)}
+                                        {element.metadata?.groupId && <span className="layer-group-indicator" title="Grouped element">🔗</span>}
+                                    </span>
                                     <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
                                         <button
                                             className="layer-action-btn"
