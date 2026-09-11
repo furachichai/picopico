@@ -59,8 +59,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         const isMultiSelectModifier = e.shiftKey || e.metaKey || e.ctrlKey;
         const isAlt = e.altKey;
 
-        // ChatQuiz: no dragging, resizing, or rotating — it fills the stage
-        const isLockedQuiz = element.metadata?.quizType === 'chatquiz';
+        // ChatQuiz & TypeQuiz: no dragging, resizing, or rotating — they fill the stage / dock to bottom
+        const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'type';
         if (isLockedQuiz && type === 'move') {
             e.stopPropagation();
             return;
@@ -358,16 +358,19 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             ref={stickerRef}
             className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.groupId ? 'is-grouped' : ''} ${element.type === 'line' ? 'is-line' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
             style={{
-                left: (element.metadata?.quizType === 'chatquiz') ? '50%' : `${element.x}%`,
-                top: (element.metadata?.quizType === 'chatquiz') ? '55%' : `${(element.type === 'quiz' && element.y === 75) ? 78.59375 : element.y}%`,
-                width: (element.metadata?.quizType === 'chatquiz') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
-                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`),
-                transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`,
-                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (elementIndex + 1000) : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1)))),
+                left: (element.metadata?.quizType === 'chatquiz') ? '50%' : (element.metadata?.quizType === 'type' ? '0' : `${element.x}%`),
+                top: (element.metadata?.quizType === 'chatquiz') ? '55%' : (element.metadata?.quizType === 'type' ? 'auto' : `${(element.type === 'quiz' && element.y === 75) ? 78.59375 : element.y}%`),
+                bottom: (element.metadata?.quizType === 'type') ? '0' : undefined,
+                width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'type') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
+                height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.metadata?.quizType === 'type' ? 'auto' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
+                transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : (element.metadata?.quizType === 'type' ? 'none' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`),
+                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (elementIndex + 1000) : (element.metadata?.quizType === 'type' ? 100 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))))),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}
             onTouchStart={(e) => handleStart(e, 'move')}
             onMouseDownCapture={(e) => {
+                // Don't intercept selection if child specifies data-no-select-parent
+                if (e.target?.closest?.('[data-no-select-parent]')) return;
                 // Capture phase fires parent-first, before child stopPropagation
                 // Support Cmd/Ctrl and Shift keys for toggling multi-selection
                 const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
@@ -377,6 +380,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 }
             }}
             onTouchStartCapture={(e) => {
+                if (e.target?.closest?.('[data-no-select-parent]')) return;
                 const isMulti = e.shiftKey || e.metaKey || e.ctrlKey;
                 if (!isSelected || isMulti) {
                     onSelect(element.id, isMulti, false);
@@ -416,7 +420,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             textDecoration: element.metadata?.textDecoration || 'none',
                             color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
                             backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
-                            padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
+                            padding: (element.metadata?.backgroundColor && element.metadata?.backgroundColor !== 'transparent') ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
                             borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
                             border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
                             boxShadow: element.type === 'collectible' ? '0 8px 32px rgba(0, 0, 0, 0.35)' : undefined,
@@ -699,7 +703,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 {element.type === 'quiz' && (
                     <div className={`sticker-quiz-wysiwyg ${element.metadata?.quizType === 'field' ? 'field-wysiwyg' : ''}`}
                         onClick={(e) => {
-                            const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem';
+                            const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem' || element.metadata?.quizType === 'type';
                             if (isLockedQuiz && !isSelected) {
                                 e.stopPropagation();
                                 onSelect(element.id);

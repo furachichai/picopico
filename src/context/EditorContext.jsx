@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer } from 'react';
 import { ELEMENT_TYPES } from '../types';
 import { ensureBalloonsAboveImages } from '../utils/layerUtils';
+import { getNonOverlappingResultFieldPosition, reindexResultFields } from '../utils/ResultFieldUtils';
 
 const EditorContext = createContext();
 
@@ -317,14 +318,27 @@ const editorReducer = (state, action) => {
 
             const newPast = pushToPast(state);
 
+            let posX = action.payload.x;
+            let posY = action.payload.y;
+
+            if (action.payload.type === ELEMENT_TYPES.RESULT_FIELD) {
+                const existingResultFields = currentSlide.elements.filter(el => el.type === ELEMENT_TYPES.RESULT_FIELD);
+                const collides = existingResultFields.some(f => Math.abs(f.x - (posX ?? 50)) < 14 && Math.abs(f.y - (posY ?? 35)) < 12);
+                if (posX === undefined || posY === undefined || collides) {
+                    const nonOverlapPos = getNonOverlappingResultFieldPosition(currentSlide);
+                    posX = nonOverlapPos.x;
+                    posY = nonOverlapPos.y;
+                }
+            }
+
             const baseElement = {
-                id: action.payload.id || `el-${Date.now()}`,
+                id: action.payload.id || `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 type: action.payload.type,
                 content: action.payload.content,
-                x: action.payload.x !== undefined ? action.payload.x : 50, // Center
-                y: action.payload.y !== undefined ? action.payload.y : (action.payload.type === 'quiz'
+                x: posX !== undefined ? posX : 50, // Center
+                y: posY !== undefined ? posY : (action.payload.type === 'quiz'
                     ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 78.59375))
-                    : 50),
+                    : (action.payload.type === 'result_field' ? 35 : 50)),
                 width: action.payload.metadata?.width || 20,
                 height: action.payload.metadata?.height || 10,
                 rotation: 0,
@@ -383,8 +397,6 @@ const editorReducer = (state, action) => {
             }
 
             if (action.payload.type === 'result_field') {
-                baseElement.x = 50;
-                baseElement.y = 35;
                 elementMetadata = {
                     locked: true,
                     ...elementMetadata
@@ -1006,7 +1018,7 @@ const editorReducer = (state, action) => {
                         slide.id === state.currentSlideId
                             ? {
                                 ...slide,
-                                elements: slide.elements.filter((el) => el.id !== action.payload),
+                                elements: reindexResultFields(slide.elements.filter((el) => el.id !== action.payload)),
                             }
                             : slide
                     ),
@@ -1032,7 +1044,7 @@ const editorReducer = (state, action) => {
                         slide.id === state.currentSlideId
                             ? {
                                 ...slide,
-                                elements: slide.elements.filter((el) => !idsToDelete.includes(el.id)),
+                                elements: reindexResultFields(slide.elements.filter((el) => !idsToDelete.includes(el.id))),
                             }
                             : slide
                     ),
@@ -1169,11 +1181,22 @@ const editorReducer = (state, action) => {
             const dupMetadata = { ...elementToDuplicate.metadata };
             delete dupMetadata.manualZ;
 
+            let dupX = elementToDuplicate.x + 5;
+            let dupY = elementToDuplicate.y + 5;
+
+            if (elementToDuplicate.type === ELEMENT_TYPES.RESULT_FIELD) {
+                const nonOverlap = getNonOverlappingResultFieldPosition(currentSlide, elementToDuplicate);
+                dupX = nonOverlap.x;
+                dupY = nonOverlap.y;
+                const count = currentSlide.elements.filter(el => el.type === ELEMENT_TYPES.RESULT_FIELD).length;
+                dupMetadata.order = count + 1;
+            }
+
             const newElement = clampPopupSticker({
                 ...elementToDuplicate,
-                id: `el-${Date.now()}`,
-                x: elementToDuplicate.x + 5,
-                y: elementToDuplicate.y + 5,
+                id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                x: dupX,
+                y: dupY,
                 metadata: dupMetadata,
             });
 

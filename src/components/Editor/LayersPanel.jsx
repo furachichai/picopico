@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Lock, Unlock } from 'lucide-react';
 import './LayersPanel.css';
 import { useDraggable } from '../../hooks/useDraggable';
 
@@ -63,7 +64,7 @@ const getElementName = (element) => {
         }
         case 'quiz': {
             const qt = element.metadata?.quizType || 'mc';
-            const labels = { mc: 'Multiple Choice', tf: 'True/False', nl: 'Number Line', chatquiz: 'Chat Quiz', pem: 'PEMDAS', match: 'Match', conecta: 'Conecta' };
+            const labels = { mc: 'Multiple Choice', tf: 'True/False', nl: 'Number Line', chatquiz: 'Chat Quiz', pem: 'PEMDAS', match: 'Match', conecta: 'Conecta', type: 'Type Answer' };
             return `Quiz — ${labels[qt] || qt}`;
         }
         case 'line': return element.metadata?.isCurved ? 'Curve (Bézier)' : 'Line';
@@ -299,11 +300,12 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                         {element.metadata?.hidden ? '👁‍🗨' : '👁'}
                                     </button>
                                     <button
-                                        className={`layer-action-btn ${element.metadata?.locked ? 'active locked' : ''}`}
+                                        className={`layer-action-btn layer-lock-btn ${element.metadata?.locked ? 'locked' : 'unlocked'}`}
                                         onClick={(e) => { e.stopPropagation(); onToggleLock(element.id); }}
                                         title={element.metadata?.locked ? 'Unlock' : 'Lock'}
+                                        aria-label={element.metadata?.locked ? 'Unlock' : 'Lock'}
                                     >
-                                        {element.metadata?.locked ? '🔒' : '🔓'}
+                                        {element.metadata?.locked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
                                     </button>
                                 </div>
                             </div>
@@ -383,11 +385,12 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                                             {element.metadata?.hidden ? '👁‍🗨' : '👁'}
                                         </button>
                                         <button
-                                            className={`layer-action-btn ${element.metadata?.locked ? 'active locked' : ''}`}
+                                            className={`layer-action-btn layer-lock-btn ${element.metadata?.locked ? 'locked' : 'unlocked'}`}
                                             onClick={(e) => { e.stopPropagation(); onToggleLock(element.id); }}
                                             title={element.metadata?.locked ? 'Unlock' : 'Lock'}
+                                            aria-label={element.metadata?.locked ? 'Unlock' : 'Lock'}
                                         >
-                                            {element.metadata?.locked ? '🔒' : '🔓'}
+                                            {element.metadata?.locked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
                                         </button>
                                     </div>
 

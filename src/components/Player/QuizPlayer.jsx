@@ -7,6 +7,7 @@ import './QuizPlayer.css';
 import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
+import TypeQuizKeyboard from './TypeQuizKeyboard';
 
 const generateFieldFlyId = () => Date.now() + Math.random();
 
@@ -874,8 +875,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         }
         if (onSolve) onSolve(resolvedAnswer);
 
-        // Mark slide solved but do NOT auto-advance — user taps to move forward
-        if (onNext) onNext();
+        // Mark slide solved; pass true so autonext can advance if enabled
+        if (onNext) onNext(true);
     };
 
     const handleWrong = (index) => {
@@ -890,8 +891,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
             setIsFailed(true);
             playSound('fail');
             if (onBanner) onBanner('fail', 'Moco!');
-            // Mark slide solved but do NOT auto-advance
-            if (onNext) onNext();
+            // Mark slide solved but do NOT auto-advance because quiz failed
+            if (onNext) onNext(false);
         } else {
             playSound('wrong');
         }
@@ -1913,7 +1914,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 setIsFailed(true);
                 playSound('fail');
                 if (onBanner) onBanner('fail', 'Moco!');
-                if (onNext) onNext();
+                if (onNext) onNext(false);
             } else {
                 playSound('wrong');
             }
@@ -3271,10 +3272,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     setPemErrors(0);
                                 }, 1000);
                             } else {
-                                if (onNext) onNext();
+                                if (onNext) onNext(true);
                             }
                         } else {
-                            if (onNext) onNext();
+                            if (onNext) onNext(true);
                         }
                     } else {
                         setPemAst(newAst);
@@ -3759,6 +3760,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         READY
                     </button>
                 </div>
+            </div>
+        );
+    }
+
+    if (quizType === 'type') {
+        return (
+            <div className="quiz-player-type-container" style={{ width: '100%', pointerEvents: 'auto' }}>
+                <TypeQuizKeyboard isActive={isActive} />
             </div>
         );
     }

@@ -20,7 +20,7 @@
     line-height: 1;
     padding: 0 4px;
     letter-spacing: -0.5px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
 }
 
 .result-field.is-square {
@@ -28,9 +28,9 @@
     aspect-ratio: 1 / 1;
 }
 
-/* Play mode styles */
+/* Classic / NL Play mode styles */
 .result-field-player {
-    pointer-events: none; /* User specified: not draggable in play mode */
+    pointer-events: none; /* Default for classic companion result fields */
 }
 
 .result-field-player.empty {
@@ -43,6 +43,80 @@
     background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
     border-color: #0284C7;
     box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* --- Type Quiz Interactive Play Mode Styles --- */
+.result-field-player.type-quiz-interactive {
+    pointer-events: auto;
+    cursor: pointer;
+    background: #18232c;
+    border: 2.5px solid #37474f;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    color: #eceff1;
+}
+
+/* 1. Greyed out (Idle / Unfocused) State */
+.result-field-player.type-quiz-interactive.state-idle {
+    background: #1c2730;
+    border-color: #3e505c;
+    color: #90a4ae;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.result-field-player.type-quiz-interactive.state-idle:hover {
+    border-color: #546e7a;
+}
+
+/* 2. Active State (With Glowing Border and Blinking Cursor) */
+.result-field-player.type-quiz-interactive.state-active {
+    background: #182834;
+    border-color: #38BDF8;
+    color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3), 0 4px 12px rgba(56, 189, 248, 0.2);
+}
+
+/* Blinking Cursor in Active Field */
+.type-quiz-cursor {
+    display: inline-block;
+    width: 2.5px;
+    height: 1.15em;
+    background-color: #38BDF8;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: cursorBlink 0.9s infinite;
+    border-radius: 1px;
+}
+
+@keyframes cursorBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+/* 3. Right Answer State (Solved, Green, Locked) */
+.result-field-player.type-quiz-interactive.state-solved {
+    background: #173427;
+    border-color: #22C55E;
+    color: #4ADE80;
+    box-shadow: 0 0 0 2.5px rgba(34, 197, 94, 0.35), 0 4px 12px rgba(34, 197, 94, 0.2);
+    pointer-events: none !important;
+    cursor: default;
+}
+
+/* 4. Wrong Answer State (Red, Shaking) */
+.result-field-player.type-quiz-interactive.state-wrong {
+    background: #391c20;
+    border-color: #EF4444;
+    color: #F87171;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.35);
+    animation: fieldShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes fieldShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
 }
 
 .result-field-content-pop {
@@ -90,6 +164,28 @@
     white-space: nowrap;
     pointer-events: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Order badge for Result fields in Editor */
+.result-field-order-badge {
+    position: absolute;
+    top: -9px;
+    left: -9px;
+    width: 20px;
+    height: 20px;
+    background: #FFD21E;
+    color: #000000;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1.5px 1.5px 0 #000000;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .result-field-placeholder {

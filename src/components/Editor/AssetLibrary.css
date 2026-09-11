@@ -448,3 +448,148 @@
     flex-shrink: 0;
     margin-left: 8px;
 }
+
+/* Background Subcategories */
+.bg-subcategories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    width: 100%;
+}
+
+/* Background Section Headers */
+.bg-section-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    box-sizing: border-box;
+}
+
+.bg-section-header.titlecards-header {
+    background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+    border: 1.5px solid #f0abfc;
+    box-shadow: 0 2px 8px rgba(217, 70, 239, 0.1);
+}
+
+.bg-section-header.scenes-header {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    margin-top: 14px;
+}
+
+.bg-section-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+.bg-section-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.bg-section-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.bg-section-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.titlecards-header .bg-section-title {
+    color: #86198f;
+}
+
+.bg-section-desc {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #64748b;
+    line-height: 1.2;
+}
+
+.titlecards-header .bg-section-desc {
+    color: #a21caf;
+}
+
+.bg-section-counter {
+    background: #ffffff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.titlecards-header .bg-section-counter {
+    background: #fdf4ff;
+    color: #a21caf;
+    border-color: #f0abfc;
+}
+
+/* Titlecard Items in Grid */
+.asset-item.custom-bg.titlecard-item {
+    aspect-ratio: 9 / 13;
+    border: 2px solid #e879f9;
+    background: #fae8ff;
+    box-shadow: 0 2px 6px rgba(217, 70, 239, 0.12);
+}
+
+.asset-item.custom-bg.titlecard-item:hover {
+    border-color: #c026d3;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(192, 38, 211, 0.28);
+}
+
+.titlecard-badge {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    background: rgba(15, 23, 42, 0.86);
+    backdrop-filter: blur(4px);
+    color: #fdf4ff;
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 2px 3px;
+    border-radius: 4px;
+    letter-spacing: 0.4px;
+    pointer-events: none;
+    border: 1px solid rgba(240, 171, 252, 0.35);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bg-section-empty {
+    grid-column: 1 / -1;
+    padding: 14px 16px;
+    text-align: center;
+    background: #fdf4ff;
+    border: 1.5px dashed #f0abfc;
+    border-radius: 10px;
+    font-size: 0.76rem;
+    color: #86198f;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}

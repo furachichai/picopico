@@ -71,8 +71,24 @@ const customObjectsList = [...filteredStaticObjects, ...customObjectsListGlob];
 const combinedImageList = [...customCharacterList, ...customImageList, ...customGraphicsList, ...customObjectsList];
 
 // Load custom backgrounds from src/assets/backgrounds
-const customBackgrounds = import.meta.glob('../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', { eager: true, query: '?url', import: 'default' });
+const customBackgrounds = import.meta.glob(['../../assets/backgrounds/*.{png,jpg,jpeg,svg,webp}', '../../assets/backgrounds/**/*.{png,jpg,jpeg,svg,webp}'], { eager: true, query: '?url', import: 'default' });
 const customBackgroundList = Object.values(customBackgrounds);
+
+export const isTitlecard = (src) => {
+    if (!src) return false;
+    const url = typeof src === 'object' ? src.default || '' : src;
+    const normalized = url.toLowerCase();
+    const filename = normalized.split('/').pop().split('?')[0];
+    return (
+        normalized.includes('/titlecards/') ||
+        normalized.includes('/titlecard') ||
+        filename.includes('titlecard') ||
+        filename.includes('title_card') ||
+        filename.includes('title-card') ||
+        filename.startsWith('title_') ||
+        filename.startsWith('titlecard')
+    );
+};
 
 const classifyAsset = (src) => {
     if (!src) return 'other';
@@ -182,6 +198,24 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         } catch {
             // ignore
         }
+    };
+
+    const savedBgTag = (() => {
+        try {
+            return localStorage.getItem('picopico_last_bg_tag') || 'all';
+        } catch {
+            return 'all';
+        }
+    })();
+    const [activeBgSubCategory, setActiveBgSubCategory] = useState(savedBgTag);
+
+    const handleBgSubCategoryChange = (catId) => {
+        const isSame = activeBgSubCategory === catId;
+        setActiveBgSubCategory(catId);
+        contentRef.current?.scrollTo({ top: 0, behavior: isSame ? 'smooth' : 'auto' });
+        try {
+            localStorage.setItem('picopico_last_bg_tag', catId);
+        } catch {}
     };
 
     // Live asset sync from server
@@ -460,6 +494,8 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     // Filter combined list by deletions and additions
     const allImages = mergeWithServer(combinedImageList, serverAssets?.allImages).filter(url => !deletedUrls.has(url));
     const allBackgrounds = mergeWithServer(customBackgroundList, serverAssets?.allBackgrounds).filter(url => !deletedUrls.has(url));
+    const titlecardBackgrounds = allBackgrounds.filter(src => isTitlecard(src));
+    const sceneBackgrounds = allBackgrounds.filter(src => !isTitlecard(src));
     const allObjects = mergeWithServer(customObjectsList, serverAssets?.allObjects).filter(url => !deletedUrls.has(url));
 
     return (
@@ -648,6 +684,24 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                     </div>
                 )}
 
+                {activeTab === 'custom-bg' && (
+                    <div className="library-subcategories bg-subcategories">
+                        {[
+                            { id: 'all', name: 'All' },
+                            { id: 'titlecards', name: '🎬 Titlecards' },
+                            { id: 'scenes', name: '🌄 Scenes' },
+                        ].map(cat => (
+                            <button
+                                key={cat.id}
+                                className={`subcategory-pill ${activeBgSubCategory === cat.id ? 'active' : ''}`}
+                                onClick={() => handleBgSubCategoryChange(cat.id)}
+                            >
+                                {cat.name} {cat.id === 'all' ? `(${allBackgrounds.length})` : (cat.id === 'titlecards' ? `(${titlecardBackgrounds.length})` : `(${sceneBackgrounds.length})`)}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 <div className="assets-grid">
                     {activeTab === 'custom' && (() => {
                         const filtered = allImages.filter(src => {
@@ -747,45 +801,103 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         )
                     )}
 
-                    {activeTab === 'custom-bg' && (
-                        allBackgrounds.length > 0 ? (
-                            allBackgrounds.map((src, index) => {
-                                const filename = src.split('/').pop();
-                                return (
-                                    <div
-                                        key={`${src}-${index}`}
-                                        className="asset-item custom-bg"
-                                        onClick={() => handleSelect(src)}
-                                    >
-                                        <img src={src} alt="background" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
-                                        <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
-                                            <button
-                                                type="button"
-                                                className="asset-action-btn info-btn"
-                                                title="View asset info"
-                                                onClick={() => setInfoModalAsset(src)}
-                                            >
-                                                ℹ️
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="asset-action-btn delete-btn"
-                                                title="Delete asset"
-                                                onClick={() => setDeleteTarget({ src, filename })}
-                                            >
-                                                🗑️
-                                            </button>
-                                        </div>
+                    {activeTab === 'custom-bg' && (() => {
+                        const showTitlecards = activeBgSubCategory === 'all' || activeBgSubCategory === 'titlecards';
+                        const showScenes = activeBgSubCategory === 'all' || activeBgSubCategory === 'scenes';
+
+                        if (allBackgrounds.length === 0) {
+                            return (
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
+                                    {t('library.noBackgrounds')} <br />
+                                    Click <strong>+ Upload</strong> or drop images into <code>src/assets/backgrounds</code>
+                                </div>
+                            );
+                        }
+
+                        const renderBgItem = (src, index, isTc = false) => {
+                            const filename = src.split('/').pop();
+                            return (
+                                <div
+                                    key={`${src}-${index}`}
+                                    className={`asset-item custom-bg ${isTc ? 'titlecard-item' : ''}`}
+                                    onClick={() => handleSelect(src)}
+                                    title={filename}
+                                >
+                                    <img
+                                        src={src}
+                                        alt={isTc ? "titlecard" : "background"}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                                    />
+                                    {isTc && (
+                                        <span className="titlecard-badge">🎬 TITLECARD</span>
+                                    )}
+                                    <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
+                                        <button
+                                            type="button"
+                                            className="asset-action-btn info-btn"
+                                            title="View asset info"
+                                            onClick={() => setInfoModalAsset(src)}
+                                        >
+                                            ℹ️
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="asset-action-btn delete-btn"
+                                            title="Delete asset"
+                                            onClick={() => setDeleteTarget({ src, filename })}
+                                        >
+                                            🗑️
+                                        </button>
                                     </div>
-                                );
-                            })
-                        ) : (
-                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#666' }}>
-                                {t('library.noBackgrounds')} <br />
-                                Click <strong>+ Upload</strong> or drop images into <code>src/assets/backgrounds</code>
-                            </div>
-                        )
-                    )}
+                                </div>
+                            );
+                        };
+
+                        return (
+                            <>
+                                {showTitlecards && (
+                                    <>
+                                        <div className="bg-section-header titlecards-header">
+                                            <div className="bg-section-title-wrap">
+                                                <span className="bg-section-icon">🎬</span>
+                                                <div className="bg-section-text-col">
+                                                    <span className="bg-section-title">Titlecards</span>
+                                                    <span className="bg-section-desc">First slide openers & lesson announcements</span>
+                                                </div>
+                                            </div>
+                                            <span className="bg-section-counter">{titlecardBackgrounds.length}</span>
+                                        </div>
+                                        {titlecardBackgrounds.length > 0 ? (
+                                            titlecardBackgrounds.map((src, idx) => renderBgItem(src, idx, true))
+                                        ) : (
+                                            <div className="bg-section-empty">
+                                                No titlecards found yet.<br />
+                                                Click <strong>+ Upload</strong> and choose Titlecard, or add images with <em>titlecard</em> in their filename.
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+                                {showScenes && (
+                                    <>
+                                        {activeBgSubCategory === 'all' && (
+                                            <div className="bg-section-header scenes-header">
+                                                <div className="bg-section-title-wrap">
+                                                    <span className="bg-section-icon">🌄</span>
+                                                    <div className="bg-section-text-col">
+                                                        <span className="bg-section-title">Backgrounds & Sceneries</span>
+                                                        <span className="bg-section-desc">Standard slide backgrounds & textures</span>
+                                                    </div>
+                                                </div>
+                                                <span className="bg-section-counter">{sceneBackgrounds.length}</span>
+                                            </div>
+                                        )}
+                                        {sceneBackgrounds.map((src, idx) => renderBgItem(src, idx, false))}
+                                    </>
+                                )}
+                            </>
+                        );
+                    })()}
 
                     {activeTab === 'emojis' && ASSETS.emojis.map((item, index) => (
                         <div

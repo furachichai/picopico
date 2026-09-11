@@ -397,7 +397,7 @@ const DiscoverView = () => {
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (element.type === 'collectible' ? '18px' : '16px'),
                                     color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
                                     backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
-                                    padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1rem' : '0'),
+                                    padding: (element.metadata?.backgroundColor && element.metadata?.backgroundColor !== 'transparent') ? '0.5rem' : (element.type === 'collectible' ? '1rem' : '0'),
                                     borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
                                     border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
                                     lineHeight: element.metadata?.lineHeight ?? (element.type === 'collectible' ? 1.4 : 1.3),

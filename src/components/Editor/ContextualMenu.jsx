@@ -6,7 +6,7 @@ import { getSymbolSvg } from '../../utils/symbols';
 import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
-import { SUPPORTED_QUIZ_TYPES } from '../../utils/ResultFieldUtils';
+import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import { isCharacterElement } from '../../utils/characterShadow';
 
 const CRATE_MAP = {
@@ -160,6 +160,7 @@ const parseFieldExpression = (expression) => {
 };
 
 const FONTS = [
+    { name: 'Acme', value: 'Acme' },
     { name: 'Bangers (Comic)', value: '"Bangers", cursive, sans-serif' },
     { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
     { name: 'Outfit', value: 'Outfit' },
@@ -188,6 +189,7 @@ const COLORS = [
 
 const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background", extraColors = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const isNone = color === 'transparent' || color === 'none';
     
     return (
         <div className="menu-group" style={{ position: 'relative' }}>
@@ -196,12 +198,13 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                 className="color-swatch-trigger"
                 style={{
                     width: '24px', height: '24px', borderRadius: '50%',
-                    backgroundColor: color || '#ffffff',
-                    border: '2px solid rgba(0,0,0,0.1)', cursor: 'pointer',
+                    backgroundColor: isNone ? '#ffffff' : (color || '#ffffff'),
+                    border: isNone ? '1.5px solid #ef4444' : '2px solid rgba(0,0,0,0.1)', cursor: 'pointer',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                     transition: 'transform 0.1s',
                     position: 'relative',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    overflow: 'hidden'
                 }}
                 onClick={() => setIsOpen(!isOpen)}
                 onMouseDown={(e) => {
@@ -209,6 +212,16 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                     if (onMouseDownItem) e.preventDefault();
                 }}
             >
+                {isNone && !children && (
+                    <span style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '2px',
+                        backgroundColor: '#ef4444',
+                        transform: 'rotate(-45deg)',
+                        transformOrigin: 'center'
+                    }} />
+                )}
                 {children}
             </div>
             {isOpen && (
@@ -268,7 +281,7 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                         )}
                         {allowNone && (
                             <div
-                                className="color-swatch-none"
+                                className={`color-swatch-none ${isNone ? 'active' : ''}`}
                                 title={noneLabel}
                                 style={{
                                     gridColumn: '1 / -1',
@@ -278,12 +291,12 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                                     gap: '8px',
                                     padding: '6px 10px',
                                     borderRadius: '8px',
-                                    border: '1.5px dashed #cbd5e1',
-                                    backgroundColor: '#f8fafc',
+                                    border: isNone ? '2px solid #ef4444' : '1.5px dashed #cbd5e1',
+                                    backgroundColor: isNone ? '#fef2f2' : '#f8fafc',
                                     cursor: 'pointer',
                                     fontSize: '0.8rem',
                                     fontWeight: '600',
-                                    color: '#475569',
+                                    color: isNone ? '#dc2626' : '#475569',
                                     marginBottom: '4px',
                                     transition: 'all 0.15s ease'
                                 }}
@@ -293,9 +306,9 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                                     e.currentTarget.style.color = '#dc2626';
                                 }}
                                 onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#f8fafc';
-                                    e.currentTarget.style.borderColor = '#cbd5e1';
-                                    e.currentTarget.style.color = '#475569';
+                                    e.currentTarget.style.backgroundColor = isNone ? '#fef2f2' : '#f8fafc';
+                                    e.currentTarget.style.borderColor = isNone ? '#ef4444' : '#cbd5e1';
+                                    e.currentTarget.style.color = isNone ? '#dc2626' : '#475569';
                                 }}
                                 onMouseDown={(e) => {
                                     if (onMouseDownItem) onMouseDownItem(e, 'transparent');
@@ -363,12 +376,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
     const handleToggleResultField = () => {
         if (!existingResultField) {
+            const pos = getNonOverlappingResultFieldPosition(currentSlide);
+            const fieldId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             dispatch({
                 type: 'ADD_ELEMENT',
                 payload: {
+                    id: fieldId,
                     type: ELEMENT_TYPES.RESULT_FIELD,
-                    content: '',
-                    metadata: { locked: true }
+                    content: '60',
+                    metadata: {
+                        correctAnswer: '60',
+                        order: 1,
+                        locked: true
+                    },
+                    x: pos.x,
+                    y: pos.y
                 }
             });
         } else {
@@ -472,6 +494,81 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const updateMetadata = (updates) => {
         onChange(element.id, { metadata: { ...metadata, ...updates } });
     };
+
+    const isInteractiveSlide = !!(
+        currentSlide?.cartridge ||
+        currentSlide?.elements?.some(el => el.type === 'quiz' || el.type === 'game' || el.type === 'result_field') ||
+        element.type === 'quiz' ||
+        element.type === 'cartridge' ||
+        element.type === 'result_field' ||
+        element.type === 'game'
+    );
+
+    const isAutonext = !!(
+        currentSlide?.autonext ||
+        currentSlide?.cartridge?.config?.autonext ||
+        currentSlide?.elements?.some(el => el.metadata?.autonext || el.config?.autonext) ||
+        element.metadata?.autonext ||
+        element.config?.autonext
+    );
+
+    const handleToggleAutonext = () => {
+        const nextVal = !isAutonext;
+        dispatch({
+            type: 'UPDATE_SLIDE',
+            payload: {
+                autonext: nextVal,
+                ...(currentSlide?.cartridge ? {
+                    cartridge: {
+                        ...currentSlide.cartridge,
+                        config: {
+                            ...(currentSlide.cartridge.config || {}),
+                            autonext: nextVal
+                        }
+                    }
+                } : {})
+            }
+        });
+
+        if (element.id && (element.type === 'quiz' || element.type === 'result_field' || element.type === 'game')) {
+            updateMetadata({ autonext: nextVal });
+        } else if (element.type === 'cartridge') {
+            onChange('cartridge', {
+                config: {
+                    ...(element.config || {}),
+                    autonext: nextVal
+                }
+            });
+        }
+    };
+
+    const renderAutonextButton = (size = 'normal') => (
+        <div className="menu-group">
+            <label>Autonext</label>
+            <button
+                type="button"
+                className={`btn-secondary ${isAutonext ? 'active' : ''}`}
+                onClick={handleToggleAutonext}
+                title={`Autonext: Automatically advance to next slide when task is correctly solved (${isAutonext ? 'ON' : 'OFF'})`}
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: size === 'compact' ? '30px' : '34px',
+                    height: size === 'compact' ? '30px' : '34px',
+                    padding: 0,
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    background: isAutonext ? '#DCFCE7' : '#F1F5F9',
+                    border: isAutonext ? '1.5px solid #22C55E' : '1.5px solid #CBD5E1',
+                    boxShadow: isAutonext ? '0 0 0 2px rgba(34, 197, 94, 0.25)' : 'none',
+                    transition: 'all 0.15s ease'
+                }}
+            >
+                <span style={{ fontSize: '1rem', opacity: isAutonext ? 1 : 0.35, filter: isAutonext ? 'none' : 'grayscale(100%)' }}>⏭️</span>
+            </button>
+        </div>
+    );
 
     const handleFormatCommand = (e, cmd, metaProp, activeValue, inactiveValue = 'normal') => {
         e.preventDefault();
@@ -703,9 +800,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group" style={{ flexDirection: 'row', alignItems: 'flex-end', gap: '10px' }}>
                         <ColorPickerDropdown
                             label={element.type === 'balloon' ? 'Bubble' : (element.type === 'banner' ? 'Card' : 'Background')}
-                            color={metadata.backgroundColor || (element.type === 'banner' && metadata.skin === 'paper' ? '#f6efdd' : (element.type === 'banner' && metadata.skin === 'sticky' ? '#fff875' : '#ffffff'))}
+                            color={(metadata.backgroundColor && metadata.backgroundColor !== '')
+                                ? metadata.backgroundColor
+                                : (element.type === 'banner'
+                                    ? (metadata.skin === 'paper' ? '#f6efdd' : (metadata.skin === 'sticky' ? '#fff875' : '#ffffff'))
+                                    : (element.type === 'balloon' ? '#ffffff' : 'transparent'))}
                             onSelect={(c) => updateMetadata({ backgroundColor: c })}
                             align="left"
+                            allowNone={true}
+                            noneLabel="No background"
                             extraColors={element.type === 'banner' ? ['#f6efdd', '#fff875'] : undefined}
                         />
                         {element.type === 'banner' && (() => {
@@ -848,6 +951,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 </label>
                             </div>
                         )}
+                        {element.type === 'background' && isInteractiveSlide && renderAutonextButton()}
                     </div>
 
                     {!translationMode && onOpenPresets && (
@@ -1400,6 +1504,170 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 </>
             )}
 
+            {element.type === 'result_field' && (() => {
+                const allResultFields = (currentSlide?.elements || [])
+                    .filter(el => el.type === 'result_field')
+                    .sort((a, b) => {
+                        const orderA = a.metadata?.order !== undefined ? Number(a.metadata.order) : 0;
+                        const orderB = b.metadata?.order !== undefined ? Number(b.metadata.order) : 0;
+                        return orderA - orderB;
+                    });
+                const isTypeQuizSlide = currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'type');
+                const currentOrder = element.metadata?.order !== undefined ? Number(element.metadata.order) : (allResultFields.findIndex(f => f.id === element.id) + 1);
+                const answerValue = element.metadata?.correctAnswer !== undefined ? String(element.metadata.correctAnswer) : (element.content || '');
+
+                return (
+                    <>
+                        {allResultFields.length > 1 && (
+                            <div className="menu-group">
+                                <label>Field</label>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    {allResultFields.map((f, i) => {
+                                        const orderNum = f.metadata?.order !== undefined ? Number(f.metadata.order) : (i + 1);
+                                        const isCurrent = f.id === element.id;
+                                        return (
+                                            <button
+                                                key={f.id}
+                                                type="button"
+                                                onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: f.id })}
+                                                style={{
+                                                    minWidth: '32px',
+                                                    height: '30px',
+                                                    borderRadius: '8px',
+                                                    background: isCurrent ? '#0284C7' : '#F1F5F9',
+                                                    color: isCurrent ? '#ffffff' : '#334155',
+                                                    fontWeight: 900,
+                                                    fontSize: '0.85rem',
+                                                    border: isCurrent ? '2px solid #0369A1' : '1.5px solid #CBD5E1',
+                                                    cursor: 'pointer',
+                                                    padding: '0 6px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center'
+                                                }}
+                                                title={`Select Field #${orderNum}`}
+                                            >
+                                                #{orderNum}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="menu-group">
+                            <label>Result Answer</label>
+                            <input
+                                key={`result-answer-${element.id}`}
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="e.g. 60"
+                                value={answerValue}
+                                onChange={(e) => {
+                                    const val = e.target.value.replace(/[^0-9]/g, '');
+                                    onChange(element.id, {
+                                        content: val,
+                                        metadata: { ...metadata, correctAnswer: val }
+                                    });
+                                }}
+                                style={{
+                                    width: '80px',
+                                    padding: '5px 8px',
+                                    borderRadius: '8px',
+                                    border: '1.5px solid #CBD5E1',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 'bold',
+                                    textAlign: 'center'
+                                }}
+                            />
+                        </div>
+
+                        {(allResultFields.length > 1 || isTypeQuizSlide) && (
+                            <div className="menu-group">
+                                <label>Order</label>
+                                <select
+                                    key={`result-order-${element.id}`}
+                                    value={currentOrder}
+                                    onChange={(e) => {
+                                        const newOrder = Number(e.target.value);
+                                        const otherField = allResultFields.find(f => {
+                                            if (f.id === element.id) return false;
+                                            const fOrder = f.metadata?.order !== undefined
+                                                ? Number(f.metadata.order)
+                                                : (allResultFields.findIndex(item => item.id === f.id) + 1);
+                                            return fOrder === newOrder;
+                                        });
+                                        if (otherField) {
+                                            onChange(otherField.id, {
+                                                metadata: { ...otherField.metadata, order: currentOrder }
+                                            });
+                                        }
+                                        updateMetadata({ order: newOrder });
+                                    }}
+                                    style={{
+                                        padding: '5px 8px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 'bold'
+                                    }}
+                                >
+                                    {allResultFields.map((_, i) => (
+                                        <option key={i + 1} value={i + 1}>
+                                            #{i + 1}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        {allResultFields.length < 5 && (
+                            <div className="menu-group" style={{ alignSelf: 'center' }}>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => {
+                                        const pos = getNonOverlappingResultFieldPosition(currentSlide, element);
+                                        const fieldId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                                        dispatch({
+                                            type: 'ADD_ELEMENT',
+                                            payload: {
+                                                id: fieldId,
+                                                type: ELEMENT_TYPES.RESULT_FIELD,
+                                                content: '100',
+                                                metadata: {
+                                                    correctAnswer: '100',
+                                                    order: allResultFields.length + 1,
+                                                    locked: true
+                                                },
+                                                x: pos.x,
+                                                y: pos.y
+                                            }
+                                        });
+                                    }}
+                                    title="Add another Result Field (max 5)"
+                                    style={{
+                                        fontSize: '0.8rem',
+                                        padding: '5px 10px',
+                                        fontWeight: 'bold',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '4px'
+                                    }}
+                                >
+                                    ➕ Add Field ({allResultFields.length}/5)
+                                </button>
+                            </div>
+                        )}
+
+                        {renderAutonextButton()}
+
+                        <div className="menu-divider"></div>
+                    </>
+                );
+            })()}
+
+
             {element.type === 'number_line' && (
                 <>
                     {/* Orientation */}
@@ -1620,6 +1888,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
             {element.type === 'cartridge' && (
                 <>
+                    {renderAutonextButton()}
+                    <div className="menu-divider"></div>
+
                     {/* Fraction Alpha Settings */}
                     {element.cartridgeType === 'FractionAlpha' && (
                         <>
@@ -2610,6 +2881,8 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             style={{ textDecoration: 'underline', fontSize: '1rem' }}
                         >U</button>
                     </div>
+
+                    {renderAutonextButton()}
                 </div>
 
                 {/* Quiz Text Color */}
@@ -2737,11 +3010,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             label="Left Bubble"
                             color={metadata.leftBubbleColor || '#ffffff'}
                             onSelect={(c) => updateMetadata({ leftBubbleColor: c })}
+                            allowNone={true}
+                            noneLabel="No background"
                         />
                         <ColorPickerDropdown
                             label="Right Bubble"
                             color={metadata.rightBubbleColor || '#14B8A6'}
                             onSelect={(c) => updateMetadata({ rightBubbleColor: c })}
+                            allowNone={true}
+                            noneLabel="No background"
                         />
                     </div>
                 )}
@@ -3346,6 +3623,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 </>
             )}
 
+            {element.type === 'game' && (
+                <>
+                    <div className="menu-group">
+                        <label>🎮 Minigame</label>
+                    </div>
+                    {renderAutonextButton()}
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
             <div className="menu-group">
                 <label>Actions</label>
                 <div style={{ display: 'flex', gap: '5px' }}>
@@ -3400,7 +3687,20 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </button>
                     )}
                     {!translationMode && element.type !== 'cartridge' && element.type !== 'quiz' && (
-                        <button className="btn-icon" onClick={onDuplicate} title="Duplicate Element">
+                        <button 
+                            className="btn-icon" 
+                            onClick={() => {
+                                if (element.type === 'result_field') {
+                                    const count = (currentSlide?.elements || []).filter(el => el.type === 'result_field').length;
+                                    if (count >= 5) {
+                                        alert('A maximum of 5 Result Fields are allowed on this slide!');
+                                        return;
+                                    }
+                                }
+                                onDuplicate();
+                            }} 
+                            title="Duplicate Element"
+                        >
                             ❐
                         </button>
                     )}
@@ -3415,7 +3715,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </button>
                     )}
                     {!translationMode && (
-                        <button className="btn-delete" onClick={() => onDelete(element.type === 'cartridge' ? 'cartridge' : element.id)} title="Delete Element">
+                        <button 
+                            className="btn-delete" 
+                            onClick={() => {
+                                if (element.type === 'result_field') {
+                                    const isTypeQuizSlide = currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'type');
+                                    const count = (currentSlide?.elements || []).filter(el => el.type === 'result_field').length;
+                                    if (isTypeQuizSlide && count <= 1) {
+                                        alert('A Type Answer quiz must have at least one Result Field!');
+                                        return;
+                                    }
+                                }
+                                onDelete(element.type === 'cartridge' ? 'cartridge' : element.id);
+                            }} 
+                            title="Delete Element"
+                        >
                             🗑️
                         </button>
                     )}

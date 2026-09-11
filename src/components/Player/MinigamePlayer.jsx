@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MinigamePlayer.css';
 
-const MinigamePlayer = ({ data }) => {
+const MinigamePlayer = ({ data, onComplete }) => {
     const [score, setScore] = useState(0);
     const [targetPos, setTargetPos] = useState({ top: '50%', left: '50%' });
     const [gameOver, setGameOver] = useState(false);
@@ -21,6 +21,7 @@ const MinigamePlayer = ({ data }) => {
 
         if (newScore >= 5) {
             setGameOver(true);
+            if (onComplete) onComplete();
         } else {
             moveTarget();
         }

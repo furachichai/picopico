@@ -51,9 +51,10 @@ export const PotiondasThumbnail = ({ config }) => {
     );
 };
 
-const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false, cover = false }) => {
+const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false, hideTextAndShapes = false, cover = false }) => {
     const containerRef = useRef(null);
     const [scale, setScale] = useState(1);
+    const shouldFilterOverlays = hideTextAndBalloons || hideTextAndShapes;
 
     // Base resolution for the slide (matching Canvas.jsx)
     const BASE_WIDTH = 360;
@@ -220,7 +221,25 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                     </div>
                 )}
                 {slide.elements
-                    .filter(el => !hideTextAndBalloons || (el.type !== 'text' && el.type !== 'balloon' && el.type !== 'banner'))
+                    .filter(el => {
+                        if (!shouldFilterOverlays) return true;
+                        // Do not render text
+                        if (['text', 'balloon', 'banner', 'collectible', 'quiz', 'result_field', 'emoji'].includes(el.type)) {
+                            return false;
+                        }
+                        // Do not render shapes, symbols, lines, or number lines
+                        if (el.type === 'line' || el.type === 'number_line') {
+                            return false;
+                        }
+                        if (el.metadata?.isSymbol || el.metadata?.symbolType || el.metadata?.isShape) {
+                            return false;
+                        }
+                        // Do not render interactive widgets or popups
+                        if (['isticker', 'popup', 'game'].includes(el.type)) {
+                            return false;
+                        }
+                        return true;
+                    })
                     .map(element => (
                     <Sticker
                         key={element.id}

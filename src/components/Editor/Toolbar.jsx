@@ -4,6 +4,7 @@ import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { Gamepad2 } from 'lucide-react';
 import { getSymbolSvg } from '../../utils/symbols';
+import { getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import ScriptImportModal from './ScriptImportModal';
 
 const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
@@ -108,6 +109,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         const isMatch = type === 'match';
         const isConecta = type === 'conecta';
         const isField = type === 'field';
+        const isType = type === 'type';
 
         let defaultOptions;
         if (isTF) defaultOptions = ['True', 'False'];
@@ -115,21 +117,23 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         else if (isChatQuiz) defaultOptions = [];
         else if (isPEM) defaultOptions = [];
         else if (isMatch || isConecta) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6'];
-        else if (isField) defaultOptions = [];
+        else if (isField || isType) defaultOptions = [];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
+        const quizId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         dispatch({
             type: 'ADD_ELEMENT',
             payload: {
+                id: quizId,
                 type: ELEMENT_TYPES.QUIZ,
-                content: 'Quiz',
+                content: isType ? 'Type Answer' : 'Quiz',
                 metadata: {
                     fontFamily: '"Fira Sans"',
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta', 'field'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta', 'field', 'type'
                     visualMode: false,
                     ...((isMatch || isConecta) && { matchAnswers: ['5', '6', '9', '7'] }),
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
@@ -163,6 +167,47 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                 }
             }
         });
+
+        // If Type quiz, automatically create the 1st Result Field if none on slide
+        if (isType) {
+            const existingField = currentSlide?.elements?.find(el => el.type === ELEMENT_TYPES.RESULT_FIELD);
+            if (!existingField) {
+                const pos = getNonOverlappingResultFieldPosition(currentSlide);
+                const fieldId = `el-${Date.now() + 1}-${Math.random().toString(36).substr(2, 9)}`;
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        id: fieldId,
+                        type: ELEMENT_TYPES.RESULT_FIELD,
+                        content: '60',
+                        metadata: {
+                            correctAnswer: '60',
+                            order: 1,
+                            locked: true
+                        },
+                        x: pos.x,
+                        y: pos.y
+                    }
+                });
+            } else if (!existingField.metadata?.correctAnswer) {
+                // Ensure existing companion field has correctAnswer and order initialized
+                dispatch({
+                    type: 'UPDATE_ELEMENT',
+                    payload: {
+                        id: existingField.id,
+                        updates: {
+                            content: existingField.content || '60',
+                            metadata: {
+                                ...existingField.metadata,
+                                correctAnswer: existingField.content || '60',
+                                order: existingField.metadata?.order || 1,
+                                locked: true
+                            }
+                        }
+                    }
+                });
+            }
+        }
     };
 
     const handleBackgroundChange = (e) => {
@@ -218,6 +263,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                 <button onClick={() => handleAddQuiz('match')}>Match Drag</button>
                                 <button onClick={() => handleAddQuiz('conecta')}>Conecta</button>
                                 <button onClick={() => handleAddQuiz('field')}>Field</button>
+                                <button onClick={() => handleAddQuiz('type')}>{t('editor.quizTypeAnswer') || 'Type Answer'}</button>
                             </div>
                         )}
                     </div>

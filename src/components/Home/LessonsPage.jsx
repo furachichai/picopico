@@ -268,13 +268,13 @@ const LessonsPage = () => {
                             >
                                 <div className="lesson-card-preview">
                                     {item.content?.slides?.[0] ? (
-                                        <SlideThumbnail slide={item.content.slides[0]} cover={true} />
+                                        <SlideThumbnail slide={item.content.slides[0]} hideTextAndBalloons={true} cover={true} />
                                     ) : (
                                         <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                     )}
                                 </div>
                                 <div className="lesson-card-content">
-                                    <div className="item-name">{item.title}</div>
+                                    <div className="item-name" title={item.title}>{item.title}</div>
                                     <div className="item-slides-count">
                                         #{item.content?.slides?.length || 0} slides
                                     </div>
@@ -313,13 +313,13 @@ const LessonsPage = () => {
                         >
                             <div className="lesson-card-preview">
                                 {item.content?.slides?.[0] ? (
-                                    <SlideThumbnail slide={item.content.slides[0]} cover={true} />
+                                    <SlideThumbnail slide={item.content.slides[0]} hideTextAndBalloons={true} cover={true} />
                                 ) : (
                                     <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                 )}
                             </div>
                             <div className="lesson-card-content">
-                                <div className="item-name">{item.title}</div>
+                                <div className="item-name" title={item.title}>{item.title}</div>
                                 <div className="item-slides-count">
                                     #{item.content?.slides?.length || 0} slides
                                 </div>
@@ -327,7 +327,7 @@ const LessonsPage = () => {
                                     <div className="item-description" style={{ textAlign: 'center' }}>{item.description}</div>
                                 )}
 
-                                <div className="item-actions" style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                <div className="item-actions">
                                     {/* Visibility toggle */}
                                     <button
                                         className="btn-icon"

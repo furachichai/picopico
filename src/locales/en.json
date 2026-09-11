@@ -7,6 +7,8 @@
         "addBalloon": "Add Balloon",
         "addResultField": "Add Result Field",
         "addQuiz": "Add Quiz",
+        "addTypeQuiz": "Add Type Answer Quiz",
+        "quizTypeAnswer": "Type Answer",
         "openLibrary": "Open Library",
         "background": "Bg",
         "language": "Language",
@@ -49,6 +51,12 @@
         "menu": "Menu",
         "close": "Close",
         "hint": "Swipe or use Arrow Keys"
+    },
+    "quiz": {
+        "check": "CHECK",
+        "tryAgain": "TRY AGAIN",
+        "next": "NEXT",
+        "done": "DONE"
     },
     "common": {
         "close": "CLOSE",

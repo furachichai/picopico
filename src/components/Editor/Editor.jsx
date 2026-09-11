@@ -1117,6 +1117,7 @@ const Editor = () => {
                                         bottom: `${100 - (selectedElement.y || 50)}%`
                                     }}>
                                         <ContextualMenu
+                                            key={selectedElement.id}
                                             element={selectedElement}
                                             onChange={handleContextMenuChange}
                                             onDelete={handleContextMenuDelete}
@@ -1172,6 +1173,7 @@ const Editor = () => {
 
                                 return (
                                     <ContextualMenu
+                                        key={selectedElement.id}
                                         element={selectedElement}
                                         onChange={handleContextMenuChange}
                                         onDelete={handleContextMenuDelete}

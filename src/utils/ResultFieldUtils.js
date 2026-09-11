@@ -4,7 +4,7 @@
  * and dimension calculation based on the largest answer.
  */
 
-export const SUPPORTED_QUIZ_TYPES = ['classic', 'mc', '4sq', 'nl'];
+export const SUPPORTED_QUIZ_TYPES = ['classic', 'mc', '4sq', 'nl', 'type'];
 
 /**
  * Extracts quiz options, largest answer, and correct answer for supported quiz types.
@@ -68,6 +68,10 @@ export const getQuizInfo = (slide, language = 'es') => {
         const minVal = String(meta.nlConfig?.min ?? 0);
         const maxVal = String(meta.nlConfig?.max ?? 10);
         options = [minVal, maxVal, correctAnswer];
+    } else if (quizType === 'type') {
+        const resultFields = (slide.elements || []).filter(el => el.type === 'result_field');
+        options = resultFields.map(f => String(f.metadata?.correctAnswer ?? '0'));
+        correctAnswer = options[0] || '0';
     }
 
     // Determine the largest answer by string length
@@ -121,3 +125,94 @@ export const calculateResultFieldDimensions = (largestAnswer) => {
         fontSize
     };
 };
+
+/**
+ * Computes a non-overlapping coordinate { x, y } for a new or duplicated result_field.
+ * Avoids spawning directly on top of existing result fields.
+ * Coordinates are percentage values (15 to 85).
+ */
+export const getNonOverlappingResultFieldPosition = (slide, baseField = null) => {
+    const existing = (slide?.elements || []).filter(el => el.type === 'result_field');
+    if (existing.length === 0) {
+        return { x: 50, y: 35 };
+    }
+
+    // Reference field to offset from: baseField, or the last added result_field
+    const ref = baseField || existing[existing.length - 1];
+    let startX = ref?.x !== undefined ? ref.x : 50;
+    let startY = ref?.y !== undefined ? ref.y : 35;
+
+    // Step rightwards by 18% (approx 65px on canvas, well clear of the ~56px field)
+    let candidateX = startX + 18;
+    let candidateY = startY;
+
+    // Check collision with all existing fields
+    const isColliding = (x, y) => {
+        return existing.some(f => Math.abs(f.x - x) < 14 && Math.abs(f.y - y) < 12);
+    };
+
+    let attempts = 0;
+    while (isColliding(candidateX, candidateY) || candidateX > 82 || candidateY > 65) {
+        attempts++;
+        if (attempts > 30) break;
+
+        if (candidateX > 82) {
+            candidateX = 26;
+            candidateY += 14;
+        } else {
+            candidateX += 18;
+        }
+
+        if (candidateY > 65) {
+            candidateY = 25;
+            candidateX = 26 + (attempts % 4) * 16;
+        }
+    }
+
+    return {
+        x: Math.min(85, Math.max(15, Math.round(candidateX))),
+        y: Math.min(65, Math.max(15, Math.round(candidateY)))
+    };
+};
+
+/**
+ * Re-indexes all result_field elements sequentially from 1 to N based on their relative order.
+ * If multiple fields exist and any deletion happens, remaining fields are renamed #1, #2, etc.
+ * @param {Array} elements - Array of slide elements
+ * @returns {Array} Updated elements with sequential order in metadata
+ */
+export const reindexResultFields = (elements) => {
+    if (!elements || !Array.isArray(elements)) return elements;
+
+    const resultFields = elements.filter(el => el.type === 'result_field');
+    if (resultFields.length === 0) return elements;
+
+    // Sort existing result fields by their current order
+    const sortedFields = [...resultFields].sort((a, b) => {
+        const orderA = a.metadata?.order !== undefined ? Number(a.metadata.order) : 0;
+        const orderB = b.metadata?.order !== undefined ? Number(b.metadata.order) : 0;
+        return orderA - orderB;
+    });
+
+    const orderMap = new Map();
+    sortedFields.forEach((rf, index) => {
+        orderMap.set(rf.id, index + 1);
+    });
+
+    return elements.map(el => {
+        if (el.type === 'result_field' && orderMap.has(el.id)) {
+            const newOrder = orderMap.get(el.id);
+            if (el.metadata?.order !== newOrder) {
+                return {
+                    ...el,
+                    metadata: {
+                        ...el.metadata,
+                        order: newOrder
+                    }
+                };
+            }
+        }
+        return el;
+    });
+};
+

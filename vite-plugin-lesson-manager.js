@@ -476,17 +476,20 @@ export default function lessonManagerPlugin() {
                         };
                         const seenFilenames = new Set();
 
-                        const scanDir = (dirPath, category, urlPrefix) => {
+                        const scanDir = (dirPath, category, urlPrefix, relSubDir = '') => {
                             if (!fs.existsSync(dirPath)) return;
                             const entries = fs.readdirSync(dirPath, { withFileTypes: true });
                             for (const entry of entries) {
-                                if (entry.isFile()) {
+                                if (entry.isDirectory()) {
+                                    scanDir(path.join(dirPath, entry.name), category, urlPrefix, relSubDir ? `${relSubDir}/${entry.name}` : entry.name);
+                                } else if (entry.isFile()) {
                                     const ext = path.extname(entry.name).toLowerCase();
                                     if (imageExts.has(ext)) {
-                                        const key = `${category}:${entry.name}`;
+                                        const relPath = relSubDir ? `${relSubDir}/${entry.name}` : entry.name;
+                                        const key = `${category}:${relPath}`;
                                         if (!seenFilenames.has(key)) {
                                             seenFilenames.add(key);
-                                            const assetUrl = `${urlPrefix}/${category}/${entry.name}`;
+                                            const assetUrl = `${urlPrefix}/${category}/${relPath}`;
                                             if (results[category]) {
                                                 results[category].push(assetUrl);
                                             }

@@ -4,6 +4,7 @@ import './PresetPanel.css';
 import { useDraggable } from '../../hooks/useDraggable';
 
 const FONTS = [
+    { name: 'Acme', value: 'Acme' },
     { name: 'Outfit', value: 'Outfit' },
     { name: 'Nunito', value: 'Nunito' },
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },

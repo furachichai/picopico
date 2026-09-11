@@ -23,6 +23,7 @@ import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
 import FullscreenToggle from '../FullscreenToggle';
 import { X, Pencil } from 'lucide-react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { TypeQuizProvider } from '../../context/TypeQuizContext';
 import './Player.css';
 
 const Player = () => {
@@ -160,6 +161,26 @@ const Player = () => {
     }, [currentSlideIndex, isGameActive, currentSlide]);
 
     const [wiggleIStickerId, setWiggleIStickerId] = useState(null);
+    const autoNextTimeoutRef = useRef(null);
+
+    // Clear any pending autonext when changing slides or unmounting
+    useEffect(() => {
+        return () => {
+            if (autoNextTimeoutRef.current) {
+                clearTimeout(autoNextTimeoutRef.current);
+                autoNextTimeoutRef.current = null;
+            }
+        };
+    }, [currentSlideIndex]);
+
+    const isSlideAutonext = (slideIndex) => {
+        const slide = slides[slideIndex];
+        if (!slide) return false;
+        if (slide.autonext) return true;
+        if (slide.cartridge?.config?.autonext) return true;
+        if (slide.elements?.some(el => el.metadata?.autonext || el.config?.autonext)) return true;
+        return false;
+    };
 
     // Check if a slide has an unsolved interactive (quiz or cartridge)
     const slideHasUnsolvedInteractive = (slideIndex) => {
@@ -179,7 +200,41 @@ const Player = () => {
         setSolvedSlides(prev => new Set(prev).add(slideIndex));
     };
 
+    const handleInteractiveSolve = (slideIndex, isSuccess = true, delay = 1000, forceAdvance = false) => {
+        markSlideSolved(slideIndex);
+
+        if (forceAdvance) {
+            if (autoNextTimeoutRef.current) {
+                clearTimeout(autoNextTimeoutRef.current);
+                autoNextTimeoutRef.current = null;
+            }
+            nextSlide(true);
+            return;
+        }
+
+        // Only auto-advance if the task was correctly solved AND autonext is enabled for this slide
+        if (isSuccess && isSlideAutonext(slideIndex)) {
+            if (autoNextTimeoutRef.current) {
+                clearTimeout(autoNextTimeoutRef.current);
+            }
+            autoNextTimeoutRef.current = setTimeout(() => {
+                autoNextTimeoutRef.current = null;
+                const s = slides[slideIndex];
+                const stripperActive = s?.stripper?.enabled && s.stripper?.dividers?.length > 0;
+                if (stripperActive && stripperStep < s.stripper.dividers.length && !visitedStripperSlides.has(slideIndex)) {
+                    nextSlide(false);
+                } else {
+                    nextSlide(true);
+                }
+            }, delay);
+        }
+    };
+
     const nextSlide = (force = false) => {
+        if (autoNextTimeoutRef.current) {
+            clearTimeout(autoNextTimeoutRef.current);
+            autoNextTimeoutRef.current = null;
+        }
         const slide = slides[currentSlideIndex];
         const stripper = slide?.stripper;
         const stripperActive = stripper?.enabled && stripper?.dividers?.length > 0;
@@ -232,6 +287,10 @@ const Player = () => {
     };
 
     const prevSlide = () => {
+        if (autoNextTimeoutRef.current) {
+            clearTimeout(autoNextTimeoutRef.current);
+            autoNextTimeoutRef.current = null;
+        }
         if (currentSlideIndex > 0) {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev - 1);
@@ -765,7 +824,7 @@ const Player = () => {
                                         <FractionAlpha
                                             config={slide.cartridge.config}
                                             onComplete={() => {
-                                                markSlideSolved(index);
+                                                handleInteractiveSolve(index, true, 1000);
                                                 setIsGameActive(false);
                                             }}
                                         />
@@ -775,7 +834,7 @@ const Player = () => {
                                             <FractionSlicer
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -786,7 +845,7 @@ const Player = () => {
                                             <SwipeSorter
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -797,7 +856,7 @@ const Player = () => {
                                             <PEMDASCartridge
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -808,7 +867,7 @@ const Player = () => {
                                             <AlgeBrosCartridge
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -819,7 +878,7 @@ const Player = () => {
                                             <BalanzaCartridge
                                                 config={slide.cartridge.config}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                             />
@@ -831,7 +890,7 @@ const Player = () => {
                                                 config={slide.cartridge.config}
                                                 isAlreadySolved={solvedSlides.has(index)}
                                                 onComplete={() => {
-                                                    markSlideSolved(index);
+                                                    handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);
                                                 }}
                                                 onRestart={() => {
@@ -849,46 +908,50 @@ const Player = () => {
                                 </div>
                             )}
 
-                            {slide.elements.map((element, idx) => {
-                                if (element.metadata?.hidden) return null;
+                            {(() => {
+                                const hasTypeQuiz = slide.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'type');
+                                const renderedElements = slide.elements.map((element, idx) => {
+                                    if (element.metadata?.hidden) return null;
 
-                                // Stripper: determine strip and visibility
-                                const stripperActive = slide.stripper?.enabled && slide.stripper?.dividers?.length > 0;
-                                const elementStrip = stripperActive ? getElementStrip(element.y, slide.stripper.dividers) : 0;
-                                const currentStep = index === currentSlideIndex ? stripperStep : (visitedStripperSlides.has(index) ? (slide.stripper?.dividers?.length || 0) : 0);
-                                const isStripVisible = !stripperActive || elementStrip <= currentStep;
-                                const isStripRevealing = stripperActive && elementStrip === currentStep && elementStrip > 0 && index === currentSlideIndex && !visitedStripperSlides.has(index);
+                                    // Stripper: determine strip and visibility
+                                    const stripperActive = slide.stripper?.enabled && slide.stripper?.dividers?.length > 0;
+                                    const elementStrip = stripperActive ? getElementStrip(element.y, slide.stripper.dividers) : 0;
+                                    const currentStep = index === currentSlideIndex ? stripperStep : (visitedStripperSlides.has(index) ? (slide.stripper?.dividers?.length || 0) : 0);
+                                    const isStripVisible = !stripperActive || elementStrip <= currentStep;
+                                    const isStripRevealing = stripperActive && elementStrip === currentStep && elementStrip > 0 && index === currentSlideIndex && !visitedStripperSlides.has(index);
 
-                                const isFullScreenQuiz = element.type === 'quiz' && (
-                                    element.metadata?.quizType === 'chatquiz' || 
-                                    element.metadata?.quizType === 'pem' || 
-                                    element.metadata?.quizType === 'match' ||
-                                    element.metadata?.quizType === 'conecta'
-                                );
-                                const isMatchQuiz = element.type === 'quiz' && (
-                                    element.metadata?.quizType === 'match' ||
-                                    element.metadata?.quizType === 'conecta'
-                                );
+                                    const isFullScreenQuiz = element.type === 'quiz' && (
+                                        element.metadata?.quizType === 'chatquiz' || 
+                                        element.metadata?.quizType === 'pem' || 
+                                        element.metadata?.quizType === 'match' ||
+                                        element.metadata?.quizType === 'conecta'
+                                    );
+                                    const isMatchQuiz = element.type === 'quiz' && (
+                                        element.metadata?.quizType === 'match' ||
+                                        element.metadata?.quizType === 'conecta'
+                                    );
+                                    const isTypeQuiz = element.type === 'quiz' && element.metadata?.quizType === 'type';
 
-                                let effectiveScale = element.scale ?? 1;
-                                let effectiveWidth = element.width;
-                                let effectiveY = element.y;
+                                    let effectiveScale = element.scale ?? 1;
+                                    let effectiveWidth = element.width;
+                                    let effectiveY = element.y;
 
-                                try {
-                                    return (
-                                        <div
-                                            key={element.id}
-                                            className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
-                                            style={{
-                                                left: isFullScreenQuiz ? '50%' : `${element.x}%`,
-                                                top: isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`),
-                                                width: isFullScreenQuiz ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
-                                                height: isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
-                                                transform: isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`,
-                                                zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1)))),
-                                                pointerEvents: (isFullScreenQuiz || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
-                                            }}
-                                        >
+                                    try {
+                                        return (
+                                            <div
+                                                key={element.id}
+                                                className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
+                                                style={{
+                                                    left: isTypeQuiz ? '0' : (isFullScreenQuiz ? '50%' : `${element.x}%`),
+                                                    top: isTypeQuiz ? 'auto' : (isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`)),
+                                                    bottom: isTypeQuiz ? '0' : undefined,
+                                                    width: (isFullScreenQuiz || isTypeQuiz) ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
+                                                    height: isTypeQuiz ? 'auto' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
+                                                    transform: isTypeQuiz ? 'none' : (isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`),
+                                                    zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (isTypeQuiz ? 1000 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))))),
+                                                    pointerEvents: (isFullScreenQuiz || isTypeQuiz || element.type === 'result_field' || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
+                                                }}
+                                            >
                                             {(element.type === 'text' || element.type === 'collectible') && (
                                                 <div
                                                     className={element.type === 'collectible' ? "player-collectible" : "player-text"}
@@ -900,7 +963,7 @@ const Player = () => {
                                                         textDecoration: element.metadata?.textDecoration || 'none',
                                                         color: element.metadata?.color || (element.type === 'collectible' ? '#ffffff' : 'black'),
                                                         backgroundColor: element.metadata?.backgroundColor || (element.type === 'collectible' ? 'rgba(255, 255, 255, 0.08)' : 'transparent'),
-                                                        padding: element.metadata?.backgroundColor ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
+                                                        padding: (element.metadata?.backgroundColor && element.metadata?.backgroundColor !== 'transparent') ? '0.5rem' : (element.type === 'collectible' ? '1.25rem 1.5rem' : '0'),
                                                         borderRadius: element.metadata?.borderRadius || (element.type === 'collectible' ? '16px' : '8px'),
                                                         border: element.metadata?.border || (element.type === 'collectible' ? '1px solid rgba(255, 255, 255, 0.15)' : 'none'),
                                                         boxShadow: element.type === 'collectible' ? '0 8px 32px rgba(0, 0, 0, 0.35)' : undefined,
@@ -1136,11 +1199,8 @@ const Player = () => {
                                                         }
                                                         return d;
                                                     })()}
-                                                    onNext={(autoAdvance = false) => {
-                                                         markSlideSolved(currentSlideIndex);
-                                                         if (autoAdvance) {
-                                                             nextSlide(true);
-                                                         }
+                                                    onNext={(isSuccess = false, force = false) => {
+                                                         handleInteractiveSolve(index, isSuccess, 1000, force);
                                                      }}
                                                     onSolve={(answer) => {
                                                         setSolvedAnswers(prev => ({ ...prev, [index]: answer }));
@@ -1151,7 +1211,12 @@ const Player = () => {
                                                     isActive={index === currentSlideIndex}
                                                 />
                                             )}
-                                            {element.type === 'game' && <MinigamePlayer data={element} />}
+                                            {element.type === 'game' && (
+                                                <MinigamePlayer
+                                                    data={element}
+                                                    onComplete={() => handleInteractiveSolve(index, true, 1000)}
+                                                />
+                                            )}
                                             {element.type === 'result_field' && (
                                                 <ResultField
                                                     element={element}
@@ -1224,7 +1289,28 @@ const Player = () => {
                                     console.error('Failed to render element:', element, err);
                                     return null;
                                 }
-                            })}
+                            });
+
+                            if (hasTypeQuiz) {
+                                return (
+                                    <TypeQuizProvider
+                                        slide={slide}
+                                        isActive={index === currentSlideIndex}
+                                        onSolve={(answer) => {
+                                            setSolvedAnswers(prev => ({ ...prev, [index]: answer }));
+                                        }}
+                                        onNext={(isSuccess = false, force = false) => {
+                                            handleInteractiveSolve(index, isSuccess, 1000, force);
+                                        }}
+                                        onBanner={handleBanner}
+                                    >
+                                        {renderedElements}
+                                    </TypeQuizProvider>
+                                );
+                            }
+
+                            return renderedElements;
+                        })()}
 
                             {/* Popup Overlay Modal */}
                             {index === currentSlideIndex && activePopupText !== null && (

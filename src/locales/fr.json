@@ -11,6 +11,8 @@
         "addBalloon": "Ajouter Bulle",
         "addResultField": "Ajouter Résultat",
         "addQuiz": "Ajouter Quiz",
+        "addTypeQuiz": "Ajouter Quiz Écrire la réponse",
+        "quizTypeAnswer": "Écrire la réponse",
         "openLibrary": "Ouvrir Bibliothèque",
         "background": "Fond",
         "language": "Langue",
@@ -48,6 +50,12 @@
         "menu": "Menu",
         "close": "Fermer",
         "hint": "Glissez ou utilisez les Flèches"
+    },
+    "quiz": {
+        "check": "VÉRIFIER",
+        "tryAgain": "RÉESSAYER",
+        "next": "SUIVANT",
+        "done": "TERMINÉ"
     },
     "common": {
         "close": "FERMER",

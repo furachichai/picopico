@@ -28,6 +28,12 @@ const OBJECT_TAGS = [
     { id: 'keep', label: 'Original Names' },
 ];
 
+const BACKGROUND_TAGS = [
+    { id: 'titlecard', label: '🎬 Titlecard' },
+    { id: 'bkg', label: '🌄 Scene / Bkg' },
+    { id: 'keep', label: 'Original Names' },
+];
+
 const getSavedCategory = (fallback = 'characters') => {
     try {
         const saved = localStorage.getItem('picopico_last_save_category');
@@ -64,8 +70,20 @@ const getSavedObjectTag = (fallback = 'whole') => {
     return fallback;
 };
 
+const getSavedBackgroundTag = (fallback = 'bkg') => {
+    try {
+        const saved = localStorage.getItem('picopico_last_save_background_tag');
+        if (saved && BACKGROUND_TAGS.some(t => t.id === saved)) {
+            return saved;
+        }
+    } catch {
+        // ignore
+    }
+    return fallback;
+};
+
 // Helper to format/prefix a filename according to category and selected sub-tag
-const formatItemFilename = (rawName, category, characterTag, objectTag) => {
+const formatItemFilename = (rawName, category, characterTag, objectTag, backgroundTag) => {
     let clean = (rawName || 'asset').replace(/\.[^/.]+$/, '');
     clean = clean.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
 
@@ -76,6 +94,11 @@ const formatItemFilename = (rawName, category, characterTag, objectTag) => {
         }
     });
     OBJECT_TAGS.forEach(t => {
+        if (t.id !== 'keep' && clean.startsWith(t.id + '_')) {
+            clean = clean.replace(new RegExp(`^${t.id}_`), '');
+        }
+    });
+    BACKGROUND_TAGS.forEach(t => {
         if (t.id !== 'keep' && clean.startsWith(t.id + '_')) {
             clean = clean.replace(new RegExp(`^${t.id}_`), '');
         }
@@ -95,6 +118,14 @@ const formatItemFilename = (rawName, category, characterTag, objectTag) => {
         return clean || 'object';
     }
 
+    if (category === 'backgrounds') {
+        if (backgroundTag && backgroundTag !== 'keep') {
+            const prefix = backgroundTag === 'titlecard' ? 'titlecard' : 'bkg';
+            return `${prefix}_${clean || 'background'}`;
+        }
+        return clean || 'background';
+    }
+
     return clean || 'image';
 };
 
@@ -111,6 +142,7 @@ const SaveAssetModal = ({
     const [category, setCategory] = useState('characters');
     const [characterTag, setCharacterTag] = useState('chef');
     const [objectTag, setObjectTag] = useState('whole');
+    const [backgroundTag, setBackgroundTag] = useState('bkg');
     const [items, setItems] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
     const [saveProgress, setSaveProgress] = useState({ current: 0, total: 0, name: '' });
@@ -123,10 +155,12 @@ const SaveAssetModal = ({
         const effectiveCategory = initialCategory || getSavedCategory('characters');
         const effectiveCharTag = getSavedCharacterTag('chef');
         const effectiveObjTag = getSavedObjectTag('whole');
+        const effectiveBgTag = getSavedBackgroundTag('bkg');
 
         setCategory(effectiveCategory);
         setCharacterTag(effectiveCharTag);
         setObjectTag(effectiveObjTag);
+        setBackgroundTag(effectiveBgTag);
         setError(null);
         setIsSaving(false);
         setSaveProgress({ current: 0, total: 0, name: '' });
@@ -151,7 +185,7 @@ const SaveAssetModal = ({
 
         const initializedItems = rawList.map((item, idx) => {
             const rawName = item.filename || `asset_${timestamp}_${idx + 1}`;
-            const targetName = formatItemFilename(rawName, effectiveCategory, effectiveCharTag, effectiveObjTag);
+            const targetName = formatItemFilename(rawName, effectiveCategory, effectiveCharTag, effectiveObjTag, effectiveBgTag);
 
             return {
                 id: `asset_${idx}_${Date.now()}`,
@@ -198,7 +232,20 @@ const SaveAssetModal = ({
 
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, category, characterTag, tagId)
+            filename: formatItemFilename(item.originalName, category, characterTag, tagId, backgroundTag)
+        })));
+    };
+
+    // Update prefix when background tag changes
+    const handleBackgroundTagChange = (tagId) => {
+        setBackgroundTag(tagId);
+        try {
+            localStorage.setItem('picopico_last_save_background_tag', tagId);
+        } catch {}
+
+        setItems(prev => prev.map(item => ({
+            ...item,
+            filename: formatItemFilename(item.originalName, category, characterTag, objectTag, tagId)
         })));
     };
 
@@ -211,7 +258,7 @@ const SaveAssetModal = ({
 
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, newCat, characterTag, objectTag)
+            filename: formatItemFilename(item.originalName, newCat, characterTag, objectTag, backgroundTag)
         })));
     };
 
@@ -420,6 +467,25 @@ const SaveAssetModal = ({
                                             key={tag.id}
                                             className={`save-tag-pill ${objectTag === tag.id ? 'active' : ''}`}
                                             onClick={() => handleObjectTagChange(tag.id)}
+                                        >
+                                            {tag.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Background Tag Selector */}
+                        {category === 'backgrounds' && (
+                            <div className="save-asset-field">
+                                <label>Background Type / Prefix for All</label>
+                                <div className="save-asset-tag-pills">
+                                    {BACKGROUND_TAGS.map(tag => (
+                                        <button
+                                            type="button"
+                                            key={tag.id}
+                                            className={`save-tag-pill ${backgroundTag === tag.id ? 'active' : ''}`}
+                                            onClick={() => handleBackgroundTagChange(tag.id)}
                                         >
                                             {tag.label}
                                         </button>

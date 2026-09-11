@@ -281,6 +281,41 @@
     background: rgba(34, 197, 94, 0.15);
 }
 
+/* Padlock icon button - clear open/locked visibility with green/red tints */
+.layer-action-btn.layer-lock-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.layer-action-btn.layer-lock-btn.locked {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.18);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.layer-action-btn.layer-lock-btn.locked:hover {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.32);
+    border-color: rgba(239, 68, 68, 0.45);
+}
+
+.layer-action-btn.layer-lock-btn.unlocked {
+    color: #4ade80;
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.layer-action-btn.layer-lock-btn.unlocked:hover {
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.28);
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
 /* Drop indicator */
 .layer-drop-indicator {
     position: absolute;

@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './QuizEditor.css';
 import { parseFraction, formatFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 import { useDraggable } from '../../hooks/useDraggable';
+import { useEditor } from '../../context/EditorContext';
+import { ELEMENT_TYPES } from '../../types';
+import { getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 
 /**
  * QuizEditor Component
@@ -197,6 +200,7 @@ const generateFieldChoices = (segments) => {
 
 
 const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
+    const { state, dispatch } = useEditor();
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
     // For 4sq, we use correctIndices. Fallback to correctIndex if missing.
@@ -277,6 +281,167 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
         if (quizType === 'nl') return 'nl-mode';
         return '';
     };
+
+    // -------------------------------------------------------------------------
+    // TYPE QUIZ RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'type') {
+        const currentSlide = state?.lesson?.slides?.find(s => s.id === state.currentSlideId);
+        const resultFields = (currentSlide?.elements || [])
+            .map((el, idx) => ({ el, idx }))
+            .filter(item => item.el.type === 'result_field');
+
+        resultFields.sort((a, b) => {
+            const orderA = a.el.metadata?.order !== undefined ? Number(a.el.metadata.order) : (a.idx + 1);
+            const orderB = b.el.metadata?.order !== undefined ? Number(b.el.metadata.order) : (b.idx + 1);
+            return orderA - orderB;
+        });
+
+        const handleAddField = () => {
+            if (resultFields.length >= 5) {
+                alert('A maximum of 5 Result Fields are allowed on this slide!');
+                return;
+            }
+            const nonOverlap = getNonOverlappingResultFieldPosition(currentSlide);
+            const fieldId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            dispatch({
+                type: 'ADD_ELEMENT',
+                payload: {
+                    id: fieldId,
+                    type: ELEMENT_TYPES.RESULT_FIELD,
+                    content: '100',
+                    metadata: {
+                        correctAnswer: '100',
+                        order: resultFields.length + 1,
+                        locked: true
+                    },
+                    x: nonOverlap.x,
+                    y: nonOverlap.y
+                }
+            });
+        };
+
+        const isAutonext = !!(currentSlide?.autonext || element.metadata?.autonext);
+        const toggleAutonext = (e) => {
+            e.stopPropagation();
+            const nextVal = !isAutonext;
+            dispatch({ type: 'UPDATE_SLIDE', payload: { autonext: nextVal } });
+            onChange({ metadata: { ...element.metadata, autonext: nextVal } });
+        };
+
+        return (
+            <div className="quiz-editor-2" style={{ width: '100%', minWidth: '260px', maxWidth: '330px', padding: '12px', background: '#18232C', borderRadius: '16px', border: '3px solid #000000', color: '#ffffff', boxSizing: 'border-box', boxShadow: '0 4px 0 #000000' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 900, fontSize: '1.05rem', color: '#38BDF8' }}>
+                        <span>⌨️</span> Type Answer Quiz
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <button
+                            type="button"
+                            onClick={toggleAutonext}
+                            title={`Autonext: Automatically advance when solved (${isAutonext ? 'ON' : 'OFF'})`}
+                            style={{
+                                width: '28px',
+                                height: '24px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.85rem',
+                                background: isAutonext ? '#14532D' : '#263440',
+                                border: isAutonext ? '1.5px solid #22C55E' : '1.5px solid #37474F',
+                                padding: 0,
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease'
+                            }}
+                        >
+                            <span style={{ opacity: isAutonext ? 1 : 0.35, filter: isAutonext ? 'none' : 'grayscale(100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                ⏭️
+                            </span>
+                        </button>
+                        <span style={{ fontSize: '0.75rem', background: '#263440', padding: '2px 8px', borderRadius: '10px', color: '#90A4AE', fontWeight: 'bold' }}>
+                            {resultFields.length}/5 Fields
+                        </span>
+                    </div>
+                </div>
+
+                <div style={{ fontSize: '0.78rem', color: '#90A4AE', marginBottom: '10px', lineHeight: 1.3 }}>
+                    Learners type answers into result fields. Move fields anywhere on canvas.
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '10px' }}>
+                    {resultFields.map((item, i) => {
+                        const f = item.el;
+                        const orderNum = f.metadata?.order !== undefined ? f.metadata.order : (i + 1);
+                        const ans = f.metadata?.correctAnswer || '0';
+                        return (
+                            <div 
+                                key={f.id} 
+                                data-no-select-parent="true"
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    dispatch({ type: 'SELECT_ELEMENT', payload: f.id });
+                                }}
+                                style={{
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'space-between', 
+                                    background: '#23303C', 
+                                    padding: '6px 10px', 
+                                    borderRadius: '8px', 
+                                    cursor: 'pointer',
+                                    border: '1.5px solid #37474F'
+                                }}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#FFD21E', color: '#000', fontSize: '11px', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        #{orderNum}
+                                    </span>
+                                    <span style={{ fontSize: '0.85rem', color: '#ECEFF1' }}>Result:</span>
+                                </div>
+                                <span style={{ fontWeight: 800, color: '#38BDF8', fontSize: '0.95rem' }}>
+                                    {ans}
+                                </span>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {resultFields.length < 5 && (
+                    <button
+                        type="button"
+                        data-no-select-parent="true"
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddField();
+                        }}
+                        style={{
+                            width: '100%',
+                            height: '36px',
+                            background: '#38BDF8',
+                            color: '#000000',
+                            border: '2px solid #000000',
+                            borderRadius: '10px',
+                            fontWeight: 800,
+                            fontSize: '0.88rem',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            boxShadow: '0 2px 0 #000000'
+                        }}
+                    >
+                        ➕ Add Result Field ({resultFields.length}/5)
+                    </button>
+                )}
+            </div>
+        );
+    }
 
     // -------------------------------------------------------------------------
     // FIELD RENDER LOGIC
