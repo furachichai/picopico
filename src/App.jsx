@@ -9,6 +9,7 @@ import Dashboard from './components/Home/Dashboard';
 import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from './cartridges/Balanza/BalanzaCartridge';
+import ExloreNLCartridge from './cartridges/ExploreNL/ExloreNLCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import './index.css'
 
@@ -254,6 +255,54 @@ const AppContent = () => {
             </div>
           );
         }
+        if (selectedGame === 'explorenl') {
+          return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#ffffff' }}>
+              <ExloreNLCartridge
+                config={{
+                  orientation: 'vertical',
+                  numbersSide: 'left',
+                  pointerSide: 'right',
+                  startNumber: -3,
+                  endNumber: 3,
+                  bottomNumber: -3,
+                  topNumber: 3,
+                  step: 1,
+                  thickness: 3,
+                  showArrows: true,
+                  currentValue: 0,
+                  equationTemplate: '2!n =',
+                  lineColor: '#6366F1',
+                  numberColor: '#1E293B',
+                  pointerColor: '#4ECDC4',
+                  equationColor: '#0F172A',
+                  equationBg: '#FFFFFF',
+                  equationBorder: '#6366F1',
+                  equationFontSize: 28,
+                  nlX: 25,
+                  nlY: 50,
+                  nlLength: 520,
+                  equationX: 65,
+                  equationY: 45,
+                  equationRotation: 0
+                }}
+                onComplete={() => {}}
+              />
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: 'rgba(0,0,0,0.08)', border: 'none',
+                  borderRadius: '50%', width: 40, height: 40,
+                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        }
         return (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
@@ -379,6 +428,38 @@ const AppContent = () => {
                   <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>Balanza</h3>
                   <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
                     Balance a two-plate scale by dragging emojis to see an equation come into equilibrium.
+                  </p>
+                </div>
+              </div>
+
+              {/* ExploreNL Game Card */}
+              <div
+                onClick={() => setSelectedGame('explorenl')}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <div style={{
+                  fontSize: '2.5rem', background: 'rgba(99, 102, 241, 0.1)', width: '64px', height: '64px',
+                  borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(99, 102, 241, 0.2)'
+                }}>
+                  📈
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>ExploreNL</h3>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                    Interactive number line to explore zero powers (2⁰=1), negative exponents (2⁻¹=½), and dynamic equations.
                   </p>
                 </div>
               </div>

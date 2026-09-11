@@ -10,8 +10,8 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     const lastElementId = useRef(null);
 
     // Derive dimensions dynamically and synchronously from element width/height percentage
-    const widthPx = Math.max(40, Math.round(((element.width || 80) / 100) * 360));
-    const heightPx = Math.max(30, Math.round(((element.height || 14) / 100) * 640));
+    const widthPx = Math.max(40, Math.round(((element.width || 51) / 100) * 360));
+    const heightPx = Math.max(30, Math.round(((element.height || 12.5) / 100) * 640));
 
     const [size, setSize] = useState({ width: widthPx, height: heightPx });
 

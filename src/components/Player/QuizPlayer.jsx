@@ -447,7 +447,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const correctIndex = data.metadata?.correctIndex ?? 0;
     const correctIndices = data.metadata?.correctIndices || [correctIndex];
     const isMultiSelect = quizType === '4sq' && correctIndices.length > 1;
-    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#48FF3E'];
+    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#FFA756'];
     const maxAttempts = Math.max(1, options.length - 1);
 
     // NL Data
@@ -3766,7 +3766,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
     if (quizType === 'type') {
         return (
-            <div className="quiz-player-type-container" style={{ width: '100%', pointerEvents: 'auto' }}>
+            <div className="quiz-player-type-container" style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
                 <TypeQuizKeyboard isActive={isActive} />
             </div>
         );

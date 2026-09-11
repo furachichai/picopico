@@ -17,13 +17,15 @@
     align-items: center;
     width: 100%;
     /* 100% of stage (360px) */
-    min-width: 250px;
+    min-width: 320px;
+    max-width: 348px;
     pointer-events: auto;
     z-index: 10;
     margin: auto 0;
     /* Center vertically */
-    padding: 1rem 1rem 0.25rem 1rem;
+    padding: 1rem 6px 0.25rem 6px;
     /* Asymmetrical padding matches Editor, shifting visual center down */
+    box-sizing: border-box;
 }
 
 .quiz-option-wrapper {
@@ -59,9 +61,10 @@
 }
 
 .quiz-option-2-player {
-    width: 92%;
+    width: 318px; /* 20% longer in play mode (from ~265px to 318px) to accommodate more text on a single line */
+    max-width: 96%;
     min-height: 38px;
-    padding: 6px 14px;
+    padding: 6px 16px;
     background-color: #ffffff;
     border: 3px solid #000000;
     border-radius: 14px;
@@ -75,7 +78,7 @@
     cursor: pointer;
     transform: rotate(var(--tilt, 0deg));
     transform-origin: center center;
-    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s, opacity 0.2s, background-color 0.15s;
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s, opacity 0.3s ease, background-color 0.15s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -160,13 +163,12 @@
     opacity: 0.35;
     cursor: default;
     transform: rotate(var(--tilt, 0deg));
-    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
     pointer-events: none;
-    filter: grayscale(0.6);
 }
 
 .quiz-option-tf.grayed-out {
-    opacity: 0.3;
+    opacity: 0.35;
     cursor: default;
     transform: none;
     box-shadow: none;
@@ -179,26 +181,28 @@
     color: #000000 !important;
     border-color: #000000 !important;
     box-shadow: 4px 4px 0px #000000 !important;
+    opacity: 1 !important;
     animation: pulse 1s infinite ease-in-out;
 }
 
 .quiz-option-tf.correct {
     z-index: 10;
     background-color: #58cc02 !important;
+    opacity: 1 !important;
     animation: pulse 1s infinite ease-in-out;
 }
 
 .quiz-option-2-player.wrong {
-    background-color: #f87171 !important;
-    color: #000000 !important;
-    border-color: #000000 !important;
-    box-shadow: 4px 4px 0px #000000 !important;
-    opacity: 1;
+    opacity: 0.35;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    cursor: default;
+    pointer-events: none;
 }
 
 .quiz-option-tf.wrong {
-    background-color: #FF6B6B !important;
-    opacity: 1;
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
 }
 
 .quiz-option-2-player.selected {
@@ -441,10 +445,16 @@
 
 .quiz-option-4sq.correct {
     z-index: 10;
+    background-color: #4ade80 !important;
+    opacity: 1 !important;
+    animation: pulse 1s infinite ease-in-out;
 }
 
 .quiz-option-4sq.wrong {
-    opacity: 0.3;
+    opacity: 0.35;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+    cursor: default;
+    pointer-events: none;
 }
 
 

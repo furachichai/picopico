@@ -251,7 +251,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                     }}
                     style={{
                         fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
-                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
+                        fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '19px',
                         fontWeight: element.metadata?.fontWeight || 'normal',
                         fontStyle: element.metadata?.fontStyle || 'normal',
                         textDecoration: element.metadata?.textDecoration || 'none',

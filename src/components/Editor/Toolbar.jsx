@@ -69,11 +69,13 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
             payload: {
                 type: ELEMENT_TYPES.BANNER,
                 content: '',
-                width: 80,
-                height: 14,
+                width: 51,
+                height: 12.5,
                 rotation: 0,
                 scale: 1,
                 metadata: {
+                    width: 51,
+                    height: 12.5,
                     fontFamily: '"Bangers", cursive, sans-serif',
                     fontSize: 26,
                     fontStyle: 'normal',
@@ -231,7 +233,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     hasShadow: true,
                                     borderColor: '#000000',
                                     ...(preset?.balloon?.fontFamily && { fontFamily: preset.balloon.fontFamily }),
-                                    ...(preset?.balloon?.fontSize && { fontSize: preset.balloon.fontSize }),
+                                    fontSize: preset?.balloon?.fontSize || 19,
                                     ...(preset?.balloon?.color && { color: preset.balloon.color }),
                                 }
                             }
@@ -416,6 +418,44 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>⚖️ Balanza</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'ExploreNL',
+                                                config: {
+                                                    orientation: 'vertical',
+                                                    numbersSide: 'left',
+                                                    pointerSide: 'right',
+                                                    startNumber: -3,
+                                                    endNumber: 3,
+                                                    bottomNumber: -3,
+                                                    topNumber: 3,
+                                                    step: 1,
+                                                    thickness: 3,
+                                                    showArrows: true,
+                                                    currentValue: 0,
+                                                    equationTemplate: '2!n =',
+                                                    lineColor: '#6366F1',
+                                                    numberColor: '#1E293B',
+                                                    pointerColor: '#4ECDC4',
+                                                    equationColor: '#0F172A',
+                                                    equationBg: '#FFFFFF',
+                                                    equationBorder: '#6366F1',
+                                                    equationFontSize: 28,
+                                                    nlX: 25,
+                                                    nlY: 50,
+                                                    nlLength: 520,
+                                                    equationX: 65,
+                                                    equationY: 45,
+                                                    equationRotation: 0
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>📈 ExploreNL</button>
                             </div>
                         )}
                     </div>

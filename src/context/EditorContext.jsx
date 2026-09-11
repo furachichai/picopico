@@ -339,10 +339,10 @@ const editorReducer = (state, action) => {
                 y: posY !== undefined ? posY : (action.payload.type === 'quiz'
                     ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 78.59375))
                     : (action.payload.type === 'result_field' ? 35 : 50)),
-                width: action.payload.metadata?.width || 20,
-                height: action.payload.metadata?.height || 10,
-                rotation: 0,
-                scale: 1,
+                width: action.payload.width !== undefined ? action.payload.width : (action.payload.metadata?.width || 20),
+                height: action.payload.height !== undefined ? action.payload.height : (action.payload.metadata?.height || 10),
+                rotation: action.payload.rotation !== undefined ? action.payload.rotation : 0,
+                scale: action.payload.scale !== undefined ? action.payload.scale : 1,
             };
 
             // Build metadata based on element type
@@ -360,15 +360,20 @@ const editorReducer = (state, action) => {
             }
             if (action.payload.type === 'balloon') {
                 elementMetadata = {
-                    ...elementMetadata,
                     backgroundColor: '#ffffff',
                     color: '#000000',
                     fontFamily: '"Noto Sans"',
-                    fontSize: 16,
-                    tailPos: { x: 20, y: 50 }
+                    fontSize: 19,
+                    tailPos: { x: 20, y: 50 },
+                    ...elementMetadata
                 };
-                baseElement.width = 40;
-                baseElement.height = 20;
+                baseElement.width = action.payload.width !== undefined ? action.payload.width : (action.payload.metadata?.width || 40);
+                baseElement.height = action.payload.height !== undefined ? action.payload.height : (action.payload.metadata?.height || 20);
+            }
+
+            if (action.payload.type === 'banner') {
+                baseElement.width = action.payload.width !== undefined ? action.payload.width : (action.payload.metadata?.width || 51);
+                baseElement.height = action.payload.height !== undefined ? action.payload.height : (action.payload.metadata?.height || 12.5);
             }
 
             if (action.payload.type === 'isticker') {

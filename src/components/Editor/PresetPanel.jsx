@@ -47,7 +47,7 @@ const PresetPanel = ({ onClose }) => {
     const [quizColor, setQuizColor] = useState(existing.quizAnswers?.color || '#ffffff');
 
     const [balloonFont, setBalloonFont] = useState(existing.balloon?.fontFamily || '"HVD Comic Serif Pro", sans-serif');
-    const [balloonSize, setBalloonSize] = useState(existing.balloon?.fontSize || 16);
+    const [balloonSize, setBalloonSize] = useState(existing.balloon?.fontSize || 19);
     const [balloonColor, setBalloonColor] = useState(existing.balloon?.color || '#000000');
 
     const [mathOpColor, setMathOpColor] = useState(existing.mathOperatorColor || '#ff4b4b');

@@ -1,0 +1,315 @@
+/* ExploreNLCartridge.css - Modern interactive number line manipulative */
+
+.explorenl-cartridge {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Number line container (relocatable & resizable via inline styles) */
+.explorenl-nl-wrapper {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: outline-color 0.2s ease;
+}
+
+.explorenl-nl-wrapper.is-selected {
+    outline: 2px dashed rgba(99, 102, 241, 0.6);
+    outline-offset: 6px;
+    border-radius: 8px;
+}
+
+
+
+/* Endpoint resize handles */
+.explorenl-nl-resize-handle {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #6366F1;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 40;
+    border: 2px solid #ffffff;
+    user-select: none;
+}
+
+.explorenl-nl-resize-handle.top {
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.explorenl-nl-resize-handle.bottom {
+    bottom: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+}
+
+.explorenl-nl-resize-handle.left {
+    left: -11px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+
+.explorenl-nl-resize-handle.right {
+    right: -11px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+}
+
+/* Interactive SVG Line */
+.explorenl-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+}
+
+.is-preview .explorenl-nl-wrapper {
+    cursor: move;
+}
+
+.is-preview .explorenl-svg {
+    cursor: move;
+}
+
+.is-play .explorenl-svg {
+    cursor: default;
+}
+
+/* Ticks and Labels */
+.explorenl-tick-label {
+    font-family: 'Outfit', 'Nunito', 'Fira Sans', sans-serif;
+    font-weight: 800;
+    cursor: default;
+    user-select: none;
+    transition: transform 0.15s ease, fill 0.15s ease;
+}
+
+.is-preview .explorenl-tick-label {
+    cursor: move;
+}
+
+.explorenl-tick-label.active {
+    font-weight: 900;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Number Line Quiz Pointer (Unified Vector SVG Knob & Spring Physics)
+   ───────────────────────────────────────────────────────────── */
+.explorenl-pointer {
+    position: absolute;
+    z-index: 35;
+    user-select: none;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+
+    /* Spring transition matching Number Line Quiz */
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.explorenl-pointer.dragging {
+    transition: none; /* Instant follow while dragging */
+    cursor: grabbing;
+}
+
+/* Unified Vector Knob SVG */
+.explorenl-pointer-svg {
+    display: block;
+    transition: transform 0.15s ease;
+    transform-origin: center center;
+}
+
+.explorenl-pointer.dragging .explorenl-pointer-svg,
+.explorenl-pointer:active .explorenl-pointer-svg {
+    transform: scale(1.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Floating Equation Card
+   ───────────────────────────────────────────────────────────── */
+.explorenl-equation-card {
+    position: absolute;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08);
+    cursor: default;
+    user-select: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Outfit', 'Nunito', 'Fira Sans', sans-serif;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.explorenl-equation-card.is-editor {
+    cursor: move;
+}
+
+.explorenl-equation-card.selected {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4), 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* Stable Equation Grid: Sized to max dimensions across all states to prevent resizing and jitter */
+.explorenl-equation-grid {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Fixed Prefix & Suffix (e.g. '2' in '2!n =', '8 + ' in '8 + n =', '²' in 'n!2 =') */
+.explorenl-eq-prefix,
+.explorenl-eq-suffix {
+    display: inline-block;
+    white-space: nowrap;
+    user-select: none;
+}
+
+/* Stationary Equals Sign */
+.explorenl-eq-equal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    user-select: none;
+}
+
+/* CSS Grid Slots where all potential tick states share grid-column: 1 / grid-row: 1 */
+.explorenl-eq-slot {
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+}
+
+.explorenl-eq-slot-var {
+    justify-items: start;
+}
+
+.explorenl-eq-slot-var.has-suffix {
+    justify-items: end;
+}
+
+.explorenl-eq-slot-rhs {
+    justify-items: start;
+}
+
+/* Each item in the stack */
+.explorenl-eq-item {
+    grid-column: 1;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.explorenl-eq-item.is-hidden {
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+.explorenl-eq-item.is-active {
+    visibility: visible;
+}
+
+/* Math Fraction Display */
+.explorenl-fraction {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 1;
+    margin: 0 2px;
+}
+
+.explorenl-num {
+    border-bottom: 2.5px solid currentColor;
+    padding: 0 4px 1px 4px;
+    font-size: 0.82em;
+    text-align: center;
+    display: block;
+}
+
+.explorenl-denom {
+    padding: 2px 4px 0 4px;
+    font-size: 0.82em;
+    text-align: center;
+    display: block;
+}
+
+/* Editor Handles for Equation Box */
+.explorenl-handle-rotate {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #6366F1;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: grab;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.explorenl-handle-rotate::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 2px;
+    height: 8px;
+    background: #6366F1;
+    transform: translateX(-50%);
+}
+
+.explorenl-handle-resize {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #6366F1;
+    border: 2px solid #ffffff;
+    cursor: nwse-resize;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+

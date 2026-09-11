@@ -7,18 +7,14 @@ const TypeQuizKeyboard = ({ isActive = true }) => {
     const { t } = useTranslation();
     const typeQuiz = useTypeQuiz();
 
-    if (!typeQuiz) return null;
-
-    const {
-        checkButtonState,
-        keyboardSlidDown,
-        handleKeyPress,
-        handleCheck
-    } = typeQuiz;
+    const checkButtonState = typeQuiz?.checkButtonState;
+    const keyboardSlidDown = typeQuiz?.keyboardSlidDown;
+    const handleKeyPress = typeQuiz?.handleKeyPress;
+    const handleCheck = typeQuiz?.handleCheck;
 
     // Listen to physical keyboard events when slide is active
     useEffect(() => {
-        if (!isActive || keyboardSlidDown) return;
+        if (!typeQuiz || !isActive || keyboardSlidDown) return;
 
         const handleKeyDown = (e) => {
             // Do not capture if typing in an input/textarea outside
@@ -26,19 +22,21 @@ const TypeQuizKeyboard = ({ isActive = true }) => {
 
             if (/^[0-9]$/.test(e.key)) {
                 e.preventDefault();
-                handleKeyPress(e.key);
+                handleKeyPress?.(e.key);
             } else if (e.key === 'Backspace' || e.key === 'Delete') {
                 e.preventDefault();
-                handleKeyPress('backspace');
+                handleKeyPress?.('backspace');
             } else if (e.key === 'Enter') {
                 e.preventDefault();
-                handleCheck();
+                handleCheck?.();
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isActive, keyboardSlidDown, handleKeyPress, handleCheck]);
+    }, [typeQuiz, isActive, keyboardSlidDown, handleKeyPress, handleCheck]);
+
+    if (!typeQuiz) return null;
 
     // Button label based on state
     let buttonLabel = t('quiz.check', 'CHECK');

@@ -2801,6 +2801,346 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
 
 
+                    {/* ExploreNL Settings */}
+                    {(element.cartridgeType === 'ExploreNL' || element.cartridgeType === 'ExloreNL') && (
+                        <>
+                            {/* Equation Template Input */}
+                            <div className="menu-group">
+                                <label>Equation (n = number, ! = power)</label>
+                                <input
+                                    type="text"
+                                    value={element.config?.equationTemplate || '2!n ='}
+                                    placeholder="e.g. 2!n = or 8 + n ="
+                                    onChange={(e) => onChange('cartridge', {
+                                        config: { ...element.config, equationTemplate: e.target.value }
+                                    })}
+                                    style={{
+                                        width: '140px',
+                                        padding: '5px 8px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontSize: '0.95rem',
+                                        fontWeight: 'bold'
+                                    }}
+                                />
+                            </div>
+
+                            {/* Quick Equation Presets */}
+                            <div className="menu-group">
+                                <label>Presets</label>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    {[
+                                        { label: '2!n =', desc: 'Powers of 2 (2⁰=1, 2⁻¹=½)' },
+                                        { label: '10!n =', desc: 'Powers of 10' },
+                                        { label: '8 + n =', desc: 'Addition' },
+                                        { label: '3!n =', desc: 'Powers of 3' },
+                                        { label: 'n!2 =', desc: 'Squares (n²)' }
+                                    ].map(pr => (
+                                        <button
+                                            key={pr.label}
+                                            type="button"
+                                            className="btn-secondary"
+                                            onClick={() => onChange('cartridge', {
+                                                config: { ...element.config, equationTemplate: pr.label }
+                                            })}
+                                            title={pr.desc}
+                                            style={{
+                                                fontSize: '0.75rem',
+                                                padding: '3px 6px',
+                                                fontWeight: 'bold'
+                                            }}
+                                        >
+                                            {pr.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Bottom (Min) & Top (Max) Numbers */}
+                            <div className="menu-group">
+                                <label>Start / Min</label>
+                                <input
+                                    type="number"
+                                    value={element.config?.startNumber ?? (element.config?.bottomNumber ?? -3)}
+                                    onChange={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        const num = isNaN(val) ? 0 : val;
+                                        onChange('cartridge', {
+                                            config: {
+                                                ...element.config,
+                                                startNumber: num,
+                                                bottomNumber: num
+                                            }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '55px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>End / Max</label>
+                                <input
+                                    type="number"
+                                    value={element.config?.endNumber ?? (element.config?.topNumber ?? 3)}
+                                    onChange={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        const num = isNaN(val) ? 10 : val;
+                                        onChange('cartridge', {
+                                            config: {
+                                                ...element.config,
+                                                endNumber: num,
+                                                topNumber: num
+                                            }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '55px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Step</label>
+                                <input
+                                    type="number"
+                                    step="any"
+                                    min="0.001"
+                                    value={element.config?.step ?? 1}
+                                    onChange={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, step: isNaN(val) || val <= 0 ? 1 : val }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                />
+                            </div>
+
+                            {/* Start At / Initial Value */}
+                            <div className="menu-group">
+                                <label>Start At</label>
+                                <input
+                                    type="number"
+                                    step={element.config?.step ?? 1}
+                                    value={element.config?.currentValue ?? 0}
+                                    onChange={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, currentValue: isNaN(val) ? 0 : val }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '55px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Number where the pointer starts in Play mode"
+                                />
+                            </div>
+
+                            {/* Thickness */}
+                            <div className="menu-group">
+                                <label>Thickness</label>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="8"
+                                    value={element.config?.thickness ?? 3}
+                                    onChange={(e) => onChange('cartridge', {
+                                        config: { ...element.config, thickness: parseInt(e.target.value) }
+                                    })}
+                                    style={{ width: '60px' }}
+                                    title={`${element.config?.thickness ?? 3}px`}
+                                />
+                            </div>
+
+                            {/* Arrows */}
+                            <div className="menu-group">
+                                <label>Arrows</label>
+                                <button
+                                    type="button"
+                                    className={`btn-icon ${(element.config?.showArrows ?? true) ? 'active' : ''}`}
+                                    onClick={() => onChange('cartridge', {
+                                        config: { ...element.config, showArrows: !(element.config?.showArrows ?? true) }
+                                    })}
+                                    title="Toggle Arrowheads"
+                                    style={{ fontSize: '0.9rem' }}
+                                >
+                                    {(element.config?.showArrows ?? true) ? '🏹' : '➖'}
+                                </button>
+                            </div>
+
+                            {/* Line Length */}
+                            <div className="menu-group">
+                                <label>Length</label>
+                                <input
+                                    type="range"
+                                    min="220"
+                                    max="880"
+                                    value={element.config?.nlLength ?? (element.config?.orientation === 'horizontal' ? 620 : 520)}
+                                    onChange={(e) => onChange('cartridge', {
+                                        config: { ...element.config, nlLength: parseInt(e.target.value) }
+                                    })}
+                                    style={{ width: '60px' }}
+                                    title={`${element.config?.nlLength ?? 520}px`}
+                                />
+                            </div>
+
+                            {/* Orientation */}
+                            <div className="menu-group">
+                                <label>Orientation</label>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <button
+                                        type="button"
+                                        className={`btn-icon ${element.config?.orientation !== 'horizontal' ? 'active' : ''}`}
+                                        onClick={() => onChange('cartridge', {
+                                            config: { ...element.config, orientation: 'vertical' }
+                                        })}
+                                        title="Vertical (Default)"
+                                        style={{ width: '32px', height: '32px' }}
+                                    >
+                                        ↕️
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`btn-icon ${element.config?.orientation === 'horizontal' ? 'active' : ''}`}
+                                        onClick={() => onChange('cartridge', {
+                                            config: { ...element.config, orientation: 'horizontal' }
+                                        })}
+                                        title="Horizontal"
+                                        style={{ width: '32px', height: '32px' }}
+                                    >
+                                        ↔️
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Sides (Single control with two positions in Vertical Mode) */}
+                            {element.config?.orientation !== 'horizontal' && (() => {
+                                const isSwapped = Boolean(element.config?.swapSides) || (element.config?.pointerSide === 'left' && element.config?.numbersSide === 'right');
+                                return (
+                                    <div className="menu-group">
+                                        <label>Sides</label>
+                                        <button
+                                            type="button"
+                                            className={`btn-icon ${isSwapped ? 'active' : ''}`}
+                                            onClick={() => {
+                                                const nextSwapped = !isSwapped;
+                                                onChange('cartridge', {
+                                                    config: {
+                                                        ...element.config,
+                                                        numbersSide: nextSwapped ? 'right' : 'left',
+                                                        pointerSide: nextSwapped ? 'left' : 'right',
+                                                        swapSides: nextSwapped
+                                                    }
+                                                });
+                                            }}
+                                            title={isSwapped
+                                                ? "Pointer on Left, Numbers on Right (Click for Default)"
+                                                : "Numbers on Left, Pointer on Right (Default, Click to swap)"}
+                                            style={{ width: '32px', height: '32px', fontSize: '1rem' }}
+                                        >
+                                            ⇄
+                                        </button>
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Colors */}
+                            <ColorPickerDropdown
+                                label="Line"
+                                color={element.config?.lineColor || '#6366F1'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, lineColor: c }
+                                })}
+                            />
+                            <ColorPickerDropdown
+                                label="Numbers"
+                                color={element.config?.numberColor || '#1E293B'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, numberColor: c }
+                                })}
+                            />
+                            <ColorPickerDropdown
+                                label="Pointer"
+                                color={element.config?.pointerColor || '#4ECDC4'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, pointerColor: c }
+                                })}
+                            />
+                            <ColorPickerDropdown
+                                label="Equation Text"
+                                color={element.config?.equationColor || '#0F172A'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, equationColor: c }
+                                })}
+                            />
+                            <ColorPickerDropdown
+                                label="Equation Bg"
+                                color={element.config?.equationBg || '#FFFFFF'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, equationBg: c }
+                                })}
+                            />
+                            <ColorPickerDropdown
+                                label="Equation Border"
+                                color={element.config?.equationBorder || '#6366F1'}
+                                onSelect={(c) => onChange('cartridge', {
+                                    config: { ...element.config, equationBorder: c }
+                                })}
+                            />
+
+                            {/* Reset Line and Card Positions */}
+                            <div className="menu-group">
+                                <label>Reset</label>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => onChange('cartridge', {
+                                        config: {
+                                            ...element.config,
+                                            numbersSide: 'left',
+                                            pointerSide: 'right',
+                                            nlX: element.config?.orientation === 'horizontal' ? 50 : 25,
+                                            nlY: element.config?.orientation === 'horizontal' ? 72 : 50,
+                                            nlLength: element.config?.orientation === 'horizontal' ? 620 : 520,
+                                            equationX: element.config?.orientation === 'horizontal' ? 50 : 65,
+                                            equationY: element.config?.orientation === 'horizontal' ? 28 : 45,
+                                            equationRotation: 0,
+                                            equationFontSize: 28
+                                        }
+                                    })}
+                                    title="Reset Line and Equation Card Position"
+                                    style={{ fontSize: '0.8rem', padding: '5px 8px', fontWeight: 'bold' }}
+                                >
+                                    🎯 Reset
+                                </button>
+                            </div>
+                        </>
+                    )}
+
                     <div className="menu-divider"></div>
                 </>
             )}

@@ -210,7 +210,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
     const visualMode = element.metadata?.visualMode || false;
     const matchAnswers = element.metadata?.matchAnswers || ['5', '6', '9', '7'];
 
-    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#48FF3E'];
+    const colors = ['#65BBF9', '#F9D639', '#9662B6', '#FFA756'];
 
     const { popupRef, dragHandlers, style } = useDraggable('stickerPicker');
 

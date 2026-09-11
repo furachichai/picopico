@@ -450,7 +450,7 @@ function buildNarrativeElements(parsed, elements, nextElId, textPreset) {
                 backgroundColor: '#ffffff',
                 color: '#000000',
                 fontFamily: textPreset?.balloon?.fontFamily || '"Fira Sans"',
-                fontSize: textPreset?.balloon?.fontSize || 16,
+                fontSize: textPreset?.balloon?.fontSize || 19,
                 tailPos: { x: i % 2 === 0 ? 15 : 85, y: 83 },
             },
         });

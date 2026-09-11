@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import ConfirmationModal from './ConfirmationModal';
 import './SlideStrip.css';
@@ -7,6 +7,17 @@ const SlideStrip = () => {
     const { state, dispatch } = useEditor();
     const { lesson, currentSlideId } = state;
     const [slideToDelete, setSlideToDelete] = useState(null);
+    const activeThumbnailRef = useRef(null);
+
+    useEffect(() => {
+        if (activeThumbnailRef.current) {
+            activeThumbnailRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }, [currentSlideId]);
 
     const handleSelect = (id) => {
         dispatch({ type: 'SET_CURRENT_SLIDE', payload: id });
@@ -47,6 +58,7 @@ const SlideStrip = () => {
                 {lesson.slides.map((slide, index) => (
                     <div
                         key={slide.id}
+                        ref={slide.id === currentSlideId ? activeThumbnailRef : null}
                         className={`slide-thumbnail ${slide.id === currentSlideId ? 'active' : ''}`}
                         onClick={() => handleSelect(slide.id)}
                     >

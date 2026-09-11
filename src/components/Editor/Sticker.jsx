@@ -30,11 +30,21 @@ const rotatePoint = (x, y, angle) => {
     };
 };
 
-const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onMoveMultiple, onEdit, onDelete, translationMode = false, readOnly = false }) => {
+const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, onChange, onMoveMultiple, onEdit, onDelete, onSnapGuideline, translationMode = false, readOnly = false }) => {
     const { state, dispatch } = useEditor();
     const stickerRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [interactionType, setInteractionType] = useState(null); // 'move', 'resize', 'rotate'
+    const wasSnappedXRef = useRef(false);
+    const wasSnappedYRef = useRef(false);
+
+    useEffect(() => {
+        return () => {
+            if (onSnapGuideline) {
+                onSnapGuideline({ vertical: false, horizontal: false, immediate: true });
+            }
+        };
+    }, [onSnapGuideline]);
 
     // Helper to get client coordinates from mouse or touch
     const getClientCoords = (e) => {
@@ -137,10 +147,53 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     onMoveMultiple(state.selectedElementIds.filter(id => id !== 'background' && id !== 'cartridge'), dxPct, dyPct);
                 } else {
                     // Single element move uses absolute positioning for perfection
-                    let newX = startLeft + (dx / parentWidth) * 100;
-                    const newY = startTop + (dy / parentHeight) * 100;
+                    const pWidth = parentWidth || 360;
+                    const pHeight = parentHeight || 640;
+                    let rawX = startLeft + (dx / pWidth) * 100;
+                    let rawY = startTop + (dy / pHeight) * 100;
+
+                    // Center snapping logic (8px threshold)
+                    const SNAP_PIXELS = 8;
+                    const snapThresholdX = (SNAP_PIXELS / pWidth) * 100;
+                    const snapThresholdY = (SNAP_PIXELS / pHeight) * 100;
+
+                    let snappedX = false;
+                    let snappedY = false;
+                    let newX = rawX;
+                    let newY = rawY;
+
+                    const isBypass = moveEvent.altKey;
+                    if (!isBypass) {
+                        if (Math.abs(rawX - 50) <= snapThresholdX) {
+                            newX = 50;
+                            snappedX = true;
+                        }
+                        if (Math.abs(rawY - 50) <= snapThresholdY) {
+                            newY = 50;
+                            snappedY = true;
+                        }
+                    }
+
+                    // Quiz elements only move vertically, locked horizontally (except field type)
+                    if (element.type === 'quiz' && element.metadata?.quizType !== 'field') {
+                        snappedX = false;
+                    }
+
+                    // Haptic feedback tick on entering snap
+                    if (snappedX && !wasSnappedXRef.current) {
+                        if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+                    }
+                    if (snappedY && !wasSnappedYRef.current) {
+                        if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+                    }
+                    wasSnappedXRef.current = snappedX;
+                    wasSnappedYRef.current = snappedY;
+
+                    if (onSnapGuideline) {
+                        onSnapGuideline({ vertical: snappedX, horizontal: snappedY });
+                    }
+
                     if (element.type === 'quiz') {
-                        // Quiz elements only move vertically, locked horizontally (except field type)
                         if (element.metadata?.quizType === 'field') {
                             onChange(element.id, { x: newX, y: newY });
                         } else {
@@ -335,6 +388,11 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         const handleEnd = () => {
             setIsDragging(false);
             setInteractionType(null);
+            wasSnappedXRef.current = false;
+            wasSnappedYRef.current = false;
+            if (onSnapGuideline) {
+                onSnapGuideline({ vertical: false, horizontal: false, immediate: true });
+            }
             document.removeEventListener('mousemove', handleMove);
             document.removeEventListener('mouseup', handleEnd);
             document.removeEventListener('touchmove', handleMove);

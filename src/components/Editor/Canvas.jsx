@@ -8,6 +8,7 @@ import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
+import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
 import SaveAssetModal from './SaveAssetModal';
@@ -45,6 +46,66 @@ const Canvas = (props) => {
     lesson.slides.find(s => s.id === currentSlideId),
     [lesson.slides, currentSlideId]
   );
+
+  // Center Snap Guidelines State
+  const [snapGuideline, setSnapGuideline] = useState({ vertical: false, horizontal: false });
+  const snapTimeoutRef = useRef({ vertical: null, horizontal: null });
+  const isDraggingSnappedRef = useRef({ vertical: false, horizontal: false });
+
+  const handleSnapGuideline = useCallback(({ vertical, horizontal, immediate = false }) => {
+    isDraggingSnappedRef.current = { vertical: !!vertical, horizontal: !!horizontal };
+
+    setSnapGuideline(prev => {
+      let nextV = prev.vertical;
+      let nextH = prev.horizontal;
+
+      // Vertical guide (snapped horizontally to center X)
+      if (vertical) {
+        if (snapTimeoutRef.current.vertical) clearTimeout(snapTimeoutRef.current.vertical);
+        snapTimeoutRef.current.vertical = null;
+        nextV = true;
+      } else if (!vertical && prev.vertical) {
+        if (immediate) {
+          if (snapTimeoutRef.current.vertical) clearTimeout(snapTimeoutRef.current.vertical);
+          snapTimeoutRef.current.vertical = null;
+          nextV = false;
+        } else if (!snapTimeoutRef.current.vertical) {
+          snapTimeoutRef.current.vertical = setTimeout(() => {
+            setSnapGuideline(curr => isDraggingSnappedRef.current.vertical ? curr : { ...curr, vertical: false });
+            snapTimeoutRef.current.vertical = null;
+          }, 200);
+        }
+      }
+
+      // Horizontal guide (snapped vertically to center Y)
+      if (horizontal) {
+        if (snapTimeoutRef.current.horizontal) clearTimeout(snapTimeoutRef.current.horizontal);
+        snapTimeoutRef.current.horizontal = null;
+        nextH = true;
+      } else if (!horizontal && prev.horizontal) {
+        if (immediate) {
+          if (snapTimeoutRef.current.horizontal) clearTimeout(snapTimeoutRef.current.horizontal);
+          snapTimeoutRef.current.horizontal = null;
+          nextH = false;
+        } else if (!snapTimeoutRef.current.horizontal) {
+          snapTimeoutRef.current.horizontal = setTimeout(() => {
+            setSnapGuideline(curr => isDraggingSnappedRef.current.horizontal ? curr : { ...curr, horizontal: false });
+            snapTimeoutRef.current.horizontal = null;
+          }, 200);
+        }
+      }
+
+      if (nextV === prev.vertical && nextH === prev.horizontal) return prev;
+      return { vertical: nextV, horizontal: nextH };
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (snapTimeoutRef.current.vertical) clearTimeout(snapTimeoutRef.current.vertical);
+      if (snapTimeoutRef.current.horizontal) clearTimeout(snapTimeoutRef.current.horizontal);
+    };
+  }, []);
 
   // Rulers and Guides State
   const [cursorPos, setCursorPos] = useState({ x: null, y: null });
@@ -902,7 +963,7 @@ const Canvas = (props) => {
 
           {/* Cartridge Container */}
           <div className="cartridge-container">
-            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza') && (
+            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') && (
               <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
                 {currentSlide.cartridge.type === 'FractionAlpha' && (
                   <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
@@ -927,6 +988,28 @@ const Canvas = (props) => {
                     onSelect={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' })}
                     onConfigChange={(newConfig) => {
                       dispatch({ type: 'SAVE_HISTORY' });
+                      dispatch({
+                        type: 'UPDATE_SLIDE',
+                        payload: {
+                          cartridge: {
+                            ...currentSlide.cartridge,
+                            config: {
+                              ...currentSlide.cartridge.config,
+                              ...newConfig
+                            }
+                          }
+                        }
+                      });
+                    }}
+                  />
+                )}
+                {(currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') && (
+                  <ExloreNLCartridge
+                    config={currentSlide.cartridge.config}
+                    preview={true}
+                    isSelected={state.selectedElementId === 'cartridge'}
+                    onSelect={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' })}
+                    onConfigChange={(newConfig) => {
                       dispatch({
                         type: 'UPDATE_SLIDE',
                         payload: {
@@ -980,10 +1063,15 @@ const Canvas = (props) => {
                 onMoveMultiple={(ids, dx, dy) => dispatch({ type: 'MOVE_ELEMENTS', payload: { ids, dx, dy } })}
                 onEdit={() => handleEdit(element.id)}
                 onDelete={handleDelete}
+                onSnapGuideline={handleSnapGuideline}
                 translationMode={state.translationMode || false}
               />
             );
           })}
+
+          {/* Center Snap Guidelines (Flash on alignment with slide center) */}
+          <div className={`center-snap-guideline vertical ${snapGuideline.vertical ? 'active' : ''}`} />
+          <div className={`center-snap-guideline horizontal ${snapGuideline.horizontal ? 'active' : ''}`} />
         </div>
 
         {/* Stripper Draggable Pointers (OUTSIDE slide-canvas, inside relative wrapper) */}

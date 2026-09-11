@@ -10,6 +10,7 @@ import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
+import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
@@ -25,6 +26,14 @@ import { X, Pencil } from 'lucide-react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { TypeQuizProvider } from '../../context/TypeQuizContext';
 import './Player.css';
+
+// Helper to detect if a cartridge or slide has an open manipulative without a win scenario
+const isOpenManipulative = (cartridge) => {
+    if (!cartridge) return false;
+    if (cartridge.type === 'ExploreNL' || cartridge.type === 'ExloreNL') return true;
+    if (cartridge.hasWinScenario === false || cartridge.config?.hasWinScenario === false || cartridge.config?.openEnded === true) return true;
+    return false;
+};
 
 const Player = () => {
     const { state, dispatch } = useEditor();
@@ -68,10 +77,19 @@ const Player = () => {
     const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
-    // Check if current slide has a cartridge/quiz and enable game mode
-    // Only block navigation if the slide hasn't been solved yet
+    // Keep currentSlideId in sync with the slide being played
     useEffect(() => {
-        if (currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex)) {
+        const slide = slides[currentSlideIndex];
+        if (slide?.id && state.currentSlideId !== slide.id) {
+            dispatch({ type: 'SET_CURRENT_SLIDE', payload: slide.id });
+        }
+    }, [currentSlideIndex, slides, state.currentSlideId, dispatch]);
+
+    // Check if current slide has a cartridge/quiz and enable game mode
+    // Only block navigation if the slide hasn't been solved yet (open manipulatives are not blocking games)
+    useEffect(() => {
+        const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
+        if (isGame && !solvedSlides.has(currentSlideIndex)) {
             setIsGameActive(true);
         } else {
             setIsGameActive(false);
@@ -189,8 +207,9 @@ const Player = () => {
         if (solvedSlides.has(slideIndex)) return false;
         // Check for quiz elements
         const hasQuiz = slide.elements?.some(el => el.type === 'quiz');
-        // Check for cartridge (game)
-        const hasCartridge = !!slide.cartridge;
+        // Check for cartridge (game) - open manipulatives don't have a blocking win condition
+        const isGame = slide.cartridge && !isOpenManipulative(slide.cartridge);
+        const hasCartridge = !!isGame;
         // Check for isticker
         const hasISticker = slide.elements?.some(el => el.type === 'isticker');
         return hasQuiz || hasCartridge || hasISticker;
@@ -360,18 +379,7 @@ const Player = () => {
             return;
         }
         playTone(type);
-        setBanner({ type, text });
-        setBannerFadingOut(false);
-
-        // Show for 1 second (1000ms), then start fade out (400ms)
-        bannerFadeTimeoutRef.current = setTimeout(() => {
-            setBannerFadingOut(true);
-        }, 1000);
-
-        bannerTimeoutRef.current = setTimeout(() => {
-            setBanner(null);
-            setBannerFadingOut(false);
-        }, 1400);
+        // Topo / Moco celebrations removed for now; sound and confetti are kept
     };
 
     // Clear banner and reset stripper step when slide changes
@@ -437,6 +445,14 @@ const Player = () => {
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
 
+    const handleEdit = () => {
+        const slide = slides[currentSlideIndex];
+        if (slide?.id) {
+            dispatch({ type: 'SET_CURRENT_SLIDE', payload: slide.id });
+        }
+        dispatch({ type: 'SET_VIEW', payload: 'editor' });
+    };
+
     const [isNavigating, setIsNavigating] = useState(false);
 
     // Helper to detect if a touch or click target is an interactive control or draggable game piece
@@ -451,6 +467,8 @@ const Player = () => {
             '.algebros-card, .algebros-slot, .algebros-op-btn, ' +
             '.fraction-slice, .swipe-card, ' +
             '.quiz-option, .chatquiz-option-btn, .match-card, .conecta-item, .nl-knob-player, .quiz-ready-btn, ' +
+            '.explorenl-pointer, .explorenl-equation-card, ' +
+            '.type-quiz-keyboard-container, .type-quiz-key-btn, .type-quiz-action-btn, ' +
             '.isticker-container, .popup-character, img[alt="popup"], ' +
             '[data-interactive="true"], ' +
             '.fullscreen-toggle, .player-top-controls, .player-nav-btn, .close-btn, .edit-btn';
@@ -476,8 +494,9 @@ const Player = () => {
     const handleHotzoneNav = (direction) => {
         if (isNavigating) return;
 
-        // Determine what kind of interactive is on the current slide
-        const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
+        // Determine what kind of interactive is on the current slide (open manipulatives are not blocking games)
+        const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
+        const hasCartridge = !!isGame && !solvedSlides.has(currentSlideIndex);
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
         const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
@@ -557,7 +576,8 @@ const Player = () => {
     };
 
     // Determine active interactive elements
-    const hasCartridge = !!currentSlide?.cartridge && !solvedSlides.has(currentSlideIndex);
+    const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
+    const hasCartridge = !!isGame && !solvedSlides.has(currentSlideIndex);
     const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
     const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
@@ -571,6 +591,10 @@ const Player = () => {
         && currentSlide.stripper.dividers?.length > 0
         && !visitedStripperSlides.has(currentSlideIndex);
 
+    // Open manipulatives (like ExploreNL) don't have a win scenario; don't show the swipe hint so users explore freely without being rushed
+    const hasOpenManipulative = isOpenManipulative(currentSlide?.cartridge) ||
+        currentSlide?.elements?.some(el => el.type === 'ExploreNL' || el.type === 'ExloreNL' || (el.metadata?.isManipulative && !el.metadata?.hasWinScenario));
+
     const canNavigateForward = currentSlideIndex < slides.length - 1
         && !hasCartridge && !hasQuiz && !hasISticker && !stripperBlocking;
 
@@ -578,7 +602,8 @@ const Player = () => {
         setShowNavHint(false);
         if (navHintTimerRef.current) clearTimeout(navHintTimerRef.current);
 
-        if (!canNavigateForward) return;
+        // Do not trigger the swipe slide hint animation on slides with open manipulatives (no win scenario)
+        if (!canNavigateForward || hasOpenManipulative) return;
 
         navHintTimerRef.current = setTimeout(() => {
             setShowNavHint(true);
@@ -589,7 +614,7 @@ const Player = () => {
         return () => {
             if (navHintTimerRef.current) clearTimeout(navHintTimerRef.current);
         };
-    }, [currentSlideIndex, canNavigateForward, solvedSlides, visitedStripperSlides]);
+    }, [currentSlideIndex, canNavigateForward, hasOpenManipulative, solvedSlides, visitedStripperSlides]);
 
     return (
         <div className="player-container">
@@ -678,7 +703,7 @@ const Player = () => {
 
                             {!state.readOnly && (
                                 <button
-                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'editor' })}
+                                    onClick={handleEdit}
                                     title={t('common.edit')}
                                     className="player-top-btn"
                                 >
@@ -691,7 +716,8 @@ const Player = () => {
                         </div>
                     </div>
 
-                    {banner && (
+                    {/* Topo / Moco celebrations removed for now */}
+                    {false && banner && (
                         <>
                             <div className={`sign-glow ${banner.type === 'correct' ? 'correct-glow' : 'fail-glow'} ${bannerFadingOut ? 'banner-fade-out' : ''}`} />
                             <div className={`quiz-result-sign ${banner.type === 'correct' ? 'correct-sign' : 'fail-sign'} ${bannerFadingOut ? 'banner-fade-out' : ''}`}>
@@ -884,6 +910,18 @@ const Player = () => {
                                             />
                                         </ErrorBoundary>
                                     )}
+                                    {(slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') && (
+                                        <ErrorBoundary>
+                                            <ExloreNLCartridge
+                                                config={slide.cartridge.config}
+                                                preview={false}
+                                                onComplete={() => {
+                                                    handleInteractiveSolve(index, true, 1000);
+                                                    setIsGameActive(false);
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
                                     {slide.cartridge.type === 'Potiondas' && (
                                         <ErrorBoundary>
                                             <Potiondas
@@ -946,7 +984,7 @@ const Player = () => {
                                                     top: isTypeQuiz ? 'auto' : (isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`)),
                                                     bottom: isTypeQuiz ? '0' : undefined,
                                                     width: (isFullScreenQuiz || isTypeQuiz) ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
-                                                    height: isTypeQuiz ? 'auto' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
+                                                    height: isTypeQuiz ? '30%' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
                                                     transform: isTypeQuiz ? 'none' : (isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`),
                                                     zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (isTypeQuiz ? 1000 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))))),
                                                     pointerEvents: (isFullScreenQuiz || isTypeQuiz || element.type === 'result_field' || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,

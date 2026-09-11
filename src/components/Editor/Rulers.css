@@ -199,3 +199,55 @@
 .guide-drag-tooltip.delete-hint .dot {
     background: #FFFFFF;
 }
+
+/* Center Snap Guidelines (Flash when element centers with slide) */
+.center-snap-guideline {
+    position: absolute;
+    pointer-events: none;
+    z-index: 950;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+}
+
+.center-snap-guideline.active {
+    opacity: 1;
+    visibility: visible;
+    transition: none;
+    animation: snapGuideFlash 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.center-snap-guideline.vertical {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1.5px;
+    background-color: #FF2D55;
+    box-shadow: 0 0 4px rgba(255, 45, 85, 0.9), 0 0 10px rgba(255, 45, 85, 0.5), 0 0 1px rgba(0, 0, 0, 0.7);
+    transform: translateX(-50%);
+}
+
+.center-snap-guideline.horizontal {
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1.5px;
+    background-color: #FF2D55;
+    box-shadow: 0 0 4px rgba(255, 45, 85, 0.9), 0 0 10px rgba(255, 45, 85, 0.5), 0 0 1px rgba(0, 0, 0, 0.7);
+    transform: translateY(-50%);
+}
+
+@keyframes snapGuideFlash {
+    0% {
+        opacity: 0;
+        filter: brightness(2.5) drop-shadow(0 0 8px #FF2D55);
+    }
+    30% {
+        opacity: 1;
+        filter: brightness(2) drop-shadow(0 0 6px #FF2D55);
+    }
+    100% {
+        opacity: 0.95;
+        filter: brightness(1) drop-shadow(0 0 3px rgba(255, 45, 85, 0.8));
+    }
+}
