@@ -11,6 +11,7 @@ import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from './cartridges/Balanza/BalanzaCartridge';
 import ExloreNLCartridge from './cartridges/ExploreNL/ExloreNLCartridge';
 import DiscoverView from './components/Home/DiscoverView';
+import './components/Player/TypeQuizKeyboard.css';
 import './index.css'
 
 // Error Boundary to prevent white screen crashes
@@ -140,19 +141,28 @@ const AppContent = () => {
     };
   }, []);
 
-  // Track real viewport height for iOS Safari URL bar
+  // Track real viewport height for iOS Safari URL bar & mobile Chrome
   React.useEffect(() => {
     const setAppHeight = () => {
-      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', `${h}px`);
     };
 
     setAppHeight();
 
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', setAppHeight);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', setAppHeight);
+      window.visualViewport.addEventListener('scroll', setAppHeight);
+    }
     return () => {
       window.removeEventListener('resize', setAppHeight);
       window.removeEventListener('orientationchange', setAppHeight);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', setAppHeight);
+        window.visualViewport.removeEventListener('scroll', setAppHeight);
+      }
     };
   }, []);
 
@@ -503,7 +513,8 @@ const AppContent = () => {
 // PIN Gate Component
 const PinGate = ({ children }) => {
   const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const [isUnlocked, setIsUnlocked] = React.useState(isLocal);
+  const forceGate = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('pin');
+  const [isUnlocked, setIsUnlocked] = React.useState(isLocal && !forceGate);
   const [pinValue, setPinValue] = React.useState('');
   const [error, setError] = React.useState('');
   const [selectedLang, setSelectedLang] = React.useState(() => {
@@ -511,39 +522,86 @@ const PinGate = ({ children }) => {
   });
 
   React.useEffect(() => {
-    if (isLocal) {
+    if (isLocal && !forceGate) {
       localStorage.setItem('pico_app_unlocked', 'true');
       localStorage.setItem('pico_access_level', 'editor');
       localStorage.setItem('pico_editor_unlocked', 'true');
     }
-  }, [isLocal]);
+  }, [isLocal, forceGate]);
 
   const languages = [
     { code: 'es', flag: '🇪🇸' },
     { code: 'en', flag: '🇺🇸' },
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (pinValue === '2027') {
+  const verifyPin = (code) => {
+    if (code === '2027') {
       // Player-only access
       localStorage.setItem('pico_app_unlocked', 'true');
       localStorage.setItem('pico_access_level', 'player');
       localStorage.removeItem('pico_editor_unlocked');
       localStorage.setItem('pico_language', selectedLang);
       setIsUnlocked(true);
-    } else if (pinValue === '1314b') {
+      return true;
+    } else if (code === '1314') {
       // Editor access
       localStorage.setItem('pico_app_unlocked', 'true');
       localStorage.setItem('pico_access_level', 'editor');
       localStorage.setItem('pico_editor_unlocked', 'true');
       localStorage.setItem('pico_language', selectedLang);
       setIsUnlocked(true);
+      return true;
     } else {
       setError('Incorrect code');
       setPinValue('');
+      return false;
     }
   };
+
+  const handleDigit = (digit) => {
+    if (pinValue.length >= 4) return;
+    const nextPin = pinValue + digit;
+    setPinValue(nextPin);
+    setError('');
+
+    if (nextPin.length === 4) {
+      setTimeout(() => {
+        verifyPin(nextPin);
+      }, 150);
+    }
+  };
+
+  const handleBackspace = () => {
+    setPinValue((prev) => prev.slice(0, -1));
+    setError('');
+  };
+
+  const handleUnlock = () => {
+    if (pinValue.length > 0) {
+      verifyPin(pinValue);
+    }
+  };
+
+  // Physical keyboard support for desktop
+  React.useEffect(() => {
+    if (isUnlocked) return;
+
+    const handleKeyDown = (e) => {
+      if (/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        handleDigit(e.key);
+      } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        e.preventDefault();
+        handleBackspace();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        handleUnlock();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isUnlocked, pinValue, selectedLang]);
 
   if (isUnlocked) {
     return children;
@@ -556,41 +614,58 @@ const PinGate = ({ children }) => {
       left: 0,
       width: '100%',
       height: '100%',
+      minHeight: '100dvh',
+      height: 'var(--app-height, 100dvh)',
       backgroundColor: '#1a202c',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: 'Inter, system-ui, sans-serif',
-      color: 'white'
+      fontFamily: "'Outfit', 'Nunito', Inter, system-ui, sans-serif",
+      color: 'white',
+      padding: '16px',
+      boxSizing: 'border-box',
+      overflowY: 'auto',
+      userSelect: 'none',
+      WebkitUserSelect: 'none'
     }}>
       <div style={{
-        background: 'rgba(255,255,255,0.1)',
-        padding: '40px',
-        borderRadius: '20px',
+        background: 'rgba(255, 255, 255, 0.08)',
+        padding: '24px 20px',
+        borderRadius: '24px',
         textAlign: 'center',
-        backdropFilter: 'blur(10px)',
-        minWidth: '280px'
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        width: '100%',
+        maxWidth: '340px',
+        boxSizing: 'border-box',
+        border: '1.5px solid rgba(255, 255, 255, 0.12)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
       }}>
-        <h1 style={{ marginBottom: '8px', fontSize: '2rem' }}>🔒 PicoPico</h1>
-        <p style={{ opacity: 0.7, marginBottom: '20px' }}>Enter code to continue</p>
+        <h1 style={{ margin: '0 0 4px 0', fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.5px' }}>
+          🔒 PicoPico
+        </h1>
+        <p style={{ opacity: 0.7, margin: '0 0 16px 0', fontSize: '0.9rem', fontWeight: 600 }}>
+          Enter code to continue
+        </p>
 
         {/* Language Selector */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
-          {languages.map(lang => (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '16px' }}>
+          {languages.map((lang) => (
             <button
               key={lang.code}
+              type="button"
               onClick={() => setSelectedLang(lang.code)}
               style={{
-                fontSize: '2rem',
-                background: selectedLang === lang.code ? 'rgba(139, 92, 246, 0.4)' : 'rgba(255,255,255,0.1)',
+                fontSize: '1.8rem',
+                background: selectedLang === lang.code ? 'rgba(139, 92, 246, 0.35)' : 'rgba(255, 255, 255, 0.06)',
                 border: selectedLang === lang.code ? '2px solid #8B5CF6' : '2px solid transparent',
                 borderRadius: '12px',
-                padding: '8px 14px',
+                padding: '6px 14px',
                 cursor: 'pointer',
                 transition: 'all 0.15s',
-                filter: selectedLang === lang.code ? 'none' : 'grayscale(0.5)',
-                opacity: selectedLang === lang.code ? 1 : 0.6
+                filter: selectedLang === lang.code ? 'none' : 'grayscale(0.6)',
+                opacity: selectedLang === lang.code ? 1 : 0.55
               }}
             >
               {lang.flag}
@@ -598,44 +673,110 @@ const PinGate = ({ children }) => {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            value={pinValue}
-            onChange={(e) => { setPinValue(e.target.value); setError(''); }}
-            placeholder="Enter code"
-            autoFocus
-            style={{
-              padding: '12px 20px',
-              fontSize: '1.2rem',
-              borderRadius: '12px',
-              border: error ? '2px solid #EF4444' : '2px solid rgba(255,255,255,0.2)',
-              background: 'rgba(255,255,255,0.1)',
-              color: 'white',
-              textAlign: 'center',
-              width: '150px',
-              outline: 'none'
-            }}
-          />
-          <br />
-          {error && <p style={{ color: '#EF4444', marginTop: '8px', fontSize: '0.9rem' }}>{error}</p>}
+        {/* PIN Dots Display (No native input, prevents mobile keyboard) */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: error ? '8px' : '18px' }}>
+          {[0, 1, 2, 3].map((idx) => {
+            const isFilled = pinValue.length > idx;
+            return (
+              <div
+                key={idx}
+                style={{
+                  width: '46px',
+                  height: '52px',
+                  borderRadius: '12px',
+                  border: error ? '2px solid #EF4444' : (isFilled ? '2px solid #8B5CF6' : '2px solid rgba(255, 255, 255, 0.2)'),
+                  backgroundColor: isFilled ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 255, 255, 0.06)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.6rem',
+                  color: '#ffffff',
+                  boxShadow: isFilled ? '0 0 10px rgba(139, 92, 246, 0.4)' : 'none',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {isFilled ? '●' : ''}
+              </div>
+            );
+          })}
+        </div>
+
+        {error && (
+          <p style={{ color: '#EF4444', margin: '0 0 12px 0', fontSize: '0.88rem', fontWeight: 700 }}>
+            {error}
+          </p>
+        )}
+
+        {/* Custom Onscreen Numeric Keypad (Type Answer Style) */}
+        <div
+          className="type-quiz-keypad-grid"
+          style={{
+            width: '100%',
+            maxWidth: '280px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(4, 1fr)',
+            gap: '8px'
+          }}
+        >
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
+            <button
+              key={digit}
+              type="button"
+              className="type-quiz-key-btn"
+              onClick={() => handleDigit(digit)}
+              style={{ height: '48px', fontSize: '1.35rem', fontWeight: 900 }}
+            >
+              {digit}
+            </button>
+          ))}
+
+          {/* Bottom row: spacer, 0, backspace */}
+          <div className="type-quiz-key-spacer" />
           <button
-            type="submit"
+            type="button"
+            className="type-quiz-key-btn"
+            onClick={() => handleDigit('0')}
+            style={{ height: '48px', fontSize: '1.35rem', fontWeight: 900 }}
+          >
+            0
+          </button>
+          <button
+            type="button"
+            className="type-quiz-key-btn type-quiz-key-backspace"
+            onClick={handleBackspace}
+            style={{ height: '48px' }}
+            title="Backspace"
+            aria-label="Backspace"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" style={{ width: 22, height: 22, strokeWidth: 2.5 }}>
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+              <line x1="18" y1="9" x2="12" y2="15" />
+              <line x1="12" y1="9" x2="18" y2="15" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Action / Unlock Button */}
+        <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'center' }}>
+          <button
+            type="button"
+            className={`type-quiz-action-btn ${pinValue.length >= 4 ? 'check' : 'disabled'}`}
+            disabled={pinValue.length === 0}
+            onClick={handleUnlock}
             style={{
-              marginTop: '16px',
-              padding: '12px 32px',
-              fontSize: '1rem',
-              fontWeight: '700',
-              borderRadius: '12px',
-              border: 'none',
-              background: '#8B5CF6',
-              color: 'white',
-              cursor: 'pointer'
+              width: '100%',
+              maxWidth: '280px',
+              height: '42px',
+              fontSize: '0.95rem',
+              letterSpacing: '1px',
+              borderRadius: '10px'
             }}
           >
             Unlock
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

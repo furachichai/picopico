@@ -10,6 +10,7 @@ import NumberLine from '../NumberLine/NumberLine';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { saveLessonProgress } from '../../utils/storage';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { formatExponents } from '../../utils/textFormatters';
 
 // The app's view-transition system remounts the outgoing view (its exit animation
 // renders in a fresh wrapper React can't reconcile against the prior mount), so this
@@ -24,6 +25,10 @@ import { resolveAssetUrl } from '../../utils/assetUrl';
 let cachedLessons = null;
 let cachedIndex = 0;
 let cachedHasVerticallySwiped = false;
+
+export const invalidateDiscoverCache = () => {
+    cachedLessons = null;
+};
 
 const DiscoverView = () => {
     const { dispatch } = useEditor();
@@ -73,34 +78,55 @@ const DiscoverView = () => {
                     data = await response.json();
                 }
 
+                const isFeedVis = (item) => {
+                    // Explicit false anywhere hides from feed
+                    if (item.visibleInFeed === false || item.content?.visibleInFeed === false) {
+                        return false;
+                    }
+                    // Explicit true shows in feed
+                    if (item.visibleInFeed === true || item.content?.visibleInFeed === true) {
+                        return true;
+                    }
+                    // Fallback to menu visibility (must be visible in menu to show in feed by default)
+                    return item.visible !== false && item.content?.visible !== false;
+                };
+
                 const flatList = [];
                 const traverse = (items) => {
                     if (!Array.isArray(items)) return;
                     items.forEach(item => {
                         if (item.type === 'directory' && item.children) {
                             traverse(item.children);
-                        } else if (item.visible !== false) {
-                            flatList.push(item);
+                        } else {
+                            if (isFeedVis(item)) {
+                                flatList.push(item);
+                            }
                         }
                     });
                 };
                 traverse(data);
 
                 let loadedLessons = await Promise.all(flatList.map(async (l) => {
+                    let lessonData = null;
                     if (l.content && l.content.slides && l.content.slides.length > 0) {
-                        return { ...l.content, path: l.path || l.id };
-                    }
-                    if (l.slides && l.slides.length > 0) {
-                        return { ...l, path: l.path || l.id };
-                    }
-                    if (isDev && l.path) {
+                        lessonData = { ...l.content, path: l.path || l.id };
+                    } else if (l.slides && l.slides.length > 0) {
+                        lessonData = { ...l, path: l.path || l.id };
+                    } else if (isDev && l.path) {
                         try {
                             const res = await fetch(`/api/load-lesson?path=${encodeURIComponent(l.path)}`);
                             const content = await res.json();
-                            return { ...content, path: l.path };
+                            lessonData = { ...content, path: l.path };
                         } catch (e) {
                             return null;
                         }
+                    }
+                    if (lessonData) {
+                        const vis = l.visibleInFeed !== undefined ? l.visibleInFeed : lessonData.visibleInFeed;
+                        return {
+                            ...lessonData,
+                            visibleInFeed: vis !== undefined ? vis : (lessonData.visible !== false)
+                        };
                     }
                     return null;
                 }));
@@ -110,25 +136,48 @@ const DiscoverView = () => {
                     const { getLocalLessons } = await import('../../utils/lessonStorage');
                     const localLessons = getLocalLessons();
                     if (localLessons && localLessons.length > 0) {
+                        // Server paths that are marked hidden from the feed
+                        const hiddenServerPaths = new Set(
+                            (Array.isArray(data) ? data : [])
+                                .filter(l => l.visibleInFeed === false || l.content?.visibleInFeed === false)
+                                .map(l => l.path)
+                                .filter(Boolean)
+                        );
+                        // Server paths already present in loadedLessons to avoid duplicates
+                        const feedServerPaths = new Set(
+                            loadedLessons.filter(Boolean).map(l => l.path).filter(Boolean)
+                        );
+
+                        const feedLocalLessons = localLessons.filter(l => {
+                            const path = l.path || l.id;
+                            if (path && hiddenServerPaths.has(path)) return false;
+                            if (path && feedServerPaths.has(path)) return false;
+                            if (l.visibleInFeed === false || l.content?.visibleInFeed === false) return false;
+                            return l.visibleInFeed === true || l.content?.visibleInFeed === true || (l.visible !== false && l.content?.visible !== false);
+                        });
                         // Prepend local lessons so they show up first (newly created)
-                        loadedLessons = [...localLessons, ...loadedLessons];
+                        loadedLessons = [...feedLocalLessons, ...loadedLessons];
                     }
                 } catch (e) {
                     console.error('Failed to load local lessons:', e);
                 }
 
-                // Filter valid lessons
-                const filtered = loadedLessons.filter(l => l !== null && l.slides && l.slides.length > 0);
+                // Filter valid lessons AND strictly enforce feed visibility
+                const filtered = loadedLessons.filter(l => {
+                    if (!l || !l.slides || l.slides.length === 0) return false;
+                    if (l.visibleInFeed === false || l.content?.visibleInFeed === false) return false;
+                    return true;
+                });
                 cachedLessons = filtered;
                 setLessons(filtered);
+                setCurrentIndex(prev => (prev >= filtered.length ? Math.max(0, filtered.length - 1) : prev));
             } catch (error) {
                 console.error('Error loading discover feed:', error);
             }
         };
-        // A remount (e.g. this view exiting mid swipe-to-lesson transition) already has
-        // the last-fetched list from the lazy useState initializer above — no need to
-        // block on the network again for a copy that's about to be thrown away anyway.
-        if (!cachedLessons) fetchLessons();
+
+        // Always revalidate lessons on mount so feed reflects toggles made in other views
+        fetchLessons();
     }, []);
 
     // Hint Animation Logic
@@ -339,15 +388,13 @@ const DiscoverView = () => {
     const renderSlide = (slide, additionalStyle = {}) => {
         if (!slide) return null;
         const mappedBackground = slide.background ? resolveAssetUrl(slide.background) : slide.background;
+        const isUrlOrGradient = mappedBackground && (mappedBackground.includes('url') || mappedBackground.includes('gradient'));
+        const bgSettings = slide.backgroundSettings;
         return (
             <div
                 key={slide.id}
                 style={{
-                    backgroundColor: (mappedBackground && !mappedBackground.includes('url') && !mappedBackground.includes('gradient')) ? mappedBackground : 'transparent',
-                    backgroundImage: (mappedBackground && (mappedBackground.includes('url') || mappedBackground.includes('gradient'))) ? mappedBackground : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: (mappedBackground && !isUrlOrGradient) ? mappedBackground : 'white',
                     width: '360px',
                     height: '640px',
                     position: 'absolute',
@@ -357,6 +404,43 @@ const DiscoverView = () => {
                     userSelect: 'none'
                 }}
             >
+                {/* Background Layer */}
+                {isUrlOrGradient && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundImage: mappedBackground,
+                            backgroundSize: bgSettings?.sizeMode === 'custom'
+                                ? `${bgSettings?.size ?? 100}%`
+                                : (bgSettings?.sizeMode || 'cover'),
+                            backgroundPosition: `${bgSettings?.positionX ?? 50}% ${bgSettings?.positionY ?? 50}%`,
+                            backgroundRepeat: 'no-repeat',
+                            opacity: bgSettings?.opacity ?? 1,
+                            filter: bgSettings ? `grayscale(${bgSettings.grayscale ? 100 : 0}%) brightness(${bgSettings.brightness ?? 100}%) blur(${bgSettings.blur ?? 0}px)` : undefined,
+                            transform: bgSettings ? `scale(${(bgSettings.flipX ? -1 : 1) * ((bgSettings.blur ?? 0) > 0 ? 1.05 : 1)}, ${(bgSettings.flipY ? -1 : 1) * ((bgSettings.blur ?? 0) > 0 ? 1.05 : 1)})` : undefined,
+                            zIndex: 0
+                        }}
+                    />
+                )}
+                {bgSettings?.grayscale && bgSettings?.tintColor && bgSettings.tintColor !== 'transparent' && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: bgSettings.tintColor,
+                            mixBlendMode: 'color',
+                            zIndex: 0
+                        }}
+                    />
+                )}
+
                 {/* Cartridge Layer */}
                 {slide.cartridge && (
                     <div style={{
@@ -373,7 +457,7 @@ const DiscoverView = () => {
                 )}
 
                 {/* Elements */}
-                {slide.elements.map(element => (
+                {slide.elements.map((element, idx) => (
                     <div
                         key={element.id}
                         style={{
@@ -383,11 +467,14 @@ const DiscoverView = () => {
                             width: element.type === 'quiz' ? '360px' : `${element.width}%`, // Full width for quiz
                             height: element.type === 'quiz' ? 'auto' : `${element.height}%`,
                             transform: `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale * (element.metadata?.flipX ? -1 : 1)}, ${element.scale * (element.metadata?.flipY ? -1 : 1)})`,
-                            zIndex: 10,
+                            zIndex: (element.type === 'result_field' ? (idx + 1000) : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))),
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            pointerEvents: 'none' // Preview only
+                            pointerEvents: 'none', // Preview only
+                            ...((element.type !== 'image' && element.type !== 'popup') ? {
+                                opacity: element.metadata?.opacity ?? element.opacity ?? 1
+                            } : {})
                         }}
                     >
                         {(element.type === 'text' || element.type === 'collectible') && (
@@ -407,10 +494,35 @@ const DiscoverView = () => {
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none'
                                 }}
-                                dangerouslySetInnerHTML={{ __html: element.content }}
+                                dangerouslySetInnerHTML={{ __html: formatExponents(element.content) }}
                             />
                         )}
-                        {element.type === 'image' && <img src={resolveAssetUrl(element.content)} alt="content" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+                        {element.type === 'image' && (
+                            <img
+                                src={resolveAssetUrl(element.content)}
+                                alt="content"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: (element.metadata?.isSymbol && element.metadata?.symbolType?.startsWith('shape-')) ? 'fill' : 'contain',
+                                    opacity: element.metadata?.opacity ?? element.opacity ?? 1,
+                                    filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined
+                                }}
+                            />
+                        )}
+                        {element.type === 'popup' && (
+                            <img
+                                src="/assets/characters/tutuTucaSticker_SMALL.png"
+                                alt="popup"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    opacity: element.metadata?.opacity ?? 1,
+                                    filter: element.metadata?.brightness !== undefined ? `brightness(${element.metadata.brightness}%)` : undefined
+                                }}
+                            />
+                        )}
                         {element.type === 'banner' && (
                             <Banner
                                 element={element}

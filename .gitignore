@@ -24,3 +24,4 @@ dist-ssr
 .vercel
 scratch/
 .deleted_assets/
+.deleted_lessons/

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
+import { replaceMathShortcuts } from '../../utils/textFormatters';
+import ConfirmationModal from './ConfirmationModal';
 import './ContextualMenu.css';
 
 const AVAILABLE_ICONS = [
@@ -12,7 +14,7 @@ const AVAILABLE_ICONS = [
     'icon_textbook.png'
 ];
 
-const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 'es' }) => {
+const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translationLang = 'es' }) => {
     const { t } = useTranslation();
     const { SUPPORTED_LANGUAGES } = useLanguage();
 
@@ -20,9 +22,11 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
     const [formData, setFormData] = useState({});
     const [lessonIcon, setLessonIcon] = useState('icon_textbook.png');
     const [cardColor, setCardColor] = useState('#8B5CF6');
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         if (isOpen && lesson) {
+            setShowDeleteConfirm(false);
             setLessonIcon(lesson.icon || lesson.content?.icon || 'icon_textbook.png');
             setCardColor(lesson.cardColor || lesson.content?.cardColor || '#8B5CF6');
             
@@ -65,29 +69,31 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e') {
             e.preventDefault();
             const target = e.target;
-            const start = target.selectionStart;
-            const end = target.selectionEnd;
+            let start = target.selectionStart;
+            let end = target.selectionEnd;
             const text = target.value;
-            const selectedText = text.substring(start, end);
+            let selectedText = text.substring(start, end);
             
+            if (!selectedText && start === end) {
+                const textBefore = text.substring(0, start);
+                const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
+                    || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
+                    || textBefore.match(/[\*\/]$/);
+                if (match) {
+                    start = start - match[0].length;
+                    selectedText = match[0];
+                }
+            }
+
             if (selectedText) {
-                const toSuperscript = (str) => {
-                    const map = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
-                    return str.split('').map(c => map[c] || c).join('');
-                };
-                
-                const replacement = selectedText
-                    .replace(/\*/g, '×')
-                    .replace(/\//g, '÷')
-                    .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
-                    
+                const replacement = replaceMathShortcuts(selectedText);
                 const newVal = text.substring(0, start) + replacement + text.substring(end);
                 
                 const fieldName = target.name;
                 handleFieldChange(fieldName, newVal);
                 
                 setTimeout(() => {
-                    target.setSelectionRange(start, start + replacement.length);
+                    target.setSelectionRange(start + replacement.length, start + replacement.length);
                 }, 0);
             }
         }
@@ -325,6 +331,33 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                         )}
                     </div>
 
+                    {onDelete && (
+                        <div style={{ marginTop: '12px' }}>
+                            <button
+                                type="button"
+                                onClick={() => setShowDeleteConfirm(true)}
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #FCA5A5',
+                                    backgroundColor: '#FEF2F2',
+                                    color: '#DC2626',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    fontSize: '0.9rem',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                🗑️ {t('editor.deleteLesson')}
+                            </button>
+                        </div>
+                    )}
+
                     <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                         <button type="button" onClick={onClose} style={{
                             flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd', background: 'white', cursor: 'pointer'
@@ -339,6 +372,22 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, translationLang = 
                     </div>
                 </form>
             </div>
+
+            {showDeleteConfirm && (
+                <ConfirmationModal
+                    isOpen={showDeleteConfirm}
+                    message={t('editor.deleteConfirm')}
+                    onConfirm={() => {
+                        setShowDeleteConfirm(false);
+                        if (onDelete) {
+                            onDelete(lesson);
+                        }
+                    }}
+                    onCancel={() => setShowDeleteConfirm(false)}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
+                />
+            )}
         </div>
     );
 };

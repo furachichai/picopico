@@ -12,18 +12,56 @@
 }
 
 .slides-header {
-    padding: 1rem 2rem;
+    padding: 0.75rem 1.25rem;
     background: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.slides-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .slides-header h1 {
     margin: 0;
-    font-size: 1.5rem;
-    color: #333;
+    font-size: 1.35rem;
+    color: #1e293b;
+    font-weight: 800;
+}
+
+.slides-selected-badge {
+    background: #8B5CF6;
+    color: white;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    animation: slidesBadgePop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slidesBadgePop {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.slides-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .btn-back {
@@ -31,45 +69,110 @@
     border: none;
     font-size: 1.1rem;
     cursor: pointer;
-    color: #666;
+    color: #64748b;
     font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.btn-back:hover {
+    background: #f1f5f9;
+    color: #334155;
 }
 
 .btn-create {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.9rem;
     border-radius: 8px;
+    font-weight: 800;
+}
+
+.btn-header {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    border-bottom: 3px solid #cbd5e1 !important;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.1s;
+    user-select: none;
+}
+
+.btn-header:hover:not(:disabled) {
+    background-color: #e2e8f0;
+}
+
+.btn-header:active:not(:disabled) {
+    transform: translateY(2px);
+    border-bottom-width: 1px !important;
+}
+
+.btn-header:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-bottom-width: 1px !important;
+}
+
+.btn-header.btn-undo {
+    font-size: 1.1rem;
+    padding: 0.35rem 0.6rem;
+}
+
+.btn-header.btn-delete-multi {
+    background-color: #FEE2E2;
+    color: #DC2626;
+    border-color: #FCA5A5;
+    border-bottom-color: #F87171 !important;
+}
+
+.btn-header.btn-delete-multi:hover:not(:disabled) {
+    background-color: #FECACA;
 }
 
 .slides-grid {
     flex: 1;
-    padding: 2rem;
+    padding: 1.5rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     grid-auto-rows: max-content;
-    /* Ensure rows take necessary height */
-    gap: 2rem;
-    /* Increased gap */
+    gap: 1.5rem;
     padding-bottom: 4rem;
-    /* Extra space at bottom */
     overflow-y: auto;
     align-content: flex-start;
 }
 
 .slide-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     display: flex;
     flex-direction: column;
     height: fit-content;
+    cursor: pointer;
+    user-select: none;
+    border: 3px solid transparent;
+    position: relative;
+    box-sizing: border-box;
 }
 
 .slide-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.slide-card.is-selected {
+    border-color: #8B5CF6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(139, 92, 246, 0.2);
+    transform: translateY(-3px);
 }
 
 .slide-preview {
@@ -85,7 +188,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     width: 24px;
     height: 24px;
@@ -94,73 +197,131 @@
     justify-content: center;
     align-items: center;
     font-size: 0.8rem;
+    font-weight: 800;
+    backdrop-filter: blur(4px);
+    z-index: 5;
 }
 
-.slide-info {
+/* Circular Selection Checkbox */
+.slide-select-checkbox {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    color: #666;
-    display: none;
-    /* Hide element count as we render elements now */
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    line-height: 1;
+}
+
+.slide-select-checkbox:hover {
+    transform: scale(1.15);
+    background: rgba(139, 92, 246, 0.7);
+    border-color: #8B5CF6;
+}
+
+.slide-select-checkbox.is-checked {
+    background: #8B5CF6;
+    border-color: white;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.6);
+}
+
+/* Edit Slide Hover Button */
+.slide-edit-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(15, 23, 42, 0.88);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.18s ease;
+    z-index: 6;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.slide-preview:hover .slide-edit-btn {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.slide-edit-btn:hover {
+    background: #6366F1;
+    border-color: #818CF8;
+    transform: translateX(-50%) translateY(-2px);
 }
 
 .slide-actions {
     padding: 0.5rem;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     background: #fafafa;
 }
 
 .btn-icon {
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    opacity: 0.75;
+    transition: opacity 0.15s, transform 0.15s;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon.btn-duplicate {
+    font-size: 0.92rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #475569;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.btn-icon.btn-duplicate:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
 }
 
 .btn-icon:hover {
     opacity: 1;
+    transform: scale(1.15);
 }
 
 .btn-icon:disabled {
     opacity: 0.2;
     cursor: not-allowed;
+    transform: none;
 }
 
-.btn-delete:hover {
-    transform: scale(1.1);
-}
-
-.btn-paste {
-    background-color: #f1f5f9;
-    color: #334155;
-    border: 1px solid #cbd5e1;
-    border-bottom: 3px solid #cbd5e1 !important;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.1s;
-}
-
-.btn-paste:hover {
-    background-color: #e2e8f0;
-}
-
-.btn-paste:active {
-    transform: translateY(2px);
-    border-bottom-width: 1px !important;
+.btn-icon.btn-delete:hover {
+    transform: scale(1.2);
 }
 
 .slides-feedback {
@@ -173,9 +334,10 @@
     padding: 12px 24px;
     border-radius: 50px;
     font-weight: 800;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -3px rgba(139, 92, 246, 0.4);
     animation: slidesPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 2000;
+    pointer-events: none;
 }
 
 @keyframes slidesPopIn {

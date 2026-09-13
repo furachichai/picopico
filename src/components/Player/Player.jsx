@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage, getTranslatedContent } from '../../context/LanguageContext';
 import QuizPlayer from './QuizPlayer';
 import MinigamePlayer from './MinigamePlayer';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
@@ -843,8 +843,8 @@ const Player = () => {
                             {slide.cartridge && (
                                 <div className="cartridge-container" style={{
                                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-                                    zIndex: slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : 1, 
-                                    pointerEvents: slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 'none' : 'auto'
+                                    zIndex: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 80 : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : 1), 
+                                    pointerEvents: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 'none' : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 'none' : 'auto')
                                 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && (
                                         <FractionAlpha
@@ -1014,7 +1014,7 @@ const Player = () => {
                                                         wordBreak: 'break-word',
                                                     }}
                                                     dangerouslySetInnerHTML={{ __html: formatExponents(
-                                                        (language !== 'es' && element.translations?.[language]?.content) || element.content
+                                                        getTranslatedContent(element, language)
                                                     ) }}
                                                 />
                                             )}
@@ -1268,24 +1268,24 @@ const Player = () => {
                                             {element.type === 'number_line' && (
                                                 <NumberLine element={element} />
                                             )}
-                                             {element.type === 'banner' && (
-                                                 <Banner
-                                                     element={language !== 'es' && element.translations?.[language]?.content
-                                                         ? { ...element, content: element.translations[language].content }
-                                                         : element
-                                                     }
+                                              {element.type === 'banner' && (
+                                                  <Banner
+                                                      element={{
+                                                          ...element,
+                                                          content: getTranslatedContent(element, language)
+                                                      }}
+                                                      readOnly={true}
+                                                  />
+                                              )}
+                                              {element.type === 'balloon' && (
+                                                 <Balloon
+                                                     element={{
+                                                         ...element,
+                                                         content: getTranslatedContent(element, language)
+                                                     }}
                                                      readOnly={true}
                                                  />
                                              )}
-                                             {element.type === 'balloon' && (
-                                                <Balloon
-                                                    element={language !== 'es' && element.translations?.[language]?.content
-                                                        ? { ...element, content: element.translations[language].content }
-                                                        : element
-                                                    }
-                                                    readOnly={true}
-                                                />
-                                            )}
                                             {element.type === 'isticker' && (
                                                 <IStickerPlayer
                                                     data={element}

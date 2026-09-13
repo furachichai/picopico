@@ -15072,5 +15072,6 @@
     }
   },
   "cardColor": "#8B5CF6",
-  "hashtag": "#OrderOfOperations"
+  "hashtag": "#OrderOfOperations",
+  "visibleInFeed": false
 }

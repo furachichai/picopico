@@ -202,7 +202,10 @@ const Dashboard = () => {
         .dashboard-container {
           font-family: 'Outfit', 'Inter', sans-serif;
           background: var(--bg);
-          height: 100vh;
+          height: 100%;
+          height: 100dvh;
+          height: var(--app-height, 100dvh);
+          max-height: 100%;
           display: flex;
           flex-direction: column;
           color: var(--text);
@@ -264,6 +267,7 @@ const Dashboard = () => {
         /* Scroll Area */
         .scroll-area {
           flex: 1;
+          min-height: 0;
           overflow-y: auto;
           padding: 0 20px 20px 20px;
           -webkit-overflow-scrolling: touch;
@@ -383,8 +387,8 @@ const Dashboard = () => {
         .bottom-nav {
           background-color: var(--white);
           padding: 8px 20px;
-          /* Handle iOS Safe Area - increased padding */
-          padding-bottom: calc(8px + env(safe-area-inset-bottom));
+          /* Handle iOS Safe Area & mobile Chrome/Safari URL bar */
+          padding-bottom: max(16px, calc(8px + env(safe-area-inset-bottom, 0px)));
           display: flex;
           justify-content: space-around;
           align-items: center;
@@ -392,6 +396,7 @@ const Dashboard = () => {
           z-index: 10;
           flex-shrink: 0;
           border-top: 1px solid #F1F5F9;
+          box-sizing: border-box;
         }
 
         .nav-item {

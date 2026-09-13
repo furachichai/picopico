@@ -131,25 +131,29 @@
 .layer-row {
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 42px;
     padding: 0 10px;
     gap: 8px;
     cursor: pointer;
-    transition: background 0.12s ease;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     user-select: none;
+    border-left: 4px solid transparent;
 }
 
 .layer-row:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.05);
 }
 
+/* ── Selected State: Vivid color matching the selected object on the slide ── */
 .layer-row.selected {
-    background: rgba(139, 92, 246, 0.2);
+    background: linear-gradient(90deg, var(--row-color-bg, rgba(99, 102, 241, 0.28)) 0%, rgba(99, 102, 241, 0.12) 60%, rgba(30, 30, 46, 0.6) 100%);
+    border-left: 4px solid var(--row-color, #6366f1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.04), 0 0 14px var(--row-color-glow, rgba(99, 102, 241, 0.3));
 }
 
 .layer-row.selected:hover {
-    background: rgba(139, 92, 246, 0.28);
+    background: linear-gradient(90deg, var(--row-color-bg, rgba(99, 102, 241, 0.35)) 0%, rgba(99, 102, 241, 0.18) 60%, rgba(30, 30, 46, 0.7) 100%);
 }
 
 .layer-row.dragging {
@@ -191,21 +195,51 @@
 
 .layer-drag-handle.pinned {
     cursor: default;
-    color: rgba(139, 92, 246, 0.3);
-    font-size: 9px;
+    color: rgba(139, 92, 246, 0.5);
+    font-size: 10px;
+}
+
+.layer-drag-handle.interactive {
+    cursor: default;
+    color: #F59E0B;
+    font-size: 12px;
+    filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.4));
 }
 
 /* Type icon */
 .layer-type-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 13px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.15s ease;
+}
+
+.layer-type-icon.icon-selected {
+    box-shadow: 0 0 10px var(--row-color-glow, rgba(99, 102, 241, 0.5));
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Color dot swatch */
+.layer-color-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.15s ease;
+}
+
+.layer-row.selected .layer-color-dot {
+    box-shadow: 0 0 8px var(--row-color, #6366f1);
+    transform: scale(1.25);
+    border-color: #ffffff;
 }
 
 /* Element name */
@@ -220,7 +254,28 @@
 }
 
 .layer-row.selected .layer-name {
-    color: rgba(255, 255, 255, 0.95);
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Selected Tag in Color */
+.layer-selected-tag {
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    animation: layerTagFadeIn 0.2s ease;
+}
+
+@keyframes layerTagFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 /* Action buttons (visibility, lock) */

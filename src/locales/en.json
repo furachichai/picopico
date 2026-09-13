@@ -23,7 +23,9 @@
         "created": "Created",
         "lastSaved": "Last Saved",
         "discardChanges": "Discard unsaved changes?",
-        "saveAs": "Save As..."
+        "saveAs": "Save As...",
+        "deleteLesson": "Delete Lesson",
+        "deleteConfirm": "Are you sure you want to delete this lesson?"
     },
     "slides": {
         "title": "Slides",
@@ -61,6 +63,8 @@
     "common": {
         "close": "CLOSE",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "delete": "Delete",
+        "cancel": "Cancel"
     }
 }

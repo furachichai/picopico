@@ -16944,5 +16944,6 @@
     }
   },
   "hashtag": "#OrderOfOperations",
-  "cardColor": "#8B5CF6"
+  "cardColor": "#8B5CF6",
+  "visibleInFeed": false
 }

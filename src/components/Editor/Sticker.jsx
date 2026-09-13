@@ -91,8 +91,59 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             return;
         }
 
+        // Blur active contentEditable if user is starting a canvas manipulation
+        if (document.activeElement && document.activeElement.blur && (document.activeElement.isContentEditable || document.activeElement.closest?.('[contenteditable="true"]'))) {
+            document.activeElement.blur();
+        }
+
         setInteractionType(type);
         setIsDragging(true);
+
+        const isMultiSelected = state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1;
+        let startMultiElements = [];
+        let startGroupCenterX = 50;
+        let startGroupCenterY = 50;
+
+        if (isMultiSelected) {
+            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            const validSelected = currentSlide?.elements.filter(el => state.selectedElementIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+            startMultiElements = validSelected.map(el => ({ id: el.id, x: el.x, y: el.y, width: el.width, height: el.height }));
+
+            const parent = stickerRef.current?.parentElement;
+            const parentRect = parent ? parent.getBoundingClientRect() : null;
+
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            validSelected.forEach(el => {
+                const domNode = parent?.querySelector(`[data-element-id="${el.id}"]`);
+                if (domNode && parentRect) {
+                    const r = domNode.getBoundingClientRect();
+                    const leftPct = ((r.left - parentRect.left) / parentRect.width) * 100;
+                    const topPct = ((r.top - parentRect.top) / parentRect.height) * 100;
+                    const rightPct = ((r.right - parentRect.left) / parentRect.width) * 100;
+                    const bottomPct = ((r.bottom - parentRect.top) / parentRect.height) * 100;
+                    if (leftPct < minX) minX = leftPct;
+                    if (topPct < minY) minY = topPct;
+                    if (rightPct > maxX) maxX = rightPct;
+                    if (bottomPct > maxY) maxY = bottomPct;
+                } else {
+                    const w = el.width || 20;
+                    const h = el.height || 20;
+                    const leftPct = el.x - w / 2;
+                    const topPct = el.y - h / 2;
+                    const rightPct = el.x + w / 2;
+                    const bottomPct = el.y + h / 2;
+                    if (leftPct < minX) minX = leftPct;
+                    if (topPct < minY) minY = topPct;
+                    if (rightPct > maxX) maxX = rightPct;
+                    if (bottomPct > maxY) maxY = bottomPct;
+                }
+            });
+
+            if (isFinite(minX) && isFinite(maxX)) {
+                startGroupCenterX = (minX + maxX) / 2;
+                startGroupCenterY = (minY + maxY) / 2;
+            }
+        }
 
         const startCoords = getClientCoords(e);
         const startX = startCoords.x;
@@ -139,12 +190,56 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             const parentHeight = parent.offsetHeight;
 
             if (type === 'move') {
-                const isMultiSelected = state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1;
-                
-                if (isMultiSelected && onMoveMultiple) {
-                    const dxPct = (frameDx / parentWidth) * 100;
-                    const dyPct = (frameDy / parentHeight) * 100;
-                    onMoveMultiple(state.selectedElementIds.filter(id => id !== 'background' && id !== 'cartridge'), dxPct, dyPct);
+                const pWidth = parentWidth || 360;
+                const pHeight = parentHeight || 640;
+                const SNAP_PIXELS = 8;
+                const snapThresholdX = (SNAP_PIXELS / pWidth) * 100;
+                const snapThresholdY = (SNAP_PIXELS / pHeight) * 100;
+
+                if (isMultiSelected && startMultiElements.length > 1) {
+                    let rawDx = (dx / pWidth) * 100;
+                    let rawDy = (dy / pHeight) * 100;
+
+                    const newGroupCx = startGroupCenterX + rawDx;
+                    const newGroupCy = startGroupCenterY + rawDy;
+
+                    let snappedX = false;
+                    let snappedY = false;
+
+                    const isBypass = moveEvent.altKey;
+                    if (!isBypass) {
+                        if (Math.abs(newGroupCx - 50) <= snapThresholdX) {
+                            rawDx = 50 - startGroupCenterX;
+                            snappedX = true;
+                        }
+                        if (Math.abs(newGroupCy - 50) <= snapThresholdY) {
+                            rawDy = 50 - startGroupCenterY;
+                            snappedY = true;
+                        }
+                    }
+
+                    // Haptic feedback tick on entering snap
+                    if (snappedX && !wasSnappedXRef.current) {
+                        if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+                    }
+                    if (snappedY && !wasSnappedYRef.current) {
+                        if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+                    }
+                    wasSnappedXRef.current = snappedX;
+                    wasSnappedYRef.current = snappedY;
+
+                    if (onSnapGuideline) {
+                        onSnapGuideline({ vertical: snappedX, horizontal: snappedY });
+                    }
+
+                    const updatesMap = {};
+                    startMultiElements.forEach(el => {
+                        updatesMap[el.id] = {
+                            x: el.x + rawDx,
+                            y: el.y + rawDy
+                        };
+                    });
+                    dispatch({ type: 'UPDATE_ELEMENTS', payload: updatesMap });
                 } else {
                     // Single element move uses absolute positioning for perfection
                     const pWidth = parentWidth || 360;
@@ -414,6 +509,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
     return (
         <div
             ref={stickerRef}
+            data-element-id={element.id}
             className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.groupId ? 'is-grouped' : ''} ${element.type === 'line' ? 'is-line' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
             style={{
                 left: (element.metadata?.quizType === 'chatquiz') ? '50%' : (element.metadata?.quizType === 'type' ? '0' : `${element.x}%`),
@@ -445,6 +541,11 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 }
             }}
             onDoubleClick={() => {
+                if (element.metadata?.groupId) {
+                    // Double-click drills down to select only this element
+                    onSelect(element.id, false, true);
+                    return;
+                }
                 if (element.type !== 'quiz' && onEdit) onEdit();
             }}
         >
@@ -573,7 +674,17 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                                         </filter>
                                     </defs>
 
-                                    {/* Bézier curve path */}
+                                     {/* Invisible wide hit target for curved line */}
+                                    <path
+                                        d={pathData}
+                                        fill="none"
+                                        stroke="transparent"
+                                        strokeWidth={Math.max(thickness + 24, 36)}
+                                        strokeLinecap="round"
+                                        style={{ pointerEvents: 'stroke', cursor: 'grab' }}
+                                    />
+
+                                     {/* Bézier curve path */}
                                     <path
                                         d={pathData}
                                         fill="none"
@@ -582,11 +693,12 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                                         strokeDasharray={strokeDash}
                                         strokeLinecap={strokeLinecap}
                                         filter={filter}
+                                        style={{ pointerEvents: 'stroke', cursor: 'grab' }}
                                     />
 
                                     {/* Start Cap */}
                                     {element.metadata?.startCap === 'arrow' && (
-                                        <g transform={`translate(0, ${y0}) rotate(${thetaStart})`}>
+                                        <g transform={`translate(0, ${y0}) rotate(${thetaStart})`} style={{ pointerEvents: 'auto', cursor: 'grab' }}>
                                             <polygon
                                                 points={`0,0 ${arrowSize},${-arrowSize * 0.45} ${arrowSize * 0.75},0 ${arrowSize},${arrowSize * 0.45}`}
                                                 fill={color}
@@ -594,12 +706,12 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                                         </g>
                                     )}
                                     {element.metadata?.startCap === 'circle' && (
-                                        <circle cx={0} cy={y0} r={thickness * 0.9} fill={color} />
+                                        <circle cx={0} cy={y0} r={thickness * 0.9} fill={color} style={{ pointerEvents: 'auto', cursor: 'grab' }} />
                                     )}
 
                                     {/* End Cap */}
                                     {element.metadata?.endCap === 'arrow' && (
-                                        <g transform={`translate(${widthPx}, ${y0}) rotate(${thetaEnd})`}>
+                                        <g transform={`translate(${widthPx}, ${y0}) rotate(${thetaEnd})`} style={{ pointerEvents: 'auto', cursor: 'grab' }}>
                                             <polygon
                                                 points={`0,0 ${-arrowSize},${-arrowSize * 0.45} ${-arrowSize * 0.75},0 ${-arrowSize},${arrowSize * 0.45}`}
                                                 fill={color}
@@ -607,7 +719,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                                         </g>
                                     )}
                                     {element.metadata?.endCap === 'circle' && (
-                                        <circle cx={widthPx} cy={y0} r={thickness * 0.9} fill={color} />
+                                        <circle cx={widthPx} cy={y0} r={thickness * 0.9} fill={color} style={{ pointerEvents: 'auto', cursor: 'grab' }} />
                                     )}
                                 </svg>
                             </div>
@@ -617,7 +729,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     let lineStyle = {
                         width: '100%',
                         height: `${thickness}px`,
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        pointerEvents: 'auto',
                     };
 
                     if (lineType === 'normal') {
@@ -644,7 +757,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     }
 
                     return (
-                        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', cursor: 'grab' }}>
                             {/* Hidden SVG Filters for hand-drawn look */}
                             <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none', visibility: 'hidden' }}>
                                 <defs>
@@ -664,22 +777,22 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             
                             {/* Start Cap */}
                             {element.metadata?.startCap === 'arrow' && (
-                                <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                <svg style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible', pointerEvents: 'auto', cursor: 'grab' }} viewBox="0 0 100 100">
                                     <polygon points="100,0 0,50 100,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
                                 </svg>
                             )}
                             {element.metadata?.startCap === 'circle' && (
-                                <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                                <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translate(-50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6', pointerEvents: 'auto', cursor: 'grab' }} />
                             )}
 
                             {/* End Cap */}
                             {element.metadata?.endCap === 'arrow' && (
-                                <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible' }} viewBox="0 0 100 100">
+                                <svg style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, height: `${Math.max(20, (element.metadata?.height || 10) * 2.5)}px`, overflow: 'visible', pointerEvents: 'auto', cursor: 'grab' }} viewBox="0 0 100 100">
                                     <polygon points="0,0 100,50 0,100" fill={element.metadata?.symbolColor || '#8B5CF6'} />
                                 </svg>
                             )}
                             {element.metadata?.endCap === 'circle' && (
-                                <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6' }} />
+                                <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translate(50%, -50%)', width: `${(element.metadata?.height || 10) * 2}px`, height: `${(element.metadata?.height || 10) * 2}px`, borderRadius: '50%', backgroundColor: element.metadata?.symbolColor || '#8B5CF6', pointerEvents: 'auto', cursor: 'grab' }} />
                             )}
                         </div>
                     );

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
-import { processEquation, parseEquationTemplate, toSuperscript, playTickSound } from './game/ExploreNLEngine';
+import { processEquation, parseEquationTemplate, playTickSound } from './game/ExploreNLEngine';
 import './ExloreNLCartridge.css';
 
 /**
@@ -12,6 +12,7 @@ export default function ExloreNLCartridge({
     config = {},
     preview = false,
     isSelected = false,
+    selectedPart = null,
     onSelect,
     onConfigChange
 }) {
@@ -307,7 +308,7 @@ export default function ExloreNLCartridge({
         if (!preview) return;
         e.stopPropagation();
         e.preventDefault();
-        if (onSelect) onSelect();
+        if (onSelect) onSelect('nl');
 
         const parent = containerRef.current?.closest('.slide-canvas') || containerRef.current;
         const rect = parent.getBoundingClientRect();
@@ -392,7 +393,7 @@ export default function ExloreNLCartridge({
     const handleEquationDragStart = (e) => {
         if (!preview) return; // Only moveable in Editor
         e.stopPropagation();
-        if (onSelect) onSelect();
+        if (onSelect) onSelect('equation');
 
         const parent = containerRef.current?.closest('.slide-canvas') || containerRef.current;
         const rect = parent.getBoundingClientRect();
@@ -514,9 +515,8 @@ export default function ExloreNLCartridge({
         return tickValues.map(val => {
             const eq = processEquation(equationTemplate, val);
             let varDisplay = '';
-            if (templateParts.varType === 'superscript') {
-                varDisplay = toSuperscript(val);
-            } else if (templateParts.varType === 'normal') {
+            if (templateParts.varType !== 'none') {
+                // Use standard digits to ensure 100% consistent font family ('Outfit') and bold weight (800)
                 varDisplay = String(val);
             }
             return {
@@ -534,12 +534,12 @@ export default function ExloreNLCartridge({
         const found = allEquations.find(item => Math.abs(item.val - currentN) < 0.0001);
         return found || allEquations[0] || {
             val: currentN,
-            varDisplay: templateParts.varType === 'superscript' ? toSuperscript(currentN) : String(currentN),
+            varDisplay: String(currentN),
             fracObj: null,
             resultDisplay: '?',
             lhsFormatted: ''
         };
-    }, [allEquations, currentN, templateParts]);
+    }, [allEquations, currentN]);
 
     // Position of the pointer (continuous while dragging, snapped when idle)
     const activePointerValue = (isDraggingPointer && dragN !== null) ? dragN : currentN;
@@ -592,6 +592,9 @@ export default function ExloreNLCartridge({
         position: 'absolute'
     };
 
+    const isNLSelected = preview && isSelected && (selectedPart === 'nl' || selectedPart === 'all' || !selectedPart);
+    const isEqSelected = preview && isSelected && (selectedPart === 'equation' || selectedPart === 'all' || !selectedPart);
+
     return (
         <div
             ref={containerRef}
@@ -603,10 +606,13 @@ export default function ExloreNLCartridge({
             {/* ─── Number Line (Whole surface draggable in editor, resizable via handles) ─── */}
             <div
                 ref={nlWrapperRef}
-                className={`explorenl-nl-wrapper ${orientation} ${preview && isSelected ? 'is-selected' : ''}`}
-                style={nlWrapperStyle}
-                onMouseDown={preview ? handleNLMoveStart : undefined}
-                onTouchStart={preview ? handleNLMoveStart : undefined}
+                className={`explorenl-nl-wrapper ${orientation} ${isNLSelected ? 'is-selected' : ''} ${config.hideNL ? 'is-hidden' : ''}`}
+                style={{
+                    ...nlWrapperStyle,
+                    ...(config.hideNL ? (preview ? { opacity: 0.35 } : { display: 'none' }) : {})
+                }}
+                onMouseDown={preview ? (!config.lockNL ? handleNLMoveStart : undefined) : handlePointerDragStart}
+                onTouchStart={preview ? (!config.lockNL ? handleNLMoveStart : undefined) : handlePointerDragStart}
             >
                 {/* SVG rebuilt in true 1:1 pixels (never squeezed or distorted) */}
                 <svg
@@ -769,7 +775,7 @@ export default function ExloreNLCartridge({
                 </div>
 
                 {/* Editor Resize handles for Number Line endpoints */}
-                {preview && isSelected && (
+                {isNLSelected && !config.lockNL && (
                     <>
                         {isVertical ? (
                             <>
@@ -819,7 +825,7 @@ export default function ExloreNLCartridge({
             {/* ─── Movable & Rotatable Equation Card ─── */}
             <div
                 ref={eqCardRef}
-                className={`explorenl-equation-card ${preview ? 'is-editor' : ''} ${isSelected ? 'selected' : ''}`}
+                className={`explorenl-equation-card ${preview ? 'is-editor' : ''} ${isEqSelected ? 'selected' : ''} ${config.hideEquation ? 'is-hidden' : ''}`}
                 style={{
                     left: `${equationX}%`,
                     top: `${equationY}%`,
@@ -827,10 +833,11 @@ export default function ExloreNLCartridge({
                     backgroundColor: equationBg,
                     border: `3px solid ${equationBorder}`,
                     color: equationColor,
-                    fontSize: `${equationFontSize}px`
+                    fontSize: `${equationFontSize}px`,
+                    ...(config.hideEquation ? (preview ? { opacity: 0.35 } : { display: 'none' }) : {})
                 }}
-                onMouseDown={handleEquationDragStart}
-                onTouchStart={handleEquationDragStart}
+                onMouseDown={preview ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
+                onTouchStart={preview ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
             >
                 {/* Stabilized Equation Layout (No resize, zero jitter) */}
                 <div className="explorenl-equation-grid">
@@ -844,7 +851,7 @@ export default function ExloreNLCartridge({
                     {/* Variable n Slot: sized to max width across all ticks, colored with pointerColor */}
                     {templateParts.varType !== 'none' && (
                         <div
-                            className={`explorenl-eq-slot explorenl-eq-slot-var ${templateParts.suffix ? 'has-suffix' : ''}`}
+                            className={`explorenl-eq-slot explorenl-eq-slot-var ${templateParts.varType === 'superscript' ? 'is-superscript' : ''} ${templateParts.suffix ? 'has-suffix' : ''}`}
                             style={{ color: pointerColor }}
                         >
                             {allEquations.map(({ val, varDisplay }) => {
@@ -862,9 +869,9 @@ export default function ExloreNLCartridge({
                         </div>
                     )}
 
-                    {/* Suffix: Numbers/symbols after n that NEVER change (e.g. '²' in 'n!2 =', ' × 3' in 'n * 3 =') */}
+                    {/* Suffix: Numbers/symbols after n that NEVER change (e.g. '2' in 'n!2 =', ' × 3' in 'n * 3 =') */}
                     {templateParts.suffix && (
-                        <span className="explorenl-eq-suffix">
+                        <span className={`explorenl-eq-suffix ${templateParts.suffixIsSuperscript ? 'is-superscript' : ''}`}>
                             {templateParts.suffix}
                         </span>
                     )}
@@ -903,7 +910,7 @@ export default function ExloreNLCartridge({
                 </div>
 
                 {/* Editor handles for equation card */}
-                {preview && isSelected && (
+                {isEqSelected && !config.lockEquation && (
                     <>
                         <div
                             className="explorenl-handle-rotate"

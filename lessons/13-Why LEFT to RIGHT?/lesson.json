@@ -7104,5 +7104,6 @@
     }
   },
   "cardColor": "#14B8A6",
-  "hashtag": "#OrderOfOperations"
+  "hashtag": "#OrderOfOperations",
+  "visibleInFeed": false
 }

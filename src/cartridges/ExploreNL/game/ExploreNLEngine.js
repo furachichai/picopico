@@ -15,11 +15,35 @@ const SUPERSCRIPTS = {
     '-': '⁻', '+': '⁺', '(': '⁽', ')': '⁾', 'n': 'ⁿ', 'N': 'ⁿ'
 };
 
+const FROM_SUPERSCRIPTS = {
+    '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4',
+    '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9',
+    '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')', 'ⁿ': 'n', 'ᴺ': 'n'
+};
+
 export const toSuperscript = (str) => {
     return String(str)
         .split('')
         .map(char => SUPERSCRIPTS[char] || char)
         .join('');
+};
+
+export const fromSuperscript = (str) => {
+    return String(str)
+        .split('')
+        .map(char => FROM_SUPERSCRIPTS[char] || char)
+        .join('');
+};
+
+/**
+ * Normalizes an equation string by converting any unicode superscript characters
+ * following a base into explicit '!exp' notation (e.g. "2ⁿ =" -> "2!n =", "2² =" -> "2!2 =").
+ */
+export const normalizeEquationString = (str) => {
+    if (!str || typeof str !== 'string') return '';
+    return str.replace(/([0-9a-zA-Z.]+)([⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿᴺ]+)/g, (_, base, expChars) => {
+        return `${base}!${fromSuperscript(expChars)}`;
+    });
 };
 
 /**
@@ -64,7 +88,7 @@ export const decimalToFraction = (value, maxDenominator = 999) => {
 export const evaluateMath = (expr) => {
     try {
         if (!expr || typeof expr !== 'string') return null;
-        let clean = expr
+        let clean = fromSuperscript(expr)
             .replace(/[xX×]/g, '*')
             .replace(/[÷]/g, '/')
             .replace(/[−—–]/g, '-')
@@ -108,7 +132,8 @@ export const processEquation = (template, n) => {
         };
     }
 
-    const trimmed = template.trim();
+    const normalizedTemplate = normalizeEquationString(template);
+    const trimmed = normalizedTemplate.trim();
     const hasEquals = trimmed.includes('=');
     const [rawLhs] = trimmed.split('=');
     const lhs = rawLhs ? rawLhs.trim() : '';
@@ -222,11 +247,13 @@ export const parseEquationTemplate = (template) => {
             prefix: '',
             varType: 'none',
             suffix: '',
+            suffixIsSuperscript: false,
             rawLhs: ''
         };
     }
 
-    const trimmed = template.trim();
+    const normalizedTemplate = normalizeEquationString(template);
+    const trimmed = normalizedTemplate.trim();
     const hasEquals = trimmed.includes('=');
     const [rawLhs] = trimmed.split('=');
     const lhs = rawLhs ? rawLhs.trim() : '';
@@ -237,30 +264,33 @@ export const parseEquationTemplate = (template) => {
             prefix: '',
             varType: 'none',
             suffix: '',
+            suffixIsSuperscript: false,
             rawLhs: ''
         };
     }
 
     // Pattern 1: base!n or base^n (e.g. 2!n, 10!n, 3^n, (-2)!n)
-    const baseExpMatch = lhs.match(/^\(?([+-]?[0-9a-zA-Z.]+)\)?[!^]\(?([nN])\)?$/);
+    const baseExpMatch = lhs.match(/^\(?([+-]?[0-9a-zA-Z.]+)\)?\s*[!^]\s*\(?([nN])\)?$/);
     if (baseExpMatch) {
         return {
             hasEquals,
             prefix: baseExpMatch[1],
             varType: 'superscript',
             suffix: '',
+            suffixIsSuperscript: false,
             rawLhs: lhs
         };
     }
 
     // Pattern 2: n!exp or n^exp (e.g. n!2, n^3)
-    const nBaseMatch = lhs.match(/^\(?([nN])\)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/);
+    const nBaseMatch = lhs.match(/^\(?([nN])\)?\s*[!^]\s*\(?([+-]?[0-9a-zA-Z.]+)\)?$/);
     if (nBaseMatch) {
         return {
             hasEquals,
             prefix: '',
             varType: 'normal',
-            suffix: toSuperscript(nBaseMatch[2]),
+            suffix: nBaseMatch[2],
+            suffixIsSuperscript: true,
             rawLhs: lhs
         };
     }
@@ -284,6 +314,7 @@ export const parseEquationTemplate = (template) => {
             prefix,
             varType: 'normal',
             suffix,
+            suffixIsSuperscript: false,
             rawLhs: lhs
         };
     }
@@ -300,6 +331,7 @@ export const parseEquationTemplate = (template) => {
         prefix: formattedLhs,
         varType: 'none',
         suffix: '',
+        suffixIsSuperscript: false,
         rawLhs: lhs
     };
 };

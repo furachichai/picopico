@@ -220,6 +220,19 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         <>
             <div className="editor-toolbar">
                 <div className="toolbar-section">
+                    <button
+                        className="btn-secondary"
+                        onClick={() => dispatch({ type: 'UNDO_ELEMENT' })}
+                        disabled={!state.past || state.past.length === 0}
+                        title="Undo (Cmd+Z)"
+                        style={{
+                            fontSize: '1.2rem',
+                            opacity: (!state.past || state.past.length === 0) ? 0.35 : 1,
+                            cursor: (!state.past || state.past.length === 0) ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        ↩️
+                    </button>
                     <button className="btn-secondary" onClick={handleAddText} title={t('editor.addText')} style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>T</button>
                     <button className="btn-secondary" onClick={() => {
                         const preset = state.lesson.textPreset;

@@ -9,6 +9,7 @@
     -webkit-user-select: none;
     font-family: 'Outfit', 'Nunito', sans-serif;
     box-sizing: border-box;
+    pointer-events: none;
 }
 
 /* Number line container (relocatable & resizable via inline styles) */
@@ -19,6 +20,8 @@
     justify-content: center;
     box-sizing: border-box;
     transition: outline-color 0.2s ease;
+    z-index: 20;
+    pointer-events: auto;
 }
 
 .explorenl-nl-wrapper.is-selected {
@@ -169,6 +172,8 @@
     line-height: 1.2;
     letter-spacing: -0.5px;
     text-align: center;
+    z-index: 10;
+    pointer-events: auto;
 }
 
 .explorenl-equation-card.is-editor {
@@ -218,6 +223,19 @@
 
 .explorenl-eq-slot-var.has-suffix {
     justify-items: end;
+}
+
+/* Superscript styling for exponents (guarantees 100% uniform font weight and family across all numbers) */
+.explorenl-eq-slot-var.is-superscript,
+.explorenl-eq-suffix.is-superscript {
+    font-size: 0.62em;
+    line-height: 1;
+    position: relative;
+    top: -0.42em;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-family: inherit;
+    font-weight: inherit;
 }
 
 .explorenl-eq-slot-rhs {

@@ -3777,5 +3777,6 @@
     }
   },
   "cardColor": "#EC4899",
-  "hashtag": "#OrderOfOperations"
+  "hashtag": "#OrderOfOperations",
+  "visibleInFeed": false
 }

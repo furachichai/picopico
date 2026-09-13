@@ -22,7 +22,9 @@
         "created": "Creado",
         "lastSaved": "Último Guardado",
         "discardChanges": "¿Descartar cambios no guardados?",
-        "saveAs": "Guardar Como..."
+        "saveAs": "Guardar Como...",
+        "deleteLesson": "Eliminar Lección",
+        "deleteConfirm": "¿Estás seguro de que quieres eliminar esta lección?"
     },
     "slides": {
         "title": "Diapositivas",
@@ -60,6 +62,8 @@
     "common": {
         "close": "CERRAR",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "cancel": "Cancelar"
     }
 }

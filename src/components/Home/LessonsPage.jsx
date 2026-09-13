@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../Editor/ConfirmationModal';
 import SlideThumbnail from '../Editor/SlideThumbnail';
 import LessonInfoModal from '../Editor/LessonInfoModal';
+import { invalidateDiscoverCache } from './DiscoverView';
 import './LessonsPage.css';
 
 const LessonsPage = () => {
@@ -130,8 +131,8 @@ const LessonsPage = () => {
         }
     };
 
-    const confirmDelete = async () => {
-        const item = deleteTarget;
+    const confirmDelete = async (targetOverride) => {
+        const item = targetOverride || deleteTarget;
         setDeleteTarget(null);
         if (!item) return;
         try {
@@ -180,18 +181,75 @@ const LessonsPage = () => {
             const lesson = await loadLesson(item);
             if (!lesson) return;
 
+            const isCurrentlyVisible = item.visible !== undefined ? item.visible : lesson.visible !== false;
+            const newVis = !isCurrentlyVisible;
             const updatedLesson = {
                 ...lesson,
-                visible: !item.visible
+                visible: newVis
             };
+            if (updatedLesson.content) {
+                updatedLesson.content.visible = newVis;
+            }
+
+            try {
+                const { getLocalLessons, saveLocalLesson } = await import('../../utils/lessonStorage');
+                const local = getLocalLessons().find(l => l.path === item.path);
+                if (local) {
+                    saveLocalLesson({ ...local, visible: newVis });
+                }
+            } catch (e) {
+                // Ignore
+            }
 
             await fetch('/api/save-lesson', {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path: item.path, content: updatedLesson })
             });
+            invalidateDiscoverCache();
             fetchLessons();
         } catch (error) {
             console.error('Error toggling visibility:', error);
+        }
+    };
+
+    const handleToggleFeedVisibility = async (item) => {
+        try {
+            const lesson = await loadLesson(item);
+            if (!lesson) return;
+
+            const isCurrentlyFeedVisible = item.visibleInFeed !== undefined
+                ? item.visibleInFeed
+                : (lesson.visibleInFeed !== undefined ? lesson.visibleInFeed !== false : (lesson.visible !== false));
+
+            const newFeedVis = !isCurrentlyFeedVisible;
+            const updatedLesson = {
+                ...lesson,
+                visibleInFeed: newFeedVis
+            };
+            if (updatedLesson.content) {
+                updatedLesson.content.visibleInFeed = newFeedVis;
+            }
+
+            try {
+                const { getLocalLessons, saveLocalLesson } = await import('../../utils/lessonStorage');
+                const local = getLocalLessons().find(l => l.path === item.path);
+                if (local) {
+                    saveLocalLesson({ ...local, visibleInFeed: newFeedVis });
+                }
+            } catch (e) {
+                // Ignore
+            }
+
+            await fetch('/api/save-lesson', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: item.path, content: updatedLesson })
+            });
+            invalidateDiscoverCache();
+            fetchLessons();
+        } catch (error) {
+            console.error('Error toggling feed visibility:', error);
         }
     };
 
@@ -301,42 +359,109 @@ const LessonsPage = () => {
                         No lessons yet. Create your first one!
                     </div>
                 ) : (
-                    lessons.map((item, idx) => (
-                        <div
-                            key={item.path}
-                            className={`file-tree-item file ${!item.visible ? 'lesson-hidden' : ''}`}
-                            onClick={(e) => {
-                                if (e.target.closest('button') || e.target.tagName === 'BUTTON') return;
-                                handleEdit(item);
-                            }}
-                            style={{ opacity: item.visible ? 1 : 0.5, backgroundColor: item.content?.cardColor || '#8B5CF6' }}
-                        >
-                            <div className="lesson-card-preview">
-                                {item.content?.slides?.[0] ? (
-                                    <SlideThumbnail slide={item.content.slides[0]} hideTextAndBalloons={true} cover={true} />
-                                ) : (
-                                    <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
-                                )}
-                            </div>
-                            <div className="lesson-card-content">
-                                <div className="item-name" title={item.title}>{item.title}</div>
-                                <div className="item-slides-count">
-                                    #{item.content?.slides?.length || 0} slides
-                                </div>
-                                {item.description && (
-                                    <div className="item-description" style={{ textAlign: 'center' }}>{item.description}</div>
-                                )}
+                    lessons.map((item, idx) => {
+                        const isMenuVisible = item.visible !== false;
+                        const isFeedVisible = item.visibleInFeed !== undefined
+                            ? item.visibleInFeed !== false
+                            : (item.content?.visibleInFeed !== undefined
+                                ? item.content.visibleInFeed !== false
+                                : isMenuVisible);
+                        const isFullyHidden = !isMenuVisible && !isFeedVisible;
 
-                                <div className="item-actions">
-                                    {/* Visibility toggle */}
-                                    <button
-                                        className="btn-icon"
-                                        onClick={(e) => { e.stopPropagation(); handleToggleVisibility(item); }}
-                                        title={item.visible ? 'Hide from menu' : 'Show on menu'}
-                                        style={{ fontSize: '1.1rem' }}
-                                    >
-                                        {item.visible ? '👁️' : '🚫'}
-                                    </button>
+                        return (
+                            <div
+                                key={item.path}
+                                className={`file-tree-item file ${isFullyHidden ? 'lesson-hidden' : ''}`}
+                                onClick={(e) => {
+                                    if (e.target.closest('button') || e.target.tagName === 'BUTTON') return;
+                                    handleEdit(item);
+                                }}
+                                style={{
+                                    opacity: isFullyHidden ? 0.45 : (!isMenuVisible ? 0.75 : 1),
+                                    backgroundColor: item.content?.cardColor || '#8B5CF6'
+                                }}
+                            >
+                                <div className="lesson-card-preview">
+                                    {item.content?.slides?.[0] ? (
+                                        <SlideThumbnail slide={item.content.slides[0]} hideTextAndBalloons={true} cover={true} />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
+                                    )}
+                                </div>
+                                <div className="lesson-card-content">
+                                    <div className="item-name" title={item.title}>{item.title}</div>
+                                    <div className="item-slides-count">
+                                        #{item.content?.slides?.length || 0} slides
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginBottom: '6px', flexWrap: 'wrap' }}>
+                                        <span style={{
+                                            fontSize: '0.68rem',
+                                            fontWeight: 700,
+                                            padding: '2px 6px',
+                                            borderRadius: '4px',
+                                            backgroundColor: isMenuVisible ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)',
+                                            color: isMenuVisible ? '#A7F3D0' : '#FCA5A5'
+                                        }}>
+                                            {isMenuVisible ? 'Menu: ON' : 'Menu: OFF'}
+                                        </span>
+                                        <span style={{
+                                            fontSize: '0.68rem',
+                                            fontWeight: 700,
+                                            padding: '2px 6px',
+                                            borderRadius: '4px',
+                                            backgroundColor: isFeedVisible ? 'rgba(236, 72, 153, 0.35)' : 'rgba(239, 68, 68, 0.3)',
+                                            color: isFeedVisible ? '#FBCFE8' : '#FCA5A5'
+                                        }}>
+                                            {isFeedVisible ? 'Feed: ON' : 'Feed: OFF'}
+                                        </span>
+                                    </div>
+                                    {item.description && (
+                                        <div className="item-description" style={{ textAlign: 'center' }}>{item.description}</div>
+                                    )}
+
+                                    <div className="item-actions">
+                                        {/* Menu Visibility toggle */}
+                                        <button
+                                            className="btn-icon"
+                                            onClick={(e) => { e.stopPropagation(); handleToggleVisibility(item); }}
+                                            title={isMenuVisible ? 'Hide from menu' : 'Show in menu'}
+                                            style={{ fontSize: '1.1rem' }}
+                                        >
+                                            {isMenuVisible ? '👁️' : '🚫'}
+                                        </button>
+
+                                        {/* TikTok Feed Visibility toggle */}
+                                        <button
+                                            className="btn-icon"
+                                            onClick={(e) => { e.stopPropagation(); handleToggleFeedVisibility(item); }}
+                                            title={isFeedVisible ? 'Hide from TikTok feed' : 'Show in TikTok feed'}
+                                            style={{
+                                                fontSize: '1.1rem',
+                                                position: 'relative',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            <span style={{
+                                                opacity: isFeedVisible ? 1 : 0.35,
+                                                filter: isFeedVisible ? 'none' : 'grayscale(1)'
+                                            }}>
+                                                🧭
+                                            </span>
+                                            {!isFeedVisible && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    color: '#ef4444',
+                                                    fontSize: '0.85rem',
+                                                    fontWeight: 900,
+                                                    lineHeight: 1,
+                                                    pointerEvents: 'none'
+                                                }}>
+                                                    ✕
+                                                </span>
+                                            )}
+                                        </button>
                                     {/* Reorder */}
                                     <button
                                         className="btn-icon"
@@ -381,8 +506,8 @@ const LessonsPage = () => {
                                 </div>
                             </div>
                         </div>
-                    ))
-                )}
+                    );
+                }))}
                 
                 {/* Deleted Lessons Toggle Button */}
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
@@ -417,6 +542,10 @@ const LessonsPage = () => {
                 lesson={infoTarget}
                 onUpdate={handleUpdateInfo}
                 onClose={() => setInfoTarget(null)}
+                onDelete={(item) => {
+                    setInfoTarget(null);
+                    confirmDelete(item);
+                }}
             />
         </div>
     );

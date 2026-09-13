@@ -23,7 +23,9 @@
         "lessonInfo": "INFO",
         "saveLesson": "Sauvegarder Leçon",
         "created": "Créé",
-        "lastSaved": "Dernière Sauvegarde"
+        "lastSaved": "Dernière Sauvegarde",
+        "deleteLesson": "Supprimer la Leçon",
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette leçon ?"
     },
     "slides": {
         "title": "Diapositives",
@@ -60,6 +62,8 @@
     "common": {
         "close": "FERMER",
         "yes": "Oui",
-        "no": "Non"
+        "no": "Non",
+        "delete": "Supprimer",
+        "cancel": "Annuler"
     }
 }

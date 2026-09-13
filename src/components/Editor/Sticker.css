@@ -34,6 +34,10 @@
     outline: none;
 }
 
+.sticker.is-line {
+    min-height: 36px;
+}
+
 .sticker-group-badge {
     position: absolute;
     top: -12px;

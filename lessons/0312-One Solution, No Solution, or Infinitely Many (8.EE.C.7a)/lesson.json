@@ -1368,5 +1368,6 @@
       "title": "",
       "description": ""
     }
-  }
+  },
+  "visibleInFeed": false
 }

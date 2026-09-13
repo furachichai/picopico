@@ -1,0 +1,120 @@
+.group-transform-box {
+    position: absolute;
+    box-sizing: border-box;
+    border: 2px dashed #6366f1;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 950;
+    transition: none;
+}
+
+.group-transform-badge {
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: auto;
+    cursor: grab;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.group-transform-badge:active {
+    cursor: grabbing;
+}
+
+.group-rotate-stem {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 24px;
+    background: #6366f1;
+    pointer-events: none;
+}
+
+.group-rotate-handle {
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 2px solid #6366f1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    pointer-events: auto;
+    font-size: 13px;
+    font-weight: bold;
+    color: #6366f1;
+    user-select: none;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.group-rotate-handle:hover {
+    background-color: #f5f3ff;
+    transform: translateX(-50%) scale(1.15);
+}
+
+.group-rotate-handle:active {
+    cursor: grabbing;
+    background-color: #ede9fe;
+}
+
+.group-corner-handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: #ffffff;
+    border: 2px solid #6366f1;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+    pointer-events: auto;
+    user-select: none;
+    transition: transform 0.1s ease;
+}
+
+.group-corner-handle:hover {
+    transform: scale(1.25);
+    background-color: #ede9fe;
+}
+
+.group-corner-handle.nw {
+    top: -7px;
+    left: -7px;
+    cursor: nwse-resize;
+}
+
+.group-corner-handle.ne {
+    top: -7px;
+    right: -7px;
+    cursor: nesw-resize;
+}
+
+.group-corner-handle.sw {
+    bottom: -7px;
+    left: -7px;
+    cursor: nesw-resize;
+}
+
+.group-corner-handle.se {
+    bottom: -7px;
+    right: -7px;
+    cursor: nwse-resize;
+}

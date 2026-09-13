@@ -1,4 +1,5 @@
-import { ensureBalloonsAboveImages } from './layerUtils';
+import { ensureBalloonsAboveImages } from './layerUtils.js';
+import { formatQuizQuestion } from './textFormatters.js';
 
 /**
  * scriptParser.js
@@ -333,25 +334,37 @@ export function buildLessonSlides(parsedSlides, textPreset = null) {
  * Build elements for a quiz slide.
  */
 function buildQuizElements(parsed, elements, nextElId, textPreset) {
-    // Question text at the top
+    // Question banner at the top
     if (parsed.questionText) {
+        // Format question: bold markdown to <b>, math shortcuts, and numbers/math signs in black
+        const formattedContent = formatQuizQuestion(parsed.questionText);
+
         elements.push({
             id: nextElId(),
-            type: 'text',
-            content: parsed.questionText,
+            type: 'banner',
+            content: formattedContent,
             x: 50,
             y: 22,
-            width: 86,
-            height: 14,
+            width: 78,
+            height: 17,
             rotation: 0,
             scale: 1,
             metadata: {
+                width: 78,
+                height: 17,
+                fontFamily: textPreset?.banner?.fontFamily || '"Bangers", cursive, sans-serif',
+                fontSize: textPreset?.banner?.fontSize || 28,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                color: textPreset?.banner?.color || '#00b0ff',
                 textAlign: 'center',
-                fontFamily: textPreset?.text?.fontFamily || '"Fira Sans"',
-                fontSize: textPreset?.text?.fontSize || 20,
-                lineHeight: 1.35,
-                fontWeight: '600',
-                ...(textPreset?.text?.color && { color: textPreset.text.color }),
+                backgroundColor: '#ffffff',
+                borderColor: '#000000',
+                shadow: 'grey',
+                hasShadow: true,
+                borderRadius: 20,
+                skin: 'comic',
+                showTape: false,
             },
         });
     }

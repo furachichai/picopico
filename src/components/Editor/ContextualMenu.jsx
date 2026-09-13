@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './ContextualMenu.css';
 import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Player/PEMExpressionPool';
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
@@ -365,9 +365,31 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
     );
 };
 
-const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false, canGroup = false, isGrouped = false, onGroup, onUngroup }) => {
+const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrary, onOpenPresets, onReorderElement, onUndo, onStartContinuousChange, onEndContinuousChange, onApplyBackgroundToAll, showGuides, onToggleGuides, translationMode = false, canGroup = false, isGrouped = false, onGroup, onUngroup }) => {
     const { state, dispatch } = useEditor();
     const [applyToAllChecked, setApplyToAllChecked] = useState(false);
+
+    useEffect(() => {
+        const handleGlobalPointerUp = () => {
+            if (onEndContinuousChange) {
+                onEndContinuousChange();
+            }
+        };
+        window.addEventListener('pointerup', handleGlobalPointerUp);
+        window.addEventListener('touchend', handleGlobalPointerUp);
+        return () => {
+            window.removeEventListener('pointerup', handleGlobalPointerUp);
+            window.removeEventListener('touchend', handleGlobalPointerUp);
+        };
+    }, [onEndContinuousChange]);
+
+    const handleRangePointerDown = (e) => {
+        if (e.target.tagName === 'INPUT' && e.target.type === 'range') {
+            if (onStartContinuousChange) {
+                onStartContinuousChange();
+            }
+        }
+    };
 
     if (!element) return null;
 
@@ -603,7 +625,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     };
 
     return (
-        <div className="contextual-menu">
+        <div
+            className="contextual-menu"
+            onPointerDownCapture={handleRangePointerDown}
+            onTouchStartCapture={handleRangePointerDown}
+        >
             {(isTextType || element.type === 'background') && (
                 <>
                     {element.type !== 'background' && (
@@ -612,7 +638,14 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 <label>Font</label>
                                 <select
                                     value={metadata.fontFamily}
-                                    onChange={(e) => updateMetadata({ fontFamily: e.target.value })}
+                                    onChange={(e) => {
+                                        const newFont = e.target.value;
+                                        const isBangers = newFont && newFont.toLowerCase().includes('bangers');
+                                        updateMetadata({
+                                            fontFamily: newFont,
+                                            textTransform: isBangers ? 'uppercase' : 'none'
+                                        });
+                                    }}
                                 >
                                     {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
                                 </select>
@@ -660,6 +693,12 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     title="Underline"
                                     style={{ textDecoration: 'underline', fontSize: '1rem' }}
                                 >U</button>
+                                <button
+                                    className={`btn-icon ${metadata.textTransform === 'uppercase' ? 'active' : ''}`}
+                                    onClick={() => updateMetadata({ textTransform: metadata.textTransform === 'uppercase' ? 'none' : 'uppercase' })}
+                                    title="Toggle Uppercase / Normal Case (Aa)"
+                                    style={{ fontWeight: 'bold', fontSize: '0.85rem' }}
+                                >Aa</button>
                             </div>
                         </div>
                     )}

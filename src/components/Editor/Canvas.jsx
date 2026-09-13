@@ -13,6 +13,7 @@ import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
 import SaveAssetModal from './SaveAssetModal';
 import Rulers from './Rulers';
+import GroupTransformBox from './GroupTransformBox';
 
 /**
  * Canvas Component
@@ -356,8 +357,6 @@ const Canvas = (props) => {
     let baseSelection = [];
     if (isMultiSelectModifier && state.selectedElementIds) {
       baseSelection = [...state.selectedElementIds];
-    } else {
-      dispatch({ type: 'SELECT_ELEMENT', payload: null });
     }
 
     const rect = canvasRef.current.getBoundingClientRect();
@@ -408,6 +407,13 @@ const Canvas = (props) => {
           if (intersectedIds.length > 0) {
               const newSelection = Array.from(new Set([...baseSelection, ...intersectedIds]));
               dispatch({ type: 'SELECT_ELEMENTS', payload: newSelection });
+          } else if (!isMultiSelectModifier) {
+              dispatch({ type: 'SELECT_ELEMENT', payload: null });
+          }
+      } else {
+          // Clicked empty canvas without dragging
+          if (!isMultiSelectModifier) {
+              dispatch({ type: 'SELECT_ELEMENT', payload: null });
           }
       }
     };
@@ -962,9 +968,18 @@ const Canvas = (props) => {
           </div>
 
           {/* Cartridge Container */}
-          <div className="cartridge-container">
+          <div
+            className="cartridge-container"
+            style={{
+              zIndex: (currentSlide.cartridge && (currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL')) ? 80 : undefined
+            }}
+          >
             {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') && (
-              <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
+              <div style={{
+                pointerEvents: (currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') ? 'none' : 'auto',
+                width: '100%',
+                height: '100%'
+              }}>
                 {currentSlide.cartridge.type === 'FractionAlpha' && (
                   <FractionAlpha config={currentSlide.cartridge.config} preview={true} />
                 )}
@@ -1007,8 +1022,9 @@ const Canvas = (props) => {
                   <ExloreNLCartridge
                     config={currentSlide.cartridge.config}
                     preview={true}
-                    isSelected={state.selectedElementId === 'cartridge'}
-                    onSelect={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' })}
+                    isSelected={state.selectedElementId === 'cartridge' || (typeof state.selectedElementId === 'string' && state.selectedElementId.startsWith('cartridge:'))}
+                    selectedPart={state.selectedElementId === 'cartridge:explorenl-nl' ? 'nl' : (state.selectedElementId === 'cartridge:explorenl-equation' ? 'equation' : (state.selectedElementId === 'cartridge' ? 'all' : null))}
+                    onSelect={(part) => dispatch({ type: 'SELECT_ELEMENT', payload: part ? `cartridge:explorenl-${part}` : 'cartridge' })}
                     onConfigChange={(newConfig) => {
                       dispatch({
                         type: 'UPDATE_SLIDE',
@@ -1072,6 +1088,23 @@ const Canvas = (props) => {
           {/* Center Snap Guidelines (Flash on alignment with slide center) */}
           <div className={`center-snap-guideline vertical ${snapGuideline.vertical ? 'active' : ''}`} />
           <div className={`center-snap-guideline horizontal ${snapGuideline.horizontal ? 'active' : ''}`} />
+
+          {/* Unified Group Transform Box (when 2+ elements or a group are selected) */}
+          {!state.translationMode && (() => {
+            const activeIds = state.selectedElementIds && state.selectedElementIds.length > 1
+              ? state.selectedElementIds
+              : [];
+            const selectedEls = currentSlide?.elements?.filter(el => activeIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+            if (selectedEls.length <= 1) return null;
+            return (
+              <GroupTransformBox
+                selectedElements={selectedEls}
+                canvasRef={canvasRef}
+                dispatch={dispatch}
+                onSnapGuideline={handleSnapGuideline}
+              />
+            );
+          })()}
         </div>
 
         {/* Stripper Draggable Pointers (OUTSIDE slide-canvas, inside relative wrapper) */}

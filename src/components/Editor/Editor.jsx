@@ -13,6 +13,9 @@ import ConfirmationModal from './ConfirmationModal';
 import PresetPanel from './PresetPanel';
 import LayersPanel from './LayersPanel';
 import { useTranslation } from 'react-i18next';
+import { getSymbolSvg } from '../../utils/symbols';
+import { replaceMathShortcuts, replaceMathInHtml } from '../../utils/textFormatters';
+import { deleteLocalLesson } from '../../utils/lessonStorage';
 
 const Editor = () => {
     const { state, dispatch } = useEditor();
@@ -70,6 +73,7 @@ const Editor = () => {
         if (editingElementId) {
             dispatch({
                 type: 'UPDATE_ELEMENT',
+                saveHistory: true,
                 payload: { id: editingElementId, updates: { content: data.content, metadata: { ...data.metadata } } }
             });
             setEditingElementId(null);
@@ -239,6 +243,35 @@ const Editor = () => {
         setShowNewLessonConfirmation(false);
     };
 
+    const handleDeleteLesson = async () => {
+        const lessonPath = state.lesson?.path;
+        if (lessonPath) {
+            if (lessonPath.startsWith('local://')) {
+                deleteLocalLesson(lessonPath);
+            } else {
+                try {
+                    const folderPath = lessonPath.replace('/lesson.json', '');
+                    const response = await fetch('/api/delete-lesson', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ path: folderPath })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err.error || 'Delete failed');
+                    }
+                } catch (error) {
+                    console.error('Error deleting lesson:', error);
+                    alert('Failed to delete lesson: ' + error.message);
+                    return;
+                }
+            }
+        }
+        setShowInfoModal(false);
+        dispatch({ type: 'NEW_LESSON' });
+        dispatch({ type: 'SET_VIEW', payload: 'lessons' });
+    };
+
     const handleGoToMenu = () => {
         dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
     };
@@ -253,12 +286,25 @@ const Editor = () => {
         dispatch({ type: 'APPLY_BACKGROUND_TO_ALL', payload: backgroundElement });
     };
 
+    const isRangeInteractingRef = useRef(false);
+
+    const handleStartContinuousChange = () => {
+        dispatch({ type: 'SAVE_HISTORY' });
+        isRangeInteractingRef.current = true;
+    };
+
+    const handleEndContinuousChange = () => {
+        isRangeInteractingRef.current = false;
+    };
+
     // Shared ContextualMenu handlers (used in both bottom-menus and floating keyboard mode)
     const handleContextMenuChange = (id, updates) => {
-        if (id === 'cartridge') {
+        const shouldSave = !isRangeInteractingRef.current;
+        if (id === 'cartridge' || (typeof id === 'string' && id.startsWith('cartridge:'))) {
             const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
             dispatch({
                 type: 'UPDATE_SLIDE',
+                saveHistory: shouldSave,
                 payload: {
                     cartridge: {
                         ...slide?.cartridge,
@@ -281,25 +327,112 @@ const Editor = () => {
             }
             dispatch({
                 type: 'UPDATE_SLIDE',
+                saveHistory: shouldSave,
                 payload: {
                     ...(newBackground ? { background: newBackground } : {}),
                     backgroundSettings: { ...slide?.backgroundSettings, ...newSettings }
                 }
             });
+        } else if (state.selectedElementIds && state.selectedElementIds.length > 1 && state.selectedElementIds.includes(id)) {
+            // Multi-selection parameter batch update:
+            const slide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            const targetIds = state.selectedElementIds.filter(elId => elId !== 'background' && elId !== 'cartridge');
+            
+            const textKeys = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'color', 'lineHeight', 'textTransform', 'textAlign', 'textDecoration', 'letterSpacing'];
+            const visualKeys = ['opacity', 'brightness', 'locked', 'hidden'];
+            const symbolKeys = ['symbolColor', 'roundCorners'];
+            const lineKeys = ['isCurved', 'curvature', 'curveSkew', 'lineType', 'startCap', 'endCap', 'height'];
+
+            const updatesMap = {};
+
+            targetIds.forEach(targetId => {
+                const el = slide?.elements?.find(e => e.id === targetId);
+                if (!el) return;
+
+                if (targetId === id) {
+                    updatesMap[targetId] = updates;
+                    return;
+                }
+
+                const elUpdates = {};
+                const elMetaUpdates = {};
+
+                // Top-level property updates
+                if (updates.scale !== undefined) elUpdates.scale = updates.scale;
+                if (updates.rotation !== undefined) elUpdates.rotation = updates.rotation;
+
+                // Metadata updates
+                if (updates.metadata) {
+                    const meta = updates.metadata;
+                    const isTextElement = ['text', 'balloon', 'banner', 'collectible'].includes(el.type);
+                    const isLineElement = el.type === 'line';
+                    const isSymbolElement = !!el.metadata?.isSymbol || isLineElement;
+
+                    // Text properties
+                    if (isTextElement) {
+                        textKeys.forEach(k => {
+                            if (meta[k] !== undefined) elMetaUpdates[k] = meta[k];
+                        });
+                    }
+
+                    // Visual properties (all elements)
+                    visualKeys.forEach(k => {
+                        if (meta[k] !== undefined) elMetaUpdates[k] = meta[k];
+                    });
+
+                    // Symbol / Shape properties
+                    if (isSymbolElement) {
+                        symbolKeys.forEach(k => {
+                            if (meta[k] !== undefined) elMetaUpdates[k] = meta[k];
+                        });
+
+                        // Re-generate SVG symbol content if symbolColor or roundCorners changed
+                        if (el.metadata?.symbolType && (meta.symbolColor !== undefined || meta.roundCorners !== undefined)) {
+                            const newColor = meta.symbolColor !== undefined ? meta.symbolColor : (el.metadata.symbolColor || '#8B5CF6');
+                            const mergedMeta = { ...el.metadata, ...elMetaUpdates };
+                            try {
+                                elUpdates.content = getSymbolSvg(el.metadata.symbolType, el.metadata.symbolValue, newColor, mergedMeta);
+                            } catch (e) {
+                                console.warn('Failed to regenerate symbol SVG', e);
+                            }
+                        }
+                    }
+
+                    // Line properties
+                    if (isLineElement) {
+                        lineKeys.forEach(k => {
+                            if (meta[k] !== undefined) elMetaUpdates[k] = meta[k];
+                        });
+                        if (meta.symbolColor !== undefined) {
+                            elMetaUpdates.symbolColor = meta.symbolColor;
+                        }
+                    }
+                }
+
+                if (Object.keys(elMetaUpdates).length > 0) {
+                    elUpdates.metadata = elMetaUpdates;
+                }
+
+                if (Object.keys(elUpdates).length > 0) {
+                    updatesMap[targetId] = elUpdates;
+                }
+            });
+
+            dispatch({ type: 'UPDATE_ELEMENTS', payload: updatesMap, saveHistory: shouldSave });
         } else {
-            dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates } });
+            dispatch({ type: 'UPDATE_ELEMENT', payload: { id, updates }, saveHistory: shouldSave });
         }
     };
 
     const handleContextMenuDelete = (id) => {
-        if (id === 'cartridge') {
+        if (id === 'cartridge' || (typeof id === 'string' && id.startsWith('cartridge:'))) {
             dispatch({ type: 'UPDATE_SLIDE', payload: { cartridge: null } });
             dispatch({ type: 'SELECT_ELEMENT', payload: null });
         } else {
             const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
                 ? state.selectedElementIds
                 : (state.selectedElementId ? [state.selectedElementId] : []);
-            const validIds = selectedIds.filter(selId => selId !== 'background' && selId !== 'cartridge');
+            const validIds = selectedIds.filter(selId => selId !== 'background' && selId !== 'cartridge' && !selId.startsWith('cartridge:'));
             if (validIds.length > 1 && validIds.includes(id)) {
                 dispatch({ type: 'DELETE_ELEMENTS', payload: validIds });
             } else {
@@ -329,6 +462,44 @@ const Editor = () => {
     };
 
     const handleToggleLock = (elementId) => {
+        if (typeof elementId === 'string' && elementId.startsWith('cartridge:')) {
+            const slide = currentSlide;
+            if (!slide?.cartridge) return;
+            const config = slide.cartridge.config || {};
+            dispatch({ type: 'SAVE_HISTORY' });
+            if (elementId === 'cartridge:explorenl-nl') {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, lockNL: !config.lockNL }
+                        }
+                    }
+                });
+            } else if (elementId === 'cartridge:explorenl-equation') {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, lockEquation: !config.lockEquation }
+                        }
+                    }
+                });
+            } else {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, locked: !config.locked }
+                        }
+                    }
+                });
+            }
+            return;
+        }
         const el = currentSlide?.elements.find(e => e.id === elementId);
         if (!el) return;
         dispatch({ type: 'SAVE_HISTORY' });
@@ -336,6 +507,44 @@ const Editor = () => {
     };
 
     const handleToggleVisibility = (elementId) => {
+        if (typeof elementId === 'string' && elementId.startsWith('cartridge:')) {
+            const slide = currentSlide;
+            if (!slide?.cartridge) return;
+            const config = slide.cartridge.config || {};
+            dispatch({ type: 'SAVE_HISTORY' });
+            if (elementId === 'cartridge:explorenl-nl') {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, hideNL: !config.hideNL }
+                        }
+                    }
+                });
+            } else if (elementId === 'cartridge:explorenl-equation') {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, hideEquation: !config.hideEquation }
+                        }
+                    }
+                });
+            } else {
+                dispatch({
+                    type: 'UPDATE_SLIDE',
+                    payload: {
+                        cartridge: {
+                            ...slide.cartridge,
+                            config: { ...config, hidden: !config.hidden }
+                        }
+                    }
+                });
+            }
+            return;
+        }
         const el = currentSlide?.elements.find(e => e.id === elementId);
         if (!el) return;
         dispatch({ type: 'SAVE_HISTORY' });
@@ -370,13 +579,17 @@ const Editor = () => {
 
     // Determine selected element (Sticker vs Cartridge)
     let selectedElement = null;
-    if (state.selectedElementId === 'cartridge' && currentSlide?.cartridge) {
+    const isCartridgeSelected = state.selectedElementId === 'cartridge' ||
+        (typeof state.selectedElementId === 'string' && state.selectedElementId.startsWith('cartridge:'));
+
+    if (isCartridgeSelected && currentSlide?.cartridge) {
         // Mock an element structure for the cartridge so ContextualMenu can consume it
         selectedElement = {
-            id: 'cartridge',
+            id: state.selectedElementId,
             type: 'cartridge', // Special type
             cartridgeType: currentSlide.cartridge.type, // Pass specific cartridge type (FractionAlpha, FractionSlicer)
             config: currentSlide.cartridge.config, // Pass config directly
+            selectedPart: typeof state.selectedElementId === 'string' && state.selectedElementId.includes(':') ? state.selectedElementId.split(':')[1] : null,
             // Add other props if needed by generic menu parts, but unlikely
         };
     } else if (state.selectedElementId === 'background') {
@@ -455,6 +668,20 @@ const Editor = () => {
             // Don't intercept if user is typing in an input, textarea, or contentEditable
             // Exception: allow Cmd+B/I/U formatting shortcuts through
             const isUndoShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z';
+            // Undo shortcut (Cmd+Z / Ctrl+Z): Always handle in editor even if banner/balloon contentEditable is active
+            if (isUndoShortcut) {
+                const isNativeTextInput = e.target.tagName === 'INPUT' && e.target.type !== 'range' && e.target.type !== 'button';
+                const isTextarea = e.target.tagName === 'TEXTAREA';
+                if (!isNativeTextInput && !isTextarea) {
+                    e.preventDefault();
+                    if (document.activeElement && document.activeElement.blur) {
+                        document.activeElement.blur();
+                    }
+                    handleUndo();
+                    return;
+                }
+            }
+
             const isTextFormatShortcut = (e.metaKey || e.ctrlKey) && ['b', 'i', 'u'].includes(e.key.toLowerCase());
             const isMathShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e';
             if (
@@ -467,49 +694,86 @@ const Editor = () => {
                 )
             ) return;
 
-            // Undo shortcut (Cmd+Z / Ctrl+Z)
-            if (isUndoShortcut) {
-                e.preventDefault();
-                handleUndo();
-                return;
-            }
-
-            // Math replacement shortcut (Cmd+M / Ctrl+M)
+            // Math replacement shortcut (Cmd+E / Ctrl+E)
             if (isMathShortcut) {
                 const activeEl = document.activeElement;
                 const isNativeInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
                 let selectedText = '';
+                let targetStart = null;
+                let targetEnd = null;
 
                 if (isNativeInput) {
-                    if (activeEl.selectionStart !== activeEl.selectionEnd) {
-                        selectedText = activeEl.value.substring(activeEl.selectionStart, activeEl.selectionEnd);
+                    let start = activeEl.selectionStart;
+                    let end = activeEl.selectionEnd;
+                    if (start !== end) {
+                        selectedText = activeEl.value.substring(start, end);
+                        targetStart = start;
+                        targetEnd = end;
+                    } else {
+                        const val = activeEl.value;
+                        const textBefore = val.substring(0, start);
+                        const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
+                            || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
+                            || textBefore.match(/[\*\/]$/);
+                        if (match) {
+                            targetStart = start - match[0].length;
+                            targetEnd = start;
+                            selectedText = match[0];
+                        }
                     }
                 } else {
                     const sel = window.getSelection();
-                    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-                        selectedText = sel.toString();
+                    if (sel && sel.rangeCount > 0) {
+                        if (!sel.isCollapsed) {
+                            selectedText = sel.toString();
+                        } else {
+                            const range = sel.getRangeAt(0);
+                            const node = range.startContainer;
+                            if (node && node.nodeType === Node.TEXT_NODE) {
+                                const text = node.nodeValue || '';
+                                const offset = range.startOffset;
+                                const textBefore = text.substring(0, offset);
+                                const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
+                                    || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
+                                    || textBefore.match(/[\*\/]$/);
+                                if (match) {
+                                    const matchStart = offset - match[0].length;
+                                    const newRange = document.createRange();
+                                    newRange.setStart(node, matchStart);
+                                    newRange.setEnd(node, offset);
+                                    sel.removeAllRanges();
+                                    sel.addRange(newRange);
+                                    selectedText = match[0];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // If nothing was selected/matched in focus, but a text/banner element is selected on canvas
+                if (!selectedText && state.selectedElementId) {
+                    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                    const selectedElement = currentSlide?.elements.find(el => el.id === state.selectedElementId);
+                    if (selectedElement && (selectedElement.type === 'text' || selectedElement.type === 'banner')) {
+                        const content = selectedElement.content || '';
+                        if (/[!^\*\/]/.test(content)) {
+                            e.preventDefault();
+                            const newContent = replaceMathInHtml(content);
+                            if (newContent !== content) {
+                                handleContextMenuChange(state.selectedElementId, { content: newContent });
+                                return;
+                            }
+                        }
                     }
                 }
 
                 if (selectedText) {
                     e.preventDefault();
-                    
-                    const superscriptMap = {
-                        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-                        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
-                    };
-                    const toSuperscript = (numStr) => {
-                        return numStr.split('').map(digit => superscriptMap[digit] || digit).join('');
-                    };
-                    
-                    const replacement = selectedText
-                        .replace(/\*/g, '×')
-                        .replace(/\//g, '÷')
-                        .replace(/!(\d+)/g, (_, digits) => toSuperscript(digits));
+                    const replacement = replaceMathShortcuts(selectedText);
                         
                     if (isNativeInput) {
-                        const start = activeEl.selectionStart;
-                        const end = activeEl.selectionEnd;
+                        const start = targetStart !== null ? targetStart : activeEl.selectionStart;
+                        const end = targetEnd !== null ? targetEnd : activeEl.selectionEnd;
                         const val = activeEl.value;
                         const newVal = val.substring(0, start) + replacement + val.substring(end);
                         
@@ -676,6 +940,24 @@ const Editor = () => {
             // clipboard actually contains PicoPico element-copy JSON.
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'v') {
                 const processCopyData = (text) => {
+                    if (!text || typeof text !== 'string') return false;
+
+                    // Check for copied slide(s)
+                    if (text.startsWith('picopico-slides:') || text.startsWith('picopico-slide:')) {
+                        try {
+                            let slidesToPaste = [];
+                            if (text.startsWith('picopico-slides:')) {
+                                slidesToPaste = JSON.parse(text.substring('picopico-slides:'.length));
+                            } else if (text.startsWith('picopico-slide:')) {
+                                slidesToPaste = [JSON.parse(text.substring('picopico-slide:'.length))];
+                            }
+                            if (Array.isArray(slidesToPaste) && slidesToPaste.length > 0) {
+                                dispatch({ type: 'PASTE_SLIDES', payload: { slides: slidesToPaste, targetSlideId: state.currentSlideId } });
+                                return true;
+                            }
+                        } catch { /* ignore and continue */ }
+                    }
+
                     try {
                         const data = JSON.parse(text);
                         if (data._picopicoCopy) {
@@ -696,19 +978,19 @@ const Editor = () => {
                         const pasted = processCopyData(text);
                         if (!pasted) {
                             try {
-                                const fallback = localStorage.getItem('picopico-copied-element');
+                                const fallback = localStorage.getItem('picopico-copied-element') || localStorage.getItem('picopico-copied-slides');
                                 if (fallback) processCopyData(fallback);
                             } catch {}
                         }
                     }).catch(() => {
                         try {
-                            const fallback = localStorage.getItem('picopico-copied-element');
+                            const fallback = localStorage.getItem('picopico-copied-element') || localStorage.getItem('picopico-copied-slides');
                             if (fallback) processCopyData(fallback);
                         } catch {}
                     });
                 } else {
                     try {
-                        const fallback = localStorage.getItem('picopico-copied-element');
+                        const fallback = localStorage.getItem('picopico-copied-element') || localStorage.getItem('picopico-copied-slides');
                         if (fallback) processCopyData(fallback);
                     } catch {}
                 }
@@ -841,6 +1123,7 @@ const Editor = () => {
                     lesson={state.lesson}
                     onUpdate={handleUpdateInfo}
                     onClose={() => setShowInfoModal(false)}
+                    onDelete={handleDeleteLesson}
                     translationLang={isTranslating ? translationLang : 'es'}
                 />
 
@@ -1130,6 +1413,8 @@ const Editor = () => {
                                             onOpenPresets={() => setShowPresetPanel(true)}
                                             onReorderElement={handleReorderElement}
                                             onUndo={handleUndo}
+                                            onStartContinuousChange={handleStartContinuousChange}
+                                            onEndContinuousChange={handleEndContinuousChange}
                                             onApplyBackgroundToAll={handleApplyBackgroundToAll}
                                             showGuides={state.showGuides}
                                             guideMode={state.guideMode}
@@ -1143,6 +1428,8 @@ const Editor = () => {
                                 {!isTranslating && (
                                     <LayersPanel
                                         elements={currentSlide?.elements || []}
+                                        cartridge={currentSlide?.cartridge}
+                                        selectedElementId={state.selectedElementId}
                                         selectedElementIds={state.selectedElementIds}
                                         onSelect={(id, isMulti, isAlt) => dispatch({ type: 'SELECT_ELEMENT', payload: typeof id === 'object' ? id : { id, isShift: !!isMulti, isAlt: !!isAlt } })}
                                         onReorderTo={handleReorderElementTo}
@@ -1166,7 +1453,7 @@ const Editor = () => {
                                 const activeSelectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
                                     ? state.selectedElementIds
                                     : (state.selectedElementId ? [state.selectedElementId] : []);
-                                const validActiveSelectedElements = currentSlide?.elements.filter(el => activeSelectedIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+                                const validActiveSelectedElements = currentSlide?.elements.filter(el => activeSelectedIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge' && !el.id.startsWith('cartridge:')) || [];
                                 const activeGroupIds = new Set(validActiveSelectedElements.map(el => el.metadata?.groupId).filter(Boolean));
                                 const isCurrentSelectionGrouped = validActiveSelectedElements.length > 0 && activeGroupIds.size === 1 && validActiveSelectedElements.every(el => el.metadata?.groupId);
                                 const canCurrentSelectionGroup = validActiveSelectedElements.length >= 2 && !isCurrentSelectionGrouped;
@@ -1186,6 +1473,8 @@ const Editor = () => {
                                         onOpenPresets={() => setShowPresetPanel(true)}
                                         onReorderElement={handleReorderElement}
                                         onUndo={handleUndo}
+                                        onStartContinuousChange={handleStartContinuousChange}
+                                        onEndContinuousChange={handleEndContinuousChange}
                                         onApplyBackgroundToAll={handleApplyBackgroundToAll}
                                         showGuides={state.showGuides}
                                         guideMode={state.guideMode}

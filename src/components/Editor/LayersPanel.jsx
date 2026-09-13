@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { Lock, Unlock } from 'lucide-react';
 import './LayersPanel.css';
 import { useDraggable } from '../../hooks/useDraggable';
@@ -6,13 +6,17 @@ import { useDraggable } from '../../hooks/useDraggable';
 /**
  * Determines if an element type is "pinned" (always on top, cannot be reordered).
  */
-const isPinnedType = (type) => ['quiz', 'isticker', 'game', 'result_field'].includes(type);
+const isPinnedType = (type) => ['quiz', 'isticker', 'game', 'result_field', 'explorenl_nl', 'explorenl_equation', 'cartridge'].includes(type);
 
 /**
  * Gets an icon for the element type.
  */
 const getTypeIcon = (element) => {
+    if (element.icon) return element.icon;
     switch (element.type) {
+        case 'explorenl_nl': return '📈';
+        case 'explorenl_equation': return '🔢';
+        case 'cartridge': return '🎮';
         case 'image': return '🖼️';
         case 'text': return '📝';
         case 'balloon': return '💬';
@@ -30,10 +34,59 @@ const getTypeIcon = (element) => {
 };
 
 /**
+ * Gets a representative color for the element based on its slide properties or element type.
+ */
+const getElementColor = (element) => {
+    if (element.color) return element.color;
+    if (element.metadata?.color && element.metadata.color !== 'transparent' && element.metadata.color !== '#000000' && element.metadata.color !== 'black') {
+        return element.metadata.color;
+    }
+    if (element.metadata?.backgroundColor && element.metadata.backgroundColor !== 'transparent') {
+        return element.metadata.backgroundColor;
+    }
+    if (element.metadata?.bannerColor) return element.metadata.bannerColor;
+    if (element.metadata?.symbolColor) return element.metadata.symbolColor;
+
+    switch (element.type) {
+        case 'explorenl_nl':
+            return '#6366F1'; // Indigo
+        case 'explorenl_equation':
+            return '#F57C00'; // Amber/Orange
+        case 'cartridge':
+            return '#8B5CF6'; // Violet
+        case 'banner':
+            return '#F43F5E'; // Rose / Coral
+        case 'balloon':
+            return '#EAB308'; // Warm Yellow
+        case 'text':
+            return '#10B981'; // Emerald
+        case 'quiz':
+            return '#A855F7'; // Purple
+        case 'line':
+            return '#EC4899'; // Pink
+        case 'image':
+            return '#0EA5E9'; // Sky Blue
+        case 'collectible':
+            return '#F97316'; // Orange
+        case 'isticker':
+            return '#8B5CF6'; // Violet
+        case 'number_line':
+            return '#6366F1';
+        case 'result_field':
+            return '#64748B';
+        default:
+            return '#6366F1';
+    }
+};
+
+/**
  * Derives a display name for an element.
  */
 const getElementName = (element) => {
+    if (element.name) return element.name;
     switch (element.type) {
+        case 'explorenl_nl': return 'Number Line (ExploreNL)';
+        case 'explorenl_equation': return 'Equation (ExploreNL)';
         case 'banner': {
             const raw = (element.content || '').replace(/<[^>]*>/g, '').trim();
             const badge = element.metadata?.badgeText ? `[${element.metadata.badgeText}] ` : '';
@@ -42,7 +95,6 @@ const getElementName = (element) => {
         case 'image': {
             const path = element.content || '';
             const filename = path.split('/').pop() || 'Image';
-            // Remove extension for cleaner display
             return filename.replace(/\.(png|jpg|jpeg|svg|webp|gif)$/i, '');
         }
         case 'text': {
@@ -77,11 +129,24 @@ const getElementName = (element) => {
         }
         case 'popup': return 'Popup';
         case 'game': return `Game — ${element.metadata?.gameId || ''}`;
+        case 'cartridge': return 'Interactive Cartridge';
         default: return element.type;
     }
 };
 
-const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onToggleLock, onToggleVisibility, isOpen, onToggle, onReorder }) => {
+const LayersPanel = ({
+    elements = [],
+    cartridge = null,
+    selectedElementId = null,
+    selectedElementIds = [],
+    onSelect,
+    onReorderTo,
+    onToggleLock,
+    onToggleVisibility,
+    isOpen,
+    onToggle,
+    onReorder
+}) => {
     const [dragState, setDragState] = useState(null); // { elementId, startIndex }
     const [dropIndex, setDropIndex] = useState(null); // visual drop indicator position
     const [copiedId, setCopiedId] = useState(null);
@@ -91,7 +156,7 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
 
     const handleCopy = (e, element) => {
         e.stopPropagation();
-        if (!element) return;
+        if (!element || element.isInteractive) return;
         const payload = JSON.stringify({ _picopicoCopy: true, elements: [element] });
 
         if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
@@ -137,13 +202,98 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
         };
     }, [isOpen, onToggle]);
 
-    // Separate pinned (quiz/isticker/game) from draggable elements
-    // Display order: reversed array (top of z-stack = top of list)
-    const reversedElements = [...elements].reverse();
-    const pinnedElements = reversedElements.filter(el => isPinnedType(el.type));
-    const draggableElements = reversedElements.filter(el => !isPinnedType(el.type));
+    // Synthetic layers for interactive manipulatives & cartridges
+    // Visual stack order for ExploreNL: Number Line (top) -> Equation (next)
+    const cartridgeLayers = useMemo(() => {
+        if (!cartridge) return [];
+        const type = cartridge.type;
+        const config = cartridge.config || {};
 
-    const isSelected = useCallback((id) => selectedElementIds?.includes(id), [selectedElementIds]);
+        if (type === 'ExploreNL' || type === 'ExloreNL') {
+            return [
+                {
+                    id: 'cartridge:explorenl-nl',
+                    type: 'explorenl_nl',
+                    isInteractive: true,
+                    name: 'Number Line (ExploreNL)',
+                    icon: '📈',
+                    color: config.lineColor || '#6366F1',
+                    metadata: {
+                        locked: !!config.lockNL,
+                        hidden: !!config.hideNL
+                    }
+                },
+                {
+                    id: 'cartridge:explorenl-equation',
+                    type: 'explorenl_equation',
+                    isInteractive: true,
+                    name: 'Equation (ExploreNL)',
+                    icon: '🔢',
+                    color: config.pointerColor || config.equationBorder || '#F57C00',
+                    metadata: {
+                        locked: !!config.lockEquation,
+                        hidden: !!config.hideEquation
+                    }
+                }
+            ];
+        }
+
+        const cartridgeMeta = {
+            Balanza: { name: 'Balanza Scale', icon: '⚖️', color: '#F59E0B' },
+            PEMDAS: { name: 'PEMDAS Manipulative', icon: '🧮', color: '#10B981' },
+            Potiondas: { name: 'Potiondas Game', icon: '🧪', color: '#8B5CF6' },
+            FractionAlpha: { name: 'Fraction Pizza', icon: '🍕', color: '#EF4444' },
+            FractionSlicer: { name: 'Fraction Slicer', icon: '🔪', color: '#EC4899' },
+            SwipeSorter: { name: 'Swipe Sorter', icon: '🗂️', color: '#3B82F6' },
+            AlgeBros: { name: 'AlgeBros', icon: '📐', color: '#14B8A6' }
+        };
+
+        const meta = cartridgeMeta[type] || { name: `${type} Game`, icon: '🎮', color: '#8B5CF6' };
+        return [
+            {
+                id: `cartridge:${type.toLowerCase()}`,
+                type: 'cartridge',
+                isInteractive: true,
+                name: meta.name,
+                icon: meta.icon,
+                color: meta.color,
+                metadata: {
+                    locked: !!config.locked,
+                    hidden: !!config.hidden
+                }
+            }
+        ];
+    }, [cartridge]);
+
+    // Display order: reversed array (top of z-stack = top of list)
+    // Interactive cartridge layers take top position (matching top z-sort)
+    const reversedElements = [...elements].reverse();
+    const pinnedElements = [...cartridgeLayers, ...reversedElements.filter(el => isPinnedType(el.type))];
+    const draggableElements = reversedElements.filter(el => !isPinnedType(el.type));
+    const totalCount = pinnedElements.length + draggableElements.length;
+
+    // Normalizing selected element IDs
+    const allSelectedIds = useMemo(() => {
+        const ids = new Set(selectedElementIds || []);
+        if (selectedElementId) ids.add(selectedElementId);
+        return ids;
+    }, [selectedElementIds, selectedElementId]);
+
+    const isSelected = useCallback((id) => {
+        if (allSelectedIds.has(id)) return true;
+        if (allSelectedIds.has('cartridge') && typeof id === 'string' && id.startsWith('cartridge:')) return true;
+        if (id === 'cartridge' && Array.from(allSelectedIds).some(sid => typeof sid === 'string' && sid.startsWith('cartridge:'))) return true;
+        return false;
+    }, [allSelectedIds]);
+
+    // Automatically scroll to the selected element when selection changes on the slide
+    useEffect(() => {
+        if (!isOpen || !listRef.current) return;
+        const selectedEl = listRef.current.querySelector('.layer-row.selected');
+        if (selectedEl) {
+            selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    }, [selectedElementId, selectedElementIds, isOpen]);
 
     const handleRowClick = (e, elementId) => {
         e.stopPropagation();
@@ -153,9 +303,8 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
 
     // ─── Drag-to-Reorder (pointer-based) ───
     const handleDragStart = (e, element, displayIndex) => {
-        if (isPinnedType(element.type)) return;
+        if (isPinnedType(element.type) || element.isInteractive) return;
         
-        // If clicking action buttons, do NOT start a drag or selection
         if (e.target.closest('.layer-action-btn')) {
             return;
         }
@@ -163,11 +312,9 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
         e.stopPropagation();
         e.preventDefault();
 
-        // Select immediately on pointerdown (matches Figma/design tool behavior)
         const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
         onSelect(element.id, isMulti, e.altKey);
 
-        const startY = e.clientY;
         setDragState({ elementId: element.id, displayIndex });
 
         const handleDragMove = (moveEvent) => {
@@ -188,7 +335,6 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestIdx = i;
-                    // If mouse is below midpoint, drop AFTER this row
                     if (mouseY > midY) closestIdx = i + 1;
                 }
             });
@@ -201,24 +347,16 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
             document.removeEventListener('pointerup', handleDragEnd);
 
             if (dragState && dropIndex !== null) {
-                // Convert display indices back to array indices
-                // Display is reversed, so we need to convert
                 const draggableOnly = elements.filter(el => !isPinnedType(el.type));
                 const fromDisplayIdx = draggableElements.findIndex(el => el.id === element.id);
                 
                 if (fromDisplayIdx !== -1 && dropIndex !== fromDisplayIdx && dropIndex !== fromDisplayIdx + 1) {
-                    // Convert reversed display index to real array index
-                    // draggableElements is reversed, so display 0 = last in array
-                    const realFromIndex = elements.indexOf(elements.find(el => el.id === element.id));
-                    
-                    // The drop position in display space (reversed) needs to be converted
                     let targetDisplayIdx = dropIndex > fromDisplayIdx ? dropIndex - 1 : dropIndex;
                     targetDisplayIdx = Math.max(0, Math.min(targetDisplayIdx, draggableOnly.length - 1));
                     
-                    // Convert: display index (reversed) to real array index
-                    // In reversed display, index 0 = last real index among draggable elements
                     const sortedDraggable = elements.filter(el => !isPinnedType(el.type));
                     const realTargetIdx = elements.indexOf(sortedDraggable[sortedDraggable.length - 1 - targetDisplayIdx]);
+                    const realFromIndex = elements.indexOf(elements.find(el => el.id === element.id));
                     
                     if (realFromIndex !== -1 && realTargetIdx !== -1) {
                         onReorderTo(element.id, realTargetIdx);
@@ -232,6 +370,144 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
 
         document.addEventListener('pointermove', handleDragMove);
         document.addEventListener('pointerup', handleDragEnd);
+    };
+
+    const renderRow = (element, isPinned, displayIdx = 0, isTop = false, isBottom = false) => {
+        const selected = isSelected(element.id);
+        const color = getElementColor(element);
+        const isHidden = !!element.metadata?.hidden;
+        const isLocked = !!element.metadata?.locked;
+
+        return (
+            <div
+                key={element.id}
+                data-layer-id={element.id}
+                className={`layer-row ${isPinned ? 'pinned-row' : ''} ${selected ? 'selected' : ''} ${dragState?.elementId === element.id ? 'dragging' : ''} ${isHidden ? 'hidden-element' : ''}`}
+                style={{
+                    '--row-color': color,
+                    '--row-color-glow': `${color}99`,
+                    '--row-color-bg': `${color}33`
+                }}
+                onPointerDown={!isPinned ? (e) => handleDragStart(e, element, displayIdx) : undefined}
+                onClick={(e) => handleRowClick(e, element.id)}
+            >
+                {/* Drop indicator */}
+                {!isPinned && dropIndex === displayIdx && dragState && dragState.elementId !== element.id && (
+                    <div className="layer-drop-indicator top" />
+                )}
+
+                {/* Drag Handle / Pin indicator */}
+                <div
+                    className={`layer-drag-handle ${isPinned ? (element.isInteractive ? 'interactive' : 'pinned') : ''}`}
+                    title={isPinned ? (element.isInteractive ? '⚡ Interactive Manipulative' : '📌 Pinned Layer') : 'Drag to reorder'}
+                >
+                    {isPinned ? (element.isInteractive ? '⚡' : '📌') : '⠿'}
+                </div>
+
+                {/* Type icon highlighted in object color */}
+                <div
+                    className={`layer-type-icon ${selected ? 'icon-selected' : ''}`}
+                    style={{
+                        backgroundColor: selected ? color : `${color}22`,
+                        color: selected ? '#ffffff' : color,
+                        borderColor: selected ? color : `${color}55`
+                    }}
+                >
+                    {getTypeIcon(element)}
+                </div>
+
+                {/* Color swatch dot reflecting the object's color on the slide */}
+                <div
+                    className="layer-color-dot"
+                    style={{ backgroundColor: color }}
+                    title={`Object Color: ${color}`}
+                />
+
+                {/* Element Name */}
+                <span className="layer-name">
+                    {getElementName(element)}
+                    {element.metadata?.groupId && (
+                        <span className="layer-group-indicator" title="Grouped element">🔗</span>
+                    )}
+                </span>
+
+                {/* Active / Selected Tag in Color */}
+                {selected && (
+                    <span
+                        className="layer-selected-tag"
+                        style={{
+                            backgroundColor: `${color}2b`,
+                            color: color,
+                            borderColor: `${color}77`
+                        }}
+                    >
+                        SELECTED
+                    </span>
+                )}
+
+                {/* Actions (Move, Copy, Visibility, Lock) */}
+                <div className={`layer-actions ${(isLocked || isHidden || copiedId === element.id) ? 'has-active' : ''}`}>
+                    {!isPinned && (
+                        <>
+                            <button
+                                className="layer-action-btn"
+                                disabled={isTop}
+                                onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'forward'); }}
+                                title="Move Up"
+                            >
+                                ▲
+                            </button>
+                            <button
+                                className="layer-action-btn"
+                                disabled={isBottom}
+                                onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'backward'); }}
+                                title="Move Down"
+                            >
+                                ▼
+                            </button>
+                        </>
+                    )}
+                    {!element.isInteractive && (
+                        <button
+                            className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
+                            onClick={(e) => handleCopy(e, element)}
+                            title={copiedId === element.id ? 'Copied to clipboard!' : 'Copy to clipboard'}
+                        >
+                            {copiedId === element.id ? (
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            ) : (
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                            )}
+                        </button>
+                    )}
+                    <button
+                        className={`layer-action-btn ${isHidden ? 'active' : ''}`}
+                        onClick={(e) => { e.stopPropagation(); onToggleVisibility(element.id); }}
+                        title={isHidden ? 'Show' : 'Hide'}
+                    >
+                        {isHidden ? '👁‍🗨' : '👁'}
+                    </button>
+                    <button
+                        className={`layer-action-btn layer-lock-btn ${isLocked ? 'locked' : 'unlocked'}`}
+                        onClick={(e) => { e.stopPropagation(); onToggleLock(element.id); }}
+                        title={isLocked ? 'Unlock' : 'Lock'}
+                        aria-label={isLocked ? 'Unlock' : 'Lock'}
+                    >
+                        {isLocked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
+                    </button>
+                </div>
+
+                {/* Drop indicator at bottom of last element */}
+                {!isPinned && dropIndex === draggableElements.length && isBottom && dragState && (
+                    <div className="layer-drop-indicator bottom" />
+                )}
+            </div>
+        );
     };
 
     return (
@@ -258,58 +534,12 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
                     </button>
                 </div>
 
-                {elements.length === 0 ? (
+                {totalCount === 0 ? (
                     <div className="layers-empty">No elements</div>
                 ) : (
                     <div className="layers-list" ref={listRef}>
-                        {/* Pinned elements (quiz, isticker, game) */}
-                        {pinnedElements.map((element) => (
-                            <div
-                                key={element.id}
-                                className={`layer-row pinned-row ${isSelected(element.id) ? 'selected' : ''} ${element.metadata?.hidden ? 'hidden-element' : ''}`}
-                                onClick={(e) => handleRowClick(e, element.id)}
-                            >
-                                <div className="layer-drag-handle pinned" title="Pinned">📌</div>
-                                <div className="layer-type-icon">{getTypeIcon(element)}</div>
-                                <span className="layer-name">
-                                    {getElementName(element)}
-                                    {element.metadata?.groupId && <span className="layer-group-indicator" title="Grouped element">🔗</span>}
-                                </span>
-                                <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
-                                    <button
-                                        className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
-                                        onClick={(e) => handleCopy(e, element)}
-                                        title={copiedId === element.id ? 'Copied to clipboard!' : 'Copy to clipboard'}
-                                    >
-                                        {copiedId === element.id ? (
-                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                <polyline points="20 6 9 17 4 12" />
-                                            </svg>
-                                        ) : (
-                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                    <button
-                                        className={`layer-action-btn ${element.metadata?.hidden ? 'active' : ''}`}
-                                        onClick={(e) => { e.stopPropagation(); onToggleVisibility(element.id); }}
-                                        title={element.metadata?.hidden ? 'Show' : 'Hide'}
-                                    >
-                                        {element.metadata?.hidden ? '👁‍🗨' : '👁'}
-                                    </button>
-                                    <button
-                                        className={`layer-action-btn layer-lock-btn ${element.metadata?.locked ? 'locked' : 'unlocked'}`}
-                                        onClick={(e) => { e.stopPropagation(); onToggleLock(element.id); }}
-                                        title={element.metadata?.locked ? 'Unlock' : 'Lock'}
-                                        aria-label={element.metadata?.locked ? 'Unlock' : 'Lock'}
-                                    >
-                                        {element.metadata?.locked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                        {/* Pinned & interactive elements */}
+                        {pinnedElements.map((element) => renderRow(element, true))}
 
                         {/* Separator if there are both pinned and draggable elements */}
                         {pinnedElements.length > 0 && draggableElements.length > 0 && (
@@ -318,88 +548,10 @@ const LayersPanel = ({ elements, selectedElementIds, onSelect, onReorderTo, onTo
 
                         {/* Draggable elements */}
                         {draggableElements.map((element, displayIdx) => {
-                            const isTopDraggable = displayIdx === 0;
-                            const isBottomDraggable = displayIdx === draggableElements.length - 1;
-
-                            return (
-                                <div
-                                    key={element.id}
-                                    className={`layer-row ${isSelected(element.id) ? 'selected' : ''} ${dragState?.elementId === element.id ? 'dragging' : ''} ${element.metadata?.hidden ? 'hidden-element' : ''}`}
-                                    onPointerDown={(e) => handleDragStart(e, element, displayIdx)}
-                                    onClick={(e) => handleRowClick(e, element.id)}
-                                >
-                                    {/* Drop indicator */}
-                                    {dropIndex === displayIdx && dragState && dragState.elementId !== element.id && (
-                                        <div className="layer-drop-indicator top" />
-                                    )}
-
-                                    <div
-                                        className="layer-drag-handle"
-                                        title="Drag to reorder"
-                                    >
-                                        ⠿
-                                    </div>
-                                    <div className="layer-type-icon">{getTypeIcon(element)}</div>
-                                    <span className="layer-name">
-                                        {getElementName(element)}
-                                        {element.metadata?.groupId && <span className="layer-group-indicator" title="Grouped element">🔗</span>}
-                                    </span>
-                                    <div className={`layer-actions ${(element.metadata?.locked || element.metadata?.hidden || copiedId === element.id) ? 'has-active' : ''}`}>
-                                        <button
-                                            className="layer-action-btn"
-                                            disabled={isTopDraggable}
-                                            onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'forward'); }}
-                                            title="Move Up"
-                                        >
-                                            ▲
-                                        </button>
-                                        <button
-                                            className="layer-action-btn"
-                                            disabled={isBottomDraggable}
-                                            onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'backward'); }}
-                                            title="Move Down"
-                                        >
-                                            ▼
-                                        </button>
-                                        <button
-                                            className={`layer-action-btn ${copiedId === element.id ? 'active-copied' : ''}`}
-                                            onClick={(e) => handleCopy(e, element)}
-                                            title={copiedId === element.id ? 'Copied to clipboard!' : 'Copy to clipboard'}
-                                        >
-                                            {copiedId === element.id ? (
-                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="20 6 9 17 4 12" />
-                                                </svg>
-                                            ) : (
-                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                                </svg>
-                                            )}
-                                        </button>
-                                        <button
-                                            className={`layer-action-btn ${element.metadata?.hidden ? 'active' : ''}`}
-                                            onClick={(e) => { e.stopPropagation(); onToggleVisibility(element.id); }}
-                                            title={element.metadata?.hidden ? 'Show' : 'Hide'}
-                                        >
-                                            {element.metadata?.hidden ? '👁‍🗨' : '👁'}
-                                        </button>
-                                        <button
-                                            className={`layer-action-btn layer-lock-btn ${element.metadata?.locked ? 'locked' : 'unlocked'}`}
-                                            onClick={(e) => { e.stopPropagation(); onToggleLock(element.id); }}
-                                            title={element.metadata?.locked ? 'Unlock' : 'Lock'}
-                                            aria-label={element.metadata?.locked ? 'Unlock' : 'Lock'}
-                                        >
-                                            {element.metadata?.locked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
-                                        </button>
-                                    </div>
-
-                                {/* Drop indicator at bottom of last element */}
-                                {dropIndex === draggableElements.length && displayIdx === draggableElements.length - 1 && dragState && (
-                                    <div className="layer-drop-indicator bottom" />
-                                )}
-                            </div>
-                        )})}
+                            const isTop = displayIdx === 0;
+                            const isBottom = displayIdx === draggableElements.length - 1;
+                            return renderRow(element, false, displayIdx, isTop, isBottom);
+                        })}
                     </div>
                 )}
             </div>

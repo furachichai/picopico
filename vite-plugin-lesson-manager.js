@@ -1,6 +1,68 @@
 import fs from 'fs';
 import path from 'path';
 
+function syncPublicLessonsData() {
+    try {
+        const lessonsDir = path.resolve(process.cwd(), 'lessons');
+        const outputPath = path.resolve(process.cwd(), 'public', 'lessons-data.json');
+        if (!fs.existsSync(lessonsDir)) return;
+
+        const results = [];
+        const folders = fs.readdirSync(lessonsDir).sort((a, b) => {
+            return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        folders.forEach(folder => {
+            const folderPath = path.join(lessonsDir, folder);
+            if (!fs.statSync(folderPath).isDirectory()) return;
+
+            const lessonFile = path.join(folderPath, 'lesson.json');
+            if (!fs.existsSync(lessonFile)) return;
+
+            let content = {};
+            try {
+                content = JSON.parse(fs.readFileSync(lessonFile, 'utf-8'));
+            } catch (e) {
+                console.error(`Error reading ${lessonFile}:`, e);
+            }
+
+            const match = folder.match(/^(\d+)-(.*)$/);
+            const order = match ? parseInt(match[1], 10) : 99;
+            const name = match ? match[2] : folder;
+
+            const isFeedVis = (content.visibleInFeed === false || content.content?.visibleInFeed === false)
+                ? false
+                : (content.visibleInFeed === true || content.content?.visibleInFeed === true)
+                    ? true
+                    : (content.visible !== false && content.content?.visible !== false);
+
+            if (content && content.content) {
+                delete content.content;
+            }
+
+            results.push({
+                name: folder,
+                type: 'file',
+                path: path.relative(process.cwd(), lessonFile),
+                title: content.title || name,
+                description: content.description || '',
+                visible: content.visible !== false,
+                visibleInFeed: isFeedVis,
+                order: order,
+                content: {
+                    ...content,
+                    visibleInFeed: isFeedVis
+                }
+            });
+        });
+
+        results.sort((a, b) => a.order - b.order);
+        fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+    } catch (e) {
+        console.error('Error syncing public/lessons-data.json:', e);
+    }
+}
+
 export default function lessonManagerPlugin() {
     return {
         name: 'vite-plugin-lesson-manager',
@@ -39,11 +101,20 @@ export default function lessonManagerPlugin() {
                                 fs.mkdirSync(dir, { recursive: true });
                             }
 
+                            // Strip any nested 'content' property to prevent recursive bloat
+                            if (content && content.content) {
+                                delete content.content;
+                            }
+
                             // Write file
                             fs.writeFileSync(fullPath, JSON.stringify(content, null, 2));
 
+                            // Keep public/lessons-data.json in sync with disk
+                            syncPublicLessonsData();
+
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');
+                            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                             res.end(JSON.stringify({ success: true, path: lessonPath }));
                         } catch (error) {
                             console.error('Error saving lesson:', error);
@@ -94,15 +165,25 @@ export default function lessonManagerPlugin() {
                             const order = match ? parseInt(match[1], 10) : 99;
                             const name = match ? match[2] : folder;
 
+                            const isFeedVis = (content.visibleInFeed === false || content.content?.visibleInFeed === false)
+                                ? false
+                                : (content.visibleInFeed === true || content.content?.visibleInFeed === true)
+                                    ? true
+                                    : (content.visible !== false && content.content?.visible !== false);
+
                             results.push({
                                 name: folder,
                                 type: 'file',
                                 path: path.relative(process.cwd(), lessonFile),
                                 title: content.title || name,
                                 description: content.description || '',
-                                visible: content.visible !== false, // default true
+                                visible: content.visible !== false, // default true (controls Menu)
+                                visibleInFeed: isFeedVis, // controls TikTok Feed
                                 order: order,
-                                content: content
+                                content: {
+                                    ...content,
+                                    visibleInFeed: isFeedVis
+                                }
                             });
                         });
 
@@ -111,6 +192,7 @@ export default function lessonManagerPlugin() {
 
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
+                        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                         res.end(JSON.stringify(results));
                     } catch (error) {
                         console.error('Error listing lessons:', error);
@@ -145,7 +227,12 @@ export default function lessonManagerPlugin() {
                                 fs.renameSync(fullPath, newPath);
                             }
 
+                            // Keep public/lessons-data.json in sync with disk
+                            syncPublicLessonsData();
+
                             res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                             res.end(JSON.stringify({ success: true }));
                         } catch (error) {
                             res.statusCode = 500;
@@ -251,7 +338,10 @@ export default function lessonManagerPlugin() {
 
                             fs.renameSync(deletedPath, targetPath);
 
+                            syncPublicLessonsData();
+
                             res.statusCode = 200;
+                            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                             res.end(JSON.stringify({ success: true, newPath: path.relative(process.cwd(), path.join(targetPath, 'lesson.json')) }));
                         } catch (error) {
                             res.statusCode = 500;
@@ -275,7 +365,7 @@ export default function lessonManagerPlugin() {
                             const fullOldPath = path.resolve(process.cwd(), oldPath);
                             const fullNewPath = path.resolve(process.cwd(), newPath);
 
-                            if (!fullOldPath.startsWith(process.cwd()) || !fullNewPath.startsWith(process.cwd())) {
+                            if (!fullOldPath.startsWith(process.cwd())) {
                                 throw new Error('Invalid path');
                             }
 
@@ -287,7 +377,10 @@ export default function lessonManagerPlugin() {
                                 fs.renameSync(fullOldPath, fullNewPath);
                             }
 
+                            syncPublicLessonsData();
+
                             res.statusCode = 200;
+                            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                             res.end(JSON.stringify({ success: true }));
                         } catch (error) {
                             res.statusCode = 500;
@@ -330,7 +423,10 @@ export default function lessonManagerPlugin() {
                             // Rename to final
                             tempNames.forEach(t => fs.renameSync(t.tempPath, t.finalPath));
 
+                            syncPublicLessonsData();
+
                             res.statusCode = 200;
+                            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
                             res.end(JSON.stringify({ success: true }));
                         } catch (error) {
                             console.error('Reorder error:', error);

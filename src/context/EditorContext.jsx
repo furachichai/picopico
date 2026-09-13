@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer } from 'react';
 import { ELEMENT_TYPES } from '../types';
 import { ensureBalloonsAboveImages } from '../utils/layerUtils';
 import { getNonOverlappingResultFieldPosition, reindexResultFields } from '../utils/ResultFieldUtils';
+import { isPureEmoji } from './LanguageContext';
 
 const EditorContext = createContext();
 
@@ -242,7 +243,12 @@ const editorReducer = (state, action) => {
             return { ...state, view: state.view === 'editor' ? 'player' : 'editor' };
 
         case 'SET_CURRENT_SLIDE':
-            return { ...state, currentSlideId: action.payload };
+            return {
+                ...state,
+                currentSlideId: action.payload,
+                selectedElementId: null,
+                selectedElementIds: []
+            };
 
         case 'ADD_SLIDE': {
             const newSlide = {
@@ -254,6 +260,7 @@ const editorReducer = (state, action) => {
             return {
                 ...state,
                 isDirty: true,
+                past: pushToPast(state),
                 lesson: {
                     ...state.lesson,
                     slides: [...state.lesson.slides, newSlide],
@@ -282,6 +289,7 @@ const editorReducer = (state, action) => {
             return {
                 ...state,
                 isDirty: true,
+                past: pushToPast(state),
                 lesson: {
                     ...state.lesson,
                     slides: newSlides,
@@ -348,14 +356,18 @@ const editorReducer = (state, action) => {
             // Build metadata based on element type
             let elementMetadata = action.payload.metadata || {};
 
-            if (elementMetadata.isSymbol) {
-                // Inherit size from the last added symbol on this slide
-                const symbols = currentSlide.elements.filter(el => el.metadata?.isSymbol);
+            if (elementMetadata.isSymbol && action.payload.type !== 'line' && action.payload.type !== ELEMENT_TYPES.LINE) {
+                // Inherit size from the last added symbol of same general kind (not lines)
+                const symbols = currentSlide.elements.filter(el => el.metadata?.isSymbol && el.type !== 'line' && el.type !== ELEMENT_TYPES.LINE);
                 if (symbols.length > 0) {
                     const lastSymbol = symbols[symbols.length - 1];
-                    baseElement.width = lastSymbol.width;
-                    baseElement.height = lastSymbol.height;
-                    baseElement.scale = lastSymbol.scale;
+                    const isShape = elementMetadata.symbolType?.startsWith('shape-');
+                    const lastIsShape = lastSymbol.metadata?.symbolType?.startsWith('shape-');
+                    if (!isShape && !lastIsShape) {
+                        baseElement.width = lastSymbol.width;
+                        baseElement.height = lastSymbol.height;
+                        baseElement.scale = lastSymbol.scale;
+                    }
                 }
             }
             if (action.payload.type === 'balloon') {
@@ -640,8 +652,10 @@ const editorReducer = (state, action) => {
                     saveLastBackground(newLastBg);
                 }
             }
+            const shouldSave = action.saveHistory === true;
             return {
                 ...state,
+                past: shouldSave ? pushToPast(state) : (state.past || []),
                 isDirty: true,
                 lastAppliedBackground: newLastBg,
                 lesson: {
@@ -657,8 +671,10 @@ const editorReducer = (state, action) => {
 
         case 'UPDATE_ELEMENT': {
             const { id, updates } = action.payload;
+            const shouldSave = action.saveHistory === true;
             return {
                 ...state,
+                past: shouldSave ? pushToPast(state) : (state.past || []),
                 isDirty: true,
                 lesson: {
                     ...state.lesson,
@@ -666,9 +682,18 @@ const editorReducer = (state, action) => {
                         if (slide.id !== state.currentSlideId) return slide;
 
                         const oldElement = slide.elements.find(el => el.id === id);
-                        let newElements = slide.elements.map((el) =>
-                            el.id === id ? clampPopupSticker({ ...el, ...updates, metadata: { ...el.metadata, ...updates.metadata } }) : el
-                        );
+                        let newElements = slide.elements.map((el) => {
+                            if (el.id !== id) return el;
+                            let updated = clampPopupSticker({ ...el, ...updates, metadata: { ...el.metadata, ...updates.metadata } });
+                            if (updates.content !== undefined && isPureEmoji(updates.content) && updated.translations) {
+                                const newTranslations = { ...updated.translations };
+                                Object.keys(newTranslations).forEach(lang => {
+                                    newTranslations[lang] = { ...newTranslations[lang], content: updates.content };
+                                });
+                                updated.translations = newTranslations;
+                            }
+                            return updated;
+                        });
 
                         // If element was just locked, move it to the beginning of the array (lowest z-sort)
                         const wasLocked = oldElement?.metadata?.locked;
@@ -679,6 +704,49 @@ const editorReducer = (state, action) => {
                             newElements = newElements.filter(el => el.id !== id);
                             newElements.unshift(updatedElement);
                         }
+
+                        return { ...slide, elements: newElements };
+                    }),
+                },
+            };
+        }
+
+        case 'UPDATE_ELEMENTS': {
+            // action.payload: { ids, updates } | { updatesMap: { [id]: updates } } | { [id]: updates } | Array of { id, updates }
+            let updatesMap = {};
+            if (action.payload?.ids && action.payload?.updates) {
+                action.payload.ids.forEach(id => {
+                    updatesMap[id] = action.payload.updates;
+                });
+            } else if (action.payload?.updatesMap) {
+                updatesMap = action.payload.updatesMap;
+            } else if (Array.isArray(action.payload)) {
+                action.payload.forEach(item => {
+                    if (item.id) updatesMap[item.id] = item.updates || item;
+                });
+            } else if (action.payload && typeof action.payload === 'object') {
+                updatesMap = action.payload;
+            }
+
+            const shouldSave = action.saveHistory === true;
+            return {
+                ...state,
+                past: shouldSave ? pushToPast(state) : (state.past || []),
+                isDirty: true,
+                lesson: {
+                    ...state.lesson,
+                    slides: state.lesson.slides.map((slide) => {
+                        if (slide.id !== state.currentSlideId) return slide;
+
+                        const newElements = slide.elements.map((el) => {
+                            const elUpdates = updatesMap[el.id];
+                            if (!elUpdates) return el;
+                            return clampPopupSticker({
+                                ...el,
+                                ...elUpdates,
+                                ...(elUpdates.metadata ? { metadata: { ...el.metadata, ...elUpdates.metadata } } : {})
+                            });
+                        });
 
                         return { ...slide, elements: newElements };
                     }),
@@ -764,8 +832,12 @@ const editorReducer = (state, action) => {
 
         case 'DELETE_SLIDE': {
             if (state.lesson.slides.length <= 1) return state; // Prevent deleting last slide
+            const newPast = pushToPast(state);
             const newSlides = state.lesson.slides.filter(s => s.id !== action.payload);
             if (newSlides.length === 0) return state; // Safety: should never happen
+
+            // Re-index order
+            newSlides.forEach((s, i) => s.order = i);
 
             // If we deleted the current slide, switch to the first remaining slide
             // Also validate that currentSlideId still exists in the remaining slides
@@ -777,6 +849,7 @@ const editorReducer = (state, action) => {
             return {
                 ...state,
                 isDirty: true,
+                past: newPast,
                 lesson: { ...state.lesson, slides: newSlides },
                 currentSlideId: newCurrentId,
                 selectedElementId: null, // Clear selection to prevent stale references
@@ -784,24 +857,94 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'DELETE_SLIDES': {
+            const idsToDelete = Array.isArray(action.payload) ? action.payload : [action.payload];
+            if (idsToDelete.length === 0) return state;
+            if (state.lesson.slides.length <= idsToDelete.length) {
+                // Prevent deleting all slides - must keep at least 1 slide
+                return state;
+            }
+
+            const newPast = pushToPast(state);
+            const newSlides = state.lesson.slides.filter(s => !idsToDelete.includes(s.id));
+            if (newSlides.length === 0) return state;
+
+            // Re-index order
+            newSlides.forEach((s, i) => s.order = i);
+
+            const currentStillExists = newSlides.some(s => s.id === state.currentSlideId);
+            const newCurrentId = currentStillExists ? state.currentSlideId : newSlides[0].id;
+
+            return {
+                ...state,
+                isDirty: true,
+                past: newPast,
+                lesson: { ...state.lesson, slides: newSlides },
+                currentSlideId: newCurrentId,
+                selectedElementId: null,
+                selectedElementIds: [],
+            };
+        }
+
+        case 'MOVE_SLIDES':
         case 'MOVE_SLIDE': {
-            const { slideId, direction } = action.payload;
-            const index = state.lesson.slides.findIndex(s => s.id === slideId);
-            if (index === -1) return state;
+            const { slideId, slideIds, direction } = action.payload || {};
+            const targetIds = slideIds && slideIds.length > 0 ? slideIds : (slideId ? [slideId] : []);
+            if (targetIds.length === 0) return state;
 
-            const newIndex = direction === 'left' ? index - 1 : index + 1;
-            if (newIndex < 0 || newIndex >= state.lesson.slides.length) return state;
+            // Get current positions of the target slides in the slides array
+            const currentIndices = targetIds
+                .map(id => state.lesson.slides.findIndex(s => s.id === id))
+                .filter(idx => idx !== -1)
+                .sort((a, b) => a - b);
 
+            if (currentIndices.length === 0) return state;
+
+            if (direction === 'left') {
+                // Cannot move left if the earliest selected slide is already at index 0
+                if (currentIndices[0] <= 0) return state;
+            } else if (direction === 'right') {
+                // Cannot move right if the latest selected slide is already at the end
+                if (currentIndices[currentIndices.length - 1] >= state.lesson.slides.length - 1) return state;
+            } else {
+                return state;
+            }
+
+            const newPast = pushToPast(state);
             const newSlides = [...state.lesson.slides];
-            const [movedSlide] = newSlides.splice(index, 1);
-            newSlides.splice(newIndex, 0, movedSlide);
+            const targetIdSet = new Set(targetIds);
 
-            // Update order property if needed, or just rely on array order
+            if (direction === 'left') {
+                // Iterate left to right: swap each selected slide with its preceding unselected slide
+                for (let i = 0; i < newSlides.length; i++) {
+                    if (targetIdSet.has(newSlides[i].id)) {
+                        if (i > 0 && !targetIdSet.has(newSlides[i - 1].id)) {
+                            const temp = newSlides[i];
+                            newSlides[i] = newSlides[i - 1];
+                            newSlides[i - 1] = temp;
+                        }
+                    }
+                }
+            } else if (direction === 'right') {
+                // Iterate right to left: swap each selected slide with its following unselected slide
+                for (let i = newSlides.length - 1; i >= 0; i--) {
+                    if (targetIdSet.has(newSlides[i].id)) {
+                        if (i < newSlides.length - 1 && !targetIdSet.has(newSlides[i + 1].id)) {
+                            const temp = newSlides[i];
+                            newSlides[i] = newSlides[i + 1];
+                            newSlides[i + 1] = temp;
+                        }
+                    }
+                }
+            }
+
+            // Update order property across all slides
             newSlides.forEach((s, i) => s.order = i);
 
             return {
                 ...state,
                 isDirty: true,
+                past: newPast,
                 lesson: { ...state.lesson, slides: newSlides },
             };
         }
@@ -810,16 +953,28 @@ const editorReducer = (state, action) => {
             const slideToDuplicate = state.lesson.slides.find(s => s.id === action.payload);
             if (!slideToDuplicate) return state;
 
+            const newPast = pushToPast(state);
+            // Map old groupIds to new groupIds to maintain grouping integrity
+            const groupMap = {};
             const newSlide = {
-                ...slideToDuplicate,
+                ...JSON.parse(JSON.stringify(slideToDuplicate)),
                 id: `slide-${Date.now()}`,
-                elements: slideToDuplicate.elements.map(el => ({
-                    ...el,
-                    id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-                })),
-                cartridge: slideToDuplicate.cartridge ? { ...slideToDuplicate.cartridge } : null,
-                order: state.lesson.slides.map(s => s.order).length, // Append to end or insert after?
-                // Let's insert after the original
+                elements: (slideToDuplicate.elements || []).map(el => {
+                    const newElId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    let newGroupId = el.groupId;
+                    if (el.groupId) {
+                        if (!groupMap[el.groupId]) {
+                            groupMap[el.groupId] = `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                        }
+                        newGroupId = groupMap[el.groupId];
+                    }
+                    return {
+                        ...JSON.parse(JSON.stringify(el)),
+                        id: newElId,
+                        ...(newGroupId !== undefined ? { groupId: newGroupId } : {})
+                    };
+                }),
+                cartridge: slideToDuplicate.cartridge ? JSON.parse(JSON.stringify(slideToDuplicate.cartridge)) : null,
             };
 
             const index = state.lesson.slides.findIndex(s => s.id === action.payload);
@@ -832,39 +987,78 @@ const editorReducer = (state, action) => {
             return {
                 ...state,
                 isDirty: true,
+                past: newPast,
                 lesson: {
                     ...state.lesson,
                     slides: newSlides
                 },
-                // Optionally switch to the new slide
-                // currentSlideId: newSlide.id 
+                currentSlideId: newSlide.id 
             };
         }
 
+        case 'PASTE_SLIDES':
         case 'PASTE_SLIDE': {
-            const pastedSlideData = action.payload;
-            if (!pastedSlideData || typeof pastedSlideData !== 'object') return state;
+            const payload = action.payload;
+            if (!payload) return state;
 
-            // Generate new IDs to prevent clashing
-            const newSlideId = `slide-${Date.now()}`;
-            const newSlide = {
-                ...pastedSlideData,
-                id: newSlideId,
-                elements: (pastedSlideData.elements || []).map(el => ({
-                    ...el,
-                    id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-                })),
-                cartridge: pastedSlideData.cartridge ? { ...pastedSlideData.cartridge } : null,
-            };
+            // Handle both { slides, targetSlideId } and direct array or single slide
+            let incomingSlides = [];
+            let targetSlideId = state.currentSlideId;
 
-            // Insert after the current slide if one exists, otherwise append to end
-            const currentIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
-            const newSlides = [...state.lesson.slides];
-            if (currentIndex !== -1) {
-                newSlides.splice(currentIndex + 1, 0, newSlide);
-            } else {
-                newSlides.push(newSlide);
+            if (Array.isArray(payload)) {
+                incomingSlides = payload;
+            } else if (payload && Array.isArray(payload.slides)) {
+                incomingSlides = payload.slides;
+                if (payload.targetSlideId) targetSlideId = payload.targetSlideId;
+            } else if (payload && typeof payload === 'object') {
+                incomingSlides = [payload];
+                if (payload.targetSlideId) targetSlideId = payload.targetSlideId;
             }
+
+            if (incomingSlides.length === 0) return state;
+
+            // Push current state to undo history
+            const newPast = pushToPast(state);
+
+            // Deep clone each slide and assign fresh unique IDs for slides and elements
+            const newSlidesToAdd = incomingSlides.map((slide, sIdx) => {
+                const newSlideId = `slide-${Date.now()}-${sIdx}-${Math.random().toString(36).substr(2, 6)}`;
+                
+                // Map old groupIds in this slide to new groupIds to preserve grouping
+                const groupMap = {};
+                const clonedElements = (slide.elements || []).map(el => {
+                    const newElId = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    let newGroupId = el.groupId;
+                    if (el.groupId) {
+                        if (!groupMap[el.groupId]) {
+                            groupMap[el.groupId] = `group-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                        }
+                        newGroupId = groupMap[el.groupId];
+                    }
+                    return {
+                        ...JSON.parse(JSON.stringify(el)),
+                        id: newElId,
+                        ...(newGroupId !== undefined ? { groupId: newGroupId } : {})
+                    };
+                });
+
+                return {
+                    ...JSON.parse(JSON.stringify(slide)),
+                    id: newSlideId,
+                    elements: clonedElements,
+                    cartridge: slide.cartridge ? JSON.parse(JSON.stringify(slide.cartridge)) : null,
+                    backgroundSettings: slide.backgroundSettings ? JSON.parse(JSON.stringify(slide.backgroundSettings)) : {}
+                };
+            });
+
+            // Find insertion point
+            let targetIndex = state.lesson.slides.findIndex(s => s.id === targetSlideId);
+            if (targetIndex === -1) {
+                targetIndex = state.lesson.slides.length - 1;
+            }
+
+            const newSlides = [...state.lesson.slides];
+            newSlides.splice(targetIndex + 1, 0, ...newSlidesToAdd);
 
             // Re-index order
             newSlides.forEach((s, i) => s.order = i);
@@ -872,11 +1066,12 @@ const editorReducer = (state, action) => {
             return {
                 ...state,
                 isDirty: true,
+                past: newPast,
                 lesson: {
                     ...state.lesson,
                     slides: newSlides
                 },
-                currentSlideId: newSlideId
+                currentSlideId: newSlidesToAdd[0].id
             };
         }
 
@@ -892,17 +1087,30 @@ const editorReducer = (state, action) => {
         }
 
         case 'SELECT_ELEMENTS': {
-            const ids = action.payload; // Array of IDs
+            const ids = action.payload || []; // Array of IDs
             const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
             if (currentSlideIndex === -1) return state;
 
             const currentSlide = state.lesson.slides[currentSlideIndex];
             const currentSlideElementIds = currentSlide.elements.map(el => el.id);
             const validIds = ids.filter(id => currentSlideElementIds.includes(id));
+            const primarySelectedId = validIds.length > 0 ? validIds[validIds.length - 1] : null;
+
+            const currentIds = state.selectedElementIds || [];
+            const isUnchanged = state.selectedElementId === primarySelectedId &&
+                currentIds.length === validIds.length &&
+                currentIds.every((id, idx) => id === validIds[idx]);
+
+            if (isUnchanged) {
+                return state;
+            }
+
+            const shouldSave = action.saveHistory !== false && !action.skipHistory;
 
             return {
                 ...state,
-                selectedElementId: validIds.length > 0 ? validIds[validIds.length - 1] : null,
+                past: shouldSave ? pushToPast(state) : (state.past || []),
+                selectedElementId: primarySelectedId,
                 selectedElementIds: validIds
             };
         }
@@ -920,22 +1128,43 @@ const editorReducer = (state, action) => {
                 selectedId = action.payload;
             }
 
-            // If deselecting or selecting cartridge, just update ID
-            if (!selectedId || selectedId === 'cartridge') {
+            // If deselecting or selecting cartridge, cartridge parts, or background
+            if (!selectedId || selectedId === 'cartridge' || selectedId === 'background' || (typeof selectedId === 'string' && selectedId.startsWith('cartridge:'))) {
+                const targetIds = selectedId ? [selectedId] : [];
+                const currentIds = state.selectedElementIds || [];
+                const isUnchanged = state.selectedElementId === selectedId &&
+                    currentIds.length === targetIds.length &&
+                    (targetIds.length === 0 || currentIds[0] === selectedId);
+
+                if (isUnchanged) {
+                    return state;
+                }
+
+                const shouldSave = action.saveHistory !== false && !action.skipHistory;
                 return {
                     ...state,
+                    past: shouldSave ? pushToPast(state) : (state.past || []),
                     selectedElementId: selectedId,
-                    selectedElementIds: selectedId ? [selectedId] : []
+                    selectedElementIds: targetIds
                 };
             }
 
             // Find current slide
             const currentSlideIndex = state.lesson.slides.findIndex(s => s.id === state.currentSlideId);
             if (currentSlideIndex === -1) {
+                const targetIds = [selectedId];
+                const currentIds = state.selectedElementIds || [];
+                const isUnchanged = state.selectedElementId === selectedId &&
+                    currentIds.length === targetIds.length &&
+                    currentIds[0] === selectedId;
+                if (isUnchanged) return state;
+
+                const shouldSave = action.saveHistory !== false && !action.skipHistory;
                 return {
                     ...state,
+                    past: shouldSave ? pushToPast(state) : (state.past || []),
                     selectedElementId: selectedId,
-                    selectedElementIds: [selectedId]
+                    selectedElementIds: targetIds
                 };
             }
 
@@ -944,10 +1173,19 @@ const editorReducer = (state, action) => {
             const elementToSelect = currentSlide.elements[elementIndex];
 
             if (elementIndex === -1) {
+                const targetIds = [selectedId];
+                const currentIds = state.selectedElementIds || [];
+                const isUnchanged = state.selectedElementId === selectedId &&
+                    currentIds.length === targetIds.length &&
+                    currentIds[0] === selectedId;
+                if (isUnchanged) return state;
+
+                const shouldSave = action.saveHistory !== false && !action.skipHistory;
                 return {
                     ...state,
+                    past: shouldSave ? pushToPast(state) : (state.past || []),
                     selectedElementId: selectedId,
-                    selectedElementIds: [selectedId]
+                    selectedElementIds: targetIds
                 };
             }
 
@@ -988,8 +1226,20 @@ const editorReducer = (state, action) => {
 
             const primarySelectedId = newSelectedIds.length > 0 ? newSelectedIds[newSelectedIds.length - 1] : null;
 
+            const currentIds = state.selectedElementIds || [];
+            const isUnchanged = state.selectedElementId === primarySelectedId &&
+                currentIds.length === newSelectedIds.length &&
+                currentIds.every((id, idx) => id === newSelectedIds[idx]);
+
+            if (isUnchanged) {
+                return state;
+            }
+
+            const shouldSave = action.saveHistory !== false && !action.skipHistory;
+
             return {
                 ...state,
+                past: shouldSave ? pushToPast(state) : (state.past || []),
                 selectedElementId: primarySelectedId,
                 selectedElementIds: newSelectedIds
             };
@@ -1197,12 +1447,20 @@ const editorReducer = (state, action) => {
                 dupMetadata.order = count + 1;
             }
 
+            let dupTranslations = elementToDuplicate.translations ? { ...elementToDuplicate.translations } : undefined;
+            if (isPureEmoji(elementToDuplicate.content) && dupTranslations) {
+                Object.keys(dupTranslations).forEach(lang => {
+                    dupTranslations[lang] = { ...dupTranslations[lang], content: elementToDuplicate.content };
+                });
+            }
+
             const newElement = clampPopupSticker({
                 ...elementToDuplicate,
                 id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 x: dupX,
                 y: dupY,
                 metadata: dupMetadata,
+                ...(dupTranslations ? { translations: dupTranslations } : {})
             });
 
             const originalIndex = currentSlide.elements.findIndex(el => el.id === action.payload);
@@ -1255,12 +1513,19 @@ const editorReducer = (state, action) => {
                 if (dupMeta.groupId && groupMap[dupMeta.groupId]) {
                     dupMeta.groupId = groupMap[dupMeta.groupId];
                 }
+                let dupTranslations = el.translations ? { ...el.translations } : undefined;
+                if (isPureEmoji(el.content) && dupTranslations) {
+                    Object.keys(dupTranslations).forEach(lang => {
+                        dupTranslations[lang] = { ...dupTranslations[lang], content: el.content };
+                    });
+                }
                 return clampPopupSticker({
                     ...el,
                     id: `el-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 6)}`,
                     x: Math.min((el.x || 50) + 3, 95),
                     y: Math.min((el.y || 50) + 3, 95),
                     metadata: dupMeta,
+                    ...(dupTranslations ? { translations: dupTranslations } : {})
                 });
             });
 

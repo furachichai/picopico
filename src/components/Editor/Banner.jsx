@@ -422,7 +422,6 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
                 onInput={handleBodyInput}
                 onBlur={handleBlur}
                 onPaste={handlePaste}
-                data-placeholder={readOnly ? undefined : "Type banner text..."}
                 className="comic-banner-text"
                 style={{
                     width: '100%',
@@ -435,7 +434,9 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
                     fontStyle: meta.fontStyle || 'normal',
                     color: meta.color || '#00b0ff',
                     textAlign: meta.textAlign || 'center',
-                    textTransform: meta.textTransform || 'uppercase',
+                    textTransform: meta.textTransform !== undefined 
+                        ? meta.textTransform 
+                        : ((meta.fontFamily || '').toLowerCase().includes('bangers') ? 'uppercase' : 'none'),
                     lineHeight: meta.lineHeight ?? 1.2,
                     letterSpacing: meta.letterSpacing || '0.5px',
                     textDecoration: meta.textDecoration || 'none',

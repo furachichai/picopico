@@ -38,6 +38,16 @@ function getLessons(dir) {
         const order = match ? parseInt(match[1], 10) : 99;
         const name = match ? match[2] : folder;
 
+        const isFeedVis = (content.visibleInFeed === false || content.content?.visibleInFeed === false)
+            ? false
+            : (content.visibleInFeed === true || content.content?.visibleInFeed === true)
+                ? true
+                : (content.visible !== false && content.content?.visible !== false);
+
+        if (content && content.content) {
+            delete content.content;
+        }
+
         results.push({
             name: folder,
             type: 'file',
@@ -45,8 +55,12 @@ function getLessons(dir) {
             title: content.title || name,
             description: content.description || '',
             visible: content.visible !== false,
+            visibleInFeed: isFeedVis,
             order: order,
-            content: content // Embed full lesson content for Vercel
+            content: {
+                ...content,
+                visibleInFeed: isFeedVis
+            }
         });
     });
 
