@@ -25,3 +25,4 @@ dist-ssr
 scratch/
 .deleted_assets/
 .deleted_lessons/
+.env*
