@@ -1,9 +1,10 @@
 # Ignore nested/legacy projects
-SeptemberWeb
-PEMDAS
+/SeptemberWeb
+/PEMDAS
 
 # Ignore deleted asset backups
 .deleted_assets
+.deleted_lessons
 
 # Scratch and utility scripts
 scratch/
