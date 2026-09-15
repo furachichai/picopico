@@ -628,20 +628,35 @@ const DiscoverView = () => {
                             dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
                         }}
                         style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            border: '1px solid rgba(0,0,0,0.1)',
+                            background: '#ffffff',
+                            border: '3px solid #000000',
                             borderRadius: '50%',
-                            width: '44px',
-                            height: '44px',
+                            width: '42px',
+                            height: '42px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
                             padding: 0,
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                            boxShadow: '3.5px 3.5px 0px #000000',
+                            transition: 'transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s',
+                            color: '#000000',
+                            boxSizing: 'border-box'
+                        }}
+                        onPointerDown={(e) => {
+                            e.currentTarget.style.transform = 'translate(2px, 2px)';
+                            e.currentTarget.style.boxShadow = '1.5px 1.5px 0px #000000';
+                        }}
+                        onPointerUp={(e) => {
+                            e.currentTarget.style.transform = 'none';
+                            e.currentTarget.style.boxShadow = '3.5px 3.5px 0px #000000';
+                        }}
+                        onPointerLeave={(e) => {
+                            e.currentTarget.style.transform = 'none';
+                            e.currentTarget.style.boxShadow = '3.5px 3.5px 0px #000000';
                         }}
                     >
-                        <Home size={24} color="#334155" />
+                        <Home size={22} color="#000000" strokeWidth={2.8} />
                     </button>
                 </div>
             </div>

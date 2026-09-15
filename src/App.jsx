@@ -11,6 +11,7 @@ import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from './cartridges/Balanza/BalanzaCartridge';
 import ExloreNLCartridge from './cartridges/ExploreNL/ExloreNLCartridge';
 import DiscoverView from './components/Home/DiscoverView';
+import CardsView from './components/Home/CardsView';
 import './components/Player/TypeQuizKeyboard.css';
 import './index.css'
 
@@ -112,7 +113,7 @@ const AppContent = () => {
     currentViewRef.current = to;
 
     // Returning to the dashboard reads as "back" (slide right); everything else is "forward"
-    const animDir = (to === 'dashboard' && (from === 'player' || from === 'game' || from === 'discover'))
+    const animDir = (to === 'dashboard' && (from === 'player' || from === 'game' || from === 'discover' || from === 'cards'))
       ? 'back'
       : 'forward';
 
@@ -191,6 +192,7 @@ const AppContent = () => {
       case 'lessons': return <LessonsPage />;
       case 'player': return <Player />;
       case 'discover': return <DiscoverView />;
+      case 'cards': return <CardsView />;
       case 'game': {
         if (selectedGame === 'pemdas') {
           return (
@@ -203,11 +205,12 @@ const AppContent = () => {
                 onClick={() => setSelectedGame(null)}
                 style={{
                   position: 'absolute', top: 12, left: 12, zIndex: 200,
-                  background: 'rgba(255,255,255,0.15)', border: 'none',
-                  borderRadius: '50%', width: 40, height: 40,
-                  color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  backdropFilter: 'blur(6px)'
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
                 }}
               >
                 ✕
@@ -226,10 +229,12 @@ const AppContent = () => {
                 onClick={() => setSelectedGame(null)}
                 style={{
                   position: 'absolute', top: 12, left: 12, zIndex: 200,
-                  background: 'rgba(0,0,0,0.08)', border: 'none',
-                  borderRadius: '50%', width: 40, height: 40,
-                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
                 }}
               >
                 ✕
@@ -254,10 +259,12 @@ const AppContent = () => {
                 onClick={() => setSelectedGame(null)}
                 style={{
                   position: 'absolute', top: 12, left: 12, zIndex: 200,
-                  background: 'rgba(0,0,0,0.08)', border: 'none',
-                  borderRadius: '50%', width: 40, height: 40,
-                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
                 }}
               >
                 ✕
@@ -302,10 +309,12 @@ const AppContent = () => {
                 onClick={() => setSelectedGame(null)}
                 style={{
                   position: 'absolute', top: 12, left: 12, zIndex: 200,
-                  background: 'rgba(0,0,0,0.08)', border: 'none',
-                  borderRadius: '50%', width: 40, height: 40,
-                  color: '#334155', fontSize: '1.2rem', cursor: 'pointer',
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
                 }}
               >
                 ✕
@@ -325,11 +334,12 @@ const AppContent = () => {
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'dashboard' })}
               style={{
                 position: 'absolute', top: 12, left: 12, zIndex: 200,
-                background: 'rgba(255,255,255,0.1)', border: 'none',
-                borderRadius: '50%', width: 40, height: 40,
-                color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
+                background: '#ffffff', border: '3px solid #000000',
+                borderRadius: '50%', width: 42, height: 42,
+                color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backdropFilter: 'blur(6px)'
+                boxShadow: '3.5px 3.5px 0px #000000',
+                boxSizing: 'border-box'
               }}
             >
               ✕

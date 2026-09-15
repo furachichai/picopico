@@ -70,42 +70,55 @@
 }
 
 .balanza-restart-btn {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
-  color: var(--text-main);
-  font-size: 1.1rem;
+  background: #ffffff;
+  border: 3px solid #000000;
+  box-shadow: 3.5px 3.5px 0px #000000;
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 0;
   z-index: 101;
-  transition: transform 0.15s ease, background 0.15s ease;
+  box-sizing: border-box;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .balanza-restart-btn:hover {
-  transform: rotate(-30deg) scale(1.05);
+  transform: scale(1.08) rotate(-30deg);
+  box-shadow: 4.5px 4.5px 0px #000000;
   background: #ffffff;
+}
+
+.balanza-restart-btn:active {
+  transform: translate(2px, 2px) rotate(-60deg);
+  box-shadow: 1.5px 1.5px 0px #000000;
+}
+
+.balanza-restart-btn svg {
+  stroke: #000000;
 }
 
 .balanza-equation-frame {
   margin-top: 6px;
-  background: linear-gradient(135deg, rgba(254, 243, 199, 0.95) 0%, rgba(253, 230, 138, 0.95) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 2px solid #f59e0b;
+  background: #fef08a;
+  border: 3px solid #000000;
   border-radius: 999px;
   padding: 6px 20px;
-  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2), 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: 3.5px 3.5px 0px #000000;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   max-width: 95%;
   z-index: 102;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .balanza-footer-equation-area {
@@ -374,16 +387,21 @@
   justify-content: center;
   position: relative;
   gap: 2px;
-  padding: 8px 12px;
-  min-width: 54px;
-  min-height: 58px;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1.5px solid rgba(15, 23, 42, 0.14);
-  border-radius: 14px;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  padding: 8px 14px;
+  min-width: 60px;
+  min-height: 64px;
+  background: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 16px;
+  box-shadow: none;
   user-select: none;
   overflow: visible;
-  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  cursor: grab;
+  box-sizing: border-box;
+}
+
+.balanza-menu-tile:active {
+  cursor: grabbing;
 }
 
 .balanza-menu-tile-static-slot {
@@ -415,22 +433,31 @@
 }
 
 .balanza-menu-tile-glyph {
-  font-size: 1.6rem;
+  font-size: 1.85rem;
   line-height: 1;
 }
 
 .balanza-menu-tile-count {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #000000;
+  background: #facc15;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 1px 6px;
+  box-shadow: 1.5px 1.5px 0px #000000;
   z-index: 1;
+  line-height: 1.1;
+  font-family: 'Outfit', 'Nunito', sans-serif;
 }
 
 .balanza-menu-tile.is-empty {
-  background: rgba(226, 232, 240, 0.55);
-  border: 1.5px dashed rgba(148, 163, 184, 0.45);
+  background: #f1f5f9;
+  border: 2.5px dashed #94a3b8;
   box-shadow: none;
-  opacity: 0.8;
+  opacity: 0.65;
+  cursor: default;
+  transform: none !important;
 }
 
 /* Move feedback. Rearranging (merge / decompose / transpose) never moves the beam —

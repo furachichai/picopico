@@ -843,7 +843,7 @@ const Player = () => {
                             {slide.cartridge && (
                                 <div className="cartridge-container" style={{
                                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-                                    zIndex: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 80 : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : 1), 
+                                    zIndex: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 80 : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : (slide.cartridge.type === 'Balanza' ? 20 : 1)), 
                                     pointerEvents: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 'none' : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 'none' : 'auto')
                                 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && (

@@ -2694,7 +2694,7 @@
     "visibleInFeed": false,
     "order": 5,
     "content": {
-      "id": "lessons/02-Intro to PEMDAS/lesson.json",
+      "id": "lessons/05-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
       "slides": [
         {
@@ -3118,7 +3118,7 @@
               "type": "image",
               "content": "/src/assets/characters/pest_scratches%20head_front.png?t=1778452495231",
               "x": 49.72222222222223,
-              "y": 46.5625,
+              "y": 45.46875,
               "width": 40,
               "height": 23.677130044843047,
               "rotation": 0,
@@ -3133,7 +3133,7 @@
               "type": "quiz",
               "content": "Quiz",
               "x": 50,
-              "y": 81.875,
+              "y": 79.21875,
               "width": 20,
               "height": 10,
               "rotation": 0,
@@ -3359,7 +3359,7 @@
       ],
       "author": "User",
       "createdAt": "2026-05-10T21:44:26.467Z",
-      "updatedAt": "2026-06-08T18:15:03.620Z",
+      "updatedAt": "2026-09-13T16:40:57.061Z",
       "path": "lessons/05-Intro to PEMDAS/lesson.json",
       "textPreset": null,
       "subject": "Math",
@@ -3368,17 +3368,13 @@
       "chapterName": "Chapter: Intro",
       "lessonId": "00",
       "visible": true,
-      "name": "02-Intro to PEMDAS",
+      "name": "05-Intro to PEMDAS",
       "type": "file",
       "description": "",
-      "order": 2,
-      "status": "completed",
+      "order": 5,
+      "status": "active",
       "icon": "icon_gym.png",
-      "progress": {
-        "lastSlideIndex": 9,
-        "completed": true,
-        "lastPlayed": 1779299186316
-      },
+      "progress": null,
       "translations": {
         "en": {
           "title": "",
@@ -3388,7 +3384,16 @@
       },
       "cardColor": "#EC4899",
       "hashtag": "#OrderOfOperations",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      }
     }
   },
   {
@@ -11613,17 +11618,17 @@
     }
   },
   {
-    "name": "4283-Untitled Lesson",
+    "name": "4283-Exponentes negativos",
     "type": "file",
-    "path": "lessons/4283-Untitled Lesson/lesson.json",
-    "title": "Untitled Lesson",
+    "path": "lessons/4283-Exponentes negativos/lesson.json",
+    "title": "Exponentes negativos",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
     "order": 4283,
     "content": {
-      "id": "lessons/4283-Untitled Lesson/lesson.json",
-      "title": "Untitled Lesson",
+      "id": "lessons/4283-Exponentes negativos/lesson.json",
+      "title": "Exponentes negativos",
       "slides": [
         {
           "id": "slide-1",
@@ -14049,9 +14054,9 @@
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 75.859375,
-              "width": 51,
-              "height": 29.089565023811797,
+              "y": 74.140625,
+              "width": 33.30446397460074,
+              "height": 31.79304969435891,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -14080,9 +14085,9 @@
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 27.96875,
+              "y": 24.609375,
               "width": 51,
-              "height": 12.5,
+              "height": 10.165172329982045,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -14108,9 +14113,9 @@
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 46.40625,
+              "y": 39.453125,
               "width": 51,
-              "height": 12.5,
+              "height": 8.93631566155154,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -14136,7 +14141,7 @@
               "type": "text",
               "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">a⁻ⁿ = 1/aⁿ</span></font>",
               "x": 50,
-              "y": 28.4375,
+              "y": 25.625,
               "width": 26.764489040083262,
               "height": 5,
               "rotation": 0,
@@ -14152,8 +14157,8 @@
               "id": "el-1789244442795-wcewjxqp5",
               "type": "text",
               "content": "a⁻ⁿ is a fraction.",
-              "x": 51.80555555555556,
-              "y": 47.03125,
+              "x": 50,
+              "y": 39.21875,
               "width": 44.72222222222222,
               "height": 5,
               "rotation": 0,
@@ -14185,12 +14190,14 @@
           "order": 19,
           "guides": {
             "horizontal": [],
-            "vertical": []
+            "vertical": [
+              0
+            ]
           },
           "cartridge": {
             "type": "ExploreNL",
             "config": {
-              "orientation": "horizontal",
+              "orientation": "vertical",
               "numbersSide": "left",
               "pointerSide": "right",
               "startNumber": -2,
@@ -14208,12 +14215,12 @@
               "equationColor": "#0F172A",
               "equationBg": "#FFFFFF",
               "equationBorder": "#6366F1",
-              "equationFontSize": 27,
+              "equationFontSize": 19,
               "nlX": 50,
-              "nlY": 87,
-              "nlLength": 220,
+              "nlY": 76,
+              "nlLength": 237,
               "equationX": 50,
-              "equationY": 68,
+              "equationY": 53,
               "equationRotation": 0,
               "swapSides": false
             }
@@ -14223,15 +14230,15 @@
       ],
       "author": "User",
       "createdAt": "2026-09-12T11:54:58.023Z",
-      "updatedAt": "2026-09-12T21:32:22.825Z",
-      "path": "lessons/4283-Untitled Lesson/lesson.json",
+      "updatedAt": "2026-09-13T23:31:49.731Z",
+      "path": "lessons/4283-Exponentes negativos/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
       "cardColor": "#8B5CF6",
       "translations": {
         "en": {
-          "title": "Tiny Pesto",
+          "title": "Negative Exponents",
           "description": ""
         }
       },
@@ -14240,7 +14247,7 @@
       "visible": true,
       "visibleInFeed": true,
       "order": 4283,
-      "status": "completed",
+      "status": "active",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -14251,9 +14258,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 11,
-        "completed": true,
-        "lastPlayed": 1789245364859
+        "lastSlideIndex": 0,
+        "completed": false,
+        "lastPlayed": 1789327850861
       }
     }
   },
@@ -14306,17 +14313,17 @@
     }
   },
   {
-    "name": "7323-Why Anything to the Power of 0 Equals 1",
+    "name": "7323-¿ Por qué n⁰ es igual a 1 ?",
     "type": "file",
-    "path": "lessons/7323-Why Anything to the Power of 0 Equals 1/lesson.json",
-    "title": "Why Anything to the Power of 0 Equals 1",
+    "path": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+    "title": "¿ Por qué n⁰ es igual a 1 ?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
     "order": 7323,
     "content": {
-      "id": "lessons/7323-Why Anything to the Power of 0 Equals 1/lesson.json",
-      "title": "Why Anything to the Power of 0 Equals 1",
+      "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+      "title": "¿ Por qué n⁰ es igual a 1 ?",
       "slides": [
         {
           "id": "slide-1789010029868",
@@ -16846,7 +16853,7 @@
               }
             }
           ],
-          "order": 21,
+          "order": 20,
           "backgroundSettings": {
             "opacity": 0.31
           }
@@ -16925,7 +16932,7 @@
               }
             }
           ],
-          "order": 24
+          "order": 21
         },
         {
           "id": "slide-1788656023648",
@@ -17008,7 +17015,7 @@
               }
             }
           ],
-          "order": 26,
+          "order": 22,
           "backgroundSettings": {
             "opacity": 0.37
           }
@@ -17101,7 +17108,7 @@
               }
             }
           ],
-          "order": 27,
+          "order": 23,
           "backgroundSettings": {
             "opacity": 0.46,
             "grayscale": true,
@@ -17175,7 +17182,7 @@
               }
             }
           ],
-          "order": 28,
+          "order": 24,
           "backgroundSettings": {
             "opacity": 0.78
           }
@@ -17260,7 +17267,7 @@
               }
             }
           ],
-          "order": 29,
+          "order": 25,
           "backgroundSettings": {
             "opacity": 0.66,
             "brightness": 81,
@@ -17341,7 +17348,7 @@
               }
             }
           ],
-          "order": 30,
+          "order": 26,
           "guides": {
             "horizontal": [],
             "vertical": [
@@ -17428,7 +17435,7 @@
               }
             }
           ],
-          "order": 31,
+          "order": 27,
           "backgroundSettings": {
             "opacity": 0.46,
             "grayscale": true,
@@ -17510,23 +17517,23 @@
               }
             }
           ],
-          "order": 32,
+          "order": 28,
           "backgroundSettings": {
             "opacity": 0.31
           }
         },
         {
-          "id": "slide-1788656023655",
+          "id": "slide-1789317339180",
           "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1789156871780-xdehs59ub",
+              "id": "el-1789317339180-welvg2vi7",
               "type": "banner",
               "content": "<br>",
               "x": 49.72222222222223,
-              "y": 54.296875,
+              "y": 55.546875,
               "width": 53.46758575754757,
-              "height": 50.50893993114036,
+              "height": 52.07324382096494,
               "rotation": 0,
               "scale": 1.5981549469140102,
               "metadata": {
@@ -17549,13 +17556,13 @@
               }
             },
             {
-              "id": "el-1789159439961-vmerzb75r",
+              "id": "el-1789317339180-mspzm3tv7",
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 74.140625,
-              "width": 51,
-              "height": 27.36916568800909,
+              "y": 73.75,
+              "width": 51.21846340772097,
+              "height": 32.65324936226026,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -17567,7 +17574,7 @@
                 "fontWeight": "normal",
                 "color": "#00b0ff",
                 "textAlign": "center",
-                "backgroundColor": "#7EC8E3",
+                "backgroundColor": "#FDE74C",
                 "borderColor": "#000000",
                 "shadow": "grey",
                 "hasShadow": true,
@@ -17580,13 +17587,13 @@
               }
             },
             {
-              "id": "el-1789157639580-wckyi01k5",
+              "id": "el-1789317339180-yquligzxd",
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 27.96875,
+              "y": 24.609375,
               "width": 51,
-              "height": 12.5,
+              "height": 10.165172329982045,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -17608,13 +17615,13 @@
               }
             },
             {
-              "id": "el-1789159421637-anbqgbj4c",
+              "id": "el-1789317339180-jovnouv6m",
               "type": "banner",
               "content": "<br>",
               "x": 50,
-              "y": 46.40625,
+              "y": 39.453125,
               "width": 51,
-              "height": 12.5,
+              "height": 8.93631566155154,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -17636,212 +17643,12 @@
               }
             },
             {
-              "id": "el-1789156915090-i6jh9nkrc",
+              "id": "el-1789317339180-5awdiofh1",
               "type": "text",
-              "content": "* (0⁰ is a special case.)",
+              "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">n⁰ = 1</span></font>",
               "x": 50,
-              "y": 88.59375,
-              "width": 58.88888888888889,
-              "height": 5,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "manualZ": true,
-                "locked": false
-              }
-            },
-            {
-              "id": "el-1789159284186-2-faln07",
-              "type": "text",
-              "content": "<span style=\"background-color: rgb(245, 124, 0);\"><span style=\"font-weight: normal;\">2</span>⁰<span style=\"font-weight: normal;\">= 1</span></span>",
-              "x": 49.16666666666662,
-              "y": 83.21875,
-              "width": 38.611111111111114,
-              "height": 5,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 29,
-                "fontWeight": "normal",
-                "color": "#FFFFFF"
-              }
-            },
-            {
-              "id": "el-1789159284186-3-y5uym8",
-              "type": "text",
-              "content": "<font color=\"#880e4f\">÷2</font>",
-              "x": 69.77777777777789,
-              "y": 64.96875,
-              "width": 10,
-              "height": 5,
-              "rotation": 0,
-              "scale": 0.9451144968623475,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22
-              }
-            },
-            {
-              "id": "el-1789159745862-lu6e27ms4",
-              "type": "text",
-              "content": "<font color=\"#880e4f\">÷2</font>",
-              "x": 69.77777777777789,
-              "y": 71.84375,
-              "width": 10,
-              "height": 5,
-              "rotation": 0,
-              "scale": 0.9451144968623475,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22
-              }
-            },
-            {
-              "id": "el-1789159284186-4-e9sy49",
-              "type": "text",
-              "content": "<span style=\"font-weight: normal;\">2</span>¹<span style=\"font-weight: normal;\">= 2</span>",
-              "x": 49.16666666666662,
-              "y": 76.40625,
-              "width": 38.611111111111114,
-              "height": 5,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22,
-                "fontWeight": "normal",
-                "color": "#000000"
-              }
-            },
-            {
-              "id": "el-1789159284186-5-wwt4ga",
-              "type": "text",
-              "content": "<span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= 4</span>",
-              "x": 49.16666666666662,
-              "y": 69.28125,
-              "width": 38.611111111111114,
-              "height": 5,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22,
-                "fontWeight": "normal",
-                "color": "#000000"
-              }
-            },
-            {
-              "id": "el-1789159284186-6-509rco",
-              "type": "text",
-              "content": "2³= 8",
-              "x": 49.16666666666662,
-              "y": 62.78125,
-              "width": 38.611111111111114,
-              "height": 5,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22,
-                "fontWeight": "normal",
-                "color": "#000000"
-              }
-            },
-            {
-              "id": "el-1789159592057-hqe3j6yji",
-              "type": "line",
-              "x": 59.72222222222223,
-              "y": 64.0625,
-              "width": 9.571072459771843,
-              "height": 10,
-              "rotation": 90,
-              "scale": 1,
-              "metadata": {
-                "width": 50,
-                "height": 2,
-                "isSymbol": true,
-                "symbolColor": "#8B5CF6",
-                "startCap": "none",
-                "endCap": "arrow",
-                "isCurved": true,
-                "curvature": -10,
-                "curveSkew": -4
-              }
-            },
-            {
-              "id": "el-1789159621818-y8bpc54ug",
-              "type": "line",
-              "x": 60.277777777777764,
-              "y": 71.25,
-              "width": 9.571072459771843,
-              "height": 10,
-              "rotation": 90,
-              "scale": 1,
-              "metadata": {
-                "width": 50,
-                "height": 2,
-                "isSymbol": true,
-                "symbolColor": "#8B5CF6",
-                "startCap": "none",
-                "endCap": "arrow",
-                "isCurved": true,
-                "curvature": -10,
-                "curveSkew": -4
-              }
-            },
-            {
-              "id": "el-1789159632477-n8xtovrj4",
-              "type": "line",
-              "x": 60.833333333333336,
-              "y": 78.4375,
-              "width": 9.571072459771843,
-              "height": 10,
-              "rotation": 90,
-              "scale": 1,
-              "metadata": {
-                "width": 50,
-                "height": 2,
-                "isSymbol": true,
-                "symbolColor": "#8B5CF6",
-                "startCap": "none",
-                "endCap": "arrow",
-                "isCurved": true,
-                "curvature": -10,
-                "curveSkew": -4
-              }
-            },
-            {
-              "id": "el-1789159753840-0-a7bf67",
-              "type": "text",
-              "content": "<font color=\"#880e4f\">÷2</font>",
-              "x": 69.7222222222224,
-              "y": 78.90625,
-              "width": 10,
-              "height": 5,
-              "rotation": 0,
-              "scale": 0.9451144968623475,
-              "metadata": {
-                "textAlign": "center",
-                "fontFamily": "\"Fira Sans\"",
-                "fontSize": 22
-              }
-            },
-            {
-              "id": "el-1789160066465-h8mxvel4g",
-              "type": "text",
-              "content": "<font color=\"#2196f3\">n⁰ = 1</font>",
-              "x": 49.58333333333333,
-              "y": 28.4375,
-              "width": 18.445268914929162,
+              "y": 25.625,
+              "width": 26.764489040083262,
               "height": 5,
               "rotation": 0,
               "scale": 2.2037322077703445,
@@ -17853,35 +17660,268 @@
               }
             },
             {
-              "id": "el-1789160136749-n4b1ppixn",
+              "id": "el-1789317339180-3yn04ha3i",
               "type": "text",
-              "content": "any number with exponent zero equals to 1",
+              "content": "any number with exponent zero<div>equals to 1</div>",
               "x": 50,
-              "y": 47.03125,
-              "width": 41.11111111111111,
+              "y": 39.21875,
+              "width": 44.72222222222222,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.2138676431373434,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 16
+              }
+            },
+            {
+              "id": "el-1789317339180-l9ae3j0cn",
+              "type": "text",
+              "content": "<font color=\"#ffffff\" style=\"background-color: rgb(0, 0, 0);\"> exponent zero </font>",
+              "x": 50,
+              "y": 14.6875,
+              "width": 63.05555555555556,
               "height": 5,
               "rotation": 0,
               "scale": 1,
               "metadata": {
                 "textAlign": "center",
-                "fontFamily": "\"Fira Sans\""
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "textTransform": "uppercase",
+                "fontSize": 27
+              }
+            },
+            {
+              "id": "el-1789317339180-8l6qmpes5",
+              "type": "text",
+              "content": "<font color=\"#880e4f\">÷2</font>",
+              "x": 69.44444444444453,
+              "y": 64.6875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 0.9451144968623475,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22,
+                "groupId": "group-1789317506900-8y48dq"
+              }
+            },
+            {
+              "id": "el-1789317339180-513bxc3gy",
+              "type": "text",
+              "content": "<font color=\"#880e4f\">÷2</font>",
+              "x": 69.7222222222223,
+              "y": 74.6875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 0.9451144968623475,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22,
+                "groupId": "group-1789317506900-8y48dq"
+              }
+            },
+            {
+              "id": "el-1789317339180-xbqyyc23g",
+              "type": "text",
+              "content": "<font color=\"#880e4f\">÷2</font>",
+              "x": 69.38888888888904,
+              "y": 83.3125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 0.9451144968623475,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22,
+                "groupId": "group-1789317506900-8y48dq"
+              }
+            },
+            {
+              "id": "el-1789317339180-21bnfjtp2",
+              "type": "line",
+              "x": 57.80772569444443,
+              "y": 66.15625,
+              "width": 9.571072459771843,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 2,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow",
+                "isCurved": true,
+                "curvature": -10,
+                "curveSkew": -4,
+                "groupId": "group-1789317518056-ehu3bt"
+              }
+            },
+            {
+              "id": "el-1789317434722-0-eyqwjp",
+              "type": "line",
+              "x": 57.196614583333314,
+              "y": 75.5625,
+              "width": 9.571072459771843,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 2,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow",
+                "isCurved": true,
+                "curvature": -10,
+                "curveSkew": -4,
+                "groupId": "group-1789317518056-ehu3bt"
+              }
+            },
+            {
+              "id": "el-1789317437645-0-g910v4",
+              "type": "line",
+              "x": 57.696614583333314,
+              "y": 84.8125,
+              "width": 9.571072459771843,
+              "height": 10,
+              "rotation": 90,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 2,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "arrow",
+                "isCurved": true,
+                "curvature": -10,
+                "curveSkew": -4,
+                "groupId": "group-1789317518056-ehu3bt"
+              }
+            },
+            {
+              "id": "el-1789322270918-q9mmgcl9c",
+              "type": "text",
+              "content": "2",
+              "x": 47.222222222222214,
+              "y": 62.8125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1789322347007-9ork5eq5i",
+              "type": "text",
+              "content": "2",
+              "x": 47.49999999999998,
+              "y": 72.96875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1789322356508-3gjn478xt",
+              "type": "text",
+              "content": "2",
+              "x": 47.77777777777774,
+              "y": 82.65625,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22
+              }
+            },
+            {
+              "id": "el-1789322364519-1nyiorlp6",
+              "type": "text",
+              "content": "2",
+              "x": 47.49999999999995,
+              "y": 92.03125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 22
               }
             }
           ],
-          "order": 33,
+          "order": 29,
           "guides": {
             "horizontal": [],
             "vertical": [
-              50.2,
-              68.5
+              0,
+              80
             ]
-          }
+          },
+          "cartridge": {
+            "type": "ExploreNL",
+            "config": {
+              "orientation": "vertical",
+              "numbersSide": "right",
+              "pointerSide": "left",
+              "startNumber": 0,
+              "endNumber": 3,
+              "bottomNumber": 0,
+              "topNumber": 3,
+              "step": 1,
+              "thickness": 3,
+              "showArrows": false,
+              "currentValue": 3,
+              "equationTemplate": "2!n =",
+              "lineColor": "#6366F1",
+              "numberColor": "#1E293B",
+              "pointerColor": "#F57C00",
+              "equationColor": "#0F172A",
+              "equationBg": "#FFFFFF",
+              "equationBorder": "#6366F1",
+              "equationFontSize": 31,
+              "nlX": 42,
+              "nlY": 76,
+              "nlLength": 228,
+              "equationX": 51,
+              "equationY": 52,
+              "equationRotation": 0,
+              "swapSides": true,
+              "equationPadY": 1,
+              "equationPadX": 16
+            }
+          },
+          "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-09-06T00:53:37.022Z",
-      "updatedAt": "2026-09-12T12:15:16.806Z",
-      "path": "lessons/7323-Why Anything to the Power of 0 Equals 1/lesson.json",
+      "updatedAt": "2026-09-13T23:33:05.626Z",
+      "path": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -17902,7 +17942,7 @@
       "cardColor": "#EC4899",
       "translations": {
         "en": {
-          "title": "",
+          "title": "Why n⁰ equals 1 ?",
           "description": ""
         }
       },
@@ -17921,9 +17961,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 14,
+        "lastSlideIndex": 0,
         "completed": false,
-        "lastPlayed": 1789215024635
+        "lastPlayed": 1789342316342
       },
       "visibleInFeed": true
     }

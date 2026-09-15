@@ -11,6 +11,7 @@ import './ExloreNLCartridge.css';
 export default function ExloreNLCartridge({
     config = {},
     preview = false,
+    readOnly = false,
     isSelected = false,
     selectedPart = null,
     onSelect,
@@ -61,6 +62,20 @@ export default function ExloreNLCartridge({
     const equationRotation = config.equationRotation !== undefined ? config.equationRotation : 0;
     const equationFontSize = config.equationFontSize || 28;
     const equationTemplate = config.equationTemplate || '2!n =';
+
+    // Smart dynamic padding that scales down gracefully when equationFontSize is small,
+    // while honoring explicit horizontal / vertical padding overrides if set
+    const defaultPadY = Math.max(2, Math.round(equationFontSize * 0.38));
+    const defaultPadX = Math.max(4, Math.round(equationFontSize * 0.72));
+    const equationPadX = config.equationPadX !== undefined && config.equationPadX !== null
+        ? config.equationPadX
+        : defaultPadX;
+    const equationPadY = config.equationPadY !== undefined && config.equationPadY !== null
+        ? config.equationPadY
+        : defaultPadY;
+
+    const eqBorderWidth = Math.max(2, Math.min(3, Math.round(equationFontSize * 0.08)));
+    const eqBorderRadius = Math.max(6, Math.min(18, Math.round(equationFontSize * 0.6)));
 
     // Generate tick values (safeguarded against infinite loops)
     const tickValues = useMemo(() => {
@@ -473,21 +488,109 @@ export default function ExloreNLCartridge({
         window.addEventListener('touchend', handleUp);
     };
 
-    const handleResizeStart = (e) => {
+    // Corner resize handle: scales overall font size (from 12px to 56px)
+    const handleResizeCornerStart = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
+        const startX = e.touches ? e.touches[0].clientX : e.clientX;
         const startY = e.touches ? e.touches[0].clientY : e.clientY;
         const startSize = equationFontSize;
 
         const handleMove = (evt) => {
             evt.preventDefault();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
             const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+            const rad = (equationRotation * Math.PI) / 180;
+            const dx = clientX - startX;
             const dy = clientY - startY;
-            const newSize = Math.max(16, Math.min(56, Math.round(startSize + dy * 0.4)));
+            const localDx = dx * Math.cos(rad) + dy * Math.sin(rad);
+            const localDy = -dx * Math.sin(rad) + dy * Math.cos(rad);
+            const delta = (localDx + localDy) * 0.25;
+
+            const newSize = Math.max(12, Math.min(56, Math.round(startSize + delta)));
 
             if (onConfigChange) {
                 onConfigChange({ equationFontSize: newSize });
+            }
+        };
+
+        const handleUp = () => {
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleUp);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleUp);
+        };
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleUp);
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('touchend', handleUp);
+    };
+
+    // Horizontal handle: adjusts horizontal padding / width (equationPadX)
+    const handleResizeHorizontalStart = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const startX = e.touches ? e.touches[0].clientX : e.clientX;
+        const startY = e.touches ? e.touches[0].clientY : e.clientY;
+        const startPadX = equationPadX;
+
+        const handleMove = (evt) => {
+            evt.preventDefault();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+            const rad = (equationRotation * Math.PI) / 180;
+            const dx = clientX - startX;
+            const dy = clientY - startY;
+            const localDx = dx * Math.cos(rad) + dy * Math.sin(rad);
+
+            const newPadX = Math.max(2, Math.min(80, Math.round(startPadX + localDx)));
+
+            if (onConfigChange) {
+                onConfigChange({ equationPadX: newPadX });
+            }
+        };
+
+        const handleUp = () => {
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleUp);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleUp);
+        };
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleUp);
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('touchend', handleUp);
+    };
+
+    // Vertical handle: adjusts vertical padding / height (equationPadY)
+    const handleResizeVerticalStart = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const startX = e.touches ? e.touches[0].clientX : e.clientX;
+        const startY = e.touches ? e.touches[0].clientY : e.clientY;
+        const startPadY = equationPadY;
+
+        const handleMove = (evt) => {
+            evt.preventDefault();
+            const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+            const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+            const rad = (equationRotation * Math.PI) / 180;
+            const dx = clientX - startX;
+            const dy = clientY - startY;
+            const localDy = -dx * Math.sin(rad) + dy * Math.cos(rad);
+
+            const newPadY = Math.max(1, Math.min(50, Math.round(startPadY + localDy)));
+
+            if (onConfigChange) {
+                onConfigChange({ equationPadY: newPadY });
             }
         };
 
@@ -554,7 +657,7 @@ export default function ExloreNLCartridge({
                 left: `${tickX2}px`,
                 top: `${pointerPos}px`,
                 transform: 'translate(0, -50%)',
-                pointerEvents: preview ? 'none' : 'auto'
+                pointerEvents: (preview || readOnly) ? 'none' : 'auto'
             };
         } else {
             // Pointer on left of axis, pointing RIGHT at tick endpoint (tickX1)
@@ -562,7 +665,7 @@ export default function ExloreNLCartridge({
                 left: `${tickX1}px`,
                 top: `${pointerPos}px`,
                 transform: 'translate(-100%, -50%)',
-                pointerEvents: preview ? 'none' : 'auto'
+                pointerEvents: (preview || readOnly) ? 'none' : 'auto'
             };
         }
     } else {
@@ -571,7 +674,7 @@ export default function ExloreNLCartridge({
             left: `${pointerPos}px`,
             top: `${centerY + 10}px`,
             transform: 'translate(-50%, 0)',
-            pointerEvents: preview ? 'none' : 'auto'
+            pointerEvents: (preview || readOnly) ? 'none' : 'auto'
         };
     }
 
@@ -592,15 +695,16 @@ export default function ExloreNLCartridge({
         position: 'absolute'
     };
 
-    const isNLSelected = preview && isSelected && (selectedPart === 'nl' || selectedPart === 'all' || !selectedPart);
-    const isEqSelected = preview && isSelected && (selectedPart === 'equation' || selectedPart === 'all' || !selectedPart);
+    const isNLSelected = !readOnly && preview && isSelected && (selectedPart === 'nl' || selectedPart === 'all' || !selectedPart);
+    const isEqSelected = !readOnly && preview && isSelected && (selectedPart === 'equation' || selectedPart === 'all' || !selectedPart);
 
     return (
         <div
             ref={containerRef}
             className={`explorenl-cartridge ${preview ? 'is-preview' : 'is-play'}`}
+            style={readOnly ? { pointerEvents: 'none' } : undefined}
             onClick={() => {
-                if (preview && onSelect) onSelect();
+                if (!readOnly && preview && onSelect) onSelect();
             }}
         >
             {/* ─── Number Line (Whole surface draggable in editor, resizable via handles) ─── */}
@@ -609,10 +713,12 @@ export default function ExloreNLCartridge({
                 className={`explorenl-nl-wrapper ${orientation} ${isNLSelected ? 'is-selected' : ''} ${config.hideNL ? 'is-hidden' : ''}`}
                 style={{
                     ...nlWrapperStyle,
+                    ...(readOnly ? { pointerEvents: 'none' } : {}),
                     ...(config.hideNL ? (preview ? { opacity: 0.35 } : { display: 'none' }) : {})
                 }}
-                onMouseDown={preview ? (!config.lockNL ? handleNLMoveStart : undefined) : handlePointerDragStart}
-                onTouchStart={preview ? (!config.lockNL ? handleNLMoveStart : undefined) : handlePointerDragStart}
+                onMouseDown={(preview && !readOnly) ? (!config.lockNL ? handleNLMoveStart : undefined) : (!readOnly ? handlePointerDragStart : undefined)}
+                onTouchStart={(preview && !readOnly) ? (!config.lockNL ? handleNLMoveStart : undefined) : (!readOnly ? handlePointerDragStart : undefined)}
+                onClick={(preview && !readOnly) ? (e) => { e.stopPropagation(); if (onSelect) onSelect('nl'); } : undefined}
             >
                 {/* SVG rebuilt in true 1:1 pixels (never squeezed or distorted) */}
                 <svg
@@ -747,9 +853,9 @@ export default function ExloreNLCartridge({
                 <div
                     className={`explorenl-pointer ${orientation} ${isDraggingPointer ? 'dragging' : ''}`}
                     style={pointerStyle}
-                    onMouseDown={!preview ? handlePointerDragStart : undefined}
-                    onTouchStart={!preview ? handlePointerDragStart : undefined}
-                    title={preview ? undefined : "Drag to explore values"}
+                    onMouseDown={(!preview && !readOnly) ? handlePointerDragStart : undefined}
+                    onTouchStart={(!preview && !readOnly) ? handlePointerDragStart : undefined}
+                    title={(preview || readOnly) ? undefined : "Drag to explore values"}
                 >
                     {isVertical ? (
                         pointerSide === 'right' ? (
@@ -831,13 +937,17 @@ export default function ExloreNLCartridge({
                     top: `${equationY}%`,
                     transform: `translate(-50%, -50%) rotate(${equationRotation}deg)`,
                     backgroundColor: equationBg,
-                    border: `3px solid ${equationBorder}`,
+                    border: `${eqBorderWidth}px solid ${equationBorder}`,
+                    borderRadius: `${eqBorderRadius}px`,
+                    padding: `${equationPadY}px ${equationPadX}px`,
                     color: equationColor,
                     fontSize: `${equationFontSize}px`,
+                    ...(readOnly ? { pointerEvents: 'none' } : {}),
                     ...(config.hideEquation ? (preview ? { opacity: 0.35 } : { display: 'none' }) : {})
                 }}
-                onMouseDown={preview ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
-                onTouchStart={preview ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
+                onMouseDown={(preview && !readOnly) ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
+                onTouchStart={(preview && !readOnly) ? (!config.lockEquation ? handleEquationDragStart : undefined) : undefined}
+                onClick={(preview && !readOnly) ? (e) => { e.stopPropagation(); if (onSelect) onSelect('equation'); } : undefined}
             >
                 {/* Stabilized Equation Layout (No resize, zero jitter) */}
                 <div className="explorenl-equation-grid">
@@ -920,11 +1030,26 @@ export default function ExloreNLCartridge({
                         >
                             🔄
                         </div>
+                        {/* Horizontal resize handle (East edge) */}
                         <div
-                            className="explorenl-handle-resize"
+                            className="explorenl-handle-resize-e"
+                            title="Adjust Horizontal Width / Padding"
+                            onMouseDown={handleResizeHorizontalStart}
+                            onTouchStart={handleResizeHorizontalStart}
+                        />
+                        {/* Vertical resize handle (South edge) */}
+                        <div
+                            className="explorenl-handle-resize-s"
+                            title="Adjust Vertical Height / Padding"
+                            onMouseDown={handleResizeVerticalStart}
+                            onTouchStart={handleResizeVerticalStart}
+                        />
+                        {/* Corner resize handle (Font Size) */}
+                        <div
+                            className="explorenl-handle-resize explorenl-handle-resize-se"
                             title="Resize Equation Font"
-                            onMouseDown={handleResizeStart}
-                            onTouchStart={handleResizeStart}
+                            onMouseDown={handleResizeCornerStart}
+                            onTouchStart={handleResizeCornerStart}
                         />
                     </>
                 )}

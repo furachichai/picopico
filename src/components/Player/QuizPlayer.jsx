@@ -125,7 +125,7 @@ function validateOperationNoParen(ast, tappedNodeId) {
 }
 
 
-const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents, baseStyle, colors }) => {
+const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDragStart, formatExponents, baseStyle }) => {
     const textRef = React.useRef(null);
 
     React.useLayoutEffect(() => {
@@ -165,7 +165,6 @@ const MatchCard = ({ sq, isSolved, isFailed, disabled, cardShape, handleMatchDra
             id={`sq-el-${sq.id}`}
             className={`quiz-option-match ${sq.type} ${cardShape === 'circle' ? 'circle' : 'square'} ${isDragging ? 'dragging' : ''} ${isFlashing ? 'flash-red' : ''} ${sq.flashGreen ? 'flash-green' : ''} ${isMatched ? 'matched' : ''} ${sq.merging ? 'merging' : ''}`}
             style={{
-                backgroundColor: colors ? colors[sq.pairIndex % colors.length] : undefined,
                 pointerEvents: (isSolved || isFailed || disabled || isMatched || sq.merging) ? 'none' : 'auto',
                 transform: (() => {
                     let s = 1;
@@ -3584,12 +3583,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     if (quizType === 'match') {
         const enableBubbles = data.metadata?.enableBubbles !== false;
         const baseStyle = {
-            fontFamily: data.metadata?.fontFamily,
+            fontFamily: (!data.metadata?.fontFamily || data.metadata?.fontFamily === '"Fira Sans"') ? "'Bangers', cursive, sans-serif" : data.metadata.fontFamily,
             fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
             fontWeight: data.metadata?.fontWeight,
-            fontStyle: data.metadata?.fontStyle,
+            fontStyle: data.metadata?.fontStyle || 'normal',
             textDecoration: data.metadata?.textDecoration,
-            color: data.metadata?.color,
+            color: data.metadata?.color || '#000000',
         };
         return (
             <div className="quiz-player-2 match-mode">
@@ -3623,7 +3622,6 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             handleMatchDragStart={handleMatchDragStart}
                             formatExponents={formatExponents}
                             baseStyle={baseStyle}
-                            colors={colors}
                         />
                     ))}
                 </div>
@@ -3635,12 +3633,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     if (quizType === 'conecta') {
         const enableBubbles = data.metadata?.enableBubbles !== false;
         const baseStyle = {
-            fontFamily: data.metadata?.fontFamily,
+            fontFamily: (!data.metadata?.fontFamily || data.metadata?.fontFamily === '"Fira Sans"') ? "'Bangers', cursive, sans-serif" : data.metadata.fontFamily,
             fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
             fontWeight: data.metadata?.fontWeight,
-            fontStyle: data.metadata?.fontStyle,
+            fontStyle: data.metadata?.fontStyle || 'normal',
             textDecoration: data.metadata?.textDecoration,
-            color: data.metadata?.color,
+            color: data.metadata?.color || '#000000',
         };
         return (
             <div className="quiz-player-2 conecta-mode">
@@ -3803,8 +3801,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     <div
                                         key={idx}
                                         ref={el => slotRefs.current[idx] = el}
-                                        className={`field-player-slot ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''} ${placed ? 'has-placed' : ''}`}
-                                        style={{ minWidth: `${slotWidth}px`, height: '40px', pointerEvents: 'auto', visibility: pendingSelections[idx] ? 'hidden' : 'visible' }}
+                                        className={`field-player-slot ${seg.isDouble ? 'double-star' : ''} ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''} ${placed ? 'has-placed' : ''}`}
+                                        style={{ minWidth: `${slotWidth}px`, height: '42px', pointerEvents: 'auto', visibility: pendingSelections[idx] ? 'hidden' : 'visible' }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleFieldSlotTap(idx);
@@ -3827,13 +3825,6 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                 style={{
                                                     width: '100%',
                                                     height: '100%',
-                                                    backgroundColor: '#8338EC',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '8px',
-                                                    fontSize: '1rem',
-                                                    fontWeight: 800,
-                                                    cursor: 'pointer',
                                                     pointerEvents: 'auto'
                                                 }}
                                             >
@@ -3877,13 +3868,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                     transition={{ type: 'tween', ease: 'easeOut', duration: piece.duration || 0.22 }}
                                     style={{
                                         position: 'absolute',
-                                        backgroundColor: piece.sourceSlotIdx !== undefined ? '#8338EC' : '#3A86FF',
+                                        backgroundColor: piece.sourceSlotIdx !== undefined ? '#8B5CF6' : '#3B82F6',
                                         color: 'white',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        fontSize: '1rem',
-                                        fontWeight: 800,
-                                        boxShadow: piece.sourceSlotIdx !== undefined ? 'none' : '0 4px 0 rgba(0,0,0,0.15)',
+                                        border: '2.5px solid #000000',
+                                        borderRadius: '10px',
+                                        fontFamily: "'Outfit', sans-serif",
+                                        fontSize: '1.05rem',
+                                        fontWeight: 900,
+                                        boxShadow: '3px 3px 0px #000000',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -3902,13 +3894,14 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         top: `${draggedChoice.y}px`,
                                         width: `${draggedChoice.width}px`,
                                         height: `${draggedChoice.height}px`,
-                                        backgroundColor: '#3A86FF',
+                                        backgroundColor: '#3B82F6',
                                         color: 'white',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        fontSize: '1rem',
-                                        fontWeight: 800,
-                                        boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+                                        border: '2.5px solid #000000',
+                                        borderRadius: '12px',
+                                        fontFamily: "'Outfit', sans-serif",
+                                        fontSize: '1.05rem',
+                                        fontWeight: 900,
+                                        boxShadow: '5px 5px 0px #000000',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -3937,7 +3930,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                 {isPlaced ? (
                                                     <div className="field-choice-placeholder-cell"></div>
                                                 ) : (
-                                                    <motion.button
+                                                    <button
                                                         className="field-choice-btn"
                                                         onMouseDown={(e) => {
                                                             e.stopPropagation();
@@ -3951,21 +3944,11 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                                         style={{
                                                             width: '100%',
                                                             height: '100%',
-                                                            backgroundColor: '#3A86FF',
-                                                            color: 'white',
-                                                            border: 'none',
-                                                            borderRadius: '8px',
-                                                            fontSize: '1rem',
-                                                            fontWeight: 800,
-                                                            boxShadow: '0 4px 0 rgba(0,0,0,0.15)',
-                                                            cursor: 'pointer',
                                                             pointerEvents: 'auto'
                                                         }}
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
                                                     >
                                                         {choice.value}
-                                                    </motion.button>
+                                                    </button>
                                                 )}
                                             </div>
                                         );

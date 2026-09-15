@@ -2895,6 +2895,132 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 </div>
                             </div>
 
+                            {/* Equation Banner Sizing, Horizontal/Vertical Padding & Position */}
+                            <div className="menu-group">
+                                <label>Eq Size</label>
+                                <input
+                                    type="number"
+                                    min="12"
+                                    max="56"
+                                    value={element.config?.equationFontSize ?? 28}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, equationFontSize: isNaN(val) ? 28 : Math.max(12, Math.min(56, val)) }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Equation Font Size (12 - 56px)"
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>H-Pad</label>
+                                <input
+                                    type="number"
+                                    min="2"
+                                    max="80"
+                                    value={element.config?.equationPadX ?? Math.max(4, Math.round((element.config?.equationFontSize ?? 28) * 0.72))}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, equationPadX: isNaN(val) ? 10 : Math.max(2, Math.min(80, val)) }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Equation Horizontal Padding (Width)"
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>V-Pad</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="50"
+                                    value={element.config?.equationPadY ?? Math.max(2, Math.round((element.config?.equationFontSize ?? 28) * 0.38))}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, equationPadY: isNaN(val) ? 4 : Math.max(1, Math.min(50, val)) }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Equation Vertical Padding (Height)"
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Eq X</label>
+                                <input
+                                    type="number"
+                                    min="5"
+                                    max="95"
+                                    value={element.config?.equationX ?? (element.config?.orientation === 'horizontal' ? 50 : 65)}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, equationX: isNaN(val) ? 50 : Math.max(5, Math.min(95, val)) }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Equation Horizontal Center Position (%)"
+                                />
+                            </div>
+
+                            <div className="menu-group">
+                                <label>Eq Y</label>
+                                <input
+                                    type="number"
+                                    min="5"
+                                    max="95"
+                                    value={element.config?.equationY ?? (element.config?.orientation === 'horizontal' ? 28 : 45)}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        onChange('cartridge', {
+                                            config: { ...element.config, equationY: isNaN(val) ? 45 : Math.max(5, Math.min(95, val)) }
+                                        });
+                                    }}
+                                    style={{
+                                        width: '50px',
+                                        padding: '4px 6px',
+                                        borderRadius: '8px',
+                                        border: '1.5px solid #CBD5E1',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center'
+                                    }}
+                                    title="Equation Vertical Center Position (%)"
+                                />
+                            </div>
+
                             {/* Bottom (Min) & Top (Max) Numbers */}
                             <div className="menu-group">
                                 <label>Start / Min</label>
@@ -3168,7 +3294,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                             equationX: element.config?.orientation === 'horizontal' ? 50 : 65,
                                             equationY: element.config?.orientation === 'horizontal' ? 28 : 45,
                                             equationRotation: 0,
-                                            equationFontSize: 28
+                                            equationFontSize: 28,
+                                            equationPadX: undefined,
+                                            equationPadY: undefined
                                         }
                                     })}
                                     title="Reset Line and Equation Card Position"

@@ -504,27 +504,34 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
+    background: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 2.5px 2.5px 0px #000000;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 1.3rem;
-    font-weight: bold;
-    color: #4b5563;
-    transition: all 0.2s ease;
+    font-weight: 900;
+    color: #000000;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
     padding: 0;
     line-height: 1;
 }
 
 .popup-modal-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #111827;
-    transform: scale(1.05);
+    background: #ffffff;
+    color: #000000;
+    transform: scale(1.08);
+    box-shadow: 3.5px 3.5px 0px #000000;
+}
+
+.popup-modal-close:active {
+    transform: translate(1.5px, 1.5px);
+    box-shadow: 1px 1px 0px #000000;
 }
 
 .popup-modal-content {

@@ -131,7 +131,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                 type: ELEMENT_TYPES.QUIZ,
                 content: isType ? 'Type Answer' : 'Quiz',
                 metadata: {
-                    fontFamily: '"Fira Sans"',
+                    fontFamily: (isMatch || isConecta) ? "'Bangers', cursive, sans-serif" : '"Fira Sans"',
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
@@ -466,6 +466,10 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                                 }
                                             }
                                         }
+                                    });
+                                    dispatch({
+                                        type: 'SELECT_ELEMENT',
+                                        payload: 'cartridge:explorenl-equation'
                                     });
                                     setShowGameMenu(false);
                                 }}>📈 ExploreNL</button>

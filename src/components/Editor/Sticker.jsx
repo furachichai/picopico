@@ -517,7 +517,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 bottom: (element.metadata?.quizType === 'type') ? '0' : undefined,
                 width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'type') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
                 height: (element.metadata?.quizType === 'chatquiz') ? '85%' : (element.metadata?.quizType === 'type' ? 'auto' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`)),
-                transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : (element.metadata?.quizType === 'type' ? 'none' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${element.scale})`),
+                transform: (element.metadata?.quizType === 'chatquiz') ? 'translate(-50%, -50%)' : (element.metadata?.quizType === 'type' ? 'none' : `translate(-50%, -50%) rotate(${element.rotation || 0}deg) scale(${element.scale ?? 1})`),
                 zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (elementIndex + 1000) : (element.metadata?.quizType === 'type' ? 100 : (element.type === 'quiz' || element.type === 'cartridge' ? (elementIndex + 50) : (elementIndex + 1))))),
             }}
             onMouseDown={(e) => handleStart(e, 'move')}

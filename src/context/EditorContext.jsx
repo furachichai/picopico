@@ -1873,6 +1873,11 @@ const editorReducer = (state, action) => {
 export const EditorProvider = ({ children }) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
 
+    if (typeof window !== 'undefined') {
+        window.__PICO_DISPATCH__ = dispatch;
+        window.__PICO_STATE__ = state;
+    }
+
     return (
         <EditorContext.Provider value={{ state, dispatch }}>
             {children}

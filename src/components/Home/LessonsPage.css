@@ -85,15 +85,17 @@
 }
 
 .lesson-card-preview {
-    width: 90px;
+    width: 98px;
     min-height: 160px;
     flex-shrink: 0;
     position: relative;
     background-color: transparent;
+    overflow: hidden;
     border-right: 3.5px solid #000000;
 }
 
 .lesson-card-preview > div {
+    width: 100% !important;
     height: 100% !important;
 }
 

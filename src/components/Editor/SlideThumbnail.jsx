@@ -3,6 +3,8 @@ import { resolveAssetUrl } from '../../utils/assetUrl';
 import Sticker from './Sticker';
 import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { deserializeLevels, DEFAULT_LEVELS } from '../../cartridges/Potiondas/Potiondas';
+import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
+import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 
 export const PotiondasThumbnail = ({ config }) => {
     let levels = DEFAULT_LEVELS;
@@ -53,8 +55,9 @@ export const PotiondasThumbnail = ({ config }) => {
 
 const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false, hideTextAndShapes = false, cover = false }) => {
     const containerRef = useRef(null);
-    const [scale, setScale] = useState(1);
-    const shouldFilterOverlays = hideTextAndBalloons || hideTextAndShapes;
+    const [scale, setScale] = useState(cover ? 0.28 : 0.5);
+    const shouldFilterText = hideTextAndBalloons || hideTextAndShapes;
+    const shouldFilterShapes = hideTextAndShapes;
 
     // Base resolution for the slide (matching Canvas.jsx)
     const BASE_WIDTH = 360;
@@ -64,6 +67,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
         const updateScale = () => {
             if (!containerRef.current) return;
             const { width: containerWidth, height: containerHeight } = containerRef.current.getBoundingClientRect();
+            if (!containerWidth || !containerHeight) return;
 
             const scaleX = containerWidth / BASE_WIDTH;
             const scaleY = containerHeight / BASE_HEIGHT;
@@ -86,6 +90,13 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
         return () => observer.disconnect();
     }, [cover]);
 
+    const rawBg = slide?.background || '';
+    const isColor = rawBg.startsWith('#') || rawBg.startsWith('rgb');
+    const isUrlOrGradient = !isColor && (rawBg.includes('url(') || rawBg.includes('gradient') || rawBg.startsWith('/') || rawBg.startsWith('http') || rawBg.startsWith('data:'));
+    const resolvedBg = isUrlOrGradient
+        ? (rawBg.includes('url(') || rawBg.includes('gradient') ? resolveAssetUrl(rawBg) : `url("${resolveAssetUrl(rawBg)}")`)
+        : rawBg;
+
     return (
         <div
             ref={containerRef}
@@ -94,7 +105,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                 height,
                 position: 'relative',
                 overflow: 'hidden',
-                backgroundColor: 'transparent'
+                backgroundColor: 'transparent',
+                pointerEvents: 'none'
             }}
         >
             <div
@@ -111,7 +123,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                 }}
             >
                 {/* Background Layer */}
-                {slide.background && (slide.background.includes('url') || slide.background.includes('gradient')) && (
+                {isUrlOrGradient && (
                     <div
                         style={{
                             position: 'absolute',
@@ -131,18 +143,18 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                 left: 0,
                                 width: '100%',
                                 height: '100%',
-                                backgroundImage: slide.background ? resolveAssetUrl(slide.background) : slide.background,
-                                backgroundSize: slide.backgroundSettings?.sizeMode === 'custom'
-                                    ? `${slide.backgroundSettings?.size ?? 100}%`
-                                    : (slide.backgroundSettings?.sizeMode || 'cover'),
-                                backgroundPosition: `${slide.backgroundSettings?.positionX ?? 50}% ${slide.backgroundSettings?.positionY ?? 50}%`,
+                                backgroundImage: resolvedBg,
+                                backgroundSize: slide?.backgroundSettings?.sizeMode === 'custom'
+                                    ? `${slide?.backgroundSettings?.size ?? 100}%`
+                                    : (slide?.backgroundSettings?.sizeMode || 'cover'),
+                                backgroundPosition: `${slide?.backgroundSettings?.positionX ?? 50}% ${slide?.backgroundSettings?.positionY ?? 50}%`,
                                 backgroundRepeat: 'no-repeat',
-                                opacity: slide.backgroundSettings?.opacity ?? 1,
-                                filter: `grayscale(${slide.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide.backgroundSettings?.brightness ?? 100}%) blur(${slide.backgroundSettings?.blur ?? 0}px)`,
-                                transform: `scale(${(slide.backgroundSettings?.flipX ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(slide.backgroundSettings?.flipY ? -1 : 1) * ((slide.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`,
+                                opacity: slide?.backgroundSettings?.opacity ?? 1,
+                                filter: `grayscale(${slide?.backgroundSettings?.grayscale ? 100 : 0}%) brightness(${slide?.backgroundSettings?.brightness ?? 100}%) blur(${slide?.backgroundSettings?.blur ?? 0}px)`,
+                                transform: `scale(${(slide?.backgroundSettings?.flipX ? -1 : 1) * ((slide?.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)}, ${(slide?.backgroundSettings?.flipY ? -1 : 1) * ((slide?.backgroundSettings?.blur ?? 0) > 0 ? 1.05 : 1)})`,
                             }}
                         />
-                        {slide.backgroundSettings?.grayscale && slide.backgroundSettings?.tintColor && slide.backgroundSettings.tintColor !== 'transparent' && (
+                        {slide?.backgroundSettings?.grayscale && slide?.backgroundSettings?.tintColor && slide?.backgroundSettings.tintColor !== 'transparent' && (
                             <div
                                 style={{
                                     position: 'absolute',
@@ -157,7 +169,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                         )}
                     </div>
                 )}
-                {slide.background && !slide.background.includes('url') && !slide.background.includes('gradient') && (
+                {!isUrlOrGradient && rawBg && (
                     <div
                         style={{
                             position: 'absolute',
@@ -165,7 +177,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundColor: slide.background,
+                            backgroundColor: rawBg,
                             zIndex: 0
                         }}
                     />
@@ -178,28 +190,33 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            zIndex: 0,
-                            pointerEvents: 'none',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px'
+                            zIndex: 30,
+                            pointerEvents: 'none'
                         }}
                     >
                         {slide.cartridge.type === 'SwipeSorter' ? (
                             <SwipeSorter config={slide.cartridge.config} preview={true} />
                         ) : slide.cartridge.type === 'Potiondas' ? (
                             <PotiondasThumbnail config={slide.cartridge.config} />
+                        ) : (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? (
+                            <ExloreNLCartridge config={slide.cartridge.config} preview={false} readOnly={true} />
+                        ) : slide.cartridge.type === 'Balanza' ? (
+                            <BalanzaCartridge config={slide.cartridge.config} />
                         ) : (
-                            <>
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px'
+                            }}>
                                 <div style={{ fontSize: '48px', opacity: 0.7 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && '🍕'}
                                     {slide.cartridge.type === 'FractionSlicer' && '🔪'}
                                     {slide.cartridge.type === 'PEMDAS' && '🧮'}
                                     {slide.cartridge.type === 'AlgeBros' && '📐'}
-                                    {slide.cartridge.type === 'Balanza' && '⚖️'}
-                                    {(slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') && '📈'}
                                     {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter', 'AlgeBros', 'Balanza', 'ExploreNL', 'ExloreNL'].includes(slide.cartridge.type) && '🎮'}
                                 </div>
                                 <div style={{
@@ -218,34 +235,35 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                                     {(slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') && 'EXPLORENL'}
                                     {!['FractionAlpha', 'FractionSlicer', 'PEMDAS', 'Potiondas', 'SwipeSorter', 'AlgeBros', 'Balanza', 'ExploreNL', 'ExloreNL'].includes(slide.cartridge.type) && 'GAME'}
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
                 )}
-                {slide.elements
+                {(slide.elements || [])
                     .filter(el => {
-                        if (!shouldFilterOverlays) return true;
-                        // Do not render text
-                        if (['text', 'balloon', 'banner', 'collectible', 'quiz', 'result_field', 'emoji'].includes(el.type)) {
-                            return false;
+                        if (shouldFilterText) {
+                            if (['text', 'balloon', 'quiz', 'result_field', 'emoji'].includes(el.type)) {
+                                return false;
+                            }
+                            if (['isticker', 'popup', 'game'].includes(el.type)) {
+                                return false;
+                            }
                         }
-                        // Do not render shapes, symbols, lines, or number lines
-                        if (el.type === 'line' || el.type === 'number_line') {
-                            return false;
-                        }
-                        if (el.metadata?.isSymbol || el.metadata?.symbolType || el.metadata?.isShape) {
-                            return false;
-                        }
-                        // Do not render interactive widgets or popups
-                        if (['isticker', 'popup', 'game'].includes(el.type)) {
-                            return false;
+                        if (shouldFilterShapes) {
+                            if (el.type === 'line' || el.type === 'number_line' || el.type === 'banner') {
+                                return false;
+                            }
+                            if (el.metadata?.isSymbol || el.metadata?.symbolType || el.metadata?.isShape) {
+                                return false;
+                            }
                         }
                         return true;
                     })
-                    .map(element => (
+                    .map((element, idx) => (
                     <Sticker
                         key={element.id}
                         element={element}
+                        elementIndex={idx}
                         isSelected={false}
                         readOnly={true} // Assuming Sticker might support this or we just pass no-ops
                         onSelect={() => { }}

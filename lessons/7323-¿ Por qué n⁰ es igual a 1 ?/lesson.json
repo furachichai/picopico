@@ -1,0 +1,3646 @@
+{
+  "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+  "title": "¿ Por qué n⁰ es igual a 1 ?",
+  "slides": [
+    {
+      "id": "slide-1789010029868",
+      "background": "url(\"/src/assets/backgrounds/bkg_giant_pesto_002_titlecard.png\")",
+      "elements": [
+        {
+          "id": "el-1789128420918-12zb87qsk",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 33.05555555555556,
+          "y": 76.328125,
+          "width": 45.55555555555556,
+          "height": 23.28125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-square",
+            "symbolColor": "#8B5CF6",
+            "opacity": 0.72
+          }
+        },
+        {
+          "id": "el-1789128457562-ew07b4yed",
+          "type": "text",
+          "content": "<font color=\"#fde74c\"><b>Why n⁰ equals 1</b></font>",
+          "x": 32.77777777777778,
+          "y": 77.8125,
+          "width": 23.33288323492181,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.6669667863077007,
+          "metadata": {
+            "textAlign": "left",
+            "fontFamily": "Nunito",
+            "fontSize": 21,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1789128616137-yszg39wtz",
+          "type": "text",
+          "content": "<font color=\"#ffffff\" style=\"background-color: rgb(0, 0, 0);\"> exponents </font>",
+          "x": 24.722222222222218,
+          "y": 69.0625,
+          "width": 28.888888888888886,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Source Sans 3\"",
+            "color": "#000000"
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1788656023630",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1788656169138",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_afraid_trembling.png",
+          "x": 96.94444444444444,
+          "y": 89.53125,
+          "width": 40,
+          "height": 31.83609958506224,
+          "rotation": 0,
+          "scale": 1.1467647173650777,
+          "metadata": {
+            "width": 40,
+            "height": 31.83609958506224,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788656114407",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_pointing_side.png",
+          "x": 17.77777777777778,
+          "y": 69.6875,
+          "width": 40,
+          "height": 20.376106194690266,
+          "rotation": 5.545355566663645,
+          "scale": 3.0437158709433443,
+          "metadata": {
+            "width": 40,
+            "height": 20.376106194690266,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788656023631",
+          "type": "balloon",
+          "content": "Hold still.<div>I will make you</div><div><b>twice</b> your size.</div>",
+          "x": 41.38888888888889,
+          "y": 31.25,
+          "width": 65,
+          "height": 24.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -34,
+              "y": 101
+            }
+          }
+        },
+        {
+          "id": "el-1788656023632",
+          "type": "balloon",
+          "content": "What?! Why?!",
+          "x": 74.99999999999999,
+          "y": 49.5,
+          "width": 37.77777777777778,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 18,
+            "tailPos": {
+              "x": 13,
+              "y": 71
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.55
+      }
+    },
+    {
+      "id": "slide-1788656817801",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "elements": [
+        {
+          "id": "el-1788656825659",
+          "type": "image",
+          "content": "/src/assets/objects/item_ray_gun_empty.png",
+          "x": 67.5,
+          "y": 58.4375,
+          "width": 40,
+          "height": 15.703125000000002,
+          "rotation": -21.17471923394747,
+          "scale": 4.154882361357248,
+          "metadata": {
+            "width": 40,
+            "height": 15.703125000000002,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656861120",
+          "type": "result_field",
+          "content": "",
+          "x": 65,
+          "y": 45.46875,
+          "width": 20,
+          "height": 10,
+          "rotation": -19.90865449894322,
+          "scale": 0.5000611370020522,
+          "metadata": {
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656944769",
+          "type": "text",
+          "content": "<b>2</b>",
+          "x": 62.77777777777778,
+          "y": 48.59375,
+          "width": 10,
+          "height": 5,
+          "rotation": -23.617328879798478,
+          "scale": 1.6633605833315632,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Nunito Sans\""
+          }
+        },
+        {
+          "id": "el-1788656853210",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 80,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "autonext": false
+          }
+        },
+        {
+          "id": "el-1789000462278",
+          "type": "banner",
+          "content": "<span style=\"font-style: normal;\"><font color=\"#2196f3\">What </font><span style=\"font-weight: normal;\"><font color=\"#4caf50\">power</font></span><font color=\"#2196f3\"> should&nbsp; we set to make Pesto </font><font color=\"#4caf50\">2 times</font><font color=\"#2196f3\"> bigger?</font></span>",
+          "x": 52.03163216605533,
+          "y": 24.954337591410656,
+          "width": 50.463964662597306,
+          "height": 11.112554761138478,
+          "rotation": -2.837661902478459,
+          "scale": 1.58965446909887,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 15,
+            "fontStyle": "italic",
+            "fontWeight": "bold",
+            "color": "#69F05E",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "hideTape": true,
+            "skin": "comic"
+          }
+        },
+        {
+          "id": "el-1789000905658",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> Challenge </span></font>",
+          "x": 66.80555555555556,
+          "y": 15.15625,
+          "width": 43.611111111111114,
+          "height": 5,
+          "rotation": -2.6721656986168796,
+          "scale": 1.5516248454219699,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif"
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.24
+      },
+      "autonext": false
+    },
+    {
+      "id": "slide-1788656023631",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_004.png\")",
+      "elements": [
+        {
+          "id": "el-1788817373304-ulr3m3ro9",
+          "type": "number_line",
+          "x": 88.52777777777776,
+          "y": 36.53125,
+          "width": 11.396734562540095,
+          "height": 41.171013314249564,
+          "rotation": 0,
+          "scale": 4.08580008266073,
+          "metadata": {
+            "orientation": "vertical",
+            "startNumber": 0,
+            "endNumber": 8,
+            "step": 1,
+            "showNumbers": true,
+            "numberColorMode": "white",
+            "showArrows": false,
+            "symbolColor": "#8B5CF6",
+            "thickness": 3,
+            "manualZ": true,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656371040",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_scratches_head.png",
+          "x": 76.94444444444444,
+          "y": 82.34375,
+          "width": 40,
+          "height": 31.58571428571429,
+          "rotation": 0,
+          "scale": 0.9601528468975652,
+          "metadata": {
+            "width": 40,
+            "height": 31.58571428571429,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656405383",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_scratches_head.png",
+          "x": 76.3888888888889,
+          "y": 87.03125,
+          "width": 40,
+          "height": 31.58571428571429,
+          "rotation": 0,
+          "scale": 0.6245828389884284,
+          "metadata": {
+            "width": 40,
+            "height": 31.58571428571429,
+            "opacity": 0.41
+          }
+        },
+        {
+          "id": "el-1788657365713-1",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_side.png",
+          "x": 20.61111111111111,
+          "y": 78.7198093220339,
+          "width": 40,
+          "height": 41.87288135593221,
+          "rotation": 4.521172054668,
+          "scale": 0.9974806328741693,
+          "metadata": {
+            "width": 40,
+            "height": 41.87288135593221,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788811647671",
+          "type": "image",
+          "content": "/src/assets/objects/part_ray_02.png",
+          "x": 51.944444444444436,
+          "y": 72.34375,
+          "width": 40,
+          "height": 5.650529500756429,
+          "rotation": 6.03687567470395,
+          "scale": 0.6800931139158474,
+          "metadata": {
+            "width": 40,
+            "height": 5.650529500756429,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789079692706-0-vojahm",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_scratches_head.png",
+          "x": 76.61111111111113,
+          "y": 91.28125,
+          "width": 40,
+          "height": 31.58571428571429,
+          "rotation": 0,
+          "scale": 0.34269167639136844,
+          "metadata": {
+            "width": 40,
+            "height": 31.58571428571429,
+            "opacity": 0.56
+          }
+        },
+        {
+          "id": "el-1789076699077",
+          "type": "banner",
+          "content": "<b>2¹=2</b>",
+          "x": 42.22222222222222,
+          "y": 21.71875,
+          "width": 42.77777777777778,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#fff875",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1788658500525",
+          "type": "balloon",
+          "content": "Wow!<div>\nYour ray gun worked!</div>",
+          "x": 55.27777777777777,
+          "y": 42.8125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 30,
+              "y": 86
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {
+        "grayscale": false,
+        "tintColor": "transparent",
+        "opacity": 0.38,
+        "blur": 0
+      }
+    },
+    {
+      "id": "slide-1788811882121",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_010.png\")",
+      "elements": [
+        {
+          "id": "el-1788811882121-vs0v64ndb",
+          "type": "image",
+          "content": "/src/assets/objects/item_ray_gun_empty.png",
+          "x": 63.333333333333336,
+          "y": 55.46875,
+          "width": 40,
+          "height": 15.703125000000002,
+          "rotation": -21.17471923394747,
+          "scale": 4.154882361357248,
+          "metadata": {
+            "width": 40,
+            "height": 15.703125000000002,
+            "locked": true,
+            "groupId": "group-1789002375370-ja0ps3"
+          }
+        },
+        {
+          "id": "el-1788811882121-zlvs8as0i",
+          "type": "result_field",
+          "content": "",
+          "x": 61.11111111111111,
+          "y": 42.65625,
+          "width": 20,
+          "height": 10,
+          "rotation": -19.90865449894322,
+          "scale": 0.5000611370020522,
+          "metadata": {
+            "locked": true,
+            "groupId": "group-1789002375370-ja0ps3"
+          }
+        },
+        {
+          "id": "el-1788811882121-jsfytfzec",
+          "type": "text",
+          "content": "<b>2</b>",
+          "x": 59.44444444444444,
+          "y": 45.625,
+          "width": 10,
+          "height": 5,
+          "rotation": -23.617328879798478,
+          "scale": 1.7441861129164582,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Nunito Sans\"",
+            "groupId": "group-1789002375370-ja0ps3"
+          }
+        },
+        {
+          "id": "el-1788811882121-dyl0xc5gf",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 79.53125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789002346871-0-a0nkeg",
+          "type": "banner",
+          "content": "<span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\">What </font><font color=\"#4caf50\" style=\"font-style: normal;\">power</font><font color=\"#2196f3\" style=\"font-style: normal;\"> should&nbsp; we set to make Pesto&nbsp;</font></span><div><span style=\"font-weight: normal;\"><font color=\"#4caf50\" style=\"font-style: normal;\">4 times</font><font color=\"#2196f3\"><span style=\"font-style: normal;\"> bigger?</span></font></span></div>",
+          "x": 51.976076610499774,
+          "y": 22.641837591410656,
+          "width": 50.463964662597306,
+          "height": 11.112554761138478,
+          "rotation": -2.837661902478459,
+          "scale": 1.58965446909887,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 15,
+            "fontStyle": "italic",
+            "fontWeight": "bold",
+            "color": "#69F05E",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "hideTape": true
+          }
+        }
+      ],
+      "order": 4,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": false,
+        "tintColor": "transparent",
+        "opacity": 0.75
+      }
+    },
+    {
+      "id": "slide-1788656605665",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1788662656025-0",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_maniac_1.png",
+          "x": 23.55555555555555,
+          "y": 85.23742012779553,
+          "width": 40,
+          "height": 46.150159744408946,
+          "rotation": 0,
+          "scale": 0.6343796008135135,
+          "metadata": {
+            "width": 40,
+            "height": 46.150159744408946
+          }
+        },
+        {
+          "id": "el-1788817428964-1dsmifk28",
+          "type": "number_line",
+          "x": 93.66666666666664,
+          "y": 57.15625,
+          "width": 15,
+          "height": 41.171013314249564,
+          "rotation": 0,
+          "scale": 2.1821804631553983,
+          "metadata": {
+            "orientation": "vertical",
+            "startNumber": 0,
+            "endNumber": 8,
+            "step": 1,
+            "showNumbers": true,
+            "numberColorMode": "white",
+            "showArrows": false,
+            "symbolColor": "#8B5CF6",
+            "thickness": 3
+          }
+        },
+        {
+          "id": "el-1788656605665-i7ikp3m9z",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_shocked_surprised_2.png",
+          "x": 70.55555555555556,
+          "y": 78.4375,
+          "width": 40,
+          "height": 25.155737704918035,
+          "rotation": 0,
+          "scale": 1.780399320502552,
+          "metadata": {
+            "width": 40,
+            "height": 25.155737704918035,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788656605665-j1dbwguxm",
+          "type": "balloon",
+          "content": "Please, stop!",
+          "x": 51.86111111111111,
+          "y": 87.4375,
+          "width": 34.72222222222222,
+          "height": 10.9375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 27,
+              "y": -46
+            },
+            "locked": false
+          }
+        },
+        {
+          "id": "el-1789076822733-0-i4bnjj",
+          "type": "banner",
+          "content": "2² = 2×2 = <font color=\"#2196f3\">4</font>",
+          "x": 50.58333333333333,
+          "y": 25.375,
+          "width": 59.166666666666664,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#fff875",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1788656605665-hf513851t",
+          "type": "balloon",
+          "content": "<div>Now you're <font color=\"#2196f3\"><b>4</b></font> times<br></div><div>your size!</div>",
+          "x": 40.05555555555556,
+          "y": 49.34375,
+          "width": 65,
+          "height": 22.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "tailPos": {
+              "x": -31,
+              "y": 149
+            }
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)",
+        "opacity": 0.25
+      },
+      "cartridge": null
+    },
+    {
+      "id": "slide-1788657132371",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1788657132371-uwnpvui9c",
+          "type": "image",
+          "content": "/src/assets/objects/item_ray_gun_empty.png",
+          "x": 66.11111111111111,
+          "y": 50.78125,
+          "width": 40,
+          "height": 15.703125000000002,
+          "rotation": -21.17471923394747,
+          "scale": 4.154882361357248,
+          "metadata": {
+            "width": 40,
+            "height": 15.703125000000002,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788657132371-shb3xhcj7",
+          "type": "result_field",
+          "content": "",
+          "x": 63.888888888888886,
+          "y": 37.96875,
+          "width": 20,
+          "height": 10,
+          "rotation": -19.90865449894322,
+          "scale": 0.5000611370020522,
+          "metadata": {
+            "locked": true,
+            "hidden": false
+          }
+        },
+        {
+          "id": "el-1788657132371-3igqqumbb",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 80.78125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788657132371-bxx18rplr",
+          "type": "text",
+          "content": "<b>2</b>",
+          "x": 62.22222222222222,
+          "y": 40.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": -23.617328879798478,
+          "scale": 1.7441861129164582,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Nunito Sans\""
+          }
+        },
+        {
+          "id": "el-1789007356947-0-tl98nk",
+          "type": "banner",
+          "content": "<span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\">What </font><font color=\"#4caf50\" style=\"font-style: normal;\">power</font><font color=\"#2196f3\" style=\"font-style: normal;\"> should&nbsp; we set to make Pesto</font></span><div><span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\"> </font><font color=\"#4caf50\" style=\"font-style: normal;\">8 times</font><font color=\"#2196f3\"><span style=\"font-style: normal;\"> bigger?</span></font></span></div>",
+          "x": 50.8094099438331,
+          "y": 23.454337591410656,
+          "width": 50.463964662597306,
+          "height": 11.112554761138478,
+          "rotation": -2.837661902478459,
+          "scale": 1.58965446909887,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 15,
+            "fontStyle": "italic",
+            "fontWeight": "bold",
+            "color": "#69F05E",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "hideTape": true
+          }
+        }
+      ],
+      "order": 6,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.28,
+        "grayscale": true,
+        "tintColor": "rgba(253, 224, 71, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656680865",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_007.png\")",
+      "elements": [
+        {
+          "id": "el-1788656692038",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_looking_down_worried_scared.png",
+          "x": 101.38888888888887,
+          "y": 60.15625,
+          "width": 40,
+          "height": 27.44505494505495,
+          "rotation": 0,
+          "scale": 3.205069332536531,
+          "metadata": {
+            "width": 40,
+            "height": 27.44505494505495,
+            "flipX": true,
+            "locked": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1788813837988",
+          "type": "image",
+          "content": "/src/assets/characters/yara_points_up_signals_urgent.png",
+          "x": 25.555555555555557,
+          "y": 84.84375,
+          "width": 40,
+          "height": 54.32008368200837,
+          "rotation": 0,
+          "scale": 0.47591864105870124,
+          "metadata": {
+            "width": 40,
+            "height": 54.32008368200837,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1788656680865-evp5zs673",
+          "type": "balloon",
+          "content": "I want to go back to normal!",
+          "x": 57.972222222222214,
+          "y": 82.59375,
+          "width": 34.72222222222222,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 22,
+              "y": -73
+            }
+          }
+        },
+        {
+          "id": "el-1788656680865-m7jnz8res",
+          "type": "balloon",
+          "content": "<div><div>You're <b><font color=\"#2196f3\">8</font></b> times taller now.</div></div>",
+          "x": 26.027777777777775,
+          "y": 51.84375,
+          "width": 51.94444444444445,
+          "height": 18.75,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "tailPos": {
+              "x": -4,
+              "y": 108
+            }
+          }
+        },
+        {
+          "id": "el-1788817475650-rro7cne74",
+          "type": "number_line",
+          "x": 93.1111111111111,
+          "y": 57.15625,
+          "width": 15,
+          "height": 41.171013314249564,
+          "rotation": 0,
+          "scale": 2.1821804631553983,
+          "metadata": {
+            "orientation": "vertical",
+            "startNumber": 0,
+            "endNumber": 8,
+            "step": 1,
+            "showNumbers": true,
+            "numberColorMode": "white",
+            "showArrows": false,
+            "symbolColor": "#8B5CF6",
+            "thickness": 3
+          }
+        },
+        {
+          "id": "el-1789076879454-0-uab9sy",
+          "type": "banner",
+          "content": "2³ = 2×2×2 = <font color=\"#2196f3\">8</font>",
+          "x": 43.5,
+          "y": 21.46875,
+          "width": 68.33333333333333,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#fff875",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 7,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(103, 232, 249, 0.4)",
+        "opacity": 0.3
+      },
+      "cartridge": null,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "slide-1788656023632",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1788660510321",
+          "type": "image",
+          "content": "/src/assets/objects/whole_mitten_thumbs_up.png",
+          "x": 36.11111111111112,
+          "y": 49.6875,
+          "width": 40,
+          "height": 12.272727272727273,
+          "rotation": -12.073138187380778,
+          "scale": 6.917960139070901,
+          "metadata": {
+            "width": 40,
+            "height": 12.272727272727273,
+            "locked": true,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1788660596275-867wcp69g",
+          "type": "image",
+          "content": "/src/assets/objects/item_ray_gun_empty.png",
+          "x": 67.83333333333334,
+          "y": 52.78125,
+          "width": 40,
+          "height": 15.703125000000002,
+          "rotation": -21.17471923394747,
+          "scale": 4.154882361357248,
+          "metadata": {
+            "width": 40,
+            "height": 15.703125000000002,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788660653877-4wbgrcjw1",
+          "type": "text",
+          "content": "<b>2</b>",
+          "x": 64.22222222222223,
+          "y": 42.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": -23.617328879798478,
+          "scale": 1.7441861129164582,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Nunito Sans\""
+          }
+        },
+        {
+          "id": "el-1788660704309-z805hg8fl",
+          "type": "text",
+          "content": "<b><font color=\"#f57c00\">0</font></b>",
+          "x": 65.94444444444446,
+          "y": 40.09375,
+          "width": 10,
+          "height": 5,
+          "rotation": -23.617328879798478,
+          "scale": 1.7441861129164582,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Nunito Sans\"",
+            "fontSize": 10
+          }
+        },
+        {
+          "id": "el-1788656023831",
+          "type": "balloon",
+          "content": "Don't worry!\n\nI'll set the power to <b><font color=\"#f57c00\">0</font></b>.",
+          "x": 46.94444444444444,
+          "y": 83.515625,
+          "width": 65,
+          "height": 19.53125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 18,
+            "tailPos": {
+              "x": -141,
+              "y": -39
+            }
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1788656023633",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_007.png\")",
+      "elements": [
+        {
+          "id": "el-1788825659436",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_jumping_scared.png",
+          "x": 60.83333333333333,
+          "y": 70.15625,
+          "width": 40,
+          "height": 26.180297397769515,
+          "rotation": 0,
+          "scale": 2.3428921647318166,
+          "metadata": {
+            "width": 40,
+            "height": 26.180297397769515,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1788660831545-uqy7w7dpt",
+          "type": "balloon",
+          "content": "Zero?!\nI'll disappear!",
+          "x": 45.333333333333336,
+          "y": 26.6875,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 9,
+      "backgroundSettings": {
+        "opacity": 0.36
+      }
+    },
+    {
+      "id": "slide-1788656023634",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_003.png\")",
+      "elements": [
+        {
+          "id": "el-1788660903643",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_pointing_side.png",
+          "x": 36.94444444444444,
+          "y": 67.5,
+          "width": 40,
+          "height": 20.376106194690266,
+          "rotation": -22.965306454610584,
+          "scale": 3.74495119607322,
+          "metadata": {
+            "width": 40,
+            "height": 20.376106194690266,
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1788660929835-pbyqsc185",
+          "type": "balloon",
+          "content": "2⁰ will just&nbsp;<div>get you back\n to size 1.</div>",
+          "x": 66.58333333333333,
+          "y": 43.0625,
+          "width": 49.166666666666664,
+          "height": 18.4375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 23,
+            "tailPos": {
+              "x": -79,
+              "y": 101
+            }
+          }
+        },
+        {
+          "id": "el-1788656024032",
+          "type": "balloon",
+          "content": "What a drama queen!",
+          "x": 33.8888888888889,
+          "y": 24.65625,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -24,
+              "y": 90
+            }
+          }
+        }
+      ],
+      "order": 10,
+      "backgroundSettings": {
+        "opacity": 0.35
+      }
+    },
+    {
+      "id": "slide-1788660973448",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [
+        {
+          "id": "el-1788817505069-ju0owlnaq",
+          "type": "number_line",
+          "x": 88.11111111111117,
+          "y": 21.140625000000007,
+          "width": 15,
+          "height": 42.53146450063184,
+          "rotation": 0,
+          "scale": 3.8622054095621032,
+          "metadata": {
+            "orientation": "vertical",
+            "startNumber": 0,
+            "endNumber": 8,
+            "step": 1,
+            "showNumbers": true,
+            "numberColorMode": "white",
+            "showArrows": false,
+            "symbolColor": "#8B5CF6",
+            "thickness": 3,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788661024673",
+          "type": "image",
+          "content": "/src/assets/characters/pesto jumping.png",
+          "x": 81.38888888888889,
+          "y": 85.9375,
+          "width": 40,
+          "height": 26.642384105960264,
+          "rotation": 0,
+          "scale": 0.9678122537759514,
+          "metadata": {
+            "width": 40,
+            "height": 26.642384105960264,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1788661060195",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_laughing.png",
+          "x": 33.333333333333336,
+          "y": 75.46875,
+          "width": 40,
+          "height": 55.42207792207792,
+          "rotation": 0,
+          "scale": 0.8053455839033453,
+          "metadata": {
+            "width": 40,
+            "height": 55.42207792207792
+          }
+        },
+        {
+          "id": "el-1788661111372-nmpnhy52s",
+          "type": "balloon",
+          "content": "Of course!<br>",
+          "x": 21.02777777777777,
+          "y": 91.6875,
+          "width": 43.611111111111114,
+          "height": 14.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 22,
+            "tailPos": {
+              "x": 11,
+              "y": -61
+            },
+            "lineHeight": 1.2
+          }
+        },
+        {
+          "id": "el-1788660973448-psfrnsaqc",
+          "type": "balloon",
+          "content": "I'm still alive!",
+          "x": 69.16666666666666,
+          "y": 50,
+          "width": 48.333333333333336,
+          "height": 13.593749999999998,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 14,
+              "y": 87
+            }
+          }
+        },
+        {
+          "id": "el-1789076961912-0-pkhu5i",
+          "type": "banner",
+          "content": "2⁰ = <font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">1</span></font>",
+          "x": 45.666666666666664,
+          "y": 27.28125,
+          "width": 54.99999999999999,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#fff875",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 11,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent",
+        "opacity": 0.39
+      },
+      "cartridge": null
+    },
+    {
+      "id": "slide-1788656023639",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1789132175477-x1xyl1knt",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_starstruck.png",
+          "x": 74.44444444444444,
+          "y": 72.5,
+          "width": 40,
+          "height": 27.813653136531364,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 27.813653136531364,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1789132221786-2g79390l9",
+          "type": "image",
+          "content": "/src/assets/characters/yara_leaning_2_with_shadow.png",
+          "x": 10.833333333333336,
+          "y": 57.1875,
+          "width": 40,
+          "height": 56.56250000000001,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 56.56250000000001,
+            "category": "characters",
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1788656024531",
+          "type": "balloon",
+          "content": "I don't understand why<div>2⁰ is 1</div>",
+          "x": 63.333333333333336,
+          "y": 36.953125,
+          "width": 65,
+          "height": 19.21875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 21,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 12
+    },
+    {
+      "id": "slide-1789138747845",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1789138801502-b8ahv1ox0",
+          "type": "image",
+          "content": "/src/assets/characters/yara_looks_back_smirk.png",
+          "x": 23.333333333333332,
+          "y": 78.4375,
+          "width": 40,
+          "height": 36.409090909090914,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 36.409090909090914,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789139438880-a6zkqopxw",
+          "type": "balloon",
+          "content": "<font color=\"#2196f3\"><b>Play</b></font> around and see what you <font color=\"#2196f3\"><b>notice</b></font>.",
+          "x": 25,
+          "y": 46.09375,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 0,
+              "y": 78
+            }
+          }
+        }
+      ],
+      "order": 13,
+      "cartridge": {
+        "type": "ExploreNL",
+        "config": {
+          "orientation": "vertical",
+          "numbersSide": "left",
+          "pointerSide": "right",
+          "startNumber": 0,
+          "endNumber": 5,
+          "bottomNumber": 0,
+          "topNumber": 5,
+          "step": 1,
+          "thickness": 3,
+          "showArrows": false,
+          "currentValue": 5,
+          "equationTemplate": "2!n =",
+          "lineColor": "#6366F1",
+          "numberColor": "#1E293B",
+          "pointerColor": "#F57C00",
+          "equationColor": "#0F172A",
+          "equationBg": "#FFFFFF",
+          "equationBorder": "#6366F1",
+          "equationFontSize": 47,
+          "nlX": 61,
+          "nlY": 69,
+          "nlLength": 386,
+          "equationX": 54,
+          "equationY": 25,
+          "equationRotation": 0,
+          "swapSides": false
+        }
+      },
+      "backgroundSettings": {
+        "opacity": 0.25,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1789138853987",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1789138881229-hh1dtxp0i",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 86.5625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Results get multiplied by 2",
+              "Results get divided by 2"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789138901235-ilflwqwun",
+          "type": "banner",
+          "content": "What HAPPENS AS <font color=\"#f57c00\">exponents</font> MOVE <font color=\"#f57c00\">DOWN</font>?",
+          "x": 53.47222222222223,
+          "y": 22.656249999999993,
+          "width": 74.30562980157366,
+          "height": 17.719442003761646,
+          "rotation": -4.475477607749696,
+          "scale": 0.8571402388422985,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789139352712-aafzt8hz7",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "x": 21.944444444444443,
+          "y": 63.28125,
+          "width": 40,
+          "height": 26.422018348623855,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 26.422018348623855,
+            "category": "characters",
+            "flipX": true
+          }
+        }
+      ],
+      "order": 14,
+      "cartridge": {
+        "type": "ExploreNL",
+        "config": {
+          "orientation": "vertical",
+          "numbersSide": "left",
+          "pointerSide": "right",
+          "startNumber": 0,
+          "endNumber": 5,
+          "bottomNumber": 0,
+          "topNumber": 5,
+          "step": 1,
+          "thickness": 3,
+          "showArrows": false,
+          "currentValue": 5,
+          "equationTemplate": "2!n =",
+          "lineColor": "#6366F1",
+          "numberColor": "#1E293B",
+          "pointerColor": "#F57C00",
+          "equationColor": "#0F172A",
+          "equationBg": "#FFFFFF",
+          "equationBorder": "#6366F1",
+          "equationFontSize": 28,
+          "nlX": 59,
+          "nlY": 54,
+          "nlLength": 275,
+          "equationX": 26,
+          "equationY": 43,
+          "equationRotation": 0,
+          "swapSides": false
+        }
+      },
+      "backgroundSettings": {
+        "opacity": 0.25,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656023641",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+      "elements": [
+        {
+          "id": "el-1788825728792",
+          "type": "text",
+          "content": "2³=",
+          "x": 43.75,
+          "y": 20.312500000000004,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "normal"
+          }
+        },
+        {
+          "id": "el-1789139507509-6c9qu1wwx",
+          "type": "image",
+          "content": "/src/assets/characters/yara_examining_small_object_on_one_knee_02.png",
+          "x": 0.277777777777775,
+          "y": 65.9375,
+          "width": 40,
+          "height": 31.68136020151134,
+          "rotation": 0,
+          "scale": 2.7903663509424037,
+          "metadata": {
+            "width": 40,
+            "height": 31.68136020151134,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789139517408-soqaj2ecv",
+          "type": "balloon",
+          "content": "Let's take a closer look...",
+          "x": 76.1111111111111,
+          "y": 32.421875,
+          "width": 40,
+          "height": 14.84375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": -126,
+              "y": 1
+            }
+          }
+        },
+        {
+          "id": "el-1789139578978-1fczxpma1",
+          "type": "quiz",
+          "content": "Type Answer",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "type",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789139578979-ilcx0ez3j",
+          "type": "result_field",
+          "content": "8",
+          "x": 65,
+          "y": 20.46875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "8",
+            "order": 1
+          }
+        }
+      ],
+      "order": 15,
+      "backgroundSettings": {
+        "opacity": 0.33
+      },
+      "guides": {
+        "horizontal": [
+          23.3
+        ],
+        "vertical": [
+          33.7
+        ]
+      },
+      "autonext": true
+    },
+    {
+      "id": "slide-1789077025837",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+      "elements": [
+        {
+          "id": "el-1789077025837-2x2ysbske",
+          "type": "line",
+          "x": 68.47222222222221,
+          "y": 25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1789077025837-inu1ld6n5",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 81.94444444444443,
+          "y": 25.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1789077025837-j8tqzdj1a",
+          "type": "text",
+          "content": "<span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= </span>",
+          "x": 45.75000000000001,
+          "y": 32.9375,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789077063630-0-q31rge",
+          "type": "text",
+          "content": "<font color=\"#969696\">2³= 8</font>",
+          "x": 49.80555555555556,
+          "y": 19.875000000000004,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "normal"
+          }
+        },
+        {
+          "id": "el-1789139602843-a5jcdkx34",
+          "type": "quiz",
+          "content": "Type Answer",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "type",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789139602844-b0g5tc0wh",
+          "type": "result_field",
+          "content": "4",
+          "x": 61.66666666666667,
+          "y": 33.28125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "4",
+            "order": 1
+          }
+        }
+      ],
+      "order": 16,
+      "backgroundSettings": {
+        "opacity": 0.33
+      },
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          44.9,
+          62.8
+        ]
+      },
+      "autonext": true,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1788825944532",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+      "elements": [
+        {
+          "id": "el-1788825944532-zvww14wxw",
+          "type": "line",
+          "x": 68.47222222222221,
+          "y": 25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1788825944532-qvyh45zrs",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 81.94444444444443,
+          "y": 25.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1788825957827-zxvl0bpag",
+          "type": "line",
+          "x": 69.08333333333336,
+          "y": 37.3125,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1788825985792-xzyd159za",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 81.44444444444443,
+          "y": 36.84375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1788825994999-h92f6n43o",
+          "type": "text",
+          "content": "<span style=\"font-weight: normal;\">2</span>¹<span style=\"font-weight: normal;\">=   </span>",
+          "x": 49.97222222222223,
+          "y": 46.1875,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789077219571-0-z0gtwf",
+          "type": "text",
+          "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= 4</span></font>",
+          "x": 49.58333333333334,
+          "y": 32.8125,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789077219571-1-b05elm",
+          "type": "text",
+          "content": "<font color=\"#969696\">2³= 8</font>",
+          "x": 49.75,
+          "y": 20.218750000000004,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "normal"
+          }
+        },
+        {
+          "id": "el-1789139622957-uple3558o",
+          "type": "quiz",
+          "content": "Type Answer",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "type",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789139622958-zk6rl0i02",
+          "type": "result_field",
+          "content": "2",
+          "x": 62.777777777777786,
+          "y": 46.09375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "2",
+            "order": 1
+          }
+        }
+      ],
+      "order": 17,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.27
+      },
+      "autonext": true,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          33.2
+        ]
+      }
+    },
+    {
+      "id": "slide-1788826043094",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+      "elements": [
+        {
+          "id": "el-1788826043094-w6i40i2r3",
+          "type": "line",
+          "x": 69.30555555555553,
+          "y": 25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1788826043094-m7acpgb79",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 81.94444444444443,
+          "y": 25.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1788826043094-8m82ny2fd",
+          "type": "line",
+          "x": 69.6388888888889,
+          "y": 38.25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1788826043094-dmxsph8ly",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 81.99999999999997,
+          "y": 37.625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1788826054875-qpm2uxgdb",
+          "type": "text",
+          "content": "<span style=\"font-weight: normal;\">2</span>⁰<span style=\"font-weight: normal;\">=      </span>",
+          "x": 53.916666666666686,
+          "y": 58.03125,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1788826078990-qwwag4u44",
+          "type": "line",
+          "x": 69.41666666666667,
+          "y": 51.1875,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1788826088617-uq4h8io0f",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 82.33333333333334,
+          "y": 51.03125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1789077339274-0-82vnkl",
+          "type": "text",
+          "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>¹<span style=\"font-weight: normal;\">= 2  </span></font>",
+          "x": 52.97222222222222,
+          "y": 45.90625,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789077339274-1-ddfzhb",
+          "type": "text",
+          "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= 4</span></font>",
+          "x": 50.63888888888889,
+          "y": 32.53125,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789077339274-2-z41yo7",
+          "type": "text",
+          "content": "<font color=\"#969696\">2³= 8</font>",
+          "x": 50.24999999999999,
+          "y": 19.937500000000004,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "normal"
+          }
+        },
+        {
+          "id": "el-1789139655035-1n4tma167",
+          "type": "quiz",
+          "content": "Type Answer",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "type",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789139655036-jehzymf8j",
+          "type": "result_field",
+          "content": "1",
+          "x": 61.66666666666667,
+          "y": 57.96875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "1",
+            "order": 1
+          }
+        }
+      ],
+      "order": 18,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.32
+      },
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          54.7
+        ]
+      }
+    },
+    {
+      "id": "slide-1789139676743",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_002.png\")",
+      "elements": [
+        {
+          "id": "el-1789139676743-1a1s9dj6l",
+          "type": "line",
+          "x": 68.47222222222221,
+          "y": 25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1789139676743-phuyp3hq4",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷3</font>",
+          "x": 81.94444444444443,
+          "y": 25.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1789139676743-xck3bg7fy",
+          "type": "line",
+          "x": 69.08333333333336,
+          "y": 38.25,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1789139676743-e7vd69kes",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷3</font>",
+          "x": 81.99999999999997,
+          "y": 37.625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1789139676743-m4c16c04c",
+          "type": "text",
+          "content": "<span style=\"font-weight: 400;\">3</span>⁰<span style=\"font-weight: normal;\">= 1    </span>",
+          "x": 53.916666666666686,
+          "y": 58.03125,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789139676743-n59bx8xxu",
+          "type": "line",
+          "x": 69.41666666666667,
+          "y": 51.1875,
+          "width": 15.019468305906717,
+          "height": 10,
+          "rotation": -270,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -21,
+            "curveSkew": 1
+          }
+        },
+        {
+          "id": "el-1789139676743-fber9b1ev",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷3</font>",
+          "x": 82.33333333333334,
+          "y": 51.03125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 30
+          }
+        },
+        {
+          "id": "el-1789139676743-eq72cchlq",
+          "type": "text",
+          "content": "<font color=\"#969696\"><span style=\"font-weight: 400;\">3</span>¹<span style=\"font-weight: normal;\">= 3  </span></font>",
+          "x": 52.97222222222222,
+          "y": 45.90625,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789139676743-6nl29eowy",
+          "type": "text",
+          "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">3</span>²<span style=\"font-weight: normal;\">= 9</span></font>",
+          "x": 50.63888888888889,
+          "y": 32.53125,
+          "width": 38.611111111111114,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789139676743-gc1omzqcl",
+          "type": "text",
+          "content": "<font color=\"#969696\">3³= 27</font>",
+          "x": 49.55555555555554,
+          "y": 19.937500000000004,
+          "width": 40,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 55,
+            "fontWeight": "normal"
+          }
+        },
+        {
+          "id": "el-1789140680135-j681ox034",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_thumbs_up.png",
+          "x": 28.055555555555564,
+          "y": 85,
+          "width": 40,
+          "height": 26.546762589928058,
+          "rotation": 0,
+          "scale": 0.9086979779561287,
+          "metadata": {
+            "width": 40,
+            "height": 26.546762589928058,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789140975473-kmfhwmq85",
+          "type": "balloon",
+          "content": "a⁰ is <b>always</b> 1, no matter what <b>number</b>.",
+          "x": 71.3888888888889,
+          "y": 78.75,
+          "width": 48.333333333333336,
+          "height": 26.25,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 20,
+            "tailPos": {
+              "x": -91,
+              "y": 10
+            },
+            "lineHeight": 1.2
+          }
+        }
+      ],
+      "order": 19,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.32
+      },
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          54.7
+        ]
+      }
+    },
+    {
+      "id": "slide-1788656023643",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001d.png\")",
+      "elements": [
+        {
+          "id": "el-1788662817368-d962vgv12",
+          "type": "text",
+          "content": "4⁰ =         ",
+          "x": 52.97222222222222,
+          "y": 40.90625,
+          "width": 18.54929262464502,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.6317966863292668,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#FDE74C",
+            "locked": true,
+            "fontSize": 16,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1788656024931",
+          "type": "text",
+          "content": "4³ = 64<div>4² = 16</div><div>4¹ = 1</div>",
+          "x": 48.61111111111111,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 28,
+            "lineHeight": 1.5,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788813354811",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_half_body_epic_.png",
+          "x": 33.33333333333333,
+          "y": 57.1875,
+          "width": 40,
+          "height": 22.34302325581395,
+          "rotation": 0,
+          "scale": 1.9986386565236036,
+          "metadata": {
+            "width": 40,
+            "height": 22.34302325581395,
+            "category": "characters",
+            "hasShadow": false,
+            "locked": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1788662858688",
+          "type": "result_field",
+          "content": "",
+          "x": 61.66666666666665,
+          "y": 40.9375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656024932",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 79.21875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "0",
+              "3",
+              "1",
+              "9"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 20,
+      "backgroundSettings": {
+        "opacity": 0.31
+      }
+    },
+    {
+      "id": "slide-1788656023646",
+      "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025232",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 81.875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "1",
+              "0",
+              "7",
+              "7³"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789142652455-bdzx7z83e",
+          "type": "banner",
+          "content": "<font color=\"#000000\">7³</font> ÷ <font color=\"#000000\">7³</font> = <font color=\"#000000\">?</font>",
+          "x": 54.02777777777777,
+          "y": 25.46875,
+          "width": 41.94444444444444,
+          "height": 10,
+          "rotation": -1.4805572614228595,
+          "scale": 1.4843668375006969,
+          "metadata": {
+            "fontFamily": "Acme",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789142740477-kuy2p0lxi",
+          "type": "image",
+          "content": "/src/assets/characters/pesto asoma.png",
+          "x": 20.27777777777778,
+          "y": 54.375,
+          "width": 40,
+          "height": 51.69478527607362,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 51.69478527607362,
+            "category": "characters",
+            "flipX": true
+          }
+        }
+      ],
+      "order": 21
+    },
+    {
+      "id": "slide-1788656023648",
+      "background": "url(\"/src/assets/backgrounds/background_a002.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025431",
+          "type": "text",
+          "content": "913471⁰ =        ",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 2.12654471552749,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600",
+            "backgroundColor": "#4CAF50",
+            "locked": false
+          }
+        },
+        {
+          "id": "el-1788812873786",
+          "type": "result_field",
+          "content": "",
+          "x": 75.55555555555554,
+          "y": 21.875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1788656025432",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 81.71875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "71",
+              "0",
+              "1"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788813320963",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_afraid.png",
+          "x": 51.111111111111114,
+          "y": 50.78125,
+          "width": 40,
+          "height": 26.173469387755098,
+          "rotation": 0,
+          "scale": 1.4349695033343073,
+          "metadata": {
+            "width": 40,
+            "height": 26.173469387755098,
+            "category": "characters",
+            "hasShadow": true
+          }
+        }
+      ],
+      "order": 22,
+      "backgroundSettings": {
+        "opacity": 0.37
+      }
+    },
+    {
+      "id": "slide-1788656023649",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025532",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 81.875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "0",
+              "1",
+              "9",
+              "90"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788824523449",
+          "type": "result_field",
+          "content": "",
+          "x": 64.16666666666667,
+          "y": 26.875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "order": 1
+          }
+        },
+        {
+          "id": "el-1789142816882-68rifz3hh",
+          "type": "banner",
+          "content": "<font color=\"#000000\">8⁰ =</font>      ",
+          "x": 52.50000000000001,
+          "y": 26.953125,
+          "width": 42.06298347142352,
+          "height": 14.265688821202346,
+          "rotation": 0,
+          "scale": 1.2087731234334702,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789142866176-byg1ojrea",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_happy.png",
+          "x": 51.388888888888886,
+          "y": 54.0625,
+          "width": 40,
+          "height": 20.184563758389263,
+          "rotation": 0,
+          "scale": 2.065425119757347,
+          "metadata": {
+            "width": 40,
+            "height": 20.184563758389263,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 23,
+      "backgroundSettings": {
+        "opacity": 0.46,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656023650",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025631",
+          "type": "text",
+          "content": "Which one is NOT equal to 1?",
+          "x": 50,
+          "y": 21.84375,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600",
+            "backgroundColor": "#FFC107"
+          }
+        },
+        {
+          "id": "el-1788656025632",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 80,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "4⁰",
+              "100⁰",
+              "4¹",
+              "1⁰"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788812277841",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_wink.png",
+          "x": 54.44444444444444,
+          "y": 45.15625,
+          "width": 40,
+          "height": 21.253012048192772,
+          "rotation": 0,
+          "scale": 2.0253571197385107,
+          "metadata": {
+            "width": 40,
+            "height": 21.253012048192772,
+            "category": "characters",
+            "hasShadow": false
+          }
+        }
+      ],
+      "order": 24,
+      "backgroundSettings": {
+        "opacity": 0.78
+      }
+    },
+    {
+      "id": "slide-1788656023651",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025732",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "1",
+              "0",
+              "5",
+              "−5"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1788812376393",
+          "type": "result_field",
+          "content": "",
+          "x": 41.11111111111111,
+          "y": 35.3125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 0.6335488008393535,
+          "metadata": {
+            "locked": false
+          }
+        },
+        {
+          "id": "el-1788656025731",
+          "type": "text",
+          "content": "5³ = 125 <div>5² = 25</div><div>5¹ = 5</div><div><br></div><div>5⁰ = </div>",
+          "x": 36.111111111111114,
+          "y": 27.15625,
+          "width": 29.888888888888893,
+          "height": 14.000000000000002,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "left",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600",
+            "backgroundColor": "#F57C00"
+          }
+        },
+        {
+          "id": "el-1788816365427",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "x": 69.72222222222223,
+          "y": 44.84375,
+          "width": 40,
+          "height": 26.422018348623855,
+          "rotation": 0,
+          "scale": 1.2686831584110883,
+          "metadata": {
+            "width": 40,
+            "height": 26.422018348623855,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 25,
+      "backgroundSettings": {
+        "opacity": 0.66,
+        "brightness": 81,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656023652",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025832",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 82.5,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "−6",
+              "−1",
+              "0",
+              "1"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789142926329-jlnqhegac",
+          "type": "banner",
+          "content": "<font color=\"#000000\">(−6)</font>⁰ = <font color=\"#000000\">?</font>",
+          "x": 60.55555555555556,
+          "y": 28.75,
+          "width": 39.99999999999999,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.3344397795031595,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789142975839-bim83wk1l",
+          "type": "image",
+          "content": "/src/assets/characters/yara_pointing_signaling_34s.png",
+          "x": 26.666666666666668,
+          "y": 39.21875,
+          "width": 40,
+          "height": 38.580691642651296,
+          "rotation": 0,
+          "scale": 1.329314487230117,
+          "metadata": {
+            "width": 40,
+            "height": 38.580691642651296,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 26,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "backgroundSettings": {
+        "opacity": 0.46,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656023653",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1788656025932",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 81.5625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "0",
+              "2",
+              "6",
+              "1"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789143003395-qqsrxxvfr",
+          "type": "banner",
+          "content": "3⁰ <font color=\"#000000\">+</font> 3⁰ <font color=\"#000000\">=</font> <font color=\"#000000\">?</font>",
+          "x": 50,
+          "y": 23.59375,
+          "width": 43.333333333333336,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1.3597264139816398,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789143054432-8500erbk8",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_pointing_upwards.png",
+          "x": 54.72222222222222,
+          "y": 50,
+          "width": 40,
+          "height": 61.696832579185525,
+          "rotation": 0,
+          "scale": 0.7183902108414102,
+          "metadata": {
+            "width": 40,
+            "height": 61.696832579185525,
+            "category": "characters",
+            "flipX": true
+          }
+        }
+      ],
+      "order": 27,
+      "backgroundSettings": {
+        "opacity": 0.46,
+        "grayscale": true,
+        "tintColor": "rgba(253, 164, 175, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1788656023654",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [
+        {
+          "id": "el-1788656026031",
+          "type": "text",
+          "content": "<br>",
+          "x": 50,
+          "y": 22,
+          "width": 86,
+          "height": 14,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "lineHeight": 1.35,
+            "fontWeight": "600"
+          }
+        },
+        {
+          "id": "el-1788656026032",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "It doesn't",
+              "Because 2 − 2 = 0",
+              "Because it's 5¹ ÷ 5",
+              "It's a convention"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789156776038-0-olej2c",
+          "type": "banner",
+          "content": "<span style=\"caret-color: rgb(0, 0, 0);\"><font color=\"#ffffff\">Why does 5⁰ equal 1?</font></span>",
+          "x": 52.02777777777777,
+          "y": 36.59375,
+          "width": 52.697796262303584,
+          "height": 12.131871948922047,
+          "rotation": 0,
+          "scale": 1.6124326799919328,
+          "metadata": {
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#E91E8F",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 28,
+      "backgroundSettings": {
+        "opacity": 0.31
+      }
+    },
+    {
+      "id": "slide-1789317339180",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1789317339180-welvg2vi7",
+          "type": "banner",
+          "content": "<br>",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1789317339180-mspzm3tv7",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 73.75,
+          "width": 51.21846340772097,
+          "height": 32.65324936226026,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FDE74C",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": false,
+            "manualZ": true,
+            "hidden": false
+          }
+        },
+        {
+          "id": "el-1789317339180-yquligzxd",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 24.609375,
+          "width": 51,
+          "height": 10.165172329982045,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789317339180-jovnouv6m",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 39.453125,
+          "width": 51,
+          "height": 8.93631566155154,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#F9A0C7",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789317339180-5awdiofh1",
+          "type": "text",
+          "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">n⁰ = 1</span></font>",
+          "x": 50,
+          "y": 25.625,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 20
+          }
+        },
+        {
+          "id": "el-1789317339180-3yn04ha3i",
+          "type": "text",
+          "content": "any number with exponent zero<div>equals to 1</div>",
+          "x": 50,
+          "y": 39.21875,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16
+          }
+        },
+        {
+          "id": "el-1789317339180-l9ae3j0cn",
+          "type": "text",
+          "content": "<font color=\"#ffffff\" style=\"background-color: rgb(0, 0, 0);\"> exponent zero </font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 63.05555555555556,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        },
+        {
+          "id": "el-1789317339180-8l6qmpes5",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 69.44444444444453,
+          "y": 64.6875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 0.9451144968623475,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22,
+            "groupId": "group-1789317506900-8y48dq"
+          }
+        },
+        {
+          "id": "el-1789317339180-513bxc3gy",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 69.7222222222223,
+          "y": 74.6875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 0.9451144968623475,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22,
+            "groupId": "group-1789317506900-8y48dq"
+          }
+        },
+        {
+          "id": "el-1789317339180-xbqyyc23g",
+          "type": "text",
+          "content": "<font color=\"#880e4f\">÷2</font>",
+          "x": 69.38888888888904,
+          "y": 83.3125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 0.9451144968623475,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22,
+            "groupId": "group-1789317506900-8y48dq"
+          }
+        },
+        {
+          "id": "el-1789317339180-21bnfjtp2",
+          "type": "line",
+          "x": 57.80772569444443,
+          "y": 66.15625,
+          "width": 9.571072459771843,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -10,
+            "curveSkew": -4,
+            "groupId": "group-1789317518056-ehu3bt"
+          }
+        },
+        {
+          "id": "el-1789317434722-0-eyqwjp",
+          "type": "line",
+          "x": 57.196614583333314,
+          "y": 75.5625,
+          "width": 9.571072459771843,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -10,
+            "curveSkew": -4,
+            "groupId": "group-1789317518056-ehu3bt"
+          }
+        },
+        {
+          "id": "el-1789317437645-0-g910v4",
+          "type": "line",
+          "x": 57.696614583333314,
+          "y": 84.8125,
+          "width": 9.571072459771843,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "isCurved": true,
+            "curvature": -10,
+            "curveSkew": -4,
+            "groupId": "group-1789317518056-ehu3bt"
+          }
+        },
+        {
+          "id": "el-1789322270918-q9mmgcl9c",
+          "type": "text",
+          "content": "2",
+          "x": 47.222222222222214,
+          "y": 62.8125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1789322347007-9ork5eq5i",
+          "type": "text",
+          "content": "2",
+          "x": 47.49999999999998,
+          "y": 72.96875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1789322356508-3gjn478xt",
+          "type": "text",
+          "content": "2",
+          "x": 47.77777777777774,
+          "y": 82.65625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22
+          }
+        },
+        {
+          "id": "el-1789322364519-1nyiorlp6",
+          "type": "text",
+          "content": "2",
+          "x": 47.49999999999995,
+          "y": 92.03125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22
+          }
+        }
+      ],
+      "order": 29,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0,
+          80
+        ]
+      },
+      "cartridge": {
+        "type": "ExploreNL",
+        "config": {
+          "orientation": "vertical",
+          "numbersSide": "right",
+          "pointerSide": "left",
+          "startNumber": 0,
+          "endNumber": 3,
+          "bottomNumber": 0,
+          "topNumber": 3,
+          "step": 1,
+          "thickness": 3,
+          "showArrows": false,
+          "currentValue": 3,
+          "equationTemplate": "2!n =",
+          "lineColor": "#6366F1",
+          "numberColor": "#1E293B",
+          "pointerColor": "#F57C00",
+          "equationColor": "#0F172A",
+          "equationBg": "#FFFFFF",
+          "equationBorder": "#6366F1",
+          "equationFontSize": 31,
+          "nlX": 42,
+          "nlY": 76,
+          "nlLength": 228,
+          "equationX": 51,
+          "equationY": 52,
+          "equationRotation": 0,
+          "swapSides": true,
+          "equationPadY": 1,
+          "equationPadX": 16
+        }
+      },
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-06T00:53:37.022Z",
+  "updatedAt": "2026-09-13T23:33:05.626Z",
+  "path": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+  "textPreset": null,
+  "_snapshots": [
+    {
+      "timestamp": "2026-09-06T00:53:43.630Z",
+      "reason": "Before script import",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0
+        }
+      ]
+    }
+  ],
+  "description": "",
+  "icon": "icon_lightbulb.png",
+  "cardColor": "#EC4899",
+  "translations": {
+    "en": {
+      "title": "Why n⁰ equals 1 ?",
+      "description": ""
+    }
+  },
+  "name": "7323-Why Anything to the Power of 0 Equals 1",
+  "type": "file",
+  "visible": true,
+  "order": 7323,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1789342316342
+  },
+  "visibleInFeed": true
+}

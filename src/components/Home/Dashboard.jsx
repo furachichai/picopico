@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Gamepad2, Compass } from 'lucide-react';
+import { Star, Lock, Play, Trophy, User, ChevronRight, BookOpen, Gamepad2, Compass, Layers } from 'lucide-react';
 
 import { useEditor } from '../../context/EditorContext';
 import { useLanguage, getTranslatedContent } from '../../context/LanguageContext';
@@ -551,6 +551,14 @@ const Dashboard = () => {
         >
           <Compass size={36} strokeWidth={1.5} />
           <span className="nav-label">FEED</span>
+        </button>
+        <button
+          className="nav-item"
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'cards' })}
+          style={{ color: '#8B5CF6' }}
+        >
+          <Layers size={36} strokeWidth={1.5} />
+          <span className="nav-label">CARDS</span>
         </button>
         <button
           className="nav-item"
