@@ -141,18 +141,44 @@ const LayersPanel = ({
     selectedElementIds = [],
     onSelect,
     onReorderTo,
+    onStartContinuousChange,
+    onEndContinuousChange,
     onToggleLock,
     onToggleVisibility,
     isOpen,
     onToggle,
     onReorder
 }) => {
-    const [dragState, setDragState] = useState(null); // { elementId, startIndex }
-    const [dropIndex, setDropIndex] = useState(null); // visual drop indicator position
+    const [dragState, setDragState] = useState(null); // { elementId }
+    const [tempColoredIds, setTempColoredIds] = useState(new Set());
+    const tempColorTimeoutRef = useRef(null);
+    const prevIsOpenRef = useRef(isOpen);
+    const elementsRef = useRef(elements);
+    elementsRef.current = elements;
+
     const [copiedId, setCopiedId] = useState(null);
     const copyTimeoutRef = useRef(null);
     const listRef = useRef(null);
     const { popupRef, dragHandlers, style } = useDraggable('layersPanel');
+
+    // Trigger temporary coloring when panel opens with selected element(s)
+    useEffect(() => {
+        if (isOpen && !prevIsOpenRef.current) {
+            const initialIds = new Set(selectedElementIds || []);
+            if (selectedElementId) initialIds.add(selectedElementId);
+            if (initialIds.size > 0) {
+                setTempColoredIds(initialIds);
+                if (tempColorTimeoutRef.current) clearTimeout(tempColorTimeoutRef.current);
+                tempColorTimeoutRef.current = setTimeout(() => {
+                    setTempColoredIds(new Set());
+                }, 1800);
+            }
+        } else if (!isOpen) {
+            setTempColoredIds(new Set());
+            if (tempColorTimeoutRef.current) clearTimeout(tempColorTimeoutRef.current);
+        }
+        prevIsOpenRef.current = isOpen;
+    }, [isOpen, selectedElementId, selectedElementIds]);
 
     const handleCopy = (e, element) => {
         e.stopPropagation();
@@ -181,6 +207,9 @@ const LayersPanel = ({
         return () => {
             if (copyTimeoutRef.current) {
                 clearTimeout(copyTimeoutRef.current);
+            }
+            if (tempColorTimeoutRef.current) {
+                clearTimeout(tempColorTimeoutRef.current);
             }
         };
     }, []);
@@ -301,9 +330,13 @@ const LayersPanel = ({
         onSelect(elementId, isMulti, e.altKey);
     };
 
-    // ─── Drag-to-Reorder (pointer-based) ───
-    const handleDragStart = (e, element, displayIndex) => {
-        if (isPinnedType(element.type) || element.isInteractive) return;
+    // ─── Drag-to-Reorder (live real-time reorder) ───
+    const isDraggingRef = useRef(false);
+    const startPosRef = useRef({ x: 0, y: 0 });
+
+    const handleDragStart = (e, element) => {
+        // Locked layers, pinned layers, and interactive cartridges cannot be dragged
+        if (isPinnedType(element.type) || element.isInteractive || element.metadata?.locked) return;
         
         if (e.target.closest('.layer-action-btn')) {
             return;
@@ -315,61 +348,102 @@ const LayersPanel = ({
         const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
         onSelect(element.id, isMulti, e.altKey);
 
-        setDragState({ elementId: element.id, displayIndex });
+        const startX = e.clientX;
+        const startY = e.clientY;
+        startPosRef.current = { x: startX, y: startY };
+        isDraggingRef.current = false;
 
         const handleDragMove = (moveEvent) => {
             moveEvent.preventDefault();
+            const dx = moveEvent.clientX - startPosRef.current.x;
+            const dy = moveEvent.clientY - startPosRef.current.y;
+
+            if (!isDraggingRef.current) {
+                if (Math.hypot(dx, dy) < 4) return;
+                isDraggingRef.current = true;
+                setDragState({ elementId: element.id });
+                onStartContinuousChange?.();
+                document.body.style.cursor = 'grabbing';
+            }
+
             const listEl = listRef.current;
             if (!listEl) return;
 
-            const rows = listEl.querySelectorAll('.layer-row:not(.pinned-row)');
+            // Auto-scroll list when pointer is near top or bottom edges
+            const listRect = listEl.getBoundingClientRect();
+            if (moveEvent.clientY < listRect.top + 25) {
+                listEl.scrollTop -= 6;
+            } else if (moveEvent.clientY > listRect.bottom - 25) {
+                listEl.scrollTop += 6;
+            }
+
+            // Find all draggable layer rows
+            const rows = Array.from(listEl.querySelectorAll('.layer-row:not(.pinned-row)'));
+            if (rows.length <= 1) return;
+
             const mouseY = moveEvent.clientY;
+            let targetRow = null;
 
-            let closestIdx = 0;
-            let closestDist = Infinity;
+            const firstRect = rows[0].getBoundingClientRect();
+            const lastRect = rows[rows.length - 1].getBoundingClientRect();
 
-            rows.forEach((row, i) => {
-                const rect = row.getBoundingClientRect();
-                const midY = rect.top + rect.height / 2;
-                const dist = Math.abs(mouseY - midY);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestIdx = i;
-                    if (mouseY > midY) closestIdx = i + 1;
-                }
-            });
-
-            setDropIndex(closestIdx);
-        };
-
-        const handleDragEnd = () => {
-            document.removeEventListener('pointermove', handleDragMove);
-            document.removeEventListener('pointerup', handleDragEnd);
-
-            if (dragState && dropIndex !== null) {
-                const draggableOnly = elements.filter(el => !isPinnedType(el.type));
-                const fromDisplayIdx = draggableElements.findIndex(el => el.id === element.id);
-                
-                if (fromDisplayIdx !== -1 && dropIndex !== fromDisplayIdx && dropIndex !== fromDisplayIdx + 1) {
-                    let targetDisplayIdx = dropIndex > fromDisplayIdx ? dropIndex - 1 : dropIndex;
-                    targetDisplayIdx = Math.max(0, Math.min(targetDisplayIdx, draggableOnly.length - 1));
-                    
-                    const sortedDraggable = elements.filter(el => !isPinnedType(el.type));
-                    const realTargetIdx = elements.indexOf(sortedDraggable[sortedDraggable.length - 1 - targetDisplayIdx]);
-                    const realFromIndex = elements.indexOf(elements.find(el => el.id === element.id));
-                    
-                    if (realFromIndex !== -1 && realTargetIdx !== -1) {
-                        onReorderTo(element.id, realTargetIdx);
+            if (mouseY <= firstRect.top + firstRect.height * 0.5) {
+                targetRow = rows[0];
+            } else if (mouseY >= lastRect.bottom - lastRect.height * 0.5) {
+                targetRow = rows[rows.length - 1];
+            } else {
+                for (const r of rows) {
+                    const rect = r.getBoundingClientRect();
+                    if (mouseY >= rect.top && mouseY <= rect.bottom) {
+                        targetRow = r;
+                        break;
                     }
                 }
             }
 
-            setDragState(null);
-            setDropIndex(null);
+            if (!targetRow) return;
+            const targetId = targetRow.getAttribute('data-layer-id');
+            if (!targetId || targetId === element.id) return;
+
+            // Execute real-time reorder in elements array
+            const currentElements = elementsRef.current;
+            const fromIndex = currentElements.findIndex(el => el.id === element.id);
+            const originalTargetIndex = currentElements.findIndex(el => el.id === targetId);
+            if (fromIndex === -1 || originalTargetIndex === -1) return;
+
+            const elementsWithoutDragged = currentElements.filter(el => el.id !== element.id);
+            const targetIndexInFiltered = elementsWithoutDragged.findIndex(el => el.id === targetId);
+            if (targetIndexInFiltered === -1) return;
+
+            let newInsertIndex;
+            if (fromIndex < originalTargetIndex) {
+                // Moving up in visual panel / higher in elements array
+                newInsertIndex = targetIndexInFiltered + 1;
+            } else {
+                // Moving down in visual panel / lower in elements array
+                newInsertIndex = targetIndexInFiltered;
+            }
+
+            onReorderTo(element.id, newInsertIndex, false);
         };
 
-        document.addEventListener('pointermove', handleDragMove);
-        document.addEventListener('pointerup', handleDragEnd);
+        const handleDragEnd = () => {
+            window.removeEventListener('pointermove', handleDragMove);
+            window.removeEventListener('pointerup', handleDragEnd);
+            window.removeEventListener('pointercancel', handleDragEnd);
+            document.body.style.cursor = '';
+
+            if (isDraggingRef.current) {
+                onEndContinuousChange?.();
+            }
+
+            setDragState(null);
+            isDraggingRef.current = false;
+        };
+
+        window.addEventListener('pointermove', handleDragMove, { passive: false });
+        window.addEventListener('pointerup', handleDragEnd);
+        window.addEventListener('pointercancel', handleDragEnd);
     };
 
     const renderRow = (element, isPinned, displayIdx = 0, isTop = false, isBottom = false) => {
@@ -377,31 +451,33 @@ const LayersPanel = ({
         const color = getElementColor(element);
         const isHidden = !!element.metadata?.hidden;
         const isLocked = !!element.metadata?.locked;
+        const isTempColored = tempColoredIds.has(element.id) ||
+            (typeof element.id === 'string' && element.id.startsWith('cartridge:') && tempColoredIds.has('cartridge')) ||
+            (element.id === 'cartridge' && Array.from(tempColoredIds).some(sid => typeof sid === 'string' && sid.startsWith('cartridge:')));
 
         return (
             <div
                 key={element.id}
                 data-layer-id={element.id}
-                className={`layer-row ${isPinned ? 'pinned-row' : ''} ${selected ? 'selected' : ''} ${dragState?.elementId === element.id ? 'dragging' : ''} ${isHidden ? 'hidden-element' : ''}`}
+                className={`layer-row ${isPinned ? 'pinned-row' : ''} ${selected ? 'selected' : ''} ${isTempColored ? 'temp-colored' : ''} ${dragState?.elementId === element.id ? 'dragging' : ''} ${isHidden ? 'hidden-element' : ''} ${isLocked ? 'is-locked' : ''}`}
                 style={{
                     '--row-color': color,
                     '--row-color-glow': `${color}99`,
                     '--row-color-bg': `${color}33`
                 }}
-                onPointerDown={!isPinned ? (e) => handleDragStart(e, element, displayIdx) : undefined}
+                onPointerDown={!isPinned && !isLocked ? (e) => handleDragStart(e, element) : undefined}
                 onClick={(e) => handleRowClick(e, element.id)}
             >
-                {/* Drop indicator */}
-                {!isPinned && dropIndex === displayIdx && dragState && dragState.elementId !== element.id && (
-                    <div className="layer-drop-indicator top" />
-                )}
-
                 {/* Drag Handle / Pin indicator */}
                 <div
-                    className={`layer-drag-handle ${isPinned ? (element.isInteractive ? 'interactive' : 'pinned') : ''}`}
-                    title={isPinned ? (element.isInteractive ? '⚡ Interactive Manipulative' : '📌 Pinned Layer') : 'Drag to reorder'}
+                    className={`layer-drag-handle ${isPinned ? (element.isInteractive ? 'interactive' : 'pinned') : ''} ${isLocked ? 'locked' : ''}`}
+                    title={
+                        isPinned
+                            ? (element.isInteractive ? '⚡ Interactive Manipulative' : '📌 Pinned Layer')
+                            : (isLocked ? '🔒 Layer is locked (unlock to drag)' : 'Drag to reorder')
+                    }
                 >
-                    {isPinned ? (element.isInteractive ? '⚡' : '📌') : '⠿'}
+                    {isPinned ? (element.isInteractive ? '⚡' : '📌') : (isLocked ? '🔒' : '⠿')}
                 </div>
 
                 {/* Type icon highlighted in object color */}
@@ -451,7 +527,7 @@ const LayersPanel = ({
                         <>
                             <button
                                 className="layer-action-btn"
-                                disabled={isTop}
+                                disabled={isTop || isLocked}
                                 onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'forward'); }}
                                 title="Move Up"
                             >
@@ -459,7 +535,7 @@ const LayersPanel = ({
                             </button>
                             <button
                                 className="layer-action-btn"
-                                disabled={isBottom}
+                                disabled={isBottom || isLocked}
                                 onClick={(e) => { e.stopPropagation(); onReorder(element.id, 'backward'); }}
                                 title="Move Down"
                             >
@@ -501,11 +577,6 @@ const LayersPanel = ({
                         {isLocked ? <Lock size={15} strokeWidth={2.2} /> : <Unlock size={15} strokeWidth={2.2} />}
                     </button>
                 </div>
-
-                {/* Drop indicator at bottom of last element */}
-                {!isPinned && dropIndex === draggableElements.length && isBottom && dragState && (
-                    <div className="layer-drop-indicator bottom" />
-                )}
             </div>
         );
     };

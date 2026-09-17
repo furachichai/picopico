@@ -457,8 +457,9 @@ const Editor = () => {
         dispatch({ type: 'REORDER_ELEMENT', payload: { elementId, direction } });
     };
 
-    const handleReorderElementTo = (elementId, toIndex) => {
-        dispatch({ type: 'REORDER_ELEMENT_TO', payload: { elementId, toIndex } });
+    const handleReorderElementTo = (elementId, toIndex, saveHistory = undefined) => {
+        const shouldSave = saveHistory !== undefined ? saveHistory : !isRangeInteractingRef.current;
+        dispatch({ type: 'REORDER_ELEMENT_TO', payload: { elementId, toIndex, saveHistory: shouldSave } });
     };
 
     const handleToggleLock = (elementId) => {
@@ -1433,6 +1434,8 @@ const Editor = () => {
                                         selectedElementIds={state.selectedElementIds}
                                         onSelect={(id, isMulti, isAlt) => dispatch({ type: 'SELECT_ELEMENT', payload: typeof id === 'object' ? id : { id, isShift: !!isMulti, isAlt: !!isAlt } })}
                                         onReorderTo={handleReorderElementTo}
+                                        onStartContinuousChange={handleStartContinuousChange}
+                                        onEndContinuousChange={handleEndContinuousChange}
                                         onToggleLock={handleToggleLock}
                                         onToggleVisibility={handleToggleVisibility}
                                         isOpen={showLayersPanel}

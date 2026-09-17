@@ -285,13 +285,18 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         return <span key={idx} className="field-preview-text">{seg.content}</span>;
                     } else {
                         const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '?';
-                        const len = Math.max(1, evaluatedStr.length);
-                        const width = 44 + (len - 1) * 15;
+                        const maxLen = Math.max(1, evaluatedStr.length, (seg.isDouble ? (seg.placeholder || '').length : 0));
+                        const width = Math.max(48, 44 + (maxLen - 1) * 14);
                         return (
                             <span
                                 key={idx}
                                 className={`field-preview-slot ${seg.isDouble ? 'double-star' : ''}`}
-                                style={{ minWidth: `${width}px` }}
+                                style={{
+                                    width: `${width}px`,
+                                    minWidth: `${width}px`,
+                                    maxWidth: `${width}px`,
+                                    flexShrink: 0
+                                }}
                             >
                                 {seg.isDouble ? (
                                     <span className="field-preview-placeholder">{seg.placeholder}</span>

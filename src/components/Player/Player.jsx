@@ -469,6 +469,7 @@ const Player = () => {
             '.quiz-option, .chatquiz-option-btn, .match-card, .conecta-item, .nl-knob-player, .quiz-ready-btn, ' +
             '.explorenl-pointer, .explorenl-equation-card, ' +
             '.type-quiz-keyboard-container, .type-quiz-key-btn, .type-quiz-action-btn, ' +
+            '.field-player-bottom-portal, .field-choices-section, .field-choice-cell, .field-choice-btn, .field-ok-section, .field-ok-btn, .field-player-expression-card, .field-player-slot, .field-placed-choice-btn, ' +
             '.isticker-container, .popup-character, img[alt="popup"], ' +
             '[data-interactive="true"], ' +
             '.fullscreen-toggle, .player-top-controls, .player-nav-btn, .close-btn, .edit-btn';

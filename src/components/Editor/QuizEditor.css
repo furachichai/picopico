@@ -1302,16 +1302,17 @@ input:checked+.toggle-slider:before {
     border: 2.5px dashed #000000;
     background-color: rgba(0, 0, 0, 0.04);
     border-radius: 12px;
-    padding: 0 6px;
+    padding: 0;
     vertical-align: middle;
     box-sizing: border-box;
+    box-shadow: none !important;
 }
 
 .field-canvas-preview .field-preview-slot.double-star {
     border-style: solid;
     border: 2.5px solid #000000;
     background: #ffffff;
-    box-shadow: 2.5px 2.5px 0px #000000;
+    box-shadow: none !important;
 }
 
 .field-canvas-preview .field-preview-placeholder {
@@ -1319,6 +1320,8 @@ input:checked+.toggle-slider:before {
     font-size: 0.95rem;
     color: #000000;
     font-weight: 900;
-    padding: 0 6px;
+    padding: 0 4px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

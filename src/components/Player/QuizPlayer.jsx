@@ -3628,15 +3628,22 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                 const isSlotActive = activeSlotIndex === idx;
                                 const isSlotWrong = fieldShakeSlots.has(idx);
                                 const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
-                                const len = Math.max(1, evaluatedStr.length);
-                                const slotWidth = 44 + (len - 1) * 15;
+                                const maxLen = Math.max(1, evaluatedStr.length, (seg.isDouble ? (seg.placeholder || '').length : 0));
+                                const slotWidth = Math.max(48, 44 + (maxLen - 1) * 14);
                                 
                                 return (
                                     <div
                                         key={idx}
                                         ref={el => slotRefs.current[idx] = el}
                                         className={`field-player-slot ${seg.isDouble ? 'double-star' : ''} ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''} ${placed ? 'has-placed' : ''}`}
-                                        style={{ minWidth: `${slotWidth}px`, height: '42px', pointerEvents: 'auto', visibility: pendingSelections[idx] ? 'hidden' : 'visible' }}
+                                        style={{
+                                            width: `${slotWidth}px`,
+                                            minWidth: `${slotWidth}px`,
+                                            maxWidth: `${slotWidth}px`,
+                                            height: '42px',
+                                            pointerEvents: 'auto',
+                                            flexShrink: 0
+                                        }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleFieldSlotTap(idx);
@@ -3704,12 +3711,12 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         position: 'absolute',
                                         backgroundColor: piece.sourceSlotIdx !== undefined ? '#8B5CF6' : '#3B82F6',
                                         color: 'white',
-                                        border: '2.5px solid #000000',
-                                        borderRadius: '10px',
+                                        border: piece.sourceSlotIdx !== undefined ? '2.5px solid #000000' : '2px solid #000000',
+                                        borderRadius: piece.sourceSlotIdx !== undefined ? '10px' : '9px',
                                         fontFamily: "'Outfit', sans-serif",
-                                        fontSize: '1.05rem',
+                                        fontSize: piece.sourceSlotIdx !== undefined ? '1.05rem' : '0.95rem',
                                         fontWeight: 900,
-                                        boxShadow: '3px 3px 0px #000000',
+                                        boxShadow: piece.sourceSlotIdx !== undefined ? '2.5px 2.5px 0px #000000' : '2px 2px 0px #000000',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',

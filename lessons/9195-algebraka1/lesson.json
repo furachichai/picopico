@@ -1,28 +1,17 @@
 {
-  "id": "lessons/9195-Untitled Lesson/lesson.json",
+  "id": "lessons/9195-algebraka1/lesson.json",
   "title": "algebraka1",
   "slides": [
+    {
+      "id": "slide-1789667234115",
+      "background": "url(\"/src/assets/backgrounds/titlecard_bottles.png\")",
+      "elements": [],
+      "order": 0
+    },
     {
       "id": "slide-1",
       "background": "#E1F5FE",
       "elements": [
-        {
-          "id": "el-1789657533509-g8be1knit",
-          "type": "image",
-          "content": "/src/assets/characters/pesto%20jumping.png",
-          "x": 19.722222222222232,
-          "y": 59.21875,
-          "width": 40,
-          "height": 26.642384105960264,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 40,
-            "height": 26.642384105960264,
-            "category": "characters",
-            "flipX": true
-          }
-        },
         {
           "id": "el-1789657578019-03murl72s",
           "type": "image",
@@ -40,12 +29,28 @@
           }
         },
         {
+          "id": "el-1789681812325-s893dbeqz",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holding_paper.png",
+          "x": 19.166666666666664,
+          "y": 50,
+          "width": 40,
+          "height": 22.171532846715326,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 22.171532846715326,
+            "category": "characters"
+          }
+        },
+        {
           "id": "el-1789657538111-9xvpxp76j",
           "type": "balloon",
-          "content": "I <b>found</b> where he <b>hid</b> the <b>formula</b>!",
-          "x": 34.16666666666666,
+          "content": "I <b>found</b> where the scientist <b>hid</b> the <b>formula</b>!",
+          "x": 30.555555555555546,
           "y": 25.9375,
-          "width": 40,
+          "width": 47.22222222222222,
           "height": 20,
           "rotation": 0,
           "scale": 1,
@@ -55,8 +60,8 @@
             "fontFamily": "\"Noto Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": -31,
-              "y": 100
+              "x": -1,
+              "y": 84
             },
             "shadow": "grey",
             "hasShadow": true,
@@ -88,7 +93,7 @@
           }
         }
       ],
-      "order": 0,
+      "order": 1,
       "cartridge": null
     },
     {
@@ -168,7 +173,7 @@
           }
         }
       ],
-      "order": 1
+      "order": 2
     },
     {
       "id": "slide-1789658854276",
@@ -245,7 +250,7 @@
           }
         }
       ],
-      "order": 2
+      "order": 3
     },
     {
       "id": "slide-1789659485208",
@@ -270,7 +275,7 @@
             "fontWeight": "normal",
             "color": "#00b0ff",
             "textAlign": "center",
-            "backgroundColor": "#ffffff",
+            "backgroundColor": "#C8E6C9",
             "borderColor": "#000000",
             "shadow": "grey",
             "hasShadow": true,
@@ -318,42 +323,6 @@
           }
         },
         {
-          "id": "el-1789659509448-4dwj86sy4",
-          "type": "image",
-          "content": "/src/assets/objects/prop_scale_001.png",
-          "x": 50,
-          "y": 37.34375,
-          "width": 40,
-          "height": 17.879464285714285,
-          "rotation": -1.7460910246984298,
-          "scale": 0.7872302497585891,
-          "metadata": {
-            "width": 40,
-            "height": 17.879464285714285,
-            "category": "characters",
-            "hasShadow": false,
-            "manualZ": true,
-            "locked": true
-          }
-        },
-        {
-          "id": "el-1789659615914-y65pqpg23",
-          "type": "text",
-          "content": "<font color=\"#fde74c\">14</font>",
-          "x": 50,
-          "y": 39.0625,
-          "width": 10,
-          "height": 5,
-          "rotation": -1.6829840976818815,
-          "scale": 1,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "Acme",
-            "textTransform": "none",
-            "fontSize": 24
-          }
-        },
-        {
           "id": "el-1789659694862-brvzpy8z3",
           "type": "quiz",
           "content": "Quiz",
@@ -376,6 +345,35 @@
           }
         },
         {
+          "id": "el-1789666108809-0-09m0ox",
+          "type": "banner",
+          "content": "",
+          "x": 51.61111111111111,
+          "y": 63.9375,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
           "id": "el-1789659816198-1s4mbumsd",
           "type": "image",
           "content": "/src/assets/objects/item_bottle_scircle_orange.png",
@@ -391,12 +389,215 @@
             "category": "characters",
             "hasShadow": false
           }
+        },
+        {
+          "id": "el-1789664698045-v86s34mj2",
+          "type": "image",
+          "content": "/src/assets/characters/pesto%20asoma.png",
+          "x": 90.27777777777777,
+          "y": 51.875,
+          "width": 40,
+          "height": 51.69478527607362,
+          "rotation": 0,
+          "scale": 0.5050040568511168,
+          "metadata": {
+            "width": 40,
+            "height": 51.69478527607362,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789665325946-0-l401kl",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 48.833333333333336,
+          "y": 35.1875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789659615914-y65pqpg23",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">14</font>",
+          "x": 49.44444444444444,
+          "y": 35.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
         }
       ],
-      "order": 3,
+      "order": 4,
       "backgroundSettings": {
         "opacity": 0.42
       }
+    },
+    {
+      "id": "slide-1789666211640",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_2987.png\")",
+      "elements": [
+        {
+          "id": "el-1789666211640-negr2m237",
+          "type": "banner",
+          "content": "",
+          "x": 50,
+          "y": 35.703125,
+          "width": 51,
+          "height": 21.08918987288618,
+          "rotation": 0,
+          "scale": 1.6554238770393073,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#C8E6C9",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "photo",
+            "showTape": false,
+            "locked": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789666211640-zww2qkipd",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_orange.png",
+          "x": 43.61111111111111,
+          "y": 29.21875,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": -1.9865846231103461,
+          "scale": 0.2340097320081486,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters",
+            "hasShadow": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1789666211640-979wcsndv",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_orange.png",
+          "x": 54.94444444444444,
+          "y": 29.09375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": -1.7056528737516317,
+          "scale": 0.2340097320081486,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters",
+            "hasShadow": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1789666211640-8t5m65k7s",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 48.833333333333336,
+          "y": 35.1875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789666211640-oa76bbgok",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">14</font>",
+          "x": 49.44444444444444,
+          "y": 35.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789666290836-29nxfq66a",
+          "type": "image",
+          "content": "/src/assets/characters/yara_wonders.png",
+          "x": 23.61111111111111,
+          "y": 78.59375,
+          "width": 40,
+          "height": 45.744485294117645,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 45.744485294117645,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789666316196-c1a6o71qj",
+          "type": "balloon",
+          "content": "If <b>2</b> bottles weight <b>14</b>,<div><br><div><b>1</b> bottle is <b>14÷2=7</b></div></div>",
+          "x": 68.47222222222223,
+          "y": 76.640625,
+          "width": 53.61111111111111,
+          "height": 27.03125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -111,
+              "y": -25
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.42
+      },
+      "cartridge": null
     },
     {
       "id": "slide-1789659998690",
@@ -421,7 +622,7 @@
             "fontWeight": "normal",
             "color": "#00b0ff",
             "textAlign": "center",
-            "backgroundColor": "#FFFFFF",
+            "backgroundColor": "#FFCDD2",
             "borderColor": "#000000",
             "shadow": "grey",
             "hasShadow": true,
@@ -454,7 +655,7 @@
           "id": "el-1789660077506-0-oxj85p",
           "type": "image",
           "content": "/src/assets/objects/item_bottle_square_blue.png",
-          "x": 56.222222222222236,
+          "x": 56.500000000000014,
           "y": 29,
           "width": 40,
           "height": 26.420454545454547,
@@ -485,42 +686,6 @@
           }
         },
         {
-          "id": "el-1789659998690-ya2oqond1",
-          "type": "image",
-          "content": "/src/assets/objects/prop_scale_001.png",
-          "x": 50,
-          "y": 37.34375,
-          "width": 40,
-          "height": 17.879464285714285,
-          "rotation": -1.7460910246984298,
-          "scale": 0.7872302497585891,
-          "metadata": {
-            "width": 40,
-            "height": 17.879464285714285,
-            "category": "characters",
-            "hasShadow": false,
-            "manualZ": true,
-            "locked": true
-          }
-        },
-        {
-          "id": "el-1789659998690-ap9zszvfs",
-          "type": "text",
-          "content": "<font color=\"#fde74c\">6</font>",
-          "x": 50,
-          "y": 39.0625,
-          "width": 10,
-          "height": 5,
-          "rotation": -1.6829840976818815,
-          "scale": 1,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "Acme",
-            "textTransform": "none",
-            "fontSize": 24
-          }
-        },
-        {
           "id": "el-1789659998690-w1og056jy",
           "type": "quiz",
           "content": "Quiz",
@@ -543,6 +708,35 @@
           }
         },
         {
+          "id": "el-1789666053454-xufcpae11",
+          "type": "banner",
+          "content": "",
+          "x": 51.11111111111111,
+          "y": 63.75,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
           "id": "el-1789660024639-kukf077g6",
           "type": "image",
           "content": "/src/assets/objects/item_bottle_square_blue.png",
@@ -556,11 +750,47 @@
             "width": 40,
             "height": 26.420454545454547,
             "category": "characters",
-            "hidden": false
+            "hidden": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789665371096-0-xb4qs8",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 49.11111111111111,
+          "y": 35.34375,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789659998690-ap9zszvfs",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">6</font>",
+          "x": 49.72222222222222,
+          "y": 36.09375,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
           }
         }
       ],
-      "order": 4,
+      "order": 6,
       "cartridge": null,
       "backgroundSettings": {
         "opacity": 0.33
@@ -589,7 +819,7 @@
             "fontWeight": "normal",
             "color": "#00b0ff",
             "textAlign": "center",
-            "backgroundColor": "#ffffff",
+            "backgroundColor": "#FFE0B2",
             "borderColor": "#000000",
             "shadow": "grey",
             "hasShadow": true,
@@ -635,6 +865,35 @@
           }
         },
         {
+          "id": "el-1789666147607-0-6fgva1",
+          "type": "banner",
+          "content": "",
+          "x": 50.777777777777764,
+          "y": 63.3125,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
           "id": "el-1789660338994-i2f6yopry",
           "type": "image",
           "content": "/src/assets/objects/item_bottle_triangle_violet.png",
@@ -649,44 +908,6 @@
             "height": 26.420454545454547,
             "category": "characters",
             "manualZ": true
-          }
-        },
-        {
-          "id": "el-1789660324986-36pf2zy5z",
-          "type": "image",
-          "content": "/src/assets/objects/prop_scale_001.png",
-          "x": 50,
-          "y": 37.34375,
-          "width": 40,
-          "height": 17.879464285714285,
-          "rotation": -1.7460910246984298,
-          "scale": 0.7872302497585891,
-          "metadata": {
-            "width": 40,
-            "height": 17.879464285714285,
-            "category": "characters",
-            "hasShadow": false,
-            "manualZ": true,
-            "locked": true,
-            "groupId": "group-1789660447956-o62uf7"
-          }
-        },
-        {
-          "id": "el-1789660324986-lbek1xtem",
-          "type": "text",
-          "content": "<font color=\"#fde74c\">20</font>",
-          "x": 50,
-          "y": 39.0625,
-          "width": 10,
-          "height": 5,
-          "rotation": -1.6829840976818815,
-          "scale": 1,
-          "metadata": {
-            "textAlign": "center",
-            "fontFamily": "Acme",
-            "textTransform": "none",
-            "fontSize": 24,
-            "groupId": "group-1789660447956-o62uf7"
           }
         },
         {
@@ -727,20 +948,778 @@
             "fontSize": 19,
             "fontWeight": "bold"
           }
+        },
+        {
+          "id": "el-1789665241552-kypaiiy7s",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 50.27777777777778,
+          "y": 35.46875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789660324986-lbek1xtem",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">20</font>",
+          "x": 50,
+          "y": 36.25,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
         }
       ],
-      "order": 5,
+      "order": 7,
       "cartridge": null,
       "backgroundSettings": {
         "opacity": 0.2,
         "grayscale": true,
         "tintColor": "rgba(134, 239, 172, 0.4)"
       }
+    },
+    {
+      "id": "slide-1789679591758",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4663.png\")",
+      "elements": [
+        {
+          "id": "el-1789679591758-uycfjqmk5",
+          "type": "banner",
+          "content": "",
+          "x": 50,
+          "y": 35.703125,
+          "width": 51,
+          "height": 21.08918987288618,
+          "rotation": 0,
+          "scale": 1.6554238770393073,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFE0B2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "photo",
+            "showTape": false,
+            "locked": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679591758-0dqzdaap0",
+          "type": "image",
+          "content": "/src/assets/objects/prop_weight_ring.png",
+          "x": 53.05555555555556,
+          "y": 28.59375,
+          "width": 40,
+          "height": 23.230293663060277,
+          "rotation": -2.4210615412760177,
+          "scale": 0.27175767280516816,
+          "metadata": {
+            "width": 40,
+            "height": 23.230293663060277,
+            "category": "characters",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679591758-3vl43u1x9",
+          "type": "banner",
+          "content": "",
+          "x": 50.777777777777764,
+          "y": 63.3125,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679591759-0uxz7f6k1",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 58.05555555555556,
+          "y": 63.90625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "field",
+            "visualMode": false,
+            "fieldExpression": "=*6*"
+          }
+        },
+        {
+          "id": "el-1789679591759-96k5xg2qf",
+          "type": "text",
+          "content": "8",
+          "x": 53.333333333333336,
+          "y": 29.6875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "fontWeight": "bold"
+          }
+        },
+        {
+          "id": "el-1789679591759-uqkp9g8lu",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 50.27777777777778,
+          "y": 35.46875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789679591759-xbeb0c222",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">20</font>",
+          "x": 50,
+          "y": 36.25,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679609913-a1y023pc7",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_green.png",
+          "x": 39.166666666666664,
+          "y": 63.28125,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.3674041359197388,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789679619926-0-b6pcj0",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_green.png",
+          "x": 35.22222222222222,
+          "y": 28.9375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": -1.1202510219014243,
+          "scale": 0.23675434575689955,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789679628924-0-1oh2u8",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_green.png",
+          "x": 43.22222222222222,
+          "y": 28.8125,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": -1.1202510219014243,
+          "scale": 0.23675434575689955,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 8,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.2,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1789679885181",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4663.png\")",
+      "elements": [
+        {
+          "id": "el-1789679885181-hgay2ejnf",
+          "type": "banner",
+          "content": "",
+          "x": 50,
+          "y": 35.703125,
+          "width": 51,
+          "height": 21.08918987288618,
+          "rotation": 0,
+          "scale": 1.6554238770393073,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFE0B2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "photo",
+            "showTape": false,
+            "locked": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679885181-so1wvx1aa",
+          "type": "image",
+          "content": "/src/assets/objects/prop_weight_ring.png",
+          "x": 53.05555555555556,
+          "y": 28.59375,
+          "width": 40,
+          "height": 23.230293663060277,
+          "rotation": -2.4210615412760177,
+          "scale": 0.27175767280516816,
+          "metadata": {
+            "width": 40,
+            "height": 23.230293663060277,
+            "category": "characters",
+            "manualZ": true,
+            "groupId": "group-1789679935609-edd3hq"
+          }
+        },
+        {
+          "id": "el-1789679900786-0g22lxump",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_violet.png",
+          "x": 39.72222222222222,
+          "y": 63.4375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.3677986770908793,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679885181-j462k00to",
+          "type": "banner",
+          "content": "",
+          "x": 50.777777777777764,
+          "y": 63.3125,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679885181-9imyaxulk",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 58.05555555555556,
+          "y": 63.75,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "field",
+            "visualMode": false,
+            "fieldExpression": "=*4*"
+          }
+        },
+        {
+          "id": "el-1789679885181-0b5v1h7q7",
+          "type": "text",
+          "content": "5",
+          "x": 53.333333333333336,
+          "y": 29.6875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "fontWeight": "bold",
+            "groupId": "group-1789679935609-edd3hq"
+          }
+        },
+        {
+          "id": "el-1789679936818-0-l78kxk",
+          "type": "image",
+          "content": "/src/assets/objects/prop_weight_ring.png",
+          "x": 42.166666666666664,
+          "y": 28.46875,
+          "width": 40,
+          "height": 23.230293663060277,
+          "rotation": -2.4210615412760177,
+          "scale": 0.27175767280516816,
+          "metadata": {
+            "width": 40,
+            "height": 23.230293663060277,
+            "category": "characters",
+            "groupId": "group-1789679936818-sjg9x3",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679912821-0-d2o5ol",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_violet.png",
+          "x": 33.55555555555556,
+          "y": 28.9375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0.06397810548091343,
+          "scale": 0.2454086753974137,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679949034-0-dvy7i2",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_violet.png",
+          "x": 62.66666666666667,
+          "y": 28.65625,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0.06397810548091343,
+          "scale": 0.2454086753974137,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679885181-fj4wuabi1",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 50.27777777777778,
+          "y": 35.46875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789679885181-258zn71y6",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">16</font>",
+          "x": 50,
+          "y": 36.25,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789679936818-1-d54t42",
+          "type": "text",
+          "content": "3",
+          "x": 42.166666666666664,
+          "y": 29.5625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "fontWeight": "bold",
+            "groupId": "group-1789679936818-sjg9x3"
+          }
+        },
+        {
+          "id": "el-1789680156926-vdpoqk9si",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_scircle_violet.png",
+          "x": 40.55555555555556,
+          "y": 63.59375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.3828178510747957,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 9,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.2,
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1789680452308",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4624.png\")",
+      "elements": [
+        {
+          "id": "el-1789680452308-sw2kl1cuq",
+          "type": "banner",
+          "content": "",
+          "x": 50,
+          "y": 35.703125,
+          "width": 51,
+          "height": 21.08918987288618,
+          "rotation": 0,
+          "scale": 1.6554238770393073,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFCDD2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "photo",
+            "showTape": true,
+            "locked": false,
+            "manualZ": true,
+            "hideTape": false
+          }
+        },
+        {
+          "id": "el-1789680452309-4pep2scsw",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 58.611111111111114,
+          "y": 64.0625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "field",
+            "visualMode": false,
+            "fieldExpression": "=*(37-9)/4*"
+          }
+        },
+        {
+          "id": "el-1789680452309-maq29ot8a",
+          "type": "banner",
+          "content": "",
+          "x": 51.11111111111111,
+          "y": 63.75,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789680464620-dv5ixcbnm",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_orange.png",
+          "x": 40,
+          "y": 63.4375,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.38477490236539513,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789680475606-0-31ftn6",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_orange.png",
+          "x": 37.166666666666664,
+          "y": 33.78125,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.2187361578351403,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789680524520-0-xsagva",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_orange.png",
+          "x": 45.166666666666664,
+          "y": 33.65625,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.2187361578351403,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789680529373-0-bkfyvv",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_orange.png",
+          "x": 37.05555555555555,
+          "y": 27.75,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.2187361578351403,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789680533546-0-rcox7d",
+          "type": "image",
+          "content": "/src/assets/objects/item_bottle_square_orange.png",
+          "x": 45.61111111111111,
+          "y": 27.625,
+          "width": 40,
+          "height": 26.420454545454547,
+          "rotation": 0,
+          "scale": 0.2187361578351403,
+          "metadata": {
+            "width": 40,
+            "height": 26.420454545454547,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789680552620-0-rbsq2o",
+          "type": "image",
+          "content": "/src/assets/objects/prop_weight_ring.png",
+          "x": 55.77777777777778,
+          "y": 32.84375,
+          "width": 40,
+          "height": 23.230293663060277,
+          "rotation": -2.4210615412760177,
+          "scale": 0.27175767280516816,
+          "metadata": {
+            "width": 40,
+            "height": 23.230293663060277,
+            "category": "characters",
+            "groupId": "group-1789680552620-3faaar"
+          }
+        },
+        {
+          "id": "el-1789680552620-1-qi8qxz",
+          "type": "text",
+          "content": "9",
+          "x": 56.05555555555556,
+          "y": 34.40625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "fontWeight": "bold",
+            "groupId": "group-1789680552620-3faaar"
+          }
+        },
+        {
+          "id": "el-1789680452309-62uu2hw09",
+          "type": "image",
+          "content": "/src/assets/objects/item_scale_001.png",
+          "x": 50.00086805555555,
+          "y": 40.1875,
+          "width": 40,
+          "height": 8.90625,
+          "rotation": -0.5824014794563084,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 8.90625,
+            "category": "characters",
+            "hasShadow": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1789680452309-9ej1ejfkq",
+          "type": "text",
+          "content": "<font color=\"#fde74c\">37</font>",
+          "x": 50.611979166666664,
+          "y": 40.9375,
+          "width": 10,
+          "height": 5,
+          "rotation": -1.6829840976818815,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Acme",
+            "textTransform": "none",
+            "fontSize": 24,
+            "manualZ": true
+          }
+        }
+      ],
+      "order": 10,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.33
+      }
     }
   ],
   "author": "User",
   "createdAt": "2026-08-16T14:31:56.022Z",
-  "updatedAt": "2026-09-17T16:20:44.633Z",
+  "updatedAt": "2026-09-17T21:50:50.626Z",
   "path": "lessons/9195-algebraka1/lesson.json",
   "textPreset": null,
   "description": "",
@@ -753,7 +1732,7 @@
     }
   },
   "visibleInFeed": false,
-  "name": "9195-Untitled Lesson",
+  "name": "9195-algebraka1",
   "type": "file",
   "visible": true,
   "order": 9195,
@@ -767,5 +1746,9 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1789680441579
+  }
 }

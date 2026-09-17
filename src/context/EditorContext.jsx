@@ -826,7 +826,7 @@ const editorReducer = (state, action) => {
         }
 
         case 'REORDER_ELEMENT_TO': {
-            const { elementId, toIndex } = action.payload;
+            const { elementId, toIndex, saveHistory } = action.payload || {};
             const currentSlideForMove = state.lesson.slides.find(s => s.id === state.currentSlideId);
             if (!currentSlideForMove) return state;
 
@@ -837,7 +837,8 @@ const editorReducer = (state, action) => {
             const clampedTo = Math.max(0, Math.min(toIndex, moveElements.length - 1));
             if (fromIndex === clampedTo) return state;
 
-            const newPast = pushToPast(state);
+            const shouldSave = saveHistory !== false && action.saveHistory !== false;
+            const newPast = shouldSave ? pushToPast(state) : state.past;
             const [moved] = moveElements.splice(fromIndex, 1);
             const updatedMoved = {
                 ...moved,
