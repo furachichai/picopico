@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import './AssetLibrary.css';
 import { useEditor } from '../../context/EditorContext';
@@ -9,6 +9,7 @@ import AssetInfoModal from './AssetInfoModal';
 import ConfirmationModal from './ConfirmationModal';
 import RecycleBinModal from './RecycleBinModal';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { getCustomCharacterTags, EVENT_CUSTOM_TAGS_CHANGED } from '../../utils/characterTags';
 
 const ASSETS = {
     emojis: [
@@ -90,7 +91,7 @@ export const isTitlecard = (src) => {
     );
 };
 
-const classifyAsset = (src) => {
+const classifyAsset = (src, customTags = []) => {
     if (!src) return 'other';
     const url = typeof src === 'object' ? src.default || '' : src;
     const filename = url.split('/').pop().toLowerCase();
@@ -116,6 +117,12 @@ const classifyAsset = (src) => {
     if (filename.includes('yara')) {
         return 'yara';
     }
+    // Check custom character tags
+    for (const tag of customTags) {
+        if (filename.includes(tag.id) || filename.includes(tag.id.replace(/_/g, ' '))) {
+            return tag.id;
+        }
+    }
     if (
         filename.startsWith('whole_') || 
         filename.startsWith('part_') || 
@@ -136,7 +143,7 @@ const classifyAsset = (src) => {
     return 'other';
 };
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
     { id: 'chef', name: 'Chef' },
     { id: 'pesto', name: 'Pesto' },
     { id: 'sales', name: 'Sales' },
@@ -177,6 +184,33 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const [recycleModalOpen, setRecycleModalOpen] = useState(false);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
 
+    // Custom character tags state and sync
+    const [customTags, setCustomTags] = useState(() => getCustomCharacterTags());
+
+    useEffect(() => {
+        const handleSync = () => {
+            setCustomTags(getCustomCharacterTags());
+        };
+        window.addEventListener(EVENT_CUSTOM_TAGS_CHANGED, handleSync);
+        window.addEventListener('storage', handleSync);
+        return () => {
+            window.removeEventListener(EVENT_CUSTOM_TAGS_CHANGED, handleSync);
+            window.removeEventListener('storage', handleSync);
+        };
+    }, []);
+
+    const libraryCategories = useMemo(() => {
+        const base = DEFAULT_CATEGORIES.filter(c => !['objects', 'other', 'all'].includes(c.id));
+        const custom = customTags.map(t => ({ id: t.id, name: t.label }));
+        return [
+            ...base,
+            ...custom,
+            { id: 'objects', name: 'Objects' },
+            { id: 'other', name: 'Other' },
+            { id: 'all', name: 'All' }
+        ];
+    }, [customTags]);
+
     // Persist last selected image category tag
     const savedTag = (() => {
         try {
@@ -186,8 +220,20 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
     })();
     const [activeSubCategory, setActiveSubCategory] = useState(() => {
-        return CATEGORIES.some(c => c.id === savedTag) ? savedTag : 'all';
+        const initialCustom = getCustomCharacterTags();
+        const allValid = [
+            ...DEFAULT_CATEGORIES,
+            ...initialCustom.map(t => ({ id: t.id, name: t.label }))
+        ];
+        return allValid.some(c => c.id === savedTag) ? savedTag : 'all';
     });
+
+    // Reset to 'all' if activeSubCategory was deleted
+    useEffect(() => {
+        if (activeSubCategory !== 'all' && !libraryCategories.some(c => c.id === activeSubCategory)) {
+            setActiveSubCategory('all');
+        }
+    }, [libraryCategories, activeSubCategory]);
 
     const handleSubCategoryChange = (catId) => {
         const isSame = activeSubCategory === catId;
@@ -437,8 +483,11 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
 
             // If user imported objects while on the custom images tab, switch to Objects subcategory pill
             const savedCategory = results[0]?.category;
+            const charTag = results[0]?.characterTag;
             if (savedCategory === 'objects' && activeTab === 'custom') {
                 handleSubCategoryChange('objects');
+            } else if (savedCategory === 'characters' && charTag && charTag !== 'keep' && activeTab === 'custom') {
+                handleSubCategoryChange(charTag);
             }
         }
     };
@@ -672,7 +721,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
 
                 {activeTab === 'custom' && (
                     <div className="library-subcategories">
-                        {CATEGORIES.map(cat => (
+                        {libraryCategories.map(cat => (
                             <button
                                 key={cat.id}
                                 className={`subcategory-pill ${activeSubCategory === cat.id ? 'active' : ''}`}
@@ -706,7 +755,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                     {activeTab === 'custom' && (() => {
                         const filtered = allImages.filter(src => {
                             if (activeSubCategory === 'all') return true;
-                            return classifyAsset(src) === activeSubCategory;
+                            return classifyAsset(src, customTags) === activeSubCategory;
                         });
                         return filtered.length > 0 ? (
                             filtered.map((src, index) => {

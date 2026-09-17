@@ -13772,6 +13772,179 @@
           }
         },
         {
+          "id": "slide-1789654097021-0-l6p087",
+          "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
+          "elements": [
+            {
+              "id": "el-1789654097021-tlw7vd71x",
+              "type": "image",
+              "content": "/src/assets/objects/whole_crate_1x2_001.png",
+              "x": 17.5,
+              "y": 44.649174528301884,
+              "width": 40,
+              "height": 31.132075471698112,
+              "rotation": 0,
+              "scale": 0.7276119552330245,
+              "metadata": {
+                "width": 40,
+                "height": 31.132075471698112
+              }
+            },
+            {
+              "id": "el-1789654097021-rk0w63zqn",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_raygun_afraid01.png",
+              "x": 18.805555555555557,
+              "y": 65.04994644657258,
+              "width": 40,
+              "height": 21.36592741935484,
+              "rotation": 0,
+              "scale": 0.5983983015785536,
+              "metadata": {
+                "width": 40,
+                "height": 21.36592741935484
+              }
+            },
+            {
+              "id": "el-1789654097021-017f5uah9",
+              "type": "number_line",
+              "x": 35.833333333333336,
+              "y": 43.28125,
+              "width": 15,
+              "height": 12.812499999999998,
+              "rotation": 0,
+              "scale": 1.243724290547373,
+              "metadata": {
+                "orientation": "vertical",
+                "startNumber": 0,
+                "endNumber": 1,
+                "step": 1,
+                "showNumbers": false,
+                "numberColorMode": "invisible",
+                "showArrows": false,
+                "symbolColor": "#8B5CF6",
+                "thickness": 8
+              }
+            },
+            {
+              "id": "el-1789654097021-r6k1zr6ua",
+              "type": "text",
+              "content": "3",
+              "x": 39.722222222222214,
+              "y": 44.375,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 27
+              }
+            },
+            {
+              "id": "el-1789654130594-3ed84ii16",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 85.625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "2⁻¹",
+                  "2⁻²",
+                  "2⁰"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1789654211850-1n6v4u056",
+              "type": "banner",
+              "content": "Setting for <font color=\"#000000\">fitting</font> the monster in the <font color=\"#000000\">crate</font>?",
+              "x": 40.972222222222214,
+              "y": 21.40625,
+              "width": 67.94444444444444,
+              "height": 12.5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 21,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#f6efdd",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "sticky",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1789654596702-qenbhia5y",
+              "type": "image",
+              "content": "/src/assets/characters/monsters_monster_003.png",
+              "x": 81.38888888888889,
+              "y": 51.71875,
+              "width": 40,
+              "height": 28.333333333333332,
+              "rotation": 0,
+              "scale": 1.8077708229301896,
+              "metadata": {
+                "width": 40,
+                "height": 28.333333333333332,
+                "category": "characters",
+                "flipX": true,
+                "hasShadow": false
+              }
+            },
+            {
+              "id": "el-1789654097021-rahs45pqz",
+              "type": "number_line",
+              "x": 93.61111111111111,
+              "y": 41.875,
+              "width": 15,
+              "height": 55,
+              "rotation": 0,
+              "scale": 1.4756094613339825,
+              "metadata": {
+                "orientation": "vertical",
+                "startNumber": 0,
+                "endNumber": 8,
+                "step": 1,
+                "showNumbers": true,
+                "numberColorMode": "white",
+                "showArrows": false,
+                "symbolColor": "#FFFFFF",
+                "thickness": 3,
+                "manualZ": true
+              }
+            }
+          ],
+          "order": 16,
+          "backgroundSettings": {
+            "opacity": 1,
+            "grayscale": true,
+            "tintColor": "rgba(253, 224, 71, 0.4)"
+          },
+          "cartridge": null
+        },
+        {
           "id": "slide-1789248352400-5-rjvj58",
           "background": "url(\"/src/assets/backgrounds/bkg_geom_008.png\")",
           "elements": [
@@ -13848,7 +14021,7 @@
               }
             }
           ],
-          "order": 16,
+          "order": 17,
           "cartridge": null,
           "backgroundSettings": {
             "opacity": 0.47
@@ -13929,11 +14102,185 @@
               }
             }
           ],
-          "order": 17,
+          "order": 18,
           "cartridge": null,
           "backgroundSettings": {
             "opacity": 0.47
           }
+        },
+        {
+          "id": "slide-1789654456961",
+          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+          "elements": [
+            {
+              "id": "el-1789654456961-iusx8c3uw",
+              "type": "text",
+              "content": "2",
+              "x": 34.16666666666666,
+              "y": 38.125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 27
+              }
+            },
+            {
+              "id": "el-1789654456961-v1vyj94ms",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 85.625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "3⁰",
+                  "3⁻¹",
+                  "3⁻²"
+                ],
+                "correctIndex": 1,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1789654515385-ln70bizsk",
+              "type": "image",
+              "content": "/src/assets/characters/monsters_yeti_001.png",
+              "x": 82.77777777777779,
+              "y": 48.125,
+              "width": 40,
+              "height": 25.673981191222573,
+              "rotation": 0,
+              "scale": 1.8510074436983028,
+              "metadata": {
+                "width": 40,
+                "height": 25.673981191222573,
+                "category": "characters",
+                "flipX": true,
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789654456961-xekslbm9s",
+              "type": "number_line",
+              "x": 93.61111111111111,
+              "y": 41.875,
+              "width": 15,
+              "height": 55,
+              "rotation": 0,
+              "scale": 1.4756094613339825,
+              "metadata": {
+                "orientation": "vertical",
+                "startNumber": 0,
+                "endNumber": 8,
+                "step": 1,
+                "showNumbers": true,
+                "numberColorMode": "white",
+                "showArrows": false,
+                "symbolColor": "#8B5CF6",
+                "thickness": 3,
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789654456961-bayobti1i",
+              "type": "banner",
+              "content": "Setting for <font color=\"#000000\">fitting</font> the monster in the <font color=\"#000000\">crate</font>?",
+              "x": 40.972222222222214,
+              "y": 21.40625,
+              "width": 67.94444444444444,
+              "height": 12.5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 21,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#fff875",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "sticky",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1789654476314-qmojytmxw",
+              "type": "image",
+              "content": "/src/assets/objects/whole_crate_side_1x1_001.png",
+              "x": 16.944444444444443,
+              "y": 37.65625,
+              "width": 40,
+              "height": 21.341911764705877,
+              "rotation": 0,
+              "scale": 0.4636263889410255,
+              "metadata": {
+                "width": 40,
+                "height": 21.341911764705877,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1789654507055-6834dlmte",
+              "type": "image",
+              "content": "/src/assets/characters/yara_ray_gun_yara_rotfl_1.png",
+              "x": 19.166666666666668,
+              "y": 61.25,
+              "width": 40,
+              "height": 27.354988399071928,
+              "rotation": 0,
+              "scale": 0.7684436922502583,
+              "metadata": {
+                "width": 40,
+                "height": 27.354988399071928,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1789654456961-8pr4wd3xw",
+              "type": "number_line",
+              "x": 28.611111111111114,
+              "y": 37.96875,
+              "width": 15,
+              "height": 12.812499999999998,
+              "rotation": 0,
+              "scale": 0.7809940517754226,
+              "metadata": {
+                "orientation": "vertical",
+                "startNumber": 0,
+                "endNumber": 1,
+                "step": 1,
+                "showNumbers": false,
+                "numberColorMode": "invisible",
+                "showArrows": false,
+                "symbolColor": "#8B5CF6",
+                "thickness": 8,
+                "manualZ": true
+              }
+            }
+          ],
+          "order": 19,
+          "backgroundSettings": {
+            "opacity": 0.22
+          },
+          "cartridge": null
         },
         {
           "id": "slide-1789248352400-7-p018xm",
@@ -14010,7 +14357,7 @@
               }
             }
           ],
-          "order": 18,
+          "order": 20,
           "cartridge": null,
           "backgroundSettings": {
             "opacity": 0.47
@@ -14187,7 +14534,7 @@
               }
             }
           ],
-          "order": 19,
+          "order": 21,
           "guides": {
             "horizontal": [],
             "vertical": [
@@ -14230,7 +14577,7 @@
       ],
       "author": "User",
       "createdAt": "2026-09-12T11:54:58.023Z",
-      "updatedAt": "2026-09-13T23:31:49.731Z",
+      "updatedAt": "2026-09-17T14:23:22.419Z",
       "path": "lessons/4283-Exponentes negativos/lesson.json",
       "textPreset": null,
       "description": "",
@@ -14242,12 +14589,12 @@
           "description": ""
         }
       },
-      "name": "4283-Untitled Lesson",
+      "name": "4283-Exponentes negativos",
       "type": "file",
       "visible": true,
       "visibleInFeed": true,
       "order": 4283,
-      "status": "active",
+      "status": "completed",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -14258,9 +14605,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1789327850861
+        "lastSlideIndex": 19,
+        "completed": true,
+        "lastPlayed": 1789654087198
       }
     }
   },
@@ -17969,50 +18316,784 @@
     }
   },
   {
-    "name": "9195-Untitled Lesson",
+    "name": "9195-algebraka1",
     "type": "file",
-    "path": "lessons/9195-Untitled Lesson/lesson.json",
-    "title": "Untitled Lesson",
+    "path": "lessons/9195-algebraka1/lesson.json",
+    "title": "algebraka1",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
     "order": 9195,
     "content": {
       "id": "lessons/9195-Untitled Lesson/lesson.json",
-      "title": "Untitled Lesson",
+      "title": "algebraka1",
       "slides": [
         {
           "id": "slide-1",
           "background": "#E1F5FE",
-          "elements": [],
-          "order": 0,
-          "cartridge": {
-            "type": "Balanza",
-            "config": {
-              "weightsText": "",
-              "leftPlateText": "🍎, 🍎, 📦x",
-              "rightPlateText": "🍎, 📦",
-              "menuText": "2x🍎",
-              "showZeroTiles": false
+          "elements": [
+            {
+              "id": "el-1789657533509-g8be1knit",
+              "type": "image",
+              "content": "/src/assets/characters/pesto%20jumping.png",
+              "x": 19.722222222222232,
+              "y": 59.21875,
+              "width": 40,
+              "height": 26.642384105960264,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 26.642384105960264,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1789657578019-03murl72s",
+              "type": "image",
+              "content": "/src/assets/characters/yara_triumph.png",
+              "x": 71.11111111111111,
+              "y": 72.96875,
+              "width": 40,
+              "height": 35.325,
+              "rotation": 0,
+              "scale": 1.4933816794552615,
+              "metadata": {
+                "width": 40,
+                "height": 35.325,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1789657538111-9xvpxp76j",
+              "type": "balloon",
+              "content": "I <b>found</b> where he <b>hid</b> the <b>formula</b>!",
+              "x": 34.16666666666666,
+              "y": 25.9375,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -31,
+                  "y": 100
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            },
+            {
+              "id": "el-1789657583790-qrosehzsu",
+              "type": "balloon",
+              "content": "We're going to be SO rich!",
+              "x": 80.27777777777777,
+              "y": 31.484375,
+              "width": 40,
+              "height": 14.531250000000002,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -16,
+                  "y": 87
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
             }
+          ],
+          "order": 0,
+          "cartridge": null
+        },
+        {
+          "id": "slide-1789657610934",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789658401406-0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looking_at_paper.png",
+              "x": 75.27777777777777,
+              "y": 95.20747950819671,
+              "width": 40,
+              "height": 48.07377049180328,
+              "rotation": 0,
+              "scale": 2.4400362182987467,
+              "metadata": {
+                "width": 40,
+                "height": 48.07377049180328
+              }
+            },
+            {
+              "id": "el-1789658428795-l9x6k6661",
+              "type": "image",
+              "content": "/src/assets/objects/item_balloon_octo002.png",
+              "x": 34.44444444444444,
+              "y": 29.53125,
+              "width": 40,
+              "height": 14.671658986175116,
+              "rotation": -1.2592678657544383,
+              "scale": 1.6770092443453815,
+              "metadata": {
+                "width": 40,
+                "height": 14.671658986175116,
+                "category": "objects"
+              }
+            },
+            {
+              "id": "el-1789658453395-7f4q1tte5",
+              "type": "text",
+              "content": "<font color=\"#c62828\">Not so fast!</font><div><font color=\"#c62828\"><span style=\"caret-color: rgb(198, 40, 40);\"><br></span></font><div><font color=\"#c62828\">The <b>ingredients</b> are <b>coded</b>..</font></div></div>",
+              "x": 30.416666666666664,
+              "y": 28.90625,
+              "width": 40.833333333333336,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 20,
+                "lineHeight": 1
+              }
+            },
+            {
+              "id": "el-1789658589278-4ohzws9zq",
+              "type": "balloon",
+              "content": "I could <b>identify</b> them if I knew their <b>weight</b>...",
+              "x": 18.888888888888886,
+              "y": 65.234375,
+              "width": 40,
+              "height": 22.65625,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 84,
+                  "y": 15
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 1
+        },
+        {
+          "id": "slide-1789658854276",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789659184997-1",
+              "type": "image",
+              "content": "/src/assets/objects/item_file_cabinet_open.png",
+              "x": 23.111111111111118,
+              "y": 38.289500000000004,
+              "width": 40,
+              "height": 27.647999999999996,
+              "rotation": 0,
+              "scale": 1.1226887944999375,
+              "metadata": {
+                "width": 40,
+                "height": 27.647999999999996
+              }
+            },
+            {
+              "id": "el-1789659239102-5fjau9lr0",
+              "type": "image",
+              "content": "/src/assets/characters/pesto asking question.png",
+              "x": 18.055555555555557,
+              "y": 58.125,
+              "width": 40,
+              "height": 25.981132075471695,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 25.981132075471695,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1789659292635-0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looking_at_paper_from_behind_1.png",
+              "x": 88.88888888888889,
+              "y": 63.71160409556313,
+              "width": 40,
+              "height": 45.03839590443686,
+              "rotation": 0,
+              "scale": 1.889109988468162,
+              "metadata": {
+                "width": 40,
+                "height": 45.03839590443686
+              }
+            },
+            {
+              "id": "el-1789659335364-zgmtbdi6u",
+              "type": "balloon",
+              "content": "Maybe these <b>photos</b> could help...",
+              "x": 32.083333333333336,
+              "y": 85.15625,
+              "width": 44.72222222222222,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -6,
+                  "y": -106
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 2
+        },
+        {
+          "id": "slide-1789659485208",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_2987.png\")",
+          "elements": [
+            {
+              "id": "el-1789659489306-5myhlsjfj",
+              "type": "banner",
+              "content": "",
+              "x": 50,
+              "y": 35.703125,
+              "width": 51,
+              "height": 21.08918987288618,
+              "rotation": 0,
+              "scale": 1.6554238770393073,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "photo",
+                "showTape": false,
+                "locked": false,
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789659542598-lbpsnlif3",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_scircle_orange.png",
+              "x": 43.61111111111111,
+              "y": 29.21875,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -1.9865846231103461,
+              "scale": 0.2340097320081486,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "hasShadow": false,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1789659554115-0-9eqpw6",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_scircle_orange.png",
+              "x": 54.94444444444444,
+              "y": 29.09375,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -1.7056528737516317,
+              "scale": 0.2340097320081486,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "hasShadow": false,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1789659509448-4dwj86sy4",
+              "type": "image",
+              "content": "/src/assets/objects/prop_scale_001.png",
+              "x": 50,
+              "y": 37.34375,
+              "width": 40,
+              "height": 17.879464285714285,
+              "rotation": -1.7460910246984298,
+              "scale": 0.7872302497585891,
+              "metadata": {
+                "width": 40,
+                "height": 17.879464285714285,
+                "category": "characters",
+                "hasShadow": false,
+                "manualZ": true,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1789659615914-y65pqpg23",
+              "type": "text",
+              "content": "<font color=\"#fde74c\">14</font>",
+              "x": 50,
+              "y": 39.0625,
+              "width": 10,
+              "height": 5,
+              "rotation": -1.6829840976818815,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Acme",
+                "textTransform": "none",
+                "fontSize": 24
+              }
+            },
+            {
+              "id": "el-1789659694862-brvzpy8z3",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 58.611111111111114,
+              "y": 64.0625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "field",
+                "visualMode": false,
+                "fieldExpression": "=*14/2*"
+              }
+            },
+            {
+              "id": "el-1789659816198-1s4mbumsd",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_scircle_orange.png",
+              "x": 41.388888888888886,
+              "y": 63.90625,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": 0,
+              "scale": 0.341997633880717,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "hasShadow": false
+              }
+            }
+          ],
+          "order": 3,
+          "backgroundSettings": {
+            "opacity": 0.42
+          }
+        },
+        {
+          "id": "slide-1789659998690",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4624.png\")",
+          "elements": [
+            {
+              "id": "el-1789659998690-8xqk094km",
+              "type": "banner",
+              "content": "",
+              "x": 50,
+              "y": 35.703125,
+              "width": 51,
+              "height": 21.08918987288618,
+              "rotation": 0,
+              "scale": 1.6554238770393073,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "photo",
+                "showTape": true,
+                "locked": false,
+                "manualZ": true,
+                "hideTape": false
+              }
+            },
+            {
+              "id": "el-1789660040481-0-2hwlv8",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_square_blue.png",
+              "x": 39.94444444444444,
+              "y": 29.09375,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -1.8164750818798012,
+              "scale": 0.24142088955931876,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660077506-0-oxj85p",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_square_blue.png",
+              "x": 56.222222222222236,
+              "y": 29,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -2.0639725392138217,
+              "scale": 0.24142088955931876,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660072444-0-2smggp",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_square_blue.png",
+              "x": 48.22222222222222,
+              "y": 29.125,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -1.9987325408631875,
+              "scale": 0.24142088955931876,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789659998690-ya2oqond1",
+              "type": "image",
+              "content": "/src/assets/objects/prop_scale_001.png",
+              "x": 50,
+              "y": 37.34375,
+              "width": 40,
+              "height": 17.879464285714285,
+              "rotation": -1.7460910246984298,
+              "scale": 0.7872302497585891,
+              "metadata": {
+                "width": 40,
+                "height": 17.879464285714285,
+                "category": "characters",
+                "hasShadow": false,
+                "manualZ": true,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1789659998690-ap9zszvfs",
+              "type": "text",
+              "content": "<font color=\"#fde74c\">6</font>",
+              "x": 50,
+              "y": 39.0625,
+              "width": 10,
+              "height": 5,
+              "rotation": -1.6829840976818815,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Acme",
+                "textTransform": "none",
+                "fontSize": 24
+              }
+            },
+            {
+              "id": "el-1789659998690-w1og056jy",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 58.611111111111114,
+              "y": 64.0625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "field",
+                "visualMode": false,
+                "fieldExpression": "=*6/3*"
+              }
+            },
+            {
+              "id": "el-1789660024639-kukf077g6",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_square_blue.png",
+              "x": 40.83333333333333,
+              "y": 63.28125,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": 0,
+              "scale": 0.3455469266143352,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "hidden": false
+              }
+            }
+          ],
+          "order": 4,
+          "cartridge": null,
+          "backgroundSettings": {
+            "opacity": 0.33
+          }
+        },
+        {
+          "id": "slide-1789660324986",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4663.png\")",
+          "elements": [
+            {
+              "id": "el-1789660324986-vor611wx8",
+              "type": "banner",
+              "content": "",
+              "x": 50,
+              "y": 35.703125,
+              "width": 51,
+              "height": 21.08918987288618,
+              "rotation": 0,
+              "scale": 1.6554238770393073,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "photo",
+                "showTape": false,
+                "locked": false,
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660370980-0-3dvnpo",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_triangle_violet.png",
+              "x": 42.166666666666664,
+              "y": 29.40625,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": -2.4558040232163734,
+              "scale": 0.23313471869549482,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660356532-mncn0jm1e",
+              "type": "image",
+              "content": "/src/assets/objects/prop_weight_ring.png",
+              "x": 53.05555555555556,
+              "y": 28.59375,
+              "width": 40,
+              "height": 23.230293663060277,
+              "rotation": -2.4210615412760177,
+              "scale": 0.27175767280516816,
+              "metadata": {
+                "width": 40,
+                "height": 23.230293663060277,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660338994-i2f6yopry",
+              "type": "image",
+              "content": "/src/assets/objects/item_bottle_triangle_violet.png",
+              "x": 39.99999999999999,
+              "y": 63.4375,
+              "width": 40,
+              "height": 26.420454545454547,
+              "rotation": 0,
+              "scale": 0.3479519255454431,
+              "metadata": {
+                "width": 40,
+                "height": 26.420454545454547,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789660324986-36pf2zy5z",
+              "type": "image",
+              "content": "/src/assets/objects/prop_scale_001.png",
+              "x": 50,
+              "y": 37.34375,
+              "width": 40,
+              "height": 17.879464285714285,
+              "rotation": -1.7460910246984298,
+              "scale": 0.7872302497585891,
+              "metadata": {
+                "width": 40,
+                "height": 17.879464285714285,
+                "category": "characters",
+                "hasShadow": false,
+                "manualZ": true,
+                "locked": true,
+                "groupId": "group-1789660447956-o62uf7"
+              }
+            },
+            {
+              "id": "el-1789660324986-lbek1xtem",
+              "type": "text",
+              "content": "<font color=\"#fde74c\">20</font>",
+              "x": 50,
+              "y": 39.0625,
+              "width": 10,
+              "height": 5,
+              "rotation": -1.6829840976818815,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Acme",
+                "textTransform": "none",
+                "fontSize": 24,
+                "groupId": "group-1789660447956-o62uf7"
+              }
+            },
+            {
+              "id": "el-1789660324986-m1hwj6a97",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 58.05555555555556,
+              "y": 63.90625,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "field",
+                "visualMode": false,
+                "fieldExpression": "=*20-5*"
+              }
+            },
+            {
+              "id": "el-1789660401704-73obd2iyh",
+              "type": "text",
+              "content": "5",
+              "x": 53.333333333333336,
+              "y": 29.6875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          "order": 5,
+          "cartridge": null,
+          "backgroundSettings": {
+            "opacity": 0.2,
+            "grayscale": true,
+            "tintColor": "rgba(134, 239, 172, 0.4)"
           }
         }
       ],
       "author": "User",
       "createdAt": "2026-08-16T14:31:56.022Z",
-      "updatedAt": "2026-08-16T14:50:39.195Z",
-      "path": "lessons/9195-Untitled Lesson/lesson.json",
+      "updatedAt": "2026-09-17T16:20:44.633Z",
+      "path": "lessons/9195-algebraka1/lesson.json",
       "textPreset": null,
       "description": "",
-      "icon": "icon_textbook.png",
-      "cardColor": "#8B5CF6",
+      "icon": "icon_game.png",
+      "cardColor": "#22D3EE",
       "translations": {
         "en": {
           "title": "",
           "description": ""
         }
       },
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "name": "9195-Untitled Lesson",
+      "type": "file",
+      "visible": true,
+      "order": 9195,
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": null
     }
   }
 ]

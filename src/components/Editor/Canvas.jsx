@@ -14,6 +14,7 @@ import { PotiondasThumbnail } from './SlideThumbnail';
 import SaveAssetModal from './SaveAssetModal';
 import Rulers from './Rulers';
 import GroupTransformBox from './GroupTransformBox';
+import FieldQuizBottomControls from './FieldQuizBottomControls';
 
 /**
  * Canvas Component
@@ -1084,6 +1085,21 @@ const Canvas = (props) => {
               />
             );
           })}
+
+          {/* Field Quiz Bottom Controls Preview in Editor */}
+          {(() => {
+            const fieldQuizElement = currentSlide?.elements?.find(
+              el => el.type === 'quiz' && el.metadata?.quizType === 'field'
+            );
+            if (!fieldQuizElement) return null;
+            return (
+              <FieldQuizBottomControls
+                element={fieldQuizElement}
+                onSelect={handleSelect}
+                isEditor={true}
+              />
+            );
+          })()}
 
           {/* Center Snap Guidelines (Flash on alignment with slide center) */}
           <div className={`center-snap-guideline vertical ${snapGuideline.vertical ? 'active' : ''}`} />

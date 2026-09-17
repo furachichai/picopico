@@ -7,7 +7,8 @@ import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
-import { isCharacterElement } from '../../utils/characterShadow';
+import { isCharacterElement, setImageShadowPreference } from '../../utils/characterShadow';
+import { evaluateMathExpression, parseFieldExpression } from '../../utils/fieldQuizUtils';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -83,82 +84,6 @@ const EMOJI_CATEGORIES = [
     }
 ];
 
-const evaluateMathExpression = (expr) => {
-    try {
-        if (!expr) return null;
-        let clean = expr
-            .replace(/[xX×]/g, '*')
-            .replace(/[÷]/g, '/')
-            .replace(/[−—–]/g, '-')
-            .replace(/\s+/g, '');
-        
-        if (!/^[0-9+\-*/().\s]+$/.test(clean)) {
-            return null;
-        }
-        
-        const val = new Function(`return (${clean})`)();
-        if (typeof val === 'number' && !isNaN(val) && isFinite(val)) {
-            return val;
-        }
-        return null;
-    } catch (e) {
-        return null;
-    }
-};
-
-const parseFieldExpression = (expression) => {
-    if (!expression) return [];
-    
-    const segments = [];
-    let lastIndex = 0;
-    const regex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
-    let match;
-    
-    while ((match = regex.exec(expression)) !== null) {
-        if (match.index > lastIndex) {
-            segments.push({
-                type: 'text',
-                content: expression.substring(lastIndex, match.index)
-            });
-        }
-        
-        const isDouble = match[1].startsWith('**');
-        const expr = isDouble ? match[2] : match[3];
-        const val = evaluateMathExpression(expr);
-        
-        segments.push({
-            type: 'field',
-            isDouble,
-            placeholder: expr,
-            evaluated: val,
-            raw: match[1]
-        });
-        
-        lastIndex = regex.lastIndex;
-    }
-    
-    if (lastIndex < expression.length) {
-        segments.push({
-            type: 'text',
-            content: expression.substring(lastIndex)
-        });
-    }
-
-    // Trim trailing/leading whitespace from text segments adjacent to fields
-    for (let i = 0; i < segments.length; i++) {
-        if (segments[i].type === 'text') {
-            if (i + 1 < segments.length && segments[i + 1].type === 'field') {
-                segments[i].content = segments[i].content.replace(/\s+$/, '');
-            }
-            if (i - 1 >= 0 && segments[i - 1].type === 'field') {
-                segments[i].content = segments[i].content.replace(/^\s+/, '');
-            }
-        }
-    }
-    
-    return segments;
-};
-
 const FONTS = [
     { name: 'Acme', value: 'Acme' },
     { name: 'Bangers (Comic)', value: '"Bangers", cursive, sans-serif' },
@@ -177,14 +102,18 @@ const FONTS = [
 ];
 
 const COLORS = [
-    // Row 1 — Light
-    '#7EC8E3', '#5EEDC9', '#69F05E', '#FDE74C', '#F88B8B', '#F9A0C7',
-    // Row 2 — Medium
-    '#2196F3', '#00BFA5', '#4CAF50', '#FFC107', '#F44336', '#E91E8F',
-    // Row 3 — Dark
-    '#0D47A1', '#00897B', '#2E7D32', '#F57C00', '#C62828', '#880E4F',
-    // Row 4 — Neutrals & Paper tone
-    '#FFFFFF', '#f6efdd', '#C8C8C8', '#969696', '#5A5A5A', '#000000',
+    // Row 1 — Pastel / Very Light
+    '#FFCDD2', '#FFE0B2', '#FFF9C4', '#C8E6C9', '#B2DFDB', '#BBDEFB', '#E1BEE7', '#FCE4EC',
+    // Row 2 — Light
+    '#F88B8B', '#FFB74D', '#FDE74C', '#69F05E', '#5EEDC9', '#7EC8E3', '#C084FC', '#F9A0C7',
+    // Row 3 — Vibrant / Medium
+    '#F44336', '#FF9800', '#FFC107', '#4CAF50', '#00BFA5', '#2196F3', '#9C27B0', '#E91E8F',
+    // Row 4 — Deep / Rich
+    '#C62828', '#F57C00', '#FFA000', '#2E7D32', '#00897B', '#1565C0', '#7B1FA2', '#C2185B',
+    // Row 5 — Dark / Jewel
+    '#B71C1C', '#E65100', '#FF6F00', '#1B5E20', '#004D40', '#0D47A1', '#4A148C', '#880E4F',
+    // Row 6 — Neutrals & Monochrome
+    '#FFFFFF', '#f6efdd', '#E2E8F0', '#CBD5E1', '#C8C8C8', '#969696', '#5A5A5A', '#000000',
 ];
 
 const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background", extraColors = [] }) => {
@@ -234,9 +163,9 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                     <div className="color-picker-popup" style={{
                         position: 'absolute', bottom: 'calc(100% + 12px)',
                         ...(align === 'left' ? { left: '0px' } : align === 'right' ? { right: '0px' } : { left: '50%', transform: 'translateX(-50%)' }),
-                        background: 'white', padding: '12px', borderRadius: '16px',
+                        background: 'white', padding: '10px 12px', borderRadius: '16px',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.25)', display: 'grid',
-                        gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', zIndex: 100,
+                        gridTemplateColumns: 'repeat(8, 1fr)', gap: '6px', zIndex: 100,
                     }}>
                         {extraColors && extraColors.length > 0 && (
                             <div style={{
@@ -348,7 +277,18 @@ const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children
                             <div
                                 key={c}
                                 className={`color-swatch ${color === c ? 'active' : ''}`}
-                                style={{ backgroundColor: c, width: '28px', height: '28px', borderRadius: '6px' }}
+                                style={{
+                                    backgroundColor: c,
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '6px',
+                                    boxSizing: 'border-box',
+                                    border: color === c
+                                        ? undefined
+                                        : (['#FFFFFF', '#f6efdd', '#FFF9C4', '#FCE4EC', '#E2E8F0', '#FFE0B2', '#FFCDD2', '#C8E6C9', '#B2DFDB', '#BBDEFB', '#E1BEE7'].includes(c)
+                                            ? '1.5px solid rgba(0,0,0,0.14)'
+                                            : '1.5px solid rgba(0,0,0,0.06)')
+                                }}
                                 onMouseDown={(e) => {
                                     if (onMouseDownItem) onMouseDownItem(e, c);
                                 }}
@@ -848,7 +788,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             align="left"
                             allowNone={true}
                             noneLabel="No background"
-                            extraColors={element.type === 'banner' ? ['#f6efdd', '#fff875'] : undefined}
+                            extraColors={element.type === 'banner' ? ['#f6efdd', '#fff875', '#faf8f5'] : undefined}
                         />
                         {element.type === 'banner' && (() => {
                             const currentSkin = metadata.skin || 'comic';
@@ -857,6 +797,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 { id: 'paper', icon: '📜', label: 'Taped Paper', defaultBg: '#f6efdd' },
                                 { id: 'sticky', icon: '📝', label: 'Sticky Note', defaultBg: '#fff875' },
                                 { id: 'notebook', icon: '📓', label: 'Notebook Paper', defaultBg: '#ffffff' },
+                                { id: 'photo', icon: '📸', label: 'Photo Frame', defaultBg: '#faf8f5' },
                             ];
                             const currSkinObj = skins.find(s => s.id === currentSkin) || skins[0];
 
@@ -1255,7 +1196,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             <label>Shadow</label>
                             <button
                                 className={`btn-icon ${hasShadow ? 'active' : ''}`}
-                                onClick={() => updateMetadata({ hasShadow: !hasShadow })}
+                                onClick={() => {
+                                    const nextShadow = !hasShadow;
+                                    updateMetadata({ hasShadow: nextShadow });
+                                    setImageShadowPreference(element.content, nextShadow);
+                                }}
                                 title={hasShadow ? "Turn off shadow" : "Turn on shadow"}
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

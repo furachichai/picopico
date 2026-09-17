@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useTranslation } from 'react-i18next';
 import './SaveAssetModal.css';
+import {
+    DEFAULT_CHARACTER_TAGS,
+    getCustomCharacterTags,
+    getAllCharacterTags,
+    addCustomCharacterTag,
+    removeCustomCharacterTag,
+    EVENT_CUSTOM_TAGS_CHANGED
+} from '../../utils/characterTags';
 
 const CATEGORIES = [
     { id: 'characters', label: 'Characters', icon: '👤', folder: 'src/assets/characters' },
     { id: 'objects', label: 'Objects', icon: '📦', folder: 'src/assets/objects' },
     { id: 'backgrounds', label: 'Backgrounds', icon: '🌄', folder: 'src/assets/backgrounds' },
     { id: 'images', label: 'General', icon: '🖼️', folder: 'src/assets/images' },
-];
-
-const CHARACTER_TAGS = [
-    { id: 'chef', label: 'Chef' },
-    { id: 'pesto', label: 'Pesto' },
-    { id: 'sales', label: 'Sales' },
-    { id: 'dilla', label: 'Dilla' },
-    { id: 'wizard', label: 'Wizard' },
-    { id: 'yara', label: 'Yara' },
-    { id: 'keep', label: 'Original Names' },
 ];
 
 const OBJECT_TAGS = [
@@ -46,10 +43,11 @@ const getSavedCategory = (fallback = 'characters') => {
     return fallback;
 };
 
-const getSavedCharacterTag = (fallback = 'chef') => {
+const getSavedCharacterTag = (fallback = 'chef', availableTags = null) => {
     try {
         const saved = localStorage.getItem('picopico_last_save_character_tag');
-        if (saved && CHARACTER_TAGS.some(t => t.id === saved)) {
+        const tags = availableTags || getAllCharacterTags();
+        if (saved && tags.some(t => t.id === saved)) {
             return saved;
         }
     } catch {
@@ -83,12 +81,13 @@ const getSavedBackgroundTag = (fallback = 'bkg') => {
 };
 
 // Helper to format/prefix a filename according to category and selected sub-tag
-const formatItemFilename = (rawName, category, characterTag, objectTag, backgroundTag) => {
+const formatItemFilename = (rawName, category, characterTag, objectTag, backgroundTag, charTagsList = null) => {
     let clean = (rawName || 'asset').replace(/\.[^/.]+$/, '');
     clean = clean.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
 
     // Strip previous tag prefixes
-    CHARACTER_TAGS.forEach(t => {
+    const allCharTags = charTagsList || getAllCharacterTags();
+    allCharTags.forEach(t => {
         if (t.id !== 'keep' && clean.startsWith(t.id + '_')) {
             clean = clean.replace(new RegExp(`^${t.id}_`), '');
         }
@@ -138,7 +137,6 @@ const SaveAssetModal = ({
     onSave,
     onCancel
 }) => {
-    const { t } = useTranslation();
     const [category, setCategory] = useState('characters');
     const [characterTag, setCharacterTag] = useState('chef');
     const [objectTag, setObjectTag] = useState('whole');
@@ -148,12 +146,35 @@ const SaveAssetModal = ({
     const [saveProgress, setSaveProgress] = useState({ current: 0, total: 0, name: '' });
     const [error, setError] = useState(null);
 
+    // Custom character tags state
+    const [customTags, setCustomTags] = useState(() => getCustomCharacterTags());
+    const [isCreatingTag, setIsCreatingTag] = useState(false);
+    const [newTagInput, setNewTagInput] = useState('');
+    const [newTagError, setNewTagError] = useState(null);
+
+    // Keep custom tags synchronized
+    useEffect(() => {
+        const handleSync = () => {
+            setCustomTags(getCustomCharacterTags());
+        };
+        window.addEventListener(EVENT_CUSTOM_TAGS_CHANGED, handleSync);
+        window.addEventListener('storage', handleSync);
+        return () => {
+            window.removeEventListener(EVENT_CUSTOM_TAGS_CHANGED, handleSync);
+            window.removeEventListener('storage', handleSync);
+        };
+    }, []);
+
     // Initialize items and tags on open
     useEffect(() => {
         if (!isOpen) return;
 
+        const loadedCustom = getCustomCharacterTags();
+        setCustomTags(loadedCustom);
+        const allTags = getAllCharacterTags(loadedCustom);
+
         const effectiveCategory = initialCategory || getSavedCategory('characters');
-        const effectiveCharTag = getSavedCharacterTag('chef');
+        const effectiveCharTag = getSavedCharacterTag('chef', allTags);
         const effectiveObjTag = getSavedObjectTag('whole');
         const effectiveBgTag = getSavedBackgroundTag('bkg');
 
@@ -163,6 +184,9 @@ const SaveAssetModal = ({
         setBackgroundTag(effectiveBgTag);
         setError(null);
         setIsSaving(false);
+        setIsCreatingTag(false);
+        setNewTagInput('');
+        setNewTagError(null);
         setSaveProgress({ current: 0, total: 0, name: '' });
 
         // Normalize raw items list
@@ -185,7 +209,7 @@ const SaveAssetModal = ({
 
         const initializedItems = rawList.map((item, idx) => {
             const rawName = item.filename || `asset_${timestamp}_${idx + 1}`;
-            const targetName = formatItemFilename(rawName, effectiveCategory, effectiveCharTag, effectiveObjTag, effectiveBgTag);
+            const targetName = formatItemFilename(rawName, effectiveCategory, effectiveCharTag, effectiveObjTag, effectiveBgTag, allTags);
 
             return {
                 id: `asset_${idx}_${Date.now()}`,
@@ -211,16 +235,52 @@ const SaveAssetModal = ({
     }, [isOpen, imageData, propItems, initialCategory, initialFilename]);
 
     // Update prefix when character tag changes
-    const handleCharacterTagChange = (tagId) => {
+    const handleCharacterTagChange = (tagId, tagsList = null) => {
         setCharacterTag(tagId);
         try {
             localStorage.setItem('picopico_last_save_character_tag', tagId);
         } catch {}
 
+        const currentTags = tagsList || getAllCharacterTags(customTags);
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, category, tagId, objectTag)
+            filename: formatItemFilename(item.originalName, category, tagId, objectTag, backgroundTag, currentTags)
         })));
+    };
+
+    // Create a new custom character tag
+    const handleCreateTag = (e) => {
+        if (e) e.preventDefault();
+        const trimmed = newTagInput.trim();
+        if (!trimmed) {
+            setNewTagError('Please enter a tag name');
+            return;
+        }
+
+        try {
+            const newTag = addCustomCharacterTag(trimmed);
+            const updatedCustom = getCustomCharacterTags();
+            setCustomTags(updatedCustom);
+            setNewTagInput('');
+            setIsCreatingTag(false);
+            setNewTagError(null);
+
+            const updatedAll = getAllCharacterTags(updatedCustom);
+            handleCharacterTagChange(newTag.id, updatedAll);
+        } catch (err) {
+            setNewTagError(err.message || 'Could not add tag');
+        }
+    };
+
+    // Delete a custom character tag
+    const handleDeleteCustomTag = (tagId, e) => {
+        if (e) e.stopPropagation();
+        const updatedCustom = removeCustomCharacterTag(tagId);
+        setCustomTags(updatedCustom);
+        const updatedAll = getAllCharacterTags(updatedCustom);
+        if (characterTag === tagId) {
+            handleCharacterTagChange('chef', updatedAll);
+        }
     };
 
     // Update prefix when object tag changes
@@ -230,9 +290,10 @@ const SaveAssetModal = ({
             localStorage.setItem('picopico_last_save_object_tag', tagId);
         } catch {}
 
+        const allTags = getAllCharacterTags(customTags);
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, category, characterTag, tagId, backgroundTag)
+            filename: formatItemFilename(item.originalName, category, characterTag, tagId, backgroundTag, allTags)
         })));
     };
 
@@ -243,9 +304,10 @@ const SaveAssetModal = ({
             localStorage.setItem('picopico_last_save_background_tag', tagId);
         } catch {}
 
+        const allTags = getAllCharacterTags(customTags);
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, category, characterTag, objectTag, tagId)
+            filename: formatItemFilename(item.originalName, category, characterTag, objectTag, tagId, allTags)
         })));
     };
 
@@ -256,9 +318,10 @@ const SaveAssetModal = ({
             localStorage.setItem('picopico_last_save_category', newCat);
         } catch {}
 
+        const allTags = getAllCharacterTags(customTags);
         setItems(prev => prev.map(item => ({
             ...item,
-            filename: formatItemFilename(item.originalName, newCat, characterTag, objectTag, backgroundTag)
+            filename: formatItemFilename(item.originalName, newCat, characterTag, objectTag, backgroundTag, allTags)
         })));
     };
 
@@ -331,7 +394,8 @@ const SaveAssetModal = ({
                 const result = await response.json();
                 savedResults.push({
                     ...result,
-                    dimensions: item.dimensions
+                    dimensions: item.dimensions,
+                    characterTag: category === 'characters' ? characterTag : null
                 });
             }
 
@@ -440,18 +504,103 @@ const SaveAssetModal = ({
                         {/* Character Tag Selector */}
                         {category === 'characters' && (
                             <div className="save-asset-field">
-                                <label>Character Tag / Prefix for All</label>
-                                <div className="save-asset-tag-pills">
-                                    {CHARACTER_TAGS.map(tag => (
+                                <div className="save-asset-field-header">
+                                    <label>Character Tag / Category for All</label>
+                                    {!isCreatingTag && (
                                         <button
                                             type="button"
-                                            key={tag.id}
-                                            className={`save-tag-pill ${characterTag === tag.id ? 'active' : ''}`}
-                                            onClick={() => handleCharacterTagChange(tag.id)}
+                                            className="save-asset-add-tag-trigger"
+                                            onClick={() => {
+                                                setIsCreatingTag(true);
+                                                setNewTagError(null);
+                                            }}
+                                            title="Create new character category/tag"
                                         >
-                                            {tag.label}
+                                            + New Tag
                                         </button>
-                                    ))}
+                                    )}
+                                </div>
+
+                                {isCreatingTag && (
+                                    <div className="save-asset-new-tag-row">
+                                        <input
+                                            type="text"
+                                            className="save-asset-new-tag-input"
+                                            placeholder="e.g. Knight, Robot, Monster..."
+                                            value={newTagInput}
+                                            onChange={e => {
+                                                setNewTagInput(e.target.value);
+                                                if (newTagError) setNewTagError(null);
+                                            }}
+                                            onKeyDown={e => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleCreateTag();
+                                                } else if (e.key === 'Escape') {
+                                                    setIsCreatingTag(false);
+                                                    setNewTagInput('');
+                                                    setNewTagError(null);
+                                                }
+                                            }}
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="button"
+                                            className="save-asset-new-tag-btn add"
+                                            onClick={handleCreateTag}
+                                            disabled={!newTagInput.trim()}
+                                        >
+                                            Add
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="save-asset-new-tag-btn cancel"
+                                            onClick={() => {
+                                                setIsCreatingTag(false);
+                                                setNewTagInput('');
+                                                setNewTagError(null);
+                                            }}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                )}
+
+                                {newTagError && (
+                                    <div className="save-asset-tag-error">
+                                        ⚠️ {newTagError}
+                                    </div>
+                                )}
+
+                                <div className="save-asset-tag-pills">
+                                    {getAllCharacterTags(customTags).map(tag => {
+                                        const isCustom = !DEFAULT_CHARACTER_TAGS.some(d => d.id === tag.id);
+                                        return (
+                                            <div
+                                                key={tag.id}
+                                                className={`save-tag-pill-container ${characterTag === tag.id ? 'active' : ''}`}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    className={`save-tag-pill ${characterTag === tag.id ? 'active' : ''} ${isCustom ? 'custom-tag' : ''}`}
+                                                    onClick={() => handleCharacterTagChange(tag.id)}
+                                                    title={isCustom ? `Custom character tag: ${tag.label}` : tag.label}
+                                                >
+                                                    {tag.label}
+                                                </button>
+                                                {isCustom && (
+                                                    <button
+                                                        type="button"
+                                                        className="save-tag-delete-btn"
+                                                        onClick={(e) => handleDeleteCustomTag(tag.id, e)}
+                                                        title={`Delete tag "${tag.label}"`}
+                                                    >
+                                                        ×
+                                                    </button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -499,7 +648,7 @@ const SaveAssetModal = ({
                             <div className="save-asset-field">
                                 <label>Files ({items.length})</label>
                                 <div className="batch-files-list">
-                                    {items.map((item, idx) => (
+                                    {items.map((item) => (
                                         <div key={item.id} className="batch-file-row">
                                             <div className="batch-file-thumb">
                                                 <img src={item.dataUrl} alt="thumb" />

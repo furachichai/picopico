@@ -1,3 +1,5 @@
+import { getCustomCharacterTags } from './characterTags.js';
+
 /**
  * Utility functions for detecting character elements and calculating their shadow metrics.
  */
@@ -38,11 +40,99 @@ export function isCharacterElement(element) {
         return false;
     }
 
-    // Match known character keywords
+    // Match known character keywords (including custom tags)
+    const customTags = getCustomCharacterTags();
+    const customKeywords = customTags.map(t => t.id);
     const characterKeywords = [
-        'chef', 'pesto', 'pest_', 'sales', 'alien', 'dilla', 'tucu', 'wizard', 'yara', 'scientist'
+        'chef', 'pesto', 'pest_', 'sales', 'alien', 'dilla', 'tucu', 'wizard', 'yara', 'scientist',
+        ...customKeywords
     ];
     return characterKeywords.some(kw => filename.includes(kw));
+}
+
+/**
+ * Normalizes an image src or path into a consistent identifier (filename)
+ * for shadow preference tracking across dev and production.
+ */
+export function normalizeImageShadowKey(src) {
+    if (!src || typeof src !== 'string') return '';
+    const clean = src.split('?')[0].split('#')[0];
+    if (clean.startsWith('data:')) return '';
+
+    let filename = clean.split('/').pop() || '';
+    try {
+        filename = decodeURIComponent(filename);
+    } catch {
+        // ignore decode errors
+    }
+    filename = filename.trim().toLowerCase();
+    if (!filename) return '';
+
+    // Strip Vite asset bundle hash in production builds (e.g. "chef_dipper-Cr4vvjnE.png" -> "chef_dipper.png")
+    return filename.replace(/-[A-Za-z0-9_-]{8}\.([a-zA-Z0-9]+)$/, '.$1');
+}
+
+export const STORAGE_KEY_SHADOW_PREFS = 'picopico_image_shadow_prefs';
+
+/**
+ * Returns whether an image should be instantiated with a shadow.
+ * Checks localStorage first, then looks for the most recent instance of the image across slides.
+ * Defaults to true.
+ */
+export function getImageShadowPreference(src, slides = []) {
+    const key = normalizeImageShadowKey(src);
+    if (!key) return true;
+
+    // 1. Check persistent preferences in localStorage
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY_SHADOW_PREFS);
+        if (raw) {
+            const prefs = JSON.parse(raw);
+            if (key in prefs && typeof prefs[key] === 'boolean') {
+                return prefs[key];
+            }
+        }
+    } catch {
+        // ignore errors
+    }
+
+    // 2. If not recorded in localStorage, check slides in the lesson for the last instantiation of this image
+    if (Array.isArray(slides) && slides.length > 0) {
+        for (let i = slides.length - 1; i >= 0; i--) {
+            const slide = slides[i];
+            if (!slide || !Array.isArray(slide.elements)) continue;
+            for (let j = slide.elements.length - 1; j >= 0; j--) {
+                const el = slide.elements[j];
+                if (el && (el.type === 'image' || el.type === 'IMAGE') && el.content) {
+                    if (normalizeImageShadowKey(el.content) === key) {
+                        return el.metadata?.hasShadow !== false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Records whether a character image has shadow enabled or disabled.
+ */
+export function setImageShadowPreference(src, hasShadow) {
+    const key = normalizeImageShadowKey(src);
+    if (!key) return;
+
+    try {
+        let prefs = {};
+        const raw = localStorage.getItem(STORAGE_KEY_SHADOW_PREFS);
+        if (raw) {
+            prefs = JSON.parse(raw) || {};
+        }
+        prefs[key] = Boolean(hasShadow);
+        localStorage.setItem(STORAGE_KEY_SHADOW_PREFS, JSON.stringify(prefs));
+    } catch (e) {
+        console.warn('Could not save image shadow preference:', e);
+    }
 }
 
 /**

@@ -63,6 +63,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
 
     const meta = element.metadata || {};
     const skin = meta.skin || 'comic';
+    const isPhotoSkin = skin === 'photo' || skin === 'polaroid';
     const hasTape = Boolean(meta.showTape ?? (meta.hideTape !== undefined ? !meta.hideTape : false));
     const hasShadow = meta.hasShadow !== false;
     const shadowMode = (() => {
@@ -72,7 +73,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     })();
     const borderColor = meta.borderColor || '#000000';
     const borderRadius = meta.borderRadius ? `${meta.borderRadius}px` : '20px';
-    const bgColor = meta.backgroundColor || (skin === 'paper' ? '#f6efdd' : (skin === 'sticky' ? '#fff875' : '#ffffff'));
+    const bgColor = meta.backgroundColor || (skin === 'paper' ? '#f6efdd' : (skin === 'sticky' ? '#fff875' : (isPhotoSkin ? '#faf8f5' : '#ffffff')));
 
     // Dynamic hand-drawn torn paper SVG path with edge notches matching reference artwork
     const getPaperPath = (w, h) => {
@@ -112,6 +113,10 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
             `Z`
         ].join(' ');
     };
+
+    const photoTop = Math.max(8, Math.min(16, Math.round(activeHeight * 0.12)));
+    const photoSide = Math.max(8, Math.min(16, Math.round(activeWidth * 0.05)));
+    const photoBottom = Math.max(16, Math.min(30, Math.round(activeHeight * 0.22)));
 
     // Card styling based on active skin
     let containerStyle = {
@@ -164,6 +169,16 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
             borderRadius: '6px',
             boxShadow: 'none',
             padding: '16px 22px 16px 36px',
+        };
+    } else if (isPhotoSkin) {
+        containerStyle = {
+            ...containerStyle,
+            backgroundColor: 'transparent',
+            border: 'none',
+            borderRadius: '4px',
+            boxShadow: 'none',
+            padding: `${photoTop + 4}px ${photoSide + 6}px ${photoBottom + 4}px ${photoSide + 6}px`,
+            transform: 'rotate(-1.5deg)',
         };
     }
 
@@ -291,6 +306,72 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
                 />
             )}
 
+            {/* Photo Skin: Moire Shadow */}
+            {isPhotoSkin && shadowMode === 'grey' && (
+                <div
+                    className="banner-moire-shadow"
+                    style={{
+                        position: 'absolute',
+                        top: '4px',
+                        left: '4px',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '4px',
+                        backgroundColor: '#a8a8a8',
+                        backgroundImage: 'radial-gradient(#222222 1.15px, transparent 1.15px)',
+                        backgroundSize: '3.5px 3.5px',
+                        zIndex: 0,
+                        pointerEvents: 'none',
+                        boxSizing: 'border-box',
+                    }}
+                />
+            )}
+
+            {/* Photo Skin: Card Face (Balanza Photo Frame - Always White Frame) */}
+            {isPhotoSkin && (
+                <div
+                    className="banner-photo-face"
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundColor: '#ffffff',
+                        border: meta.border || (borderColor && borderColor !== '#000000' ? `2px solid ${borderColor}` : (shadowMode === 'black' ? '2.5px solid #000000' : '1px solid rgba(0, 0, 0, 0.08)')),
+                        borderRadius: '4px',
+                        boxShadow: shadowMode === 'black'
+                            ? (meta.boxShadow || '5px 5px 0px #000000')
+                            : (shadowMode === 'grey'
+                                ? '0 14px 34px rgba(15, 23, 42, 0.2), 0 3px 10px rgba(15, 23, 42, 0.08)'
+                                : 'none'),
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                        boxSizing: 'border-box',
+                    }}
+                />
+            )}
+
+            {/* Photo Skin: Inner Photo Surface (Card Color applied to inner rectangle) */}
+            {isPhotoSkin && (
+                <div
+                    className="banner-photo-inner"
+                    style={{
+                        position: 'absolute',
+                        top: `${photoTop}px`,
+                        left: `${photoSide}px`,
+                        right: `${photoSide}px`,
+                        bottom: `${photoBottom}px`,
+                        backgroundColor: bgColor,
+                        borderRadius: '2px',
+                        border: '1px solid rgba(0, 0, 0, 0.06)',
+                        boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.04)',
+                        filter: bgColor === '#faf8f5' ? 'contrast(97%) brightness(98%) sepia(8%)' : undefined,
+                        overflow: 'hidden',
+                        zIndex: 2,
+                        pointerEvents: 'none',
+                        boxSizing: 'border-box',
+                    }}
+                />
+            )}
+
             {/* Paper Skin: SVG Torn Paper Background & Moire Shadow */}
             {skin === 'paper' && (
                 <svg
@@ -371,48 +452,53 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
             )}
 
             {/* Scotch Tape Overlays: Left-Top and Bottom-Right for every skin */}
-            {hasTape && (
-                <>
-                    {/* Top-Left Scotch Tape */}
-                    <img
-                        src={SCOTCH_TAPE_SRC}
-                        alt=""
-                        draggable={false}
-                        className="banner-scotch-tape tape-tl"
-                        style={{
-                            position: 'absolute',
-                            top: '-14px',
-                            left: '-14px',
-                            width: 'clamp(40px, 20%, 75px)',
-                            aspectRatio: '229 / 233',
-                            objectFit: 'contain',
-                            pointerEvents: 'none',
-                            userSelect: 'none',
-                            zIndex: 4,
-                            filter: 'drop-shadow(1px 2px 2px rgba(0,0,0,0.18))',
-                        }}
-                    />
-                    {/* Bottom-Right Scotch Tape */}
-                    <img
-                        src={SCOTCH_TAPE_SRC}
-                        alt=""
-                        draggable={false}
-                        className="banner-scotch-tape tape-br"
-                        style={{
-                            position: 'absolute',
-                            bottom: '-14px',
-                            right: '-14px',
-                            width: 'clamp(40px, 20%, 75px)',
-                            aspectRatio: '229 / 233',
-                            objectFit: 'contain',
-                            pointerEvents: 'none',
-                            userSelect: 'none',
-                            zIndex: 4,
-                            filter: 'drop-shadow(1px 2px 2px rgba(0,0,0,0.18))',
-                        }}
-                    />
-                </>
-            )}
+            {hasTape && (() => {
+                const tapeWidth = Math.max(38, Math.min(56, Math.round(Math.min(activeWidth * 0.25, activeHeight * 0.45)) || 48));
+                return (
+                    <>
+                        {/* Top-Left Scotch Tape */}
+                        <img
+                            src={SCOTCH_TAPE_SRC}
+                            alt=""
+                            draggable={false}
+                            className="banner-scotch-tape tape-tl"
+                            style={{
+                                position: 'absolute',
+                                top: '3px',
+                                left: '3px',
+                                transform: 'translate(-50%, -50%)',
+                                width: `${tapeWidth}px`,
+                                aspectRatio: '230 / 222',
+                                objectFit: 'contain',
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                                zIndex: 4,
+                                filter: 'drop-shadow(1px 2px 2px rgba(0,0,0,0.18))',
+                            }}
+                        />
+                        {/* Bottom-Right Scotch Tape */}
+                        <img
+                            src={SCOTCH_TAPE_SRC}
+                            alt=""
+                            draggable={false}
+                            className="banner-scotch-tape tape-br"
+                            style={{
+                                position: 'absolute',
+                                bottom: '3px',
+                                right: '3px',
+                                transform: 'translate(50%, 50%)',
+                                width: `${tapeWidth}px`,
+                                aspectRatio: '230 / 222',
+                                objectFit: 'contain',
+                                pointerEvents: 'none',
+                                userSelect: 'none',
+                                zIndex: 4,
+                                filter: 'drop-shadow(1px 2px 2px rgba(0,0,0,0.18))',
+                            }}
+                        />
+                    </>
+                );
+            })()}
 
             {/* Main Text Content */}
             <div

@@ -3,6 +3,7 @@ import { ELEMENT_TYPES } from '../types';
 import { ensureBalloonsAboveImages } from '../utils/layerUtils';
 import { getNonOverlappingResultFieldPosition, reindexResultFields } from '../utils/ResultFieldUtils';
 import { isPureEmoji } from './LanguageContext';
+import { getImageShadowPreference, setImageShadowPreference } from '../utils/characterShadow';
 
 const EditorContext = createContext();
 
@@ -356,6 +357,17 @@ const editorReducer = (state, action) => {
             // Build metadata based on element type
             let elementMetadata = action.payload.metadata || {};
 
+            if (action.payload.type === 'image' || action.payload.type === ELEMENT_TYPES.IMAGE) {
+                if (elementMetadata.hasShadow === undefined) {
+                    const shouldHaveShadow = getImageShadowPreference(action.payload.content, state.lesson?.slides);
+                    if (shouldHaveShadow === false) {
+                        elementMetadata.hasShadow = false;
+                    }
+                } else {
+                    setImageShadowPreference(action.payload.content, elementMetadata.hasShadow);
+                }
+            }
+
             if (elementMetadata.isSymbol && action.payload.type !== 'line' && action.payload.type !== ELEMENT_TYPES.LINE) {
                 // Inherit size from the last added symbol of same general kind (not lines)
                 const symbols = currentSlide.elements.filter(el => el.metadata?.isSymbol && el.type !== 'line' && el.type !== ELEMENT_TYPES.LINE);
@@ -672,6 +684,15 @@ const editorReducer = (state, action) => {
         case 'UPDATE_ELEMENT': {
             const { id, updates } = action.payload;
             const shouldSave = action.saveHistory === true;
+
+            const currentSlideForUpdate = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (updates?.metadata && 'hasShadow' in updates.metadata && currentSlideForUpdate) {
+                const targetEl = currentSlideForUpdate.elements.find(el => el.id === id);
+                if (targetEl && (targetEl.type === 'image' || targetEl.type === ELEMENT_TYPES.IMAGE) && targetEl.content) {
+                    setImageShadowPreference(targetEl.content, updates.metadata.hasShadow);
+                }
+            }
+
             return {
                 ...state,
                 past: shouldSave ? pushToPast(state) : (state.past || []),
@@ -726,6 +747,18 @@ const editorReducer = (state, action) => {
                 });
             } else if (action.payload && typeof action.payload === 'object') {
                 updatesMap = action.payload;
+            }
+
+            const currentSlideForUpdates = state.lesson.slides.find(s => s.id === state.currentSlideId);
+            if (currentSlideForUpdates) {
+                Object.entries(updatesMap).forEach(([elId, upd]) => {
+                    if (upd?.metadata && 'hasShadow' in upd.metadata) {
+                        const targetEl = currentSlideForUpdates.elements.find(el => el.id === elId);
+                        if (targetEl && (targetEl.type === 'image' || targetEl.type === ELEMENT_TYPES.IMAGE) && targetEl.content) {
+                            setImageShadowPreference(targetEl.content, upd.metadata.hasShadow);
+                        }
+                    }
+                });
             }
 
             const shouldSave = action.saveHistory === true;
