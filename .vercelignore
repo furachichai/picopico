@@ -15,3 +15,7 @@ prompts/
 # Git and OS
 .git
 .DS_Store
+
+# Build outputs
+dist/
+dist-ssr/
