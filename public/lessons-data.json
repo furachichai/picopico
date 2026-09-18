@@ -24030,11 +24030,11 @@
             {
               "id": "el-1789753605309-ecu3iawx9",
               "type": "balloon",
-              "content": "Most crates have junk.<div><br></div><div>But a few have gold coins!</div>",
+              "content": "Most crates have junk.<div><br></div><div>But a <b>few</b> have <b>gold</b> coins!</div>",
               "x": 62.083333333333336,
-              "y": 50,
+              "y": 48.828125,
               "width": 64.16666666666667,
-              "height": 20,
+              "height": 22.34375,
               "rotation": 0,
               "scale": 1,
               "metadata": {
@@ -24188,11 +24188,11 @@
             {
               "id": "el-1789753888312-iv3ai4vg1",
               "type": "balloon",
-              "content": "I hate when you're right.<div><br></div><div>We find out what's inside without opening it.</div>",
-              "x": 50,
-              "y": 33.28125,
-              "width": 55.833333333333336,
-              "height": 30,
+              "content": "I hate when you're right.<div><br></div><div>We must find out what's inside without opening it.</div>",
+              "x": 51.52777777777778,
+              "y": 35.078125,
+              "width": 58.88888888888889,
+              "height": 26.406249999999996,
               "rotation": 0,
               "scale": 1,
               "metadata": {
@@ -24316,7 +24316,7 @@
             {
               "id": "el-1789758871402-0-o32z8i",
               "type": "balloon",
-              "content": "Ok, kiddo.<div><br></div><div>Let's find all the 📦that weigh the same as<b>💰.</b></div>",
+              "content": "Ok, kiddo.<div><br></div><div>Let's find all the 📦 that weigh the same as<b>💰.</b></div>",
               "x": 75.08333333333333,
               "y": 87.296875,
               "width": 50.27777777777778,
@@ -24902,7 +24902,7 @@
               "weightsText": "🌸=2\nx📦=12\n💰=12\nx=12",
               "leftPlateText": "x,",
               "rightPlateText": "",
-              "menuText": "2w1,w2,2w5",
+              "menuText": "2w1,2w2,2w5",
               "showZeroTiles": false,
               "freeMovement": true,
               "equationPosition": "up",
@@ -25271,187 +25271,6 @@
           "order": 12
         },
         {
-          "id": "slide-1789760966127",
-          "background": "url(\"/src/assets/backgrounds/bkg_abandoned_crates_foreground.png\")",
-          "elements": [
-            {
-              "id": "el-1789760966127-r2o94csws",
-              "type": "image",
-              "content": "/src/assets/objects/item_crates_group.png",
-              "x": 35.16666666666667,
-              "y": 33.96875,
-              "width": 40,
-              "height": 17.00205338809035,
-              "rotation": 0,
-              "scale": 2.243320291968137,
-              "metadata": {
-                "width": 40,
-                "height": 17.00205338809035,
-                "flipX": true,
-                "brightness": 49,
-                "manualZ": true
-              }
-            },
-            {
-              "id": "el-1789760966127-eoymnla44",
-              "type": "image",
-              "content": "/src/assets/objects/item_crates_group.png",
-              "x": 90.55555555555556,
-              "y": 54.15625,
-              "width": 40,
-              "height": 17.00205338809035,
-              "rotation": 0,
-              "scale": 2.243320291968137,
-              "metadata": {
-                "width": 40,
-                "height": 17.00205338809035,
-                "flipX": true,
-                "brightness": 49,
-                "manualZ": true
-              }
-            },
-            {
-              "id": "el-1789760966127-uii3dab7i",
-              "type": "image",
-              "content": "/src/assets/objects/item_crates_group.png",
-              "x": 2.44444444444445,
-              "y": 53.15625,
-              "width": 40,
-              "height": 17.00205338809035,
-              "rotation": 0,
-              "scale": 2.9672353322611285,
-              "metadata": {
-                "width": 40,
-                "height": 17.00205338809035,
-                "manualZ": true
-              }
-            },
-            {
-              "id": "el-1789762225517-szm9nd7qz",
-              "type": "image",
-              "content": "/src/assets/objects/whole_crates_on_kart_pile_7.png",
-              "x": -7.777777777777778,
-              "y": 64.375,
-              "width": 40,
-              "height": 38.99271844660194,
-              "rotation": 0,
-              "scale": 1.903697860294343,
-              "metadata": {
-                "width": 40,
-                "height": 38.99271844660194,
-                "category": "characters"
-              }
-            },
-            {
-              "id": "el-1789765675694-0-65xb57",
-              "type": "image",
-              "content": "/src/assets/objects/whole_crates_on_kart_pile_7.png",
-              "x": 105.22222222222221,
-              "y": 68.9375,
-              "width": 40,
-              "height": 38.99271844660194,
-              "rotation": -5.089160767439196,
-              "scale": 1.903697860294343,
-              "metadata": {
-                "width": 40,
-                "height": 38.99271844660194,
-                "category": "characters",
-                "flipX": true
-              }
-            },
-            {
-              "id": "el-1789765724588-9lct9qxgl",
-              "type": "image",
-              "content": "/src/assets/characters/yara_explains_01.png",
-              "x": 26.666666666666664,
-              "y": 67.5,
-              "width": 40,
-              "height": 49.21875,
-              "rotation": 0,
-              "scale": 1.2630301083090467,
-              "metadata": {
-                "width": 40,
-                "height": 49.21875,
-                "category": "characters"
-              }
-            },
-            {
-              "id": "el-1789762200676-kvw6ivi7y",
-              "type": "image",
-              "content": "/src/assets/characters/pesto_sleeps_tired.png",
-              "x": 80.55555555555557,
-              "y": 89.0625,
-              "width": 40,
-              "height": 19.678456591639872,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "width": 40,
-                "height": 19.678456591639872,
-                "category": "characters",
-                "manualZ": true,
-                "flipX": true
-              }
-            },
-            {
-              "id": "el-1789760966127-chdmk7prn",
-              "type": "balloon",
-              "content": "All these crates weigh 12.<div><br></div><div>Pesto: carry them to the truck.</div>",
-              "x": 56.47222222222221,
-              "y": 32.53125,
-              "width": 54.72222222222223,
-              "height": 21.25,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 19,
-                "tailPos": {
-                  "x": -27,
-                  "y": 81
-                },
-                "shadow": "grey",
-                "hasShadow": true,
-                "borderColor": "#000000"
-              }
-            },
-            {
-              "id": "el-1789765781895-0-ue7688",
-              "type": "balloon",
-              "content": "Zzzz",
-              "x": 66.69444444444443,
-              "y": 71.15625,
-              "width": 27.500000000000007,
-              "height": 10.625,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 19,
-                "tailPos": {
-                  "x": 15,
-                  "y": 43
-                },
-                "shadow": "grey",
-                "hasShadow": true,
-                "borderColor": "#000000"
-              }
-            }
-          ],
-          "order": 13,
-          "backgroundSettings": {
-            "grayscale": true,
-            "tintColor": "rgba(192, 132, 252, 0.4)",
-            "opacity": 0.67,
-            "brightness": 95
-          },
-          "cartridge": null
-        },
-        {
           "id": "slide-1789766272737",
           "background": "url(\"/src/assets/backgrounds/bkg_abandoned_crates_foreground.png\")",
           "elements": [
@@ -25529,7 +25348,7 @@
               }
             }
           ],
-          "order": 14,
+          "order": 13,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -25543,11 +25362,171 @@
               0
             ]
           }
+        },
+        {
+          "id": "slide-1789766699752",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789766764775-5gp6ylzdv",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_starstruck.png",
+              "x": 13.333333333333332,
+              "y": 87.65625,
+              "width": 40,
+              "height": 27.813653136531364,
+              "rotation": 0,
+              "scale": 1.1390269442332142,
+              "metadata": {
+                "width": 40,
+                "height": 27.813653136531364,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1789766711033-bqsnh00sk",
+              "type": "image",
+              "content": "/src/assets/characters/yara_opening_crate.png",
+              "x": 57.77777777777777,
+              "y": 71.40625,
+              "width": 40,
+              "height": 29.23857868020304,
+              "rotation": 0,
+              "scale": 2.480301827696415,
+              "metadata": {
+                "width": 40,
+                "height": 29.23857868020304,
+                "category": "characters",
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1789767121058-jyqjnfmpt",
+              "type": "balloon",
+              "content": "<div>No booby traps so far...<br></div>",
+              "x": 72.63888888888889,
+              "y": 33.75,
+              "width": 46.38888888888889,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -19,
+                  "y": 83
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            },
+            {
+              "id": "el-1789767263708-n6w19fyt3",
+              "type": "text",
+              "content": "<span style=\"background-color: rgb(0, 0, 0);\"> Back in the lab... </span>",
+              "x": 33.750000000000014,
+              "y": 19.21875,
+              "width": 50.277777777777786,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "textTransform": "uppercase",
+                "color": "#FFFFFF",
+                "fontSize": 25
+              }
+            }
+          ],
+          "order": 14
+        },
+        {
+          "id": "slide-1789766796764",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789766878569-m5kbjnzii",
+              "type": "banner",
+              "content": "GUESS WHAT <font color=\"#000000\">ALSO</font> WEIGHS <font color=\"#000000\">12</font>...",
+              "x": 50,
+              "y": 22.578125000000004,
+              "width": 63.77777777777778,
+              "height": 16.71875,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1789766963790-85z8s3est",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_angry.png",
+              "x": 50,
+              "y": 52.8125,
+              "width": 40,
+              "height": 22.386934673366838,
+              "rotation": 0,
+              "scale": 2.1866534940576026,
+              "metadata": {
+                "width": 40,
+                "height": 22.386934673366838,
+                "category": "characters",
+                "hasShadow": false
+              }
+            },
+            {
+              "id": "el-1789767060526-4yjb6pww4",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 83.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "Diamonds",
+                  "Bitcoins",
+                  "Sardine tins",
+                  "Silver bars"
+                ],
+                "correctIndex": 2,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 15
         }
       ],
       "author": "User",
       "createdAt": "2026-09-18T17:32:09.502Z",
-      "updatedAt": "2026-09-18T21:21:23.221Z",
+      "updatedAt": "2026-09-18T21:35:45.964Z",
       "path": "lessons/2993-X variable/lesson.json",
       "textPreset": null,
       "description": "",
