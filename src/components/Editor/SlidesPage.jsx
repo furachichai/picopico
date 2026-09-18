@@ -21,6 +21,9 @@ const SlidesPage = () => {
     const [slideToSplit, setSlideToSplit] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState('');
 
+    const [draggedSlideId, setDraggedSlideId] = useState(null);
+    const [dragOverInfo, setDragOverInfo] = useState(null); // { targetId: string, position: 'before' | 'after' }
+
     const selectedIndices = useMemo(() => {
         return selectedSlideIds
             .map(id => lesson.slides.findIndex(s => s.id === id))
@@ -350,6 +353,82 @@ const SlidesPage = () => {
         }
     };
 
+    const handleDragStart = (e, slideId) => {
+        if (e.target.closest('button') || e.target.closest('input')) {
+            e.preventDefault();
+            return;
+        }
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', slideId);
+        setDraggedSlideId(slideId);
+    };
+
+    const handleDragOver = (e, slideId) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        const movingIds = selectedSlideIds.includes(draggedSlideId)
+            ? selectedSlideIds
+            : (draggedSlideId ? [draggedSlideId] : []);
+
+        if (movingIds.includes(slideId)) {
+            return;
+        }
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const midX = rect.left + rect.width / 2;
+        const position = e.clientX < midX ? 'before' : 'after';
+
+        if (!dragOverInfo || dragOverInfo.targetId !== slideId || dragOverInfo.position !== position) {
+            setDragOverInfo({ targetId: slideId, position });
+        }
+    };
+
+    const handleDragLeave = (e, slideId) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            if (dragOverInfo && dragOverInfo.targetId === slideId) {
+                setDragOverInfo(null);
+            }
+        }
+    };
+
+    const handleDrop = (e, slideId) => {
+        e.preventDefault();
+        if (!draggedSlideId || !dragOverInfo) {
+            setDraggedSlideId(null);
+            setDragOverInfo(null);
+            return;
+        }
+
+        const movingIds = selectedSlideIds.includes(draggedSlideId)
+            ? selectedSlideIds
+            : [draggedSlideId];
+
+        if (movingIds.includes(dragOverInfo.targetId)) {
+            setDraggedSlideId(null);
+            setDragOverInfo(null);
+            return;
+        }
+
+        dispatch({
+            type: 'REORDER_SLIDES_TO',
+            payload: {
+                slideIds: movingIds,
+                targetSlideId: dragOverInfo.targetId,
+                position: dragOverInfo.position
+            }
+        });
+
+        showFeedback(movingIds.length > 1 ? `Moved ${movingIds.length} slides` : (t('slides.moved') || 'Slide moved'));
+        setDraggedSlideId(null);
+        setDragOverInfo(null);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedSlideId(null);
+        setDragOverInfo(null);
+    };
+
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -509,6 +588,9 @@ const SlidesPage = () => {
             <div className="slides-grid">
                 {lesson.slides.map((slide, index) => {
                     const isSelected = selectedSlideIds.includes(slide.id);
+                    const isDragging = draggedSlideId === slide.id || (selectedSlideIds.includes(draggedSlideId) && isSelected);
+                    const isDropTarget = dragOverInfo && dragOverInfo.targetId === slide.id;
+                    const dropClass = isDropTarget ? `drop-target-${dragOverInfo.position}` : '';
                     const isMultiSelected = isSelected && selectedSlideIds.length > 1;
                     const isLeftDisabled = isMultiSelected ? minSelectedIndex <= 0 : index === 0;
                     const isRightDisabled = isMultiSelected ? maxSelectedIndex >= lesson.slides.length - 1 : index === lesson.slides.length - 1;
@@ -522,7 +604,13 @@ const SlidesPage = () => {
                     return (
                         <div
                             key={slide.id}
-                            className={`slide-card ${isSelected ? 'is-selected' : ''}`}
+                            className={`slide-card ${isSelected ? 'is-selected' : ''} ${isDragging ? 'is-dragging' : ''} ${dropClass}`}
+                            draggable={true}
+                            onDragStart={(e) => handleDragStart(e, slide.id)}
+                            onDragOver={(e) => handleDragOver(e, slide.id)}
+                            onDragLeave={(e) => handleDragLeave(e, slide.id)}
+                            onDrop={(e) => handleDrop(e, slide.id)}
+                            onDragEnd={handleDragEnd}
                             onClick={(e) => handleSlideClick(e, slide.id, index)}
                             onDoubleClick={() => handleEditSlide(slide.id)}
                         >
@@ -531,6 +619,7 @@ const SlidesPage = () => {
                                     <SlideThumbnail slide={slide} />
                                 </ErrorBoundary>
                                 <span className="slide-number">{index + 1}</span>
+                                <span className="slide-drag-handle" title="Drag to reorder">⠿</span>
                                 <button
                                     className={`slide-select-checkbox ${isSelected ? 'is-checked' : ''}`}
                                     onClick={(e) => handleToggleCheckbox(e, slide.id)}

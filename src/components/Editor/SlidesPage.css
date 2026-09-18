@@ -175,6 +175,65 @@
     transform: translateY(-3px);
 }
 
+.slide-card.is-dragging {
+    opacity: 0.35;
+    transform: scale(0.95);
+    border-style: dashed;
+    border-color: #8B5CF6;
+}
+
+.slide-card.drop-target-before::before,
+.slide-card.drop-target-after::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #8B5CF6;
+    border-radius: 4px;
+    z-index: 25;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.95);
+    pointer-events: none;
+}
+
+.slide-card.drop-target-before::before {
+    left: 0;
+}
+
+.slide-card.drop-target-after::after {
+    right: 0;
+}
+
+.slide-drag-handle {
+    position: absolute;
+    top: 10px;
+    left: 38px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    cursor: grab;
+    backdrop-filter: blur(4px);
+    z-index: 5;
+    opacity: 0.75;
+    transition: opacity 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.slide-drag-handle:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.slide-card:active .slide-drag-handle {
+    cursor: grabbing;
+}
+
 .slide-preview {
     width: 100%;
     aspect-ratio: 9 / 16;

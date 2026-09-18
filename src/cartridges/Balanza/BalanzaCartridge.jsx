@@ -101,7 +101,7 @@ function PlateTile({ term, side, isLocked, isLevelComplete, showZeroTiles, onDra
   );
 }
 
-function MenuTile({ item, isLevelComplete, isDragging, onDragStart }) {
+function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped }) {
   const isCurrentlyDragging = isDragging === `menu-${item.key}`;
   const effectiveAvailable = isCurrentlyDragging ? item.available - 1 : item.available;
   const isEmpty = effectiveAvailable <= 0;
@@ -132,7 +132,7 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart }) {
   };
 
   return (
-    <div className={`balanza-menu-tile ${isEmpty ? 'is-empty' : ''}`}>
+    <div className={`balanza-menu-tile ${isEmpty ? 'is-empty' : ''} ${isBumped ? 'is-bumped' : ''}`}>
       {/* If dragging and there are items remaining, show static glyph in the white card space */}
       {isCurrentlyDragging && effectiveAvailable > 0 && (
         <div className="balanza-menu-tile-static-slot">
@@ -217,6 +217,8 @@ export default function BalanzaCartridge({
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
   const [isDraggingItem, setIsDraggingItem] = useState(false);
   const dragSourceRef = useRef(null);
+  const [flyingItem, setFlyingItem] = useState(null);
+  const [bumpingMenuKey, setBumpingMenuKey] = useState(null);
 
   const cartridgeRef = useRef(null);
   const leftPlateRef = useRef(null);
@@ -505,11 +507,17 @@ export default function BalanzaCartridge({
   }
 
   function findMenuRowIndexForTerm(term) {
-    return menuItems.findIndex(m => (
+    const exact = menuItems.findIndex(m => (
       term.variable === null
         ? m.variable === null && m.unitCoeff === Math.abs(term.coeff)
         : m.variable === term.variable
     ));
+    if (exact !== -1) return exact;
+
+    if (term.variable === null) {
+      return menuItems.findIndex(m => m.variable === null);
+    }
+    return -1;
   }
 
   const handleRestart = () => {
@@ -518,6 +526,8 @@ export default function BalanzaCartridge({
     setMenuItems(parseMenuInventory(config.menuText));
     setHasInteracted(false);
     setMoveFlash(null);
+    setFlyingItem(null);
+    setBumpingMenuKey(null);
     hasCompletedRef.current = false;
   };
 
@@ -610,25 +620,23 @@ export default function BalanzaCartridge({
     dragSourceRef.current = null;
     if (!source) return;
 
-    const zone = resolveDropZone(info.point.x, info.point.y);
-    if (!zone) return;
-
-    // If target zone is a locked plate, reject move (flies back to origin)
-    if ((zone === 'left' || zone === 'right') && isSideLocked(zone)) {
-      unlockAudio();
-      playWrong();
-      setMoveFlash({ category: 'rejected', side: zone, nonce: ++moveNonceRef.current });
-      return;
-    }
+    const pt = info?.point || (e ? { x: e.clientX, y: e.clientY } : dragPos);
+    const zone = resolveDropZone(pt.x, pt.y);
 
     // Supply menu -> plate. Deliberately CHANGES the balance.
     if (source.origin === 'menu') {
-      if (zone === 'menu') return;
+      if (!zone || zone === 'menu') return;
+      if (isSideLocked(zone)) {
+        unlockAudio();
+        playWrong();
+        setMoveFlash({ category: 'rejected', side: zone, nonce: ++moveNonceRef.current });
+        return;
+      }
       const menuItem = menuItems.find(m => m.key === source.key);
       if (!menuItem || menuItem.available <= 0) return;
-      const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, null);
+      const collisionId = findCollisionTermId(zone, pt.x, pt.y, null);
       const incoming = makeTerm(menuItem.unitCoeff, menuItem.variable);
-      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId, info.point.x, zone);
+      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId, pt.x, zone);
       const nextMenu = menuItems.map(m => (m.key === source.key ? { ...m, available: m.available - 1 } : m));
       commitMove({ ...withSide(zone, nextPlate), menu: nextMenu }, MOVE_CHANGING, zone);
       return;
@@ -638,34 +646,17 @@ export default function BalanzaCartridge({
     const term = plateArrayForSide(sourceSide).find(t => t.id === source.termId);
     if (!term) return;
 
-    // Plate -> supply menu or dragged outside plates. Deliberately CHANGES the balance.
-    if (zone === 'menu' || !zone) {
-      const menuIdx = findMenuRowIndexForTerm(term);
-      const nextPlate = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
-      let nextMenu;
-      if (menuIdx !== -1) {
-        nextMenu = menuItems.map((m, i) => (
-          i === menuIdx ? { ...m, available: m.available + Math.abs(term.coeff) } : m
-        ));
-      } else {
-        const newKey = `menu-${Date.now()}-${term.variable ?? 'num'}`;
-        nextMenu = [
-          ...menuItems,
-          {
-            key: newKey,
-            variable: term.variable,
-            unitCoeff: term.variable ? 1 : Math.abs(term.coeff),
-            available: term.variable ? Math.abs(term.coeff) : 1,
-          }
-        ];
-      }
-      commitMove({ ...withSide(sourceSide, nextPlate), menu: nextMenu }, MOVE_CHANGING, sourceSide);
+    // If target zone is a locked plate, reject move (flies back to origin)
+    if ((zone === 'left' || zone === 'right') && isSideLocked(zone)) {
+      unlockAudio();
+      playWrong();
+      setMoveFlash({ category: 'rejected', side: zone, nonce: ++moveNonceRef.current });
       return;
     }
 
     // Same-plate move: merge if dropped on like term, or reorder horizontally. PRESERVING.
     if (zone === sourceSide) {
-      const collisionId = findCollisionTermId(zone, info.point.x, info.point.y, term.id);
+      const collisionId = findCollisionTermId(zone, pt.x, pt.y, term.id);
       const terms = plateArrayForSide(sourceSide);
       if (collisionId) {
         const targetIdx = terms.findIndex(t => t.id === collisionId);
@@ -690,7 +681,7 @@ export default function BalanzaCartridge({
         for (let i = 0; i < cardEls.length; i++) {
           const rect = cardEls[i].getBoundingClientRect();
           const centerX = rect.left + rect.width / 2;
-          if (info.point.x < centerX) {
+          if (pt.x < centerX) {
             insertIdx = i;
             break;
           }
@@ -707,20 +698,102 @@ export default function BalanzaCartridge({
       return;
     }
 
-    // Cross-plate move: if freeMovement is enabled (default), coefficient is unchanged (MOVE_CHANGING).
-    // If freeMovement is false, sign is inverted (-term.coeff) as algebraic transposition (MOVE_PRESERVING).
-    const otherSide = zone;
-    const targetCoeff = freeMovement ? term.coeff : -term.coeff;
-    const targetTerm = makeTerm(targetCoeff, term.variable);
-    const collisionId = findCollisionTermId(otherSide, info.point.x, info.point.y, null);
-    const nextSource = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
-    const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId, info.point.x, otherSide);
-    const moveCategory = freeMovement ? MOVE_CHANGING : MOVE_PRESERVING;
-    commitMove({
-      left: sourceSide === 'left' ? nextSource : nextTarget,
-      right: sourceSide === 'left' ? nextTarget : nextSource,
-      menu: menuItems,
-    }, moveCategory, otherSide);
+    // Cross-plate move: if dropped on the other plate.
+    const otherSide = sourceSide === 'left' ? 'right' : 'left';
+    if (zone === otherSide) {
+      const targetCoeff = freeMovement ? term.coeff : -term.coeff;
+      const targetTerm = makeTerm(targetCoeff, term.variable);
+      const collisionId = findCollisionTermId(otherSide, pt.x, pt.y, null);
+      const nextSource = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
+      const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId, pt.x, otherSide);
+      const moveCategory = freeMovement ? MOVE_CHANGING : MOVE_PRESERVING;
+      commitMove({
+        left: sourceSide === 'left' ? nextSource : nextTarget,
+        right: sourceSide === 'left' ? nextTarget : nextSource,
+        menu: menuItems,
+      }, moveCategory, otherSide);
+      return;
+    }
+
+    // Dragged down below the plate or dropped on the bottom menu:
+    // Move automatically to the card buttons at the bottom of the screen!
+    const sourceEl = plateRefForSide(sourceSide).current;
+    const sourceRect = sourceEl?.getBoundingClientRect();
+    const plateBottomY = sourceRect ? (sourceRect.bottom - 12) : 200;
+    const isBelowPlate = zone === 'menu' || (!zone && pt.y > plateBottomY);
+
+    if (isBelowPlate) {
+      if (flyingItem) {
+        setMenuItems(flyingItem.nextMenu);
+      }
+
+      const menuCards = menuRef.current ? Array.from(menuRef.current.querySelectorAll('.balanza-menu-tile')) : [];
+      const menuIdx = findMenuRowIndexForTerm(term);
+      let targetX, targetY;
+      let targetKey = null;
+
+      if (menuIdx !== -1 && menuCards[menuIdx]) {
+        const rect = menuCards[menuIdx].getBoundingClientRect();
+        targetX = rect.left + rect.width / 2;
+        targetY = rect.top + rect.height / 2;
+        targetKey = menuItems[menuIdx]?.key;
+      } else if (menuRef.current) {
+        const rect = menuRef.current.getBoundingClientRect();
+        if (menuCards.length > 0) {
+          const lastRect = menuCards[menuCards.length - 1].getBoundingClientRect();
+          targetX = Math.min(rect.right - 35, lastRect.right + 35);
+          targetY = lastRect.top + lastRect.height / 2;
+        } else {
+          targetX = rect.left + rect.width / 2;
+          targetY = rect.top + rect.height / 2;
+        }
+      } else {
+        targetX = pt.x;
+        targetY = window.innerHeight - 50;
+      }
+
+      const nextPlate = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
+      let nextMenu;
+      if (menuIdx !== -1) {
+        const targetItem = menuItems[menuIdx];
+        targetKey = targetItem.key;
+        const addCount = (term.variable === null && targetItem.unitCoeff === 1)
+          ? Math.abs(term.coeff)
+          : (term.variable ? Math.abs(term.coeff) : 1);
+        nextMenu = menuItems.map((m, i) => (
+          i === menuIdx ? { ...m, available: m.available + addCount } : m
+        ));
+      } else {
+        const newKey = `menu-${Date.now()}-${term.variable ?? 'num'}`;
+        targetKey = newKey;
+        nextMenu = [
+          ...menuItems,
+          {
+            key: newKey,
+            variable: term.variable,
+            unitCoeff: term.variable ? 1 : Math.abs(term.coeff),
+            available: term.variable ? Math.abs(term.coeff) : 1,
+          }
+        ];
+      }
+
+      // Immediately remove term from plate so plate weight & tilt update smoothly
+      commitMove({ ...withSide(sourceSide, nextPlate), menu: menuItems }, MOVE_CHANGING, sourceSide);
+
+      // Smoothly animate the item flying down into the target card button
+      setFlyingItem({
+        id: `fly-${Date.now()}`,
+        term,
+        from: { x: pt.x, y: pt.y },
+        to: { x: targetX, y: targetY },
+        targetKey,
+        nextMenu,
+      });
+      return;
+    }
+
+    // If released elsewhere without hitting a dropzone, do nothing -> snaps back to origin
+    return;
   };
 
   if (isPhotoMode) {
@@ -830,6 +903,7 @@ export default function BalanzaCartridge({
             item={item}
             isLevelComplete={isLevelComplete}
             isDragging={draggingKey}
+            isBumped={bumpingMenuKey === item.key}
             onDragStart={handleTileDragStart}
           />
         ))}
@@ -842,6 +916,53 @@ export default function BalanzaCartridge({
         >
           <TileGlyph term={dragOverlayTerm} isOverlay={true} />
         </div>,
+        document.body
+      )}
+
+      {flyingItem && createPortal(
+        <motion.div
+          key={flyingItem.id}
+          className="balanza-drag-overlay balanza-flying-item"
+          initial={{
+            x: '-50%',
+            y: '-50%',
+            left: flyingItem.from.x,
+            top: flyingItem.from.y,
+            scale: 1.35,
+            opacity: 1,
+          }}
+          animate={{
+            x: '-50%',
+            y: '-50%',
+            left: flyingItem.to.x,
+            top: flyingItem.to.y,
+            scale: 0.85,
+            opacity: 0.95,
+          }}
+          transition={{
+            type: 'spring',
+            damping: 24,
+            stiffness: 300,
+            mass: 0.5,
+          }}
+          onAnimationComplete={() => {
+            setMenuItems(flyingItem.nextMenu);
+            if (flyingItem.targetKey) {
+              setBumpingMenuKey(flyingItem.targetKey);
+              setTimeout(() => setBumpingMenuKey(null), 300);
+            }
+            unlockAudio();
+            playSelect();
+            setFlyingItem(null);
+          }}
+          style={{
+            position: 'fixed',
+            zIndex: 99999999,
+            pointerEvents: 'none',
+          }}
+        >
+          <TileGlyph term={flyingItem.term} isOverlay={true} />
+        </motion.div>,
         document.body
       )}
     </div>

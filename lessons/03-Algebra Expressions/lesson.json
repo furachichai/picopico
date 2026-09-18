@@ -2175,7 +2175,7 @@
         {
           "id": "el-1789696033558-mrgsk4e6i",
           "type": "balloon",
-          "content": "It's a <b>structure</b> of:<div><br></div><div> <b>numbers</b>,<div><b>variables</b> (letters)</div><div>and</div><div><b>operators</b>&nbsp;</div><div>(+-×÷)</div></div>",
+          "content": "It's a <b>phrase</b> made of:<div><br></div><div> <b>numbers</b>,<div><b>variables</b> (letters)</div><div>or</div><div><b>operators</b>&nbsp;</div><div>(+-×÷)</div></div>",
           "x": 74.02777777777777,
           "y": 79.0625,
           "width": 46.94444444444444,
@@ -2788,13 +2788,90 @@
       }
     },
     {
+      "id": "slide-1789698311834",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789698323865-w8hiqxz3v",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 81.875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "A statement using &lt; or &gt; ",
+              "a phrase made of variables, numbers or operators",
+              "A statement with an =",
+              "A problem you can solve for x"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789698327234-lm15hx75k",
+          "type": "banner",
+          "content": "AN <font color=\"#000000\">EXPRESSION</font> IS...",
+          "x": 50,
+          "y": 25.9375,
+          "width": 66.55555555555556,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1789698886138-45rx6qmn4",
+          "type": "image",
+          "content": "/src/assets/characters/yara_arms_crossed.png",
+          "x": 50,
+          "y": 54.6875,
+          "width": 40,
+          "height": 56.06404958677687,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 56.06404958677687,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 18
+    },
+    {
       "id": "slide-1789695034706",
       "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
           "id": "el-1789695034706-0n3r2q5zb",
           "type": "banner",
-          "content": "<br>",
+          "content": "<br> 😅",
           "x": 49.72222222222223,
           "y": 55.546875,
           "width": 53.46758575754757,
@@ -2854,9 +2931,9 @@
           "type": "banner",
           "content": "<br>",
           "x": 50,
-          "y": 57.109375,
+          "y": 57.34375,
           "width": 51,
-          "height": 32.038821028045,
+          "height": 33.88210603069076,
           "rotation": 0,
           "scale": 1.2715071172585377,
           "metadata": {
@@ -2899,7 +2976,7 @@
         {
           "id": "el-1789695034706-l3txwkc92",
           "type": "text",
-          "content": "An <b>expression</b> is a structure of:<div><br></div><div> <b>numbers</b>,</div><div><b>variables</b> (letters)</div><div>and</div><div><b>operators</b> </div><div>(+-×÷)</div><div><br></div><div>It <b>doesn't</b> have a <b>=</b></div>",
+          "content": "a mathematical phrase made up of<div> <b>numbers</b>,</div><div><b>variables</b> (letters)</div><div>or</div><div><b>operators</b> </div><div>(+-×÷)</div><div>that represents a value.</div><div><br></div><div><br></div><div>⛔ It <b>doesn't</b> have a <b>=</b></div>",
           "x": 50,
           "y": 57.34375,
           "width": 44.72222222222222,
@@ -2931,7 +3008,7 @@
           }
         }
       ],
-      "order": 18,
+      "order": 19,
       "guides": {
         "horizontal": [],
         "vertical": [
@@ -2944,7 +3021,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-17T21:32:32.665Z",
-  "updatedAt": "2026-09-18T01:57:12.805Z",
+  "updatedAt": "2026-09-18T02:35:55.250Z",
   "path": "lessons/7872-Algebra Expressions/lesson.json",
   "textPreset": null,
   "description": "",

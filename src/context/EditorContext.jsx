@@ -983,6 +983,50 @@ const editorReducer = (state, action) => {
             };
         }
 
+        case 'REORDER_SLIDES_TO': {
+            const { slideIds, targetSlideId, position = 'before' } = action.payload || {};
+            const targetIds = Array.isArray(slideIds) && slideIds.length > 0
+                ? slideIds
+                : (action.payload?.slideId ? [action.payload.slideId] : []);
+
+            if (targetIds.length === 0 || !targetSlideId) return state;
+
+            const allSlides = [...state.lesson.slides];
+            const targetIndex = allSlides.findIndex(s => s.id === targetSlideId);
+            if (targetIndex === -1) return state;
+
+            const movingIdsSet = new Set(targetIds);
+            // If dragging onto one of the moving slides itself, no-op
+            if (movingIdsSet.has(targetSlideId)) return state;
+
+            // Preserve relative order of moving slides
+            const movingSlides = allSlides.filter(s => movingIdsSet.has(s.id));
+            const remainingSlides = allSlides.filter(s => !movingIdsSet.has(s.id));
+
+            const remainingTargetIndex = remainingSlides.findIndex(s => s.id === targetSlideId);
+            if (remainingTargetIndex === -1) return state;
+
+            const insertIndex = position === 'after' ? remainingTargetIndex + 1 : remainingTargetIndex;
+
+            const newSlides = [
+                ...remainingSlides.slice(0, insertIndex),
+                ...movingSlides,
+                ...remainingSlides.slice(insertIndex)
+            ];
+
+            // Re-index order property
+            newSlides.forEach((s, i) => { s.order = i; });
+
+            const newPast = pushToPast(state);
+
+            return {
+                ...state,
+                isDirty: true,
+                past: newPast,
+                lesson: { ...state.lesson, slides: newSlides }
+            };
+        }
+
         case 'DUPLICATE_SLIDE': {
             const slideToDuplicate = state.lesson.slides.find(s => s.id === action.payload);
             if (!slideToDuplicate) return state;

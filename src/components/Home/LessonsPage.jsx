@@ -16,6 +16,8 @@ const LessonsPage = () => {
     const [loading, setLoading] = useState(true);
     const [deleteTarget, setDeleteTarget] = useState(null); // lesson item pending delete confirmation
     const [infoTarget, setInfoTarget] = useState(null); // lesson item to edit info for
+    const [draggedLessonPath, setDraggedLessonPath] = useState(null);
+    const [dragOverLessonInfo, setDragOverLessonInfo] = useState(null); // { targetPath, position: 'before' | 'after' }
 
     const fetchLessons = async () => {
         try {
@@ -279,6 +281,100 @@ const LessonsPage = () => {
         }
     };
 
+    const handleLessonDragStart = (e, item) => {
+        if (e.target.closest('button') || e.target.tagName === 'BUTTON' || e.target.closest('input')) {
+            e.preventDefault();
+            return;
+        }
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', item.path);
+        setDraggedLessonPath(item.path);
+    };
+
+    const handleLessonDragOver = (e, item) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+
+        if (draggedLessonPath === item.path) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        const position = e.clientY < midY ? 'before' : 'after';
+
+        if (!dragOverLessonInfo || dragOverLessonInfo.targetPath !== item.path || dragOverLessonInfo.position !== position) {
+            setDragOverLessonInfo({ targetPath: item.path, position });
+        }
+    };
+
+    const handleLessonDragLeave = (e, item) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            if (dragOverLessonInfo && dragOverLessonInfo.targetPath === item.path) {
+                setDragOverLessonInfo(null);
+            }
+        }
+    };
+
+    const handleLessonDrop = async (e, item) => {
+        e.preventDefault();
+        if (!draggedLessonPath || !dragOverLessonInfo) {
+            setDraggedLessonPath(null);
+            setDragOverLessonInfo(null);
+            return;
+        }
+
+        if (draggedLessonPath === dragOverLessonInfo.targetPath) {
+            setDraggedLessonPath(null);
+            setDragOverLessonInfo(null);
+            return;
+        }
+
+        const fromIndex = lessons.findIndex(l => l.path === draggedLessonPath);
+        if (fromIndex === -1) {
+            setDraggedLessonPath(null);
+            setDragOverLessonInfo(null);
+            return;
+        }
+
+        const newLessons = [...lessons];
+        const [movedLesson] = newLessons.splice(fromIndex, 1);
+
+        let insertIndex = newLessons.findIndex(l => l.path === dragOverLessonInfo.targetPath);
+        if (insertIndex === -1) {
+            setDraggedLessonPath(null);
+            setDragOverLessonInfo(null);
+            return;
+        }
+
+        if (dragOverLessonInfo.position === 'after') {
+            insertIndex += 1;
+        }
+
+        newLessons.splice(insertIndex, 0, movedLesson);
+
+        // Optimistic update
+        setLessons(newLessons);
+        setDraggedLessonPath(null);
+        setDragOverLessonInfo(null);
+
+        const orderedFolders = newLessons.map(l => l.name);
+        try {
+            await fetch('/api/reorder-lessons', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderedFolders })
+            });
+            fetchLessons();
+        } catch (error) {
+            console.error('Error reordering lessons:', error);
+            fetchLessons();
+        }
+    };
+
+    const handleLessonDragEnd = () => {
+        setDraggedLessonPath(null);
+        setDragOverLessonInfo(null);
+    };
+
     const handleCreateNew = () => {
         dispatch({ type: 'NEW_LESSON' });
     };
@@ -367,17 +463,26 @@ const LessonsPage = () => {
                                 ? item.content.visibleInFeed !== false
                                 : isMenuVisible);
                         const isFullyHidden = !isMenuVisible && !isFeedVisible;
+                        const isDragging = draggedLessonPath === item.path;
+                        const isDropTarget = dragOverLessonInfo && dragOverLessonInfo.targetPath === item.path;
+                        const dropClass = isDropTarget ? `drop-target-${dragOverLessonInfo.position}` : '';
 
                         return (
                             <div
                                 key={item.path}
-                                className={`file-tree-item file ${isFullyHidden ? 'lesson-hidden' : ''}`}
+                                className={`file-tree-item file ${isFullyHidden ? 'lesson-hidden' : ''} ${isDragging ? 'is-dragging' : ''} ${dropClass}`}
+                                draggable={!showDeleted}
+                                onDragStart={(e) => handleLessonDragStart(e, item)}
+                                onDragOver={(e) => handleLessonDragOver(e, item)}
+                                onDragLeave={(e) => handleLessonDragLeave(e, item)}
+                                onDrop={(e) => handleLessonDrop(e, item)}
+                                onDragEnd={handleLessonDragEnd}
                                 onClick={(e) => {
                                     if (e.target.closest('button') || e.target.tagName === 'BUTTON') return;
                                     handleEdit(item);
                                 }}
                                 style={{
-                                    opacity: isFullyHidden ? 0.45 : (!isMenuVisible ? 0.75 : 1),
+                                    opacity: isDragging ? 0.35 : (isFullyHidden ? 0.45 : (!isMenuVisible ? 0.75 : 1)),
                                     backgroundColor: item.content?.cardColor || '#8B5CF6'
                                 }}
                             >
@@ -387,6 +492,7 @@ const LessonsPage = () => {
                                     ) : (
                                         <div style={{ width: '100%', height: '100%', background: '#ccc' }} />
                                     )}
+                                    <div className="lesson-drag-handle" title="Drag to reorder">⠿</div>
                                 </div>
                                 <div className="lesson-card-content">
                                     <div className="item-name" title={item.title}>{item.title}</div>

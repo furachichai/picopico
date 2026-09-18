@@ -71,6 +71,7 @@
     min-height: 160px;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
 }
 
 .file-tree-item.file:hover {
@@ -82,6 +83,63 @@
 .file-tree-item.file:active {
     transform: translate(3px, 3px);
     box-shadow: 3px 3px 0px #000000;
+}
+
+.file-tree-item.file.is-dragging {
+    opacity: 0.35 !important;
+    border-style: dashed !important;
+    transform: scale(0.98);
+}
+
+.file-tree-item.file.drop-target-before::before,
+.file-tree-item.file.drop-target-after::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 7px;
+    background: #FCD34D;
+    z-index: 30;
+    box-shadow: 0 0 14px rgba(252, 211, 77, 1);
+    pointer-events: none;
+}
+
+.file-tree-item.file.drop-target-before::before {
+    top: 0;
+}
+
+.file-tree-item.file.drop-target-after::after {
+    bottom: 0;
+}
+
+.lesson-drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.95rem;
+    cursor: grab;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.lesson-drag-handle:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.file-tree-item.file:active .lesson-drag-handle {
+    cursor: grabbing;
 }
 
 .lesson-card-preview {
