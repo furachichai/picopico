@@ -156,7 +156,8 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     }),
                     // Field Defaults
                     ...(isField && {
-                        fieldExpression: '3 + *8 x 2* = 19'
+                        fieldExpression: '3 + *8 x 2* = 19',
+                        commutative: true
                     }),
                     // NL Defaults
                     nlConfig: type === 'nl' ? {

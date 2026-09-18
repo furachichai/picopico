@@ -503,8 +503,32 @@ export default function lessonManagerPlugin() {
 
                             let targetPath = path.join(assetsDir, cleanName);
 
-                            // If not overwriting and file exists, find unique name
+                            // Extract base64 content
+                            const rawData = base64 || dataUrl.replace(/^data:image\/[a-zA-Z+.-]+;base64,/, '');
+                            const buffer = Buffer.from(rawData, 'base64');
+
+                            // If not overwriting and file exists, check for duplicate (filename & filesize)
                             if (!overwrite && fs.existsSync(targetPath)) {
+                                const existingStat = fs.statSync(targetPath);
+                                if (existingStat.size === buffer.length) {
+                                    // Duplicate object already exists! Do not import the new one.
+                                    const relativeSrcPath = `src/assets/${targetCategory}/${cleanName}`;
+                                    const viteAssetUrl = `/src/assets/${targetCategory}/${cleanName}`;
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.end(JSON.stringify({
+                                        success: true,
+                                        duplicate: true,
+                                        skipped: true,
+                                        filename: cleanName,
+                                        category: targetCategory,
+                                        path: relativeSrcPath,
+                                        url: viteAssetUrl,
+                                        size: buffer.length
+                                    }));
+                                    return;
+                                }
+
                                 const ext = path.extname(cleanName);
                                 const nameWithoutExt = path.basename(cleanName, ext);
                                 let counter = 1;
@@ -514,10 +538,6 @@ export default function lessonManagerPlugin() {
                                 cleanName = `${nameWithoutExt}_${counter}${ext}`;
                                 targetPath = path.join(assetsDir, cleanName);
                             }
-
-                            // Extract base64 content
-                            const rawData = base64 || dataUrl.replace(/^data:image\/[a-zA-Z+.-]+;base64,/, '');
-                            const buffer = Buffer.from(rawData, 'base64');
 
                             fs.writeFileSync(targetPath, buffer);
 
@@ -571,6 +591,7 @@ export default function lessonManagerPlugin() {
                             allObjects: []
                         };
                         const seenFilenames = new Set();
+                        const assetMeta = {};
 
                         const scanDir = (dirPath, category, urlPrefix, relSubDir = '') => {
                             if (!fs.existsSync(dirPath)) return;
@@ -586,6 +607,17 @@ export default function lessonManagerPlugin() {
                                         if (!seenFilenames.has(key)) {
                                             seenFilenames.add(key);
                                             const assetUrl = `${urlPrefix}/${category}/${relPath}`;
+                                            const filePath = path.join(dirPath, entry.name);
+                                            let fileSize = 0;
+                                            try {
+                                                fileSize = fs.statSync(filePath).size;
+                                            } catch (e) {}
+
+                                            const baseName = entry.name;
+                                            if (!assetMeta[baseName]) {
+                                                assetMeta[baseName] = { size: fileSize, url: assetUrl, filename: baseName, category };
+                                            }
+
                                             if (results[category]) {
                                                 results[category].push(assetUrl);
                                             }
@@ -617,7 +649,7 @@ export default function lessonManagerPlugin() {
 
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify({ success: true, assets: results }));
+                        res.end(JSON.stringify({ success: true, assets: results, assetMeta }));
                     } catch (error) {
                         console.error('Error listing assets:', error);
                         res.statusCode = 500;

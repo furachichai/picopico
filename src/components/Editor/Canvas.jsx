@@ -336,6 +336,12 @@ const Canvas = (props) => {
     if (e.target.closest('.sticker')) {
       return;
     }
+
+    // Ensure any currently active contentEditable element blurs immediately
+    if (document.activeElement && document.activeElement.blur && (document.activeElement.isContentEditable || document.activeElement.closest?.('[contenteditable="true"]'))) {
+      document.activeElement.blur();
+      window.getSelection()?.removeAllRanges();
+    }
     
     // Determine initial selection
     const isMultiSelectModifier = e.shiftKey || e.metaKey || e.ctrlKey;
@@ -1107,9 +1113,25 @@ const Canvas = (props) => {
 
           {/* Unified Group Transform Box (when 2+ elements or a group are selected) */}
           {!state.translationMode && (() => {
-            const activeIds = state.selectedElementIds && state.selectedElementIds.length > 1
+            const rawActiveIds = (state.selectedElementIds && state.selectedElementIds.length > 0)
               ? state.selectedElementIds
-              : [];
+              : (state.selectedElementId ? [state.selectedElementId] : []);
+
+            const activeIdsSet = new Set(rawActiveIds);
+            if (currentSlide?.elements) {
+              rawActiveIds.forEach(id => {
+                const el = currentSlide.elements.find(e => e.id === id);
+                if (el?.metadata?.groupId) {
+                  currentSlide.elements.forEach(member => {
+                    if (member.metadata?.groupId === el.metadata.groupId) {
+                      activeIdsSet.add(member.id);
+                    }
+                  });
+                }
+              });
+            }
+
+            const activeIds = Array.from(activeIdsSet);
             const selectedEls = currentSlide?.elements?.filter(el => activeIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
             if (selectedEls.length <= 1) return null;
             return (

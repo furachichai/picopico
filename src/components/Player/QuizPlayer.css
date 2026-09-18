@@ -2088,6 +2088,7 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.1rem;
     font-weight: 900;
+    text-transform: none !important;
     cursor: pointer;
     pointer-events: auto;
     display: flex;
@@ -2116,9 +2117,15 @@
 .field-choices-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
+    column-gap: 4px;
+    row-gap: 12px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.field-choices-grid.four-cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 14px;
 }
 
 .field-choice-cell {
@@ -2142,6 +2149,7 @@
     font-family: 'Outfit', sans-serif;
     font-size: 0.95rem;
     font-weight: 900;
+    text-transform: none !important;
     cursor: pointer;
     box-sizing: border-box;
     display: flex;

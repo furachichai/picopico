@@ -176,6 +176,11 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const [deletedUrls, setDeletedUrls] = useState(new Set());
     const [serverAssets, setServerAssets] = useState(null);
 
+    // Full-size object preview outside the library
+    const [hoveredAsset, setHoveredAsset] = useState(null); // { url, filename, type }
+    const [previewDimensions, setPreviewDimensions] = useState(null); // { width, height }
+    const [previewPos, setPreviewPos] = useState({ side: 'left', top: 100, x: 20 });
+
     // Modal states
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [saveModalData, setSaveModalData] = useState({ items: [], initialCategory: 'characters' });
@@ -271,7 +276,10 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             if (res.ok) {
                 const data = await res.json();
                 if (data.assets) {
-                    setServerAssets(data.assets);
+                    setServerAssets({
+                        ...data.assets,
+                        assetMeta: data.assetMeta || {}
+                    });
                 }
             }
         } catch (err) {
@@ -289,6 +297,41 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     }, [fetchServerAssets]);
 
     const { popupRef, dragHandlers, style } = useDraggable('assetLibrary');
+
+    // Calculate outside-library preview position based on current popupRef position
+    useEffect(() => {
+        if (!hoveredAsset) {
+            setPreviewDimensions(null);
+            return;
+        }
+
+        if (popupRef.current) {
+            const rect = popupRef.current.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            const spaceOnLeft = rect.left;
+            const spaceOnRight = viewportWidth - rect.right;
+
+            let side = 'left';
+            let x = 20;
+
+            if (spaceOnLeft >= 320 || spaceOnLeft >= spaceOnRight) {
+                side = 'left';
+                x = Math.max(16, rect.left - 16);
+            } else {
+                side = 'right';
+                x = Math.min(viewportWidth - 16, rect.right + 16);
+            }
+
+            const top = Math.max(16, Math.min(viewportHeight - 340, rect.top));
+            setPreviewPos({ side, top, x });
+        }
+    }, [hoveredAsset]);
+
+    useEffect(() => {
+        setHoveredAsset(null);
+    }, [activeTab, activeSubCategory, activeBgSubCategory]);
 
     // Find last background data
     const getLastBackground = () => {
@@ -360,6 +403,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     };
 
     const handleSelect = (item) => {
+        setHoveredAsset(null);
         if (onSelect) {
             onSelect(item);
             onClose();
@@ -387,6 +431,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         metadata: {
                             width: targetWidthPercent,
                             height: targetHeightPercent,
+                            ...(activeTab === 'gifs' && { isGif: true }),
                             ...(activeTab === 'custom' && { category: 'characters' }),
                             ...(activeTab === 'custom-objects' && { category: 'objects' })
                         }
@@ -403,6 +448,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         metadata: {
                             width: 40,
                             height: 40,
+                            ...(activeTab === 'gifs' && { isGif: true }),
                             ...(activeTab === 'custom' && { category: 'characters' }),
                             ...(activeTab === 'custom-objects' && { category: 'objects' })
                         }
@@ -421,11 +467,46 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
     };
 
-    // Open file upload / save modal (supports batch files)
+    // Open file upload / save modal (supports batch files with duplicate checking)
     const handleFilesChosen = async (fileList) => {
         if (!fileList || fileList.length === 0) return;
         const validFiles = Array.from(fileList).filter(f => f && f.type && f.type.startsWith('image/'));
         if (validFiles.length === 0) return;
+
+        // Check for duplicates against existing library assets (by matching filename and filesize)
+        const duplicateFiles = [];
+        const nonDuplicateFiles = [];
+
+        validFiles.forEach(file => {
+            const rawName = file.name;
+            const cleanName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const meta = serverAssets?.assetMeta?.[rawName] || serverAssets?.assetMeta?.[cleanName];
+            if (meta && meta.size === file.size) {
+                duplicateFiles.push(file);
+            } else {
+                nonDuplicateFiles.push(file);
+            }
+        });
+
+        if (duplicateFiles.length > 0) {
+            if (nonDuplicateFiles.length === 0) {
+                // All files are duplicates
+                alert(
+                    duplicateFiles.length === 1
+                        ? `"${duplicateFiles[0].name}" already exists in the library with the exact same file size (${duplicateFiles[0].size} bytes). Import skipped.`
+                        : `All ${duplicateFiles.length} files already exist in the library with matching filenames and file sizes. Import skipped.`
+                );
+                return;
+            } else {
+                // In a batch import, only duplicates are not imported, the rest are imported as expected
+                alert(
+                    `Skipped ${duplicateFiles.length} duplicate file(s) already in the library (${duplicateFiles.map(f => f.name).join(', ')}).\nImporting remaining ${nonDuplicateFiles.length} new file(s).`
+                );
+            }
+        }
+
+        const filesToProcess = nonDuplicateFiles;
+        if (filesToProcess.length === 0) return;
 
         let savedCat = null;
         try {
@@ -450,7 +531,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
 
         // Read all images to data URLs
-        const readPromises = validFiles.map(file => {
+        const readPromises = filesToProcess.map(file => {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -477,7 +558,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const handleSaveSuccess = (savedResult) => {
         setSaveModalOpen(false);
         const results = Array.isArray(savedResult) ? savedResult : (savedResult ? [savedResult] : []);
-        const newUrls = results.map(r => r.url).filter(Boolean);
+        const newUrls = results.filter(r => !r.skipped).map(r => r.url).filter(Boolean);
         if (newUrls.length > 0) {
             setLocallyAdded(prev => [...newUrls, ...prev]);
 
@@ -547,7 +628,12 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const sceneBackgrounds = allBackgrounds.filter(src => !isTitlecard(src));
     const allObjects = mergeWithServer(customObjectsList, serverAssets?.allObjects).filter(url => !deletedUrls.has(url));
 
+    const maxPreviewWidth = previewPos.side === 'left'
+        ? Math.max(180, previewPos.x - 32)
+        : Math.max(180, (typeof window !== 'undefined' ? window.innerWidth : 1200) - previewPos.x - 32);
+
     return (
+        <>
         <div
             ref={popupRef}
             style={style}
@@ -658,7 +744,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 )}
             </div>
 
-            <div className="library-content" ref={contentRef}>
+            <div className="library-content" ref={contentRef} onScroll={() => setHoveredAsset(null)}>
                 {(activeTab === 'custom-bg' || activeTab === 'backgrounds') && (
                     <div className="library-last-bg-bar">
                         <button
@@ -765,7 +851,10 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                         key={`${src}-${index}`}
                                         className="asset-item custom"
                                         draggable
+                                        onMouseEnter={() => setHoveredAsset({ url: src, filename })}
+                                        onMouseLeave={() => setHoveredAsset(null)}
                                         onDragStart={(e) => {
+                                            setHoveredAsset(null);
                                             e.dataTransfer.setData('text/plain', src);
                                             e.dataTransfer.setData('application/json', JSON.stringify({
                                                 type: 'image',
@@ -814,7 +903,10 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                         key={`${src}-${index}`}
                                         className="asset-item custom"
                                         draggable
+                                        onMouseEnter={() => setHoveredAsset({ url: src, filename })}
+                                        onMouseLeave={() => setHoveredAsset(null)}
                                         onDragStart={(e) => {
+                                            setHoveredAsset(null);
                                             e.dataTransfer.setData('text/plain', src);
                                             e.dataTransfer.setData('application/json', JSON.stringify({ type: 'image', src }));
                                         }}
@@ -869,6 +961,8 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                 <div
                                     key={`${src}-${index}`}
                                     className={`asset-item custom-bg ${isTc ? 'titlecard-item' : ''}`}
+                                    onMouseEnter={() => setHoveredAsset({ url: src, filename })}
+                                    onMouseLeave={() => setHoveredAsset(null)}
                                     onClick={() => handleSelect(src)}
                                     title={filename}
                                 >
@@ -967,15 +1061,20 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         />
                     ))}
 
-                    {activeTab === 'gifs' && ASSETS.gifs.map((item, index) => (
-                        <div
-                            key={index}
-                            className="asset-item gifs"
-                            onClick={() => handleSelect(item)}
-                        >
-                            <img src={item} alt="gif" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
-                        </div>
-                    ))}
+                    {activeTab === 'gifs' && ASSETS.gifs.map((item, index) => {
+                        const filename = item.split('/').pop();
+                        return (
+                            <div
+                                key={index}
+                                className="asset-item gifs"
+                                onMouseEnter={() => setHoveredAsset({ url: item, filename })}
+                                onMouseLeave={() => setHoveredAsset(null)}
+                                onClick={() => handleSelect(item)}
+                            >
+                                <img src={item} alt="gif" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -1035,6 +1134,44 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 }}
             />
         </div>
+
+        {/* Full-size object preview outside the library */}
+        {hoveredAsset && (
+            <div
+                className={`asset-library-preview-outside ${previewPos.side}`}
+                style={{
+                    top: `${previewPos.top}px`,
+                    maxWidth: `${maxPreviewWidth}px`,
+                    ...(previewPos.side === 'left'
+                        ? { right: `calc(100vw - ${previewPos.x}px)` }
+                        : { left: `${previewPos.x}px` })
+                }}
+            >
+                <div className="preview-image-container">
+                    <img
+                        src={hoveredAsset.url}
+                        alt={hoveredAsset.filename || "asset preview"}
+                        onLoad={(e) => {
+                            setPreviewDimensions({
+                                width: e.target.naturalWidth,
+                                height: e.target.naturalHeight
+                            });
+                        }}
+                    />
+                </div>
+                <div className="preview-meta-badge">
+                    <span className="preview-filename" title={hoveredAsset.filename}>
+                        {hoveredAsset.filename}
+                    </span>
+                    {previewDimensions && (
+                        <span className="preview-resolution">
+                            {previewDimensions.width} × {previewDimensions.height} px
+                        </span>
+                    )}
+                </div>
+            </div>
+        )}
+        </>
     );
 };
 

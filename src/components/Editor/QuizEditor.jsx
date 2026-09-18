@@ -27,7 +27,7 @@ const getCharacterByAvatar = (avatar) => {
     return CHARACTERS.find(c => c.avatar === avatar) || CHARACTERS[0];
 };
 
-const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
+const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected = true }) => {
     const { state, dispatch } = useEditor();
     const options = element.metadata?.options || ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
     const correctIndex = element.metadata?.correctIndex || 0;
@@ -335,7 +335,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         {pemMode === 'MANUAL' && (
                             <div className="pem-editor-manual">
                                 <div
-                                    contentEditable
+                                    contentEditable={isSelected}
                                     suppressContentEditableWarning
                                     className="pem-manual-input"
                                     onInput={(e) => onChange(element.id, { pemExpression: e.currentTarget.textContent })}
@@ -606,7 +606,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
 
                             {(node.type === 'message' || node.type === 'reply') && (
                                 <div
-                                    contentEditable
+                                    contentEditable={isSelected}
                                     suppressContentEditableWarning
                                     className="chatquiz-message-input"
                                     data-node-index={index}
@@ -655,7 +655,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                     {node.options.map((opt, optIdx) => (
                                         <div key={optIdx} className="chatquiz-option-row">
                                             <div
-                                                contentEditable
+                                                contentEditable={isSelected}
                                                 suppressContentEditableWarning
                                                 className="chatquiz-option-input"
                                                 data-node-index={index}
@@ -792,7 +792,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                     <div key={index} className="quiz-option-row match-row">
                         <div className="quiz-option-2 match-column question-col" style={{ backgroundColor: colors[index % colors.length] }}>
                             <div
-                                contentEditable
+                                contentEditable={isSelected}
                                 suppressContentEditableWarning
                                 className="option-input-2"
                                 data-option-index={index}
@@ -822,7 +822,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                         <div className="match-arrow-divider">↔</div>
                         <div className="quiz-option-2 match-column answer-col" style={{ backgroundColor: colors[index % colors.length] }}>
                             <div
-                                contentEditable
+                                contentEditable={isSelected}
                                 suppressContentEditableWarning
                                 className="option-input-2"
                                 data-match-answer-index={index}
@@ -896,7 +896,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                             style={{ backgroundColor: colors[index % colors.length], flex: 1 }}
                         >
                             <div
-                                contentEditable
+                                contentEditable={isSelected}
                                 suppressContentEditableWarning
                                 className="option-input-2"
                                 data-option-index={index}
@@ -1029,7 +1029,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode }) => {
                                 </div>
                             ) : (
                                 <div
-                                    contentEditable
+                                    contentEditable={isSelected}
                                     suppressContentEditableWarning
                                     className="option-input-2"
                                     data-option-index={index}

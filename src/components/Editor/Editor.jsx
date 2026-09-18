@@ -1042,10 +1042,35 @@ const Editor = () => {
                 }
             }
 
-            // Arrow keys: move selected element, or navigate slides if nothing selected
+            // Arrow keys: move selected element(s) / group, or navigate slides if nothing selected
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
-                const hasSelection = state.selectedElementId && state.selectedElementId !== 'background' && state.selectedElementId !== 'cartridge';
-                if (hasSelection) {
+                const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                const rawSelectedIds = (state.selectedElementIds && state.selectedElementIds.length > 0)
+                    ? state.selectedElementIds
+                    : (state.selectedElementId ? [state.selectedElementId] : []);
+
+                const movingIdsSet = new Set();
+                if (currentSlide) {
+                    rawSelectedIds.forEach(id => {
+                        if (id && id !== 'background' && id !== 'cartridge') {
+                            movingIdsSet.add(id);
+                            // If element belongs to a group and user is not holding Alt/Option, move entire group together
+                            const el = currentSlide.elements.find(e => e.id === id);
+                            const groupId = el?.metadata?.groupId;
+                            if (groupId && !e.altKey) {
+                                currentSlide.elements.forEach(member => {
+                                    if (member.metadata?.groupId === groupId) {
+                                        movingIdsSet.add(member.id);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+                const movingIds = Array.from(movingIdsSet);
+
+                if (movingIds.length > 0) {
                     e.preventDefault();
                     
                     // Save history snapshot on initial key down (skip repeat keydown events when held down)
@@ -1058,47 +1083,19 @@ const Editor = () => {
                     const canvasW = canvas.offsetWidth;
                     const canvasH = canvas.offsetHeight;
 
-                    if (e.shiftKey) {
-                        // Move all selected elements together
-                        const pxStep = 10;
-                        const dxPct = (pxStep / canvasW) * 100;
-                        const dyPct = (pxStep / canvasH) * 100;
+                    const pxStep = e.shiftKey ? 10 : 1;
+                    const dxPct = (pxStep / canvasW) * 100;
+                    const dyPct = (pxStep / canvasH) * 100;
 
-                        let dx = 0;
-                        let dy = 0;
-                        if (e.key === 'ArrowLeft') dx = -dxPct;
-                        else if (e.key === 'ArrowRight') dx = dxPct;
-                        else if (e.key === 'ArrowUp') dy = -dyPct;
-                        else if (e.key === 'ArrowDown') dy = dyPct;
+                    let dx = 0;
+                    let dy = 0;
+                    if (e.key === 'ArrowLeft') dx = -dxPct;
+                    else if (e.key === 'ArrowRight') dx = dxPct;
+                    else if (e.key === 'ArrowUp') dy = -dyPct;
+                    else if (e.key === 'ArrowDown') dy = dyPct;
 
-                        const selectedIds = state.selectedElementIds && state.selectedElementIds.length > 0
-                            ? state.selectedElementIds
-                            : [state.selectedElementId];
-                        
-                        const movingIds = selectedIds.filter(id => id && id !== 'background' && id !== 'cartridge');
-                        
-                        if (movingIds.length > 0) {
-                            dispatch({ type: 'MOVE_ELEMENTS', payload: { ids: movingIds, dx, dy } });
-                        }
-                    } else {
-                        // Move just the single selected element by 1px
-                        const pxStep = 1;
-                        const dxPct = (pxStep / canvasW) * 100;
-                        const dyPct = (pxStep / canvasH) * 100;
-
-                        const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
-                        const el = currentSlide?.elements.find(el => el.id === state.selectedElementId);
-                        if (!el) return;
-
-                        let updates = {};
-                        if (e.key === 'ArrowLeft') updates = { x: el.x - dxPct };
-                        else if (e.key === 'ArrowRight') updates = { x: el.x + dxPct };
-                        else if (e.key === 'ArrowUp') updates = { y: el.y - dyPct };
-                        else if (e.key === 'ArrowDown') updates = { y: el.y + dyPct };
-
-                        handleContextMenuChange(el.id, updates);
-                    }
-                } else {
+                    dispatch({ type: 'MOVE_ELEMENTS', payload: { ids: movingIds, dx, dy } });
+                } else if (!state.selectedElementId || state.selectedElementId === 'background') {
                     e.preventDefault();
                     if (e.key === 'ArrowLeft') handlePrevSlide();
                     else if (e.key === 'ArrowRight') handleNextSlide();

@@ -9,6 +9,7 @@ import { ELEMENT_TYPES } from '../../types';
 import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import { isCharacterElement, setImageShadowPreference } from '../../utils/characterShadow';
 import { evaluateMathExpression, parseFieldExpression } from '../../utils/fieldQuizUtils';
+import { EMOJI_DATA } from '../../utils/emojiData';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -35,6 +36,29 @@ const renderEmojiOrCrate = (emoji, size = 26) => {
 };
 
 const EMOJI_CATEGORIES = [
+    {
+        name: '😀 Smileys & Emotion',
+        items: [
+            '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇',
+            '🥰', '😍', '🤩', '😘', '😗', '😚', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗',
+            '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥',
+            '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶',
+            '🥴', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯',
+            '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣',
+            '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '💀', '☠️', '💩', '🤡',
+            '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '🔥', '✨', '⭐', '🌟', '💥'
+        ]
+    },
+    {
+        name: '👋 People, Gestures & Hearts',
+        items: [
+            '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙',
+            '👈', '👉', '👆', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌',
+            '👐', '🤲', '🤝', '🙏', '✍️', '💪', '🧠', '👀', '👁️', '👅', '👄', '💋', '❤️',
+            '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓',
+            '💗', '💖', '💘', '💝', '🎉', '🎊', '🎈', '🏆', '👑'
+        ]
+    },
     {
         name: '📦 Crates & Mystery Boxes (Algebra)',
         items: ['📦x', '📦', '📦?', '🧰', '🧱', '🪵', '🧺', '💼', '🪨', '💎', '🪙', '🧪', '⚗️', '🔮', '🏺', '🗝️', '💰', '🏆', '👑', '🏅', '🎖️']
@@ -80,6 +104,17 @@ const EMOJI_CATEGORIES = [
             '➕', '➖', '✖️', '➗', '🟰', '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🟤', '⬛', '⬜', '🔺', '🔻', '🔹', '🔶',
             '🔷', '🔸', '💠', '🔘', '⚪', '⚫', '🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬛', '⬜', '💯', '❓', '❗',
             '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟', '🔢', '🔣'
+        ]
+    },
+    {
+        name: '🚫 Signs, Warnings & Arrows',
+        items: [
+            '🚫', '⛔', '❌', '⭕', '🛑', '⚠️', '✅', '✔️', '☑️', '🚷', '🚭', '🚯', '🔇', '🔕', '🔞',
+            '➡️', '⬅️', '⬆️', '⬇️', '↗️', '↘️', '↙️', '↖️', '↕️', '↔️', '🔄', '🔃', '🔀', '🔁', '🔂',
+            '▶️', '⏸️', '⏹️', '⏺️', '⏭️', '⏮️', '⏩', '⏪',
+            '🔍', '🔎', '🔒', '🔓', '📢', '📣', '💬', '💭', '🗯️', '✉️', '📧', '📝', '🖊️', '🖋️', '📍', '🗑️',
+            '📱', '💻', '🖥️', '🖨️', '⌨️', '⏱️', '⏲️', '⏰', '⌛', '⏳',
+            '🏁', '🚩', '🎌', '🥇', '🥈', '🥉'
         ]
     }
 ];
@@ -374,7 +409,8 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const [balanzaMenuText, setBalanzaMenuText] = useState('');
     const [balanzaMenuOriginalText, setBalanzaMenuOriginalText] = useState('');
 
-    const [emojiPickerTarget, setEmojiPickerTarget] = useState(null); // 'left' | 'right' | 'menu' | null
+    const [emojiPickerTarget, setEmojiPickerTarget] = useState(null); // 'left' | 'right' | 'menu' | 'text' | null
+    const [emojiSearch, setEmojiSearch] = useState('');
     const [recentEmojis, setRecentEmojis] = useState(() => {
         try {
             const saved = localStorage.getItem('pico_recent_emojis');
@@ -387,10 +423,53 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
         if (!emojiPickerTarget) return;
 
         setRecentEmojis(prev => {
-            const next = [emoji, ...prev.filter(e => e !== emoji)].slice(0, 12);
+            const next = [emoji, ...prev.filter(e => e !== emoji)].slice(0, 14);
             try { localStorage.setItem('pico_recent_emojis', JSON.stringify(next)); } catch (e) {}
             return next;
         });
+
+        if (emojiPickerTarget === 'text') {
+            // First check if we can restore active text selection / caret
+            const restored = restoreSelection();
+            if (restored) {
+                try {
+                    document.execCommand('insertText', false, emoji);
+                } catch (err) {
+                    if (savedSelectionRef.current) {
+                        const range = savedSelectionRef.current;
+                        range.deleteContents();
+                        const textNode = document.createTextNode(emoji);
+                        range.insertNode(textNode);
+                        range.setStartAfter(textNode);
+                        range.collapse(true);
+                    }
+                }
+                const editableEl = getEditableFromSelection() || document.activeElement?.closest?.('[contenteditable="true"]');
+                if (editableEl) {
+                    const optionIndex = editableEl.dataset.optionIndex;
+                    const matchAnswerIndex = editableEl.dataset.matchAnswerIndex;
+                    if (optionIndex !== undefined || matchAnswerIndex !== undefined) {
+                        saveQuizOption(editableEl);
+                    } else {
+                        onChange(element.id, { content: editableEl.innerHTML });
+                    }
+                    saveSelection();
+                    return;
+                }
+            }
+
+            // If not actively editing inside contentEditable, append or insert into element
+            if (isTextType) {
+                const currentContent = element.content || '';
+                const nextContent = currentContent ? `${currentContent} ${emoji}` : emoji;
+                onChange(element.id, { content: nextContent });
+            } else if (element.type === 'quiz') {
+                const currentQ = element.metadata?.question || '';
+                const nextQ = currentQ ? `${currentQ} ${emoji}` : emoji;
+                updateMetadata({ question: nextQ });
+            }
+            return;
+        }
 
         const configKey = emojiPickerTarget === 'left'
             ? 'leftPlateText'
@@ -409,7 +488,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
     const saveSelection = () => {
         const sel = window.getSelection();
-        if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+        if (sel && sel.rangeCount > 0) {
             savedSelectionRef.current = sel.getRangeAt(0).cloneRange();
         } else {
             savedSelectionRef.current = null;
@@ -639,6 +718,19 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     title="Toggle Uppercase / Normal Case (Aa)"
                                     style={{ fontWeight: 'bold', fontSize: '0.85rem' }}
                                 >Aa</button>
+                                <button
+                                    className={`btn-icon ${emojiPickerTarget === 'text' ? 'active' : ''}`}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault();
+                                        saveSelection();
+                                    }}
+                                    onClick={() => {
+                                        saveSelection();
+                                        setEmojiPickerTarget(prev => prev === 'text' ? null : 'text');
+                                    }}
+                                    title="Emoji Library"
+                                    style={{ fontSize: '1.1rem' }}
+                                >😀</button>
                             </div>
                         </div>
                     )}
@@ -2508,87 +2600,6 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </>
                     )}
 
-                    {/* Emoji Selection Modal */}
-                    {emojiPickerTarget && element.cartridgeType === 'Balanza' && (
-                        <div
-                            style={{
-                                position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-                                background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)',
-                                zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                padding: '16px'
-                            }}
-                            onClick={() => setEmojiPickerTarget(null)}
-                        >
-                            <div
-                                style={{
-                                    background: '#1e1b3a', border: '1px solid rgba(167,139,250,0.4)',
-                                    borderRadius: '16px', padding: '16px', width: '100%', maxWidth: '380px',
-                                    maxHeight: '85vh', display: 'flex', flexDirection: 'column', gap: '12px',
-                                    boxShadow: '0 12px 32px rgba(0,0,0,0.6)', color: 'white'
-                                }}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
-                                    <span style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px' }}>
-                                        SELECT EMOJI ({emojiPickerTarget.toUpperCase()})
-                                    </span>
-                                    <button
-                                        onClick={() => setEmojiPickerTarget(null)}
-                                        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', cursor: 'pointer' }}
-                                    >✕</button>
-                                </div>
-
-                                <div style={{ overflowY: 'auto', maxHeight: '50vh', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '4px' }}>
-                                    {EMOJI_CATEGORIES.map(category => (
-                                        <div key={category.name}>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>{category.name}</div>
-                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px' }}>
-                                                {category.items.map(emoji => (
-                                                    <button
-                                                        key={emoji}
-                                                        type="button"
-                                                        onClick={() => handleSelectEmoji(emoji)}
-                                                        title={emoji}
-                                                        style={{
-                                                            background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
-                                                            borderRadius: '8px', fontSize: '1.4rem', padding: '6px 0',
-                                                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                            transition: 'transform 0.1s, background 0.1s'
-                                                        }}
-                                                    >
-                                                        {renderEmojiOrCrate(emoji, 28)}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#facc15', letterSpacing: '0.5px' }}>
-                                        ⏱️ RECENTLY USED:
-                                    </div>
-                                    <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
-                                        {recentEmojis.map(emoji => (
-                                            <button
-                                                key={`recent-${emoji}`}
-                                                type="button"
-                                                onClick={() => handleSelectEmoji(emoji)}
-                                                title={emoji}
-                                                style={{
-                                                    background: 'rgba(250, 204, 21, 0.15)', border: '1px solid rgba(250, 204, 21, 0.4)',
-                                                    borderRadius: '8px', fontSize: '1.3rem', minWidth: '36px', height: '36px',
-                                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    flexShrink: 0
-                                                }}
-                                            >
-                                                {renderEmojiOrCrate(emoji, 24)}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     )}
 
                     {/* Balanza Menu Supply Editor Modal */}
@@ -3332,6 +3343,19 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             title="Underline"
                             style={{ textDecoration: 'underline', fontSize: '1rem' }}
                         >U</button>
+                        <button
+                            className={`btn-icon ${emojiPickerTarget === 'text' ? 'active' : ''}`}
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                saveSelection();
+                            }}
+                            onClick={() => {
+                                saveSelection();
+                                setEmojiPickerTarget(prev => prev === 'text' ? null : 'text');
+                            }}
+                            title="Emoji Library"
+                            style={{ fontSize: '1.1rem' }}
+                        >😀</button>
                     </div>
 
                     {renderAutonextButton()}
@@ -3777,11 +3801,11 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             type="text"
                             value={metadata.fieldExpression || '3 + *8 x 2* = 19'}
                             onChange={(e) => updateMetadata({ fieldExpression: e.target.value })}
-                            placeholder="e.g. 3 + *8 x 2* = 19"
+                            placeholder="e.g. *a*+*a*; 2a, 3a, b"
                             style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
                         />
                         <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
-                            Use *expr* for empty box, **expr** for grey text placeholder.
+                            Use *expr* for empty box. End with ; to define custom detractors separated by commas (e.g. *a*+*a*; 2a, 3a, b).
                         </span>
                     </div>
 
@@ -3797,13 +3821,76 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         border: s.evaluated !== null ? '1px solid #10B981' : '1px solid #EF4444',
                                         color: s.evaluated !== null ? '#10B981' : '#EF4444',
                                         padding: '2px 6px',
-                                        borderRadius: '4px'
+                                        borderRadius: '4px',
+                                        textTransform: 'none'
                                     }}>
                                         Slot {i + 1}: {s.evaluated !== null ? s.evaluated : '?'}
                                     </span>
                                 ))}
                         </div>
                     </div>
+
+                    {(() => {
+                        const parsed = parseFieldExpression(metadata.fieldExpression || '3 + *8 x 2* = 19');
+                        if (parsed.hasSemicolon) {
+                            return (
+                                <div className="menu-group" style={{ minWidth: '150px' }}>
+                                    <label>Manual Detractors</label>
+                                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                        {parsed.manualDetractors && parsed.manualDetractors.length > 0 ? (
+                                            parsed.manualDetractors.map((d, i) => (
+                                                <span key={i} style={{
+                                                    fontSize: '0.75rem',
+                                                    background: 'rgba(59, 130, 246, 0.2)',
+                                                    border: '1px solid #3B82F6',
+                                                    color: '#2563EB',
+                                                    padding: '2px 6px',
+                                                    borderRadius: '4px',
+                                                    textTransform: 'none'
+                                                }}>
+                                                    {d}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span style={{ fontSize: '0.75rem', opacity: 0.5, fontStyle: 'italic' }}>
+                                                None (Auto-detractors disabled)
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })()}
+
+                    {/* Commutative Setting (Only for situations over 1 field) */}
+                    {parseFieldExpression(metadata.fieldExpression || '3 + *8 x 2* = 19').filter(s => s.type === 'field').length > 1 && (
+                        <div className="menu-group" style={{ minWidth: '130px', alignItems: 'flex-start' }}>
+                            <label>Commutative</label>
+                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', margin: '4px 0' }}>
+                                <input
+                                    type="checkbox"
+                                    id="field-commutative-checkbox"
+                                    checked={metadata.commutative !== false}
+                                    onChange={(e) => updateMetadata({ commutative: e.target.checked })}
+                                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                                />
+                                <label
+                                    htmlFor="field-commutative-checkbox"
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 600,
+                                        color: '#333',
+                                        cursor: 'pointer',
+                                        textTransform: 'none',
+                                        margin: 0
+                                    }}
+                                >
+                                    Any order
+                                </label>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="menu-divider"></div>
                 </>
@@ -4187,6 +4274,171 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
                 </div>
             </div>
+
+            {/* Universal Emoji Selection Popup — positioned to side of slide */}
+            {emojiPickerTarget && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '16px',
+                        right: '16px',
+                        width: 'min(380px, calc(100vw - 32px))',
+                        maxHeight: 'calc(100vh - 32px)',
+                        background: '#1e1b3a',
+                        border: '1.5px solid rgba(167,139,250,0.4)',
+                        borderRadius: '16px',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        boxShadow: '0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08)',
+                        color: 'white',
+                        zIndex: 99999,
+                        backdropFilter: 'blur(12px)'
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+                        <span style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span>😀</span> {emojiPickerTarget === 'text' ? 'EMOJI LIBRARY' : `SELECT EMOJI (${emojiPickerTarget.toUpperCase()})`}
+                        </span>
+                        <button
+                            onClick={() => {
+                                setEmojiPickerTarget(null);
+                                setEmojiSearch('');
+                            }}
+                            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', cursor: 'pointer', padding: '2px 6px', borderRadius: '6px' }}
+                            title="Close Emoji Library"
+                        >✕</button>
+                    </div>
+
+                    {/* Search bar with instant real-time filtering */}
+                    <div style={{ position: 'relative' }}>
+                        <input
+                            type="text"
+                            placeholder="Search emojis (e.g. smi, happy, gato, star)..."
+                            value={emojiSearch}
+                            onChange={(e) => setEmojiSearch(e.target.value)}
+                            autoFocus
+                            style={{
+                                width: '100%',
+                                padding: '8px 12px 8px 32px',
+                                borderRadius: '10px',
+                                border: '1px solid rgba(255,255,255,0.2)',
+                                background: 'rgba(0,0,0,0.35)',
+                                color: 'white',
+                                fontSize: '0.85rem',
+                                outline: 'none',
+                                boxSizing: 'border-box'
+                            }}
+                        />
+                        <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, fontSize: '0.85rem', pointerEvents: 'none' }}>
+                            🔍
+                        </span>
+                        {emojiSearch && (
+                            <button
+                                type="button"
+                                onClick={() => setEmojiSearch('')}
+                                style={{
+                                    position: 'absolute',
+                                    right: '8px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: 'rgba(255,255,255,0.6)',
+                                    cursor: 'pointer',
+                                    fontSize: '0.85rem',
+                                    padding: '2px 4px'
+                                }}
+                            >✕</button>
+                        )}
+                    </div>
+
+                    <div style={{ overflowY: 'auto', maxHeight: '55vh', display: 'flex', flexDirection: 'column', gap: '12px', paddingRight: '4px' }}>
+                        {(() => {
+                            const queryWords = emojiSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
+
+                            const filteredCategories = EMOJI_CATEGORIES.map(category => {
+                                if (queryWords.length === 0) return category;
+
+                                const items = category.items.filter(emoji => {
+                                    const keywords = (EMOJI_DATA[emoji] || '').toLowerCase();
+                                    const catName = category.name.toLowerCase();
+                                    // Match if every typed word is found anywhere in keywords, category, or emoji itself (prefix or partial)
+                                    return queryWords.every(word =>
+                                        keywords.includes(word) ||
+                                        catName.includes(word) ||
+                                        emoji.includes(word)
+                                    );
+                                });
+
+                                return { ...category, items };
+                            }).filter(cat => cat.items.length > 0);
+
+                            if (filteredCategories.length === 0) {
+                                return (
+                                    <div style={{ textAlign: 'center', padding: '32px 16px', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
+                                        No emojis found for "{emojiSearch}"
+                                    </div>
+                                );
+                            }
+
+                            return filteredCategories.map(category => (
+                                <div key={category.name}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>{category.name}</div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '6px' }}>
+                                        {category.items.map(emoji => (
+                                            <button
+                                                key={emoji}
+                                                type="button"
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                onClick={() => handleSelectEmoji(emoji)}
+                                                title={EMOJI_DATA[emoji] || emoji}
+                                                style={{
+                                                    background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
+                                                    borderRadius: '8px', fontSize: '1.4rem', padding: '6px 0',
+                                                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    transition: 'transform 0.1s, background 0.1s'
+                                                }}
+                                            >
+                                                {renderEmojiOrCrate(emoji, 28)}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ));
+                        })()}
+                    </div>
+
+                    {recentEmojis.length > 0 && !emojiSearch && (
+                        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#facc15', letterSpacing: '0.5px' }}>
+                                ⏱️ RECENTLY USED:
+                            </div>
+                            <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
+                                {recentEmojis.map(emoji => (
+                                    <button
+                                        key={`recent-${emoji}`}
+                                        type="button"
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => handleSelectEmoji(emoji)}
+                                        title={EMOJI_DATA[emoji] || emoji}
+                                        style={{
+                                            background: 'rgba(250, 204, 21, 0.15)', border: '1px solid rgba(250, 204, 21, 0.4)',
+                                            borderRadius: '8px', fontSize: '1.3rem', minWidth: '36px', height: '36px',
+                                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}
+                                    >
+                                        {renderEmojiOrCrate(emoji, 24)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
 
         </div >
     );

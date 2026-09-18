@@ -235,7 +235,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                 {/* Editable Element: Handles text content */}
                 <div
                     ref={textRef}
-                    contentEditable={!readOnly && !element.metadata?.locked}
+                    contentEditable={isSelected && !readOnly && !element.metadata?.locked}
                     suppressContentEditableWarning
                     onInput={handleInput}
                     onPaste={(e) => {
@@ -248,6 +248,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         if (!readOnly && !element.metadata?.locked && textRef.current) {
                             onChange(element.id, { content: textRef.current.innerHTML });
                         }
+                        window.getSelection()?.removeAllRanges();
                     }}
                     style={{
                         fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
@@ -257,8 +258,8 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         textDecoration: element.metadata?.textDecoration || 'none',
                         color: element.metadata?.color || 'black',
                         outline: 'none',
-                        cursor: (readOnly || element.metadata?.locked) ? 'default' : 'text',
-                        userSelect: (readOnly || element.metadata?.locked) ? 'none' : 'text',
+                        cursor: (isSelected && !readOnly && !element.metadata?.locked) ? 'text' : 'default',
+                        userSelect: (isSelected && !readOnly && !element.metadata?.locked) ? 'text' : 'none',
                         // Let's stick to that logic for the input itself.
                         pointerEvents: (readOnly || element.metadata?.locked) ? 'none' : (isSelected ? 'auto' : 'none'),
                         whiteSpace: 'pre-wrap',

@@ -52,6 +52,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     const handleBlur = (e) => {
         if (readOnly || !onChange) return;
         onChange(element.id, { content: e.currentTarget.innerHTML });
+        window.getSelection()?.removeAllRanges();
     };
 
     const handlePaste = (e) => {
@@ -503,7 +504,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
             {/* Main Text Content */}
             <div
                 ref={textRef}
-                contentEditable={!readOnly}
+                contentEditable={isSelected && !readOnly}
                 suppressContentEditableWarning={true}
                 onInput={handleBodyInput}
                 onBlur={handleBlur}

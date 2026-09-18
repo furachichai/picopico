@@ -6,9 +6,11 @@ const FieldQuizBottomControls = ({ element, onSelect, isEditor = true }) => {
     if (!element) return null;
 
     const expr = element.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-    const segments = parseFieldExpression(expr);
-    const rawChoices = generateFieldChoices(segments);
-    const choices = rawChoices.length > 0 ? rawChoices : ['?', '?', '?', '?', '?'];
+    const choices = React.useMemo(() => {
+        const segments = parseFieldExpression(expr);
+        const rawChoices = generateFieldChoices(segments);
+        return rawChoices.length > 0 ? rawChoices : ['?', '?', '?', '?', '?'];
+    }, [expr]);
     const isHidden = !!(element.hidden || element.metadata?.hidden);
 
     return (
@@ -25,7 +27,7 @@ const FieldQuizBottomControls = ({ element, onSelect, isEditor = true }) => {
             }}
         >
             <div className="field-choices-section">
-                <div className="field-choices-grid">
+                <div className={`field-choices-grid ${choices.length === 4 ? 'four-cols' : ''}`}>
                     {choices.map((choiceVal, idx) => (
                         <div key={idx} className="field-choice-cell">
                             <button

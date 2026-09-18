@@ -99,14 +99,28 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         setInteractionType(type);
         setIsDragging(true);
 
-        const isMultiSelected = state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1;
+        const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+        const hasGroupId = !!element.metadata?.groupId && !isAlt;
+        const groupMembers = (hasGroupId && currentSlide)
+            ? currentSlide.elements.filter(el => el.metadata?.groupId === element.metadata.groupId)
+            : [];
+
+        const isMultiSelected = (state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1) || (groupMembers.length > 1);
         let startMultiElements = [];
         let startGroupCenterX = 50;
         let startGroupCenterY = 50;
 
         if (isMultiSelected) {
-            const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
-            const validSelected = currentSlide?.elements.filter(el => state.selectedElementIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
+            const memberIdsSet = new Set(
+                (state.selectedElementIds?.includes(element.id) && state.selectedElementIds.length > 1)
+                    ? state.selectedElementIds
+                    : [element.id]
+            );
+            if (hasGroupId) {
+                groupMembers.forEach(m => memberIdsSet.add(m.id));
+            }
+            const memberIds = Array.from(memberIdsSet);
+            const validSelected = currentSlide?.elements.filter(el => memberIds.includes(el.id) && el.id !== 'background' && el.id !== 'cartridge') || [];
             startMultiElements = validSelected.map(el => ({ id: el.id, x: el.x, y: el.y, width: el.width, height: el.height }));
 
             const parent = stickerRef.current?.parentElement;
@@ -555,11 +569,17 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 {(element.type === 'text' || element.type === 'collectible') && (
                     <div
                         className={element.type === 'collectible' ? "sticker-collectible" : "sticker-text"}
-                        contentEditable={!element.metadata?.locked}
+                        contentEditable={isSelected && !element.metadata?.locked && !readOnly}
                         suppressContentEditableWarning
                         onInput={(e) => {
                             // Capture innerHTML to preserve per-character color spans
                             onChange(element.id, { content: e.currentTarget.innerHTML });
+                        }}
+                        onBlur={(e) => {
+                            if (onChange) {
+                                onChange(element.id, { content: e.currentTarget.innerHTML });
+                            }
+                            window.getSelection()?.removeAllRanges();
                         }}
                         onPaste={(e) => {
                             e.preventDefault();
@@ -886,6 +906,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             onChange={(id, updates) => onChange(id, { metadata: { ...element.metadata, ...updates } })}
                             onSelect={onSelect}
                             translationMode={translationMode}
+                            isSelected={isSelected}
                         />
                     </div>
                 )}

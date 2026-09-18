@@ -1252,7 +1252,8 @@ input:checked+.toggle-slider:before {
 .field-choices-preview-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
+    column-gap: 4px;
+    row-gap: 8px;
     margin-top: 2px;
 }
 
@@ -1265,6 +1266,7 @@ input:checked+.toggle-slider:before {
     color: #e2e8f0;
     font-weight: 700;
     font-size: 0.7rem;
+    text-transform: none;
 }
 
 .quiz-editor-2.field-canvas-preview {

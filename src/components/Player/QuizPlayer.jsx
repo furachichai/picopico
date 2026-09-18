@@ -8,7 +8,7 @@ import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx'
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
 import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
 import TypeQuizKeyboard from './TypeQuizKeyboard';
-import { evaluateMathExpression, parseFieldExpression, generateFieldChoices } from '../../utils/fieldQuizUtils';
+import { evaluateMathExpression, parseFieldExpression, generateFieldChoices, shuffleArray } from '../../utils/fieldQuizUtils';
 
 const generateFieldFlyId = () => Date.now() + Math.random();
 
@@ -648,7 +648,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 value: val
             }));
             
-            const shuffled = [...mapped].sort(() => Math.random() - 0.5);
+            const shuffled = shuffleArray(mapped);
             setFieldChoices(shuffled);
             setFieldSelections({});
             
@@ -1725,15 +1725,52 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         let allCorrect = true;
         const wrongSlots = new Set();
         
-        segments.forEach((s, idx) => {
-            if (s.type === 'field') {
-                const placed = fieldSelections[idx];
-                if (!placed || placed.value !== s.evaluated) {
+        const isCommutative = data.metadata?.commutative !== false;
+        const fieldSlots = segments
+            .map((s, idx) => ({ ...s, idx }))
+            .filter(s => s.type === 'field');
+
+        if (isCommutative && fieldSlots.length > 1) {
+            // Commutative matching: any order is accepted as long as correct values are chosen
+            // 1. Prioritize exact position matches
+            const availableExpected = [];
+            const unmatchedPlaced = [];
+
+            fieldSlots.forEach(s => {
+                const placed = fieldSelections[s.idx];
+                const expectedStr = String(s.evaluated).trim();
+                const placedStr = placed ? String(placed.value).trim() : '';
+
+                if (placedStr === expectedStr) {
+                    // Exact match on this slot
+                } else {
+                    availableExpected.push(expectedStr);
+                    unmatchedPlaced.push({ idx: s.idx, placedStr });
+                }
+            });
+
+            // 2. Match remaining placed values to remaining required values
+            unmatchedPlaced.forEach(({ idx, placedStr }) => {
+                const matchIndex = availableExpected.indexOf(placedStr);
+                if (matchIndex !== -1) {
+                    availableExpected.splice(matchIndex, 1);
+                } else {
                     allCorrect = false;
                     wrongSlots.add(idx);
                 }
-            }
-        });
+            });
+        } else {
+            // Non-commutative (order-dependent) or single field
+            segments.forEach((s, idx) => {
+                if (s.type === 'field') {
+                    const placed = fieldSelections[idx];
+                    if (!placed || String(placed.value).trim() !== String(s.evaluated).trim()) {
+                        allCorrect = false;
+                        wrongSlots.add(idx);
+                    }
+                }
+            });
+        }
         
         if (allCorrect) {
             handleSuccess();
@@ -3720,7 +3757,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        pointerEvents: 'none'
+                                        pointerEvents: 'none',
+                                        textTransform: 'none'
                                     }}
                                 >
                                     {piece.choice.value}
@@ -3747,7 +3785,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         cursor: 'grabbing',
-                                        pointerEvents: 'none'
+                                        pointerEvents: 'none',
+                                        textTransform: 'none'
                                     }}
                                 >
                                     {draggedChoice.choice.value}
@@ -3762,7 +3801,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                         <div className="field-player-bottom-portal" style={{ pointerEvents: 'auto' }} onClick={(e) => e.stopPropagation()}>
                             {/* Choices Grid (2 rows of 5 buttons) */}
                             <div className="field-choices-section">
-                                <div className="field-choices-grid">
+                                <div className={`field-choices-grid ${fieldChoices.length === 4 ? 'four-cols' : ''}`}>
                                     {fieldChoices.map((choice) => {
                                         const isPlaced = Object.values(fieldSelections).some(s => s?.id === choice.id) || pendingSelections[choice.id] || (draggedChoice?.choice.id === choice.id);
                                         
