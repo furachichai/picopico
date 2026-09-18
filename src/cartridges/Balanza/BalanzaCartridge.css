@@ -28,6 +28,7 @@
   align-items: center;
   touch-action: none;
   padding-top: 72px;
+  container-type: inline-size;
 }
 
 .balanza-bg-layer {
@@ -221,12 +222,14 @@
 }
 
 .balanza-plate-assembly-left {
-  left: 4.25%;
+  left: calc(4.25% + 3vw);
+  left: calc(4.25% + 3cqw);
   top: 55.0%;
 }
 
 .balanza-plate-assembly-right {
-  left: 95.65%;
+  left: calc(95.65% - 3vw);
+  left: calc(95.65% - 3cqw);
   top: 55.0%;
 }
 
@@ -258,13 +261,16 @@
 
 .balanza-plate-items {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
   align-items: flex-end;
   justify-content: center;
-  gap: 4px;
-  width: 90%;
-  min-height: 44px;
-  padding: 4px 6px;
+  align-content: flex-start;
+  gap: 4px 6px;
+  width: 88%;
+  max-width: 135px;
+  min-height: 38px;
+  padding: 4px 2px;
   margin-bottom: -6%;
   z-index: 2;
   transition: box-shadow 0.2s ease, filter 0.2s ease;
@@ -296,7 +302,7 @@
   100% { filter: drop-shadow(0 0 0px transparent); }
 }
 
-/* Plate tiles - big enough for touch, with emojis 20% larger on the plate */
+/* Plate tiles - big enough for touch, with emojis and crates 15% smaller on the plate */
 .balanza-tile {
   display: flex;
   align-items: center;
@@ -309,12 +315,24 @@
 }
 
 .balanza-plate-items .balanza-tile {
-  font-size: 2.05rem;
+  font-size: 1.74rem;
+  flex: 0 0 calc((100% - 12px) / 3);
+  max-width: calc((100% - 12px) / 3);
+  min-width: calc((100% - 12px) / 3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-plate-items .balanza-tile.is-merged {
+  flex: 0 0 auto;
+  min-width: calc((100% - 12px) / 3);
+  max-width: 100%;
 }
 
 .balanza-plate-items .balanza-crate-img {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
 }
 
 .balanza-tile.is-zero {
@@ -367,6 +385,35 @@
   vertical-align: middle;
   pointer-events: none;
   user-select: none;
+}
+
+/* Weight ring glyph styles */
+.balanza-weight-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.balanza-weight-glyph img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.balanza-plate-items .balanza-weight-glyph {
+  width: 32px;
+  height: 32px;
+}
+
+.balanza-card-icon .balanza-weight-glyph {
+  width: 22.5px;
+  height: 22.5px;
+}
+
+.balanza-menu-tile-glyph .balanza-weight-glyph {
+  width: 36px;
+  height: 36px;
 }
 
 /* Bottom draggable inventory menu */
@@ -516,6 +563,56 @@
   box-shadow: none;
 }
 
+/* Merged like-terms white card */
+.balanza-merged-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0px #000000;
+  padding: 2px 6px;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.balanza-card-count {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+  font-family: inherit;
+}
+
+.balanza-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* 25% smaller version of crate icon (normal is 30px x 30px, 30 * 0.75 = 22.5px) */
+.balanza-card-icon-img {
+  width: 22.5px;
+  height: 22.5px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 25% smaller version of emoji (normal is 1.74rem, 1.74 * 0.75 = 1.305rem) */
+.balanza-card-icon-emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-block;
+  user-select: none;
+}
+
 .balanza-drag-overlay {
   font-size: 2.2rem;
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
@@ -540,6 +637,19 @@
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+.balanza-drag-overlay .balanza-merged-card {
+  transform: scale(1.35);
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 3px 3px 0px #000000, 0 12px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.balanza-flying-ghost .balanza-merged-card {
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 3px 3px 0px #000000, 0 8px 16px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Polaroid Photo Mode */
@@ -607,4 +717,162 @@
 .balanza-photo-inner .balanza-tile-card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   cursor: default;
+}
+
+/* ─── Balanza Tutorial Mode ─── */
+.balanza-cartridge.is-tutorial-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0;
+  pointer-events: auto;
+}
+
+.balanza-tutorial-area {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  touch-action: none;
+  pointer-events: auto;
+}
+
+/* In play mode, display the original content of the left plate 5% of the slide's height higher */
+.balanza-cartridge.is-tutorial-mode.is-play-mode .balanza-tutorial-area {
+  top: -5%;
+}
+
+.balanza-tutorial-items {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 90%;
+  min-height: 80px;
+  padding: 24px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Tutorial tiles - large and prominent */
+.balanza-tutorial-items .balanza-tile {
+  font-size: 3.2rem;
+  line-height: 1;
+  cursor: grab;
+  position: relative;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.balanza-tutorial-items .balanza-tile:active {
+  cursor: grabbing;
+}
+
+.balanza-tutorial-items .balanza-crate-img {
+  width: 58px;
+  height: 58px;
+  display: block;
+  object-fit: contain;
+}
+
+.balanza-tutorial-items .balanza-merged-card {
+  padding: 8px 18px;
+  border-radius: 14px;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  gap: 10px;
+  background: #ffffff;
+}
+
+.balanza-tutorial-items .balanza-card-count {
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.balanza-tutorial-items .balanza-card-icon-img {
+  width: 44px;
+  height: 44px;
+}
+
+.balanza-tutorial-items .balanza-card-icon-emoji {
+  font-size: 2.4rem;
+}
+
+/* Drag overlay when in tutorial mode */
+.balanza-drag-overlay.is-tutorial {
+  font-size: 3.6rem;
+}
+
+.balanza-drag-overlay.is-tutorial .balanza-crate-img {
+  width: 68px;
+  height: 68px;
+}
+
+.balanza-drag-overlay.is-tutorial .balanza-merged-card {
+  transform: scale(1.2);
+  padding: 8px 18px;
+  border-radius: 14px;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px #000000, 0 16px 28px rgba(0, 0, 0, 0.3) !important;
+}
+
+.balanza-drag-overlay.is-tutorial .balanza-card-count {
+  font-size: 2.1rem;
+}
+
+.balanza-drag-overlay.is-tutorial .balanza-card-icon-img {
+  width: 44px;
+  height: 44px;
+}
+
+.balanza-drag-overlay.is-tutorial .balanza-card-icon-emoji {
+  font-size: 2.4rem;
+}
+
+.balanza-tutorial-empty {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #94a3b8;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+
+/* Wiggle animation when player tries to advance before completing tutorial cycle */
+@keyframes balanzaWiggle {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-8px) rotate(-4deg);
+  }
+  40% {
+    transform: translateX(8px) rotate(4deg);
+  }
+  60% {
+    transform: translateX(-6px) rotate(-2deg);
+  }
+  80% {
+    transform: translateX(4px) rotate(2deg);
+  }
+}
+
+.balanza-tutorial-items.is-wiggling .balanza-tile,
+.balanza-tutorial-items.is-wiggling .balanza-tile-card,
+.balanza-tutorial-items.is-wiggling .balanza-merged-card,
+.balanza-tutorial-items.is-wiggling .balanza-tile-glyph-container,
+.balanza-cartridge.is-wiggling .balanza-tutorial-items .balanza-tile,
+.balanza-cartridge.is-wiggling .balanza-tile {
+  animation: balanzaWiggle 0.45s ease-in-out !important;
 }

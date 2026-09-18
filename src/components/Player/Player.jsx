@@ -30,6 +30,10 @@ import './Player.css';
 // Helper to detect if a cartridge or slide has an open manipulative without a win scenario
 const isOpenManipulative = (cartridge) => {
     if (!cartridge) return false;
+    // Balanza tutorial mode ALWAYS requires completing the tutorial cycle before advancing
+    if (cartridge.type === 'Balanza' && (cartridge.config?.tutorial || cartridge.config?.isTutorial || cartridge.config?.tutorialMode)) {
+        return false;
+    }
     if (cartridge.type === 'ExploreNL' || cartridge.type === 'ExloreNL') return true;
     if (cartridge.hasWinScenario === false || cartridge.config?.hasWinScenario === false || cartridge.config?.openEnded === true) return true;
     return false;
@@ -179,6 +183,19 @@ const Player = () => {
     }, [currentSlideIndex, isGameActive, currentSlide]);
 
     const [wiggleIStickerId, setWiggleIStickerId] = useState(null);
+    const [wiggleCartridge, setWiggleCartridge] = useState(false);
+    const cartridgeWiggleTimeoutRef = useRef(null);
+
+    const triggerCartridgeWiggle = () => {
+        setWiggleCartridge(false);
+        requestAnimationFrame(() => {
+            setWiggleCartridge(true);
+            if (cartridgeWiggleTimeoutRef.current) clearTimeout(cartridgeWiggleTimeoutRef.current);
+            cartridgeWiggleTimeoutRef.current = setTimeout(() => {
+                setWiggleCartridge(false);
+            }, 500);
+        });
+    };
     const autoNextTimeoutRef = useRef(null);
 
     // Clear any pending autonext when changing slides or unmounting
@@ -289,6 +306,9 @@ const Player = () => {
 
         // Block if current slide has unsolved quiz/cartridge/isticker
         if (!force && slideHasUnsolvedInteractive(currentSlideIndex)) {
+            if (slide?.cartridge) {
+                triggerCartridgeWiggle();
+            }
             const isticker = slide?.elements?.find(el => el.type === 'isticker');
             if (isticker) {
                 setWiggleIStickerId(isticker.id);
@@ -504,6 +524,14 @@ const Player = () => {
         if (direction === 'next') {
             // Forward is blocked when there's an unsolved quiz, cartridge, isticker, stripper, or at last slide
             if (hasCartridge || hasQuiz || hasISticker || stripperBlocking || currentSlideIndex >= slides.length - 1) {
+                if (hasCartridge) {
+                    triggerCartridgeWiggle();
+                }
+                const isticker = currentSlide?.elements?.find(el => el.type === 'isticker');
+                if (isticker && hasISticker) {
+                    setWiggleIStickerId(isticker.id);
+                    setTimeout(() => setWiggleIStickerId(null), 500);
+                }
                 triggerSlideShake();
                 return;
             }
@@ -904,6 +932,7 @@ const Player = () => {
                                         <ErrorBoundary>
                                             <BalanzaCartridge
                                                 config={slide.cartridge.config}
+                                                isWiggling={wiggleCartridge}
                                                 onComplete={() => {
                                                     handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);

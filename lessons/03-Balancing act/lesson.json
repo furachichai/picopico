@@ -1,0 +1,334 @@
+{
+  "id": "lessons/3323-Balancing act/lesson.json",
+  "title": "Balancing act",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789729684808-o4s6iwpkf",
+          "type": "image",
+          "content": "/src/assets/characters/yara_arms_in_waist_3.png",
+          "x": 16.66666666666667,
+          "y": 100.3125,
+          "width": 40,
+          "height": 48.527874564459935,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 48.527874564459935,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789729688927-es58rgqzd",
+          "type": "balloon",
+          "content": "Remove the apples.",
+          "x": 58.05555555555556,
+          "y": 78.125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -103,
+              "y": 39
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 0,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "🍎=2",
+          "leftPlateText": "📦x, 🍎",
+          "rightPlateText": "🍎, 🥑",
+          "menuText": "",
+          "showZeroTiles": false,
+          "freeMovement": false,
+          "equationPosition": "off",
+          "showEquation": false
+        }
+      }
+    },
+    {
+      "id": "slide-1789734172568-0-y39mrs",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [
+        {
+          "id": "el-1789734172568-mtdgcuzu5",
+          "type": "text",
+          "content": "Learn the basics",
+          "x": 49.30555555555555,
+          "y": 20.3125,
+          "width": 56.388888888888886,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1.8586316360533637,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "backgroundColor": "#00BFA5"
+          }
+        },
+        {
+          "id": "el-1789734172568-w7oonh34s",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_pointing_upwards.png",
+          "x": 53.333333333333336,
+          "y": 78.59375,
+          "width": 40,
+          "height": 61.696832579185525,
+          "rotation": 0,
+          "scale": 0.7076860404263579,
+          "metadata": {
+            "width": 40,
+            "height": 61.696832579185525,
+            "category": "characters",
+            "flipX": false
+          }
+        },
+        {
+          "id": "el-1789734172568-el79kx5ag",
+          "type": "image",
+          "content": "/src/assets/objects/item_balloon_octo002.png",
+          "x": 20,
+          "y": 61.71875,
+          "width": 40,
+          "height": 14.671658986175116,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 14.671658986175116,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1789734172568-1clm6s4c9",
+          "type": "balloon",
+          "content": "<b>Drag</b> to <b>add</b> back.",
+          "x": 82.02777777777779,
+          "y": 77.453125,
+          "width": 31.944444444444443,
+          "height": 14.84375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -63,
+              "y": -28
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        },
+        {
+          "id": "el-1789734172568-9retg4vkh",
+          "type": "text",
+          "content": "Double <b>tap</b> to <b>expand.</b>",
+          "x": 18.611111111111107,
+          "y": 60.625,
+          "width": 23.333333333333332,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 18
+          }
+        }
+      ],
+      "order": 1,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "🍉=2\n🍍=3",
+          "leftPlateText": " 3🍉",
+          "rightPlateText": "",
+          "menuText": "2🍍",
+          "showZeroTiles": false,
+          "lockLeftPlate": false,
+          "showEquation": false,
+          "tutorial": true
+        }
+      },
+      "backgroundSettings": {
+        "opacity": 0.35
+      }
+    },
+    {
+      "id": "slide-1789729752977",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789729752977-17r0l2r13",
+          "type": "image",
+          "content": "/src/assets/characters/yara_arms_in_waist_3.png",
+          "x": 16.66666666666667,
+          "y": 100.3125,
+          "width": 40,
+          "height": 48.527874564459935,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 48.527874564459935,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1789729752977-0qd5vsfby",
+          "type": "balloon",
+          "content": "Remove the tacos.",
+          "x": 56.111111111111114,
+          "y": 77.734375,
+          "width": 40,
+          "height": 15.46875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -103,
+              "y": 39
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "🍎=2",
+          "leftPlateText": "📦x, 🌮,🌮,🌮,🌮,🌮",
+          "rightPlateText": "🌮,🌮, 🎂",
+          "menuText": "",
+          "showZeroTiles": false,
+          "freeMovement": false,
+          "equationPosition": "off",
+          "showEquation": false
+        }
+      }
+    },
+    {
+      "id": "slide-1789730317685",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789730320458-228u25qnm",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "tips to one side",
+              "loses all weight",
+              "stays balanced",
+              "becomes empty"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1789730323529-ilg1a24gp",
+          "type": "banner",
+          "content": "If a <font color=\"#000000\">balanced</font> scale has the <font color=\"#000000\">same</font> weight <font color=\"#000000\">removed</font> from <font color=\"#000000\">both sides</font>, it...",
+          "x": 53.888888888888886,
+          "y": 27.500000000000004,
+          "width": 76,
+          "height": 20.3125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 3
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-18T11:03:24.483Z",
+  "updatedAt": "2026-09-18T12:22:57.982Z",
+  "path": "lessons/3323-Balancing act/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "name": "3323-Balancing act",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 3323,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1789731804420
+  }
+}

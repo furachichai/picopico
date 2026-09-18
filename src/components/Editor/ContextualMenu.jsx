@@ -4,6 +4,7 @@ import { PEM_MODES, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from '../Pla
 import { serializeLevels, deserializeLevels } from '../../cartridges/Potiondas/Potiondas';
 import { getSymbolSvg } from '../../utils/symbols';
 import { collectUsedSymbols, parseWeights } from '../../cartridges/Balanza/game/BalanzaEngine';
+import { WeightRingGlyph, parseWeightSymbol, renderBalanzaRichText } from '../../cartridges/Balanza/game/WeightGlyph';
 import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
@@ -28,12 +29,118 @@ const CRATE_MAP = {
 };
 
 const renderEmojiOrCrate = (emoji, size = 26) => {
+    const weightVal = parseWeightSymbol(emoji);
+    if (weightVal !== null) {
+        return <WeightRingGlyph value={weightVal} size={size} />;
+    }
     const crateSrc = CRATE_MAP[emoji];
     if (crateSrc) {
         return <img src={crateSrc} alt={emoji} style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain', verticalAlign: 'middle', pointerEvents: 'none' }} />;
     }
     return <span>{emoji}</span>;
 };
+
+function BalanzaInputField({ value, onChange, placeholder, style = {} }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (isEditing && inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+        }
+    }, [isEditing]);
+
+    if (!isEditing) {
+        const hasContent = Boolean(value && String(value).trim());
+        return (
+            <div
+                tabIndex={0}
+                role="textbox"
+                onClick={() => setIsEditing(true)}
+                onFocus={() => setIsEditing(true)}
+                title="Click to edit"
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    minWidth: '85px',
+                    maxWidth: '140px',
+                    minHeight: '28px',
+                    padding: '3px 6px',
+                    fontSize: '0.85rem',
+                    background: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '6px',
+                    cursor: 'text',
+                    userSelect: 'none',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    gap: '4px',
+                    boxSizing: 'border-box',
+                    ...style
+                }}
+            >
+                {hasContent ? (
+                    renderBalanzaRichText(value, 20, CRATE_MAP)
+                ) : (
+                    <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>{placeholder}</span>
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+            <input
+                ref={inputRef}
+                type="text"
+                value={value || ''}
+                onChange={onChange}
+                onBlur={() => setIsEditing(false)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        setIsEditing(false);
+                    }
+                }}
+                placeholder={placeholder}
+                style={{
+                    minWidth: '85px',
+                    maxWidth: '140px',
+                    padding: '4px 6px',
+                    fontSize: '0.85rem',
+                    boxSizing: 'border-box',
+                    ...style
+                }}
+            />
+            {value && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 4px)',
+                        left: 0,
+                        zIndex: 9999,
+                        background: '#0f172a',
+                        color: '#f8fafc',
+                        border: '1px solid #334155',
+                        borderRadius: '6px',
+                        padding: '4px 8px',
+                        fontSize: '0.78rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 4px 14px rgba(0,0,0,0.35)',
+                        whiteSpace: 'nowrap',
+                        pointerEvents: 'none'
+                    }}
+                >
+                    <span style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Preview:</span>
+                    {renderBalanzaRichText(value, 18, CRATE_MAP)}
+                </div>
+            )}
+        </div>
+    );
+}
 
 const EMOJI_CATEGORIES = [
     {
@@ -61,7 +168,11 @@ const EMOJI_CATEGORIES = [
     },
     {
         name: '📦 Crates & Mystery Boxes (Algebra)',
-        items: ['📦x', '📦', '📦?', '🧰', '🧱', '🪵', '🧺', '💼', '🪨', '💎', '🪙', '🧪', '⚗️', '🔮', '🏺', '🗝️', '💰', '🏆', '👑', '🏅', '🎖️']
+        items: ['📦', '📦x', '📦?', '🧰', '🧱', '🪵', '🧺', '💼', '🪨', '💎', '🪙', '🧪', '⚗️', '🔮', '🏺', '🗝️', '💰', '🏆', '👑', '🏅', '🎖️']
+    },
+    {
+        name: '⚖️ Weights (Balanza)',
+        items: ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10', 'w12', 'w15', 'w20', 'w25', 'w50']
     },
     {
         name: '🍎 Fruits, Vegetables & Food',
@@ -84,7 +195,7 @@ const EMOJI_CATEGORIES = [
     {
         name: '🎈 Objects, Sports & Toys',
         items: [
-            '🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '✨', '⚡', '⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🥏',
+            '📦', '📦x', '📦?', '🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '✨', '⚡', '⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🥏',
             '🎱', '🪀', '🏓', '🏸', '🏒', '🥊', '🥋', '🛹', '🛼', '🚗', '🚕', '🚙', '🚌', '🏎️', '🚓', '🚑', '🚒', '🚐',
             '🛻', '🚚', '🚛', '🚜', '🛵', '🏍️', '🛺', '🚲', '🛴', '🚀', '🛸', '🚁', '✈️', '⛵', '🚤', '🚢', '🔔', '🔑',
             '🎨', '🎲', '🎯', '🧸', '💡', '📚', '✏️', '🖍️', '🖌️', '📏', '📐', '✂️', '📌', '📎', '🔒', '🔓', '🧲', '🔭', '🔬', '🕹️', '🎮', '🧩', '🎸', '🎹', '🎺', '🎻', '🥁'
@@ -2340,12 +2451,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {/* Left Plate Row */}
                             <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
                                 <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Left Plate</label>
-                                <input
-                                    type="text"
+                                <BalanzaInputField
                                     value={element.config?.leftPlateText || ''}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, leftPlateText: e.target.value } })}
-                                    placeholder="e.g. 2🍎"
-                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
+                                    placeholder="e.g. 2🍎, w12"
                                 />
                                 <button
                                     type="button"
@@ -2374,12 +2483,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {/* Right Plate Row */}
                             <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
                                 <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Right Plate</label>
-                                <input
-                                    type="text"
+                                <BalanzaInputField
                                     value={element.config?.rightPlateText || ''}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, rightPlateText: e.target.value } })}
-                                    placeholder="e.g. 🍌"
-                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
+                                    placeholder="e.g. 🍌, w5"
                                 />
                                 <button
                                     type="button"
@@ -2408,12 +2515,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             {/* Bottom Supply Row */}
                             <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
                                 <label style={{ width: '65px', fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Supply Menu</label>
-                                <input
-                                    type="text"
+                                <BalanzaInputField
                                     value={element.config?.menuText || ''}
                                     onChange={(e) => onChange('cartridge', { config: { ...element.config, menuText: e.target.value } })}
-                                    placeholder="e.g. 2🍎, 3🍌"
-                                    style={{ width: '80px', padding: '4px 6px', fontSize: '0.85rem' }}
+                                    placeholder="e.g. 2🍎, 3w12"
                                 />
                                 <button
                                     type="button"
@@ -2510,6 +2615,26 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                                     <input
                                         type="checkbox"
+                                        checked={!!element.config?.tutorial}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, tutorial: e.target.checked } })}
+                                    />
+                                    🎓 Tutorial
+                                </label>
+                            </div>
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={element.config?.add !== false}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, add: e.target.checked } })}
+                                    />
+                                    Add
+                                </label>
+                            </div>
+                            <div className="menu-group">
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
                                         checked={element.config?.confetti !== false}
                                         onChange={(e) => onChange('cartridge', { config: { ...element.config, confetti: e.target.checked } })}
                                     />
@@ -2569,11 +2694,13 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 </div>
                             </div>
                             <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                                <label style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700 }}>Weights (default 5)</label>
+                                <label style={{ margin: 0, fontSize: '0.75rem', fontWeight: 700 }}>Weights</label>
                                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
                                     {collectUsedSymbols(element.config?.leftPlateText || '', element.config?.rightPlateText || '', element.config?.menuText || '').map(symbol => {
                                         const weights = parseWeights(element.config?.weightsText || '');
-                                        const current = weights[symbol] ?? 5;
+                                        const weightVal = parseWeightSymbol(symbol);
+                                        const defaultW = weightVal !== null ? parseInt(weightVal, 10) : 5;
+                                        const current = weights[symbol] ?? defaultW;
                                         return (
                                             <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '2px 4px' }}>
                                                 <span style={{ fontSize: '1rem', display: 'flex', alignItems: 'center' }}>
@@ -2585,7 +2712,10 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                     onChange={(e) => {
                                                         const nextWeights = { ...weights, [symbol]: parseFloat(e.target.value) || 0 };
                                                         const nextText = Object.entries(nextWeights)
-                                                            .filter(([, w]) => w !== 5)
+                                                            .filter(([s, w]) => {
+                                                                const def = parseWeightSymbol(s) !== null ? parseInt(parseWeightSymbol(s), 10) : 5;
+                                                                return w !== def;
+                                                            })
                                                             .map(([s, w]) => `${s}=${w}`)
                                                             .join('\n');
                                                         onChange('cartridge', { config: { ...element.config, weightsText: nextText } });
@@ -2598,8 +2728,6 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                 </div>
                             </div>
                         </>
-                    )}
-
                     )}
 
                     {/* Balanza Menu Supply Editor Modal */}

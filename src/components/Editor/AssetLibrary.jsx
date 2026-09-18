@@ -11,9 +11,29 @@ import RecycleBinModal from './RecycleBinModal';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { getCustomCharacterTags, EVENT_CUSTOM_TAGS_CHANGED } from '../../utils/characterTags';
 
+const CRATE_MAP = {
+    '📦x': '/assets/balanza/crate_x.png',
+    'x📦': '/assets/balanza/crate_x.png',
+    'crate_x': '/assets/balanza/crate_x.png',
+    '[x]': '/assets/balanza/crate_x.png',
+    'x': '/assets/balanza/crate_x.png',
+    '📦?': '/assets/balanza/crate_q.png',
+    '?📦': '/assets/balanza/crate_q.png',
+    'crate_q': '/assets/balanza/crate_q.png',
+    '[?]': '/assets/balanza/crate_q.png',
+    '?': '/assets/balanza/crate_q.png',
+    '📦': '/assets/balanza/crate.png',
+    'crate': '/assets/balanza/crate.png',
+    'box': '/assets/balanza/crate.png'
+};
+
 const ASSETS = {
     emojis: [
-        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', 'cow', 'pig', 'frog', 'monkey', 'chicken', 'penguin', 'bird', 'duck', 'eagle', 'owl', 'bat', 'wolf', 'boar', 'horse', 'unicorn',
+        '📦', '📦x', '📦?', '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🍍', '🥥', '🥝',
+        '⭐', '🌟', '✨', '🔥', '💎', '🪙', '💰', '🏆', '👑', '🎈', '🎉', '🎁', '🍕', '🍔', '🍟', '🍦', '🍩', '🍪',
+        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦',
+        '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🦋', '🐢', '🐙', '🐬', '🐳',
+        '❤️', '👍', '👏', '🎯', '🚀', '🌸', '🌻', '🍀', '🌈', '⚡'
     ],
     backgrounds: [
         '#ffffff', '#f0f0f0', '#ffcccc', '#ccffcc', '#ccccff', '#ffffcc', '#ffccff', '#ccffff', '#e5e5e5', '#333333', '#000000',
@@ -1047,8 +1067,17 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                             key={index}
                             className="asset-item emojis"
                             onClick={() => handleSelect(item)}
+                            title={item}
                         >
-                            {item}
+                            {CRATE_MAP[item] ? (
+                                <img
+                                    src={CRATE_MAP[item]}
+                                    alt={item}
+                                    style={{ width: '60%', height: '60%', objectFit: 'contain', pointerEvents: 'none' }}
+                                />
+                            ) : (
+                                item
+                            )}
                         </div>
                     ))}
 

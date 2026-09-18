@@ -9,20 +9,71 @@ import { useDraggable } from '../../hooks/useDraggable';
 const isPinnedType = (type) => ['quiz', 'isticker', 'game', 'result_field', 'explorenl_nl', 'explorenl_equation', 'cartridge'].includes(type);
 
 /**
+ * Helper to identify line elements.
+ */
+const isLineElement = (element) => element?.type === 'line';
+
+/**
+ * Helper to identify text elements.
+ */
+const isTextElement = (element) => element?.type === 'text';
+
+/**
+ * Helper to identify symbol/shape elements.
+ */
+const isSymbolElement = (element) => (
+    element?.type !== 'line' && (
+        !!element?.metadata?.isSymbol ||
+        !!element?.metadata?.symbolType ||
+        !!element?.metadata?.isShape ||
+        element?.type === 'symbol'
+    )
+);
+
+/**
+ * Gets a lowercase combined string of the element's resource path/content/name.
+ */
+const getElementResourceString = (element) => {
+    return `${element?.content || ''} ${element?.metadata?.src || ''} ${element?.name || ''}`.toLowerCase();
+};
+
+/**
+ * Helper to identify Yara graphics.
+ */
+const isYaraGraphic = (element) => {
+    if (element?.type !== 'image' && element?.type !== 'isticker') return false;
+    const res = getElementResourceString(element);
+    return res.includes('yara');
+};
+
+/**
+ * Helper to identify Pesto graphics.
+ */
+const isPestoGraphic = (element) => {
+    if (element?.type !== 'image' && element?.type !== 'isticker') return false;
+    const res = getElementResourceString(element);
+    return res.includes('pesto') || res.includes('pest_');
+};
+
+/**
  * Gets an icon for the element type.
  */
 const getTypeIcon = (element) => {
+    if (!element) return '◻️';
+    if (isLineElement(element)) return '/';
+    if (isTextElement(element)) return 'T';
+    if (isSymbolElement(element)) return 'x';
+    if (isYaraGraphic(element)) return 'Y';
+    if (isPestoGraphic(element)) return 'P';
     if (element.icon) return element.icon;
     switch (element.type) {
         case 'explorenl_nl': return '📈';
         case 'explorenl_equation': return '🔢';
         case 'cartridge': return '🎮';
         case 'image': return '🖼️';
-        case 'text': return '📝';
         case 'balloon': return '💬';
         case 'banner': return '🪧';
         case 'quiz': return '🎯';
-        case 'line': return element.metadata?.isCurved ? '⌒' : '━';
         case 'isticker': return '🧩';
         case 'game': return '🎮';
         case 'popup': return '📌';
@@ -37,7 +88,10 @@ const getTypeIcon = (element) => {
  * Gets a representative color for the element based on its slide properties or element type.
  */
 const getElementColor = (element) => {
+    if (!element) return '#6366F1';
     if (element.color) return element.color;
+
+    // Custom explicit element color first if set and legible
     if (element.metadata?.color && element.metadata.color !== 'transparent' && element.metadata.color !== '#000000' && element.metadata.color !== 'black') {
         return element.metadata.color;
     }
@@ -46,36 +100,50 @@ const getElementColor = (element) => {
     }
     if (element.metadata?.bannerColor) return element.metadata.bannerColor;
     if (element.metadata?.symbolColor) return element.metadata.symbolColor;
+    if (element.metadata?.strokeColor) return element.metadata.strokeColor;
+
+    // Specific legible colors for requested types
+    if (isYaraGraphic(element)) {
+        return '#F472B6'; // Bright Pink / Magenta for Yara
+    }
+    if (isPestoGraphic(element)) {
+        return '#4ADE80'; // Bright Green for Pesto
+    }
+    if (isSymbolElement(element)) {
+        return '#C084FC'; // Bright Violet for Symbols
+    }
+    if (isLineElement(element)) {
+        return '#FB7185'; // Bright Coral / Rose for Lines
+    }
+    if (isTextElement(element)) {
+        return '#38BDF8'; // Bright Sky Blue for Text
+    }
 
     switch (element.type) {
         case 'explorenl_nl':
-            return '#6366F1'; // Indigo
+            return '#818CF8'; // Indigo
         case 'explorenl_equation':
-            return '#F57C00'; // Amber/Orange
+            return '#FB923C'; // Amber/Orange
         case 'cartridge':
-            return '#8B5CF6'; // Violet
+            return '#A78BFA'; // Violet
         case 'banner':
-            return '#F43F5E'; // Rose / Coral
+            return '#FB7185'; // Rose / Coral
         case 'balloon':
-            return '#EAB308'; // Warm Yellow
-        case 'text':
-            return '#10B981'; // Emerald
+            return '#FACC15'; // Warm Yellow
         case 'quiz':
-            return '#A855F7'; // Purple
-        case 'line':
-            return '#EC4899'; // Pink
+            return '#C084FC'; // Purple
         case 'image':
-            return '#0EA5E9'; // Sky Blue
+            return '#38BDF8'; // Sky Blue
         case 'collectible':
-            return '#F97316'; // Orange
+            return '#FB923C'; // Orange
         case 'isticker':
-            return '#8B5CF6'; // Violet
+            return '#A78BFA'; // Violet
         case 'number_line':
-            return '#6366F1';
+            return '#818CF8';
         case 'result_field':
-            return '#64748B';
+            return '#94A3B8';
         default:
-            return '#6366F1';
+            return '#818CF8';
     }
 };
 
@@ -93,6 +161,16 @@ const getElementName = (element) => {
             return badge + (raw.length > 0 ? (raw.length > 18 ? raw.slice(0, 18) + '…' : raw) : 'Banner Card');
         }
         case 'image': {
+            if (isSymbolElement(element)) {
+                if (element.metadata?.symbolType === 'number' && element.metadata?.symbolValue !== undefined) {
+                    return `Symbol: ${element.metadata.symbolValue}`;
+                }
+                if (element.metadata?.symbolType?.startsWith('shape-')) {
+                    const shapeName = element.metadata.symbolType.replace('shape-', '');
+                    return `Shape: ${shapeName.charAt(0).toUpperCase() + shapeName.slice(1)}`;
+                }
+                return 'Symbol';
+            }
             const path = element.content || '';
             const filename = path.split('/').pop() || 'Image';
             return filename.replace(/\.(png|jpg|jpeg|svg|webp|gif)$/i, '');

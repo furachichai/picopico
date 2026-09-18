@@ -129,7 +129,12 @@ export function collectUsedSymbols(leftPlateText, rightPlateText, menuText) {
  */
 export function weightOf(variable, weights) {
   if (variable === null || variable === undefined) return 1;
-  return weights[variable] ?? 5;
+  if (weights && weights[variable] !== undefined) return weights[variable];
+  const wMatch = typeof variable === 'string' && variable.trim().match(/^w(\d{1,2})$/i);
+  if (wMatch) {
+    return parseInt(wMatch[1], 10);
+  }
+  return 5;
 }
 
 export function termValue(term, weights) {

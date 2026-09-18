@@ -1,5 +1,5 @@
 {
-  "id": "lessons/7872-Algebra Expressions/lesson.json",
+  "id": "lessons/04-Algebra Expressions/lesson.json",
   "title": "Algebra Expressions",
   "slides": [
     {
@@ -2175,7 +2175,7 @@
         {
           "id": "el-1789696033558-mrgsk4e6i",
           "type": "balloon",
-          "content": "It's a <b>phrase</b> made of:<div><br></div><div> <b>numbers</b>,<div><b>variables</b> (letters)</div><div>or</div><div><b>operators</b>&nbsp;</div><div>(+-×÷)</div></div>",
+          "content": "It's a <b>phrase</b> made of:<div><br></div><div> <b>numbers</b>,<div><b>variables</b> (letters)</div><div>or</div><div><b>operations</b>&nbsp;</div><div>(+-×÷)</div></div>",
           "x": 74.02777777777777,
           "y": 79.0625,
           "width": 46.94444444444444,
@@ -3021,8 +3021,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-17T21:32:32.665Z",
-  "updatedAt": "2026-09-18T02:35:55.250Z",
-  "path": "lessons/7872-Algebra Expressions/lesson.json",
+  "updatedAt": "2026-09-18T16:47:14.601Z",
+  "path": "lessons/04-Algebra Expressions/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -3033,11 +3033,11 @@
       "description": ""
     }
   },
-  "name": "7872-Algebra Expressions",
+  "name": "04-Algebra Expressions",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
-  "order": 7872,
+  "order": 4,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -3048,9 +3048,5 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1789688991949
-  }
+  "progress": null
 }

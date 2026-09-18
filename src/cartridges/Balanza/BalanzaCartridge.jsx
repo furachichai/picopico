@@ -18,6 +18,7 @@ import {
 } from './game/BalanzaEngine';
 import { unlockAudio, playSelect, playMerge, playWrong } from '../AlgeBros/game/AlgeBrosSoundManager';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { WeightRingGlyph, parseWeightSymbol, renderBalanzaRichText } from './game/WeightGlyph';
 import './BalanzaCartridge.css';
 
 const HIT_PADDING = 26;
@@ -53,21 +54,56 @@ const CRATE_MAP = {
 function TileGlyph({ term, isOverlay = false }) {
   const isNeg = term.coeff < 0;
   const isZero = term.coeff === 0;
-  const crateSrc = term.variable ? CRATE_MAP[term.variable] : null;
   const absCoeff = Math.abs(term.coeff);
+  const crateSrc = term.variable ? CRATE_MAP[term.variable] : null;
+  const weightVal = parseWeightSymbol(term.variable);
 
+  // When 2 or more like icons merge, render as a white card displaying the count
+  // followed by a 25% smaller version of the icon (crate image, weight ring, or emoji)
+  if (absCoeff > 1) {
+    return (
+      <div className={`balanza-merged-card ${isOverlay ? 'is-overlay' : ''}`}>
+        <span className="balanza-card-count">
+          {isNeg ? `-${absCoeff}` : absCoeff}
+        </span>
+        <span className="balanza-card-icon">
+          {crateSrc ? (
+            <img src={crateSrc} alt={term.variable} className="balanza-card-icon-img" draggable={false} />
+          ) : weightVal !== null ? (
+            <WeightRingGlyph value={weightVal} size={22.5} />
+          ) : term.variable ? (
+            <span className="balanza-card-icon-emoji">{term.variable}</span>
+          ) : null}
+        </span>
+      </div>
+    );
+  }
+
+  // Standalone crate icon (absCoeff === 1)
   if (crateSrc) {
     return (
       <div className={`balanza-tile-glyph-container ${isOverlay ? 'is-overlay' : ''}`}>
         <span className="balanza-glyph-wrapper">
           {isNeg && <span className="balanza-tile-sign">-</span>}
-          {absCoeff !== 1 && <span className="balanza-glyph-coeff">{absCoeff}</span>}
           <img src={crateSrc} alt={term.variable} className="balanza-crate-img" draggable={false} />
         </span>
       </div>
     );
   }
 
+  // Standalone weight ring icon (absCoeff === 1)
+  if (weightVal !== null) {
+    return (
+      <div className={`balanza-tile-glyph-container ${isOverlay ? 'is-overlay' : ''}`}>
+        <span className="balanza-glyph-wrapper">
+          {isNeg && <span className="balanza-tile-sign">-</span>}
+          <WeightRingGlyph value={weightVal} size={35} />
+        </span>
+      </div>
+    );
+  }
+
+  // Standalone emoji or numeric value
   const formatted = formatTerm(term, true);
   const text = (formatted.sign === '-' ? '-' : '') + formatted.value;
   return (
@@ -77,13 +113,36 @@ function TileGlyph({ term, isOverlay = false }) {
   );
 }
 
-function PlateTile({ term, side, isLocked, isLevelComplete, showZeroTiles, onDragStart, onDrag, onDragEnd, onTap, isDragging, cartridgeRef }) {
+function PlateTile({ term, side, isLocked, isLevelComplete, showZeroTiles, onDragStart, onDrag, onDragEnd, onDoubleTap, isDragging, cartridgeRef }) {
   const isZero = term.coeff === 0;
   const disabled = isZero || isLocked || isLevelComplete;
+  const lastTapRef = useRef(0);
+  const absCoeff = Math.abs(term.coeff);
+
   if (isZero && !showZeroTiles) return null;
+
+  const handleTap = () => {
+    if (disabled) return;
+    const now = Date.now();
+    const elapsed = now - lastTapRef.current;
+    if (elapsed > 40 && elapsed < 350) {
+      lastTapRef.current = 0;
+      if (onDoubleTap) onDoubleTap(side, term.id);
+    } else {
+      lastTapRef.current = now;
+    }
+  };
+
+  const handleDoubleClick = (e) => {
+    if (disabled) return;
+    e.stopPropagation();
+    lastTapRef.current = 0;
+    if (onDoubleTap) onDoubleTap(side, term.id);
+  };
+
   return (
     <motion.div
-      className={`balanza-tile ${isZero ? 'is-zero' : ''} ${isLocked ? 'is-locked' : ''}`}
+      className={`balanza-tile ${absCoeff > 1 ? 'is-merged' : ''} ${isZero ? 'is-zero' : ''} ${isLocked ? 'is-locked' : ''}`}
       data-term-id={term.id}
       drag={!disabled}
       dragConstraints={cartridgeRef}
@@ -93,7 +152,8 @@ function PlateTile({ term, side, isLocked, isLevelComplete, showZeroTiles, onDra
       onDragStart={(e, info) => !disabled && onDragStart(e, info, { origin: side, termId: term.id })}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
-      onTap={() => !disabled && onTap(side, term.id)}
+      onTap={handleTap}
+      onDoubleClick={handleDoubleClick}
       style={{ opacity: isDragging === term.id ? 0 : 1, touchAction: disabled ? 'auto' : 'none' }}
     >
       <TileGlyph term={term} />
@@ -108,11 +168,14 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped }) 
   const disabled = item.available <= 0 || isLevelComplete;
   const previewTerm = makeTerm(item.unitCoeff, item.variable);
   const crateSrc = item.variable ? CRATE_MAP[item.variable] : null;
+  const weightVal = parseWeightSymbol(item.variable);
 
   const glyphContent = (
     <span className="balanza-menu-tile-glyph">
       {crateSrc ? (
         <img src={crateSrc} alt={item.variable} className="balanza-menu-crate-img" draggable={false} />
+      ) : weightVal !== null ? (
+        <WeightRingGlyph value={weightVal} size={36} />
       ) : (
         previewTerm.variable ?? previewTerm.coeff
       )}
@@ -174,15 +237,15 @@ function EquationLine({ text }) {
     const isComp = comp === '>' || comp === '<';
     return (
       <div className="balanza-equation-line">
-        <span className="balanza-eq-side">{left}</span>
+        <span className="balanza-eq-side">{renderBalanzaRichText(left, 24, CRATE_MAP)}</span>
         <span className={`balanza-eq-comp ${isEq ? 'is-equal' : ''} ${isComp ? 'is-unequal' : ''}`}>
           {comp}
         </span>
-        <span className="balanza-eq-side">{right}</span>
+        <span className="balanza-eq-side">{renderBalanzaRichText(right, 24, CRATE_MAP)}</span>
       </div>
     );
   }
-  return <div className="balanza-equation-line">{text}</div>;
+  return <div className="balanza-equation-line">{renderBalanzaRichText(text, 24, CRATE_MAP)}</div>;
 }
 
 export default function BalanzaCartridge({
@@ -191,7 +254,8 @@ export default function BalanzaCartridge({
   preview = false,
   isSelected = false,
   onSelect,
-  onConfigChange
+  onConfigChange,
+  isWiggling = false,
 }) {
   const weights = useMemo(() => parseWeights(config.weightsText), [config.weightsText]);
   const showZeroTiles = !!config.showZeroTiles;
@@ -220,10 +284,37 @@ export default function BalanzaCartridge({
   const [flyingItem, setFlyingItem] = useState(null);
   const [bumpingMenuKey, setBumpingMenuKey] = useState(null);
 
+  const [localWiggle, setLocalWiggle] = useState(false);
+  useEffect(() => {
+    if (isWiggling) {
+      setLocalWiggle(true);
+      const timer = setTimeout(() => setLocalWiggle(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isWiggling]);
+
   const cartridgeRef = useRef(null);
   const leftPlateRef = useRef(null);
   const rightPlateRef = useRef(null);
   const menuRef = useRef(null);
+  const targetOriginalCountsRef = useRef({});
+  const hasExpandedCardRef = useRef({});
+  const hasCompletedTutorialCycleRef = useRef(false);
+
+  const isTutorialMode = !!(config.tutorial || config.isTutorial || config.tutorialMode);
+  const isPlayMode = !preview;
+  const allowAdd = config.add !== false;
+
+  useEffect(() => {
+    if (isTutorialMode) {
+      leftPlate.forEach(t => {
+        if (Math.abs(t.coeff) > 1) {
+          const varKey = t.variable ?? '__const__';
+          targetOriginalCountsRef.current[varKey] = Math.abs(t.coeff);
+        }
+      });
+    }
+  }, [config.leftPlateText, isTutorialMode]);
 
   // Draggable photo mode in editor
   const [localPhotoPos, setLocalPhotoPos] = useState({
@@ -297,19 +388,19 @@ export default function BalanzaCartridge({
   const tiltAngle = useMemo(() => computeTiltAngle(leftTotal, rightTotal), [leftTotal, rightTotal]);
   const equationLineText = useMemo(() => buildEquationLineText(leftPlate, rightPlate, leftTotal, rightTotal), [leftPlate, rightPlate, leftTotal, rightTotal]);
 
-  const isLevelComplete = hasInteracted && leftPlate.length > 0 && rightPlate.length > 0 && nearlyEqual(leftTotal, rightTotal);
+  const isLevelComplete = !isTutorialMode && hasInteracted && leftPlate.length > 0 && rightPlate.length > 0 && nearlyEqual(leftTotal, rightTotal);
 
   useEffect(() => {
-    if (preview) return;
+    if (preview || isTutorialMode) return;
     if (!hasInteracted || hasCompletedRef.current) return;
     if (leftPlate.length === 0 || rightPlate.length === 0) return;
     if (!nearlyEqual(leftTotal, rightTotal)) return;
     hasCompletedRef.current = true;
     onComplete?.();
-  }, [preview, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, onComplete]);
+  }, [preview, isTutorialMode, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, onComplete]);
 
   useEffect(() => {
-    if (preview) return;
+    if (preview || isTutorialMode) return;
     if (!hasInteracted) {
       hasFiredConfettiRef.current = false;
       return;
@@ -323,7 +414,7 @@ export default function BalanzaCartridge({
     } else if (!isBalanced) {
       hasFiredConfettiRef.current = false;
     }
-  }, [preview, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, config.confetti]);
+  }, [preview, isTutorialMode, hasInteracted, leftTotal, rightTotal, leftPlate.length, rightPlate.length, config.confetti]);
 
   useEffect(() => {
     if (!moveFlash) return;
@@ -358,7 +449,7 @@ export default function BalanzaCartridge({
     };
   }, [bgImage]);
 
-  const isPhotoMode = !!(config.photoMode || config.isPhoto || config.photo);
+  const isPhotoMode = !isTutorialMode && !!(config.photoMode || config.isPhoto || config.photo);
   const equationPos = config.equationPosition || (config.showEquation === false ? 'off' : 'up');
   const showEquationUp = equationPos === 'up';
   const showEquationDown = equationPos === 'down';
@@ -458,8 +549,8 @@ export default function BalanzaCartridge({
 
   const applyZeroFilter = (terms) => (showZeroTiles ? terms : terms.filter(t => t.coeff !== 0));
 
-  function mergeOrAddToPlate(terms, incoming, collisionId, dropX = null, side = null) {
-    if (collisionId) {
+  function mergeOrAddToPlate(terms, incoming, collisionId, dropX = null, side = null, dropY = null) {
+    if (collisionId && allowAdd) {
       const idx = terms.findIndex(t => t.id === collisionId);
       if (idx !== -1 && areLikeTerms(terms[idx], incoming)) {
         const merged = combineTerms(terms[idx], incoming);
@@ -472,14 +563,24 @@ export default function BalanzaCartridge({
       const container = plateRefForSide(side).current;
       if (container) {
         const cardEls = Array.from(container.querySelectorAll('[data-term-id]'));
-        for (let i = 0; i < cardEls.length; i++) {
-          const rect = cardEls[i].getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          if (dropX < centerX) {
-            const next = [...terms];
-            next.splice(i, 0, incoming);
-            return applyZeroFilter(next);
+        if (cardEls.length > 0) {
+          let closestIdx = 0;
+          let minDist = Infinity;
+          for (let i = 0; i < cardEls.length; i++) {
+            const rect = cardEls[i].getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dist = Math.hypot(dropX - cx, (dropY !== null ? dropY - cy : 0));
+            if (dist < minDist) {
+              minDist = dist;
+              closestIdx = i;
+            }
           }
+          const closestRect = cardEls[closestIdx].getBoundingClientRect();
+          const insertIdx = dropX < (closestRect.left + closestRect.width / 2) ? closestIdx : closestIdx + 1;
+          const next = [...terms];
+          next.splice(insertIdx, 0, incoming);
+          return applyZeroFilter(next);
         }
       }
     }
@@ -487,6 +588,7 @@ export default function BalanzaCartridge({
   }
 
   function resolveDropZone(x, y) {
+    if (isTutorialMode) return 'left';
     if (rectContainsPoint(leftPlateRef.current?.getBoundingClientRect(), x, y, HIT_PADDING)) return 'left';
     if (rectContainsPoint(rightPlateRef.current?.getBoundingClientRect(), x, y, HIT_PADDING)) return 'right';
     if (rectContainsPoint(menuRef.current?.getBoundingClientRect(), x, y, HIT_PADDING)) return 'menu';
@@ -497,13 +599,24 @@ export default function BalanzaCartridge({
     const container = plateRefForSide(side).current;
     if (!container) return null;
     const cardEls = container.querySelectorAll('[data-term-id]');
+    let closestId = null;
+    let minDist = Infinity;
+    const pad = isTutorialMode ? 28 : 18;
     for (const el of cardEls) {
       const id = el.getAttribute('data-term-id');
       if (id === excludeTermId) continue;
       const rect = el.getBoundingClientRect();
-      if (rectContainsPoint(rect, x, y, 12)) return id;
+      if (rectContainsPoint(rect, x, y, pad)) {
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dist = Math.hypot(x - cx, y - cy);
+        if (dist < minDist) {
+          minDist = dist;
+          closestId = id;
+        }
+      }
     }
-    return null;
+    return closestId;
   }
 
   function findMenuRowIndexForTerm(term) {
@@ -529,6 +642,7 @@ export default function BalanzaCartridge({
     setFlyingItem(null);
     setBumpingMenuKey(null);
     hasCompletedRef.current = false;
+    hasExpandedCardRef.current = {};
   };
 
   const withSide = (side, terms) => ({
@@ -564,11 +678,11 @@ export default function BalanzaCartridge({
     return true;
   };
 
-  const handleTileTap = (side, termId) => {
-    if (isLevelComplete || isSideLocked(side)) return;
+  const handleTileDoubleTap = (side, termId) => {
+    if (isLevelComplete || (!isTutorialMode && isSideLocked(side))) return;
     const terms = plateArrayForSide(side);
     const term = terms.find(t => t.id === termId);
-    if (!term || term.variable === null || Math.abs(term.coeff) <= 1) return;
+    if (!term || Math.abs(term.coeff) <= 1) return;
     const unitSign = term.coeff < 0 ? -1 : 1;
     const count = Math.abs(term.coeff);
     const units = Array.from({ length: count }, () => makeTerm(unitSign, term.variable));
@@ -576,6 +690,16 @@ export default function BalanzaCartridge({
     if (idx === -1) return;
     const nextTerms = [...terms];
     nextTerms.splice(idx, 1, ...units);
+
+    if (isTutorialMode) {
+      const varKey = term.variable ?? '__const__';
+      targetOriginalCountsRef.current[varKey] = count;
+      hasExpandedCardRef.current[varKey] = true;
+      if (config.confetti !== false) {
+        confetti({ particleCount: 90, spread: 65, origin: { y: isPlayMode ? 0.50 : 0.55 } });
+      }
+    }
+
     commitMove(withSide(side, nextTerms), MOVE_PRESERVING, side);
   };
 
@@ -636,7 +760,7 @@ export default function BalanzaCartridge({
       if (!menuItem || menuItem.available <= 0) return;
       const collisionId = findCollisionTermId(zone, pt.x, pt.y, null);
       const incoming = makeTerm(menuItem.unitCoeff, menuItem.variable);
-      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId, pt.x, zone);
+      const nextPlate = mergeOrAddToPlate(plateArrayForSide(zone), incoming, collisionId, pt.x, zone, pt.y);
       const nextMenu = menuItems.map(m => (m.key === source.key ? { ...m, available: m.available - 1 } : m));
       commitMove({ ...withSide(zone, nextPlate), menu: nextMenu }, MOVE_CHANGING, zone);
       return;
@@ -659,6 +783,10 @@ export default function BalanzaCartridge({
       const collisionId = findCollisionTermId(zone, pt.x, pt.y, term.id);
       const terms = plateArrayForSide(sourceSide);
       if (collisionId) {
+        if (!allowAdd) {
+          // If off, if you drop one element in a plate onto another, nothing happens (they don't add up).
+          return;
+        }
         const targetIdx = terms.findIndex(t => t.id === collisionId);
         if (targetIdx !== -1 && areLikeTerms(terms[targetIdx], term)) {
           const merged = combineTerms(terms[targetIdx], term);
@@ -666,33 +794,55 @@ export default function BalanzaCartridge({
           const mergeIdx = nextTerms.findIndex(t => t.id === collisionId);
           nextTerms.splice(mergeIdx, 1, merged);
           commitMove(withSide(sourceSide, applyZeroFilter(nextTerms)), MOVE_PRESERVING, sourceSide);
+
+          if (isTutorialMode) {
+            const varKey = merged.variable ?? '__const__';
+            const targetCount = targetOriginalCountsRef.current[varKey];
+            if (hasExpandedCardRef.current[varKey] && Math.abs(merged.coeff) >= targetCount) {
+              hasExpandedCardRef.current[varKey] = false;
+              hasCompletedTutorialCycleRef.current = true;
+              if (config.confetti !== false) {
+                confetti({ particleCount: 110, spread: 75, origin: { y: isPlayMode ? 0.50 : 0.55 } });
+              }
+              if (!preview) {
+                onComplete?.();
+              }
+            }
+          }
           return;
         }
       }
 
-      // Reorder items horizontally on the same plate
+      // Reorder items on the same plate (supports multi-row 2D layout)
       const container = plateRefForSide(sourceSide).current;
       const otherItems = terms.filter(t => t.id !== term.id);
       if (container && otherItems.length > 0) {
-        let insertIdx = otherItems.length;
         const cardEls = Array.from(container.querySelectorAll('[data-term-id]'))
           .filter(el => el.getAttribute('data-term-id') !== term.id);
 
-        for (let i = 0; i < cardEls.length; i++) {
-          const rect = cardEls[i].getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          if (pt.x < centerX) {
-            insertIdx = i;
-            break;
+        if (cardEls.length > 0) {
+          let closestIdx = 0;
+          let minDist = Infinity;
+          for (let i = 0; i < cardEls.length; i++) {
+            const rect = cardEls[i].getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dist = Math.hypot(pt.x - cx, pt.y - cy);
+            if (dist < minDist) {
+              minDist = dist;
+              closestIdx = i;
+            }
           }
-        }
+          const closestRect = cardEls[closestIdx].getBoundingClientRect();
+          const insertIdx = pt.x < (closestRect.left + closestRect.width / 2) ? closestIdx : closestIdx + 1;
 
-        const nextTerms = [...otherItems];
-        nextTerms.splice(insertIdx, 0, term);
-        const orderChanged = nextTerms.some((t, i) => t.id !== terms[i]?.id);
-        if (orderChanged) {
-          commitMove(withSide(sourceSide, nextTerms), MOVE_PRESERVING, sourceSide);
-          return;
+          const nextTerms = [...otherItems];
+          nextTerms.splice(insertIdx, 0, term);
+          const orderChanged = nextTerms.some((t, i) => t.id !== terms[i]?.id);
+          if (orderChanged) {
+            commitMove(withSide(sourceSide, nextTerms), MOVE_PRESERVING, sourceSide);
+            return;
+          }
         }
       }
       return;
@@ -705,7 +855,7 @@ export default function BalanzaCartridge({
       const targetTerm = makeTerm(targetCoeff, term.variable);
       const collisionId = findCollisionTermId(otherSide, pt.x, pt.y, null);
       const nextSource = applyZeroFilter(plateArrayForSide(sourceSide).filter(t => t.id !== term.id));
-      const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId, pt.x, otherSide);
+      const nextTarget = mergeOrAddToPlate(plateArrayForSide(otherSide), targetTerm, collisionId, pt.x, otherSide, pt.y);
       const moveCategory = freeMovement ? MOVE_CHANGING : MOVE_PRESERVING;
       commitMove({
         left: sourceSide === 'left' ? nextSource : nextTarget,
@@ -720,7 +870,7 @@ export default function BalanzaCartridge({
     const sourceEl = plateRefForSide(sourceSide).current;
     const sourceRect = sourceEl?.getBoundingClientRect();
     const plateBottomY = sourceRect ? (sourceRect.bottom - 12) : 200;
-    const isBelowPlate = zone === 'menu' || (!zone && pt.y > plateBottomY);
+    const isBelowPlate = !isTutorialMode && (zone === 'menu' || (!zone && pt.y > plateBottomY));
 
     if (isBelowPlate) {
       if (flyingItem) {
@@ -796,11 +946,66 @@ export default function BalanzaCartridge({
     return;
   };
 
+  // ─── Tutorial Mode: Shows ONLY what's on the left plate, no scale or plates ───
+  if (isTutorialMode) {
+    return (
+      <div
+        ref={cartridgeRef}
+        className={`balanza-cartridge is-tutorial-mode ${isPlayMode ? 'is-play-mode' : 'is-editor-mode'} ${localWiggle ? 'is-wiggling' : ''}`}
+        onClick={onSelect}
+      >
+        {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
+
+        <div className="balanza-tutorial-area">
+          <div ref={leftPlateRef} className={`balanza-tutorial-items ${localWiggle ? 'is-wiggling' : ''}`}>
+            {leftPlate.map(term => (
+              <PlateTile
+                key={term.id}
+                term={term}
+                side="left"
+                isLocked={false}
+                isLevelComplete={false}
+                showZeroTiles={showZeroTiles}
+                isDragging={draggingKey}
+                cartridgeRef={cartridgeRef}
+                onDragStart={handleTileDragStart}
+                onDrag={handleTileDrag}
+                onDragEnd={handleTileDragEnd}
+                onDoubleTap={handleTileDoubleTap}
+              />
+            ))}
+            {leftPlate.length === 0 && (
+              <div className="balanza-tutorial-empty">No items on left plate</div>
+            )}
+          </div>
+        </div>
+
+        {/* Drag Overlay for tutorial items */}
+        {dragOverlayTerm && dragPos && createPortal(
+          <div
+            className="balanza-drag-overlay is-tutorial"
+            style={{
+              position: 'fixed',
+              left: dragPos.x,
+              top: dragPos.y,
+              transform: 'translate(-50%, -50%)',
+              zIndex: 99999999,
+              pointerEvents: 'none',
+            }}
+          >
+            <TileGlyph term={dragOverlayTerm} isOverlay={true} />
+          </div>,
+          document.body
+        )}
+      </div>
+    );
+  }
+
   if (isPhotoMode) {
     const px = config.photoX ?? 50;
     const py = config.photoY ?? 50;
     return (
-      <div ref={cartridgeRef} className="balanza-cartridge is-photo-mode">
+      <div ref={cartridgeRef} className={`balanza-cartridge is-photo-mode ${localWiggle ? 'is-wiggling' : ''}`}>
         {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
         {showEquationUp && equationLineText && (
           <div className="balanza-header-area" style={{ marginTop: '2vh' }}>
@@ -833,7 +1038,7 @@ export default function BalanzaCartridge({
               onDragStart={null}
               onDrag={null}
               onDragEnd={null}
-              onTileTap={null}
+              onTileDoubleTap={null}
               moveFlash={null}
             />
           </div>
@@ -851,7 +1056,7 @@ export default function BalanzaCartridge({
   }
 
   return (
-    <div ref={cartridgeRef} className="balanza-cartridge">
+    <div ref={cartridgeRef} className={`balanza-cartridge ${localWiggle ? 'is-wiggling' : ''}`}>
       {bgStyle && <div className="balanza-bg-layer" style={bgStyle} />}
       <div className="balanza-header-area">
         <div className="balanza-top-row">
@@ -884,7 +1089,7 @@ export default function BalanzaCartridge({
         onDragStart={handleTileDragStart}
         onDrag={handleTileDrag}
         onDragEnd={handleTileDragEnd}
-        onTileTap={handleTileTap}
+        onTileDoubleTap={handleTileDoubleTap}
         moveFlash={moveFlash}
       />
 
@@ -969,7 +1174,7 @@ export default function BalanzaCartridge({
   );
 }
 
-function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, isLevelComplete, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileTap, moveFlash }) {
+function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, isLevelComplete, showZeroTiles, draggingKey, cartridgeRef, leftPlateRef, rightPlateRef, onDragStart, onDrag, onDragEnd, onTileDoubleTap, moveFlash }) {
   const noop = () => {};
   const flashClass = (side) => {
     if (!moveFlash || moveFlash.side !== side) return '';
@@ -1017,7 +1222,7 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
                   onDragStart={onDragStart || noop}
                   onDrag={onDrag || noop}
                   onDragEnd={onDragEnd || noop}
-                  onTap={onTileTap || noop}
+                  onDoubleTap={onTileDoubleTap || noop}
                 />
               ))}
             </div>
@@ -1047,7 +1252,7 @@ function Scale({ tiltAngle, leftPlate, rightPlate, isLeftLocked, isRightLocked, 
                   onDragStart={onDragStart || noop}
                   onDrag={onDrag || noop}
                   onDragEnd={onDragEnd || noop}
-                  onTap={onTileTap || noop}
+                  onDoubleTap={onTileDoubleTap || noop}
                 />
               ))}
             </div>

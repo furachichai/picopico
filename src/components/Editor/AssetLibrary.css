@@ -258,6 +258,14 @@
     font-size: 3rem;
 }
 
+.asset-item.emojis {
+    font-size: 2.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
 .asset-item.background {
     border: none;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
