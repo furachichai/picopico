@@ -370,13 +370,17 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                             cartridge: {
                                                 type: 'SwipeSorter',
                                                 config: {
+                                                    mode: 'manual',
                                                     leftLabel: 'FALSE',
                                                     rightLabel: 'CORRECT',
                                                     cards: [
                                                         { id: 'c1', text: '2 + 2 = 5', correctSide: 'left' },
                                                         { id: 'c2', text: 'Water is wet', correctSide: 'right' },
                                                         { id: 'c3', text: 'The moon is cheese', correctSide: 'left' }
-                                                    ]
+                                                    ],
+                                                    batch: '',
+                                                    order: 'random',
+                                                    totalCards: ''
                                                 }
                                             }
                                         }
@@ -426,7 +430,8 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                                     rightPlateText: '🍎',
                                                     menuText: '2x🍎',
                                                     showZeroTiles: false,
-                                                    goal: '='
+                                                    goal: '=',
+                                                    invert: false
                                                 }
                                             }
                                         }

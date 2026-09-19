@@ -13,6 +13,7 @@ import {
   canMoveToDenominator,
   findDistributiveCancel,
   splitIntoAdditiveGroups,
+  parseCustomEquationLevels,
 } from '../src/cartridges/AlgeBros/game/AlgeBrosEngine.js';
 import {
   parseBalanzaExpression,
@@ -433,7 +434,43 @@ const vanishedPlate = [makeTerm(7, null), oppConst].filter(t => t.coeff !== 0);
 check("goal 'xx': passes once 0 card vanishes",
   checkBalanzaGoal('xx', isolatedL, vanishedPlate, 7, 7));
 
+/* ──────────────────────────────────────────────────────────────────────────
+ * 7. algeBROS: manual level parsing
+ * ────────────────────────────────────────────────────────────────────────── */
+console.log('algeBROS — custom equation level parsing');
+
+const customText = `
+# Sample custom levels
+2x = 6
+2x + 3 = 9
+3x - 4 = 5 | 4
+x = 10 / 2
+7 = 2x + 3
+`;
+
+const parsedLevels = parseCustomEquationLevels(customText);
+check('parsedLevels length is 5', parsedLevels.length === 5);
+
+// Level 1: 2x = 6
+check('Level 1 leftNum has 2x', parsedLevels[0].initialLeftNum.length === 1 && parsedLevels[0].initialLeftNum[0].coeff === 2 && parsedLevels[0].initialLeftNum[0].variable === 'x');
+check('Level 1 rightNum has 6', parsedLevels[0].initialRightNum.length === 1 && parsedLevels[0].initialRightNum[0].coeff === 6 && parsedLevels[0].initialRightNum[0].variable === null);
+check('Level 1 minPresses defaults to 3', parsedLevels[0].minPresses === 3);
+
+// Level 2: 2x + 3 = 9
+check('Level 2 leftNum has 2x and 3', parsedLevels[1].initialLeftNum.length === 2 && parsedLevels[1].initialLeftNum[0].coeff === 2 && parsedLevels[1].initialLeftNum[1].coeff === 3);
+
+// Level 3: 3x - 4 = 5 | 4 (explicit minPresses 4)
+check('Level 3 leftNum has 3x and -4', parsedLevels[2].initialLeftNum.length === 2 && parsedLevels[2].initialLeftNum[1].coeff === -4);
+check('Level 3 explicit minPresses is 4', parsedLevels[2].minPresses === 4);
+
+// Level 4: x = 10 / 2
+check('Level 4 rightDen has 2', parsedLevels[3].initialRightDen.length === 1 && parsedLevels[3].initialRightDen[0].coeff === 2);
+
+// Level 5: 7 = 2x + 3
+check('Level 5 leftNum has 7, rightNum has 2x and 3', parsedLevels[4].initialLeftNum[0].coeff === 7 && parsedLevels[4].initialRightNum.length === 2);
+
 /* ────────────────────────────────────────────────────────────────────────── */
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed === 0 ? 0 : 1);
+
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence, Reorder } from 'framer-motion';
+import { motion, AnimatePresence, Reorder, MotionConfig, correctParentTransform } from 'framer-motion';
 import {
   formatTerm,
   areLikeTerms,
@@ -17,8 +17,10 @@ import {
   isEquivalentTransformation,
   canMoveToDenominator,
   findDistributiveCancel,
-  splitIntoAdditiveGroups
+  splitIntoAdditiveGroups,
+  parseCustomEquationLevels
 } from './game/AlgeBrosEngine';
+import { resolveAssetUrl } from '../../utils/assetUrl';
 import { generateLevels, generateDivisionLevels, generateEquationLevels } from './game/AlgeBrosLevelGenerator';
 import {
   unlockAudio,
@@ -61,100 +63,8 @@ function ParticlesBG() {
   );
 }
 
-function StartScreen({ onStart, topic, setTopic }) {
-  return (
-    <motion.div
-      className="start-screen"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
-      <h1 className="start-logo">algeBROS</h1>
-      
-      <div className="start-card" style={{ marginBottom: '16px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <p className="start-subtitle" style={{ fontWeight: 800, color: 'var(--accent-purple)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.85rem' }}>
-          Select Topic:
-        </p>
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '0', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button
-            className="hud-badge"
-            style={{
-              cursor: 'pointer',
-              background: topic === 'equations' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
-              borderColor: topic === 'equations' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
-              color: topic === 'equations' ? 'var(--accent-purple)' : 'inherit',
-              padding: '6px 12px',
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              borderRadius: '8px'
-            }}
-            onClick={() => {
-              unlockAudio();
-              playSelect();
-              setTopic('equations');
-            }}
-          >
-            ⚖️ EQUATIONS
-          </button>
-          <button
-            className="hud-badge"
-            style={{
-              cursor: 'pointer',
-              background: topic === 'divisions' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
-              borderColor: topic === 'divisions' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
-              color: topic === 'divisions' ? 'var(--accent-purple)' : 'inherit',
-              padding: '6px 12px',
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              borderRadius: '8px'
-            }}
-            onClick={() => {
-              unlockAudio();
-              playSelect();
-              setTopic('divisions');
-            }}
-          >
-            🌸 DIVISIONS
-          </button>
-          <button
-            className="hud-badge"
-            style={{
-              cursor: 'pointer',
-              background: topic === 'liketerms' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
-              borderColor: topic === 'liketerms' ? 'var(--accent-purple)' : 'rgba(15,23,42,0.08)',
-              color: topic === 'liketerms' ? 'var(--accent-purple)' : 'inherit',
-              padding: '6px 12px',
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              borderRadius: '8px'
-            }}
-            onClick={() => {
-              unlockAudio();
-              playSelect();
-              setTopic('liketerms');
-            }}
-          >
-            📐 LIKE TERMS
-          </button>
-        </div>
-      </div>
-
-      <button
-        className="primary-btn"
-        onClick={() => {
-          unlockAudio();
-          playSelect();
-          onStart();
-        }}
-      >
-        START MISSION
-      </button>
-    </motion.div>
-  );
-}
-
-function GameOverScreen({ stats, onRestart }) {
-  const isPerfectGame = stats.perfectLevels === 10;
+function GameOverScreen({ stats, onRestart, totalLevels = 10 }) {
+  const isPerfectGame = stats.perfectLevels === totalLevels;
   
   return (
     <motion.div
@@ -168,12 +78,12 @@ function GameOverScreen({ stats, onRestart }) {
       <div className="summary-stats">
         <div className="stat-row">
           <span className="stat-label">Total Levels Solved</span>
-          <span className="stat-value success">10 / 10</span>
+          <span className="stat-value success">{totalLevels} / {totalLevels}</span>
         </div>
         <div className="stat-row">
           <span className="stat-label">Perfect Levels (No Mistakes & Ideal Moves)</span>
-          <span className={`stat-value ${stats.perfectLevels > 5 ? 'perfect' : ''}`}>
-            {stats.perfectLevels} / 10
+          <span className={`stat-value ${stats.perfectLevels > Math.floor(totalLevels / 2) ? 'perfect' : ''}`}>
+            {stats.perfectLevels} / {totalLevels}
           </span>
         </div>
         <div className="stat-row">
@@ -289,6 +199,17 @@ const compareElegant = (a, b) => {
   return infoA.coeffParam.localeCompare(infoB.coeffParam);
 };
 
+/* Geometry of one expression row, straight from AlgeBrosCartridge.css. Used to keep the
+ * expression inside the banner, which clips anything that leaves it. */
+const ROW_H = 44;                 // .equation-layout .term-card height (what is actually painted)
+const ROW_BOX_H = 54;             // .expression-list min-height (the row's layout box)
+const DEN_BLOCK_H = 93;           // .division-container gap + .division-line (+margins) + gap + row
+const MIRROR_OVERHANG_H = 65;     // a mirrored denominator hanging under its term
+const BANNER_PADDING_H = 32;      // .algebros-equation-banner padding, top + bottom
+const BANNER_MIN_H = 135;         // .algebros-equation-banner min-height
+const BANNER_MIN_H_FRACTION = 185;// .algebros-equation-banner.reserves-fraction min-height
+const BANNER_POP_SLACK = 8;       // cards pop to 1.15 while a cancelled pair fades out
+
 const checkElegance = (termsList) => {
   for (let i = 0; i < termsList.length - 1; i++) {
     if (compareElegant(termsList[i], termsList[i + 1]) > 0) {
@@ -298,10 +219,63 @@ const checkElegance = (termsList) => {
   return true;
 };
 
+/**
+ * A Reorder.Group that is itself CSS-scaled (see expressionScale).
+ *
+ * framer-motion's drag works in two coordinate spaces at once here: pointer deltas and
+ * measured boxes arrive in SCREEN pixels, while an item's offset is applied as a transform in
+ * the group's scaled LOCAL space. Inside a scaled group the two disagree by `scale`, and that
+ * is what left cards sitting on top of each other:
+ *
+ *  - a ref `dragConstraints` clamps a screen-measured box against a local-space offset, and a
+ *    clamped drag ended with a leftover translate that never returned to zero. That is why the
+ *    items here carry no dragConstraints — the group's axis lock and Reorder's own
+ *    snap-to-origin keep the drag in bounds without the mismatched clamp.
+ *  - the raw pointer delta made the card travel `scale`x further than the finger, so
+ *    correctParentTransform maps pointer coordinates back through the inverse of the group's
+ *    own transform (framer-motion's supported fix for dragging inside a transformed parent).
+ *
+ * The MotionConfig only reaches motion components inside this group, so the equations board —
+ * whose custom drag handlers deliberately work in screen coordinates — is left alone.
+ */
+function ScaledReorderGroup({ children, ...props }) {
+  const groupRef = useRef(null);
+  // Built per call rather than once at render: correctParentTransform reads the group's live
+  // transform, and it should only reach for the ref while a pointer is actually moving.
+  const transformPagePoint = useCallback((point) => correctParentTransform(groupRef)(point), []);
+
+  return (
+    <Reorder.Group ref={groupRef} {...props}>
+      <MotionConfig transformPagePoint={transformPagePoint}>
+        {children}
+      </MotionConfig>
+    </Reorder.Group>
+  );
+}
+
 export default function AlgeBrosCartridge({ config = {}, onComplete, preview = false }) {
-  const [screen, setScreen] = useState('start');
+  const [screen, setScreen] = useState('game');
   const [levels, setLevels] = useState([]);
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
+  
+  // Topic from config (defaults to equations)
+  const topic = config.topic || 'equations';
+
+  // Background style from config (library, file upload, or preset)
+  const bgImage = config.background || config.backgroundImage || config.globalBackground;
+  const bgStyle = useMemo(() => {
+    if (!bgImage) return null;
+    const resolved = resolveAssetUrl(bgImage);
+    const formatted = resolved.startsWith('url(') || resolved.startsWith('linear-gradient(') || resolved.startsWith('radial-gradient(')
+      ? resolved
+      : `url(${resolved})`;
+    return {
+      backgroundImage: formatted,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    };
+  }, [bgImage]);
   
   // Level Gameplay State
   const [terms, setTerms] = useState([]);
@@ -319,7 +293,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
   const [isMatchingFading, setIsMatchingFading] = useState(false);
 
-  const [topic, setTopic] = useState('equations'); // Default is 'equations'
   const [numTerms, setNumTerms] = useState([]);
   const [denTerms, setDenTerms] = useState([]);
   const [slicedNum, setSlicedNum] = useState([]); // Sliced numerator term IDs
@@ -347,7 +320,35 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const activeCardRef = useRef(null);
   const justDraggedRef = useRef(false);
   const dragSessionRef = useRef(null);
+  // Last RAW pointer position handled by handleDragCross. framer-motion re-emits onDrag
+  // from its projection-update pipeline whenever our re-render changes the layout, so
+  // without this guard every setState here would trigger another onDrag and spin forever.
+  const lastDragPointRef = useRef(null);
+  // Pending timer for the interrupted-drag fallback (see the global release listener).
+  const fallbackReleaseRef = useRef(null);
   const cartridgeRef = useRef(null);
+  const bannerRef = useRef(null);
+  const [slideWidth, setSlideWidth] = useState(390);
+
+
+  useEffect(() => {
+    const el = cartridgeRef.current;
+    if (!el) return;
+    const updateWidth = () => {
+      const w = el.clientWidth || el.offsetWidth || (el.getBoundingClientRect && el.getBoundingClientRect().width);
+      if (w && w > 50) {
+        setSlideWidth(w);
+      }
+    };
+    updateWidth();
+    const ro = new ResizeObserver(updateWidth);
+    ro.observe(el);
+    window.addEventListener('resize', updateWidth);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', updateWidth);
+    };
+  }, []);
 
   const numTermsRef = React.useRef(numTerms);
   const denTermsRef = React.useRef(denTerms);
@@ -486,6 +487,36 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setIsDraggingTerm(false);
   }, [topic]);
 
+  const generateLevelsForConfig = useCallback(() => {
+    const customText = config.equationText || config.levelsText;
+    if (topic === 'equations' && customText && typeof customText === 'string') {
+      const customLevels = parseCustomEquationLevels(customText);
+      if (customLevels.length > 0) return customLevels;
+    }
+    return topic === 'equations'
+      ? generateEquationLevels()
+      : topic === 'divisions'
+      ? generateDivisionLevels()
+      : generateLevels();
+  }, [topic, config.equationText, config.levelsText]);
+
+  useEffect(() => {
+    const generated = generateLevelsForConfig();
+    setLevels(generated);
+    const startIdx = Math.max(0, Math.min((config.startLevel || 1) - 1, generated.length - 1));
+    setCurrentLevelIndex(startIdx);
+    if (generated[startIdx]) {
+      loadLevel(generated[startIdx]);
+    }
+    setStats({
+      totalUserPresses: 0,
+      totalMinPresses: 0,
+      totalMistakes: 0,
+      perfectLevels: 0
+    });
+    setScreen('game');
+  }, [generateLevelsForConfig, config.startLevel, loadLevel]);
+
   const handleMultiplyAdjacent = (index, type) => {
     setActiveFactorMenu(null);
     const getList = () => type === 'num' ? numTerms
@@ -611,7 +642,31 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     });
   };
 
+  /* True when solving this level will need a division: the banner then reserves the
+   * fraction's height from the start instead of growing once a denominator appears. Derived
+   * rather than stored, because an extra render makes framer-motion re-resolve the cards'
+   * drag constraints inside the scaled layout and misplace them. */
+  const reservesFraction = useMemo(() => {
+    if (topic !== 'equations') return false;
+    const level = levels[currentLevelIndex];
+    if (!level) return false;
+    const startsWithFraction = (level.initialLeftDen || []).length > 0 || (level.initialRightDen || []).length > 0;
+    const hasCoefficient = [...(level.initialLeftNum || []), ...(level.initialRightNum || [])]
+      .some(t => t.variable && Math.abs(t.coeff) > 1);
+    return startsWithFraction || hasCoefficient;
+  }, [topic, levels, currentLevelIndex]);
+
   const isDenOne = (terms) => terms && terms.length === 1 && terms[0].coeff === 1 && !terms[0].variable;
+
+  // The start screen (and its handleStart) is gone, so restarting from the game-over screen
+  // replays the level set from the top.
+  const handleRestartGame = useCallback(() => {
+    playPopFX();
+    setCurrentLevelIndex(0);
+    setStats({ totalUserPresses: 0, totalMinPresses: 0, totalMistakes: 0, perfectLevels: 0 });
+    if (levels[0]) loadLevel(levels[0]);
+    setScreen('game');
+  }, [levels, loadLevel, playPopFX]);
 
   const handleRestartLevel = () => {
     setActiveFactorMenu(null);
@@ -811,13 +866,49 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
+  const setDragPosIfMoved = useCallback((point) => {
+    setDragPos(prev => (prev && prev.x === point.x && prev.y === point.y) ? prev : point);
+  }, []);
+
+  const setDragHintIfChanged = useCallback((next) => {
+    setDragHintState(prev => {
+      if (!prev || !next) return prev === next ? prev : next;
+      if (prev.side === next.side && prev.insertIndex === next.insertIndex && prev.signHint === next.signHint) return prev;
+      return next;
+    });
+  }, []);
+
+  const clampPointToBanner = useCallback((point, cardEl) => {
+    if (!bannerRef.current || !point) return point;
+    const bannerRect = bannerRef.current.getBoundingClientRect();
+    const cardW = ((cardEl?.offsetWidth || 50)) * 1.15;
+    const cardH = ((cardEl?.offsetHeight || 46)) * 1.15;
+    const halfW = cardW / 2;
+    const halfH = cardH / 2;
+    const pad = 6;
+    const minX = bannerRect.left + halfW + pad;
+    const maxX = Math.max(minX, bannerRect.right - halfW - pad);
+    const minY = bannerRect.top + halfH + pad;
+    const maxY = Math.max(minY, bannerRect.bottom - halfH - pad);
+    return {
+      x: Math.min(Math.max(point.x, minX), maxX),
+      y: Math.min(Math.max(point.y, minY), maxY)
+    };
+  }, []);
+
   const handleDragStartInit = (term, currentType, event, info) => {
     setActiveFactorMenu(null);
     setIsDraggingTerm(true);
     setDraggingCardId(term.id);
     setDragOverlayTerm(term);
+    const cardEl = document.querySelector(`.term-card[data-id="${term.id}"]`);
+    activeCardRef.current = cardEl;
     if (info?.point) {
-      setDragPos({ x: info.point.x, y: info.point.y });
+      lastDragPointRef.current = { x: info.point.x, y: info.point.y };
+      const clamped = clampPointToBanner(info.point, cardEl);
+      setDragPos(clamped);
+    } else {
+      lastDragPointRef.current = null;
     }
 
     const isStartLeft = currentType === 'num' || currentType === 'den';
@@ -845,30 +936,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
       const draggingGroupIdx = groups.findIndex(g => g.some(t => t.id === term.id));
       let dragGroupWidth = 0;
-      const midpoints = [];
-
-      for (let i = 0; i < realEls.length && i < groups.length; i++) {
-        const rect = realEls[i].getBoundingClientRect();
-        if (i === draggingGroupIdx) {
-          // Also account for the operator span before this group (~28px)
-          dragGroupWidth = rect.width + (i > 0 ? 28 : 0);
-          continue;
-        }
-        const adjustedLeft = (draggingGroupIdx >= 0 && i > draggingGroupIdx)
-          ? rect.left - dragGroupWidth
-          : rect.left;
-        midpoints.push(adjustedLeft + rect.width / 2);
+      if (draggingGroupIdx >= 0 && groupEls[draggingGroupIdx]) {
+        dragGroupWidth = groupEls[draggingGroupIdx].getBoundingClientRect().width;
       }
+
+      const midpoints = [];
+      realEls.forEach((el, i) => {
+        const rect = el.getBoundingClientRect();
+        let mid = rect.left + rect.width / 2;
+        if (draggingGroupIdx >= 0 && i > draggingGroupIdx) {
+          mid -= dragGroupWidth;
+        }
+        midpoints.push(mid);
+      });
+
       return { midpoints, draggingGroupIdx };
     };
 
     dragSessionRef.current = {
-      termId: term.id,
-      startX: info?.point?.x || 0,
-      startY: info?.point?.y || 0,
-      startType: currentType,
-      lastSide: null,
-      lastInsertIndex: null,
       isUnlocked: false,
       leftSnapshot: snapshotSide('.left-side', numTerms),
       rightSnapshot: snapshotSide('.right-side', rightNumTerms),
@@ -876,6 +961,14 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleDragCross = (term, currentType, event, info) => {
+    // Only react to callbacks carrying a NEW pointer position. framer-motion also fires
+    // onDrag again after each layout/projection update, and acting on those would feed
+    // our own state updates straight back into it (endless re-render loop).
+    if (info?.point) {
+      const prevPoint = lastDragPointRef.current;
+      if (prevPoint && prevPoint.x === info.point.x && prevPoint.y === info.point.y) return;
+      lastDragPointRef.current = { x: info.point.x, y: info.point.y };
+    }
     if (!term || term.coeff === 0) {
       setDragHintState(null);
       return;
@@ -889,9 +982,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const equalsRect = equalsEl.getBoundingClientRect();
     const centerX = equalsRect.left + equalsRect.width / 2;
 
-    const dropX = info.point.x;
-    const dropY = info.point.y;
-    setDragPos({ x: dropX, y: dropY });
+    const cardEl = activeCardRef.current || document.querySelector(`.term-card[data-id="${term.id}"]`);
+    const clampedPoint = clampPointToBanner(info.point, cardEl);
+    const dropX = clampedPoint.x;
+    const dropY = clampedPoint.y;
+    setDragPosIfMoved(clampedPoint);
 
     const session = dragSessionRef.current;
     if (!session) return;
@@ -933,7 +1028,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const targetSide = isTargetLeft ? 'leftDen' : 'rightDen';
       session.lastSide = denyByRuleD ? null : targetSide;
       session.lastInsertIndex = null;
-      setDragHintState(denyByRuleD ? null : { side: targetSide });
+      setDragHintIfChanged(denyByRuleD ? null : { side: targetSide });
       return;
     }
 
@@ -986,7 +1081,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       signHint = term.coeff < 0 ? '-' : '+';
     }
 
-    setDragHintState({ side, insertIndex, signHint });
+    setDragHintIfChanged({ side, insertIndex, signHint });
   };
 
   const handleSameSideReorder = (term, currentType, dropX) => {
@@ -1020,6 +1115,11 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   };
 
   const handleDragEndCross = (term, currentType, event, info) => {
+    lastDragPointRef.current = null;
+    if (fallbackReleaseRef.current) {
+      clearTimeout(fallbackReleaseRef.current);
+      fallbackReleaseRef.current = null;
+    }
     setDragOverlayTerm(null);
     setDraggingCardId(null);
     setIsDraggingTerm(false);
@@ -1036,14 +1136,18 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const equalsRect = equalsEl.getBoundingClientRect();
     const centerX = equalsRect.left + equalsRect.width / 2;
 
-    const dropX = info.point.x;
-    const dropY = info.point.y;
-    const offsetX = info.offset?.x || 0;
+    const rawX = info?.point?.x ?? dragPos.x;
+    const rawY = info?.point?.y ?? dragPos.y;
+    const cardEl = activeCardRef.current || document.querySelector(`.term-card[data-id="${term.id}"]`);
+    const clampedPoint = clampPointToBanner({ x: rawX, y: rawY }, cardEl);
+    const dropX = clampedPoint.x;
+    const dropY = clampedPoint.y;
+    const offsetX = info?.offset?.x ?? 0;
 
     const startedOnLeft = currentType === 'num' || currentType === 'den';
     const crossed = startedOnLeft
-      ? (dropX > centerX || offsetX > 40)
-      : (dropX <= centerX || offsetX < -40);
+      ? (dropX > centerX || offsetX > 40 || hint?.side === 'rightNum' || hint?.side === 'rightDen')
+      : (dropX <= centerX || offsetX < -40 || hint?.side === 'leftNum' || hint?.side === 'leftDen' || hint?.side === 'num' || hint?.side === 'den');
 
     if (crossed) {
       const targetSideClass = startedOnLeft ? '.right-side' : '.left-side';
@@ -1052,7 +1156,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const hasTargetDen = targetDenTerms && targetDenTerms.length > 0 && !isDenOne(targetDenTerms);
 
       let isUnderTerm = false;
-      if (hasTargetDen && (currentType === 'num' || currentType === 'rightNum')) {
+      if (hint?.side === 'rightDen' || hint?.side === 'den' || hint?.side === 'leftDen') {
+        isUnderTerm = true;
+      } else if (hasTargetDen && (currentType === 'num' || currentType === 'rightNum')) {
         // When dragging a numerator term to a target side that HAS a denominator fraction,
         // it cannot be dropped into the target numerator. It MUST target the denominator!
         isUnderTerm = true;
@@ -1071,7 +1177,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }
 
       let targetType;
-      if (isUnderTerm) {
+      if (hint?.side === 'rightDen' || hint?.side === 'leftDen' || hint?.side === 'den') {
+        targetType = startedOnLeft ? 'rightDen' : 'den';
+      } else if (isUnderTerm) {
         targetType = startedOnLeft ? 'rightDen' : 'den';
       } else {
         targetType = startedOnLeft ? 'rightNum' : 'num';
@@ -1095,23 +1203,69 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
-  const handleStart = () => {
-    const generated = topic === 'equations'
-      ? generateEquationLevels()
-      : topic === 'divisions'
-      ? generateDivisionLevels()
-      : generateLevels();
-    setLevels(generated);
-    setCurrentLevelIndex(0);
-    loadLevel(generated[0]);
-    setStats({
-      totalUserPresses: 0,
-      totalMinPresses: 0,
-      totalMistakes: 0,
-      perfectLevels: 0
-    });
-    setScreen('game');
-  };
+  // Global drag release safety listener to prevent any UI freeze if pointer events are interrupted
+  useEffect(() => {
+    if (!isDraggingTerm) return;
+
+    const handleGlobalDragRelease = (e) => {
+      if (!isDraggingTerm) return;
+      const term = dragOverlayTerm;
+      const session = dragSessionRef.current;
+      const currentType = session?.startType || 'num';
+      const hint = dragHintState;
+
+      setIsDraggingTerm(false);
+      setDraggingCardId(null);
+      setDragOverlayTerm(null);
+      setDragHintState(null);
+      dragSessionRef.current = null;
+      lastDragPointRef.current = null;
+      justDraggedRef.current = true;
+      setTimeout(() => { justDraggedRef.current = false; }, 200);
+
+      if (!term || term.coeff === 0) return;
+      if (!hint?.side) return;
+
+      // framer-motion's own onDragEnd normally lands right after this listener and applies
+      // the move with better drop geometry. Only step in when it never arrives (pointer
+      // interrupted), otherwise the same move would be applied — and counted — twice.
+      const fallback = () => {
+        fallbackReleaseRef.current = null;
+        const startedOnLeft = currentType === 'num' || currentType === 'den';
+        const isTargetLeft = hint.side.startsWith('left') || hint.side === 'den' || hint.side === 'num';
+        const crossed = (startedOnLeft && !isTargetLeft) || (!startedOnLeft && isTargetLeft);
+        if (!crossed) return;
+
+        let targetType;
+        if (hint.side === 'rightDen' || hint.side === 'leftDen' || hint.side === 'den') {
+          targetType = startedOnLeft ? 'rightDen' : 'den';
+        } else {
+          targetType = startedOnLeft ? 'rightNum' : 'num';
+        }
+
+        if (targetType === 'den' || targetType === 'rightDen') {
+          const sourceNum = currentType === 'num' ? numTermsRef.current : rightNumTermsRef.current;
+          if ((currentType === 'num' || currentType === 'rightNum') && !canMoveToDenominator(sourceNum)) {
+            rejectMove('Move or combine the other terms on that side first — dividing splits the whole side.');
+            return;
+          }
+        }
+        handleMoveCrossSide(term, currentType, targetType, hint.insertIndex);
+      };
+
+      if (fallbackReleaseRef.current) clearTimeout(fallbackReleaseRef.current);
+      fallbackReleaseRef.current = setTimeout(fallback, 150);
+    };
+
+    window.addEventListener('pointerup', handleGlobalDragRelease, { capture: true });
+    window.addEventListener('pointercancel', handleGlobalDragRelease, { capture: true });
+    window.addEventListener('touchend', handleGlobalDragRelease, { capture: true });
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalDragRelease, { capture: true });
+      window.removeEventListener('pointercancel', handleGlobalDragRelease, { capture: true });
+      window.removeEventListener('touchend', handleGlobalDragRelease, { capture: true });
+    };
+  }, [isDraggingTerm, dragOverlayTerm, dragHintState]);
 
   const isGlobalSlicing = React.useRef(false);
   const canvasRef = React.useRef(null);
@@ -1495,7 +1649,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       const merged = combineTerms(termA, termB);
       const updatedTerms = [...terms];
       updatedTerms.splice(index - 1, 2, merged);
-      
+
       setTerms(updatedTerms);
       setUserPresses(p => p + 1);
       playMerge();
@@ -1632,7 +1786,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       // Delay loading next level for animation
       setTimeout(() => {
         const nextIndex = currentLevelIndex + 1;
-        if (nextIndex >= 10) {
+        if (nextIndex >= (levels.length || 10)) {
           playVictory();
           setScreen('gameOver');
           if (onComplete) {
@@ -1724,35 +1878,40 @@ const handleCombineEquationGroup = (groupIdx, type) => {
         chars = (isOne ? 0 : absCoeff.toString().length) + term.variable.length;
       }
     }
-    return topic === 'equations' ? (18 + chars * 11) : (28 + chars * 12.5);
-  }, [topic]);
+    // Card padding is 28px (14px on each side).
+    // In bold font at 1.35rem, each character averages ~13px.
+    return Math.max(38, 28 + chars * 13);
+  }, []);
 
   const expressionScale = useMemo(() => {
-    const calculateScaleForList = (list) => {
-      if (!list || list.length === 0) return 1.0;
-      const totalBaseWidth = list.reduce((acc, term, idx) => {
-        const cardW = getTermWidth(term);
-        const opW = idx > 0 ? (topic === 'equations' ? 26 : 38) : 0;
-        const staticSignW = (idx === 0 && term.coeff < 0) ? 12 : 0;
-        return acc + cardW + opW + staticSignW;
-      }, 0);
-      const targetWidth = topic === 'equations' ? 140 : 260;
-      const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-      return Math.max(topic === 'equations' ? 0.6 : 0.4, Math.min(1.0, calculatedScale));
-    };
+    // 1.8% white space on left + 1.8% white space on right = 3.6% total white space.
+    // Expression container occupies exactly (100% - 3.6%) = 96.4% of slideWidth.
+    const maxAvailableWidth = slideWidth * 0.964;
+    // Internal container padding (12px on each side = 24px)
+    const targetWidth = Math.max(260, maxAvailableWidth - 24);
 
     if (topic === 'divisions') {
-      const scaleNum = calculateScaleForList(numTerms);
-      const scaleDen = calculateScaleForList(denTerms);
-      return Math.min(scaleNum, scaleDen);
+      const calculateDivListWidth = (list) => {
+        if (!list || list.length === 0) return 40;
+        return list.reduce((acc, term, idx) => {
+          const cardW = getTermWidth(term);
+          const dotW = idx > 0 ? 38 : 0;
+          return acc + cardW + dotW;
+        }, 0);
+      };
+      const numW = calculateDivListWidth(numTerms);
+      const denW = calculateDivListWidth(denTerms);
+      const maxDivW = Math.max(numW, denW);
+      const calculatedScale = maxDivW > 0 ? targetWidth / maxDivW : 1;
+      return Math.max(0.45, Math.min(1.85, calculatedScale));
     } else if (topic === 'equations') {
       const getSideBaseWidth = (numList, denList) => {
         const calcW = (list) => {
-          if (!list || list.length === 0) return 29;
+          if (!list || list.length === 0) return 34;
           return list.reduce((acc, term, idx) => {
             const cardW = getTermWidth(term);
-            const opW = idx > 0 ? 26 : 0;
-            const signW = (idx === 0 && term.coeff < 0) ? 12 : 0;
+            const opW = idx > 0 ? 30 : 0;
+            const signW = (idx === 0 && term.coeff < 0) ? 14 : 0;
             return acc + cardW + opW + signW;
           }, 0);
         };
@@ -1760,26 +1919,82 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       };
       const leftW = getSideBaseWidth(numTerms, denTerms);
       const rightW = getSideBaseWidth(rightNumTerms, rightDenTerms);
-      const totalEqW = leftW + 28 + rightW;
-      const targetWidth = 310;
+      const equalsW = 38;
+      const totalEqW = leftW + equalsW + rightW;
       const calculatedScale = totalEqW > 0 ? targetWidth / totalEqW : 1;
-      return Math.max(0.45, Math.min(1.0, calculatedScale));
+
+      /* The banner clips whatever leaves it, so the width-driven scale above is not enough:
+       * a fraction is three rows tall and blowing it up would push cards out of the white
+       * card (most visibly while a cancelled pair animates out). Budget the height here,
+       * from the same term lists — measuring the DOM and re-rendering with the result makes
+       * framer-motion re-resolve the cards' drag constraints and misplace them. */
+      const hasLeftDen = (denTerms.length > 0 && !isDenOne(denTerms)) || dragHintState?.side === 'leftDen';
+      const hasRightDen = (rightDenTerms.length > 0 && !isDenOne(rightDenTerms)) || dragHintState?.side === 'rightDen';
+      const leftGroups = splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).length;
+      const rightGroups = splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).length;
+      // A denominator under a multi-term side is mirrored under each term instead of shown once.
+      const mirrored = (hasLeftDen && leftGroups > 1) || (hasRightDen && rightGroups > 1);
+      const stacked = (hasLeftDen && leftGroups <= 1) || (hasRightDen && rightGroups <= 1);
+
+      const boxH = ROW_BOX_H + (stacked ? DEN_BLOCK_H : 0);
+      const paintedH = ROW_H + (stacked ? DEN_BLOCK_H : 0);
+      // Mirrors hang BELOW the layout box, which the banner centres, so the content is
+      // lopsided: what has to fit is twice its taller half.
+      const contentH = paintedH + (mirrored ? 2 * MIRROR_OVERHANG_H : 0);
+      const bannerH = Math.max(reservesFraction ? BANNER_MIN_H_FRACTION : BANNER_MIN_H, boxH + BANNER_PADDING_H);
+      const heightCap = (bannerH - BANNER_PADDING_H - BANNER_POP_SLACK) / contentH;
+
+      return Math.max(0.45, Math.min(1.85, calculatedScale, heightCap));
     } else {
-      return calculateScaleForList(terms);
+      // topic === 'liketerms'
+      const calculateLikeTermsWidth = (list) => {
+        if (!list || list.length === 0) return 50;
+        return list.reduce((acc, term, idx) => {
+          const cardW = getTermWidth(term);
+          // Operator button (+ or -) between terms
+          const opW = idx > 0 ? 34 : 0;
+          // The first term's leading minus renders inside the card (see term-negative-prefix)
+          // rather than as a separate operator, so its extra width has to be budgeted here.
+          const staticSignW = (idx === 0 && term.coeff < 0) ? 16 : 0;
+          return acc + cardW + opW + staticSignW;
+        }, 0);
+      };
+      const totalBaseWidth = calculateLikeTermsWidth(terms);
+      const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
+      // Allow scale up to 1.95 so terms and buttons appear as large as possible within the 95% limit!
+      return Math.max(0.45, Math.min(1.95, calculatedScale));
     }
-  }, [topic, terms, numTerms, denTerms, rightNumTerms, rightDenTerms, getTermWidth]);
+  }, [topic, terms, numTerms, denTerms, rightNumTerms, rightDenTerms, slideWidth, bgStyle, getTermWidth, dragHintState, reservesFraction]);
+
+  /* Scale is free to grow/shrink between actions (so the expression fills the available
+   * space as it's simplified), but a WIDTH change mid-gesture would invalidate work already
+   * anchored to the old scale: equations' custom drag snapshots card midpoints in screen space
+   * at drag-start and re-uses them for the rest of the gesture, and Reorder's own live FLIP
+   * preview assumes its container isn't also rescaling under it. Freeze the scale the instant a
+   * drag begins and hold it for that drag's duration; release it as soon as the drag ends so the
+   * NEXT render is free to resize again. */
+  const dragFrozenScaleRef = useRef(null);
+  useEffect(() => {
+    if (isDraggingTerm) {
+      if (dragFrozenScaleRef.current === null) dragFrozenScaleRef.current = expressionScale;
+    } else {
+      dragFrozenScaleRef.current = null;
+    }
+    // Deliberately omits expressionScale: it should be captured ONCE, at the moment the drag
+    // starts, not re-captured as it changes during the very drag it's meant to hold steady.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDraggingTerm]);
+  const stableScale = (isDraggingTerm && dragFrozenScaleRef.current !== null) ? dragFrozenScaleRef.current : expressionScale;
 
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
     return (
-      <div className="algebros-cartridge" style={{ pointerEvents: 'none' }}>
+      <div className={`algebros-cartridge ${bgStyle ? 'has-background' : ''}`} style={{ pointerEvents: 'none', background: bgStyle ? 'transparent' : '#ffffff' }}>
+        {bgStyle && <div className="algebros-bg-layer" style={bgStyle} />}
         <ParticlesBG />
-        <div className="start-screen" style={{ gap: '12px' }}>
-          <h1 className="start-logo" style={{ fontSize: '2.2rem' }}>algeBROS</h1>
-          <div className="start-card" style={{ padding: '16px' }}>
-            <p className="start-subtitle" style={{ fontSize: '0.8rem', marginBottom: 0 }}>
-              Algebraic Term Simplifier
-            </p>
+        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%', padding: '16px' }}>
+          <div className="algebros-equation-banner" style={{ padding: '12px 20px', minHeight: 'auto' }}>
+            <h1 className="start-logo" style={{ fontSize: '1.6rem', margin: 0 }}>algeBROS</h1>
           </div>
         </div>
       </div>
@@ -1787,7 +2002,14 @@ const handleCombineEquationGroup = (groupIdx, type) => {
   }
 
   return (
-    <div ref={cartridgeRef} className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${flash === 'success' ? 'success-flash' : ''}`}>
+    <div
+      ref={cartridgeRef}
+      className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${flash === 'success' ? 'success-flash' : ''} ${bgStyle ? 'has-background' : ''}`}
+      style={{
+        background: bgStyle ? 'transparent' : '#ffffff'
+      }}
+    >
+      {bgStyle && <div className="algebros-bg-layer" style={bgStyle} />}
       <ParticlesBG />
       
       <div className={`screen-container ${activeFactorMenu ? 'has-active-popover' : ''}`}>
@@ -1805,10 +2027,6 @@ const handleCombineEquationGroup = (groupIdx, type) => {
           }}
         />
         <AnimatePresence mode="wait">
-          {screen === 'start' && (
-            <StartScreen key="start" onStart={handleStart} topic={topic} setTopic={setTopic} />
-          )}
-
           {screen === 'game' && (
             <motion.div
               key="game"
@@ -1821,7 +2039,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
               {/* HUD */}
               <div className="hud-header">
                 <div className="hud-badge">
-                  LVL <span className="font-mono">{currentLevelIndex + 1} / 10</span>
+                  LVL <span className="font-mono">{currentLevelIndex + 1} / {levels.length || 10}</span>
                 </div>
                 <div 
                   className="hud-badge"
@@ -1842,7 +2060,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
               </div>
 
               {/* Sub-HUD Controls Bar (Below HUD) */}
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '2px', marginBottom: '6px', zIndex: 10 }}>
+              <div className="sub-hud-controls">
                 <button
                   className="floating-reset-btn"
                   onClick={handleRestartLevel}
@@ -1866,7 +2084,8 @@ const handleCombineEquationGroup = (groupIdx, type) => {
               </div>
 
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
-                {topic === 'equations' ? (
+                <div className={`algebros-equation-banner ${reservesFraction ? 'reserves-fraction' : ''}`} ref={bannerRef}>
+                  {topic === 'equations' ? (
                   (() => {
                     const activeLeftTerms = numTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
                     const isLeftEmpty = activeLeftTerms.length === 0;
@@ -1919,7 +2138,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                       <motion.div
                         className="equation-layout"
                         style={{
-                          scale: expressionScale,
+                          scale: stableScale,
                           transformOrigin: 'center',
                           position: 'relative'
                         }}
@@ -1966,7 +2185,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                     {splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).map((group, groupIdx) => {
                                       const showHintHere = dragHintState?.side === 'leftNum' && dragHintState.insertIndex === groupIdx;
                                   return (
-                                    <React.Fragment key={`group-${group[0].id}`}>
+                                    <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
                                       {showHintHere && (
                                         <motion.div
                                           key="hint-slot-num-left"
@@ -2066,9 +2285,9 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                 data-type="num"
                                                 data-index={index}
                                                 drag={term.coeff !== 0}
-                                                dragConstraints={cartridgeRef}
+                                                dragConstraints={bannerRef}
                                                 dragSnapToOrigin={true}
-                                                dragElastic={0.1}
+                                                dragElastic={0}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
@@ -2077,7 +2296,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'num', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0 : 1 }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
                                                 onTap={() => handleCardTap(term, 'num')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -2177,8 +2396,9 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                       data-type="den"
                                       data-index={index}
                                       drag
+                                      dragConstraints={bannerRef}
                                       dragSnapToOrigin={true}
-                                      dragElastic={0.4}
+                                      dragElastic={0}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDrag={(e, info) => handleDragCross(term, 'den', e, info)}
@@ -2259,7 +2479,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                         {splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).map((group, groupIdx) => {
                                           const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
                                   return (
-                                    <React.Fragment key={`group-${group[0].id}`}>
+                                    <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
                                       {showHintHere && (
                                         <motion.div
                                           key="hint-slot-num-right"
@@ -2359,9 +2579,9 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                 data-type="rightNum"
                                                 data-index={index}
                                                 drag={term.coeff !== 0}
-                                                dragConstraints={cartridgeRef}
+                                                dragConstraints={bannerRef}
                                                 dragSnapToOrigin={true}
-                                                dragElastic={0.1}
+                                                dragElastic={0}
                                                 whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
@@ -2370,7 +2590,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                   setDraggingCardId(null);
                                                   handleDragEndCross(term, 'rightNum', e, info);
                                                 }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0 : 1 }}
+                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
                                                 onTap={() => handleCardTap(term, 'rightNum')}
                                               >
                                                 {draggingCardId === term.id && term.coeff < 0 && (
@@ -2470,8 +2690,9 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                       data-type="rightDen"
                                       data-index={index}
                                       drag
+                                      dragConstraints={bannerRef}
                                       dragSnapToOrigin={true}
-                                      dragElastic={0.4}
+                                      dragElastic={0}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDrag={(e, info) => handleDragCross(term, 'rightDen', e, info)}
@@ -2515,13 +2736,13 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                   numTerms.length === 0 && denTerms.length === 0 ? (
                     <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
                   ) : (denTerms.length === 0) ? (
-                    <Reorder.Group
+                    <ScaledReorderGroup
                       axis="x"
                       values={numTerms}
                       onReorder={setNumTerms}
                       className="expression-list"
                       style={{
-                        scale: expressionScale,
+                        scale: stableScale,
                         transformOrigin: 'center',
                         zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                         position: 'relative'
@@ -2537,9 +2758,10 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                               key={term.id}
                               value={term}
                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                              dragElastic={0}
                               whileDrag={{ scale: 1.06 }}
                               exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                              transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                              transition={{ type: 'spring', stiffness: 700, damping: 50 }}
                               onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                               onDragEnd={() => setIsDraggingTerm(false)}
                               style={{
@@ -2584,17 +2806,17 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           );
                         })}
                       </AnimatePresence>
-                    </Reorder.Group>
+                    </ScaledReorderGroup>
                   ) : (
                     <div className="division-container">
                       {/* Numerator */}
-                      <Reorder.Group
+                      <ScaledReorderGroup
                         axis="x"
                         values={numTerms}
                         onReorder={setNumTerms}
                         className="expression-list"
                         style={{
-                          scale: expressionScale,
+                          scale: stableScale,
                           transformOrigin: 'center'
                         }}
                       >
@@ -2611,9 +2833,10 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                   key={term.id}
                                   value={term}
                                   className="term-item-wrapper"
+                                  dragElastic={0}
                                   whileDrag={{ scale: 1.06 }}
                                   exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                  transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                  transition={{ type: 'spring', stiffness: 700, damping: 50 }}
                                   onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                   onDragEnd={() => setIsDraggingTerm(false)}
                                   style={{ pointerEvents: 'none' }}
@@ -2655,7 +2878,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                             })
                           )}
                         </AnimatePresence>
-                      </Reorder.Group>
+                      </ScaledReorderGroup>
 
                       {/* Division Line */}
                       <div
@@ -2668,13 +2891,13 @@ const handleCombineEquationGroup = (groupIdx, type) => {
 
                       {/* Denominator */}
                       {denTerms.length > 0 && !isDenOne(denTerms) && (
-                      <Reorder.Group
+                      <ScaledReorderGroup
                         axis="x"
                         values={denTerms}
                         onReorder={setDenTerms}
                         className="expression-list"
                         style={{
-                          scale: expressionScale,
+                          scale: stableScale,
                           transformOrigin: 'center',
                           zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
                           position: 'relative'
@@ -2690,9 +2913,10 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 key={term.id}
                                 value={term}
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                dragElastic={0}
                                 whileDrag={{ scale: 1.06 }}
                                 exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                transition={{ type: 'spring', stiffness: 700, damping: 50 }}
                                 onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                 onDragEnd={() => setIsDraggingTerm(false)}
                                 style={{
@@ -2738,18 +2962,25 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                             );
                           })}
                         </AnimatePresence>
-                      </Reorder.Group>
+                      </ScaledReorderGroup>
                       )}
                     </div>
                   )
                 ) : (
-                  <Reorder.Group
+                  <ScaledReorderGroup
+                    // Keyed on the item COUNT so a combine remounts the row. Removing items
+                    // from a CSS-scaled group is the one thing framer's layout projection gets
+                    // wrong here: the leaving cards and their surviving neighbours animate from
+                    // a mis-scaled projection, drifting and growing across ~300ms instead of
+                    // settling. Remounting skips that entirely — the merged row just appears.
+                    // Dragging never changes the count, so reordering keeps its smooth FLIP.
+                    key={terms.length}
                     axis="x"
                     values={terms}
                     onReorder={setTerms}
                     className="expression-list"
                     style={{
-                      scale: expressionScale,
+                      scale: stableScale,
                       transformOrigin: 'center'
                     }}
                   >
@@ -2765,16 +2996,28 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                             key={term.id}
                             value={term}
                             className="term-item-wrapper"
+                            dragElastic={0}
                             whileDrag={{ scale: 1.06 }}
                             exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                            transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                            onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
-                            onDragEnd={() => setIsDraggingTerm(false)}
+                            // Reordering makes every card between the old and new slot hop into
+                            // place live as the drag crosses each one — a close-to-critically-
+                            // damped spring (vs. the more elastic default) keeps each of those
+                            // hops a quick, contained settle instead of a springy overshoot.
+                            transition={{ type: 'spring', stiffness: 700, damping: 50 }}
+                            onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
+                            onDragEnd={() => { setIsDraggingTerm(false); setDraggingCardId(null); }}
                           >
-                            {/* Sign button / text (outside the card box!) */}
+                            {/* Sign button (outside the card box!). It belongs to this term's
+                                position in the ROW, not to the term itself, so it's hidden (not
+                                dragged along) while the term is being picked up — it reappears in
+                                the right place once the term settles into its dropped position.
+                                The FIRST term has no "previous term" to sit between, so its own
+                                leading minus (when negative) lives inside the card instead, same
+                                as any other term's minus does while it's being dragged. */}
                             {!isFirst && (
                               <button
                                 className="operator-btn"
+                                style={{ visibility: draggingCardId === term.id ? 'hidden' : 'visible' }}
                                 onMouseDown={(e) => e.stopPropagation()}
                                 onTouchStart={(e) => e.stopPropagation()}
                                 onClick={() => handleCombine(index)}
@@ -2782,20 +3025,21 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 {formatted.sign}
                               </button>
                             )}
-                            {isFirst && formatted.sign === '-' && (
-                              <span className="operator-static">-</span>
-                            )}
 
                             {/* Term card box (only wraps the value!) */}
                             <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`}>
+                              {formatted.sign === '-' && (isFirst || draggingCardId === term.id) && (
+                                <span className="term-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+                              )}
                               {renderTermValue(term)}
                             </div>
                           </Reorder.Item>
                         );
                       })}
                     </AnimatePresence>
-                  </Reorder.Group>
+                  </ScaledReorderGroup>
                 )}
+                </div>
               </div>
 
               {/* Feedback messages & Actions */}
@@ -2815,7 +3059,8 @@ const handleCombineEquationGroup = (groupIdx, type) => {
             <GameOverScreen
               key="gameover"
               stats={stats}
-              onRestart={handleStart}
+              totalLevels={levels.length || 10}
+              onRestart={handleRestartGame}
             />
           )}
         </AnimatePresence>

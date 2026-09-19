@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
+import { generateBatchCards, optimizeImage } from './swipeSorterUtils';
 import './SwipeSorter.css';
 
 const SWIPE_THRESHOLD = 25; // Pixels to trigger a swipe
@@ -9,8 +10,20 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     const {
         leftLabel = 'FALSE',
         rightLabel = 'CORRECT',
-        cards: initialCards = []
+        cards: initialCards = [],
+        mode = 'manual',
+        batch = '',
+        batchText: aliasBatchText = '',
+        order = 'random',
+        batchOrder: aliasBatchOrder,
+        totalCards = null,
+        batchTotalCards: aliasBatchTotalCards
     } = config;
+
+    const rawBatch = (batch !== undefined && batch !== '') ? batch : aliasBatchText;
+    const effectiveOrder = aliasBatchOrder || order || 'random';
+    const effectiveTotalCards = aliasBatchTotalCards !== undefined ? aliasBatchTotalCards : totalCards;
+    const isBatchMode = mode === 'batch' || (mode !== 'manual' && typeof rawBatch === 'string' && rawBatch.trim().length > 0);
 
     const [cards, setCards] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,6 +40,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     // Logic Refs (Mutable state for events)
     const dragStartRef = useRef(null);
     const dragDeltaRef = useRef({ x: 0, y: 0 });
+    const rafIdRef = useRef(null);
 
     // Render State (For visual feedback)
     const [dragDelta, setDragDelta] = useState({ x: 0, y: 0 });
@@ -34,18 +48,30 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     const [feedback, setFeedback] = useState(null); // 'correct', 'incorrect', null
     const [isShake, setIsShake] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
+    const [optimizedBg, setOptimizedBg] = useState(config.globalBackground || null);
 
     const audioCtxRef = useRef(null);
 
     // Initialize Cards
     useEffect(() => {
-        // Deep copy to avoid mutating prop
-        // Add random ID if not present for keys
-        const preppedCards = (initialCards.length > 0 ? initialCards : [
-            { id: 1, text: '2 + 2 = 4', correctSide: 'right' },
-            { id: 2, text: 'The sky is green', correctSide: 'left' },
-            { id: 3, text: 'Cats are mammals', correctSide: 'right' }
-        ]).map((c, i) => ({ ...c, id: c.id || `card-${i}` }));
+        let preppedCards = [];
+
+        if (isBatchMode && rawBatch && rawBatch.trim().length > 0) {
+            preppedCards = generateBatchCards({
+                batch: rawBatch,
+                order: effectiveOrder,
+                totalCards: effectiveTotalCards,
+                isDeterministic: preview
+            });
+        }
+
+        if (preppedCards.length === 0) {
+            preppedCards = (initialCards.length > 0 ? initialCards : [
+                { id: 1, text: '2 + 2 = 4', correctSide: 'right' },
+                { id: 2, text: 'The sky is green', correctSide: 'left' },
+                { id: 3, text: 'Cats are mammals', correctSide: 'right' }
+            ]).map((c, i) => ({ ...c, id: c.id || `card-${i}` }));
+        }
 
         setCards(preppedCards);
 
@@ -55,7 +81,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             setCurrentIndex(0);
         }
         setIsComplete(false);
-    }, [initialCards, preview]);
+    }, [isBatchMode, rawBatch, effectiveOrder, effectiveTotalCards, initialCards, preview]);
 
     // Audio Setup
     useEffect(() => {
@@ -159,22 +185,28 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     const handleMove = (e) => {
         if (!isDragging || !dragStartRef.current) return;
 
-        // Prevent scrolling on touch move
-        if (e.type === 'touchmove') {
-            // e.preventDefault(); // Handled by CSS
-        }
-
         const { x, y } = getClientCoordinates(e);
 
         const dx = x - dragStartRef.current.x;
         const dy = 0; // Lock vertical movement
 
         dragDeltaRef.current = { x: dx, y: dy };
-        setDragDelta({ x: dx, y: dy }); // Update visual state
+
+        // Batch visual updates with display refresh rate via requestAnimationFrame
+        if (!rafIdRef.current) {
+            rafIdRef.current = requestAnimationFrame(() => {
+                setDragDelta({ x: dragDeltaRef.current.x, y: dragDeltaRef.current.y });
+                rafIdRef.current = null;
+            });
+        }
     };
 
     const handleEnd = () => {
         if (!isDragging) return;
+        if (rafIdRef.current) {
+            cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+        }
         console.log('SwipeSorter: handleEnd', dragDeltaRef.current);
         setIsDragging(false);
 
@@ -298,9 +330,9 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
     const getCardStyle = (index) => {
         if (index === currentIndex) {
-            // Use dragDelta state for rendering
+            // Hardware-accelerated 3D transform for top dragging card
             return {
-                transform: `translate(${dragDelta.x}px, ${dragDelta.y}px) rotate(${dragDelta.x * 0.05}deg)`,
+                transform: `translate3d(${dragDelta.x}px, ${dragDelta.y}px, 0) rotate(${dragDelta.x * 0.05}deg)`,
                 zIndex: 100,
                 opacity: 1
             };
@@ -309,7 +341,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         const offset = index - currentIndex;
         if (offset > 0 && offset < 2) {
             return {
-                transform: `scale(${1 - offset * 0.05}) translateY(${offset * 10}px)`,
+                transform: `scale(${1 - offset * 0.05}) translate3d(0, ${offset * 10}px, 0)`,
                 zIndex: 100 - offset,
                 opacity: 1
             };
@@ -317,7 +349,14 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         return { opacity: 0, pointerEvents: 'none' };
     };
 
-    // ... rest of UseEffects ...
+    // Clean up rAF on unmount
+    useEffect(() => {
+        return () => {
+            if (rafIdRef.current) {
+                cancelAnimationFrame(rafIdRef.current);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         if (isComplete && !preview && onComplete) {
@@ -325,63 +364,41 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         }
     }, [isComplete, preview, onComplete]);
 
+    // Optimize background image if it is a large data URL or image source
     useEffect(() => {
-        if (config.globalBackground && audioCtxRef.current) {
-            // Preload? No.
+        let isCancelled = false;
+        const bg = config.globalBackground;
+        if (!bg) {
+            setOptimizedBg(null);
+            return;
         }
-    }, [config]);
+
+        if (typeof bg === 'string' && (bg.length > 150000 || !bg.startsWith('data:image/jpeg'))) {
+            optimizeImage(bg, 1080, 1920, 0.82).then((res) => {
+                if (!isCancelled && res) {
+                    setOptimizedBg(res);
+                }
+            });
+        } else {
+            setOptimizedBg(bg);
+        }
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [config.globalBackground]);
+
+    const activeBg = optimizedBg || config.globalBackground;
 
     const cardStyle = (index) => {
         const style = getCardStyle(index);
-        if (config.globalBackground) {
-            style.backgroundImage = `url(${config.globalBackground})`;
+        if (activeBg) {
+            style.backgroundImage = `url(${activeBg})`;
             style.backgroundSize = 'cover';
             style.backgroundPosition = 'center';
         }
         return style;
-    }
-
-    // Start Screen state
-    const [hasStarted, setHasStarted] = useState(preview);
-
-    useEffect(() => {
-        if (preview) {
-            setHasStarted(true);
-        }
-    }, [preview]);
-
-    if (!hasStarted) {
-        return (
-            <div className="swipe-sorter-container" style={{ flexDirection: 'column', gap: '20px' }}>
-                <button
-                    onClick={() => setHasStarted(true)}
-                    style={{
-                        padding: '15px 40px',
-                        fontSize: '1.5rem',
-                        fontWeight: 'bold',
-                        backgroundColor: '#2ed573',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '50px',
-                        boxShadow: '0 5px 15px rgba(46, 213, 115, 0.4)',
-                        cursor: 'pointer',
-                        animation: 'pulse 1.5s infinite'
-                    }}
-                >
-                    CHALLENGE
-                </button>
-                <style>
-                    {`
-                        @keyframes pulse {
-                            0% { transform: scale(1); }
-                            50% { transform: scale(1.05); }
-                            100% { transform: scale(1); }
-                        }
-                    `}
-                </style>
-            </div>
-        );
-    }
+    };
 
     if (isComplete && !preview) {
         return null;
@@ -389,8 +406,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
     return (
         <div
-            className="swipe-sorter-container"
-        // Container handlers removed - using Window listeners
+            className={`swipe-sorter-container ${isDragging ? 'is-dragging' : ''}`}
         >
             {/* Banner Overlays */}
             <div className={`swipe-banner left`} style={{ opacity: isDragging && dragDelta.x < -5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0 }}>
@@ -405,24 +421,27 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             </div>
 
             <div className="swipe-card-stack">
-                {cards.map((card, index) => (
-                    <div
-                        key={card.id || index}
-                        className={`swipe-card ${index === currentIndex ? (isDragging ? 'dragging' : '') : ''} ${index === currentIndex && isShake ? 'shake flash-red' : ''}`}
-                        style={cardStyle(index)}
-                        onMouseDown={index === currentIndex ? handleStart : undefined}
-                        onTouchStart={index === currentIndex ? handleStart : undefined}
-                    >
-                        <div className="swipe-card-content" style={config.globalBackground ? { background: 'rgba(255,255,255,0.7)', borderRadius: '16px', padding: '10px' } : {}}>
-                            {card.image && (
-                                <img src={card.image} alt="Card" className="swipe-card-image" draggable="false" />
-                            )}
-                            {card.text && (
-                                <div className="swipe-card-text">{card.text}</div>
-                            )}
+                {cards.slice(currentIndex, currentIndex + 2).map((card, sliceIdx) => {
+                    const index = currentIndex + sliceIdx;
+                    return (
+                        <div
+                            key={card.id || index}
+                            className={`swipe-card ${index === currentIndex ? (isDragging ? 'dragging' : '') : ''} ${index === currentIndex && isShake ? 'shake flash-red' : ''} ${activeBg ? 'has-global-bg' : ''}`}
+                            style={cardStyle(index)}
+                            onMouseDown={index === currentIndex ? handleStart : undefined}
+                            onTouchStart={index === currentIndex ? handleStart : undefined}
+                        >
+                            <div className="swipe-card-content">
+                                {card.image && (
+                                    <img src={card.image} alt="Card" className="swipe-card-image" draggable="false" />
+                                )}
+                                {card.text && (
+                                    <div className="swipe-card-text">{card.text}</div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

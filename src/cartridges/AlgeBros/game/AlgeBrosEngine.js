@@ -497,3 +497,116 @@ export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVa
 
   return false;
 }
+
+/**
+ * Splits a sum string into signed term strings (e.g. "2x + 3 - y" -> ["2x", "3", "-y"]).
+ */
+export function splitAdditiveExpression(exprStr) {
+  if (!exprStr) return [];
+  const clean = exprStr.trim().replace(/\s+/g, '');
+  if (!clean) return [];
+
+  // Match signed chunks: optional leading [+-], followed by everything up to next [+-]
+  const matches = clean.match(/[+-]?[^+-]+/g);
+  if (!matches) return [];
+
+  return matches.map(token => token.startsWith('+') ? token.slice(1) : token).filter(Boolean);
+}
+
+/**
+ * Parses one side of an equation (e.g. "2x + 3" or "(6x - 4) / 2") into numerator and denominator term arrays.
+ */
+export function parseEquationSide(sideStr) {
+  if (!sideStr) return { num: [], den: [] };
+  const clean = sideStr.trim();
+  if (!clean) return { num: [], den: [] };
+
+  const slashIdx = clean.indexOf('/');
+  if (slashIdx === -1) {
+    const tokens = splitAdditiveExpression(clean);
+    return {
+      num: tokens.map(t => parseTermString(t)),
+      den: []
+    };
+  }
+
+  let numPart = clean.slice(0, slashIdx).trim();
+  let denPart = clean.slice(slashIdx + 1).trim();
+
+  // Strip wrapping parentheses: "(2x + 4)" -> "2x + 4"
+  if (numPart.startsWith('(') && numPart.endsWith(')')) {
+    numPart = numPart.slice(1, -1).trim();
+  }
+  if (denPart.startsWith('(') && denPart.endsWith(')')) {
+    denPart = denPart.slice(1, -1).trim();
+  }
+
+  const numTokens = splitAdditiveExpression(numPart);
+  const denTokens = splitAdditiveExpression(denPart);
+
+  return {
+    num: numTokens.map(t => parseTermString(t)),
+    den: denTokens.map(t => parseTermString(t))
+  };
+}
+
+/**
+ * Parses a single equation string like "2x = 6", "2x + 3 = 9", or "3x - 4 = 5 | 2" into a level object.
+ */
+export function parseEquationLevel(lineStr, index = 0) {
+  if (!lineStr) return null;
+  let text = lineStr.trim();
+  if (!text || text.startsWith('#') || text.startsWith('//')) return null;
+
+  // Optional manual minPresses at end, e.g. "2x = 6 | 3" or "2x = 6 [3]"
+  let explicitMinPresses = null;
+  const pipeMatch = text.match(/[|\[]\s*(\d+)\s*\]?$/);
+  if (pipeMatch) {
+    explicitMinPresses = parseInt(pipeMatch[1], 10);
+    text = text.slice(0, pipeMatch.index).trim();
+  }
+
+  const equalsIdx = text.indexOf('=');
+  if (equalsIdx === -1) return null;
+
+  const leftStr = text.slice(0, equalsIdx).trim();
+  const rightStr = text.slice(equalsIdx + 1).trim();
+
+  const left = parseEquationSide(leftStr);
+  const right = parseEquationSide(rightStr);
+
+  let defaultPresses = 3;
+  // Estimate steps: if single var with coeff > 1, ~3 steps (tap to split, drag, simplify)
+  const allTerms = [...left.num, ...left.den, ...right.num, ...right.den];
+  const varTerms = allTerms.filter(t => t.variable);
+  const constTerms = allTerms.filter(t => !t.variable && t.coeff !== 0);
+  if (varTerms.length === 1 && Math.abs(varTerms[0].coeff) > 1 && constTerms.length <= 1) {
+    defaultPresses = 3; // 2x = 6 -> split 2, drag 2 under 6, simplify 6/2
+  } else if (varTerms.length === 1 && constTerms.length >= 2) {
+    defaultPresses = 2; // 2x + 3 = 9 -> transpose 3, then divide
+  }
+
+  return {
+    levelNum: index + 1,
+    initialLeftNum: left.num,
+    initialLeftDen: left.den,
+    initialRightNum: right.num,
+    initialRightDen: right.den,
+    minPresses: explicitMinPresses !== null && !isNaN(explicitMinPresses) ? explicitMinPresses : defaultPresses
+  };
+}
+
+/**
+ * Parses multiline custom equations text into an array of levels.
+ */
+export function parseCustomEquationLevels(text) {
+  if (!text || typeof text !== 'string') return [];
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const levels = [];
+  lines.forEach((line) => {
+    const level = parseEquationLevel(line, levels.length);
+    if (level) levels.push(level);
+  });
+  return levels;
+}
+

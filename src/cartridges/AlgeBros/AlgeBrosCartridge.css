@@ -35,6 +35,19 @@
   touch-action: none;
 }
 
+.algebros-cartridge.has-background {
+  background: transparent !important;
+}
+
+.algebros-cartridge .algebros-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .algebros-cartridge * {
   margin: 0;
   padding: 0;
@@ -70,7 +83,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 24px;
+  padding: 20px 0 16px 0;
 }
 
 /* Start Screen */
@@ -152,13 +165,23 @@
 
 /* HUD Header */
 .algebros-cartridge .hud-header {
-  width: 100%;
+  width: calc(100% - 3.6%);
+  margin-left: 1.8%;
+  margin-right: 1.8%;
+  margin-top: 72px;
+  margin-bottom: 8px;
+  gap: 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 72px;
-  margin-bottom: 12px;
-  gap: 6px;
+  z-index: 10;
+}
+
+.algebros-cartridge .sub-hud-controls {
+  width: calc(100% - 3.6%);
+  margin: 2px 1.8% 6px 1.8%;
+  display: flex;
+  justify-content: flex-end;
   z-index: 10;
 }
 
@@ -190,9 +213,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 40px;
+  gap: 20px;
   z-index: 5;
 }
 
@@ -202,11 +225,47 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px 0;
-  overflow-x: auto;
-  overflow-y: hidden !important;
+  padding: 10px 0;
+  overflow: visible !important;
   scrollbar-width: none;
-  touch-action: pan-x;
+  touch-action: none;
+  z-index: 2;
+  position: relative;
+}
+
+.algebros-cartridge .algebros-equation-banner {
+  width: calc(100% - 3.6%);
+  max-width: calc(100% - 3.6%);
+  margin-left: 1.8%;
+  margin-right: 1.8%;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden !important;
+  padding: 16px 12px;
+  min-height: 135px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Levels whose solution needs a division start out tall enough for the fraction, so the
+   banner never grows mid-level (and the denominator drop zone exists from the first move). */
+.algebros-cartridge .algebros-equation-banner.reserves-fraction {
+  min-height: 185px;
+}
+
+.algebros-cartridge.has-background .algebros-equation-banner {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.14), 0 3px 8px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid rgba(15, 23, 42, 0.08);
+  padding: 16px 12px;
+  overflow: hidden !important;
 }
 
 .algebros-cartridge .expression-wrapper::-webkit-scrollbar {
@@ -216,21 +275,25 @@
 .algebros-cartridge .expression-list {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 6px;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
   min-height: 54px;
+  overflow: visible;
 }
 
 /* Drag Item Card */
 .algebros-cartridge .term-card {
   display: flex;
   align-items: center;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 10px;
+  justify-content: center;
+  height: 46px;
+  min-height: 46px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
   cursor: grab;
   position: relative;
   transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
@@ -239,9 +302,9 @@
 
 .algebros-cartridge .term-card.is-dragging {
   cursor: grabbing;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-color: var(--accent-purple);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
   z-index: 9999999 !important;
   transition: none !important;
 }
@@ -262,8 +325,8 @@
   background: rgba(139, 92, 246, 0.12) !important;
   box-shadow: 0 0 14px rgba(139, 92, 246, 0.25) !important;
   min-width: 38px;
-  height: 36px;
-  border-radius: 8px;
+  height: 42px;
+  border-radius: 10px;
   pointer-events: none !important;
   animation: pulseSlotHint 1.2s infinite ease-in-out;
 }
@@ -281,16 +344,18 @@
 
 /* Sign / Operator Button component */
 .algebros-cartridge .operator-btn {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  min-height: 26px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid rgba(15, 23, 42, 0.25);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(15, 23, 42, 0.28);
   color: var(--text-main);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 800;
   margin-right: 4px;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
   pointer-events: auto; /* Ensure clickable */
   display: flex;
@@ -298,6 +363,19 @@
   justify-content: center;
   line-height: 1;
   padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 5;
+}
+
+.algebros-cartridge .operator-btn::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: -8px;
+  right: -8px;
+  border-radius: 50%;
 }
 
 /* Transition to clear text equation on level completion */
@@ -406,13 +484,14 @@
 
 /* Bottom Controls */
 .algebros-cartridge .bottom-controls {
-  width: 100%;
+  width: calc(100% - 3.6%);
+  margin: 20px 1.8% 0 1.8%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   z-index: 10;
-  margin-top: 20px;
+  padding-bottom: 24px;
 }
 
 /* Ready Button */
@@ -726,16 +805,18 @@
 }
 
 .algebros-cartridge .dot-separator-btn {
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 900;
   color: var(--text-main);
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  opacity: 0.8;
-  margin: 0 8px;
+  border: 1.5px solid var(--glass-border);
+  opacity: 0.85;
+  margin: 0 6px;
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  min-height: 26px;
   border-radius: 50%;
   display: inline-flex;
   justify-content: center;
@@ -746,6 +827,17 @@
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(8px);
   pointer-events: auto !important;
+  position: relative;
+}
+
+.algebros-cartridge .dot-separator-btn::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: -8px;
+  right: -8px;
+  border-radius: 50%;
 }
 
 .algebros-cartridge .dot-separator-btn:hover {
@@ -794,24 +886,27 @@
 }
 
 .algebros-cartridge .equation-layout .term-card {
-  height: 36px;
-  padding: 0 9px;
-  border-radius: 8px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
 }
 
 .algebros-cartridge .equation-layout .term-value {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
 }
 
 .algebros-cartridge .equation-layout .term-value sup {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .algebros-cartridge .equation-layout .dot-separator-btn {
-  margin: 0 3px;
-  width: 20px;
-  height: 20px;
-  font-size: 0.95rem;
+  margin: 0 4px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  font-size: 1.15rem;
 }
 
 .algebros-cartridge .equals-sign {

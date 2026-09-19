@@ -10,6 +10,7 @@ import { ELEMENT_TYPES } from '../../types';
 import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import { isCharacterElement, setImageShadowPreference } from '../../utils/characterShadow';
 import { evaluateMathExpression, parseFieldExpression } from '../../utils/fieldQuizUtils';
+import { parseBatchCards, optimizeImage } from '../../cartridges/SwipeSorter/swipeSorterUtils';
 import { EMOJI_DATA } from '../../utils/emojiData';
 
 const CRATE_MAP = {
@@ -2226,15 +2227,24 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         <input
                                             type="file"
                                             accept="image/*"
-                                            onChange={(e) => {
+                                            onChange={async (e) => {
                                                 const file = e.target.files[0];
                                                 if (!file) return;
-                                                const reader = new FileReader();
-                                                reader.onload = (ev) => {
-                                                    const newConfig = { ...element.config, globalBackground: ev.target.result };
-                                                    onChange('cartridge', { config: newConfig });
-                                                };
-                                                reader.readAsDataURL(file);
+                                                try {
+                                                    const optimized = await optimizeImage(file, 1080, 1920, 0.82);
+                                                    if (optimized) {
+                                                        const newConfig = { ...element.config, globalBackground: optimized };
+                                                        onChange('cartridge', { config: newConfig });
+                                                    }
+                                                } catch (err) {
+                                                    console.warn('Failed to optimize image, falling back to FileReader:', err);
+                                                    const reader = new FileReader();
+                                                    reader.onload = (ev) => {
+                                                        const newConfig = { ...element.config, globalBackground: ev.target.result };
+                                                        onChange('cartridge', { config: newConfig });
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
                                             }}
                                             style={{ width: '100%', fontSize: '0.7rem' }}
                                         />
@@ -2248,134 +2258,362 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
                             <div className="menu-divider"></div>
 
-                            <div className="menu-group" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '5px' }}>
-                                    <label>Cards ({activeCardIndex + 1} / {element.config?.cards?.length || 0})</label>
-                                    <div style={{ display: 'flex', gap: '5px' }}>
-                                        <button className="btn-icon" onClick={() => {
-                                            const newIndex = Math.max(0, activeCardIndex - 1);
-                                            setActiveCardIndex(newIndex);
-                                            onChange('cartridge', { config: { ...element.config, previewIndex: newIndex } });
-                                        }} disabled={activeCardIndex === 0}>◀</button>
-                                        <span style={{ fontSize: '0.8rem', alignSelf: 'center' }}>{activeCardIndex + 1}</span>
-                                        <button className="btn-icon" onClick={() => {
-                                            const newIndex = Math.min((element.config?.cards?.length || 1) - 1, activeCardIndex + 1);
-                                            setActiveCardIndex(newIndex);
-                                            onChange('cartridge', { config: { ...element.config, previewIndex: newIndex } });
-                                        }} disabled={activeCardIndex >= (element.config?.cards?.length || 1) - 1}>▶</button>
-                                        <button className="btn-icon" onClick={() => {
-                                            if (activeCardIndex === 0) return;
-                                            const newCards = [...element.config.cards];
-                                            const temp = newCards[activeCardIndex - 1];
-                                            newCards[activeCardIndex - 1] = newCards[activeCardIndex];
-                                            newCards[activeCardIndex] = temp;
-                                            onChange('cartridge', { config: { ...element.config, cards: newCards } });
-                                            setActiveCardIndex(activeCardIndex - 1);
-                                        }} disabled={activeCardIndex === 0} title="Move Left">⬅️</button>
-                                        <button className="btn-icon" onClick={() => {
-                                            if (activeCardIndex >= element.config.cards.length - 1) return;
-                                            const newCards = [...element.config.cards];
-                                            const temp = newCards[activeCardIndex + 1];
-                                            newCards[activeCardIndex + 1] = newCards[activeCardIndex];
-                                            newCards[activeCardIndex] = temp;
-                                            onChange('cartridge', { config: { ...element.config, cards: newCards } });
-                                            setActiveCardIndex(activeCardIndex + 1);
-                                        }} disabled={activeCardIndex >= element.config.cards.length - 1} title="Move Right">➡️</button>
-                                        <button className="btn-icon" onClick={() => {
-                                            const newCards = [...(element.config?.cards || [])];
-                                            newCards.push({ id: Date.now(), text: 'New Card', correctSide: 'right' });
-                                            onChange('cartridge', { config: { ...element.config, cards: newCards, previewIndex: newCards.length - 1 } });
-                                            setActiveCardIndex(newCards.length - 1);
-                                        }} title="Add Card">➕</button>
-                                        <button className="btn-icon" onClick={() => {
-                                            const newCards = [...(element.config?.cards || [])];
-                                            if (newCards.length <= 1) return;
-                                            newCards.splice(activeCardIndex, 1);
-                                            const newIndex = Math.max(0, activeCardIndex - 1);
-                                            onChange('cartridge', { config: { ...element.config, cards: newCards, previewIndex: newIndex } });
-                                            setActiveCardIndex(newIndex);
-                                        }} title="Delete Card" disabled={(element.config?.cards?.length || 0) <= 1}>🗑️</button>
-                                    </div>
+                            {/* Mode Switcher: Manual vs Batch */}
+                            <div className="menu-group">
+                                <label>Mode</label>
+                                <div style={{
+                                    display: 'flex',
+                                    background: '#f1f5f9',
+                                    borderRadius: '8px',
+                                    padding: '2px',
+                                    gap: '2px',
+                                    width: '100%'
+                                }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => onChange('cartridge', { config: { ...element.config, mode: 'manual' } })}
+                                        style={{
+                                            flex: 1,
+                                            padding: '4px 8px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: 700,
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            background: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'manual' ? '#ffffff' : 'transparent',
+                                            color: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'manual' ? '#0f172a' : '#64748b',
+                                            boxShadow: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'manual' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                            transition: 'all 0.15s ease'
+                                        }}
+                                    >
+                                        ✍️ Manual
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => onChange('cartridge', { config: { ...element.config, mode: 'batch' } })}
+                                        style={{
+                                            flex: 1,
+                                            padding: '4px 8px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: 700,
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            background: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'batch' ? '#ffffff' : 'transparent',
+                                            color: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'batch' ? '#0f172a' : '#64748b',
+                                            boxShadow: (element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'batch' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                            transition: 'all 0.15s ease'
+                                        }}
+                                    >
+                                        📑 Batch
+                                    </button>
                                 </div>
+                            </div>
 
-                                {element.config?.cards && element.config.cards[activeCardIndex] && (
-                                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '5px', background: 'rgba(0,0,0,0.05)', padding: '5px', borderRadius: '4px' }}>
-                                        <textarea
-                                            value={element.config.cards[activeCardIndex].text || ''}
-                                            onChange={(e) => {
+                            <div className="menu-divider"></div>
+
+                            {/* Manual Mode Editor */}
+                            {(element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'manual' && (
+                                <div className="menu-group" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '5px' }}>
+                                        <label>Cards ({activeCardIndex + 1} / {element.config?.cards?.length || 0})</label>
+                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                            <button className="btn-icon" onClick={() => {
+                                                const newIndex = Math.max(0, activeCardIndex - 1);
+                                                setActiveCardIndex(newIndex);
+                                                onChange('cartridge', { config: { ...element.config, previewIndex: newIndex } });
+                                            }} disabled={activeCardIndex === 0}>◀</button>
+                                            <span style={{ fontSize: '0.8rem', alignSelf: 'center' }}>{activeCardIndex + 1}</span>
+                                            <button className="btn-icon" onClick={() => {
+                                                const newIndex = Math.min((element.config?.cards?.length || 1) - 1, activeCardIndex + 1);
+                                                setActiveCardIndex(newIndex);
+                                                onChange('cartridge', { config: { ...element.config, previewIndex: newIndex } });
+                                            }} disabled={activeCardIndex >= (element.config?.cards?.length || 1) - 1}>▶</button>
+                                            <button className="btn-icon" onClick={() => {
+                                                if (activeCardIndex === 0) return;
                                                 const newCards = [...element.config.cards];
-                                                newCards[activeCardIndex] = { ...newCards[activeCardIndex], text: e.target.value };
+                                                const temp = newCards[activeCardIndex - 1];
+                                                newCards[activeCardIndex - 1] = newCards[activeCardIndex];
+                                                newCards[activeCardIndex] = temp;
                                                 onChange('cartridge', { config: { ...element.config, cards: newCards } });
-                                            }}
-                                            placeholder="Card Text"
-                                            style={{ width: '100%', height: '40px', fontSize: '0.8rem' }}
-                                        />
-
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <label style={{ fontSize: '0.7rem' }}>Image:</label>
-                                                <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                                                    <button
-                                                        className="btn-secondary"
-                                                        onClick={() => {
-                                                            onOpenLibrary('custom', (selectedImage) => {
-                                                                const newCards = [...element.config.cards];
-                                                                newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: selectedImage };
-                                                                onChange('cartridge', { config: { ...element.config, cards: newCards } });
-                                                            });
-                                                        }}
-                                                        style={{ fontSize: '0.7rem', padding: '4px 8px' }}
-                                                    >
-                                                        LIBRARY
-                                                    </button>
-                                                    {element.config.cards[activeCardIndex].image && (
-                                                        <button
-                                                            className="btn-icon"
-                                                            style={{ fontSize: '0.8rem', padding: '2px 5px' }}
-                                                            onClick={() => {
-                                                                const newCards = [...element.config.cards];
-                                                                newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: null };
-                                                                onChange('cartridge', { config: { ...element.config, cards: newCards } });
-                                                            }}
-                                                            title="Clear Image"
-                                                        >
-                                                            ❌
-                                                        </button>
-                                                    )}
-                                                </div>
-                                                {element.config.cards[activeCardIndex].image && <span title="Image Set">🖼️</span>}
-                                            </div>
-                                            <small style={{ fontSize: '0.65rem', color: '#888', fontStyle: 'italic', textAlign: 'right' }}>Rec: 600x800 (3:4)</small>
+                                                setActiveCardIndex(activeCardIndex - 1);
+                                            }} disabled={activeCardIndex === 0} title="Move Left">⬅️</button>
+                                            <button className="btn-icon" onClick={() => {
+                                                if (activeCardIndex >= element.config.cards.length - 1) return;
+                                                const newCards = [...element.config.cards];
+                                                const temp = newCards[activeCardIndex + 1];
+                                                newCards[activeCardIndex + 1] = newCards[activeCardIndex];
+                                                newCards[activeCardIndex] = temp;
+                                                onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                setActiveCardIndex(activeCardIndex + 1);
+                                            }} disabled={activeCardIndex >= element.config.cards.length - 1} title="Move Right">➡️</button>
+                                            <button className="btn-icon" onClick={() => {
+                                                const newCards = [...(element.config?.cards || [])];
+                                                newCards.push({ id: Date.now(), text: 'New Card', correctSide: 'right' });
+                                                onChange('cartridge', { config: { ...element.config, cards: newCards, previewIndex: newCards.length - 1 } });
+                                                setActiveCardIndex(newCards.length - 1);
+                                            }} title="Add Card">➕</button>
+                                            <button className="btn-icon" onClick={() => {
+                                                const newCards = [...(element.config?.cards || [])];
+                                                if (newCards.length <= 1) return;
+                                                newCards.splice(activeCardIndex, 1);
+                                                const newIndex = Math.max(0, activeCardIndex - 1);
+                                                onChange('cartridge', { config: { ...element.config, cards: newCards, previewIndex: newIndex } });
+                                                setActiveCardIndex(newIndex);
+                                            }} title="Delete Card" disabled={(element.config?.cards?.length || 0) <= 1}>🗑️</button>
                                         </div>
+                                    </div>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <label style={{ fontSize: '0.7rem' }}>Correct Side:</label>
-                                            <button
-                                                onClick={() => {
+                                    {element.config?.cards && element.config.cards[activeCardIndex] && (
+                                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '5px', background: 'rgba(0,0,0,0.05)', padding: '5px', borderRadius: '4px' }}>
+                                            <textarea
+                                                value={element.config.cards[activeCardIndex].text || ''}
+                                                onChange={(e) => {
                                                     const newCards = [...element.config.cards];
-                                                    const current = newCards[activeCardIndex].correctSide;
-                                                    newCards[activeCardIndex] = { ...newCards[activeCardIndex], correctSide: current === 'left' ? 'right' : 'left' };
+                                                    newCards[activeCardIndex] = { ...newCards[activeCardIndex], text: e.target.value };
                                                     onChange('cartridge', { config: { ...element.config, cards: newCards } });
                                                 }}
-                                                style={{
-                                                    fontSize: '0.8rem',
-                                                    padding: '4px 10px',
-                                                    borderRadius: '15px',
-                                                    border: 'none',
-                                                    background: element.config.cards[activeCardIndex].correctSide === 'left' ? '#ff9f43' : '#a55eea',
-                                                    color: 'white',
-                                                    cursor: 'pointer',
-                                                    transition: 'background 0.3s',
-                                                    width: '80px',
-                                                    fontWeight: 'bold'
-                                                }}
-                                            >
-                                                {element.config.cards[activeCardIndex].correctSide === 'left' ? 'Left' : 'Right'}
-                                            </button>
+                                                placeholder="Card Text"
+                                                style={{ width: '100%', height: '40px', fontSize: '0.8rem' }}
+                                            />
+
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <label style={{ fontSize: '0.7rem' }}>Image:</label>
+                                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                                                        <button
+                                                            className="btn-secondary"
+                                                            onClick={() => {
+                                                                onOpenLibrary('custom', (selectedImage) => {
+                                                                    const newCards = [...element.config.cards];
+                                                                    newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: selectedImage };
+                                                                    onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                                });
+                                                            }}
+                                                            style={{ fontSize: '0.7rem', padding: '4px 8px' }}
+                                                        >
+                                                            LIBRARY
+                                                        </button>
+                                                        {element.config.cards[activeCardIndex].image && (
+                                                            <button
+                                                                className="btn-icon"
+                                                                style={{ fontSize: '0.8rem', padding: '2px 5px' }}
+                                                                onClick={() => {
+                                                                    const newCards = [...element.config.cards];
+                                                                    newCards[activeCardIndex] = { ...newCards[activeCardIndex], image: null };
+                                                                    onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                                }}
+                                                                title="Clear Image"
+                                                            >
+                                                                ❌
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                    {element.config.cards[activeCardIndex].image && <span title="Image Set">🖼️</span>}
+                                                </div>
+                                                <small style={{ fontSize: '0.65rem', color: '#888', fontStyle: 'italic', textAlign: 'right' }}>Rec: 600x800 (3:4)</small>
+                                            </div>
+
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <label style={{ fontSize: '0.7rem' }}>Correct Side:</label>
+                                                <button
+                                                    onClick={() => {
+                                                        const newCards = [...element.config.cards];
+                                                        const current = newCards[activeCardIndex].correctSide;
+                                                        newCards[activeCardIndex] = { ...newCards[activeCardIndex], correctSide: current === 'left' ? 'right' : 'left' };
+                                                        onChange('cartridge', { config: { ...element.config, cards: newCards } });
+                                                    }}
+                                                    style={{
+                                                        fontSize: '0.8rem',
+                                                        padding: '4px 10px',
+                                                        borderRadius: '15px',
+                                                        border: 'none',
+                                                        background: element.config.cards[activeCardIndex].correctSide === 'left' ? '#ff9f43' : '#a55eea',
+                                                        color: 'white',
+                                                        cursor: 'pointer',
+                                                        transition: 'background 0.3s',
+                                                        width: '80px',
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                >
+                                                    {element.config.cards[activeCardIndex].correctSide === 'left' ? 'Left' : 'Right'}
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Batch Mode Editor */}
+                            {(element.config?.mode || (element.config?.batch ? 'batch' : 'manual')) === 'batch' && (() => {
+                                const batchText = element.config?.batch || '';
+                                const { left: parsedLeft, right: parsedRight } = parseBatchCards(batchText);
+                                const totalParsed = parsedLeft.length + parsedRight.length;
+                                const isRandom = (element.config?.order || element.config?.batchOrder || 'random') === 'random';
+                                const totalCardsVal = element.config?.totalCards !== undefined
+                                    ? element.config.totalCards
+                                    : (element.config?.batchTotalCards !== undefined ? element.config.batchTotalCards : '');
+
+                                return (
+                                    <>
+                                        <div className="menu-group" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                                                <label style={{ fontWeight: 700, fontSize: '0.8rem' }}>Batch List</label>
+                                                {totalParsed > 0 && (
+                                                    <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>
+                                                        {totalParsed} cards
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <small style={{ fontSize: '0.68rem', color: '#64748b', lineHeight: 1.3 }}>
+                                                Top group = swiped <b>{element.config?.leftLabel || 'Left'}</b>. Blank line separator. Second group = swiped <b>{element.config?.rightLabel || 'Right'}</b>. One phrase per line.
+                                            </small>
+                                            <textarea
+                                                value={batchText}
+                                                onChange={(e) => {
+                                                    const newBatch = e.target.value;
+                                                    onChange('cartridge', {
+                                                        config: {
+                                                            ...element.config,
+                                                            batch: newBatch,
+                                                            batchText: newBatch
+                                                        }
+                                                    });
+                                                }}
+                                                placeholder={"The moon is cheese\n2 + 2 = 5\n\nWater is wet\n2 + 2 = 4"}
+                                                rows={7}
+                                                style={{
+                                                    width: '100%',
+                                                    minHeight: '130px',
+                                                    fontSize: '0.78rem',
+                                                    lineHeight: '1.45',
+                                                    padding: '8px',
+                                                    fontFamily: 'monospace',
+                                                    borderRadius: '6px',
+                                                    border: '1px solid #cbd5e1',
+                                                    resize: 'vertical'
+                                                }}
+                                            />
+
+                                            {/* Parsed Group Summary */}
+                                            <div style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                fontSize: '0.7rem',
+                                                padding: '4px 6px',
+                                                background: '#f8fafc',
+                                                borderRadius: '6px',
+                                                border: '1px solid #e2e8f0'
+                                            }}>
+                                                <span>
+                                                    👈 <b>{parsedLeft.length}</b> {element.config?.leftLabel || 'Left'}
+                                                </span>
+                                                <span style={{ color: '#cbd5e1' }}>|</span>
+                                                <span>
+                                                    👉 <b>{parsedRight.length}</b> {element.config?.rightLabel || 'Right'}
+                                                </span>
+                                                <span style={{ color: '#cbd5e1' }}>|</span>
+                                                <span style={{ fontWeight: 700, color: totalParsed > 0 ? '#10b981' : '#94a3b8' }}>
+                                                    Total: {totalParsed}
+                                                </span>
+                                            </div>
+
+                                            {batchText.trim().length > 0 && parsedLeft.length > 0 && parsedRight.length === 0 && (
+                                                <div style={{ fontSize: '0.68rem', color: '#f59e0b', fontStyle: 'italic', marginTop: '2px' }}>
+                                                    ⚠️ Add an empty line between groups to set Right cards.
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="menu-divider"></div>
+
+                                        {/* Order Toggle: Random vs Linear */}
+                                        <div className="menu-group">
+                                            <label>Order</label>
+                                            <div style={{
+                                                display: 'flex',
+                                                background: '#f1f5f9',
+                                                borderRadius: '8px',
+                                                padding: '2px',
+                                                gap: '2px',
+                                                width: '100%'
+                                            }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onChange('cartridge', { config: { ...element.config, order: 'random', batchOrder: 'random' } })}
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '4px 8px',
+                                                        fontSize: '0.75rem',
+                                                        fontWeight: 700,
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: 'pointer',
+                                                        background: isRandom ? '#ffffff' : 'transparent',
+                                                        color: isRandom ? '#0f172a' : '#64748b',
+                                                        boxShadow: isRandom ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                                        transition: 'all 0.15s ease'
+                                                    }}
+                                                >
+                                                    🎲 Random
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onChange('cartridge', { config: { ...element.config, order: 'linear', batchOrder: 'linear' } })}
+                                                    style={{
+                                                        flex: 1,
+                                                        padding: '4px 8px',
+                                                        fontSize: '0.75rem',
+                                                        fontWeight: 700,
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: 'pointer',
+                                                        background: !isRandom ? '#ffffff' : 'transparent',
+                                                        color: !isRandom ? '#0f172a' : '#64748b',
+                                                        boxShadow: !isRandom ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                                        transition: 'all 0.15s ease'
+                                                    }}
+                                                >
+                                                    ➡️ Linear
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Total Cards Setting */}
+                                        <div className="menu-group">
+                                            <label>Total Cards</label>
+                                            <div style={{ display: 'flex', gap: '6px', width: '100%', alignItems: 'center' }}>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max={totalParsed || 999}
+                                                    placeholder={totalParsed > 0 ? `All (${totalParsed})` : 'All'}
+                                                    value={totalCardsVal}
+                                                    onChange={(e) => {
+                                                        const raw = e.target.value;
+                                                        const val = raw === '' ? '' : Math.max(1, parseInt(raw, 10) || 1);
+                                                        onChange('cartridge', { config: { ...element.config, totalCards: val, batchTotalCards: val } });
+                                                    }}
+                                                    style={{ flex: 1, padding: '5px', fontSize: '0.8rem' }}
+                                                />
+                                                {totalCardsVal !== '' && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn-icon"
+                                                        onClick={() => onChange('cartridge', { config: { ...element.config, totalCards: '', batchTotalCards: '' } })}
+                                                        title="Use All Cards"
+                                                        style={{ fontSize: '0.75rem', padding: '4px 8px' }}
+                                                    >
+                                                        All
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </>
+                                );
+                            })()}
                         </>
                     )}
 
@@ -2420,31 +2658,151 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
 
                     {/* AlgeBros Settings */}
-                    {element.cartridgeType === 'AlgeBros' && (
-                        <>
-                            <div className="menu-group">
-                                <label>Start Lvl</label>
-                                <input
-                                    type="number"
-                                    min="1" max="10"
-                                    value={element.config?.startLevel || 1}
-                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, startLevel: parseInt(e.target.value) } })}
-                                    style={{ width: '50px' }}
-                                />
-                            </div>
+                    {element.cartridgeType === 'AlgeBros' && (() => {
+                        const currentTopic = element.config?.topic || 'equations';
+                        const customLines = (element.config?.equationText || '')
+                            .split('\n')
+                            .map(l => l.trim())
+                            .filter(l => l && !l.startsWith('#'));
+                        const maxLevels = (currentTopic === 'equations' && customLines.length > 0) ? customLines.length : 10;
 
-                            <div className="menu-group">
-                                <label>Target Lvl</label>
-                                <input
-                                    type="number"
-                                    min={element.config?.startLevel || 1} max="10"
-                                    value={element.config?.targetLevel || 10}
-                                    onChange={(e) => onChange('cartridge', { config: { ...element.config, targetLevel: parseInt(e.target.value) } })}
-                                    style={{ width: '50px' }}
-                                />
-                            </div>
-                        </>
-                    )}
+                        return (
+                            <>
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Topic</label>
+                                    <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '2px', borderRadius: '6px' }}>
+                                        {[
+                                            { id: 'equations', label: '⚖️ Equations' },
+                                            { id: 'divisions', label: '🌸 Divisions' },
+                                            { id: 'liketerms', label: '📐 Like Terms' }
+                                        ].map(t => {
+                                            const isSelected = currentTopic === t.id;
+                                            return (
+                                                <button
+                                                    key={t.id}
+                                                    type="button"
+                                                    onClick={() => onChange('cartridge', { config: { ...element.config, topic: t.id } })}
+                                                    style={{
+                                                        padding: '3px 8px',
+                                                        fontSize: '0.72rem',
+                                                        fontWeight: isSelected ? 700 : 500,
+                                                        border: 'none',
+                                                        borderRadius: '4px',
+                                                        background: isSelected ? '#ffffff' : 'transparent',
+                                                        color: isSelected ? '#4f46e5' : '#64748b',
+                                                        boxShadow: isSelected ? '0 1px 2px rgba(0,0,0,0.1)' : 'none',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    {t.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {currentTopic === 'equations' && (
+                                    <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
+                                            Equations (1 per line)
+                                        </label>
+                                        <textarea
+                                            value={element.config?.equationText ?? ''}
+                                            onChange={(e) => onChange('cartridge', { config: { ...element.config, equationText: e.target.value } })}
+                                            placeholder={"2x = 6\n2x + 3 = 9\n3x - 4 = 5"}
+                                            rows={3}
+                                            style={{
+                                                fontFamily: 'monospace',
+                                                fontSize: '0.75rem',
+                                                padding: '4px 6px',
+                                                borderRadius: '6px',
+                                                border: '1px solid #cbd5e1',
+                                                background: '#ffffff',
+                                                resize: 'vertical',
+                                                minHeight: '52px',
+                                                width: '180px'
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Background</label>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <button
+                                            type="button"
+                                            className="btn-secondary"
+                                            onClick={() => {
+                                                if (onOpenLibrary) {
+                                                    onOpenLibrary('custom-bg', (selectedImage) => {
+                                                        onChange('cartridge', { config: { ...element.config, background: selectedImage } });
+                                                    });
+                                                }
+                                            }}
+                                            style={{ fontSize: '0.75rem', padding: '4px 8px', fontWeight: 'bold' }}
+                                            title="Choose Background from Library"
+                                        >
+                                            🖼️ LIBRARY
+                                        </button>
+                                        <label
+                                            className="btn-secondary"
+                                            style={{ fontSize: '0.75rem', padding: '4px 8px', cursor: 'pointer', margin: 0, display: 'inline-flex', alignItems: 'center' }}
+                                            title="Upload Custom Image"
+                                        >
+                                            📁 UPLOAD
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (!file) return;
+                                                    const reader = new FileReader();
+                                                    reader.onload = (ev) => {
+                                                        onChange('cartridge', { config: { ...element.config, background: ev.target.result } });
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }}
+                                                style={{ display: 'none' }}
+                                            />
+                                        </label>
+                                        {element.config?.background && (
+                                            <button
+                                                type="button"
+                                                className="btn-icon"
+                                                onClick={() => onChange('cartridge', { config: { ...element.config, background: null } })}
+                                                title="Clear Background"
+                                                style={{ fontSize: '0.85rem' }}
+                                            >
+                                                ❌
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="menu-group">
+                                    <label>Start Lvl</label>
+                                    <input
+                                        type="number"
+                                        min="1" max={maxLevels}
+                                        value={element.config?.startLevel || 1}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, startLevel: parseInt(e.target.value) } })}
+                                        style={{ width: '50px' }}
+                                    />
+                                </div>
+
+                                <div className="menu-group">
+                                    <label>Target Lvl</label>
+                                    <input
+                                        type="number"
+                                        min={element.config?.startLevel || 1} max={maxLevels}
+                                        value={element.config?.targetLevel || maxLevels}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, targetLevel: parseInt(e.target.value) } })}
+                                        style={{ width: '50px' }}
+                                    />
+                                </div>
+                            </>
+                        );
+                    })()}
 
                     {/* Balanza Settings */}
                     {element.cartridgeType === 'Balanza' && (
@@ -2619,6 +2977,48 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                 }}
                                             >
                                                 {g.label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Invert</label>
+                                <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '2px', border: '1px solid #cbd5e1' }}>
+                                    {[
+                                        { id: false, label: 'Off', title: 'Disable inverting cards on tap' },
+                                        { id: true, label: 'On', title: 'Enable inverting cards on tap' }
+                                    ].map((opt) => {
+                                        const isCurrent = !!(element.config?.invert || element.config?.allowInvert);
+                                        const isActive = isCurrent === opt.id;
+                                        return (
+                                            <button
+                                                key={opt.label}
+                                                type="button"
+                                                title={opt.title}
+                                                onClick={() => {
+                                                    onChange('cartridge', {
+                                                        config: {
+                                                            ...element.config,
+                                                            invert: opt.id
+                                                        }
+                                                    });
+                                                }}
+                                                style={{
+                                                    padding: '3px 10px',
+                                                    fontSize: '0.75rem',
+                                                    fontFamily: 'Outfit, sans-serif',
+                                                    fontWeight: isActive ? 800 : 500,
+                                                    background: isActive ? '#ffffff' : 'transparent',
+                                                    color: isActive ? '#0f172a' : '#64748b',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {opt.label}
                                             </button>
                                         );
                                     })}

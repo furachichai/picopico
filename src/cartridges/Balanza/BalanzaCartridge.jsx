@@ -215,11 +215,17 @@ function PlateTile({
   );
 }
 
-function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped }) {
+function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped, allowInvert = false }) {
   const [isInverted, setIsInverted] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const pointerStartRef = useRef(null);
   const isDraggingRef = useRef(false);
+
+  useEffect(() => {
+    if (!allowInvert && isInverted) {
+      setIsInverted(false);
+    }
+  }, [allowInvert, isInverted]);
 
   const isCurrentlyDragging = isDragging === `menu-${item.key}`;
   const effectiveAvailable = isCurrentlyDragging ? item.available - 1 : item.available;
@@ -303,6 +309,7 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped }) 
 
       // Single tap: rotate on vertical axis
       if (!wasDragging && elapsed < 500 && !isRotating) {
+        if (!allowInvert) return;
         setIsRotating(true);
         setIsInverted(prev => !prev);
         unlockAudio();
@@ -405,6 +412,7 @@ export default function BalanzaCartridge({
   const showZeroTiles = !!config.showZeroTiles;
   const freeMovement = config.freeMovement !== false && config.allowFreeMovement !== false;
   const showEquation = config.showEquation !== false;
+  const allowInvert = !!(config.invert || config.allowInvert);
 
   const isLeftLocked = useMemo(() => !!(config.lockLeftPlate || config.leftPlateLocked || config.lockedPlate === 'left'), [config]);
   const isRightLocked = useMemo(() => !!(config.lockRightPlate || config.rightPlateLocked || config.lockedPlate === 'right'), [config]);
@@ -701,7 +709,7 @@ export default function BalanzaCartridge({
         )}
         <div className="balanza-menu">
           {menuItems.map(item => (
-            <MenuTile key={item.key} item={item} cartridgeRef={cartridgeRef} />
+            <MenuTile key={item.key} item={item} cartridgeRef={cartridgeRef} allowInvert={allowInvert} />
           ))}
         </div>
       </div>
@@ -1309,6 +1317,7 @@ export default function BalanzaCartridge({
             isDragging={draggingKey}
             isBumped={bumpingMenuKey === item.key}
             onDragStart={handleTileDragStart}
+            allowInvert={allowInvert}
           />
         ))}
       </div>

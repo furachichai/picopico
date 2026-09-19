@@ -484,7 +484,7 @@ const Player = () => {
             'button, input, select, textarea, a, label, summary, ' +
             '[role="button"], [role="slider"], [role="checkbox"], [role="radio"], [role="tab"], [role="switch"], [role="link"], ' +
             '.balanza-tile, .balanza-menu-tile, .balanza-restart-btn, ' +
-            '.algebros-card, .algebros-slot, .algebros-op-btn, ' +
+            '.algebros-cartridge, .algebros-equation-banner, .algebros-card, .algebros-slot, .algebros-op-btn, .term-card, .term-item-wrapper, .term-group-wrapper, .drop-slot-placeholder, .dot-separator-btn, .operator-btn, .factor-option-btn, .floating-reset-btn, .ready-submit-btn, ' +
             '.fraction-slice, .swipe-card, ' +
             '.quiz-option, .chatquiz-option-btn, .match-card, .conecta-item, .nl-knob-player, .quiz-ready-btn, ' +
             '.explorenl-pointer, .explorenl-equation-card, ' +
@@ -518,6 +518,10 @@ const Player = () => {
         // Determine what kind of interactive is on the current slide (open manipulatives are not blocking games)
         const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
         const hasCartridge = !!isGame && !solvedSlides.has(currentSlideIndex);
+
+        // While playing a game cartridge, navigation is completely disabled with NO shaking
+        if (hasCartridge || isGameActive) return;
+
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
         const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
@@ -562,7 +566,8 @@ const Player = () => {
     const swipeRef = useRef(null);
 
     const handlePointerDown = (e) => {
-        if (isInteractiveElement(e.target)) {
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive;
+        if (isGamePlaying || isInteractiveElement(e.target)) {
             swipeRef.current = null;
             return;
         }
@@ -573,6 +578,9 @@ const Player = () => {
         const gesture = swipeRef.current;
         swipeRef.current = null;
         if (!gesture) return;
+
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive;
+        if (isGamePlaying) return;
 
         const dx = e.clientX - gesture.startX;
         const dy = e.clientY - gesture.startY;
@@ -656,7 +664,7 @@ const Player = () => {
                 onPointerDown={handlePointerDown}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
-                style={{ touchAction: 'pan-y' }}
+                style={{ touchAction: hasCartridge ? 'none' : 'pan-y' }}
             >
                 {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
