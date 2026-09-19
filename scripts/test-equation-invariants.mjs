@@ -8,6 +8,7 @@
  */
 import {
   makeTerm,
+  combineTerms,
   isEquivalentTransformation,
   canMoveToDenominator,
   findDistributiveCancel,
@@ -18,6 +19,9 @@ import {
   parseWeights,
   plateDelta,
   nearlyEqual,
+  buildEquationLineText,
+  checkBalanzaGoal,
+  isPlateFullySimplified,
 } from '../src/cartridges/Balanza/game/BalanzaEngine.js';
 
 let passed = 0;
@@ -276,6 +280,160 @@ for (let run = 0; run < 200; run++) {
 check(`fuzz: ${balanzaMoves} transposes never moved the beam`, balanzaViolations === 0);
 check(`Balanza fuzz actually ran (${balanzaMoves} moves)`, balanzaMoves > 500);
 
+/* ──────────────────────────────────────────────────────────────────────────
+ * 6. Balanza: equation line weight token rendering
+ * ────────────────────────────────────────────────────────────────────────── */
+console.log('Balanza — equation line weight tokens');
+
+// 2w5 must render as 2x5
+const leftVars = parseBalanzaExpression('x, y, z, a, b');
+const rightMergedW5 = [makeTerm(2, 'w5')];
+const textMerged = buildEquationLineText(leftVars, rightMergedW5, 100, 10);
+check('2w5 renders as 2x5 in inequation',
+  textMerged === 'x + y + z + a + b  >  2x5');
+
+// w5 + w5 must render as 5 + 5
+const rightTwoW5 = [makeTerm(1, 'w5'), makeTerm(1, 'w5')];
+const textTwoW5 = buildEquationLineText(leftVars, rightTwoW5, 100, 10);
+check('w5 + w5 renders as 5 + 5 in inequation',
+  textTwoW5 === 'x + y + z + a + b  >  5 + 5');
+
+// Single weight w5 renders as 5
+const textSingleW5 = buildEquationLineText([makeTerm(1, 'x')], [makeTerm(1, 'w5')], 5, 5);
+check('w5 renders as 5',
+  textSingleW5 === 'x  =  5');
+
+// 3w10 renders as 3x10
+const text3w10 = buildEquationLineText([makeTerm(1, 'x')], [makeTerm(3, 'w10')], 30, 30);
+check('3w10 renders as 3x10',
+  text3w10 === 'x  =  3x10');
+
+// Mixed weights on plate: w5 + 2w2 renders as 5 + 2x2
+const textMixed = buildEquationLineText([makeTerm(1, 'w5'), makeTerm(2, 'w2')], [makeTerm(1, 'x')], 9, 9);
+check('w5 + 2w2 renders as 5 + 2x2',
+  textMixed === '5 + 2x2  =  x');
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * 7. Balanza: goal modes ('=', 'x', 'xx')
+ * ────────────────────────────────────────────────────────────────────────── */
+console.log('Balanza — goal modes');
+
+// Goal '=' (Equilibrium)
+const balancedL = [makeTerm(1, 'x'), makeTerm(1, 'w2')];
+const balancedR = [makeTerm(1, 'w7')];
+check("goal '=': wins when balanced",
+  checkBalanzaGoal('=', balancedL, balancedR, 7, 7));
+check("goal '=': fails when unbalanced",
+  !checkBalanzaGoal('=', balancedL, balancedR, 7, 5));
+check("goal '=': fails when a plate is empty",
+  !checkBalanzaGoal('=', [], balancedR, 7, 7));
+
+// Goal 'x' (Isolate x)
+const isolatedL = [makeTerm(1, 'x')];
+const unsimplifiedR = [makeTerm(1, 'w5'), makeTerm(1, 'w2')];
+check("goal 'x': wins when x is alone on left plate and balanced",
+  checkBalanzaGoal('x', isolatedL, unsimplifiedR, 7, 7));
+
+// x isolated on right plate -> WINS
+check("goal 'x': wins when x is alone on right plate and balanced",
+  checkBalanzaGoal('x', unsimplifiedR, isolatedL, 7, 7));
+
+// x with crate representation e.g. '📦x' -> WINS
+check("goal 'x': works with crate token '📦x'",
+  checkBalanzaGoal('x', [makeTerm(1, '📦x')], unsimplifiedR, 7, 7));
+
+// x not alone: x + 2 on left plate -> FAILS
+check("goal 'x': fails when other items are on the same plate as x",
+  !checkBalanzaGoal('x', [makeTerm(1, 'x'), makeTerm(1, 'w2')], [makeTerm(1, 'w7')], 7, 7));
+
+// 2x on left plate (coeff > 1) -> FAILS
+check("goal 'x': fails when coeff is 2 (2x is not x alone)",
+  !checkBalanzaGoal('x', [makeTerm(2, 'x')], [makeTerm(1, 'w10')], 10, 10));
+
+// -x on left plate (coeff -1) -> FAILS
+check("goal 'x': fails when coeff is -1 (-x is not x alone)",
+  !checkBalanzaGoal('x', [makeTerm(-1, 'x')], [makeTerm(-1, 'w5')], -5, -5));
+
+// x on both plates -> FAILS
+check("goal 'x': fails when x is on both plates",
+  !checkBalanzaGoal('x', isolatedL, [makeTerm(1, 'x')], 5, 5));
+
+// Goal 'x': fails when unbalanced
+check("goal 'x': fails when unbalanced even if x is alone",
+  !checkBalanzaGoal('x', isolatedL, unsimplifiedR, 7, 5));
+
+// Goal 'xx' (Isolate x + Simplify other plate)
+// Other plate has unmerged like terms (w5 + w5) -> FAILS
+const twoW5 = [makeTerm(1, 'w5'), makeTerm(1, 'w5')];
+check("goal 'xx': fails when other plate has unmerged like terms (w5 + w5)",
+  !checkBalanzaGoal('xx', isolatedL, twoW5, 10, 10));
+
+// Other plate merged into 2w5 -> WINS
+const merged2w5 = [makeTerm(2, 'w5')];
+check("goal 'xx': wins when like terms are merged into 2w5",
+  checkBalanzaGoal('xx', isolatedL, merged2w5, 10, 10));
+
+// Other plate has distinct items that cannot be merged (2w5 + 1w2) -> WINS
+const distinctWeights = [makeTerm(2, 'w5'), makeTerm(1, 'w2')];
+check("goal 'xx': wins when distinct unmergeable items are present (2w5 + 1w2)",
+  checkBalanzaGoal('xx', isolatedL, distinctWeights, 12, 12));
+
+// Other plate has unmerged constants (3 + 4) -> FAILS
+const twoConstants = [makeTerm(3, null), makeTerm(4, null)];
+check("goal 'xx': fails when other plate has unmerged constants (3 + 4)",
+  !checkBalanzaGoal('xx', isolatedL, twoConstants, 7, 7));
+
+// Other plate has merged constant (7) -> WINS
+const oneConstant = [makeTerm(7, null)];
+check("goal 'xx': wins when other plate is a single constant",
+  checkBalanzaGoal('xx', isolatedL, oneConstant, 7, 7));
+
+// Goal 'xx': fails when unbalanced
+check("goal 'xx': fails when unbalanced even if x alone and other plate simplified",
+  !checkBalanzaGoal('xx', isolatedL, merged2w5, 10, 8));
+
+// x* crate token works with goal 'x'
+check("goal 'x': works with crate token 'x*'",
+  checkBalanzaGoal('x', [makeTerm(1, 'x*')], unsimplifiedR, 7, 7));
+
+// x* parses correctly from expression 'x*, w5'
+const parsedXStar = parseBalanzaExpression('x*, w5');
+check("parseBalanzaExpression parses 'x*' variable",
+  parsedXStar.length === 2 && parsedXStar[0].variable === 'x*' && parsedXStar[0].coeff === 1);
+
+// 2x* parses correctly from expression '2x*'
+const parsed2XStar = parseBalanzaExpression('2x*');
+check("parseBalanzaExpression parses '2x*' variable",
+  parsed2XStar.length === 1 && parsed2XStar[0].variable === 'x*' && parsed2XStar[0].coeff === 2);
+
+// x parses correctly from expression 'x, w5'
+const parsedX = parseBalanzaExpression('x, w5');
+check("parseBalanzaExpression parses 'x' variable",
+  parsedX.length === 2 && parsedX[0].variable === 'x' && parsedX[0].coeff === 1);
+
+// Equation line renders x* as x
+check("buildEquationLineText renders 'x*' as 'x'",
+  buildEquationLineText([makeTerm(1, 'x*')], [makeTerm(1, 'w5')], 5, 5) === 'x  =  5');
+
+// Opposite pairs create a 0 card
+const oppX = combineTerms(makeTerm(1, 'x'), makeTerm(-1, 'x'));
+check("combining opposites x and -x creates a 0 card",
+  oppX.coeff === 0);
+
+const oppConst = combineTerms(makeTerm(2, null), makeTerm(-2, null));
+check("combining opposites 2 and -2 creates a 0 card",
+  oppConst.coeff === 0);
+
+// Plate with 0 card is not simplified for goal 'xx' until it vanishes
+check("goal 'xx': fails when plate contains a 0 card",
+  !checkBalanzaGoal('xx', isolatedL, [makeTerm(7, null), oppConst], 7, 7));
+
+// Once 0 card vanishes, goal 'xx' passes
+const vanishedPlate = [makeTerm(7, null), oppConst].filter(t => t.coeff !== 0);
+check("goal 'xx': passes once 0 card vanishes",
+  checkBalanzaGoal('xx', isolatedL, vanishedPlate, 7, 7));
+
 /* ────────────────────────────────────────────────────────────────────────── */
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed === 0 ? 0 : 1);
+

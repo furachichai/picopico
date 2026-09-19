@@ -1,0 +1,205 @@
+{
+  "id": "lessons/04-Untitled Lesson/lesson.json",
+  "title": "test",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 0,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "",
+          "leftPlateText": "🍎, 🍎",
+          "rightPlateText": "🍎",
+          "menuText": "2x🍎",
+          "showZeroTiles": false,
+          "lockLeftPlate": false
+        }
+      }
+    },
+    {
+      "id": "slide-1789780045138",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 1,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "y=1\nx=2",
+          "leftPlateText": "x,y,y,y",
+          "rightPlateText": "w5",
+          "menuText": "2w5",
+          "showZeroTiles": false,
+          "lockLeftPlate": false,
+          "freeMovement": false,
+          "add": true
+        }
+      }
+    },
+    {
+      "id": "slide-1789786450811",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789787868510-hp5uuqp78",
+          "type": "image",
+          "content": "/src/assets/characters/yara_leaning_2_with_shadow.png",
+          "x": -1.388888888888895,
+          "y": 45.46875,
+          "width": 40,
+          "height": 56.56250000000001,
+          "rotation": 20.932147201525552,
+          "scale": 1.0885441596463687,
+          "metadata": {
+            "width": 40,
+            "height": 56.56250000000001,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1789787933577-cctc0gad1",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_sad_crying.png",
+          "x": 75.83333333333334,
+          "y": 84.84375,
+          "width": 40,
+          "height": 25.104501607717044,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 25.104501607717044,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1789787884782-s34yqwojy",
+          "type": "balloon",
+          "content": "Don't even think about getting the <b>opposites</b> <b>together.</b>",
+          "x": 61.80555555555555,
+          "y": 24.375000000000004,
+          "width": 46.94444444444444,
+          "height": 24.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -120,
+              "y": 22
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        },
+        {
+          "id": "el-1789787940771-2zlkxevku",
+          "type": "balloon",
+          "content": "I <b>double-tapped</b> the <b>zero</b> and it's <b>gone</b> <b>FOREVER</b>!",
+          "x": 25.27777777777778,
+          "y": 80.15625,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 99,
+              "y": 3
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": {
+        "type": "Balanza",
+        "config": {
+          "weightsText": "y=1\nx=2",
+          "leftPlateText": "y, -y",
+          "rightPlateText": "w5",
+          "menuText": "2w5",
+          "showZeroTiles": false,
+          "lockLeftPlate": false,
+          "freeMovement": false,
+          "add": true,
+          "tutorial": true,
+          "autonext": false
+        }
+      },
+      "autonext": false
+    },
+    {
+      "id": "slide-1789786566789",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1789786572347-uk4gax31z",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_wink.png",
+          "x": 46.666666666666664,
+          "y": 53.592243975903614,
+          "width": 40,
+          "height": 21.253012048192772,
+          "rotation": 0,
+          "scale": 1.9604138008775498,
+          "metadata": {
+            "width": 40,
+            "height": 21.253012048192772,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 3
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-08-17T16:02:09.210Z",
+  "updatedAt": "2026-09-19T03:20:17.122Z",
+  "path": "lessons/04-test/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "visibleInFeed": false,
+  "name": "04-Untitled Lesson",
+  "type": "file",
+  "visible": true,
+  "order": 4,
+  "status": "completed",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 1,
+    "completed": true,
+    "lastPlayed": 1789786239023
+  }
+}

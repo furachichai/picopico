@@ -17,7 +17,8 @@ const CRATE_MAP = {
     'x📦': '/assets/balanza/crate_x.png',
     'crate_x': '/assets/balanza/crate_x.png',
     '[x]': '/assets/balanza/crate_x.png',
-    'x': '/assets/balanza/crate_x.png',
+    'x*': '/assets/balanza/crate_x.png',
+    '*x': '/assets/balanza/crate_x.png',
     '📦?': '/assets/balanza/crate_q.png',
     '?📦': '/assets/balanza/crate_q.png',
     'crate_q': '/assets/balanza/crate_q.png',
@@ -2575,6 +2576,49 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                 }}
                                             >
                                                 {labels[pos]}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Goal</label>
+                                <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '2px', border: '1px solid #cbd5e1' }}>
+                                    {[
+                                        { id: '=', label: '=', title: 'Equilibrium: win when scale is in equilibrium' },
+                                        { id: 'x', label: 'x', title: 'Isolate x: win when x is alone on a plate' },
+                                        { id: 'xx', label: 'xx', title: 'Isolate & Simplify: win when x is alone on a plate and other plate is simplified' }
+                                    ].map((g) => {
+                                        const currentGoal = element.config?.goal || '=';
+                                        const isActive = currentGoal === g.id;
+                                        return (
+                                            <button
+                                                key={g.id}
+                                                type="button"
+                                                title={g.title}
+                                                onClick={() => {
+                                                    onChange('cartridge', {
+                                                        config: {
+                                                            ...element.config,
+                                                            goal: g.id
+                                                        }
+                                                    });
+                                                }}
+                                                style={{
+                                                    padding: '3px 10px',
+                                                    fontSize: '0.75rem',
+                                                    fontFamily: 'monospace, Outfit, sans-serif',
+                                                    fontWeight: isActive ? 800 : 500,
+                                                    background: isActive ? '#ffffff' : 'transparent',
+                                                    color: isActive ? '#0f172a' : '#64748b',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {g.label}
                                             </button>
                                         );
                                     })}

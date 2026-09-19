@@ -79,6 +79,9 @@ export function parseMenuInventory(menuText) {
     if (matchX) {
       count = parseInt(matchX[1], 10);
       rest = matchX[2].trim();
+      if (rest === '*') {
+        rest = 'x*';
+      }
     } else {
       const matchLeadingNum = tok.match(/^(\d+)(.+)$/);
       if (matchLeadingNum) {
@@ -129,7 +132,14 @@ export function collectUsedSymbols(leftPlateText, rightPlateText, menuText) {
  */
 export function weightOf(variable, weights) {
   if (variable === null || variable === undefined) return 1;
-  if (weights && weights[variable] !== undefined) return weights[variable];
+  if (weights) {
+    if (weights[variable] !== undefined) return weights[variable];
+    const cleaned = typeof variable === 'string' ? variable.replace(/[\*📦\[\]]/g, '').trim() : '';
+    if (cleaned && weights[cleaned] !== undefined) return weights[cleaned];
+    if (cleaned && weights[`${cleaned}*`] !== undefined) return weights[`${cleaned}*`];
+    if (cleaned && weights[`📦${cleaned}`] !== undefined) return weights[`📦${cleaned}`];
+    if (cleaned && weights[`${cleaned}📦`] !== undefined) return weights[`${cleaned}📦`];
+  }
   const wMatch = typeof variable === 'string' && variable.trim().match(/^w(\d{1,2})$/i);
   if (wMatch) {
     return parseInt(wMatch[1], 10);
@@ -187,7 +197,7 @@ export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTot
   const formatBalanzaEqVariable = (v) => {
     if (!v) return v;
     // When rendering the x crate in the equation, just display the x
-    if (v === '📦x' || v === 'x📦' || v === 'crate_x' || v === '[x]' || v === 'x') {
+    if (v === '📦x' || v === 'x📦' || v === 'crate_x' || v === '[x]' || v === 'x' || v === 'x*' || v === '*x') {
       return 'x';
     }
     if (v === '📦?' || v === '?📦' || v === 'crate_q' || v === '[?]' || v === '?') {
@@ -196,17 +206,30 @@ export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTot
     if (v === '📦' || v === 'crate' || v === 'box') {
       return 'x';
     }
-    // Clean any residual crate emoji or prefix
-    const cleaned = v.replace(/📦/g, '').replace(/^crate_/g, '').trim();
+    // Clean any residual crate emoji, asterisk or prefix
+    const cleaned = v.replace(/📦/g, '').replace(/^crate_/g, '').replace(/\*/g, '').trim();
     return cleaned || 'x';
   };
 
   const sideText = (terms) => {
     if (!terms || terms.length === 0) return '0';
     return terms.map((t, idx) => {
+      const isFirst = idx === 0;
+      const wMatch = typeof t.variable === 'string' && t.variable.trim().match(/^w(\d{1,2})$/i);
+      if (wMatch) {
+        const wVal = wMatch[1];
+        const absCoeff = Math.abs(t.coeff);
+        if (absCoeff === 0) {
+          return isFirst ? '0' : ' + 0';
+        }
+        const sign = isFirst ? (t.coeff < 0 ? '-' : '') : (t.coeff < 0 ? '-' : '+');
+        const valStr = absCoeff === 1 ? wVal : `${absCoeff}x${wVal}`;
+        return isFirst ? `${sign}${valStr}` : ` ${sign} ${valStr}`;
+      }
+
       const cleanTerm = { ...t, variable: formatBalanzaEqVariable(t.variable) };
-      const { sign, value } = formatTerm(cleanTerm, idx === 0);
-      return idx === 0 ? `${sign}${value}` : ` ${sign} ${value}`;
+      const { sign, value } = formatTerm(cleanTerm, isFirst);
+      return isFirst ? `${sign}${value}` : ` ${sign} ${value}`;
     }).join('');
   };
 
@@ -223,3 +246,124 @@ export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTot
 
   return `${sideText(leftTerms)}  ${comparator}  ${sideText(rightTerms)}`;
 }
+
+/**
+ * Checks if a token/variable represents 'x' (or crate x).
+ */
+export function isExplicitX(variable) {
+  if (!variable) return false;
+  const v = String(variable).trim().toLowerCase();
+  if (['x', 'x*', '*x', '📦x', 'x📦', 'crate_x', '[x]', '📦', 'crate', 'box'].includes(v)) {
+    return true;
+  }
+  const cleaned = v.replace(/📦/g, '').replace(/^crate_/g, '').replace(/\*/g, '').trim();
+  return cleaned === 'x';
+}
+
+/**
+ * Detects the unknown variable in the puzzle. Defaults to 'x', or the first letter variable found.
+ */
+export function detectUnknownVariable(plates = []) {
+  const allTerms = plates.flat().filter(Boolean);
+  if (allTerms.some(t => isExplicitX(t.variable))) {
+    return 'x';
+  }
+  const letterTerm = allTerms.find(t => {
+    if (!t.variable || typeof t.variable !== 'string') return false;
+    const v = t.variable.trim();
+    return /^[a-zA-Z]/i.test(v) && !/^w\d{1,2}$/i.test(v);
+  });
+  if (letterTerm) {
+    return letterTerm.variable.trim().toLowerCase();
+  }
+  return 'x';
+}
+
+export function isSingleXTerm(term, targetVar = 'x') {
+  if (!term || term.coeff !== 1) return false;
+  if (targetVar === 'x') {
+    return isExplicitX(term.variable);
+  }
+  return !!term.variable && String(term.variable).trim().toLowerCase() === targetVar;
+}
+
+export function containsTargetVariable(terms, targetVar = 'x') {
+  if (!terms || !terms.length) return false;
+  return terms.some(t => {
+    if (!t || !t.variable) return false;
+    if (targetVar === 'x') {
+      return isExplicitX(t.variable);
+    }
+    return String(t.variable).trim().toLowerCase() === targetVar;
+  });
+}
+
+export function isSingleXPlate(plate, targetVar = 'x') {
+  if (!plate || plate.length !== 1) return false;
+  return isSingleXTerm(plate[0], targetVar);
+}
+
+export function isPlateFullySimplified(plate) {
+  if (!plate || plate.length === 0) return false;
+  if (plate.some(t => t.coeff === 0)) return false;
+  const seenVars = new Set();
+  for (const t of plate) {
+    const key = (t.variable === null || t.variable === undefined)
+      ? '__const__'
+      : String(t.variable).trim().toLowerCase();
+    if (seenVars.has(key)) {
+      return false;
+    }
+    seenVars.add(key);
+  }
+  return true;
+}
+
+/**
+ * Checks win conditions for Balanza:
+ * - '=': Equilibrium (default)
+ * - 'x': Equilibrium + x by itself on one plate (and not on the other plate)
+ * - 'xx': Equilibrium + x by itself on one plate + other plate fully simplified
+ */
+export function checkBalanzaGoal(goalMode = '=', leftPlate = [], rightPlate = [], leftTotal = 0, rightTotal = 0) {
+  const goal = goalMode || '=';
+
+  // Both plates must have at least one element
+  if (!leftPlate?.length || !rightPlate?.length) {
+    return false;
+  }
+
+  // The scale must be in equilibrium
+  if (!nearlyEqual(leftTotal, rightTotal)) {
+    return false;
+  }
+
+  // Goal '=': equilibrium achieved
+  if (goal === '=') {
+    return true;
+  }
+
+  const targetVar = detectUnknownVariable([leftPlate, rightPlate]);
+
+  const leftIsX = isSingleXPlate(leftPlate, targetVar) && !containsTargetVariable(rightPlate, targetVar);
+  const rightIsX = isSingleXPlate(rightPlate, targetVar) && !containsTargetVariable(leftPlate, targetVar);
+
+  if (!leftIsX && !rightIsX) {
+    return false;
+  }
+
+  // Goal 'x': isolated x on one plate, scale in equilibrium
+  if (goal === 'x') {
+    return true;
+  }
+
+  // Goal 'xx': isolated x on one plate, scale in equilibrium,
+  // AND all terms on the other plate are simplified
+  if (goal === 'xx') {
+    const otherPlate = leftIsX ? rightPlate : leftPlate;
+    return isPlateFullySimplified(otherPlate);
+  }
+
+  return true;
+}
+

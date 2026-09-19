@@ -1443,17 +1443,17 @@
     }
   },
   {
-    "name": "04-Untitled Lesson",
+    "name": "04-test",
     "type": "file",
-    "path": "lessons/04-Untitled Lesson/lesson.json",
-    "title": "Untitled Lesson",
+    "path": "lessons/04-test/lesson.json",
+    "title": "test",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
     "order": 4,
     "content": {
-      "id": "draft-1",
-      "title": "Untitled Lesson",
+      "id": "lessons/04-Untitled Lesson/lesson.json",
+      "title": "test",
       "slides": [
         {
           "id": "slide-1",
@@ -1471,12 +1471,160 @@
               "lockLeftPlate": false
             }
           }
+        },
+        {
+          "id": "slide-1789780045138",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 1,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "y=1\nx=2",
+              "leftPlateText": "x,y,y,y",
+              "rightPlateText": "w5",
+              "menuText": "2w5",
+              "showZeroTiles": false,
+              "lockLeftPlate": false,
+              "freeMovement": false,
+              "add": true
+            }
+          }
+        },
+        {
+          "id": "slide-1789786450811",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789787868510-hp5uuqp78",
+              "type": "image",
+              "content": "/src/assets/characters/yara_leaning_2_with_shadow.png",
+              "x": -1.388888888888895,
+              "y": 45.46875,
+              "width": 40,
+              "height": 56.56250000000001,
+              "rotation": 20.932147201525552,
+              "scale": 1.0885441596463687,
+              "metadata": {
+                "width": 40,
+                "height": 56.56250000000001,
+                "category": "characters",
+                "hasShadow": false,
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1789787933577-cctc0gad1",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_sad_crying.png",
+              "x": 75.83333333333334,
+              "y": 84.84375,
+              "width": 40,
+              "height": 25.104501607717044,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 25.104501607717044,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1789787884782-s34yqwojy",
+              "type": "balloon",
+              "content": "Don't even think about getting the <b>opposites</b> <b>together.</b>",
+              "x": 61.80555555555555,
+              "y": 24.375000000000004,
+              "width": 46.94444444444444,
+              "height": 24.6875,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -120,
+                  "y": 22
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            },
+            {
+              "id": "el-1789787940771-2zlkxevku",
+              "type": "balloon",
+              "content": "I <b>double-tapped</b> the <b>zero</b> and it's <b>gone</b> <b>FOREVER</b>!",
+              "x": 25.27777777777778,
+              "y": 80.15625,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 99,
+                  "y": 3
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 2,
+          "cartridge": {
+            "type": "Balanza",
+            "config": {
+              "weightsText": "y=1\nx=2",
+              "leftPlateText": "y, -y",
+              "rightPlateText": "w5",
+              "menuText": "2w5",
+              "showZeroTiles": false,
+              "lockLeftPlate": false,
+              "freeMovement": false,
+              "add": true,
+              "tutorial": true,
+              "autonext": false
+            }
+          },
+          "autonext": false
+        },
+        {
+          "id": "slide-1789786566789",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1789786572347-uk4gax31z",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_wink.png",
+              "x": 46.666666666666664,
+              "y": 53.592243975903614,
+              "width": 40,
+              "height": 21.253012048192772,
+              "rotation": 0,
+              "scale": 1.9604138008775498,
+              "metadata": {
+                "width": 40,
+                "height": 21.253012048192772,
+                "category": "characters"
+              }
+            }
+          ],
+          "order": 3
         }
       ],
       "author": "User",
       "createdAt": "2026-08-17T16:02:09.210Z",
-      "updatedAt": "2026-08-17T18:49:27.477Z",
-      "path": "lessons/6554-Untitled Lesson/lesson.json",
+      "updatedAt": "2026-09-19T03:20:17.122Z",
+      "path": "lessons/04-test/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -1487,7 +1635,26 @@
           "description": ""
         }
       },
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "name": "04-Untitled Lesson",
+      "type": "file",
+      "visible": true,
+      "order": 4,
+      "status": "completed",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 1,
+        "completed": true,
+        "lastPlayed": 1789786239023
+      }
     }
   },
   {
@@ -24030,7 +24197,7 @@
             {
               "id": "el-1789753605309-ecu3iawx9",
               "type": "balloon",
-              "content": "Most crates have junk.<div><br></div><div>But a <b>few</b> have <b>gold</b> coins!</div>",
+              "content": "Most crates have junk.<div><br></div><div>But I heard a <b>few</b> have <b>gold</b> <b>coins</b>!</div>",
               "x": 62.083333333333336,
               "y": 48.828125,
               "width": 64.16666666666667,
@@ -24702,10 +24869,10 @@
             {
               "id": "el-1789763648130-fz3klz1cf",
               "type": "text",
-              "content": "No.<div><b>x is a number.</b></div><div>It's the <b>crate's weight.<br></b><div>&nbsp;<div>Since we don't know it yet, we will call it <b>x </b>for now<b>.</b><div><br></div></div></div></div>",
-              "x": 70.41666666666667,
+              "content": "No.<div><b>x </b>stands in for the <b>crate's weight.</b></div><div><div>&nbsp;<div>Since we don't know its actual <b>value</b> yet, we will call it <b>x </b>for now<b>.</b><div><br></div></div></div></div>",
+              "x": 69.30555555555556,
               "y": 38.125,
-              "width": 48.61111111111111,
+              "width": 50.83333333333333,
               "height": 5,
               "rotation": 0,
               "scale": 1,
@@ -24800,9 +24967,9 @@
               "metadata": {
                 "fontFamily": "\"Fira Sans\"",
                 "options": [
-                  "A number that's always negative",
-                  "The answer to the problem ✗",
-                  "A letter that stands for a number we don't know yet"
+                  "a number that's always negative",
+                  "the answer to the problem ✗",
+                  "a letter that stands for a number we don't know yet"
                 ],
                 "correctIndex": 2,
                 "correctIndices": [
@@ -24815,7 +24982,7 @@
             {
               "id": "el-1789761356828-zdlp0a478",
               "type": "banner",
-              "content": "<font color=\"#2196f3\">what is a </font>variable<font color=\"#2196f3\">?</font>",
+              "content": "<font color=\"#2196f3\">a </font>variable<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\"> IS...</span></font>",
               "x": 50,
               "y": 24.375000000000004,
               "width": 51,
@@ -24838,6 +25005,24 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              }
+            },
+            {
+              "id": "el-1789770790638-yliir7ggi",
+              "type": "text",
+              "content": "x = ?",
+              "x": 50,
+              "y": 47.8125,
+              "width": 34.44444444444444,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.3576169382207588,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 41,
+                "backgroundColor": "#FF6F00",
+                "color": "#FFFFFF"
               }
             }
           ],
@@ -24950,7 +25135,7 @@
               "y": 37.34375,
               "width": 51,
               "height": 12.5,
-              "rotation": -5.247529236333207,
+              "rotation": -0.01916919204566625,
               "scale": 1.472005737123488,
               "metadata": {
                 "width": 51,
@@ -25050,7 +25235,7 @@
             {
               "id": "el-1789757515171-gyde81i40",
               "type": "text",
-              "content": "It just means it weighs&nbsp;<div><b>the same </b>as<b>💰</b>.</div>",
+              "content": "It just means<div>it weighs&nbsp;<div><b>the same </b>as<b>💰</b>.</div></div>",
               "x": 75.13888888888886,
               "y": 33.90625,
               "width": 42.5,
@@ -25060,7 +25245,7 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
-                "fontSize": 18,
+                "fontSize": 20,
                 "manualZ": true,
                 "groupId": "group-1789761478205-cygo5m"
               }
@@ -25162,8 +25347,8 @@
                 "fontFamily": "\"Noto Sans\"",
                 "fontSize": 19,
                 "tailPos": {
-                  "x": -16,
-                  "y": 106
+                  "x": -8,
+                  "y": 107
                 },
                 "shadow": "grey",
                 "hasShadow": true,
@@ -25522,11 +25707,167 @@
             }
           ],
           "order": 15
+        },
+        {
+          "id": "slide-1789769775486-0-8au6mb",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "elements": [
+            {
+              "id": "el-1789769775486-xblgbr7lb",
+              "type": "banner",
+              "content": "<br> 😅",
+              "x": 49.72222222222223,
+              "y": 55.546875,
+              "width": 53.46758575754757,
+              "height": 52.07324382096494,
+              "rotation": 0,
+              "scale": 1.5981549469140102,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#f6efdd",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1789769775486-p5558moxu",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 25.703125,
+              "width": 51,
+              "height": 10.165172329982045,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "groupId": "group-1789689818834-nbba7m"
+              }
+            },
+            {
+              "id": "el-1789769775486-mgxfnh0cr",
+              "type": "banner",
+              "content": "<br>",
+              "x": 49.98424953884548,
+              "y": 57.03125,
+              "width": 51,
+              "height": 33.88210603069076,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#FCE4EC",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "groupId": "group-1789770430363-z3egsj"
+              }
+            },
+            {
+              "id": "el-1789769775486-lo88pbb2q",
+              "type": "text",
+              "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">x </font>+<font color=\"#2196f3\"> 8 </font>=<font color=\"#2196f3\"> 20</font></span>",
+              "x": 50,
+              "y": 25.625,
+              "width": 26.764489040083262,
+              "height": 5,
+              "rotation": 0,
+              "scale": 2.2037322077703445,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                "textTransform": "none",
+                "fontSize": 14,
+                "color": "#000000",
+                "groupId": "group-1789689818834-nbba7m"
+              }
+            },
+            {
+              "id": "el-1789769775486-0wxznydzf",
+              "type": "text",
+              "content": "A <b>variable</b> is a <b>symbol</b>—usually a <b>letter</b>—that stands in for an <b>unknown</b> or <b>changing</b> <b>amount</b>.<br><div><br></div><div><b>Any</b> letter works, though <i>lowercase</i> ‭<b>x</b>‬, ‭<b>y</b>‬, and <b>‭z</b>‬ are the most common.</div>",
+              "x": 49.98424953884548,
+              "y": 56.875,
+              "width": 44.72222222222222,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.2138676431373434,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 16,
+                "textTransform": "none",
+                "groupId": "group-1789770430363-z3egsj"
+              }
+            },
+            {
+              "id": "el-1789769775486-dy1j394xr",
+              "type": "text",
+              "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> VarIABLE </span></font>",
+              "x": 50,
+              "y": 14.6875,
+              "width": 82.5,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "textTransform": "uppercase",
+                "fontSize": 27
+              }
+            }
+          ],
+          "order": 16,
+          "guides": {
+            "horizontal": [],
+            "vertical": [
+              0
+            ]
+          },
+          "cartridge": null,
+          "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-09-18T17:32:09.502Z",
-      "updatedAt": "2026-09-18T21:35:45.964Z",
+      "updatedAt": "2026-09-18T22:48:31.010Z",
       "path": "lessons/2993-X variable/lesson.json",
       "textPreset": null,
       "description": "",
@@ -25543,7 +25884,7 @@
       "visible": true,
       "visibleInFeed": true,
       "order": 2993,
-      "status": "active",
+      "status": "completed",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -25553,7 +25894,11 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": null
+      "progress": {
+        "lastSlideIndex": 15,
+        "completed": true,
+        "lastPlayed": 1789767037056
+      }
     }
   }
 ]

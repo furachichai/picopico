@@ -15,18 +15,22 @@ export function parseWeightSymbol(str) {
  * Graphic component for weight emojis in Balanza using prop_weight_ring.png.
  * Displays the weight graphic with the number centered on its body.
  */
-export function WeightRingGlyph({ value, size = 32, className = '', style = {} }) {
+export function WeightRingGlyph({ value, size = 32, isNegative = false, className = '', style = {} }) {
   const isPx = typeof size === 'number';
   const dim = isPx ? `${size}px` : size;
-  const valStr = String(value);
-  // Scale font size proportionally: 2-digit numbers slightly smaller than single digits
+  const rawStr = String(value);
+  const isNeg = isNegative || rawStr.startsWith('-') || rawStr.startsWith('−');
+  const cleanVal = rawStr.replace(/^[−-]/, '');
+  const displayStr = isNeg ? `−${cleanVal}` : cleanVal;
+
+  // Scale font size proportionally: 3+ chars slightly smaller (e.g. -12), 2 chars (e.g. -5, 12), 1 char (e.g. 5)
   const fontSize = isPx
-    ? (valStr.length >= 2 ? Math.round(size * 0.35) : Math.round(size * 0.40))
-    : (valStr.length >= 2 ? '0.36em' : '0.42em');
+    ? (displayStr.length >= 3 ? Math.round(size * 0.28) : displayStr.length >= 2 ? Math.round(size * 0.35) : Math.round(size * 0.40))
+    : (displayStr.length >= 3 ? '0.30em' : displayStr.length >= 2 ? '0.36em' : '0.42em');
 
   return (
     <span
-      className={`balanza-weight-glyph ${className}`}
+      className={`balanza-weight-glyph ${isNeg ? 'is-negative' : ''} ${className}`}
       style={{
         position: 'relative',
         display: 'inline-flex',
@@ -40,17 +44,18 @@ export function WeightRingGlyph({ value, size = 32, className = '', style = {} }
         flexShrink: 0,
         ...style
       }}
-      title={`Weight ${valStr}`}
+      title={`Weight ${displayStr}`}
     >
       <img
         src="/assets/objects/prop_weight_ring.png"
-        alt={`w${valStr}`}
+        alt={`w${displayStr}`}
         style={{
           width: '100%',
           height: '100%',
           objectFit: 'contain',
           pointerEvents: 'none',
-          display: 'block'
+          display: 'block',
+          filter: isNeg ? 'brightness(0.50) contrast(1.10)' : 'none',
         }}
         draggable={false}
       />
@@ -63,15 +68,15 @@ export function WeightRingGlyph({ value, size = 32, className = '', style = {} }
           fontSize: isPx ? `${Math.max(fontSize, 7)}px` : fontSize,
           fontWeight: 900,
           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-          color: '#0f172a',
-          letterSpacing: valStr.length >= 2 ? '-0.5px' : '0px',
+          color: isNeg ? '#ffffff' : '#0f172a',
+          letterSpacing: displayStr.length >= 2 ? '-0.5px' : '0px',
           pointerEvents: 'none',
           textAlign: 'center',
           lineHeight: 1,
-          textShadow: '0 0.5px 1px rgba(255,255,255,0.7)'
+          textShadow: isNeg ? '0 1px 2px rgba(0, 0, 0, 0.9)' : '0 0.5px 1px rgba(255, 255, 255, 0.7)'
         }}
       >
-        {valStr}
+        {displayStr}
       </span>
     </span>
   );
@@ -82,7 +87,7 @@ export function WeightRingGlyph({ value, size = 32, className = '', style = {} }
  */
 export function hasSpecialBalanzaTokens(text) {
   if (!text || typeof text !== 'string') return false;
-  return /\bw\d{1,2}\b/i.test(text) || /📦/.test(text);
+  return /\bw\d{1,2}\b/i.test(text) || /📦/.test(text) || /x\*/i.test(text);
 }
 
 /**
@@ -91,8 +96,8 @@ export function hasSpecialBalanzaTokens(text) {
 export function renderBalanzaRichText(text, size = 20, crateMap = {}) {
   if (!text || typeof text !== 'string') return null;
 
-  // Regex matching: (optional coeff)(optional x/times)(w12 | crate tokens)
-  const regex = /(?:(\d+)\s*x?\s*)?(\bw\d{1,2}\b|📦[x\?]?|\[x\]|\[\?\])/gi;
+  // Regex matching: (optional coeff)(optional x/times)(w12 | crate tokens | x*)
+  const regex = /(?:(\d+)\s*x?\s*)?(\bw\d{1,2}\b|📦[x\?]?|\[x\]|\[\?\]|x\*|\*x)/gi;
   const parts = [];
   let lastIdx = 0;
   let match;

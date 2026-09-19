@@ -425,7 +425,8 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                                     leftPlateText: '🍎, 🍎',
                                                     rightPlateText: '🍎',
                                                     menuText: '2x🍎',
-                                                    showZeroTiles: false
+                                                    showZeroTiles: false,
+                                                    goal: '='
                                                 }
                                             }
                                         }
