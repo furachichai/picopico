@@ -76,7 +76,7 @@ export default function lessonManagerPlugin() {
 
                     req.on('end', () => {
                         try {
-                            const { path: lessonPath, content } = JSON.parse(body);
+                            const { path: lessonPath, content, isNew } = JSON.parse(body);
 
                             if (!lessonPath || !content) {
                                 res.statusCode = 400;
@@ -85,7 +85,8 @@ export default function lessonManagerPlugin() {
                             }
 
                             // Construct absolute path, ensuring it's within the project
-                            const fullPath = path.resolve(process.cwd(), lessonPath);
+                            let finalLessonPath = lessonPath;
+                            let fullPath = path.resolve(process.cwd(), lessonPath);
 
                             // Security check: ensure we are writing inside the project
                             if (!fullPath.startsWith(process.cwd())) {
@@ -94,11 +95,59 @@ export default function lessonManagerPlugin() {
                                 return;
                             }
 
-                            const dir = path.dirname(fullPath);
+                            const lessonsDir = path.resolve(process.cwd(), 'lessons');
 
-                            // Ensure directory exists
-                            if (!fs.existsSync(dir)) {
-                                fs.mkdirSync(dir, { recursive: true });
+                            // If this is a new lesson, insert it at the top (order 01) and shift existing lessons down
+                            if (isNew) {
+                                if (fs.existsSync(lessonsDir)) {
+                                    const existingFolders = fs.readdirSync(lessonsDir).filter(folder => {
+                                        const folderPath = path.join(lessonsDir, folder);
+                                        return fs.statSync(folderPath).isDirectory() && fs.existsSync(path.join(folderPath, 'lesson.json'));
+                                    }).sort((a, b) => {
+                                        const matchA = a.match(/^(\d+)-(.*)$/);
+                                        const matchB = b.match(/^(\d+)-(.*)$/);
+                                        const orderA = matchA ? parseInt(matchA[1], 10) : 99;
+                                        const orderB = matchB ? parseInt(matchB[1], 10) : 99;
+                                        if (orderA !== orderB) return orderA - orderB;
+                                        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                                    });
+
+                                    // Shift existing folders: index 0 becomes 02, index 1 becomes 03, etc.
+                                    const tempRenames = existingFolders.map((folder, index) => {
+                                        const oldFolderPath = path.join(lessonsDir, folder);
+                                        const match = folder.match(/^(\d+)-(.*)$/);
+                                        const baseName = match ? match[2] : folder;
+                                        const newPrefix = String(index + 2).padStart(2, '0');
+                                        const newName = `${newPrefix}-${baseName}`;
+                                        const tempName = `TEMP-${Date.now()}-${index}-${newName}`;
+                                        return {
+                                            oldPath: oldFolderPath,
+                                            tempPath: path.join(lessonsDir, tempName),
+                                            finalPath: path.join(lessonsDir, newName)
+                                        };
+                                    });
+
+                                    tempRenames.forEach(r => fs.renameSync(r.oldPath, r.tempPath));
+                                    tempRenames.forEach(r => fs.renameSync(r.tempPath, r.finalPath));
+                                }
+
+                                const rawTitle = content.title || path.basename(path.dirname(lessonPath)).replace(/^(\d+)-/, '') || 'New Lesson';
+                                const cleanTitle = rawTitle.replace(/[/\\?%*:|"<>]/g, '-').trim() || 'New Lesson';
+                                const newFolderName = `01-${cleanTitle}`;
+                                const newFolderFullPath = path.join(lessonsDir, newFolderName);
+                                if (!fs.existsSync(newFolderFullPath)) {
+                                    fs.mkdirSync(newFolderFullPath, { recursive: true });
+                                }
+                                fullPath = path.join(newFolderFullPath, 'lesson.json');
+                                finalLessonPath = path.relative(process.cwd(), fullPath);
+                                content.path = finalLessonPath;
+                                content.id = finalLessonPath;
+                            } else {
+                                const dir = path.dirname(fullPath);
+                                // Ensure directory exists
+                                if (!fs.existsSync(dir)) {
+                                    fs.mkdirSync(dir, { recursive: true });
+                                }
                             }
 
                             // Strip any nested 'content' property to prevent recursive bloat
@@ -115,7 +164,7 @@ export default function lessonManagerPlugin() {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');
                             res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-                            res.end(JSON.stringify({ success: true, path: lessonPath }));
+                            res.end(JSON.stringify({ success: true, path: finalLessonPath }));
                         } catch (error) {
                             console.error('Error saving lesson:', error);
                             res.statusCode = 500;
@@ -413,7 +462,7 @@ export default function lessonManagerPlugin() {
                                 
                                 const newPrefix = String(index + 1).padStart(2, '0');
                                 const newName = `${newPrefix}-${baseName}`;
-                                const tempName = `TEMP-${Date.now()}-${newName}`;
+                                const tempName = `TEMP-${Date.now()}-${index}-${newName}`;
                                 
                                 return { oldPath, tempPath: path.join(lessonsDir, tempName), finalPath: path.join(lessonsDir, newName) };
                             });

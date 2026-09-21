@@ -234,3 +234,82 @@
         opacity: 1;
     }
 }
+
+/* Tutorial animations for first slide hint */
+.swipe-card.tutorial-tip {
+    transition: none !important;
+    animation: swipeTutorialTip 1.1s ease-in-out forwards;
+}
+
+.swipe-banner.left.tutorial-tip {
+    transition: none !important;
+    animation: swipeBannerLeftTip 1.1s ease-in-out forwards;
+}
+
+.swipe-banner.right.tutorial-tip {
+    transition: none !important;
+    animation: swipeBannerRightTip 1.1s ease-in-out forwards;
+}
+
+@keyframes swipeTutorialTip {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    20% {
+        transform: translate3d(-40px, 0, 0) rotate(-4.5deg);
+    }
+    38% {
+        transform: translate3d(-40px, 0, 0) rotate(-4.5deg);
+    }
+    50% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    68% {
+        transform: translate3d(40px, 0, 0) rotate(4.5deg);
+    }
+    86% {
+        transform: translate3d(40px, 0, 0) rotate(4.5deg);
+    }
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+}
+
+@keyframes swipeBannerLeftTip {
+    0% {
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    38% {
+        opacity: 1;
+    }
+    48% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes swipeBannerRightTip {
+    0% {
+        opacity: 0;
+    }
+    52% {
+        opacity: 0;
+    }
+    65% {
+        opacity: 1;
+    }
+    86% {
+        opacity: 1;
+    }
+    98% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}

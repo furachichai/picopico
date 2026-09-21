@@ -329,6 +329,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const cartridgeRef = useRef(null);
   const bannerRef = useRef(null);
   const [slideWidth, setSlideWidth] = useState(390);
+  const threeTermScaleRef = useRef(null);
+  const lastSlideWidthRef = useRef(390);
 
 
   useEffect(() => {
@@ -431,6 +433,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, []);
 
   const loadLevel = useCallback((levelObj) => {
+    threeTermScaleRef.current = null;
     if (topic === 'divisions') {
       setNumTerms(levelObj.initialNum || []);
       setDenTerms(levelObj.initialDen || []);
@@ -669,6 +672,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [levels, loadLevel, playPopFX]);
 
   const handleRestartLevel = () => {
+    threeTermScaleRef.current = null;
     setActiveFactorMenu(null);
     playPopFX();
     if (levels[currentLevelIndex]) {
@@ -1393,7 +1397,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const nextDen = denList.filter(t => t.id !== denId);
 
     playPopFX();
-    triggerFlash('success');
     setIsMatchingFading(true);
 
     crossedNumSetter(prev => [...prev, ...numIdsToCancel]);
@@ -1654,7 +1657,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setUserPresses(p => p + 1);
       playMerge();
       showFeedback('Merged like terms!', 'success');
-      triggerFlash('success');
     } else {
       // Incompatible terms clicked
       setMistakes(m => m + 1);
@@ -1705,7 +1707,6 @@ const handleCombineEquationGroup = (groupIdx, type) => {
     setUserPresses(p => p + 1);
     const combined = combineTerms(termA, termB);
     showFeedback('Combined like terms!', 'success');
-    triggerFlash('success');
 
     setter(prev => {
       const prevGroups = splitIntoAdditiveGroups(prev);
@@ -1766,7 +1767,6 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       const isPerfect = isLevelPerfect && mistakes === 0 && userPresses === minPresses;
       playLevelUp();
       showFeedback(isPerfect ? 'Perfect! Clean work!' : 'Simplified successfully!', 'success');
-      triggerFlash('success');
 
       // Accumulate stats
       const levelStats = {
@@ -1947,6 +1947,11 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       return Math.max(0.45, Math.min(1.85, calculatedScale, heightCap));
     } else {
       // topic === 'liketerms'
+      if (lastSlideWidthRef.current !== slideWidth) {
+        lastSlideWidthRef.current = slideWidth;
+        threeTermScaleRef.current = null;
+      }
+
       const calculateLikeTermsWidth = (list) => {
         if (!list || list.length === 0) return 50;
         return list.reduce((acc, term, idx) => {
@@ -1959,10 +1964,28 @@ const handleCombineEquationGroup = (groupIdx, type) => {
           return acc + cardW + opW + staticSignW;
         }, 0);
       };
-      const totalBaseWidth = calculateLikeTermsWidth(terms);
-      const calculatedScale = totalBaseWidth > 0 ? targetWidth / totalBaseWidth : 1;
-      // Allow scale up to 1.95 so terms and buttons appear as large as possible within the 95% limit!
-      return Math.max(0.45, Math.min(1.95, calculatedScale));
+
+      // In Like Terms, terms can grow up to the 3-term size as the expression simplifies,
+      // but must never get bigger than the size they have when only 3 terms are available.
+      let baseWidth = calculateLikeTermsWidth(terms);
+      if (terms.length < 3) {
+        const avgCardW = terms.length > 0
+          ? terms.reduce((acc, t) => acc + getTermWidth(t), 0) / terms.length
+          : 54;
+        const missingTerms = 3 - terms.length;
+        baseWidth += missingTerms * (avgCardW + 34);
+      }
+
+      let calculatedScale = baseWidth > 0 ? targetWidth / baseWidth : 1;
+      calculatedScale = Math.max(0.45, Math.min(1.95, calculatedScale));
+
+      if (terms.length === 3) {
+        threeTermScaleRef.current = calculatedScale;
+      } else if (terms.length < 3 && threeTermScaleRef.current !== null) {
+        calculatedScale = Math.min(threeTermScaleRef.current, calculatedScale);
+      }
+
+      return calculatedScale;
     }
   }, [topic, terms, numTerms, denTerms, rightNumTerms, rightDenTerms, slideWidth, bgStyle, getTermWidth, dragHintState, reservesFraction]);
 
@@ -2004,7 +2027,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
   return (
     <div
       ref={cartridgeRef}
-      className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${flash === 'success' ? 'success-flash' : ''} ${bgStyle ? 'has-background' : ''}`}
+      className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${bgStyle ? 'has-background' : ''}`}
       style={{
         background: bgStyle ? 'transparent' : '#ffffff'
       }}
@@ -2059,32 +2082,18 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                 </div>
               </div>
 
-              {/* Sub-HUD Controls Bar (Below HUD) */}
-              <div className="sub-hud-controls">
-                <button
-                  className="floating-reset-btn"
-                  onClick={handleRestartLevel}
-                  title="Restart level"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    border: '1px solid rgba(15, 23, 42, 0.12)',
-                    boxShadow: '0 2px 8px rgba(15, 23, 42, 0.08)',
-                    color: 'var(--text-main)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ↺
-                </button>
-              </div>
-
               <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
-                <div className={`algebros-equation-banner ${reservesFraction ? 'reserves-fraction' : ''}`} ref={bannerRef}>
+                <div className="algebros-banner-container">
+                  <button
+                    className="banner-reset-btn"
+                    onClick={handleRestartLevel}
+                    title="Restart level"
+                    onMouseDown={e => e.stopPropagation()}
+                    onTouchStart={e => e.stopPropagation()}
+                  >
+                    ↺
+                  </button>
+                  <div className={`algebros-equation-banner ${reservesFraction ? 'reserves-fraction' : ''}`} ref={bannerRef}>
                   {topic === 'equations' ? (
                   (() => {
                     const activeLeftTerms = numTerms.filter(t => t.id !== draggingCardId && t.coeff !== 0);
@@ -2142,6 +2151,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           transformOrigin: 'center',
                           position: 'relative'
                         }}
+                        transition={isValidating ? { duration: 0 } : undefined}
                       >
                         {/* Left Side */}
                         <div className="equation-side left-side" style={{ zIndex: isDraggingFromLeft ? 99999 : 1, position: 'relative' }}>
@@ -2284,11 +2294,12 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                 data-id={term.id}
                                                 data-type="num"
                                                 data-index={index}
-                                                drag={term.coeff !== 0}
+                                                drag={!isValidating && term.coeff !== 0}
                                                 dragConstraints={bannerRef}
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0}
-                                                whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                                whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
+                                                transition={isValidating ? { duration: 0 } : undefined}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
                                                 onDragEnd={(e, info) => {
@@ -2369,7 +2380,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -2578,11 +2589,12 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                 data-id={term.id}
                                                 data-type="rightNum"
                                                 data-index={index}
-                                                drag={term.coeff !== 0}
+                                                drag={!isValidating && term.coeff !== 0}
                                                 dragConstraints={bannerRef}
                                                 dragSnapToOrigin={true}
                                                 dragElastic={0}
-                                                whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                                whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
+                                                transition={isValidating ? { duration: 0 } : undefined}
                                                 onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
                                                 onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
                                                 onDragEnd={(e, info) => {
@@ -2663,7 +2675,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                    transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                                    transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -2748,7 +2760,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                         position: 'relative'
                       }}
                     >
-                      <AnimatePresence>
+                      <AnimatePresence initial={false}>
                         {numTerms.map((term, index) => {
                           const oneChar = isOneChar(term);
                           const isSliced = slicedNum.includes(term.id);
@@ -2757,11 +2769,14 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                             <Reorder.Item
                               key={term.id}
                               value={term}
+                              initial={false}
+                              layout={!isValidating}
+                              dragListener={!isValidating}
                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                               dragElastic={0}
                               whileDrag={{ scale: 1.06 }}
                               exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                              transition={{ type: 'spring', stiffness: 700, damping: 50 }}
+                              transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                               onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                               onDragEnd={() => setIsDraggingTerm(false)}
                               style={{
@@ -2820,7 +2835,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           transformOrigin: 'center'
                         }}
                       >
-                        <AnimatePresence>
+                        <AnimatePresence initial={false}>
                           {numTerms.length === 0 ? (
                             <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
                           ) : (
@@ -2832,11 +2847,14 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 <Reorder.Item
                                   key={term.id}
                                   value={term}
+                                  initial={false}
+                                  layout={!isValidating}
+                                  dragListener={!isValidating}
                                   className="term-item-wrapper"
                                   dragElastic={0}
                                   whileDrag={{ scale: 1.06 }}
                                   exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                  transition={{ type: 'spring', stiffness: 700, damping: 50 }}
+                                  transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                   onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                   onDragEnd={() => setIsDraggingTerm(false)}
                                   style={{ pointerEvents: 'none' }}
@@ -2903,7 +2921,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           position: 'relative'
                         }}
                       >
-                        <AnimatePresence>
+                        <AnimatePresence initial={false}>
                           {denTerms.map((term, index) => {
                             const oneChar = isOneChar(term);
                             const isSliced = slicedDen.includes(term.id);
@@ -2912,11 +2930,14 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                               <Reorder.Item
                                 key={term.id}
                                 value={term}
+                                initial={false}
+                                layout={!isValidating}
+                                dragListener={!isValidating}
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                 dragElastic={0}
                                 whileDrag={{ scale: 1.06 }}
                                 exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                transition={{ type: 'spring', stiffness: 700, damping: 50 }}
+                                transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                 onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                 onDragEnd={() => setIsDraggingTerm(false)}
                                 style={{
@@ -2968,13 +2989,6 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                   )
                 ) : (
                   <ScaledReorderGroup
-                    // Keyed on the item COUNT so a combine remounts the row. Removing items
-                    // from a CSS-scaled group is the one thing framer's layout projection gets
-                    // wrong here: the leaving cards and their surviving neighbours animate from
-                    // a mis-scaled projection, drifting and growing across ~300ms instead of
-                    // settling. Remounting skips that entirely — the merged row just appears.
-                    // Dragging never changes the count, so reordering keeps its smooth FLIP.
-                    key={terms.length}
                     axis="x"
                     values={terms}
                     onReorder={setTerms}
@@ -2984,7 +2998,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                       transformOrigin: 'center'
                     }}
                   >
-                    <AnimatePresence>
+                    <AnimatePresence initial={false}>
                       {terms.map((term, index) => {
                         const isFirst = index === 0;
                         const formatted = formatTerm(term, isFirst);
@@ -2995,15 +3009,18 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           <Reorder.Item
                             key={term.id}
                             value={term}
+                            initial={false}
+                            layout={!isValidating}
+                            dragListener={!isValidating}
                             className="term-item-wrapper"
                             dragElastic={0}
                             whileDrag={{ scale: 1.06 }}
-                            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                            exit={{ opacity: 0, transition: { duration: 0.15 } }}
                             // Reordering makes every card between the old and new slot hop into
                             // place live as the drag crosses each one — a close-to-critically-
                             // damped spring (vs. the more elastic default) keeps each of those
                             // hops a quick, contained settle instead of a springy overshoot.
-                            transition={{ type: 'spring', stiffness: 700, damping: 50 }}
+                            transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                             onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
                             onDragEnd={() => { setIsDraggingTerm(false); setDraggingCardId(null); }}
                           >
@@ -3039,6 +3056,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                     </AnimatePresence>
                   </ScaledReorderGroup>
                 )}
+                </div>
                 </div>
               </div>
 

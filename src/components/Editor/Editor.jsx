@@ -80,12 +80,12 @@ const Editor = () => {
         }
     };
 
-    const saveToDisk = async (lessonData, path) => {
+    const saveToDisk = async (lessonData, path, isNew = false) => {
         // If it's already a local lesson, save directly to local storage
         if (path && path.startsWith('local://')) {
             try {
                 const { saveLocalLesson } = await import('../../utils/lessonStorage');
-                const saved = saveLocalLesson(lessonData);
+                const saved = saveLocalLesson(lessonData, isNew);
                 console.log('Lesson saved locally:', saved.path);
                 return { success: true, path: saved.path };
             } catch (error) {
@@ -103,7 +103,8 @@ const Editor = () => {
                 },
                 body: JSON.stringify({
                     path: path,
-                    content: lessonData
+                    content: lessonData,
+                    isNew: isNew
                 }),
             });
 
@@ -175,6 +176,7 @@ const Editor = () => {
     const handleUpdateInfo = async (data) => {
         // data contains { path, title } from LessonInfoModal
         const oldPath = state.lesson.path;
+        const isNew = !oldPath || !!data.isNew;
 
         dispatch({
             type: 'UPDATE_LESSON_METADATA',
@@ -201,7 +203,7 @@ const Editor = () => {
             updatedAt: new Date()
         };
 
-        const { success, path: savedPath } = await saveToDisk(lessonToSave, data.path);
+        const { success, path: savedPath } = await saveToDisk(lessonToSave, data.path, isNew);
 
         if (success) {
             // Update metadata with the actual saved path (in case it fell back to local)

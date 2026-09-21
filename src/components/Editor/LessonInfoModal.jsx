@@ -116,21 +116,21 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
         });
 
         // If lesson already has a path, preserve its order prefix
-        // Otherwise, generate a new path with a timestamp-based order
+        // Otherwise, mark as new lesson to be placed at the top (order 01)
+        const isNew = !lesson.path;
         let fullPath;
         if (lesson.path) {
             const parts = lesson.path.split('/');
             if (parts.length >= 3) {
                 const folderName = parts[1]; // e.g. "01-Potions"
                 const match = folderName.match(/^(\d+)-(.*)$/);
-                const order = match ? match[1] : '99';
+                const order = match ? match[1] : '01';
                 fullPath = `lessons/${order}-${safeName}/lesson.json`;
             } else {
                 fullPath = lesson.path;
             }
         } else {
-            const order = String(Date.now()).slice(-4).padStart(2, '0');
-            fullPath = `lessons/${order}-${safeName}/lesson.json`;
+            fullPath = `lessons/01-${safeName}/lesson.json`;
         }
 
         onUpdate({
@@ -139,7 +139,8 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
             description: finalDescription,
             icon: lessonIcon,
             cardColor: cardColor,
-            translations: newTranslations
+            translations: newTranslations,
+            isNew
         });
 
         onClose();

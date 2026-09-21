@@ -49,7 +49,10 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     const [isShake, setIsShake] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
     const [optimizedBg, setOptimizedBg] = useState(config.globalBackground || null);
+    const [isTutorialTipping, setIsTutorialTipping] = useState(false);
 
+    const tutorialTimerRef = useRef(null);
+    const hasAnsweredRef = useRef(false);
     const audioCtxRef = useRef(null);
 
     // Initialize Cards
@@ -79,6 +82,7 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         // In preview mode, the previewIndex effect handles the current card.
         if (!preview) {
             setCurrentIndex(0);
+            hasAnsweredRef.current = false;
         }
         setIsComplete(false);
     }, [isBatchMode, rawBatch, effectiveOrder, effectiveTotalCards, initialCards, preview]);
@@ -167,10 +171,12 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
         console.log('SwipeSorter: handleStart', e.type);
 
-        // Prevent default behavior for touch to avoid scrolling
-        if (e.type === 'touchstart') {
-            // e.preventDefault(); // Note: React synthetic events might warn if passive. 
-            // We'll handle this via CSS touch-action: none.
+        if (tutorialTimerRef.current) {
+            clearTimeout(tutorialTimerRef.current);
+            tutorialTimerRef.current = null;
+        }
+        if (isTutorialTipping) {
+            setIsTutorialTipping(false);
         }
 
         const { x, y } = getClientCoordinates(e);
@@ -220,11 +226,28 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             // Reset position if not swiped enough
             setDragDelta({ x: 0, y: 0 });
             dragDeltaRef.current = { x: 0, y: 0 };
+
+            // If player leaves first card without answering, restart tutorial loop after 3 seconds
+            if (currentIndexRef.current === 0 && !hasAnsweredRef.current && !preview) {
+                if (tutorialTimerRef.current) {
+                    clearTimeout(tutorialTimerRef.current);
+                }
+                tutorialTimerRef.current = setTimeout(() => {
+                    setIsTutorialTipping(true);
+                }, 3000);
+            }
         }
         dragStartRef.current = null;
     };
 
     const checkAnswer = (side, finalY = 0) => {
+        hasAnsweredRef.current = true;
+        if (tutorialTimerRef.current) {
+            clearTimeout(tutorialTimerRef.current);
+            tutorialTimerRef.current = null;
+        }
+        setIsTutorialTipping(false);
+
         // Use Refs to get latest state inside async/callbacks
         const currentCards = cardsRef.current;
         const currIndex = currentIndexRef.current;
@@ -316,20 +339,83 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             window.addEventListener('mouseup', onEnd);
             window.addEventListener('touchmove', onMove, { passive: false });
             window.addEventListener('touchend', onEnd);
+            window.addEventListener('touchcancel', onEnd);
 
             return () => {
                 window.removeEventListener('mousemove', onMove);
                 window.removeEventListener('mouseup', onEnd);
                 window.removeEventListener('touchmove', onMove);
                 window.removeEventListener('touchend', onEnd);
+                window.removeEventListener('touchcancel', onEnd);
             };
         }
     }, [isDragging]); // Re-bind on drag state change. State deps (cards, currentIndex) are accessed via refs or closure, checkAnswer uses state.
+
+    // Tutorial Loop on First Card when no interaction
+    useEffect(() => {
+        if (preview || isComplete || cards.length === 0 || currentIndex !== 0 || hasAnsweredRef.current) {
+            if (tutorialTimerRef.current) {
+                clearTimeout(tutorialTimerRef.current);
+                tutorialTimerRef.current = null;
+            }
+            setIsTutorialTipping(false);
+            return;
+        }
+
+        if (tutorialTimerRef.current) {
+            clearTimeout(tutorialTimerRef.current);
+        }
+        tutorialTimerRef.current = setTimeout(() => {
+            setIsTutorialTipping(true);
+        }, 3000);
+
+        return () => {
+            if (tutorialTimerRef.current) {
+                clearTimeout(tutorialTimerRef.current);
+                tutorialTimerRef.current = null;
+            }
+        };
+    }, [preview, isComplete, cards.length, currentIndex]);
+
+    const handleTutorialAnimationEnd = (e) => {
+        if (e.animationName !== 'swipeTutorialTip') return;
+        setIsTutorialTipping(false);
+        if (!hasAnsweredRef.current && currentIndexRef.current === 0 && !preview) {
+            if (tutorialTimerRef.current) {
+                clearTimeout(tutorialTimerRef.current);
+            }
+            tutorialTimerRef.current = setTimeout(() => {
+                setIsTutorialTipping(true);
+            }, 3000);
+        }
+    };
+
+    const handleContainerInteraction = (e) => {
+        if (e.target.closest && e.target.closest('.swipe-card')) return;
+        if (isDragging) return;
+        if (isTutorialTipping) {
+            setIsTutorialTipping(false);
+        }
+        if (currentIndexRef.current === 0 && !hasAnsweredRef.current && !preview) {
+            if (tutorialTimerRef.current) {
+                clearTimeout(tutorialTimerRef.current);
+            }
+            tutorialTimerRef.current = setTimeout(() => {
+                setIsTutorialTipping(true);
+            }, 3000);
+        }
+    };
 
     // ... getCardStyle ...
 
     const getCardStyle = (index) => {
         if (index === currentIndex) {
+            if (isTutorialTipping) {
+                return {
+                    zIndex: 100,
+                    opacity: 1
+                };
+            }
             // Hardware-accelerated 3D transform for top dragging card
             return {
                 transform: `translate3d(${dragDelta.x}px, ${dragDelta.y}px, 0) rotate(${dragDelta.x * 0.05}deg)`,
@@ -407,12 +493,20 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
     return (
         <div
             className={`swipe-sorter-container ${isDragging ? 'is-dragging' : ''}`}
+            onMouseDown={handleContainerInteraction}
+            onTouchStart={handleContainerInteraction}
         >
             {/* Banner Overlays */}
-            <div className={`swipe-banner left`} style={{ opacity: isDragging && dragDelta.x < -5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0 }}>
+            <div
+                className={`swipe-banner left ${isTutorialTipping ? 'tutorial-tip' : ''}`}
+                style={{ opacity: isTutorialTipping ? undefined : (isDragging && dragDelta.x < -5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0) }}
+            >
                 {leftLabel}
             </div>
-            <div className={`swipe-banner right`} style={{ opacity: isDragging && dragDelta.x > 5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0 }}>
+            <div
+                className={`swipe-banner right ${isTutorialTipping ? 'tutorial-tip' : ''}`}
+                style={{ opacity: isTutorialTipping ? undefined : (isDragging && dragDelta.x > 5 ? Math.min(Math.abs(dragDelta.x) / 15, 1) : 0) }}
+            >
                 {rightLabel}
             </div>
 
@@ -426,10 +520,11 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
                     return (
                         <div
                             key={card.id || index}
-                            className={`swipe-card ${index === currentIndex ? (isDragging ? 'dragging' : '') : ''} ${index === currentIndex && isShake ? 'shake flash-red' : ''} ${activeBg ? 'has-global-bg' : ''}`}
+                            className={`swipe-card ${index === currentIndex ? (isDragging ? 'dragging' : '') : ''} ${index === currentIndex && isTutorialTipping ? 'tutorial-tip' : ''} ${index === currentIndex && isShake ? 'shake flash-red' : ''} ${activeBg ? 'has-global-bg' : ''}`}
                             style={cardStyle(index)}
                             onMouseDown={index === currentIndex ? handleStart : undefined}
                             onTouchStart={index === currentIndex ? handleStart : undefined}
+                            onAnimationEnd={index === currentIndex ? handleTutorialAnimationEnd : undefined}
                         >
                             <div className="swipe-card-content">
                                 {card.image && (

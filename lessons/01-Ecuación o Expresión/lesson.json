@@ -1,5 +1,5 @@
 {
-  "id": "draft-1",
+  "id": "lessons/7127-Ecuación o Expresión/lesson.json",
   "title": "Ecuación o Expresión",
   "slides": [
     {
@@ -295,7 +295,7 @@
           "type": "banner",
           "content": "An <font color=\"#000000\">equation</font> is made of <font color=\"#000000\">2 expressions</font> connected&nbsp;<div>by an <font color=\"#000000\">equal</font> sign</div>",
           "x": 50,
-          "y": 27.890625,
+          "y": 51.796875,
           "width": 77.3888888888889,
           "height": 23.59375,
           "rotation": 0,
@@ -322,8 +322,8 @@
           "id": "el-1789844390024-kdm66yv0q",
           "type": "banner",
           "content": "expression = expression",
-          "x": 52.77777777777778,
-          "y": 54.21875,
+          "x": 49.986979166666664,
+          "y": 26.874999999999996,
           "width": 79.8888888888889,
           "height": 12.5,
           "rotation": 0,
@@ -344,15 +344,16 @@
             "borderRadius": 20,
             "skin": "sticky",
             "showTape": false,
-            "textTransform": "uppercase"
+            "textTransform": "uppercase",
+            "groupId": "group-1790010580686-jg29mk"
           }
         },
         {
           "id": "el-1789844465313-dx07vh8km",
           "type": "text",
           "content": "<span style=\"background-color: rgb(0, 0, 0);\"> equation </span>",
-          "x": 53.05555555555556,
-          "y": 48.125,
+          "x": 50.26475694444444,
+          "y": 20.781249999999996,
           "width": 24.444444444444443,
           "height": 5,
           "rotation": -1.125817706842554,
@@ -362,7 +363,8 @@
             "fontFamily": "\"Bangers\", cursive, sans-serif",
             "textTransform": "uppercase",
             "color": "#FFFFFF",
-            "fontSize": 22
+            "fontSize": 22,
+            "groupId": "group-1790010580686-jg29mk"
           }
         }
       ],
@@ -409,7 +411,7 @@
         {
           "id": "el-1789844785239-0-ulqboo",
           "type": "balloon",
-          "content": "<i>It <b>always</b> includes an <b>equal sign</b> <b>=</b></i>",
+          "content": "<i>That's why it <b>always</b> includes an <b>equal sign</b> <b>=</b></i>",
           "x": 63.138888888888886,
           "y": 84.484375,
           "width": 56.388888888888886,
@@ -577,7 +579,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-19T18:19:12.990Z",
-  "updatedAt": "2026-09-19T19:15:26.989Z",
+  "updatedAt": "2026-09-21T17:10:16.590Z",
   "path": "lessons/7127-Ecuación o Expresión/lesson.json",
   "textPreset": null,
   "description": "",
@@ -588,5 +590,25 @@
       "title": "",
       "description": ""
     }
+  },
+  "name": "7127-Ecuación o Expresión",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 7127,
+  "status": "completed",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 1,
+    "completed": true,
+    "lastPlayed": 1789843557275
   }
 }

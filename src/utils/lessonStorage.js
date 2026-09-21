@@ -45,7 +45,8 @@ export const saveLocalLesson = (lesson) => {
         if (existingIndex >= 0) {
             lessons[existingIndex] = lessonToSave;
         } else {
-            lessons.push(lessonToSave);
+            // New lessons appear at the top
+            lessons.unshift(lessonToSave);
         }
 
         localStorage.setItem(LOCAL_LESSONS_KEY, JSON.stringify(lessons));
