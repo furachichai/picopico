@@ -2660,11 +2660,35 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     {/* AlgeBros Settings */}
                     {element.cartridgeType === 'AlgeBros' && (() => {
                         const currentTopic = element.config?.topic || 'equations';
-                        const customLines = (element.config?.equationText || '')
+                        const activeCustomText = currentTopic === 'divisions'
+                            ? (element.config?.divisionText ?? element.config?.levelsText ?? '')
+                            : currentTopic === 'liketerms'
+                            ? (element.config?.likeTermsText ?? element.config?.levelsText ?? '')
+                            : (element.config?.equationText ?? element.config?.levelsText ?? '');
+
+                        const customLines = activeCustomText
                             .split('\n')
                             .map(l => l.trim())
-                            .filter(l => l && !l.startsWith('#'));
-                        const maxLevels = (currentTopic === 'equations' && customLines.length > 0) ? customLines.length : 10;
+                            .filter(l => l && !l.startsWith('#') && !l.startsWith('//'));
+                        const maxLevels = customLines.length > 0 ? customLines.length : 10;
+
+                        const topicMeta = currentTopic === 'divisions'
+                            ? {
+                                label: 'Divisions (1 per line)',
+                                placeholder: '(5 · by) / (y · 15)\n(7x · 12) / (4 · b)\n(x^3 · c) / (x^2 · c)',
+                                field: 'divisionText'
+                            }
+                            : currentTopic === 'liketerms'
+                            ? {
+                                label: 'Expressions (1 per line)',
+                                placeholder: '3x + 5 + 4x\n8 - 2x - 5\n-4a + 7b + 9a - 2b',
+                                field: 'likeTermsText'
+                            }
+                            : {
+                                label: 'Equations (1 per line)',
+                                placeholder: '2x = 6\n2x + 3 = 9\n3x - 4 = 5',
+                                field: 'equationText'
+                            };
 
                         return (
                             <>
@@ -2701,30 +2725,28 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     </div>
                                 </div>
 
-                                {currentTopic === 'equations' && (
-                                    <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                        <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
-                                            Equations (1 per line)
-                                        </label>
-                                        <textarea
-                                            value={element.config?.equationText ?? ''}
-                                            onChange={(e) => onChange('cartridge', { config: { ...element.config, equationText: e.target.value } })}
-                                            placeholder={"2x = 6\n2x + 3 = 9\n3x - 4 = 5"}
-                                            rows={3}
-                                            style={{
-                                                fontFamily: 'monospace',
-                                                fontSize: '0.75rem',
-                                                padding: '4px 6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #cbd5e1',
-                                                background: '#ffffff',
-                                                resize: 'vertical',
-                                                minHeight: '52px',
-                                                width: '180px'
-                                            }}
-                                        />
-                                    </div>
-                                )}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
+                                        {topicMeta.label}
+                                    </label>
+                                    <textarea
+                                        value={element.config?.[topicMeta.field] ?? element.config?.levelsText ?? ''}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, [topicMeta.field]: e.target.value } })}
+                                        placeholder={topicMeta.placeholder}
+                                        rows={3}
+                                        style={{
+                                            fontFamily: 'monospace',
+                                            fontSize: '0.75rem',
+                                            padding: '4px 6px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #cbd5e1',
+                                            background: '#ffffff',
+                                            resize: 'vertical',
+                                            minHeight: '52px',
+                                            width: '180px'
+                                        }}
+                                    />
+                                </div>
 
                                 <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
                                     <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Background</label>

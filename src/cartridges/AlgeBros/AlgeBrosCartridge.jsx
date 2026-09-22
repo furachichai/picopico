@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, Reorder, MotionConfig, correctParentTransform } from 'framer-motion';
 import {
@@ -8,6 +8,7 @@ import {
   isFullySimplified,
   calculateMinPresses,
   areEqualTerms,
+  countMatchingPairs,
   isDivisionSimplified,
   makeTerm,
   getPrimeFactors,
@@ -18,7 +19,11 @@ import {
   canMoveToDenominator,
   findDistributiveCancel,
   splitIntoAdditiveGroups,
-  parseCustomEquationLevels
+  parseCustomEquationLevels,
+  parseCustomDivisionLevels,
+  parseCustomLikeTermsLevels,
+  parseVariablePart,
+  serializeVariablePart
 } from './game/AlgeBrosEngine';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { generateLevels, generateDivisionLevels, generateEquationLevels } from './game/AlgeBrosLevelGenerator';
@@ -238,15 +243,15 @@ const checkElegance = (termsList) => {
  * The MotionConfig only reaches motion components inside this group, so the equations board —
  * whose custom drag handlers deliberately work in screen coordinates — is left alone.
  */
-function ScaledReorderGroup({ children, ...props }) {
+function ScaledReorderGroup({ children, isValidating, ...props }) {
   const groupRef = useRef(null);
   // Built per call rather than once at render: correctParentTransform reads the group's live
   // transform, and it should only reach for the ref while a pointer is actually moving.
   const transformPagePoint = useCallback((point) => correctParentTransform(groupRef)(point), []);
 
   return (
-    <Reorder.Group ref={groupRef} {...props}>
-      <MotionConfig transformPagePoint={transformPagePoint}>
+    <Reorder.Group ref={groupRef} transition={isValidating ? { duration: 0 } : undefined} {...props}>
+      <MotionConfig transformPagePoint={transformPagePoint} transition={isValidating ? { duration: 0 } : undefined}>
         {children}
       </MotionConfig>
     </Reorder.Group>
@@ -331,6 +336,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [slideWidth, setSlideWidth] = useState(390);
   const threeTermScaleRef = useRef(null);
   const lastSlideWidthRef = useRef(390);
+  const isAnimatingMergeRef = useRef(false);
+  const pendingSplitAnimRef = useRef(null);
+  const justMergedIdRef = useRef(null);
+  const currentScaleRef = useRef(1);
 
 
   useEffect(() => {
@@ -491,17 +500,31 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [topic]);
 
   const generateLevelsForConfig = useCallback(() => {
-    const customText = config.equationText || config.levelsText;
-    if (topic === 'equations' && customText && typeof customText === 'string') {
-      const customLevels = parseCustomEquationLevels(customText);
-      if (customLevels.length > 0) return customLevels;
+    const customText = topic === 'divisions'
+      ? (config.divisionText || config.levelsText || config.customText)
+      : topic === 'liketerms'
+      ? (config.likeTermsText || config.levelsText || config.customText)
+      : (config.equationText || config.levelsText || config.customText);
+
+    if (customText && typeof customText === 'string') {
+      if (topic === 'equations') {
+        const customLevels = parseCustomEquationLevels(customText);
+        if (customLevels.length > 0) return customLevels;
+      } else if (topic === 'divisions') {
+        const customLevels = parseCustomDivisionLevels(customText);
+        if (customLevels.length > 0) return customLevels;
+      } else if (topic === 'liketerms') {
+        const customLevels = parseCustomLikeTermsLevels(customText);
+        if (customLevels.length > 0) return customLevels;
+      }
     }
+
     return topic === 'equations'
       ? generateEquationLevels()
       : topic === 'divisions'
       ? generateDivisionLevels()
       : generateLevels();
-  }, [topic, config.equationText, config.levelsText]);
+  }, [topic, config.equationText, config.divisionText, config.likeTermsText, config.levelsText, config.customText]);
 
   useEffect(() => {
     const generated = generateLevelsForConfig();
@@ -520,7 +543,102 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setScreen('game');
   }, [generateLevelsForConfig, config.startLevel, loadLevel]);
 
-  const handleMultiplyAdjacent = (index, type) => {
+  const animateOperatorCollision = (btnEl, cardAEl, cardBEl, onCollide) => {
+    if (isAnimatingMergeRef.current) return;
+    isAnimatingMergeRef.current = true;
+
+    if (!btnEl || !cardAEl || !cardBEl) {
+      onCollide();
+      isAnimatingMergeRef.current = false;
+      return;
+    }
+
+    const btnRect = btnEl.getBoundingClientRect();
+    const aRect = cardAEl.getBoundingClientRect();
+    const bRect = cardBEl.getBoundingClientRect();
+
+    const btnCenter = btnRect.left + btnRect.width / 2;
+    const aCenter = aRect.left + aRect.width / 2;
+    const bCenter = bRect.left + bRect.width / 2;
+
+    const scale = currentScaleRef.current || 1;
+    const dxA = (btnCenter - aCenter) / scale;
+    const dxB = (btnCenter - bCenter) / scale;
+
+    const duration = 220;
+    const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+    const wrapperA = cardAEl.closest('.term-item-wrapper') || cardAEl;
+    const wrapperB = cardBEl.closest('.term-item-wrapper') || cardBEl;
+    wrapperA.style.zIndex = '50';
+    wrapperB.style.zIndex = '50';
+
+    const animA = cardAEl.animate([
+      { transform: 'translateX(0px)' },
+      { transform: `translateX(${dxA}px)` }
+    ], { duration, easing, fill: 'forwards' });
+
+    const animB = cardBEl.animate([
+      { transform: 'translateX(0px)' },
+      { transform: `translateX(${dxB}px)` }
+    ], { duration, easing, fill: 'forwards' });
+
+    const animBtn = btnEl.animate([
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(0)', opacity: 0 }
+    ], { duration: duration * 0.85, easing: 'ease-in', fill: 'forwards' });
+
+    setTimeout(() => {
+      try {
+        animA.cancel();
+        animB.cancel();
+        animBtn.cancel();
+        wrapperA.style.zIndex = '';
+        wrapperB.style.zIndex = '';
+      } catch (e) {
+        // Ignored if elements were unmounted
+      }
+      onCollide();
+      isAnimatingMergeRef.current = false;
+    }, duration);
+  };
+
+  const handleDecompose = (term, splitA, splitB, type) => {
+    if (isAnimatingMergeRef.current) return;
+    setActiveFactorMenu(null);
+    playMerge();
+
+    const cardEl = document.querySelector(`.term-card[data-id="${term.id}"]`);
+    const rect = cardEl ? cardEl.getBoundingClientRect() : null;
+    const origCenter = rect ? (rect.left + rect.width / 2) : null;
+
+    const targetGroup = term.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
+    const splitAWithGroup = { ...splitA, groupId: splitA.groupId || targetGroup };
+    const splitBWithGroup = { ...splitB, groupId: splitB.groupId || targetGroup };
+
+    if (origCenter != null) {
+      pendingSplitAnimRef.current = {
+        idA: splitAWithGroup.id,
+        idB: splitBWithGroup.id,
+        origCenter
+      };
+    }
+
+    const setter = type === 'num' ? setNumTerms
+                 : type === 'den' ? setDenTerms
+                 : type === 'rightNum' ? setRightNumTerms
+                 : setRightDenTerms;
+    setter(prev => {
+      const idx = prev.findIndex(t => t.id === term.id);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      next.splice(idx, 1, splitAWithGroup, splitBWithGroup);
+      return next;
+    });
+  };
+
+  const handleMultiplyAdjacent = (index, type, e) => {
+    if (isAnimatingMergeRef.current) return;
     setActiveFactorMenu(null);
     const getList = () => type === 'num' ? numTerms
                         : type === 'den' ? denTerms
@@ -534,16 +652,23 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (topic === 'equations' && termB.coeff < 0) {
       if (areLikeTerms(termA, termB)) {
-        playMerge();
-        const combined = combineTerms(termA, termB);
-        const setter = type === 'num' ? setNumTerms
-                     : type === 'den' ? setDenTerms
-                     : type === 'rightNum' ? setRightNumTerms
-                     : setRightDenTerms;
-        setter(prev => {
-          const next = [...prev];
-          next.splice(index - 1, 2, combined);
-          return next;
+        const btnEl = e?.currentTarget;
+        const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
+        const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
+
+        animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
+          playMerge();
+          const combined = combineTerms(termA, termB);
+          justMergedIdRef.current = combined.id;
+          const setter = type === 'num' ? setNumTerms
+                       : type === 'den' ? setDenTerms
+                       : type === 'rightNum' ? setRightNumTerms
+                       : setRightDenTerms;
+          setter(prev => {
+            const next = [...prev];
+            next.splice(index - 1, 2, combined);
+            return next;
+          });
         });
       } else {
         playWrong();
@@ -553,64 +678,64 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       return;
     }
 
-    playMerge();
-    const sharedGroupId = termA.groupId || termB.groupId;
-    const product = multiplyTerms(termA, termB, sharedGroupId);
-    const setter = type === 'num' ? setNumTerms
-                 : type === 'den' ? setDenTerms
-                 : type === 'rightNum' ? setRightNumTerms
-                 : setRightDenTerms;
-    setter(prev => {
-      const next = [...prev];
-      next.splice(index - 1, 2, product);
-      return next;
-    });
-  };
+    const btnEl = e?.currentTarget;
+    const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
+    const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
 
-  const handleCardTap = (term, type) => {
-    if (!term || term.coeff === 0 || isDraggingTerm || justDraggedRef.current) return;
-    const expMatch = term.variable ? term.variable.match(/^([a-zA-Z])\^(\d+)$/) : null;
-    if (expMatch) {
-      const base = expMatch[1];
-      const exponent = parseInt(expMatch[2], 10);
-      if (exponent > 1) {
-        setActiveFactorMenu(null);
-        playMerge();
-        const splitA = makeTerm(term.coeff, exponent - 1 === 1 ? base : `${base}^${exponent - 1}`, term.groupId);
-        const splitB = makeTerm(1, base, term.groupId);
-        const splitTerms = [splitA, splitB];
-        const setter = type === 'num' ? setNumTerms
-                     : type === 'den' ? setDenTerms
-                     : type === 'rightNum' ? setRightNumTerms
-                     : setRightDenTerms;
-        setter(prev => {
-          const idx = prev.findIndex(t => t.id === term.id);
-          if (idx === -1) return prev;
-          const next = [...prev];
-          next.splice(idx, 1, ...splitTerms);
-          return next;
-        });
-        return;
-      }
-    }
-
-    if (Math.abs(term.coeff) > 1 && term.variable) {
-      setActiveFactorMenu(null);
+    animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
       playMerge();
-      const splitA = makeTerm(term.coeff, null, term.groupId);
-      const splitB = makeTerm(1, term.variable, term.groupId);
+      const sharedGroupId = termA.groupId || termB.groupId;
+      const product = multiplyTerms(termA, termB, sharedGroupId);
+      justMergedIdRef.current = product.id;
       const setter = type === 'num' ? setNumTerms
                    : type === 'den' ? setDenTerms
                    : type === 'rightNum' ? setRightNumTerms
                    : setRightDenTerms;
       setter(prev => {
-        const idx = prev.findIndex(t => t.id === term.id);
-        if (idx === -1) return prev;
         const next = [...prev];
-        next.splice(idx, 1, splitA, splitB);
+        next.splice(index - 1, 2, product);
         return next;
       });
+    });
+  };
+
+  const handleCardTap = (term, type) => {
+    if (!term || term.coeff === 0 || isDraggingTerm || justDraggedRef.current || isAnimatingMergeRef.current) return;
+    const expMatch = term.variable ? term.variable.match(/^([a-zA-Z])\^(\d+)$/) : null;
+    if (expMatch) {
+      const base = expMatch[1];
+      const exponent = parseInt(expMatch[2], 10);
+      if (exponent > 1) {
+        const splitA = makeTerm(term.coeff, exponent - 1 === 1 ? base : `${base}^${exponent - 1}`, term.groupId);
+        const splitB = makeTerm(1, base, term.groupId);
+        handleDecompose(term, splitA, splitB, type);
+        return;
+      }
+    }
+
+    if (Math.abs(term.coeff) > 1 && term.variable) {
+      const splitA = makeTerm(term.coeff, null, term.groupId);
+      const splitB = makeTerm(1, term.variable, term.groupId);
+      handleDecompose(term, splitA, splitB, type);
       return;
+    }
+
+    // Tapping a multi-variable term (e.g. "by", "xyz", "x^2y")
+    if (term.variable) {
+      const varMap = parseVariablePart(term.variable);
+      const letters = Object.keys(varMap);
+      if (letters.length > 1) {
+        const firstLetter = letters[0];
+        const firstExp = varMap[firstLetter];
+        const firstVar = firstExp === 1 ? firstLetter : `${firstLetter}^${firstExp}`;
+        const remainingMap = { ...varMap };
+        delete remainingMap[firstLetter];
+        const remainingVar = serializeVariablePart(remainingMap);
+        const splitA = makeTerm(term.coeff, firstVar, term.groupId);
+        const splitB = makeTerm(1, remainingVar, term.groupId);
+        handleDecompose(term, splitA, splitB, type);
+        return;
+      }
     }
 
     // Tapping a simple card
@@ -624,25 +749,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         setActiveFactorMenu({ cardId: term.id, type });
       }
     }
-  };
-
-  const handleDecompose = (term, splitA, splitB, type) => {
-    setActiveFactorMenu(null);
-    playMerge();
-    const targetGroup = term.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
-    const splitAWithGroup = { ...splitA, groupId: splitA.groupId || targetGroup };
-    const splitBWithGroup = { ...splitB, groupId: splitB.groupId || targetGroup };
-    const setter = type === 'num' ? setNumTerms
-                 : type === 'den' ? setDenTerms
-                 : type === 'rightNum' ? setRightNumTerms
-                 : setRightDenTerms;
-    setter(prev => {
-      const idx = prev.findIndex(t => t.id === term.id);
-      if (idx === -1) return prev;
-      const next = [...prev];
-      next.splice(idx, 1, splitAWithGroup, splitBWithGroup);
-      return next;
-    });
   };
 
   /* True when solving this level will need a division: the banner then reserves the
@@ -1416,6 +1522,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         delete next[denId];
         return next;
       });
+      crossedNumSetter(prev => prev.filter(id => !numIdsToCancel.includes(id)));
+      crossedDenSetter(prev => prev.filter(id => id !== denId));
       setIsMatchingFading(false);
     }, 300);
   }, [topic, numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake, showFeedback]);
@@ -1642,21 +1750,29 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [numTerms, denTerms, rightNumTerms, rightDenTerms, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen, compareAndCrossOutSlice, topic, isValidating, isMatchingFading]);
 
 
-  const handleCombine = (index) => {
-    if (isValidating) return;
+  const handleCombine = (index, e) => {
+    if (isValidating || isAnimatingMergeRef.current) return;
     unlockAudio();
     const termA = terms[index - 1];
     const termB = terms[index];
+    if (!termA || !termB) return;
 
     if (areLikeTerms(termA, termB)) {
-      const merged = combineTerms(termA, termB);
-      const updatedTerms = [...terms];
-      updatedTerms.splice(index - 1, 2, merged);
+      const btnEl = e?.currentTarget;
+      const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
+      const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
 
-      setTerms(updatedTerms);
-      setUserPresses(p => p + 1);
-      playMerge();
-      showFeedback('Merged like terms!', 'success');
+      animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
+        const merged = combineTerms(termA, termB);
+        const updatedTerms = [...terms];
+        updatedTerms.splice(index - 1, 2, merged);
+
+        justMergedIdRef.current = merged.id;
+        setTerms(updatedTerms);
+        setUserPresses(p => p + 1);
+        playMerge();
+        showFeedback('Merged like terms!', 'success');
+      });
     } else {
       // Incompatible terms clicked
       setMistakes(m => m + 1);
@@ -1674,67 +1790,76 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     }
   };
 
-const handleCombineEquationGroup = (groupIdx, type) => {
-  if (isValidating) return;
-  unlockAudio();
+  const handleCombineEquationGroup = (groupIdx, type, e) => {
+    if (isValidating || isAnimatingMergeRef.current) return;
+    unlockAudio();
 
-  const getter = type === 'num' ? numTerms : rightNumTerms;
-  const setter = type === 'num' ? setNumTerms : setRightNumTerms;
+    const getter = type === 'num' ? numTerms : rightNumTerms;
+    const setter = type === 'num' ? setNumTerms : setRightNumTerms;
 
-  const currentList = getter;
-  const groups = splitIntoAdditiveGroups(currentList.filter(t => t.coeff !== 0 || currentList.length === 1));
+    const currentList = getter;
+    const groups = splitIntoAdditiveGroups(currentList.filter(t => t.coeff !== 0 || currentList.length === 1));
 
-  if (groupIdx <= 0 || groupIdx >= groups.length) return;
+    if (groupIdx <= 0 || groupIdx >= groups.length) return;
 
-  const groupA = groups[groupIdx - 1];
-  const groupB = groups[groupIdx];
+    const groupA = groups[groupIdx - 1];
+    const groupB = groups[groupIdx];
 
-  if (!groupA || !groupB) return;
+    if (!groupA || !groupB) return;
 
-  if (groupA.length > 1 || groupB.length > 1) {
-    setShakeDotButtons(true);
-    setTimeout(() => setShakeDotButtons(false), 500);
-    playWrong();
-    showFeedback('Multiply factors first before combining!', 'error');
-    return;
-  }
-
-  const termA = groupA[0];
-  const termB = groupB[0];
-
-  if (areLikeTerms(termA, termB)) {
-    playMerge();
-    setUserPresses(p => p + 1);
-    const combined = combineTerms(termA, termB);
-    showFeedback('Combined like terms!', 'success');
-
-    setter(prev => {
-      const prevGroups = splitIntoAdditiveGroups(prev);
-      const idxA = prevGroups.findIndex(g => g.some(t => t.id === termA.id));
-      const idxB = prevGroups.findIndex(g => g.some(t => t.id === termB.id));
-
-      if (idxA === -1 || idxB === -1) return prev;
-
-      const nextGroups = [...prevGroups];
-      if (combined.coeff === 0 && prevGroups.length > 2) {
-        nextGroups.splice(Math.min(idxA, idxB), 2);
-      } else {
-        nextGroups.splice(Math.min(idxA, idxB), 2, [combined]);
-      }
-      return nextGroups.flat();
-    });
-  } else {
-    setMistakes(m => m + 1);
-    setIsLevelPerfect(false);
-    playWrong();
-    if ('vibrate' in navigator) {
-      navigator.vibrate([100, 50, 100]);
+    if (groupA.length > 1 || groupB.length > 1) {
+      setShakeDotButtons(true);
+      setTimeout(() => setShakeDotButtons(false), 500);
+      playWrong();
+      showFeedback('Multiply factors first before combining!', 'error');
+      return;
     }
-    showFeedback('Unlike terms cannot be combined!', 'error');
-    triggerFlash('error');
-    triggerShake();
-  }
-};
+
+    const termA = groupA[0];
+    const termB = groupB[0];
+
+    if (areLikeTerms(termA, termB)) {
+      const btnEl = e?.currentTarget;
+      const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
+      const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
+
+      animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
+        playMerge();
+        setUserPresses(p => p + 1);
+        const combined = combineTerms(termA, termB);
+        if (combined.coeff !== 0) {
+          justMergedIdRef.current = combined.id;
+        }
+        showFeedback('Combined like terms!', 'success');
+
+        setter(prev => {
+          const prevGroups = splitIntoAdditiveGroups(prev);
+          const idxA = prevGroups.findIndex(g => g.some(t => t.id === termA.id));
+          const idxB = prevGroups.findIndex(g => g.some(t => t.id === termB.id));
+
+          if (idxA === -1 || idxB === -1) return prev;
+
+          const nextGroups = [...prevGroups];
+          if (combined.coeff === 0 && prevGroups.length > 2) {
+            nextGroups.splice(Math.min(idxA, idxB), 2);
+          } else {
+            nextGroups.splice(Math.min(idxA, idxB), 2, [combined]);
+          }
+          return nextGroups.flat();
+        });
+      });
+    } else {
+      setMistakes(m => m + 1);
+      setIsLevelPerfect(false);
+      playWrong();
+      if ('vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+      showFeedback('Unlike terms cannot be combined!', 'error');
+      triggerFlash('error');
+      triggerShake();
+    }
+  };
 
   const handleValidate = () => {
     if (isValidating) return;
@@ -1815,8 +1940,16 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       } else {
         if (topic === 'equations') {
           showFeedback(`Isolate the variable '${unknownVar}' with coefficient 1 on one side!`, 'error');
+        } else if (topic === 'divisions') {
+          const hasMatches = countMatchingPairs(numTerms, denTerms) > 0;
+          showFeedback(
+            hasMatches
+              ? 'Doh! There are still matching terms you can cross out!'
+              : 'Expression can still be simplified! Tap terms to break them into factors.',
+            'error'
+          );
         } else {
-          showFeedback(topic === 'divisions' ? 'Doh! There are still matching terms you can cross out!' : 'Unlike terms cannot be combined!', 'error');
+          showFeedback('Unlike terms cannot be combined!', 'error');
         }
       }
       
@@ -1824,6 +1957,18 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       triggerShake();
     }
   };
+
+  // Auto-complete divisions when the expression cannot be further simplified
+  useEffect(() => {
+    if (topic !== 'divisions' || isValidating || isMatchingFading || userPresses === 0) return;
+    const hasUnmerged = numTerms.length > 1 || denTerms.length > 1;
+    if (!hasUnmerged && isDivisionSimplified(numTerms, denTerms)) {
+      const timer = setTimeout(() => {
+        handleValidate();
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [topic, numTerms, denTerms, isValidating, isMatchingFading, userPresses]);
 
   const renderTermValue = (term) => {
     const absCoeff = Math.abs(term.coeff);
@@ -1890,6 +2035,11 @@ const handleCombineEquationGroup = (groupIdx, type) => {
     // Internal container padding (12px on each side = 24px)
     const targetWidth = Math.max(260, maxAvailableWidth - 24);
 
+    if (lastSlideWidthRef.current !== slideWidth) {
+      lastSlideWidthRef.current = slideWidth;
+      threeTermScaleRef.current = null;
+    }
+
     if (topic === 'divisions') {
       const calculateDivListWidth = (list) => {
         if (!list || list.length === 0) return 40;
@@ -1899,11 +2049,34 @@ const handleCombineEquationGroup = (groupIdx, type) => {
           return acc + cardW + dotW;
         }, 0);
       };
-      const numW = calculateDivListWidth(numTerms);
-      const denW = calculateDivListWidth(denTerms);
+      let numW = calculateDivListWidth(numTerms);
+      let denW = calculateDivListWidth(denTerms);
+
+      // In divisions, terms can grow up to the 3-term size as the fraction simplifies,
+      // but must never get bigger than the size they have when 3 terms are available in a row.
+      const maxTermCount = Math.max(numTerms.length, denTerms.length);
+      if (maxTermCount < 3) {
+        const allTerms = [...numTerms, ...denTerms];
+        const avgCardW = allTerms.length > 0
+          ? allTerms.reduce((acc, t) => acc + getTermWidth(t), 0) / allTerms.length
+          : 54;
+        const missingTerms = 3 - maxTermCount;
+        const extraW = missingTerms * (avgCardW + 38);
+        numW += extraW;
+        denW += extraW;
+      }
+
       const maxDivW = Math.max(numW, denW);
-      const calculatedScale = maxDivW > 0 ? targetWidth / maxDivW : 1;
-      return Math.max(0.45, Math.min(1.85, calculatedScale));
+      let calculatedScale = maxDivW > 0 ? targetWidth / maxDivW : 1;
+      calculatedScale = Math.max(0.45, Math.min(1.45, calculatedScale));
+
+      if (maxTermCount === 3) {
+        threeTermScaleRef.current = calculatedScale;
+      } else if (maxTermCount < 3 && threeTermScaleRef.current !== null) {
+        calculatedScale = Math.min(threeTermScaleRef.current, calculatedScale);
+      }
+
+      return calculatedScale;
     } else if (topic === 'equations') {
       const getSideBaseWidth = (numList, denList) => {
         const calcW = (list) => {
@@ -1917,11 +2090,34 @@ const handleCombineEquationGroup = (groupIdx, type) => {
         };
         return Math.max(calcW(numList), calcW(denList));
       };
-      const leftW = getSideBaseWidth(numTerms, denTerms);
-      const rightW = getSideBaseWidth(rightNumTerms, rightDenTerms);
+      let leftW = getSideBaseWidth(numTerms, denTerms);
+      let rightW = getSideBaseWidth(rightNumTerms, rightDenTerms);
       const equalsW = 38;
-      const totalEqW = leftW + equalsW + rightW;
-      const calculatedScale = totalEqW > 0 ? targetWidth / totalEqW : 1;
+      let totalEqW = leftW + equalsW + rightW;
+
+      const activeTerms = [
+        ...numTerms.filter(t => t.coeff !== 0),
+        ...denTerms.filter(t => !isDenOne([t])),
+        ...rightNumTerms.filter(t => t.coeff !== 0),
+        ...rightDenTerms.filter(t => !isDenOne([t]))
+      ];
+      const eqTermCount = activeTerms.length;
+      if (eqTermCount < 3) {
+        const avgCardW = activeTerms.length > 0
+          ? activeTerms.reduce((acc, t) => acc + getTermWidth(t), 0) / activeTerms.length
+          : 54;
+        const missingTerms = 3 - eqTermCount;
+        totalEqW += missingTerms * (avgCardW + 30);
+      }
+
+      let calculatedScale = totalEqW > 0 ? targetWidth / totalEqW : 1;
+      calculatedScale = Math.max(0.45, Math.min(1.45, calculatedScale));
+
+      if (eqTermCount === 3) {
+        threeTermScaleRef.current = calculatedScale;
+      } else if (eqTermCount < 3 && threeTermScaleRef.current !== null) {
+        calculatedScale = Math.min(threeTermScaleRef.current, calculatedScale);
+      }
 
       /* The banner clips whatever leaves it, so the width-driven scale above is not enough:
        * a fraction is three rows tall and blowing it up would push cards out of the white
@@ -1944,14 +2140,9 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       const bannerH = Math.max(reservesFraction ? BANNER_MIN_H_FRACTION : BANNER_MIN_H, boxH + BANNER_PADDING_H);
       const heightCap = (bannerH - BANNER_PADDING_H - BANNER_POP_SLACK) / contentH;
 
-      return Math.max(0.45, Math.min(1.85, calculatedScale, heightCap));
+      return Math.max(0.45, Math.min(1.45, calculatedScale, heightCap));
     } else {
       // topic === 'liketerms'
-      if (lastSlideWidthRef.current !== slideWidth) {
-        lastSlideWidthRef.current = slideWidth;
-        threeTermScaleRef.current = null;
-      }
-
       const calculateLikeTermsWidth = (list) => {
         if (!list || list.length === 0) return 50;
         return list.reduce((acc, term, idx) => {
@@ -1977,7 +2168,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
       }
 
       let calculatedScale = baseWidth > 0 ? targetWidth / baseWidth : 1;
-      calculatedScale = Math.max(0.45, Math.min(1.95, calculatedScale));
+      calculatedScale = Math.max(0.45, Math.min(1.45, calculatedScale));
 
       if (terms.length === 3) {
         threeTermScaleRef.current = calculatedScale;
@@ -2008,6 +2199,63 @@ const handleCombineEquationGroup = (groupIdx, type) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDraggingTerm]);
   const stableScale = (isDraggingTerm && dragFrozenScaleRef.current !== null) ? dragFrozenScaleRef.current : expressionScale;
+  currentScaleRef.current = stableScale;
+
+  useLayoutEffect(() => {
+    if (justMergedIdRef.current) {
+      const mergedId = justMergedIdRef.current;
+      justMergedIdRef.current = null;
+      const mergedCardEl = document.querySelector(`.term-card[data-id="${mergedId}"]`);
+      if (mergedCardEl) {
+        mergedCardEl.animate([
+          { transform: 'scale(1.18)' },
+          { transform: 'scale(1)' }
+        ], { duration: 180, easing: 'cubic-bezier(0.17, 0.89, 0.32, 1.28)' });
+      }
+    }
+
+    if (!pendingSplitAnimRef.current) return;
+    const { idA, idB, origCenter } = pendingSplitAnimRef.current;
+    pendingSplitAnimRef.current = null;
+
+    if (origCenter == null) return;
+
+    const cardAEl = document.querySelector(`.term-card[data-id="${idA}"]`);
+    const cardBEl = document.querySelector(`.term-card[data-id="${idB}"]`);
+    if (!cardAEl || !cardBEl) return;
+
+    const wrapperB = cardBEl.closest('.term-item-wrapper');
+    const btnEl = wrapperB ? wrapperB.querySelector('.dot-separator-btn') : null;
+
+    const rectA = cardAEl.getBoundingClientRect();
+    const rectB = cardBEl.getBoundingClientRect();
+    const aCenter = rectA.left + rectA.width / 2;
+    const bCenter = rectB.left + rectB.width / 2;
+
+    const scale = currentScaleRef.current || 1;
+    const dxA = (origCenter - aCenter) / scale;
+    const dxB = (origCenter - bCenter) / scale;
+
+    const duration = 240;
+    const easing = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+    cardAEl.animate([
+      { transform: `translateX(${dxA}px)` },
+      { transform: 'translateX(0px)' }
+    ], { duration, easing });
+
+    cardBEl.animate([
+      { transform: `translateX(${dxB}px)` },
+      { transform: 'translateX(0px)' }
+    ], { duration, easing });
+
+    if (btnEl) {
+      btnEl.animate([
+        { transform: 'scale(0)', opacity: 0 },
+        { transform: 'scale(1)', opacity: 1 }
+      ], { duration: duration * 0.9, easing: 'ease-out' });
+    }
+  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, terms]);
 
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
@@ -2226,7 +2474,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                           onTouchStart={(e) => e.stopPropagation()}
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'num');
+                                            handleCombineEquationGroup(groupIdx, 'num', e);
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
@@ -2283,7 +2531,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'num');
+                                                    handleMultiplyAdjacent(index, 'num', e);
                                                   }}
                                                 >
                                                   {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
@@ -2395,7 +2643,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                         onTouchStart={e => e.stopPropagation()}
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleMultiplyAdjacent(index, 'den');
+                                          handleMultiplyAdjacent(index, 'den', e);
                                         }}
                                       >
                                         ·
@@ -2521,7 +2769,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                           onTouchStart={(e) => e.stopPropagation()}
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'rightNum');
+                                            handleCombineEquationGroup(groupIdx, 'rightNum', e);
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
@@ -2578,7 +2826,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'rightNum');
+                                                    handleMultiplyAdjacent(index, 'rightNum', e);
                                                   }}
                                                 >
                                                   {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
@@ -2690,7 +2938,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                         onTouchStart={e => e.stopPropagation()}
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleMultiplyAdjacent(index, 'rightDen');
+                                          handleMultiplyAdjacent(index, 'rightDen', e);
                                         }}
                                       >
                                         ·
@@ -2759,6 +3007,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                         zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                         position: 'relative'
                       }}
+                      isValidating={isValidating}
                     >
                       <AnimatePresence initial={false}>
                         {numTerms.map((term, index) => {
@@ -2774,8 +3023,8 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                               dragListener={!isValidating}
                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                               dragElastic={0}
-                              whileDrag={{ scale: 1.06 }}
-                              exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                              whileDrag={isValidating ? undefined : { scale: 1.06 }}
+                              exit={{ opacity: 0, transition: { duration: 0.15 } }}
                               transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                               onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                               onDragEnd={() => setIsDraggingTerm(false)}
@@ -2792,7 +3041,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                   onTouchStart={e => e.stopPropagation()}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleMultiplyAdjacent(index, 'num');
+                                    handleMultiplyAdjacent(index, 'num', e);
                                   }}
                                 >
                                   ·
@@ -2804,6 +3053,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 data-type="num"
                                 data-index={index}
                                 style={{ position: 'relative' }}
+                                transition={isValidating ? { duration: 0 } : undefined}
                                 onTap={() => handleCardTap(term, 'num')}
                               >
                                 {renderTermValue(term)}
@@ -2834,6 +3084,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           scale: stableScale,
                           transformOrigin: 'center'
                         }}
+                        isValidating={isValidating}
                       >
                         <AnimatePresence initial={false}>
                           {numTerms.length === 0 ? (
@@ -2852,8 +3103,8 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                   dragListener={!isValidating}
                                   className="term-item-wrapper"
                                   dragElastic={0}
-                                  whileDrag={{ scale: 1.06 }}
-                                  exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                  whileDrag={isValidating ? undefined : { scale: 1.06 }}
+                                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
                                   transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                   onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                   onDragEnd={() => setIsDraggingTerm(false)}
@@ -2866,7 +3117,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                       onTouchStart={e => e.stopPropagation()}
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        handleMultiplyAdjacent(index, 'num');
+                                        handleMultiplyAdjacent(index, 'num', e);
                                       }}
                                     >
                                       ·
@@ -2878,6 +3129,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                     data-type="num"
                                     data-index={index}
                                     style={{ position: 'relative', pointerEvents: 'auto' }}
+                                    transition={isValidating ? { duration: 0 } : undefined}
                                     onTap={() => handleCardTap(term, 'num')}
                                   >
                                     {renderTermValue(term)}
@@ -2920,6 +3172,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                           zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
                           position: 'relative'
                         }}
+                        isValidating={isValidating}
                       >
                         <AnimatePresence initial={false}>
                           {denTerms.map((term, index) => {
@@ -2935,8 +3188,8 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 dragListener={!isValidating}
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                 dragElastic={0}
-                                whileDrag={{ scale: 1.06 }}
-                                exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                whileDrag={isValidating ? undefined : { scale: 1.06 }}
+                                exit={{ opacity: 0, transition: { duration: 0.15 } }}
                                 transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                 onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                 onDragEnd={() => setIsDraggingTerm(false)}
@@ -2954,7 +3207,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                     onTouchStart={e => e.stopPropagation()}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleMultiplyAdjacent(index, 'den');
+                                      handleMultiplyAdjacent(index, 'den', e);
                                     }}
                                   >
                                     ·
@@ -2966,6 +3219,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                   data-type="den"
                                   data-index={index}
                                   style={{ position: 'relative', pointerEvents: 'auto' }}
+                                  transition={isValidating ? { duration: 0 } : undefined}
                                   onTap={() => handleCardTap(term, 'den')}
                                 >
                                   {renderTermValue(term)}
@@ -2997,6 +3251,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                       scale: stableScale,
                       transformOrigin: 'center'
                     }}
+                    isValidating={isValidating}
                   >
                     <AnimatePresence initial={false}>
                       {terms.map((term, index) => {
@@ -3014,7 +3269,7 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                             dragListener={!isValidating}
                             className="term-item-wrapper"
                             dragElastic={0}
-                            whileDrag={{ scale: 1.06 }}
+                            whileDrag={isValidating ? undefined : { scale: 1.06 }}
                             exit={{ opacity: 0, transition: { duration: 0.15 } }}
                             // Reordering makes every card between the old and new slot hop into
                             // place live as the drag crosses each one — a close-to-critically-
@@ -3037,14 +3292,17 @@ const handleCombineEquationGroup = (groupIdx, type) => {
                                 style={{ visibility: draggingCardId === term.id ? 'hidden' : 'visible' }}
                                 onMouseDown={(e) => e.stopPropagation()}
                                 onTouchStart={(e) => e.stopPropagation()}
-                                onClick={() => handleCombine(index)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCombine(index, e);
+                                }}
                               >
                                 {formatted.sign}
                               </button>
                             )}
 
                             {/* Term card box (only wraps the value!) */}
-                            <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`}>
+                            <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`} data-id={term.id}>
                               {formatted.sign === '-' && (isFirst || draggingCardId === term.id) && (
                                 <span className="term-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
                               )}

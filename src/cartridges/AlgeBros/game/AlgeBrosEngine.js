@@ -16,16 +16,43 @@ export function makeTerm(coeff, variable, groupId = null) {
   };
 }
 
+export const REVERSE_SUPERSCRIPT_MAP = {
+  '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4',
+  '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9',
+  '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')'
+};
+
 /**
- * Parses a single term string like "-3x^2", "7x", "-14", "x" into a term object.
+ * Normalizes user-input math strings into standard ASCII syntax (e.g. x!2 -> x^2, x² -> x^2)
+ */
+export function normalizeMathString(str) {
+  if (!str || typeof str !== 'string') return '';
+  let res = str;
+  // Replace unicode superscripts with ^digits
+  res = res.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g, (match) => {
+    const normalDigits = match.split('').map(c => REVERSE_SUPERSCRIPT_MAP[c] || c).join('');
+    return `^${normalDigits}`;
+  });
+  // Replace Picopico !exp syntax with ^exp (e.g. x!2 -> x^2, x!(2) -> x^2, x!-1 -> x^-1)
+  res = res.replace(/!\(?([+-]?\d+)\)?/g, '^$1');
+  res = res.replace(/!\(?([a-zA-Z]+)\)?/g, '^$1');
+  return res;
+}
+
+/**
+ * Parses a single term string like "-3x^2", "7x", "-14", "x", "x!2", "x²" into a term object.
  */
 export function parseTermString(termStr) {
-  const cleanStr = termStr.replace(/\s+/g, '');
-  // Matches: optional sign (+|-), optional coefficient digits, optional variable (one or more letters and power)
-  const regex = /^([+-]?)(\d*)([a-zA-Z]+(?:\^\d+)?)?$/;
+  if (!termStr) return null;
+  const cleanStr = normalizeMathString(termStr).replace(/\s+/g, '');
+  if (!cleanStr) return null;
+
+  // Matches: optional sign (+|-), optional coefficient digits, optional variable (one or more letters and powers, e.g. x, x^2, x^2y, by)
+  const regex = /^([+-]?)(\d*)((?:[a-zA-Z]+(?:\^[+-]?\d+)?)+)?$/;
   const match = cleanStr.match(regex);
   if (!match) {
-    throw new Error(`Invalid term string: ${termStr}`);
+    console.warn(`Could not parse term string: "${termStr}"`);
+    return null;
   }
 
   const signStr = match[1];
@@ -161,11 +188,72 @@ export function countMatchingPairs(numTerms, denTerms) {
   return count;
 }
 
+export function gcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    const t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
+}
+
 /**
- * Checks if the division expression is fully simplified (no more equal pairs).
+ * Checks if the division expression is fully simplified:
+ * 1. No unmerged factors (numTerms.length <= 1, denTerms.length <= 1).
+ * 2. No matching pairs remaining to cross out.
+ * 3. No shared numerical factors (gcd(|num|, |den|) === 1).
+ * 4. No shared variable factors (e.g. x^3 / x^2, xy / y).
+ * 5. No redundant denominator (e.g. denominator is not 1 or -1).
  */
-export function isDivisionSimplified(numTerms, denTerms) {
-  return countMatchingPairs(numTerms, denTerms) === 0;
+export function isDivisionSimplified(numTerms = [], denTerms = []) {
+  const activeNum = (numTerms || []).filter(Boolean);
+  const activeDen = (denTerms || []).filter(Boolean);
+
+  // If there are multiple unmerged factors in numerator or denominator, not simplified yet
+  if (activeNum.length > 1 || activeDen.length > 1) {
+    return false;
+  }
+
+  // Any remaining direct matching pair means they can still be crossed out
+  if (countMatchingPairs(activeNum, activeDen) > 0) {
+    return false;
+  }
+
+  // If denominator is completely eliminated, the single numerator term is simplified
+  if (activeDen.length === 0) {
+    return true;
+  }
+
+  const denTerm = activeDen[0];
+  const numTerm = activeNum.length === 1 ? activeNum[0] : makeTerm(1, null);
+
+  // Denominator cannot be 1 or -1 without a variable (e.g. N/1 or N/-1 is not simplified)
+  if (!denTerm.variable && Math.abs(denTerm.coeff) === 1) {
+    return false;
+  }
+
+  // If numerator is 0, denominator should be eliminated
+  if (numTerm.coeff === 0) {
+    return false;
+  }
+
+  // Check if coefficients share a common factor (e.g. 6/4 or 12/4 or 10/15)
+  if (gcd(numTerm.coeff, denTerm.coeff) > 1) {
+    return false;
+  }
+
+  // Check if variables share any common base letter (e.g. x^3/x^2 or xy/y or x/x^2)
+  const numVars = parseVariablePart(numTerm.variable);
+  const denVars = parseVariablePart(denTerm.variable);
+  for (const letter in numVars) {
+    if ((denVars[letter] || 0) > 0) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -256,13 +344,34 @@ export function getTermDecompositionOptions(term) {
     }
   }
 
+  // 3. Multi-variable decomposition (e.g. by -> b · y, x^2y -> x^2 · y)
+  if (hasVar) {
+    const varMap = parseVariablePart(term.variable);
+    const letters = Object.keys(varMap);
+    if (letters.length > 1) {
+      const firstLetter = letters[0];
+      const firstExp = varMap[firstLetter];
+      const firstVar = firstExp === 1 ? firstLetter : `${firstLetter}^${firstExp}`;
+      const remainingMap = { ...varMap };
+      delete remainingMap[firstLetter];
+      const remainingVar = serializeVariablePart(remainingMap);
+      const splitA = makeTerm(term.coeff, firstVar, term.groupId);
+      const splitB = makeTerm(1, remainingVar, term.groupId);
+      const sig = `${splitA.coeff},${splitA.variable}|${splitB.coeff},${splitB.variable}`;
+      if (!seenSignatures.has(sig)) {
+        seenSignatures.add(sig);
+        options.push({ splitA, splitB });
+      }
+    }
+  }
+
   return options;
 }
 
 /**
  * Parses a variable string (like "x^2y", "ax", "z^3") into a map of { letter: exponent }
  */
-function parseVariablePart(varStr) {
+export function parseVariablePart(varStr) {
   const result = {};
   if (!varStr) return result;
   const regex = /([a-zA-Z])(?:\^(\d+))?/g;
@@ -278,7 +387,7 @@ function parseVariablePart(varStr) {
 /**
  * Serializes a letter-exponent map back to a sorted string (like "x^2y")
  */
-function serializeVariablePart(varMap) {
+export function serializeVariablePart(varMap) {
   const sortedLetters = Object.keys(varMap).sort();
   let result = '';
   for (const letter of sortedLetters) {
@@ -310,17 +419,6 @@ export function multiplyTerms(termA, termB, groupId = null) {
   const newVar = serializeVariablePart(mergedMap);
   const targetGroupId = groupId || (termA && termB && termA.groupId === termB.groupId ? termA.groupId : (termA?.groupId || termB?.groupId || null));
   return makeTerm(newCoeff, newVar, targetGroupId);
-}
-
-function gcd(a, b) {
-  a = Math.abs(a);
-  b = Math.abs(b);
-  while (b) {
-    const t = b;
-    b = a % b;
-    a = t;
-  }
-  return a;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -503,7 +601,7 @@ export function isEquationSolved(leftNum, leftDen, rightNum, rightDen, unknownVa
  */
 export function splitAdditiveExpression(exprStr) {
   if (!exprStr) return [];
-  const clean = exprStr.trim().replace(/\s+/g, '');
+  const clean = normalizeMathString(exprStr).trim().replace(/\s+/g, '');
   if (!clean) return [];
 
   // Match signed chunks: optional leading [+-], followed by everything up to next [+-]
@@ -518,14 +616,14 @@ export function splitAdditiveExpression(exprStr) {
  */
 export function parseEquationSide(sideStr) {
   if (!sideStr) return { num: [], den: [] };
-  const clean = sideStr.trim();
+  const clean = normalizeMathString(sideStr).trim();
   if (!clean) return { num: [], den: [] };
 
-  const slashIdx = clean.indexOf('/');
+  const slashIdx = clean.search(/[\/÷]/);
   if (slashIdx === -1) {
     const tokens = splitAdditiveExpression(clean);
     return {
-      num: tokens.map(t => parseTermString(t)),
+      num: tokens.map(t => parseTermString(t)).filter(Boolean),
       den: []
     };
   }
@@ -545,8 +643,8 @@ export function parseEquationSide(sideStr) {
   const denTokens = splitAdditiveExpression(denPart);
 
   return {
-    num: numTokens.map(t => parseTermString(t)),
-    den: denTokens.map(t => parseTermString(t))
+    num: numTokens.map(t => parseTermString(t)).filter(Boolean),
+    den: denTokens.map(t => parseTermString(t)).filter(Boolean)
   };
 }
 
@@ -555,7 +653,7 @@ export function parseEquationSide(sideStr) {
  */
 export function parseEquationLevel(lineStr, index = 0) {
   if (!lineStr) return null;
-  let text = lineStr.trim();
+  let text = normalizeMathString(lineStr).trim();
   if (!text || text.startsWith('#') || text.startsWith('//')) return null;
 
   // Optional manual minPresses at end, e.g. "2x = 6 | 3" or "2x = 6 [3]"
@@ -574,6 +672,9 @@ export function parseEquationLevel(lineStr, index = 0) {
 
   const left = parseEquationSide(leftStr);
   const right = parseEquationSide(rightStr);
+  if (left.num.length === 0 && left.den.length === 0 && right.num.length === 0 && right.den.length === 0) {
+    return null;
+  }
 
   let defaultPresses = 3;
   // Estimate steps: if single var with coeff > 1, ~3 steps (tap to split, drag, simplify)
@@ -604,9 +705,152 @@ export function parseCustomEquationLevels(text) {
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   const levels = [];
   lines.forEach((line) => {
-    const level = parseEquationLevel(line, levels.length);
-    if (level) levels.push(level);
+    try {
+      const level = parseEquationLevel(line, levels.length);
+      if (level && (level.initialLeftNum.length > 0 || level.initialRightNum.length > 0)) {
+        levels.push(level);
+      }
+    } catch (e) {
+      console.warn("Skipping invalid equation level line:", line, e);
+    }
   });
   return levels;
 }
+
+/**
+ * Splits a factor list string (e.g. "5 · by", "7x * 12", "(5a)(y)", "y 15") into an array of parsed term objects.
+ */
+export function parseFactorList(factorsStr) {
+  if (!factorsStr) return [];
+  let clean = normalizeMathString(factorsStr).trim();
+  if (clean.startsWith('(') && clean.endsWith(')')) {
+    clean = clean.slice(1, -1).trim();
+  }
+  clean = clean.replace(/\)\s*\(/g, ')*(');
+  const hasExplicitSep = /[*·\u00b7\u22c5×,]/.test(clean);
+  const rawTokens = hasExplicitSep ? clean.split(/[*·\u00b7\u22c5×,]+/) : clean.split(/\s+/);
+  return rawTokens
+    .map(t => t.trim().replace(/^\(|\)$/g, ''))
+    .filter(Boolean)
+    .map(t => parseTermString(t))
+    .filter(Boolean);
+}
+
+/**
+ * Parses a single division expression line into a level object.
+ * Format examples:
+ * "(5 · by) / (y · 15)"
+ * "7x * 12 / 4 * b | 2"
+ * "5a / y"
+ */
+export function parseDivisionLevel(lineStr, index = 0) {
+  if (!lineStr) return null;
+  let text = normalizeMathString(lineStr).trim();
+  if (!text || text.startsWith('#') || text.startsWith('//')) return null;
+
+  let explicitMinPresses = null;
+  const pipeMatch = text.match(/[|\[]\s*(\d+)\s*\]?$/);
+  if (pipeMatch) {
+    explicitMinPresses = parseInt(pipeMatch[1], 10);
+    text = text.slice(0, pipeMatch.index).trim();
+  }
+
+  const slashIdx = text.search(/[\/÷]/);
+  let numStr = text;
+  let denStr = '';
+  if (slashIdx !== -1) {
+    numStr = text.slice(0, slashIdx).trim();
+    denStr = text.slice(slashIdx + 1).trim();
+  }
+
+  const numTerms = parseFactorList(numStr);
+  const denTerms = parseFactorList(denStr);
+  if (numTerms.length === 0 && denTerms.length === 0) return null;
+
+  const matches = countMatchingPairs(numTerms, denTerms);
+  const defaultMinPresses = explicitMinPresses !== null && !isNaN(explicitMinPresses)
+    ? explicitMinPresses
+    : Math.max(1, matches > 0 ? matches : Math.min(numTerms.length || 1, denTerms.length || 1));
+
+  return {
+    levelNum: index + 1,
+    initialNum: numTerms,
+    initialDen: denTerms,
+    minPresses: defaultMinPresses
+  };
+}
+
+/**
+ * Parses multiline custom divisions text into an array of division levels.
+ */
+export function parseCustomDivisionLevels(text) {
+  if (!text || typeof text !== 'string') return [];
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const levels = [];
+  lines.forEach((line) => {
+    try {
+      const level = parseDivisionLevel(line, levels.length);
+      if (level && (level.initialNum.length > 0 || level.initialDen.length > 0)) {
+        levels.push(level);
+      }
+    } catch (e) {
+      console.warn("Skipping invalid division level line:", line, e);
+    }
+  });
+  return levels;
+}
+
+/**
+ * Parses a single like-terms expression line into a level object.
+ * Format examples:
+ * "3x + 5 + 4x"
+ * "8 - 2x - 5 | 1"
+ * "-4a + 7b + 9a - 2b"
+ */
+export function parseLikeTermsLevel(lineStr, index = 0) {
+  if (!lineStr) return null;
+  let text = normalizeMathString(lineStr).trim();
+  if (!text || text.startsWith('#') || text.startsWith('//')) return null;
+
+  let explicitMinPresses = null;
+  const pipeMatch = text.match(/[|\[]\s*(\d+)\s*\]?$/);
+  if (pipeMatch) {
+    explicitMinPresses = parseInt(pipeMatch[1], 10);
+    text = text.slice(0, pipeMatch.index).trim();
+  }
+
+  const tokens = splitAdditiveExpression(text);
+  if (tokens.length === 0) return null;
+  const terms = tokens.map(t => parseTermString(t)).filter(Boolean);
+  if (terms.length === 0) return null;
+
+  return {
+    levelNum: index + 1,
+    initialTerms: terms,
+    minPresses: explicitMinPresses !== null && !isNaN(explicitMinPresses)
+      ? explicitMinPresses
+      : calculateMinPresses(terms)
+  };
+}
+
+/**
+ * Parses multiline custom like-terms text into an array of levels.
+ */
+export function parseCustomLikeTermsLevels(text) {
+  if (!text || typeof text !== 'string') return [];
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const levels = [];
+  lines.forEach((line) => {
+    try {
+      const level = parseLikeTermsLevel(line, levels.length);
+      if (level && level.initialTerms.length > 0) {
+        levels.push(level);
+      }
+    } catch (e) {
+      console.warn("Skipping invalid like terms level line:", line, e);
+    }
+  });
+  return levels;
+}
+
 

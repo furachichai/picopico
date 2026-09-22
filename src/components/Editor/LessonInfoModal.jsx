@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
-import { replaceMathShortcuts } from '../../utils/textFormatters';
+import { replaceMathShortcuts, matchMathShortcutBeforeCursor } from '../../utils/textFormatters';
 import ConfirmationModal from './ConfirmationModal';
 import './ContextualMenu.css';
 
@@ -76,9 +76,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
             
             if (!selectedText && start === end) {
                 const textBefore = text.substring(0, start);
-                const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
-                    || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
-                    || textBefore.match(/[\*\/]$/);
+                const match = matchMathShortcutBeforeCursor(textBefore);
                 if (match) {
                     start = start - match[0].length;
                     selectedText = match[0];

@@ -14,6 +14,7 @@ import {
   findDistributiveCancel,
   splitIntoAdditiveGroups,
   parseCustomEquationLevels,
+  isDivisionSimplified,
 } from '../src/cartridges/AlgeBros/game/AlgeBrosEngine.js';
 import {
   parseBalanzaExpression,
@@ -468,6 +469,44 @@ check('Level 4 rightDen has 2', parsedLevels[3].initialRightDen.length === 1 && 
 
 // Level 5: 7 = 2x + 3
 check('Level 5 leftNum has 7, rightNum has 2x and 3', parsedLevels[4].initialLeftNum[0].coeff === 7 && parsedLevels[4].initialRightNum.length === 2);
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * algeBROS: division simplification tests
+ * ────────────────────────────────────────────────────────────────────────── */
+console.log('algeBROS — division simplification');
+
+// Common variable powers: x^3 / x^2 is NOT simplified
+check('x^3 / x^2 is not simplified', !isDivisionSimplified([t(1, 'x^3')], [t(1, 'x^2')]));
+
+// Common factors: 6 / 2 is NOT simplified
+check('6 / 2 is not simplified', !isDivisionSimplified([t(6, null)], [t(2, null)]));
+
+// Common factors: 12 / 4 is NOT simplified
+check('12 / 4 is not simplified', !isDivisionSimplified([t(12, null)], [t(4, null)]));
+
+// Unmerged factors: [7x, 3] / [b] is NOT simplified
+check('[7x, 3] / [b] is not simplified (unmerged factors)', !isDivisionSimplified([t(7, 'x'), t(3, null)], [t(1, 'b')]));
+
+// Simplified: 21x / b IS simplified
+check('21x / b is simplified', isDivisionSimplified([t(21, 'x')], [t(1, 'b')]));
+
+// Matching pair: x / x is NOT simplified
+check('x / x is not simplified', !isDivisionSimplified([t(1, 'x')], [t(1, 'x')]));
+
+// Simplified fraction: 1 / 2 IS simplified
+check('1 / 2 is simplified', isDivisionSimplified([t(1, null)], [t(2, null)]));
+
+// Common factors with variables: 5a / 15 is NOT simplified
+check('5a / 15 is not simplified', !isDivisionSimplified([t(5, 'a')], [t(15, null)]));
+
+// Simplified: a / 3 IS simplified
+check('a / 3 is simplified', isDivisionSimplified([t(1, 'a')], [t(3, null)]));
+
+// Single term with no denominator: [x] / [] IS simplified
+check('[x] / [] is simplified', isDivisionSimplified([t(1, 'x')], []));
+
+// Redundant denominator: 3 / 1 is NOT simplified
+check('3 / 1 is not simplified', !isDivisionSimplified([t(3, null)], [t(1, null)]));
 
 /* ────────────────────────────────────────────────────────────────────────── */
 console.log(`\n${passed} passed, ${failed} failed`);

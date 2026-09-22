@@ -14,7 +14,7 @@ import PresetPanel from './PresetPanel';
 import LayersPanel from './LayersPanel';
 import { useTranslation } from 'react-i18next';
 import { getSymbolSvg } from '../../utils/symbols';
-import { replaceMathShortcuts, replaceMathInHtml } from '../../utils/textFormatters';
+import { replaceMathShortcuts, replaceMathInHtml, matchMathShortcutBeforeCursor } from '../../utils/textFormatters';
 import { deleteLocalLesson } from '../../utils/lessonStorage';
 
 const Editor = () => {
@@ -699,6 +699,7 @@ const Editor = () => {
 
             // Math replacement shortcut (Cmd+E / Ctrl+E)
             if (isMathShortcut) {
+                e.preventDefault();
                 const activeEl = document.activeElement;
                 const isNativeInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
                 let selectedText = '';
@@ -715,9 +716,7 @@ const Editor = () => {
                     } else {
                         const val = activeEl.value;
                         const textBefore = val.substring(0, start);
-                        const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
-                            || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
-                            || textBefore.match(/[\*\/]$/);
+                        const match = matchMathShortcutBeforeCursor(textBefore);
                         if (match) {
                             targetStart = start - match[0].length;
                             targetEnd = start;
@@ -731,19 +730,24 @@ const Editor = () => {
                             selectedText = sel.toString();
                         } else {
                             const range = sel.getRangeAt(0);
-                            const node = range.startContainer;
-                            if (node && node.nodeType === Node.TEXT_NODE) {
-                                const text = node.nodeValue || '';
-                                const offset = range.startOffset;
+                            let targetNode = range.startContainer;
+                            let offset = range.startOffset;
+                            if (targetNode && targetNode.nodeType === Node.ELEMENT_NODE && offset > 0) {
+                                const prevChild = targetNode.childNodes[offset - 1];
+                                if (prevChild && prevChild.nodeType === Node.TEXT_NODE) {
+                                    targetNode = prevChild;
+                                    offset = prevChild.nodeValue?.length || 0;
+                                }
+                            }
+                            if (targetNode && targetNode.nodeType === Node.TEXT_NODE) {
+                                const text = targetNode.nodeValue || '';
                                 const textBefore = text.substring(0, offset);
-                                const match = textBefore.match(/(?:[0-9a-zA-Z.]+)?[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?$/)
-                                    || textBefore.match(/[!^]([0-9a-zA-Z+-]+)$/)
-                                    || textBefore.match(/[\*\/]$/);
+                                const match = matchMathShortcutBeforeCursor(textBefore);
                                 if (match) {
                                     const matchStart = offset - match[0].length;
                                     const newRange = document.createRange();
-                                    newRange.setStart(node, matchStart);
-                                    newRange.setEnd(node, offset);
+                                    newRange.setStart(targetNode, matchStart);
+                                    newRange.setEnd(targetNode, offset);
                                     sel.removeAllRanges();
                                     sel.addRange(newRange);
                                     selectedText = match[0];
@@ -759,8 +763,7 @@ const Editor = () => {
                     const selectedElement = currentSlide?.elements.find(el => el.id === state.selectedElementId);
                     if (selectedElement && (selectedElement.type === 'text' || selectedElement.type === 'banner')) {
                         const content = selectedElement.content || '';
-                        if (/[!^\*\/]/.test(content)) {
-                            e.preventDefault();
+                        if (/[!^\*\/]|!=/.test(content)) {
                             const newContent = replaceMathInHtml(content);
                             if (newContent !== content) {
                                 handleContextMenuChange(state.selectedElementId, { content: newContent });
@@ -771,7 +774,6 @@ const Editor = () => {
                 }
 
                 if (selectedText) {
-                    e.preventDefault();
                     const replacement = replaceMathShortcuts(selectedText);
                         
                     if (isNativeInput) {

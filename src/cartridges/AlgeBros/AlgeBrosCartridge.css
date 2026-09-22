@@ -430,11 +430,16 @@
 .algebros-cartridge .is-success-transition .term-card {
   cursor: default !important;
   transition: none !important;
+  animation: none !important;
 }
 
 .algebros-cartridge .is-success-transition .term-item-wrapper,
-.algebros-cartridge .is-success-transition .term-group-wrapper {
+.algebros-cartridge .is-success-transition .term-group-wrapper,
+.algebros-cartridge .is-success-transition .expression-list,
+.algebros-cartridge .is-success-transition .equation-layout,
+.algebros-cartridge .is-success-transition .division-container {
   transition: none !important;
+  animation: none !important;
 }
 
 .algebros-cartridge .is-success-transition .operator-btn {

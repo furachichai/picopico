@@ -1,13 +1,1262 @@
 [
   {
-    "name": "01-Ecuación o Expresión",
+    "name": "01-Any Number Over Itself Is 1",
     "type": "file",
-    "path": "lessons/01-Ecuación o Expresión/lesson.json",
-    "title": "Ecuación o Expresión",
+    "path": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+    "title": "Any Number Over Itself Is 1",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
     "order": 1,
+    "content": {
+      "id": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+      "title": "Any Number Over Itself Is 1",
+      "slides": [
+        {
+          "id": "slide-1790102024224",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102045614-dyjqvkt57",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looks_down_holds_sign.png",
+              "x": 35.69444444444444,
+              "y": 69.65836864406779,
+              "width": 40,
+              "height": 29.74576271186441,
+              "rotation": 0,
+              "scale": 2.0713032666565248,
+              "metadata": {
+                "width": 40,
+                "height": 29.74576271186441,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1790102081776-8kmk38q90",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_3_quarters.png",
+              "x": 78.05555555555556,
+              "y": 86.5625,
+              "width": 40,
+              "height": 27.604625550660796,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 27.604625550660796,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1790102024225",
+              "type": "balloon",
+              "content": "How much is this?",
+              "x": 44.44444444444445,
+              "y": 29.6875,
+              "width": 65,
+              "height": 15,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Yara",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -8,
+                  "y": 107
+                }
+              }
+            },
+            {
+              "id": "el-1790102024226",
+              "type": "balloon",
+              "content": "1",
+              "x": 77.63888888888889,
+              "y": 62.078125,
+              "width": 39.72222222222222,
+              "height": 9.53125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Pesto",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -10,
+                  "y": 49
+                }
+              }
+            },
+            {
+              "id": "el-1790102173777-owlolee9b",
+              "type": "text",
+              "content": "³⁄₃",
+              "x": 35.55555555555556,
+              "y": 70.78125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.8787823653936664,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            }
+          ],
+          "order": 0
+        },
+        {
+          "id": "slide-1790102116063",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102116063-kf9hz75u7",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looks_down_holds_sign.png",
+              "x": 33.97222222222222,
+              "y": 66.40836864406779,
+              "width": 40,
+              "height": 29.74576271186441,
+              "rotation": 0,
+              "scale": 2.0713032666565248,
+              "metadata": {
+                "width": 40,
+                "height": 29.74576271186441,
+                "category": "characters",
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1790102116063-8j3qhl841",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_3_quarters.png",
+              "x": 73.55555555555556,
+              "y": 82.84375,
+              "width": 40,
+              "height": 27.604625550660796,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 27.604625550660796,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1790102116063-3c5g9ww29",
+              "type": "balloon",
+              "content": "And this?",
+              "x": 50,
+              "y": 25,
+              "width": 65,
+              "height": 15,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Yara",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -20,
+                  "y": 70
+                }
+              }
+            },
+            {
+              "id": "el-1790102116063-r1bpsi96q",
+              "type": "balloon",
+              "content": "Still 1.",
+              "x": 74.30555555555556,
+              "y": 52.46875,
+              "width": 42.5,
+              "height": 15,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Pesto",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -12,
+                  "y": 59
+                }
+              }
+            },
+            {
+              "id": "el-1790102121997-w7y0332cw",
+              "type": "text",
+              "content": "<u>9999</u>",
+              "x": 34.166666666666664,
+              "y": 66.25,
+              "width": 17.77777777777778,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 25
+              }
+            },
+            {
+              "id": "el-1790102146039-0-9whf7m",
+              "type": "text",
+              "content": "9999",
+              "x": 34.11111111111111,
+              "y": 69.71875,
+              "width": 17.77777777777778,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 25,
+                "textDecoration": "none"
+              }
+            }
+          ],
+          "order": 1,
+          "cartridge": null
+        },
+        {
+          "id": "slide-1790102024226",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102024425",
+              "type": "banner",
+              "content": "For any number n <font color=\"#000000\">≠ 0</font>:<div>\n<b style=\"background-color: rgb(255, 249, 196);\"> n<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">/</span></font>n <font color=\"#000000\">=</font> <font color=\"#000000\">_ </font></b></div>",
+              "x": 50,
+              "y": 32.9375,
+              "width": 78,
+              "height": 21.0625,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 78,
+                "height": 17,
+                "fontFamily": "Outfit",
+                "fontSize": 22,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790102024426",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 78.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "0",
+                  "n",
+                  "1",
+                  "Depends on n"
+                ],
+                "correctIndex": 2,
+                "correctIndices": [
+                  2
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 2
+        },
+        {
+          "id": "slide-1790102024227",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102316098-0-9sd6p0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looks_down_holds_sign.png",
+              "x": 31.194444444444443,
+              "y": 65.78336864406779,
+              "width": 40,
+              "height": 29.74576271186441,
+              "rotation": 0,
+              "scale": 2.0713032666565248,
+              "metadata": {
+                "width": 40,
+                "height": 29.74576271186441,
+                "category": "characters",
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1790102326581-lguqi7ajm",
+              "type": "image",
+              "content": "/src/assets/objects/item_balloon_octo002.png",
+              "x": 61.388888888888886,
+              "y": 35.15625,
+              "width": 40,
+              "height": 14.671658986175116,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 14.671658986175116,
+                "category": "characters",
+                "flipX": true,
+                "hasShadow": false
+              }
+            },
+            {
+              "id": "el-1790111975362-xn5p5u7oe",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_stares_disapointed.png",
+              "x": 84.16666666666666,
+              "y": 84.0625,
+              "width": 40,
+              "height": 25.991379310344833,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 25.991379310344833,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1790102333421-e41s2xl8s",
+              "type": "text",
+              "content": "Too easy, even for him...",
+              "x": 64.44444444444444,
+              "y": 34.6875,
+              "width": 21.11111111111111,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
+            },
+            {
+              "id": "el-1790102361590-0-35o2fv",
+              "type": "text",
+              "content": "3799 × 1",
+              "x": 31.055555555555557,
+              "y": 67.21875,
+              "width": 33.33333333333333,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 18
+              }
+            },
+            {
+              "id": "el-1790102024526",
+              "type": "balloon",
+              "content": "3799.",
+              "x": 74.58333333333334,
+              "y": 61.140625,
+              "width": 38.611111111111114,
+              "height": 9.84375,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Pesto",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 22,
+                  "y": 64
+                }
+              }
+            }
+          ],
+          "order": 3
+        },
+        {
+          "id": "slide-1790102024228",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102024625",
+              "type": "banner",
+              "content": "For any number n:\nn <font color=\"#000000\">× 1 =</font> ?",
+              "x": 50,
+              "y": 22,
+              "width": 78,
+              "height": 17,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 78,
+                "height": 17,
+                "fontFamily": "Outfit",
+                "fontSize": 28,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790102024626",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 78.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "1",
+                  "0",
+                  "n",
+                  "2n"
+                ],
+                "correctIndex": 2,
+                "correctIndices": [
+                  2
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 4
+        },
+        {
+          "id": "slide-1790102024229",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102942277-om9ud0kn1",
+              "type": "banner",
+              "content": "",
+              "x": 71.66666666666666,
+              "y": 70.546875,
+              "width": 47.696175327206056,
+              "height": 21.085450689223293,
+              "rotation": 0,
+              "scale": 1.0089316666172978,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#fff875",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "sticky",
+                "showTape": false,
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1790102024725",
+              "type": "balloon",
+              "content": "<div><br></div><div><br></div>Put both rules together. What does this become?<div><br></div><div><br></div><div><br></div><div><br></div><div><br></div>",
+              "x": 66.66666666666667,
+              "y": 33.28125,
+              "width": 65,
+              "height": 28.4375,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Yara",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -124,
+                  "y": 19
+                },
+                "manualZ": true
+              }
+            },
+            {
+              "id": "el-1790102726306-0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_pointing_34.png",
+              "x": 24.30555555555555,
+              "y": 55.71589931153184,
+              "width": 40,
+              "height": 46.47160068846816,
+              "rotation": 0,
+              "scale": 1.4861275500972748,
+              "metadata": {
+                "width": 40,
+                "height": 46.47160068846816
+              }
+            },
+            {
+              "id": "el-1790102756306-ndvh7ymbw",
+              "type": "text",
+              "content": "<u>n</u>",
+              "x": 66.38888888888889,
+              "y": 64.375,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790102839382-y2j3j4"
+              }
+            },
+            {
+              "id": "el-1790102796922-0-7twpil",
+              "type": "text",
+              "content": "n",
+              "x": 66.33333333333334,
+              "y": 68.625,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790102839382-y2j3j4"
+              }
+            },
+            {
+              "id": "el-1790102812928-0-4st30x",
+              "type": "text",
+              "content": "= 1",
+              "x": 75.16666666666669,
+              "y": 66.625,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790102839382-y2j3j4"
+              }
+            },
+            {
+              "id": "el-1790102851122-0-5fu4q8",
+              "type": "text",
+              "content": "n×1 = 1",
+              "x": 71.27777777777779,
+              "y": 75.78125,
+              "width": 37.77777777777778,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33
+              }
+            },
+            {
+              "id": "el-1790102912210-0-o4q638",
+              "type": "text",
+              "content": "<u>8x</u>",
+              "x": 63.27777777777778,
+              "y": 36.75,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33
+              }
+            },
+            {
+              "id": "el-1790102912210-1-ytzc5n",
+              "type": "text",
+              "content": "8",
+              "x": 63.222222222222236,
+              "y": 41.3125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33
+              }
+            },
+            {
+              "id": "el-1790102912210-2-4b6dwd",
+              "type": "text",
+              "content": "= ?",
+              "x": 75.38888888888883,
+              "y": 38.6875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33
+              }
+            }
+          ],
+          "order": 5
+        },
+        {
+          "id": "slide-1790102024230",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102024825",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 26.53125,
+              "width": 78,
+              "height": 26.0625,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 78,
+                "height": 17,
+                "fontFamily": "Outfit",
+                "fontSize": 28,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790102024826",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 78.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "1",
+                  "x",
+                  "8x",
+                  "8"
+                ],
+                "correctIndex": 3,
+                "correctIndices": [
+                  3
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1790112070681-0-hgns4f",
+              "type": "text",
+              "content": "<u>8x</u>",
+              "x": 43.97526041666666,
+              "y": 24.90625,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112072177-hjvdyl"
+              }
+            },
+            {
+              "id": "el-1790112070681-1-05dakh",
+              "type": "text",
+              "content": "8",
+              "x": 43.919704861111114,
+              "y": 29.46875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112072177-hjvdyl"
+              }
+            },
+            {
+              "id": "el-1790112070681-2-kapaws",
+              "type": "text",
+              "content": "= ?",
+              "x": 56.086371527777715,
+              "y": 26.84375,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112072177-hjvdyl"
+              }
+            }
+          ],
+          "order": 6
+        },
+        {
+          "id": "slide-1790102024231",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102024925",
+              "type": "banner",
+              "content": "<div><br></div><div><br></div><div>because…<br></div>",
+              "x": 50,
+              "y": 32.390625,
+              "width": 78,
+              "height": 19.968749999999996,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 78,
+                "height": 17,
+                "fontFamily": "Outfit",
+                "fontSize": 28,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790102024926",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 78.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "It's always 8, no matter what",
+                  "n/n = 1, so it's just x × 1",
+                  "The x's are added together",
+                  "x always equals 8"
+                ],
+                "correctIndex": 1,
+                "correctIndices": [
+                  1
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            },
+            {
+              "id": "el-1790112102083-0-cvqi6r",
+              "type": "text",
+              "content": "<u>8x</u>",
+              "x": 43.97526041666666,
+              "y": 26.9375,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112112868-gq0759"
+              }
+            },
+            {
+              "id": "el-1790112102083-1-5ncx6u",
+              "type": "text",
+              "content": "8",
+              "x": 43.919704861111114,
+              "y": 31.5,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112112868-gq0759"
+              }
+            },
+            {
+              "id": "el-1790112102083-2-bjt5wu",
+              "type": "text",
+              "content": "= x",
+              "x": 56.086371527777715,
+              "y": 28.875,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 33,
+                "groupId": "group-1790112112868-gq0759"
+              }
+            }
+          ],
+          "order": 7
+        },
+        {
+          "id": "slide-1790102024232",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+          "elements": [
+            {
+              "id": "el-1790102025025",
+              "type": "balloon",
+              "content": "New rule:<div><br><div><u> a× x </u> = x.</div></div>",
+              "x": 32.22222222222223,
+              "y": 27.578125,
+              "width": 65,
+              "height": 20.78125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "speaker": "Yara",
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 20,
+                  "y": 120
+                },
+                "manualZ": true,
+                "groupId": "group-1790103904682-r1760z"
+              }
+            },
+            {
+              "id": "el-1790103815227-4n8nser8y",
+              "type": "image",
+              "content": "/src/assets/objects/item_balloon_octo002.png",
+              "x": 74.16666666666666,
+              "y": 51.5625,
+              "width": 40,
+              "height": 14.671658986175116,
+              "rotation": 0,
+              "scale": 1.361270155665817,
+              "metadata": {
+                "width": 40,
+                "height": 14.671658986175116,
+                "category": "characters",
+                "hasShadow": false,
+                "flipX": true,
+                "flipY": false,
+                "groupId": "group-1790103914926-ghs4vh"
+              }
+            },
+            {
+              "id": "el-1790103404249-rxn4v8l3w",
+              "type": "text",
+              "content": "a",
+              "x": 27.500000000000007,
+              "y": 33.4375,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 19,
+                "groupId": "group-1790103904682-r1760z"
+              }
+            },
+            {
+              "id": "el-1790103782884-pd312w84a",
+              "type": "text",
+              "content": "Nothing mysterious. Just multiplying by 1.",
+              "x": 77.77777777777777,
+              "y": 50,
+              "width": 23.61681892276784,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.7186577651776034,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 10,
+                "groupId": "group-1790103914926-ghs4vh"
+              }
+            },
+            {
+              "id": "el-1790103835310-956ffnziy",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_smirk.png",
+              "x": 24.72222222222223,
+              "y": 73.4375,
+              "width": 40,
+              "height": 24.11944869831547,
+              "rotation": 0,
+              "scale": 2.3758769495406926,
+              "metadata": {
+                "width": 40,
+                "height": 24.11944869831547,
+                "category": "characters",
+                "hasShadow": false
+              }
+            }
+          ],
+          "order": 8
+        },
+        {
+          "id": "slide-1790102024233",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790102025125",
+              "type": "banner",
+              "content": "<font color=\"#000000\">12</font>x<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">/</span></font>x <font color=\"#000000\">=</font> ?",
+              "x": 50,
+              "y": 22,
+              "width": 78,
+              "height": 17,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 78,
+                "height": 17,
+                "fontFamily": "Outfit",
+                "fontSize": 28,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790102025126",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 78.59375,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "options": [
+                  "x",
+                  "12",
+                  "1",
+                  "12x"
+                ],
+                "correctIndex": 1,
+                "correctIndices": [
+                  1
+                ],
+                "quizType": "classic",
+                "visualMode": false
+              }
+            }
+          ],
+          "order": 9
+        },
+        {
+          "id": "slide-1790102024234",
+          "background": "#1a1a2e",
+          "elements": [
+            {
+              "id": "el-1790102025225",
+              "type": "collectible",
+              "content": "n/n = 1 — a number over itself is always 1.\nMultiplying by 1 changes nothing: n × 1 = n.\nPut together: <b>A × n/n = A</b>",
+              "x": 50,
+              "y": 50,
+              "width": 82,
+              "height": 60,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Outfit\", sans-serif",
+                "fontSize": 18,
+                "color": "#ffffff",
+                "textAlign": "center",
+                "backgroundColor": "rgba(255, 255, 255, 0.08)",
+                "borderRadius": "16px",
+                "border": "1px solid rgba(255, 255, 255, 0.15)",
+                "lineHeight": 1.4
+              }
+            }
+          ],
+          "order": 10
+        },
+        {
+          "id": "slide-1790112700792",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790112710093-g47x7713u",
+              "type": "image",
+              "content": "/src/assets/objects/prop_brick_wall_with_expression.png",
+              "x": 28.055555555555557,
+              "y": 50,
+              "width": 40,
+              "height": 30.13392857142857,
+              "rotation": 0,
+              "scale": 3.6304075946631853,
+              "metadata": {
+                "width": 40,
+                "height": 30.13392857142857,
+                "category": "characters",
+                "hasShadow": false
+              }
+            },
+            {
+              "id": "el-1790112731453-0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_back_sprays.png",
+              "x": 68.61111111111113,
+              "y": 71.55657087053572,
+              "width": 40,
+              "height": 30.13392857142857,
+              "rotation": 0,
+              "scale": 2.0683631710550485,
+              "metadata": {
+                "width": 40,
+                "height": 30.13392857142857,
+                "opacity": 1
+              }
+            },
+            {
+              "id": "el-1790112771734-pnrnyv3tg",
+              "type": "balloon",
+              "content": "That's why these 3's cross out.",
+              "x": 68.88888888888889,
+              "y": 28.90625,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 9,
+                  "y": 91
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 11
+        },
+        {
+          "id": "slide-1790113375117",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790113378717-0",
+              "type": "image",
+              "content": "/src/assets/characters/yara_sprays_camera.png",
+              "x": 53.05555555555556,
+              "y": 88.92857142857143,
+              "width": 40,
+              "height": 30.13392857142857,
+              "rotation": 0,
+              "scale": 3.486358735032511,
+              "metadata": {
+                "width": 40,
+                "height": 30.13392857142857
+              }
+            },
+            {
+              "id": "el-1790113393637-mr8r7ngdh",
+              "type": "balloon",
+              "content": "Now's your turn!",
+              "x": 20.27777777777778,
+              "y": 51.875,
+              "width": 40,
+              "height": 16.25,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 77,
+                  "y": 18
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 12
+        },
+        {
+          "id": "slide-1790113431367",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 13,
+          "cartridge": {
+            "type": "AlgeBros",
+            "config": {
+              "startLevel": 1,
+              "targetLevel": 10,
+              "topic": "divisions"
+            }
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-09-22T18:21:11.740Z",
+      "updatedAt": "2026-09-22T21:52:50.739Z",
+      "path": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+      "textPreset": null,
+      "_snapshots": [
+        {
+          "timestamp": "2026-09-22T18:33:44.224Z",
+          "reason": "Before script import",
+          "slides": [
+            {
+              "id": "slide-1",
+              "background": "#E1F5FE",
+              "elements": [],
+              "order": 0
+            }
+          ]
+        }
+      ],
+      "description": "",
+      "icon": "icon_textbook.png",
+      "cardColor": "#8B5CF6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      },
+      "name": "01-Any Number Over Itself Is 1",
+      "type": "file",
+      "visible": true,
+      "visibleInFeed": true,
+      "order": 1,
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 0,
+        "completed": false,
+        "lastPlayed": 1790112616652
+      }
+    }
+  },
+  {
+    "name": "02-Ecuación o Expresión",
+    "type": "file",
+    "path": "lessons/02-Ecuación o Expresión/lesson.json",
+    "title": "Ecuación o Expresión",
+    "description": "",
+    "visible": true,
+    "visibleInFeed": true,
+    "order": 2,
     "content": {
       "id": "lessons/7127-Ecuación o Expresión/lesson.json",
       "title": "Ecuación o Expresión",
@@ -624,14 +1873,14 @@
     }
   },
   {
-    "name": "02-X variable",
+    "name": "03-X variable",
     "type": "file",
-    "path": "lessons/02-X variable/lesson.json",
+    "path": "lessons/03-X variable/lesson.json",
     "title": "X variable",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 2,
+    "order": 3,
     "content": {
       "id": "lessons/2993-X variable/lesson.json",
       "title": "X variable",
@@ -2416,14 +3665,14 @@
     }
   },
   {
-    "name": "03-Tutorial Balanza",
+    "name": "04-Tutorial Balanza",
     "type": "file",
-    "path": "lessons/03-Tutorial Balanza/lesson.json",
+    "path": "lessons/04-Tutorial Balanza/lesson.json",
     "title": "Tutorial Balanza",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 3,
+    "order": 4,
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Tutorial Balanza",
@@ -2760,14 +4009,14 @@
     }
   },
   {
-    "name": "04-01 Algebra Scale",
+    "name": "05-01 Algebra Scale",
     "type": "file",
-    "path": "lessons/04-01 Algebra Scale/lesson.json",
+    "path": "lessons/05-01 Algebra Scale/lesson.json",
     "title": "01 Algebra Scale",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 4,
+    "order": 5,
     "content": {
       "id": "lessons/01-01 Algebra Scale/lesson.json",
       "title": "01 Algebra Scale",
@@ -3515,14 +4764,14 @@
     }
   },
   {
-    "name": "05-Balancing act",
+    "name": "06-Balancing act",
     "type": "file",
-    "path": "lessons/05-Balancing act/lesson.json",
+    "path": "lessons/06-Balancing act/lesson.json",
     "title": "Balancing act",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 5,
+    "order": 6,
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Balancing act",
@@ -3859,14 +5108,14 @@
     }
   },
   {
-    "name": "06-test",
+    "name": "07-test",
     "type": "file",
-    "path": "lessons/06-test/lesson.json",
+    "path": "lessons/07-test/lesson.json",
     "title": "test",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 6,
+    "order": 7,
     "content": {
       "id": "lessons/04-Untitled Lesson/lesson.json",
       "title": "test",
@@ -4074,14 +5323,14 @@
     }
   },
   {
-    "name": "07-Algebra Expressions",
+    "name": "08-Algebra Expressions",
     "type": "file",
-    "path": "lessons/07-Algebra Expressions/lesson.json",
+    "path": "lessons/08-Algebra Expressions/lesson.json",
     "title": "Algebra Expressions",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 7,
+    "order": 8,
     "content": {
       "id": "lessons/04-Algebra Expressions/lesson.json",
       "title": "Algebra Expressions",
@@ -7136,14 +8385,14 @@
     }
   },
   {
-    "name": "08-algebraka1",
+    "name": "09-algebraka1",
     "type": "file",
-    "path": "lessons/08-algebraka1/lesson.json",
+    "path": "lessons/09-algebraka1/lesson.json",
     "title": "algebraka1",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 8,
+    "order": 9,
     "content": {
       "id": "lessons/9195-algebraka1/lesson.json",
       "title": "algebraka1",
@@ -8900,14 +10149,14 @@
     }
   },
   {
-    "name": "09-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
+    "name": "10-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "type": "file",
-    "path": "lessons/09-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
+    "path": "lessons/10-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
     "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 9,
+    "order": 10,
     "content": {
       "id": "draft-1788356342548",
       "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
@@ -10283,14 +11532,14 @@
     }
   },
   {
-    "name": "10-Estafa",
+    "name": "11-Estafa",
     "type": "file",
-    "path": "lessons/10-Estafa/lesson.json",
+    "path": "lessons/11-Estafa/lesson.json",
     "title": "Estafa",
     "description": "¡Cuidate del estafador!",
     "visible": true,
     "visibleInFeed": true,
-    "order": 10,
+    "order": 11,
     "content": {
       "id": "lessons/09-Estafa/lesson.json",
       "title": "Estafa",
@@ -11192,14 +12441,14 @@
     }
   },
   {
-    "name": "11-Pociones",
+    "name": "12-Pociones",
     "type": "file",
-    "path": "lessons/11-Pociones/lesson.json",
+    "path": "lessons/12-Pociones/lesson.json",
     "title": "Pociones",
     "description": "Aprende a crear pociones mágicas",
     "visible": true,
     "visibleInFeed": false,
-    "order": 11,
+    "order": 12,
     "content": {
       "id": "lessons/01-Pociones/lesson.json",
       "title": "Pociones",
@@ -11928,14 +13177,14 @@
     }
   },
   {
-    "name": "12-Pociones - Parte 2",
+    "name": "13-Pociones - Parte 2",
     "type": "file",
-    "path": "lessons/12-Pociones - Parte 2/lesson.json",
+    "path": "lessons/13-Pociones - Parte 2/lesson.json",
     "title": "Pociones - Parte 2",
     "description": "Mezcla +-×÷ en el orden correcto",
     "visible": true,
     "visibleInFeed": false,
-    "order": 12,
+    "order": 13,
     "content": {
       "id": "lessons/02-Pociones - Parte 2/lesson.json",
       "title": "Pociones - Parte 2",
@@ -12644,14 +13893,14 @@
     }
   },
   {
-    "name": "13-Pociones - Parte 3",
+    "name": "14-Pociones - Parte 3",
     "type": "file",
-    "path": "lessons/13-Pociones - Parte 3/lesson.json",
+    "path": "lessons/14-Pociones - Parte 3/lesson.json",
     "title": "Pociones - Parte 3",
     "description": "Exponentes",
     "visible": true,
     "visibleInFeed": false,
-    "order": 13,
+    "order": 14,
     "content": {
       "id": "lessons/03-Pociones - Parte 3/lesson.json",
       "title": "Pociones - Parte 3",
@@ -13185,14 +14434,14 @@
     }
   },
   {
-    "name": "14-Expresiones",
+    "name": "15-Expresiones",
     "type": "file",
-    "path": "lessons/14-Expresiones/lesson.json",
+    "path": "lessons/15-Expresiones/lesson.json",
     "title": "Expresiones",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 14,
+    "order": 15,
     "content": {
       "id": "lessons/06-Expresiones/lesson.json",
       "title": "Expresiones",
@@ -14227,14 +15476,14 @@
     }
   },
   {
-    "name": "15-Intro to PEMDAS",
+    "name": "16-Intro to PEMDAS",
     "type": "file",
-    "path": "lessons/15-Intro to PEMDAS/lesson.json",
+    "path": "lessons/16-Intro to PEMDAS/lesson.json",
     "title": "Intro to PEMDAS",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 15,
+    "order": 16,
     "content": {
       "id": "lessons/05-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
@@ -14939,14 +16188,14 @@
     }
   },
   {
-    "name": "16-Pociones - parte 4",
+    "name": "17-Pociones - parte 4",
     "type": "file",
-    "path": "lessons/16-Pociones - parte 4/lesson.json",
+    "path": "lessons/17-Pociones - parte 4/lesson.json",
     "title": "Pociones - parte 4",
     "description": "Todo comienza aquí dentro ( )",
     "visible": true,
     "visibleInFeed": false,
-    "order": 16,
+    "order": 17,
     "content": {
       "id": "lessons/04-Pociones - parte 4/lesson.json",
       "title": "Pociones - parte 4",
@@ -15631,14 +16880,14 @@
     }
   },
   {
-    "name": "17-Separa los términos",
+    "name": "18-Separa los términos",
     "type": "file",
-    "path": "lessons/17-Separa los términos/lesson.json",
+    "path": "lessons/18-Separa los términos/lesson.json",
     "title": "Separa los términos",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 17,
+    "order": 18,
     "content": {
       "id": "lessons/07-Separa los términos/lesson.json",
       "title": "Separa los términos",
@@ -16916,14 +18165,14 @@
     }
   },
   {
-    "name": "18-× ÷, luego + -",
+    "name": "19-× ÷, luego + -",
     "type": "file",
-    "path": "lessons/18-× ÷, luego + -/lesson.json",
+    "path": "lessons/19-× ÷, luego + -/lesson.json",
     "title": "× ÷, luego + -",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 18,
+    "order": 19,
     "content": {
       "id": "lessons/08-× ÷, luego + -/lesson.json",
       "title": "× ÷, luego + -",
@@ -17603,14 +18852,14 @@
     }
   },
   {
-    "name": "19-TEST DELETEME",
+    "name": "20-TEST DELETEME",
     "type": "file",
-    "path": "lessons/19-TEST DELETEME/lesson.json",
+    "path": "lessons/20-TEST DELETEME/lesson.json",
     "title": "TEST DELETEME",
     "description": "",
     "visible": false,
     "visibleInFeed": false,
-    "order": 19,
+    "order": 20,
     "content": {
       "id": "lessons/2713-TEST DELETEME/lesson.json",
       "title": "TEST DELETEME",
@@ -17748,14 +18997,14 @@
     }
   },
   {
-    "name": "20-exponents",
+    "name": "21-exponents",
     "type": "file",
-    "path": "lessons/20-exponents/lesson.json",
+    "path": "lessons/21-exponents/lesson.json",
     "title": "exponents",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 20,
+    "order": 21,
     "content": {
       "id": "lessons/11-exponents/lesson.json",
       "title": "exponents",
@@ -18655,14 +19904,14 @@
     }
   },
   {
-    "name": "21-Parenthesis",
+    "name": "22-Parenthesis",
     "type": "file",
-    "path": "lessons/21-Parenthesis/lesson.json",
+    "path": "lessons/22-Parenthesis/lesson.json",
     "title": "Parenthesis",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 21,
+    "order": 22,
     "content": {
       "id": "lessons/12-Parenthesis/lesson.json",
       "title": "Parenthesis",
@@ -18973,14 +20222,14 @@
     }
   },
   {
-    "name": "22-Why LEFT to RIGHT?",
+    "name": "23-Why LEFT to RIGHT?",
     "type": "file",
-    "path": "lessons/22-Why LEFT to RIGHT?/lesson.json",
+    "path": "lessons/23-Why LEFT to RIGHT?/lesson.json",
     "title": "Why LEFT to RIGHT?",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 22,
+    "order": 23,
     "content": {
       "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
       "title": "Why LEFT to RIGHT?",
@@ -19876,14 +21125,14 @@
     }
   },
   {
-    "name": "23-¿ Por qué n⁰ es igual a 1 ?",
+    "name": "24-¿ Por qué n⁰ es igual a 1 ?",
     "type": "file",
-    "path": "lessons/23-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+    "path": "lessons/24-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
     "title": "¿ Por qué n⁰ es igual a 1 ?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 23,
+    "order": 24,
     "content": {
       "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "title": "¿ Por qué n⁰ es igual a 1 ?",
@@ -23532,14 +24781,14 @@
     }
   },
   {
-    "name": "24-Exponentes negativos",
+    "name": "25-Exponentes negativos",
     "type": "file",
-    "path": "lessons/24-Exponentes negativos/lesson.json",
+    "path": "lessons/25-Exponentes negativos/lesson.json",
     "title": "Exponentes negativos",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 24,
+    "order": 25,
     "content": {
       "id": "lessons/4283-Exponentes negativos/lesson.json",
       "title": "Exponentes negativos",
