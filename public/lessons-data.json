@@ -1,13 +1,111 @@
 [
   {
-    "name": "01-Any Number Over Itself Is 1",
+    "name": "01-Spot the mistake!",
     "type": "file",
-    "path": "lessons/01-Any Number Over Itself Is 1/lesson.json",
-    "title": "Any Number Over Itself Is 1",
+    "path": "lessons/01-Spot the mistake!/lesson.json",
+    "title": "Spot the mistake!",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
     "order": 1,
+    "content": {
+      "id": "lessons/01-Spot the mistake!/lesson.json",
+      "title": "Spot the mistake!",
+      "slides": [
+        {
+          "id": "slide-1790131098612",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790131108638-0",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_holmes_003.png",
+              "x": 53.361111111111114,
+              "y": 65.9282962328767,
+              "width": 40,
+              "height": 34.67465753424658,
+              "rotation": 0,
+              "scale": 1.801591059968905,
+              "metadata": {
+                "width": 40,
+                "height": 34.67465753424658
+              }
+            },
+            {
+              "id": "el-1790131127085-5quptg4c9",
+              "type": "balloon",
+              "content": "Somewhere in the next game... a crime against algebra has been committed.",
+              "x": 47.361111111111114,
+              "y": 23.4375,
+              "width": 75.27777777777777,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -10,
+                  "y": 90
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000"
+              }
+            }
+          ],
+          "order": 0
+        },
+        {
+          "id": "slide-1",
+          "background": "url(\"/src/assets/backgrounds/Pesto%20ninja.png\")",
+          "elements": [],
+          "order": 1,
+          "cartridge": {
+            "type": "Spot",
+            "config": {
+              "stepsText": "3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2",
+              "mistakeIndex": 3,
+              "errorToken": "3",
+              "maxAttempts": 2
+            }
+          }
+        },
+        {
+          "id": "slide-1790130683591",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 2
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-09-22T22:43:41.519Z",
+      "updatedAt": "2026-09-23T02:44:34.726Z",
+      "path": "lessons/01-Spot the mistake!/lesson.json",
+      "textPreset": null,
+      "description": "",
+      "icon": "icon_textbook.png",
+      "cardColor": "#8B5CF6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      },
+      "visibleInFeed": true
+    }
+  },
+  {
+    "name": "02-Any Number Over Itself Is 1",
+    "type": "file",
+    "path": "lessons/02-Any Number Over Itself Is 1/lesson.json",
+    "title": "Any Number Over Itself Is 1",
+    "description": "",
+    "visible": true,
+    "visibleInFeed": true,
+    "order": 2,
     "content": {
       "id": "lessons/01-Any Number Over Itself Is 1/lesson.json",
       "title": "Any Number Over Itself Is 1",
@@ -1249,14 +1347,14 @@
     }
   },
   {
-    "name": "02-Ecuación o Expresión",
+    "name": "03-Ecuación o Expresión",
     "type": "file",
-    "path": "lessons/02-Ecuación o Expresión/lesson.json",
+    "path": "lessons/03-Ecuación o Expresión/lesson.json",
     "title": "Ecuación o Expresión",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 2,
+    "order": 3,
     "content": {
       "id": "lessons/7127-Ecuación o Expresión/lesson.json",
       "title": "Ecuación o Expresión",
@@ -1873,14 +1971,14 @@
     }
   },
   {
-    "name": "03-X variable",
+    "name": "04-X variable",
     "type": "file",
-    "path": "lessons/03-X variable/lesson.json",
+    "path": "lessons/04-X variable/lesson.json",
     "title": "X variable",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 3,
+    "order": 4,
     "content": {
       "id": "lessons/2993-X variable/lesson.json",
       "title": "X variable",
@@ -3665,14 +3763,14 @@
     }
   },
   {
-    "name": "04-Tutorial Balanza",
+    "name": "05-Tutorial Balanza",
     "type": "file",
-    "path": "lessons/04-Tutorial Balanza/lesson.json",
+    "path": "lessons/05-Tutorial Balanza/lesson.json",
     "title": "Tutorial Balanza",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 4,
+    "order": 5,
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Tutorial Balanza",
@@ -4009,14 +4107,14 @@
     }
   },
   {
-    "name": "05-01 Algebra Scale",
+    "name": "06-01 Algebra Scale",
     "type": "file",
-    "path": "lessons/05-01 Algebra Scale/lesson.json",
+    "path": "lessons/06-01 Algebra Scale/lesson.json",
     "title": "01 Algebra Scale",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 5,
+    "order": 6,
     "content": {
       "id": "lessons/01-01 Algebra Scale/lesson.json",
       "title": "01 Algebra Scale",
@@ -4764,14 +4862,14 @@
     }
   },
   {
-    "name": "06-Balancing act",
+    "name": "07-Balancing act",
     "type": "file",
-    "path": "lessons/06-Balancing act/lesson.json",
+    "path": "lessons/07-Balancing act/lesson.json",
     "title": "Balancing act",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 6,
+    "order": 7,
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Balancing act",
@@ -5108,14 +5206,14 @@
     }
   },
   {
-    "name": "07-test",
+    "name": "08-test",
     "type": "file",
-    "path": "lessons/07-test/lesson.json",
+    "path": "lessons/08-test/lesson.json",
     "title": "test",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 7,
+    "order": 8,
     "content": {
       "id": "lessons/04-Untitled Lesson/lesson.json",
       "title": "test",
@@ -5323,14 +5421,14 @@
     }
   },
   {
-    "name": "08-Algebra Expressions",
+    "name": "09-Algebra Expressions",
     "type": "file",
-    "path": "lessons/08-Algebra Expressions/lesson.json",
+    "path": "lessons/09-Algebra Expressions/lesson.json",
     "title": "Algebra Expressions",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 8,
+    "order": 9,
     "content": {
       "id": "lessons/04-Algebra Expressions/lesson.json",
       "title": "Algebra Expressions",
@@ -8385,14 +8483,14 @@
     }
   },
   {
-    "name": "09-algebraka1",
+    "name": "10-algebraka1",
     "type": "file",
-    "path": "lessons/09-algebraka1/lesson.json",
+    "path": "lessons/10-algebraka1/lesson.json",
     "title": "algebraka1",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 9,
+    "order": 10,
     "content": {
       "id": "lessons/9195-algebraka1/lesson.json",
       "title": "algebraka1",
@@ -10149,14 +10247,14 @@
     }
   },
   {
-    "name": "10-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
+    "name": "11-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "type": "file",
-    "path": "lessons/10-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
+    "path": "lessons/11-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
     "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 10,
+    "order": 11,
     "content": {
       "id": "draft-1788356342548",
       "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
@@ -11532,14 +11630,14 @@
     }
   },
   {
-    "name": "11-Estafa",
+    "name": "12-Estafa",
     "type": "file",
-    "path": "lessons/11-Estafa/lesson.json",
+    "path": "lessons/12-Estafa/lesson.json",
     "title": "Estafa",
     "description": "¡Cuidate del estafador!",
     "visible": true,
     "visibleInFeed": true,
-    "order": 11,
+    "order": 12,
     "content": {
       "id": "lessons/09-Estafa/lesson.json",
       "title": "Estafa",
@@ -12441,14 +12539,14 @@
     }
   },
   {
-    "name": "12-Pociones",
+    "name": "13-Pociones",
     "type": "file",
-    "path": "lessons/12-Pociones/lesson.json",
+    "path": "lessons/13-Pociones/lesson.json",
     "title": "Pociones",
     "description": "Aprende a crear pociones mágicas",
     "visible": true,
     "visibleInFeed": false,
-    "order": 12,
+    "order": 13,
     "content": {
       "id": "lessons/01-Pociones/lesson.json",
       "title": "Pociones",
@@ -13177,14 +13275,14 @@
     }
   },
   {
-    "name": "13-Pociones - Parte 2",
+    "name": "14-Pociones - Parte 2",
     "type": "file",
-    "path": "lessons/13-Pociones - Parte 2/lesson.json",
+    "path": "lessons/14-Pociones - Parte 2/lesson.json",
     "title": "Pociones - Parte 2",
     "description": "Mezcla +-×÷ en el orden correcto",
     "visible": true,
     "visibleInFeed": false,
-    "order": 13,
+    "order": 14,
     "content": {
       "id": "lessons/02-Pociones - Parte 2/lesson.json",
       "title": "Pociones - Parte 2",
@@ -13893,14 +13991,14 @@
     }
   },
   {
-    "name": "14-Pociones - Parte 3",
+    "name": "15-Pociones - Parte 3",
     "type": "file",
-    "path": "lessons/14-Pociones - Parte 3/lesson.json",
+    "path": "lessons/15-Pociones - Parte 3/lesson.json",
     "title": "Pociones - Parte 3",
     "description": "Exponentes",
     "visible": true,
     "visibleInFeed": false,
-    "order": 14,
+    "order": 15,
     "content": {
       "id": "lessons/03-Pociones - Parte 3/lesson.json",
       "title": "Pociones - Parte 3",
@@ -14434,14 +14532,14 @@
     }
   },
   {
-    "name": "15-Expresiones",
+    "name": "16-Expresiones",
     "type": "file",
-    "path": "lessons/15-Expresiones/lesson.json",
+    "path": "lessons/16-Expresiones/lesson.json",
     "title": "Expresiones",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 15,
+    "order": 16,
     "content": {
       "id": "lessons/06-Expresiones/lesson.json",
       "title": "Expresiones",
@@ -15476,14 +15574,14 @@
     }
   },
   {
-    "name": "16-Intro to PEMDAS",
+    "name": "17-Intro to PEMDAS",
     "type": "file",
-    "path": "lessons/16-Intro to PEMDAS/lesson.json",
+    "path": "lessons/17-Intro to PEMDAS/lesson.json",
     "title": "Intro to PEMDAS",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 16,
+    "order": 17,
     "content": {
       "id": "lessons/05-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
@@ -16188,14 +16286,14 @@
     }
   },
   {
-    "name": "17-Pociones - parte 4",
+    "name": "18-Pociones - parte 4",
     "type": "file",
-    "path": "lessons/17-Pociones - parte 4/lesson.json",
+    "path": "lessons/18-Pociones - parte 4/lesson.json",
     "title": "Pociones - parte 4",
     "description": "Todo comienza aquí dentro ( )",
     "visible": true,
     "visibleInFeed": false,
-    "order": 17,
+    "order": 18,
     "content": {
       "id": "lessons/04-Pociones - parte 4/lesson.json",
       "title": "Pociones - parte 4",
@@ -16880,14 +16978,14 @@
     }
   },
   {
-    "name": "18-Separa los términos",
+    "name": "19-Separa los términos",
     "type": "file",
-    "path": "lessons/18-Separa los términos/lesson.json",
+    "path": "lessons/19-Separa los términos/lesson.json",
     "title": "Separa los términos",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 18,
+    "order": 19,
     "content": {
       "id": "lessons/07-Separa los términos/lesson.json",
       "title": "Separa los términos",
@@ -18165,14 +18263,14 @@
     }
   },
   {
-    "name": "19-× ÷, luego + -",
+    "name": "20-× ÷, luego + -",
     "type": "file",
-    "path": "lessons/19-× ÷, luego + -/lesson.json",
+    "path": "lessons/20-× ÷, luego + -/lesson.json",
     "title": "× ÷, luego + -",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 19,
+    "order": 20,
     "content": {
       "id": "lessons/08-× ÷, luego + -/lesson.json",
       "title": "× ÷, luego + -",
@@ -18852,14 +18950,14 @@
     }
   },
   {
-    "name": "20-TEST DELETEME",
+    "name": "21-TEST DELETEME",
     "type": "file",
-    "path": "lessons/20-TEST DELETEME/lesson.json",
+    "path": "lessons/21-TEST DELETEME/lesson.json",
     "title": "TEST DELETEME",
     "description": "",
     "visible": false,
     "visibleInFeed": false,
-    "order": 20,
+    "order": 21,
     "content": {
       "id": "lessons/2713-TEST DELETEME/lesson.json",
       "title": "TEST DELETEME",
@@ -18997,14 +19095,14 @@
     }
   },
   {
-    "name": "21-exponents",
+    "name": "22-exponents",
     "type": "file",
-    "path": "lessons/21-exponents/lesson.json",
+    "path": "lessons/22-exponents/lesson.json",
     "title": "exponents",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 21,
+    "order": 22,
     "content": {
       "id": "lessons/11-exponents/lesson.json",
       "title": "exponents",
@@ -19904,14 +20002,14 @@
     }
   },
   {
-    "name": "22-Parenthesis",
+    "name": "23-Parenthesis",
     "type": "file",
-    "path": "lessons/22-Parenthesis/lesson.json",
+    "path": "lessons/23-Parenthesis/lesson.json",
     "title": "Parenthesis",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 22,
+    "order": 23,
     "content": {
       "id": "lessons/12-Parenthesis/lesson.json",
       "title": "Parenthesis",
@@ -20222,14 +20320,14 @@
     }
   },
   {
-    "name": "23-Why LEFT to RIGHT?",
+    "name": "24-Why LEFT to RIGHT?",
     "type": "file",
-    "path": "lessons/23-Why LEFT to RIGHT?/lesson.json",
+    "path": "lessons/24-Why LEFT to RIGHT?/lesson.json",
     "title": "Why LEFT to RIGHT?",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 23,
+    "order": 24,
     "content": {
       "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
       "title": "Why LEFT to RIGHT?",
@@ -21125,14 +21223,14 @@
     }
   },
   {
-    "name": "24-¿ Por qué n⁰ es igual a 1 ?",
+    "name": "25-¿ Por qué n⁰ es igual a 1 ?",
     "type": "file",
-    "path": "lessons/24-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+    "path": "lessons/25-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
     "title": "¿ Por qué n⁰ es igual a 1 ?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 24,
+    "order": 25,
     "content": {
       "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "title": "¿ Por qué n⁰ es igual a 1 ?",
@@ -24781,14 +24879,14 @@
     }
   },
   {
-    "name": "25-Exponentes negativos",
+    "name": "26-Exponentes negativos",
     "type": "file",
-    "path": "lessons/25-Exponentes negativos/lesson.json",
+    "path": "lessons/26-Exponentes negativos/lesson.json",
     "title": "Exponentes negativos",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 25,
+    "order": 26,
     "content": {
       "id": "lessons/4283-Exponentes negativos/lesson.json",
       "title": "Exponentes negativos",
