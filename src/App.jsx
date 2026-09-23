@@ -10,6 +10,7 @@ import PEMDASCartridge from './cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from './cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from './cartridges/Balanza/BalanzaCartridge';
 import ExloreNLCartridge from './cartridges/ExploreNL/ExloreNLCartridge';
+import SpotCartridge from './cartridges/Spot/SpotCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import CardsView from './components/Home/CardsView';
 import './components/Player/TypeQuizKeyboard.css';
@@ -322,6 +323,35 @@ const AppContent = () => {
             </div>
           );
         }
+        if (selectedGame === 'spot') {
+          return (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#ffffff' }}>
+              <SpotCartridge
+                config={{
+                  stepsText: '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2',
+                  mistakeIndex: 3,
+                  errorToken: '3',
+                  maxAttempts: 2
+                }}
+                onComplete={() => setSelectedGame(null)}
+              />
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        }
         return (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
@@ -480,6 +510,38 @@ const AppContent = () => {
                   <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>ExploreNL</h3>
                   <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
                     Interactive number line to explore zero powers (2⁰=1), negative exponents (2⁻¹=½), and dynamic equations.
+                  </p>
+                </div>
+              </div>
+
+              {/* Spot (Spot the Mistake) Game Card */}
+              <div
+                onClick={() => setSelectedGame('spot')}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <div style={{
+                  fontSize: '2.5rem', background: 'rgba(239, 68, 68, 0.1)', width: '64px', height: '64px',
+                  borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(239, 68, 68, 0.2)'
+                }}>
+                  🔍
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>Spot the Mistake</h3>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                    Find the single step with the error in an equation. Tap on it within 2 attempts to win!
                   </p>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
+import SpotCartridge from '../../cartridges/Spot/SpotCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
 import { formatExponents } from '../../utils/textFormatters';
@@ -169,6 +170,13 @@ const Player = () => {
             }
 
             // Keyboard navigation is UNRESTRICTED (testing/dev with physical keyboard)
+            // EXCEPT when playing Spot or games that lock navigation
+            if (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex)) {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    return;
+                }
+            }
+
             if (e.key === 'ArrowRight') {
                 nextSlide(true); // force = true, skip all blocking
             } else if (e.key === 'ArrowLeft') {
@@ -519,15 +527,15 @@ const Player = () => {
         const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
         const hasCartridge = !!isGame && !solvedSlides.has(currentSlideIndex);
 
-        // While playing a game cartridge, navigation is completely disabled with NO shaking
-        if (hasCartridge || isGameActive) return;
+        // While playing a game cartridge (or Spot specifically), navigation is completely disabled with NO shaking
+        if (hasCartridge || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) return;
 
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
         const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
         if (direction === 'next') {
             // Forward is blocked when there's an unsolved quiz, cartridge, isticker, stripper, or at last slide
-            if (hasCartridge || hasQuiz || hasISticker || stripperBlocking || currentSlideIndex >= slides.length - 1) {
+            if (hasCartridge || hasQuiz || hasISticker || stripperBlocking || currentSlideIndex >= slides.length - 1 || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
                 if (hasCartridge) {
                     triggerCartridgeWiggle();
                 }
@@ -545,7 +553,7 @@ const Player = () => {
             // Backward:
             //   - Cartridge/game: BLOCKED (can't leave mid-game)
             //   - At first slide: BLOCKED (no previous slide)
-            if (hasCartridge || currentSlideIndex === 0) {
+            if (hasCartridge || currentSlideIndex === 0 || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
                 triggerSlideShake();
                 return;
             }
@@ -566,7 +574,7 @@ const Player = () => {
     const swipeRef = useRef(null);
 
     const handlePointerDown = (e) => {
-        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive;
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex));
         if (isGamePlaying || isInteractiveElement(e.target)) {
             swipeRef.current = null;
             return;
@@ -579,7 +587,7 @@ const Player = () => {
         swipeRef.current = null;
         if (!gesture) return;
 
-        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive;
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex));
         if (isGamePlaying) return;
 
         const dx = e.clientX - gesture.startX;
@@ -862,7 +870,7 @@ const Player = () => {
                             )}
                             <div className={`player-progress-bar ${
                                 !solvedSlides.has(currentSlideIndex) && (
-                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza')) ||
+                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'Spot')) ||
                                     currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'pem')
                                 )
                                     ? 'greyed-out'
@@ -953,6 +961,18 @@ const Player = () => {
                                             <ExloreNLCartridge
                                                 config={slide.cartridge.config}
                                                 preview={false}
+                                                onComplete={() => {
+                                                    handleInteractiveSolve(index, true, 1000);
+                                                    setIsGameActive(false);
+                                                }}
+                                            />
+                                        </ErrorBoundary>
+                                    )}
+                                    {slide.cartridge.type === 'Spot' && (
+                                        <ErrorBoundary>
+                                            <SpotCartridge
+                                                config={slide.cartridge.config}
+                                                slideBackground={slide.background}
                                                 onComplete={() => {
                                                     handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);

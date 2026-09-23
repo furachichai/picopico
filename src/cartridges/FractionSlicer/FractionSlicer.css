@@ -589,7 +589,7 @@
 }
 
 /* Error Flash Overlay */
-.error-flash {
+.slicer-container .error-flash {
     position: absolute;
     top: 0;
     left: 0;

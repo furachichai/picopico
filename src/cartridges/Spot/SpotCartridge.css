@@ -1,0 +1,408 @@
+/* SpotCartridge.css */
+
+.spot-cartridge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  color: #1e293b;
+  user-select: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.spot-cartridge.no-bg {
+  background: radial-gradient(circle at 50% 20%, #fdfcfb 0%, #f1ebe5 100%);
+}
+
+.spot-cartridge.has-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Live hearts positioned below the progress bar, top right */
+.spot-hearts-container {
+  position: absolute;
+  top: clamp(52px, 9.5%, 72px);
+  right: 6%;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.spot-heart {
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12));
+}
+
+.spot-heart.lost {
+  opacity: 0.2;
+  filter: grayscale(1);
+  transform: scale(0.75);
+}
+
+/* Scrollable container strictly under progress bar and above GOTCHA button */
+.spot-scroll-container {
+  position: absolute;
+  top: clamp(80px, 14%, 105px);
+  bottom: 84px;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px 24px;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+}
+
+/* Single shared CSS grid for ALL equation steps: guarantees 100% collinear vertical alignment on '=' */
+.spot-steps-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: center;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 10px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: 0 auto;
+  padding: 16px 22px;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+.spot-cartridge.no-bg .spot-steps-grid {
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+.spot-cartridge.has-bg .spot-steps-grid {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.spot-steps-grid.shake {
+  animation: spot-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes spot-shake {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+/* Grid Cells for math equation alignment */
+.spot-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  box-sizing: border-box;
+}
+
+/* Column 1: Left expression — Right aligned towards '=' */
+.spot-cell-left {
+  justify-content: flex-end;
+  text-align: right;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+  font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+/* Column 2: '=' sign — Centered and strictly collinear across all rows */
+.spot-cell-equals {
+  justify-content: center;
+  text-align: center;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+  font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+  font-weight: 400;
+  color: #334155;
+  user-select: none;
+  padding: 0 4px;
+}
+
+/* Column 3: Right expression — Left aligned starting from '=' */
+.spot-cell-right {
+  justify-content: flex-start;
+  text-align: left;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+  font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+/* Full span step (if step doesn't contain '=') */
+.spot-cell-full {
+  grid-column: 1 / -1;
+  justify-content: center;
+  text-align: center;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+  font-size: clamp(1.15rem, 3.8vw, 1.35rem);
+  color: #0f172a;
+}
+
+/* Math Typesetting Elements */
+.spot-math-expr {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  line-height: 1;
+}
+
+.spot-math-token {
+  display: inline-block;
+}
+
+.spot-math-var {
+  font-style: italic;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+  padding: 0 1px;
+}
+
+.spot-math-num {
+  font-style: normal;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+}
+
+.spot-math-op {
+  font-style: normal;
+  margin: 0 2px;
+  color: #1e293b;
+}
+
+.spot-math-paren {
+  font-style: normal;
+  color: #334155;
+  font-size: 1.05em;
+  padding: 0 1px;
+}
+
+.spot-math-sup {
+  font-size: 0.68em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+/* Interactive Math Token */
+.spot-interactive-token {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.12s ease;
+  min-width: 14px;
+  min-height: 24px;
+}
+
+/* Touch hit-area expansion for easy mobile tapping */
+.spot-interactive-token::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: -3px;
+  right: -3px;
+  z-index: 1;
+}
+
+.spot-interactive-token:hover:not(.disabled) {
+  background-color: rgba(220, 38, 38, 0.08);
+  transform: scale(1.06);
+}
+
+.spot-interactive-token:active:not(.disabled) {
+  transform: scale(0.96);
+}
+
+/* Division / Fraction Display — Matches media_1790127381919.png */
+.spot-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  padding: 0 2px;
+  line-height: 1.05;
+  font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Math', 'Times New Roman', Times, serif;
+}
+
+.spot-fraction-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 2px 2px 2px;
+  font-size: 0.95em;
+}
+
+.spot-fraction-bar {
+  display: block;
+  width: 100%;
+  min-width: 14px;
+  height: 2px;
+  background-color: #0f172a;
+  border-radius: 1px;
+  margin: 1px 0;
+}
+
+.spot-fraction-den {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2px 2px 0 2px;
+  font-size: 0.95em;
+}
+
+/* Hand-Drawn Red Circle Over Selected Token */
+.spot-token-circle-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 18px);
+  height: calc(100% + 16px);
+  min-width: 38px;
+  min-height: 38px;
+  pointer-events: none;
+  z-index: 25;
+  overflow: visible;
+}
+
+.spot-circle-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.spot-circle-path {
+  fill: none;
+  stroke: #dc2626;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: spot-draw-circle 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  filter: drop-shadow(0 1px 2px rgba(220, 38, 38, 0.35));
+}
+
+@keyframes spot-draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Bottom Bar & GOTCHA! Button */
+.spot-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.98) 65%, rgba(255, 255, 255, 0));
+  z-index: 40;
+  pointer-events: none;
+}
+
+.spot-cartridge.has-bg .spot-bottom-bar {
+  background: transparent;
+}
+
+.spot-gotcha-btn {
+  pointer-events: auto;
+  padding: 12px 42px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  border-radius: 30px;
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-transform: uppercase;
+}
+
+.spot-gotcha-btn:hover:not(.disabled) {
+  background: #b91c1c;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+}
+
+.spot-gotcha-btn:active:not(.disabled) {
+  transform: translateY(0) scale(0.97);
+}
+
+.spot-gotcha-btn.disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* Retry Button (only shown when player runs out of attempts) */
+.spot-retry-wrapper {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  animation: spot-fade-in 0.25s ease-out;
+}
+
+@keyframes spot-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.spot-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25);
+}
+
+.spot-retry-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.spot-retry-btn:active {
+  transform: translateY(0);
+}

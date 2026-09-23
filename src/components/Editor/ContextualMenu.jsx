@@ -3858,6 +3858,202 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                         </>
                     )}
 
+                    {/* Spot (Spot the Mistake) Settings */}
+                    {element.cartridgeType === 'Spot' && (() => {
+                        const currentStepsText = element.config?.stepsText ?? '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n*2x + 3 = 8\n2x = 5\nx = 5/2';
+                        const lines = currentStepsText
+                            .split('\n')
+                            .map(l => l.trim())
+                            .filter(l => l && !l.startsWith('//') && !l.startsWith('#'));
+
+                        let detectedIdx = -1;
+                        lines.forEach((l, i) => {
+                            if (l.startsWith('*') || l.startsWith('!')) detectedIdx = i;
+                        });
+                        const currentMistakeIdx = detectedIdx !== -1 
+                            ? detectedIdx 
+                            : (element.config?.mistakeIndex ?? 3);
+
+                        const handleSelectMistake = (stepIdx) => {
+                            const updatedLines = currentStepsText.split('\n').map((l, i) => {
+                                const clean = l.replace(/^[*!]\s*/, '');
+                                if (i === stepIdx) {
+                                    return `*${clean}`;
+                                }
+                                return clean;
+                            });
+                            onChange('cartridge', {
+                                config: {
+                                    ...element.config,
+                                    stepsText: updatedLines.join('\n'),
+                                    mistakeIndex: stepIdx
+                                }
+                            });
+                        };
+
+                        return (
+                            <>
+                                {/* Steps Input */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
+                                        Steps (1 per line)
+                                    </label>
+                                    <textarea
+                                        value={currentStepsText}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, stepsText: e.target.value } })}
+                                        placeholder={"3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\nx = 5/2\nTip: Mark error token with *3*"}
+                                        rows={6}
+                                        style={{
+                                            fontFamily: 'monospace',
+                                            fontSize: '0.72rem',
+                                            padding: '4px 6px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #cbd5e1',
+                                            background: '#ffffff',
+                                            resize: 'vertical',
+                                            minHeight: '90px',
+                                            width: '210px'
+                                        }}
+                                    />
+                                    <span style={{ fontSize: '0.65rem', color: '#64748b' }}>
+                                        Tip: Write divisions as (6x + 12)/3. Mark error token with *3*
+                                    </span>
+                                </div>
+
+                                {/* Mistake Selector Buttons */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
+                                        Mistake on Step:
+                                    </label>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', maxWidth: '210px' }}>
+                                        {lines.map((_, i) => {
+                                            const isSelected = i === currentMistakeIdx;
+                                            return (
+                                                <button
+                                                    key={i}
+                                                    type="button"
+                                                    onClick={() => handleSelectMistake(i)}
+                                                    style={{
+                                                        padding: '3px 8px',
+                                                        fontSize: '0.72rem',
+                                                        fontWeight: isSelected ? 700 : 500,
+                                                        borderRadius: '6px',
+                                                        border: isSelected ? '1.5px solid #dc2626' : '1px solid #cbd5e1',
+                                                        background: isSelected ? '#fef2f2' : '#ffffff',
+                                                        color: isSelected ? '#dc2626' : '#475569',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    {isSelected ? '🎯 ' : ''}Step {i + 1}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Error Token */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Error Token</label>
+                                    <input
+                                        type="text"
+                                        value={element.config?.errorToken ?? '3'}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, errorToken: e.target.value } })}
+                                        placeholder="3"
+                                        style={{
+                                            fontSize: '0.75rem',
+                                            padding: '3px 6px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #cbd5e1',
+                                            width: '50px',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}
+                                        title="Specific token or number to encircle with red pen"
+                                    />
+                                </div>
+
+                                {/* Max Attempts */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Max Attempts</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="5"
+                                        value={element.config?.maxAttempts ?? 2}
+                                        onChange={(e) => {
+                                            const val = parseInt(e.target.value);
+                                            onChange('cartridge', {
+                                                config: { ...element.config, maxAttempts: isNaN(val) ? 2 : Math.max(1, Math.min(5, val)) }
+                                            });
+                                        }}
+                                        style={{
+                                            width: '45px',
+                                            padding: '3px 4px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #cbd5e1',
+                                            fontWeight: 'bold',
+                                            textAlign: 'center'
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Background */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Background</label>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <button
+                                            type="button"
+                                            className="btn-secondary"
+                                            onClick={() => {
+                                                if (onOpenLibrary) {
+                                                    onOpenLibrary('custom-bg', (selectedImage) => {
+                                                        onChange('cartridge', { config: { ...element.config, background: selectedImage } });
+                                                    });
+                                                }
+                                            }}
+                                            style={{ fontSize: '0.75rem', padding: '4px 8px', fontWeight: 'bold' }}
+                                            title="Choose Background from Library"
+                                        >
+                                            🖼️ LIBRARY
+                                        </button>
+                                        <label
+                                            className="btn-secondary"
+                                            style={{ fontSize: '0.75rem', padding: '4px 8px', cursor: 'pointer', margin: 0, display: 'inline-flex', alignItems: 'center' }}
+                                            title="Upload Custom Image"
+                                        >
+                                            📁 UPLOAD
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (!file) return;
+                                                    const reader = new FileReader();
+                                                    reader.onload = (ev) => {
+                                                        onChange('cartridge', { config: { ...element.config, background: ev.target.result } });
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }}
+                                                style={{ display: 'none' }}
+                                            />
+                                        </label>
+                                        {element.config?.background && (
+                                            <button
+                                                type="button"
+                                                className="btn-icon"
+                                                onClick={() => onChange('cartridge', { config: { ...element.config, background: null } })}
+                                                title="Remove Background"
+                                                style={{ color: '#ef4444', width: '28px', height: '28px' }}
+                                            >
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        );
+                    })()}
+
                     <div className="menu-divider"></div>
                 </>
             )}

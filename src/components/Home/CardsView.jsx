@@ -14,6 +14,7 @@ import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
+import SpotCartridge from '../../cartridges/Spot/SpotCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import FractionAlpha from '../../cartridges/FractionAlpha/FractionAlpha';
 import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
@@ -256,6 +257,15 @@ const CardsView = () => {
               <ErrorBoundary>
                 <AlgeBrosCartridge
                   config={slide.cartridge.config}
+                  onComplete={() => {}}
+                />
+              </ErrorBoundary>
+            )}
+            {slide.cartridge.type === 'Spot' && (
+              <ErrorBoundary>
+                <SpotCartridge
+                  config={slide.cartridge.config}
+                  preview={true}
                   onComplete={() => {}}
                 />
               </ErrorBoundary>

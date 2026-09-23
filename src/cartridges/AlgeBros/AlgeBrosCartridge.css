@@ -542,16 +542,6 @@
   20%, 40%, 60%, 80% { transform: translateX(6px); }
 }
 
-/* Background Red Flash for Error */
-.algebros-cartridge .error-flash {
-  animation: redFlash 0.6s ease-out;
-}
-
-@keyframes redFlash {
-  0% { background-color: rgba(239, 68, 68, 0.15); }
-  100% { background-color: transparent; }
-}
-
 /* Background Green Flash for Success */
 .algebros-cartridge .success-flash {
   animation: greenFlash 0.5s ease-out;
@@ -568,33 +558,29 @@
   font-weight: 700;
   font-size: 1rem;
   text-align: center;
-  transition: all 0.3s;
+  margin-top: 10px;
 }
 
-.algebros-cartridge .msg-error {
-  color: var(--accent-red);
-  text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
-}
-
-.algebros-cartridge .msg-success {
-  color: var(--accent-green);
-  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-}
-
-.algebros-cartridge .msg-info {
+.algebros-cartridge .feedback-msg.info {
   color: var(--text-dim);
 }
 
-/* Bottom Controls */
+.algebros-cartridge .feedback-msg.success {
+  color: var(--accent-green);
+}
+
+.algebros-cartridge .feedback-msg.error {
+  color: var(--accent-red);
+}
+
+/* Bottom Controls Area (Ready Button, Feedback) */
 .algebros-cartridge .bottom-controls {
-  width: calc(100% - 3.6%);
-  margin: 20px 1.8% 0 1.8%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   z-index: 10;
-  padding-bottom: 24px;
 }
 
 /* Ready Button */
@@ -611,6 +597,15 @@
   transition: all 0.25s;
   width: 100%;
   max-width: 320px;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none;
+}
+
+.algebros-cartridge .ready-btn:focus,
+.algebros-cartridge .ready-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
 }
 
 .algebros-cartridge .ready-btn:hover:not(:disabled) {
@@ -630,6 +625,7 @@
   background: rgba(255, 255, 255, 0.02);
   box-shadow: none;
   transform: none;
+  outline: none !important;
 }
 
 /* Game Over / Win Summary Screen */

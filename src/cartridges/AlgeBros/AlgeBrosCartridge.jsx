@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, Reorder, MotionConfig, correctParentTransform } from 'framer-motion';
 import {
@@ -292,7 +292,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   // Visual/Feedback State
   const [feedback, setFeedback] = useState({ text: 'Reorder and combine like terms!', type: 'info' });
   const [shake, setShake] = useState(false);
-  const [flash, setFlash] = useState(null);
   const [isValidating, setIsValidating] = useState(false);
   const [isElegantCompleted, setIsElegantCompleted] = useState(false);
   const [isDraggingTerm, setIsDraggingTerm] = useState(false);
@@ -336,10 +335,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const [slideWidth, setSlideWidth] = useState(390);
   const threeTermScaleRef = useRef(null);
   const lastSlideWidthRef = useRef(390);
-  const isAnimatingMergeRef = useRef(false);
-  const pendingSplitAnimRef = useRef(null);
-  const justMergedIdRef = useRef(null);
-  const currentScaleRef = useRef(1);
 
 
   useEffect(() => {
@@ -430,11 +425,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   const triggerShake = useCallback(() => {
     setShake(true);
     setTimeout(() => setShake(false), 500);
-  }, []);
-
-  const triggerFlash = useCallback((type) => {
-    setFlash(type);
-    setTimeout(() => setFlash(null), 500);
   }, []);
 
   const showFeedback = useCallback((text, type) => {
@@ -543,86 +533,13 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     setScreen('game');
   }, [generateLevelsForConfig, config.startLevel, loadLevel]);
 
-  const animateOperatorCollision = (btnEl, cardAEl, cardBEl, onCollide) => {
-    if (isAnimatingMergeRef.current) return;
-    isAnimatingMergeRef.current = true;
-
-    if (!btnEl || !cardAEl || !cardBEl) {
-      onCollide();
-      isAnimatingMergeRef.current = false;
-      return;
-    }
-
-    const btnRect = btnEl.getBoundingClientRect();
-    const aRect = cardAEl.getBoundingClientRect();
-    const bRect = cardBEl.getBoundingClientRect();
-
-    const btnCenter = btnRect.left + btnRect.width / 2;
-    const aCenter = aRect.left + aRect.width / 2;
-    const bCenter = bRect.left + bRect.width / 2;
-
-    const scale = currentScaleRef.current || 1;
-    const dxA = (btnCenter - aCenter) / scale;
-    const dxB = (btnCenter - bCenter) / scale;
-
-    const duration = 220;
-    const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
-
-    const wrapperA = cardAEl.closest('.term-item-wrapper') || cardAEl;
-    const wrapperB = cardBEl.closest('.term-item-wrapper') || cardBEl;
-    wrapperA.style.zIndex = '50';
-    wrapperB.style.zIndex = '50';
-
-    const animA = cardAEl.animate([
-      { transform: 'translateX(0px)' },
-      { transform: `translateX(${dxA}px)` }
-    ], { duration, easing, fill: 'forwards' });
-
-    const animB = cardBEl.animate([
-      { transform: 'translateX(0px)' },
-      { transform: `translateX(${dxB}px)` }
-    ], { duration, easing, fill: 'forwards' });
-
-    const animBtn = btnEl.animate([
-      { transform: 'scale(1)', opacity: 1 },
-      { transform: 'scale(0)', opacity: 0 }
-    ], { duration: duration * 0.85, easing: 'ease-in', fill: 'forwards' });
-
-    setTimeout(() => {
-      try {
-        animA.cancel();
-        animB.cancel();
-        animBtn.cancel();
-        wrapperA.style.zIndex = '';
-        wrapperB.style.zIndex = '';
-      } catch (e) {
-        // Ignored if elements were unmounted
-      }
-      onCollide();
-      isAnimatingMergeRef.current = false;
-    }, duration);
-  };
-
   const handleDecompose = (term, splitA, splitB, type) => {
-    if (isAnimatingMergeRef.current) return;
     setActiveFactorMenu(null);
     playMerge();
-
-    const cardEl = document.querySelector(`.term-card[data-id="${term.id}"]`);
-    const rect = cardEl ? cardEl.getBoundingClientRect() : null;
-    const origCenter = rect ? (rect.left + rect.width / 2) : null;
 
     const targetGroup = term.groupId || ('g_' + Math.random().toString(36).substr(2, 7));
     const splitAWithGroup = { ...splitA, groupId: splitA.groupId || targetGroup };
     const splitBWithGroup = { ...splitB, groupId: splitB.groupId || targetGroup };
-
-    if (origCenter != null) {
-      pendingSplitAnimRef.current = {
-        idA: splitAWithGroup.id,
-        idB: splitBWithGroup.id,
-        origCenter
-      };
-    }
 
     const setter = type === 'num' ? setNumTerms
                  : type === 'den' ? setDenTerms
@@ -637,8 +554,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     });
   };
 
-  const handleMultiplyAdjacent = (index, type, e) => {
-    if (isAnimatingMergeRef.current) return;
+  const handleMultiplyAdjacent = (index, type) => {
     setActiveFactorMenu(null);
     const getList = () => type === 'num' ? numTerms
                         : type === 'den' ? denTerms
@@ -652,23 +568,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
     if (topic === 'equations' && termB.coeff < 0) {
       if (areLikeTerms(termA, termB)) {
-        const btnEl = e?.currentTarget;
-        const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
-        const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
-
-        animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
-          playMerge();
-          const combined = combineTerms(termA, termB);
-          justMergedIdRef.current = combined.id;
-          const setter = type === 'num' ? setNumTerms
-                       : type === 'den' ? setDenTerms
-                       : type === 'rightNum' ? setRightNumTerms
-                       : setRightDenTerms;
-          setter(prev => {
-            const next = [...prev];
-            next.splice(index - 1, 2, combined);
-            return next;
-          });
+        playMerge();
+        const combined = combineTerms(termA, termB);
+        const setter = type === 'num' ? setNumTerms
+                     : type === 'den' ? setDenTerms
+                     : type === 'rightNum' ? setRightNumTerms
+                     : setRightDenTerms;
+        setter(prev => {
+          const next = [...prev];
+          next.splice(index - 1, 2, combined);
+          return next;
         });
       } else {
         playWrong();
@@ -678,29 +587,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       return;
     }
 
-    const btnEl = e?.currentTarget;
-    const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
-    const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
-
-    animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
-      playMerge();
-      const sharedGroupId = termA.groupId || termB.groupId;
-      const product = multiplyTerms(termA, termB, sharedGroupId);
-      justMergedIdRef.current = product.id;
-      const setter = type === 'num' ? setNumTerms
-                   : type === 'den' ? setDenTerms
-                   : type === 'rightNum' ? setRightNumTerms
-                   : setRightDenTerms;
-      setter(prev => {
-        const next = [...prev];
-        next.splice(index - 1, 2, product);
-        return next;
-      });
+    playMerge();
+    const sharedGroupId = termA.groupId || termB.groupId;
+    const product = multiplyTerms(termA, termB, sharedGroupId);
+    const setter = type === 'num' ? setNumTerms
+                 : type === 'den' ? setDenTerms
+                 : type === 'rightNum' ? setRightNumTerms
+                 : setRightDenTerms;
+    setter(prev => {
+      const next = [...prev];
+      next.splice(index - 1, 2, product);
+      return next;
     });
   };
 
   const handleCardTap = (term, type) => {
-    if (!term || term.coeff === 0 || isDraggingTerm || justDraggedRef.current || isAnimatingMergeRef.current) return;
+    if (!term || term.coeff === 0 || isDraggingTerm || justDraggedRef.current) return;
     const expMatch = term.variable ? term.variable.match(/^([a-zA-Z])\^(\d+)$/) : null;
     if (expMatch) {
       const base = expMatch[1];
@@ -869,7 +771,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     playWrong();
     if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
     showFeedback(message, 'error');
-    triggerFlash('error');
     triggerShake();
   };
 
@@ -1463,7 +1364,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       setIsLevelPerfect(false);
       playWrong();
       if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-      triggerFlash('error');
       triggerShake();
       showFeedback(message, 'error');
       setIsMatchingFading(true);
@@ -1526,7 +1426,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       crossedDenSetter(prev => prev.filter(id => id !== denId));
       setIsMatchingFading(false);
     }, 300);
-  }, [topic, numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerFlash, triggerShake, showFeedback]);
+  }, [topic, numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerShake, showFeedback]);
 
   const tempSlicedNum = React.useRef(null);
   const tempSlicedDen = React.useRef(null);
@@ -1750,29 +1650,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   }, [numTerms, denTerms, rightNumTerms, rightDenTerms, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen, compareAndCrossOutSlice, topic, isValidating, isMatchingFading]);
 
 
-  const handleCombine = (index, e) => {
-    if (isValidating || isAnimatingMergeRef.current) return;
+  const handleCombine = (index) => {
+    if (isValidating) return;
     unlockAudio();
     const termA = terms[index - 1];
     const termB = terms[index];
     if (!termA || !termB) return;
 
     if (areLikeTerms(termA, termB)) {
-      const btnEl = e?.currentTarget;
-      const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
-      const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
+      const merged = combineTerms(termA, termB);
+      const updatedTerms = [...terms];
+      updatedTerms.splice(index - 1, 2, merged);
 
-      animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
-        const merged = combineTerms(termA, termB);
-        const updatedTerms = [...terms];
-        updatedTerms.splice(index - 1, 2, merged);
-
-        justMergedIdRef.current = merged.id;
-        setTerms(updatedTerms);
-        setUserPresses(p => p + 1);
-        playMerge();
-        showFeedback('Merged like terms!', 'success');
-      });
+      setTerms(updatedTerms);
+      setUserPresses(p => p + 1);
+      playMerge();
+      showFeedback('Merged like terms!', 'success');
     } else {
       // Incompatible terms clicked
       setMistakes(m => m + 1);
@@ -1785,13 +1678,12 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }
       
       showFeedback('Unlike terms cannot be combined!', 'error');
-      triggerFlash('error');
       triggerShake();
     }
   };
 
-  const handleCombineEquationGroup = (groupIdx, type, e) => {
-    if (isValidating || isAnimatingMergeRef.current) return;
+  const handleCombineEquationGroup = (groupIdx, type) => {
+    if (isValidating) return;
     unlockAudio();
 
     const getter = type === 'num' ? numTerms : rightNumTerms;
@@ -1819,34 +1711,25 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     const termB = groupB[0];
 
     if (areLikeTerms(termA, termB)) {
-      const btnEl = e?.currentTarget;
-      const cardAEl = document.querySelector(`.term-card[data-id="${termA.id}"]`);
-      const cardBEl = document.querySelector(`.term-card[data-id="${termB.id}"]`);
+      playMerge();
+      setUserPresses(p => p + 1);
+      const combined = combineTerms(termA, termB);
+      showFeedback('Combined like terms!', 'success');
 
-      animateOperatorCollision(btnEl, cardAEl, cardBEl, () => {
-        playMerge();
-        setUserPresses(p => p + 1);
-        const combined = combineTerms(termA, termB);
-        if (combined.coeff !== 0) {
-          justMergedIdRef.current = combined.id;
+      setter(prev => {
+        const prevGroups = splitIntoAdditiveGroups(prev);
+        const idxA = prevGroups.findIndex(g => g.some(t => t.id === termA.id));
+        const idxB = prevGroups.findIndex(g => g.some(t => t.id === termB.id));
+
+        if (idxA === -1 || idxB === -1) return prev;
+
+        const nextGroups = [...prevGroups];
+        if (combined.coeff === 0 && prevGroups.length > 2) {
+          nextGroups.splice(Math.min(idxA, idxB), 2);
+        } else {
+          nextGroups.splice(Math.min(idxA, idxB), 2, [combined]);
         }
-        showFeedback('Combined like terms!', 'success');
-
-        setter(prev => {
-          const prevGroups = splitIntoAdditiveGroups(prev);
-          const idxA = prevGroups.findIndex(g => g.some(t => t.id === termA.id));
-          const idxB = prevGroups.findIndex(g => g.some(t => t.id === termB.id));
-
-          if (idxA === -1 || idxB === -1) return prev;
-
-          const nextGroups = [...prevGroups];
-          if (combined.coeff === 0 && prevGroups.length > 2) {
-            nextGroups.splice(Math.min(idxA, idxB), 2);
-          } else {
-            nextGroups.splice(Math.min(idxA, idxB), 2, [combined]);
-          }
-          return nextGroups.flat();
-        });
+        return nextGroups.flat();
       });
     } else {
       setMistakes(m => m + 1);
@@ -1856,7 +1739,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         navigator.vibrate([100, 50, 100]);
       }
       showFeedback('Unlike terms cannot be combined!', 'error');
-      triggerFlash('error');
       triggerShake();
     }
   };
@@ -1953,22 +1835,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         }
       }
       
-      triggerFlash('error');
       triggerShake();
     }
   };
-
-  // Auto-complete divisions when the expression cannot be further simplified
-  useEffect(() => {
-    if (topic !== 'divisions' || isValidating || isMatchingFading || userPresses === 0) return;
-    const hasUnmerged = numTerms.length > 1 || denTerms.length > 1;
-    if (!hasUnmerged && isDivisionSimplified(numTerms, denTerms)) {
-      const timer = setTimeout(() => {
-        handleValidate();
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [topic, numTerms, denTerms, isValidating, isMatchingFading, userPresses]);
 
   const renderTermValue = (term) => {
     const absCoeff = Math.abs(term.coeff);
@@ -2199,63 +2068,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDraggingTerm]);
   const stableScale = (isDraggingTerm && dragFrozenScaleRef.current !== null) ? dragFrozenScaleRef.current : expressionScale;
-  currentScaleRef.current = stableScale;
 
-  useLayoutEffect(() => {
-    if (justMergedIdRef.current) {
-      const mergedId = justMergedIdRef.current;
-      justMergedIdRef.current = null;
-      const mergedCardEl = document.querySelector(`.term-card[data-id="${mergedId}"]`);
-      if (mergedCardEl) {
-        mergedCardEl.animate([
-          { transform: 'scale(1.18)' },
-          { transform: 'scale(1)' }
-        ], { duration: 180, easing: 'cubic-bezier(0.17, 0.89, 0.32, 1.28)' });
-      }
-    }
-
-    if (!pendingSplitAnimRef.current) return;
-    const { idA, idB, origCenter } = pendingSplitAnimRef.current;
-    pendingSplitAnimRef.current = null;
-
-    if (origCenter == null) return;
-
-    const cardAEl = document.querySelector(`.term-card[data-id="${idA}"]`);
-    const cardBEl = document.querySelector(`.term-card[data-id="${idB}"]`);
-    if (!cardAEl || !cardBEl) return;
-
-    const wrapperB = cardBEl.closest('.term-item-wrapper');
-    const btnEl = wrapperB ? wrapperB.querySelector('.dot-separator-btn') : null;
-
-    const rectA = cardAEl.getBoundingClientRect();
-    const rectB = cardBEl.getBoundingClientRect();
-    const aCenter = rectA.left + rectA.width / 2;
-    const bCenter = rectB.left + rectB.width / 2;
-
-    const scale = currentScaleRef.current || 1;
-    const dxA = (origCenter - aCenter) / scale;
-    const dxB = (origCenter - bCenter) / scale;
-
-    const duration = 240;
-    const easing = 'cubic-bezier(0.16, 1, 0.3, 1)';
-
-    cardAEl.animate([
-      { transform: `translateX(${dxA}px)` },
-      { transform: 'translateX(0px)' }
-    ], { duration, easing });
-
-    cardBEl.animate([
-      { transform: `translateX(${dxB}px)` },
-      { transform: 'translateX(0px)' }
-    ], { duration, easing });
-
-    if (btnEl) {
-      btnEl.animate([
-        { transform: 'scale(0)', opacity: 0 },
-        { transform: 'scale(1)', opacity: 1 }
-      ], { duration: duration * 0.9, easing: 'ease-out' });
-    }
-  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, terms]);
 
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
@@ -2275,7 +2088,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   return (
     <div
       ref={cartridgeRef}
-      className={`algebros-cartridge ${flash === 'error' ? 'error-flash' : ''} ${bgStyle ? 'has-background' : ''}`}
+      className={`algebros-cartridge ${bgStyle ? 'has-background' : ''}`}
       style={{
         background: bgStyle ? 'transparent' : '#ffffff'
       }}
@@ -2474,7 +2287,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           onTouchStart={(e) => e.stopPropagation()}
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'num', e);
+                                            handleCombineEquationGroup(groupIdx, 'num');
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
@@ -2531,7 +2344,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'num', e);
+                                                    handleMultiplyAdjacent(index, 'num');
                                                   }}
                                                 >
                                                   {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
@@ -2627,7 +2440,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   <motion.div
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    
                                     transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
@@ -2643,7 +2456,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         onTouchStart={e => e.stopPropagation()}
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleMultiplyAdjacent(index, 'den', e);
+                                          handleMultiplyAdjacent(index, 'den');
                                         }}
                                       >
                                         ·
@@ -2769,7 +2582,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                           onTouchStart={(e) => e.stopPropagation()}
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'rightNum', e);
+                                            handleCombineEquationGroup(groupIdx, 'rightNum');
                                           }}
                                         >
                                           {group[0].coeff < 0 ? '-' : '+'}
@@ -2826,7 +2639,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                                   onTouchStart={e => e.stopPropagation()}
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'rightNum', e);
+                                                    handleMultiplyAdjacent(index, 'rightNum');
                                                   }}
                                                 >
                                                   {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
@@ -2922,7 +2735,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   <motion.div
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                    
                                     transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
@@ -2938,7 +2751,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                         onTouchStart={e => e.stopPropagation()}
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleMultiplyAdjacent(index, 'rightDen', e);
+                                          handleMultiplyAdjacent(index, 'rightDen');
                                         }}
                                       >
                                         ·
@@ -3024,7 +2837,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                               dragElastic={0}
                               whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                              
                               transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                               onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                               onDragEnd={() => setIsDraggingTerm(false)}
@@ -3041,7 +2854,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   onTouchStart={e => e.stopPropagation()}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleMultiplyAdjacent(index, 'num', e);
+                                    handleMultiplyAdjacent(index, 'num');
                                   }}
                                 >
                                   ·
@@ -3104,7 +2917,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                   className="term-item-wrapper"
                                   dragElastic={0}
                                   whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                  
                                   transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                   onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                   onDragEnd={() => setIsDraggingTerm(false)}
@@ -3117,7 +2930,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                       onTouchStart={e => e.stopPropagation()}
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        handleMultiplyAdjacent(index, 'num', e);
+                                        handleMultiplyAdjacent(index, 'num');
                                       }}
                                     >
                                       ·
@@ -3189,7 +3002,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                 dragElastic={0}
                                 whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                
                                 transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                 onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                 onDragEnd={() => setIsDraggingTerm(false)}
@@ -3207,7 +3020,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                     onTouchStart={e => e.stopPropagation()}
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      handleMultiplyAdjacent(index, 'den', e);
+                                      handleMultiplyAdjacent(index, 'den');
                                     }}
                                   >
                                     ·
@@ -3270,7 +3083,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                             className="term-item-wrapper"
                             dragElastic={0}
                             whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                            
                             // Reordering makes every card between the old and new slot hop into
                             // place live as the drag crosses each one — a close-to-critically-
                             // damped spring (vs. the more elastic default) keeps each of those
@@ -3294,7 +3107,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
                                 onTouchStart={(e) => e.stopPropagation()}
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleCombine(index, e);
+                                  handleCombine(index);
                                 }}
                               >
                                 {formatted.sign}

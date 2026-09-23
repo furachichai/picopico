@@ -9,6 +9,7 @@ import PEMDASCartridge from '../../cartridges/PEMDAS/PEMDASCartridge';
 import AlgeBrosCartridge from '../../cartridges/AlgeBros/AlgeBrosCartridge';
 import BalanzaCartridge from '../../cartridges/Balanza/BalanzaCartridge';
 import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
+import SpotCartridge from '../../cartridges/Spot/SpotCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import { PotiondasThumbnail } from './SlideThumbnail';
 import SaveAssetModal from './SaveAssetModal';
@@ -981,7 +982,7 @@ const Canvas = (props) => {
               zIndex: (currentSlide.cartridge && (currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL')) ? 80 : undefined
             }}
           >
-            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') && (
+            {currentSlide.cartridge && (currentSlide.cartridge.type === 'FractionAlpha' || currentSlide.cartridge.type === 'FractionSlicer' || currentSlide.cartridge.type === 'SwipeSorter' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL' || currentSlide.cartridge.type === 'Spot') && (
               <div style={{
                 pointerEvents: (currentSlide.cartridge.type === 'ExploreNL' || currentSlide.cartridge.type === 'ExloreNL') ? 'none' : 'auto',
                 width: '100%',
@@ -1001,6 +1002,13 @@ const Canvas = (props) => {
                 )}
                 {currentSlide.cartridge.type === 'AlgeBros' && (
                   <AlgeBrosCartridge config={currentSlide.cartridge.config} preview={true} />
+                )}
+                {currentSlide.cartridge.type === 'Spot' && (
+                  <SpotCartridge
+                    config={currentSlide.cartridge.config}
+                    slideBackground={currentSlide.background}
+                    preview={true}
+                  />
                 )}
                 {currentSlide.cartridge.type === 'Balanza' && (
                   <BalanzaCartridge

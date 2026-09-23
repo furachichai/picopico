@@ -352,7 +352,8 @@ const LayersPanel = ({
             FractionAlpha: { name: 'Fraction Pizza', icon: '🍕', color: '#EF4444' },
             FractionSlicer: { name: 'Fraction Slicer', icon: '🔪', color: '#EC4899' },
             SwipeSorter: { name: 'Swipe Sorter', icon: '🗂️', color: '#3B82F6' },
-            AlgeBros: { name: 'AlgeBros', icon: '📐', color: '#14B8A6' }
+            AlgeBros: { name: 'AlgeBros', icon: '📐', color: '#14B8A6' },
+            Spot: { name: 'Spot the Mistake', icon: '🔍', color: '#DC2626' }
         };
 
         const meta = cartridgeMeta[type] || { name: `${type} Game`, icon: '🎮', color: '#8B5CF6' };

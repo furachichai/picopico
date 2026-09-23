@@ -480,6 +480,23 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                     });
                                     setShowGameMenu(false);
                                 }}>📈 ExploreNL</button>
+                                <button onClick={() => {
+                                    dispatch({
+                                        type: 'UPDATE_SLIDE',
+                                        payload: {
+                                            cartridge: {
+                                                type: 'Spot',
+                                                config: {
+                                                    stepsText: '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2',
+                                                    mistakeIndex: 3,
+                                                    errorToken: '3',
+                                                    maxAttempts: 2
+                                                }
+                                            }
+                                        }
+                                    });
+                                    setShowGameMenu(false);
+                                }}>🔍 Spot</button>
                             </div>
                         )}
                     </div>
