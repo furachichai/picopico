@@ -13,22 +13,29 @@
       "title": "Spot the mistake!",
       "slides": [
         {
+          "id": "slide-1790131833534",
+          "background": "url(\"/src/assets/backgrounds/titlecard_sherlock_titlecard.png\")",
+          "elements": [],
+          "order": 0
+        },
+        {
           "id": "slide-1790131098612",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_002.png\")",
           "elements": [
             {
               "id": "el-1790131108638-0",
               "type": "image",
               "content": "/src/assets/characters/pesto_holmes_003.png",
-              "x": 53.361111111111114,
-              "y": 65.9282962328767,
+              "x": 39.75,
+              "y": 63.584546232876704,
               "width": 40,
               "height": 34.67465753424658,
               "rotation": 0,
               "scale": 1.801591059968905,
               "metadata": {
                 "width": 40,
-                "height": 34.67465753424658
+                "height": 34.67465753424658,
+                "flipX": true
               }
             },
             {
@@ -54,21 +61,42 @@
                 "hasShadow": true,
                 "borderColor": "#000000"
               }
+            },
+            {
+              "id": "el-1790131852577-7oh9nkjrn",
+              "type": "text",
+              "content": "<span style=\"background-color: rgb(255, 152, 0);\"><font color=\"#ffffff\"> x </font></span>",
+              "x": 84.44444444444444,
+              "y": 87.65625,
+              "width": 31.666666666666664,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "Verdana, Arial, sans-serif",
+                "fontSize": 41,
+                "textTransform": "none"
+              }
             }
           ],
-          "order": 0
+          "order": 1,
+          "backgroundSettings": {
+            "opacity": 0.37
+          }
         },
         {
           "id": "slide-1",
-          "background": "url(\"/src/assets/backgrounds/Pesto%20ninja.png\")",
+          "background": "#ccffcc",
           "elements": [],
-          "order": 1,
+          "order": 2,
           "cartridge": {
             "type": "Spot",
             "config": {
               "stepsText": "3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2",
               "mistakeIndex": 3,
               "errorToken": "3",
+              "correctToken": "4",
               "maxAttempts": 2
             }
           }
@@ -77,12 +105,12 @@
           "id": "slide-1790130683591",
           "background": "#E1F5FE",
           "elements": [],
-          "order": 2
+          "order": 3
         }
       ],
       "author": "User",
       "createdAt": "2026-09-22T22:43:41.519Z",
-      "updatedAt": "2026-09-23T02:44:34.726Z",
+      "updatedAt": "2026-09-23T19:02:41.679Z",
       "path": "lessons/01-Spot the mistake!/lesson.json",
       "textPreset": null,
       "description": "",
@@ -94,7 +122,26 @@
           "description": ""
         }
       },
-      "visibleInFeed": true
+      "name": "01-Spot the mistake!",
+      "type": "file",
+      "visible": true,
+      "visibleInFeed": true,
+      "order": 1,
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 2,
+        "completed": false,
+        "lastPlayed": 1790189963925
+      }
     }
   },
   {

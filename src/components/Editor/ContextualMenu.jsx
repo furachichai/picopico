@@ -3972,6 +3972,27 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     />
                                 </div>
 
+                                {/* Correct Answer (Quiz) */}
+                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Correct Answer</label>
+                                    <input
+                                        type="text"
+                                        value={element.config?.correctToken ?? element.config?.correctAnswer ?? ''}
+                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, correctToken: e.target.value } })}
+                                        placeholder="Auto (e.g. 4)"
+                                        style={{
+                                            fontSize: '0.75rem',
+                                            padding: '3px 6px',
+                                            borderRadius: '6px',
+                                            border: '1px solid #cbd5e1',
+                                            width: '80px',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}
+                                        title="Correct answer for the follow-up quiz. Leave empty to auto-deduce."
+                                    />
+                                </div>
+
                                 {/* Max Attempts */}
                                 <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
                                     <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Max Attempts</label>

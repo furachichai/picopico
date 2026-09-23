@@ -331,6 +331,7 @@ const AppContent = () => {
                   stepsText: '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2',
                   mistakeIndex: 3,
                   errorToken: '3',
+                  correctToken: '4',
                   maxAttempts: 2
                 }}
                 onComplete={() => setSelectedGame(null)}
