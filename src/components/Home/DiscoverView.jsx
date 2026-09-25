@@ -670,72 +670,79 @@ const DiscoverView = () => {
                 willChange: 'transform',
                 backfaceVisibility: 'hidden'
             }}>
-                {lessons.map((lesson, index) => (
-                    <div
-                        key={lesson.id}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            position: 'absolute',
-                            top: `${index * 100}%`,
-                            left: 0,
-                        }}
-                    >
-                        {/* Full-Screen Background Fill (Fix for Tall Screens/Letterboxing) */}
-                        <div style={{
-                            position: 'absolute',
-                            top: '-5%',
-                            left: '-5%',
-                            width: '110%',
-                            height: '110%',
-                            zIndex: -1,
-                            backgroundColor: (lesson.slides && lesson.slides[0]?.background && !lesson.slides[0].background.includes('url') && !lesson.slides[0].background.includes('gradient')) ? lesson.slides[0].background : '#1a202c',
-                            backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? resolveAssetUrl(lesson.slides[0].background) : 'none',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'blur(20px) brightness(0.8)', // Blur to make it distinct from content
-                            transform: 'scale(1.2)' // Slight zoom to avoid edge artifacts
-                        }} />
-
-                        {/* Stage Wrapper (Centers and Scales Content) */}
-                        <div style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            width: '360px',
-                            height: '640px', // Explicit size for scaling source
-                            transform: `translate(-50%, -50%) scale(${scale}) translateZ(0)`, // Hardware Acceleration
-                            transformOrigin: 'center center',
-
-                            // Mask Styles
-                            boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
-                            overflow: 'hidden',
-                            backgroundColor: 'transparent',
-                            backfaceVisibility: 'hidden',
-                            perspective: '1000px'
-                        }}>
-                            {/* Sliding Track */}
-                            <div style={{
+                {lessons.map((lesson, index) => {
+                    const isNearby = Math.abs(index - currentIndex) <= 1;
+                    return (
+                        <div
+                            key={lesson.id}
+                            style={{
                                 width: '100%',
                                 height: '100%',
-                                // OPTIMIZATION: Only animate the current lesson
-                                transform: `translateX(${index === currentIndex ? (isDragging && Math.abs(dragX) > Math.abs(dragY) ? dragX : -horizontalHintOffset) : 0}px) translateZ(0)`,
-                                transition: isDragging ? 'none' : 'transform 0.5s ease-in-out',
-                                willChange: index === currentIndex ? 'transform' : 'auto',
-                                position: 'relative',
-                                backfaceVisibility: 'hidden'
-                            }}>
-                                {/* Slide 0 */}
-                                {lesson.slides && lesson.slides.length > 0 ? (
-                                    renderSlide(lesson.slides[0], { left: 0 })
-                                ) : null}
+                                position: 'absolute',
+                                top: `${index * 100}%`,
+                                left: 0,
+                            }}
+                        >
+                            {isNearby ? (
+                                <>
+                                    {/* Full-Screen Background Fill (Fix for Tall Screens/Letterboxing) */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '-5%',
+                                        left: '-5%',
+                                        width: '110%',
+                                        height: '110%',
+                                        zIndex: -1,
+                                        backgroundColor: (lesson.slides && lesson.slides[0]?.background && !lesson.slides[0].background.includes('url') && !lesson.slides[0].background.includes('gradient')) ? lesson.slides[0].background : '#1a202c',
+                                        backgroundImage: (lesson.slides && lesson.slides[0]?.background && (lesson.slides[0].background.includes('url') || lesson.slides[0].background.includes('gradient'))) ? resolveAssetUrl(lesson.slides[0].background) : 'none',
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        filter: 'blur(20px) brightness(0.8)', // Blur to make it distinct from content
+                                        transform: 'scale(1.2)' // Slight zoom to avoid edge artifacts
+                                    }} />
 
-                                {/* Slide 1 */}
-                                {lesson.slides && lesson.slides.length > 1 ? renderSlide(lesson.slides[1], { left: '100%' }) : null}
-                            </div>
+                                    {/* Stage Wrapper (Centers and Scales Content) */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        width: '360px',
+                                        height: '640px', // Explicit size for scaling source
+                                        transform: `translate(-50%, -50%) scale(${scale}) translateZ(0)`, // Hardware Acceleration
+                                        transformOrigin: 'center center',
+
+                                        // Mask Styles
+                                        boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
+                                        overflow: 'hidden',
+                                        backgroundColor: 'transparent',
+                                        backfaceVisibility: 'hidden',
+                                        perspective: '1000px'
+                                    }}>
+                                        {/* Sliding Track */}
+                                        <div style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            // OPTIMIZATION: Only animate the current lesson
+                                            transform: `translateX(${index === currentIndex ? (isDragging && Math.abs(dragX) > Math.abs(dragY) ? dragX : -horizontalHintOffset) : 0}px) translateZ(0)`,
+                                            transition: isDragging ? 'none' : 'transform 0.5s ease-in-out',
+                                            willChange: index === currentIndex ? 'transform' : 'auto',
+                                            position: 'relative',
+                                            backfaceVisibility: 'hidden'
+                                        }}>
+                                            {/* Slide 0 */}
+                                            {lesson.slides && lesson.slides.length > 0 ? (
+                                                renderSlide(lesson.slides[0], { left: 0 })
+                                            ) : null}
+
+                                            {/* Slide 1 */}
+                                            {lesson.slides && lesson.slides.length > 1 ? renderSlide(lesson.slides[1], { left: '100%' }) : null}
+                                        </div>
+                                    </div>
+                                </>
+                            ) : null}
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* Hint */}

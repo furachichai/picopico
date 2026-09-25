@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { generateBatchCards, optimizeImage } from './swipeSorterUtils';
+import { getSharedAudioContext } from '../../utils/audioContext';
 import './SwipeSorter.css';
 
 const SWIPE_THRESHOLD = 25; // Pixels to trigger a swipe
@@ -53,7 +54,6 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
 
     const tutorialTimerRef = useRef(null);
     const hasAnsweredRef = useRef(false);
-    const audioCtxRef = useRef(null);
 
     // Initialize Cards
     useEffect(() => {
@@ -87,28 +87,8 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
         setIsComplete(false);
     }, [isBatchMode, rawBatch, effectiveOrder, effectiveTotalCards, initialCards, preview]);
 
-    // Audio Setup
-    useEffect(() => {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) {
-                audioCtxRef.current = new AudioContext();
-            }
-        } catch (e) {
-            console.error('AudioContext creation failed:', e);
-        }
-        return () => {
-            if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-                try {
-                    audioCtxRef.current.close();
-                } catch (e) {
-                    // Ignore close errors
-                }
-            }
-        };
-    }, []);
-
     const playSound = (type) => {
+        if (preview) return;
         try {
             if ('vibrate' in navigator) {
                 if (type === 'success') {
@@ -119,12 +99,18 @@ const SwipeSorter = ({ config = {}, onComplete, preview = false }) => {
             }
         } catch (e) {}
 
-        if (!audioCtxRef.current) return;
-        if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
+        const ctx = getSharedAudioContext();
+        if (!ctx) return;
+        if (ctx.state === 'suspended') ctx.resume();
 
-        const ctx = audioCtxRef.current;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
+        osc.onended = () => {
+            try {
+                osc.disconnect();
+                gain.disconnect();
+            } catch (_) {}
+        };
         osc.connect(gain);
         gain.connect(ctx.destination);
 

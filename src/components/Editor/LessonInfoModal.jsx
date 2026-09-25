@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
 import { replaceMathShortcuts, matchMathShortcutBeforeCursor } from '../../utils/textFormatters';
 import ConfirmationModal from './ConfirmationModal';
+import TitlecardCircleFrame from '../Home/TitlecardCircleFrame';
+import CircleFrameModal from '../Home/CircleFrameModal';
 import './ContextualMenu.css';
 
 const AVAILABLE_ICONS = [
@@ -22,6 +24,8 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
     const [formData, setFormData] = useState({});
     const [lessonIcon, setLessonIcon] = useState('icon_textbook.png');
     const [cardColor, setCardColor] = useState('#8B5CF6');
+    const [titlecardFrame, setTitlecardFrame] = useState(null);
+    const [isFrameModalOpen, setIsFrameModalOpen] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
@@ -29,6 +33,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
             setShowDeleteConfirm(false);
             setLessonIcon(lesson.icon || lesson.content?.icon || 'icon_textbook.png');
             setCardColor(lesson.cardColor || lesson.content?.cardColor || '#8B5CF6');
+            setTitlecardFrame(lesson.titlecardFrame || lesson.content?.titlecardFrame || null);
             
             // Initialize form data for all supported languages
             const initialData = {};
@@ -137,6 +142,7 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
             description: finalDescription,
             icon: lessonIcon,
             cardColor: cardColor,
+            titlecardFrame: titlecardFrame,
             translations: newTranslations,
             isNew
         });
@@ -254,11 +260,80 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
                         />
                     </div>
 
-                    {/* Icon Selection - only show when not translating */}
+                    {/* Icon & Circle Frame Selection - only show when not translating */}
                     {!isTranslating && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {/* Circle Frame Titlecard Focus */}
+                            <div style={{
+                                background: '#F8FAFC',
+                                border: '2px solid #E2E8F0',
+                                borderRadius: '12px',
+                                padding: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '10px'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <TitlecardCircleFrame
+                                        slide={lesson.content?.slides?.[0] || lesson.slides?.[0]}
+                                        titlecardFrame={titlecardFrame}
+                                        icon={lessonIcon}
+                                        size={46}
+                                        shape="square"
+                                        borderRadius="10px"
+                                        cardColor={cardColor}
+                                    />
+                                    <div>
+                                        <div style={{ fontWeight: 800, fontSize: '0.85rem', color: '#1E293B' }}>
+                                            Button Artwork Frame
+                                        </div>
+                                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>
+                                            {titlecardFrame ? 'Custom zoom & pan active' : 'Default artwork / icon'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', gap: '6px' }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsFrameModalOpen(true)}
+                                        style={{
+                                            padding: '6px 12px',
+                                            borderRadius: '8px',
+                                            border: '2px solid #000000',
+                                            background: '#8B5CF6',
+                                            color: '#FFFFFF',
+                                            fontWeight: 800,
+                                            fontSize: '0.8rem',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        🎯 Focus Frame
+                                    </button>
+                                    {titlecardFrame && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setTitlecardFrame(null)}
+                                            style={{
+                                                padding: '6px 8px',
+                                                borderRadius: '8px',
+                                                border: '1.5px solid #CBD5E1',
+                                                background: '#FFFFFF',
+                                                color: '#64748B',
+                                                fontWeight: 700,
+                                                fontSize: '0.75rem',
+                                                cursor: 'pointer'
+                                            }}
+                                            title="Revert to lesson icon"
+                                        >
+                                            Reset
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
                             <div>
-                                <label style={labelStyle}>Icon</label>
+                                <label style={labelStyle}>Default Icon (Fallback)</label>
                                 <div style={{ display: 'flex', gap: '8px', padding: '4px', overflowX: 'auto' }}>
                                     {AVAILABLE_ICONS.map(icon => (
                                         <div
@@ -385,6 +460,25 @@ const LessonInfoModal = ({ isOpen, lesson, onUpdate, onClose, onDelete, translat
                     onCancel={() => setShowDeleteConfirm(false)}
                     confirmText={t('common.delete')}
                     cancelText={t('common.cancel')}
+                />
+            )}
+
+            {isFrameModalOpen && (
+                <CircleFrameModal
+                    isOpen={isFrameModalOpen}
+                    lesson={{
+                        ...lesson,
+                        titlecardFrame: titlecardFrame,
+                        content: {
+                            ...(lesson.content || {}),
+                            titlecardFrame: titlecardFrame,
+                            icon: lessonIcon
+                        }
+                    }}
+                    onSave={async (newFrame) => {
+                        setTitlecardFrame(newFrame);
+                    }}
+                    onClose={() => setIsFrameModalOpen(false)}
                 />
             )}
         </div>

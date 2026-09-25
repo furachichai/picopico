@@ -1,0 +1,28 @@
+[
+  {
+    "id": "banner-algebra",
+    "title": "ALGEBRA",
+    "beforeLesson": "lessons/01-What Is a Variable-/lesson.json",
+    "leftImage": "/src/assets/characters/yara_avatar_calm.png",
+    "rightImage": "/src/assets/characters/yara_avatar_happy.png",
+    "backgroundColor": "#B81EAD",
+    "textColor": "#FFFFFF",
+    "borderColor": "#06B6D4"
+  },
+  {
+    "id": "banner-order-of-operations",
+    "title": "ORDER OF OPERATIONS",
+    "beforeLesson": "lessons/14-Pociones/lesson.json",
+    "leftImage": "/src/assets/characters/wizard stirs cauldron.png",
+    "rightImage": "",
+    "backgroundColor": "#BAE6FD",
+    "textColor": "#1E293B"
+  },
+  {
+    "id": "banner-exponents",
+    "title": "EXPONENTS",
+    "leftImage": "/src/assets/characters/wizard_goblet_exponents.png",
+    "rightImage": "",
+    "beforeLesson": "lessons/23-exponents/lesson.json"
+  }
+]

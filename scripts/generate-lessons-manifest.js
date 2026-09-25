@@ -57,8 +57,10 @@ function getLessons(dir) {
             visible: content.visible !== false,
             visibleInFeed: isFeedVis,
             order: order,
+            titlecardFrame: content.titlecardFrame || null,
             content: {
                 ...content,
+                titlecardFrame: content.titlecardFrame || null,
                 visibleInFeed: isFeedVis
             }
         });
@@ -73,3 +75,19 @@ console.log('Generating lessons manifest...');
 const lessons = getLessons(lessonsDir);
 fs.writeFileSync(outputPath, JSON.stringify(lessons, null, 2));
 console.log(`Wrote ${outputPath} with ${lessons.length} lessons`);
+
+// Also sync banners.json
+const bannersSrc = path.resolve(process.cwd(), 'lessons', 'banners.json');
+const bannersDest = path.resolve(process.cwd(), 'public', 'banners.json');
+if (fs.existsSync(bannersSrc)) {
+    fs.copyFileSync(bannersSrc, bannersDest);
+    console.log(`Synced ${bannersSrc} to ${bannersDest}`);
+}
+
+// Also sync menu-settings.json
+const menuSrc = path.resolve(process.cwd(), 'lessons', 'menu-settings.json');
+const menuDest = path.resolve(process.cwd(), 'public', 'menu-settings.json');
+if (fs.existsSync(menuSrc)) {
+    fs.copyFileSync(menuSrc, menuDest);
+    console.log(`Synced ${menuSrc} to ${menuDest}`);
+}

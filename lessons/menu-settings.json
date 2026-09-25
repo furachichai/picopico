@@ -1,0 +1,10 @@
+{
+  "menuBg": "#160A52",
+  "showStars": true,
+  "buttonBorderColor": "#42DEE8",
+  "buttonShadowColor": "#2c1376",
+  "bannerBorderColor": "#42DEE8",
+  "buttonTitleColor": "#FFFFFF",
+  "titleShadowColor": "#B81EAD",
+  "buttonOverlayBg": "rgba(0, 86, 214, 0.1)"
+}

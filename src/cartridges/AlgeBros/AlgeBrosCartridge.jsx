@@ -378,39 +378,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     slicedRightDenRef.current = slicedRightDen;
   }, [numTerms, denTerms, slicedNum, slicedDen, rightNumTerms, rightDenTerms, slicedRightNum, slicedRightDen]);
 
-  const playPopFX = useCallback(() => {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
-      
-      const playPop = (delay) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        const startTime = ctx.currentTime + delay;
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, startTime);
-        osc.frequency.exponentialRampToValueAtTime(150, startTime + 0.12);
-        
-        gain.gain.setValueAtTime(0.25, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.12);
-        
-        osc.start(startTime);
-        osc.stop(startTime + 0.12);
-      };
-      
-      playPop(0);
-      playPop(0.08);
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   // Game-wide statistics
   const [stats, setStats] = useState({
     totalUserPresses: 0,
@@ -482,7 +449,6 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         : 'Reorder and combine like terms!',
       type: 'info'
     });
-    setFlash(null);
     setShake(false);
     setIsValidating(false);
     setIsElegantCompleted(false);
@@ -1430,6 +1396,7 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
 
   const tempSlicedNum = React.useRef(null);
   const tempSlicedDen = React.useRef(null);
+  const sliceAnimFrameRef = React.useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -1459,7 +1426,9 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       }
       
       if (isGlobalSlicing.current || swipePoints.current.length > 0) {
-        requestAnimationFrame(animateCanvas);
+        sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
+      } else {
+        sliceAnimFrameRef.current = null;
       }
     };
 
@@ -1495,8 +1464,8 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
         clientY: e.clientY,
         time: Date.now()
       }];
-      
-      requestAnimationFrame(animateCanvas);
+      if (sliceAnimFrameRef.current) cancelAnimationFrame(sliceAnimFrameRef.current);
+      sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
     };
 
     const handleGlobalMove = (e) => {
@@ -1643,6 +1612,10 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     window.addEventListener('pointermove', handleGlobalMove);
     window.addEventListener('pointerup', handleGlobalUp);
     return () => {
+      if (sliceAnimFrameRef.current) {
+        cancelAnimationFrame(sliceAnimFrameRef.current);
+        sliceAnimFrameRef.current = null;
+      }
       window.removeEventListener('pointerdown', handleGlobalDown);
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);

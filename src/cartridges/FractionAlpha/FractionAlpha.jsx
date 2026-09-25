@@ -4,6 +4,7 @@ import './FractionAlpha.css';
 // import confetti from 'canvas-confetti';
 import pizzaBox from '../../assets/graphics/pizza_box.png';
 import kitchenCounter from '../../assets/graphics/kitchen_counter.png';
+import { getSharedAudioContext } from '../../utils/audioContext';
 
 const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
     // Config mainly sets the "Theme" or "Starting Point" now, but logic handles 5 levels
@@ -55,11 +56,18 @@ const FractionAlpha = ({ config = {}, onComplete, preview = false }) => {
     const playChopSound = () => {
         if (preview) return;
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const ctx = new AudioContext();
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') ctx.resume();
+
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            osc.onended = () => {
+                try {
+                    osc.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
 
             osc.type = 'square';
             osc.frequency.setValueAtTime(150, ctx.currentTime);

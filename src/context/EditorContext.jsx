@@ -66,7 +66,7 @@ const pushToPast = (state) => {
         currentSlideId: state.currentSlideId
     };
     const newPast = [...(state.past || [])];
-    if (newPast.length >= 50) {
+    if (newPast.length >= 20) {
         newPast.shift();
     }
     newPast.push(snapshot);

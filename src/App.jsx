@@ -146,7 +146,10 @@ const AppContent = () => {
   // Track real viewport height for iOS Safari URL bar & mobile Chrome
   React.useEffect(() => {
     const setAppHeight = () => {
-      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const isStandalone = typeof window !== 'undefined' && (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches);
+      const h = isStandalone
+        ? window.innerHeight
+        : (window.visualViewport ? window.visualViewport.height : window.innerHeight);
       document.documentElement.style.setProperty('--app-height', `${h}px`);
     };
 
@@ -562,7 +565,7 @@ const AppContent = () => {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: '#1a202c',
+        backgroundColor: '#000000',
         zIndex: -5
       }} />
       {/* View stack: keys are view names, so a view keeps its mounted instance across

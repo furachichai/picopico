@@ -3,8 +3,8 @@
   "short_name": "PicoPico",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#1a202c",
-  "theme_color": "#8B5CF6",
+  "background_color": "#000000",
+  "theme_color": "#ffffff",
   "orientation": "portrait",
   "icons": [
     {

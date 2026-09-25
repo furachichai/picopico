@@ -12,7 +12,9 @@ export const PotiondasThumbnail = ({ config }) => {
         try {
             const parsed = deserializeLevels(config.levelsText);
             if (parsed.length > 0) levels = parsed;
-        } catch (e) {}
+        } catch {
+            // ignore
+        }
     }
     
     // Get first 3 levels
@@ -53,9 +55,18 @@ export const PotiondasThumbnail = ({ config }) => {
     );
 };
 
-const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBalloons = false, hideTextAndShapes = false, cover = false }) => {
+const SlideThumbnail = ({ 
+    slide, 
+    width = '100%', 
+    height = '100%', 
+    hideTextAndBalloons = false, 
+    hideTextAndShapes = false, 
+    cover = false,
+    fixedScale = null
+}) => {
     const containerRef = useRef(null);
-    const [scale, setScale] = useState(cover ? 0.28 : 0.5);
+    const [measuredScale, setMeasuredScale] = useState(cover ? 0.28 : 0.5);
+    const scale = fixedScale !== null ? fixedScale : measuredScale;
     const shouldFilterText = hideTextAndBalloons || hideTextAndShapes;
     const shouldFilterShapes = hideTextAndShapes;
 
@@ -64,6 +75,8 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
     const BASE_HEIGHT = 640;
 
     useEffect(() => {
+        if (fixedScale !== null) return;
+
         const updateScale = () => {
             if (!containerRef.current) return;
             const { width: containerWidth, height: containerHeight } = containerRef.current.getBoundingClientRect();
@@ -74,10 +87,10 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
 
             if (cover) {
                 // Cover mode + 6% overshoot to eliminate any letterboxing or top/bottom gap lines
-                setScale(Math.max(scaleX, scaleY) * 1.06);
+                setMeasuredScale(Math.max(scaleX, scaleY) * 1.06);
             } else {
                 // Use the smaller scale to fit entirely within the container
-                setScale(Math.min(scaleX, scaleY));
+                setMeasuredScale(Math.min(scaleX, scaleY));
             }
         };
 
@@ -88,7 +101,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
         }
 
         return () => observer.disconnect();
-    }, [cover]);
+    }, [cover, fixedScale]);
 
     const rawBg = slide?.background || '';
     const isColor = rawBg.startsWith('#') || rawBg.startsWith('rgb');
@@ -201,7 +214,7 @@ const SlideThumbnail = ({ slide, width = '100%', height = '100%', hideTextAndBal
                         ) : (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? (
                             <ExloreNLCartridge config={slide.cartridge.config} preview={false} readOnly={true} />
                         ) : slide.cartridge.type === 'Balanza' ? (
-                            <BalanzaCartridge config={slide.cartridge.config} />
+                            <BalanzaCartridge config={slide.cartridge.config} preview={true} />
                         ) : (
                             <div style={{
                                 width: '100%',

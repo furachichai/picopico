@@ -3048,5 +3048,10 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null
+  "progress": null,
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": -0.2,
+    "y": -39.7
+  }
 }

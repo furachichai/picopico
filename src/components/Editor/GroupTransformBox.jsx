@@ -82,6 +82,17 @@ const GroupTransformBox = ({ selectedElements, canvasRef, dispatch, onSnapGuidel
         setBounds(b);
     }, [selectedElements, computeBounds, isInteracting]);
 
+    const dragCleanupRef = useRef(null);
+
+    // Clean up active listeners on unmount
+    useEffect(() => {
+        return () => {
+            if (dragCleanupRef.current) {
+                dragCleanupRef.current();
+            }
+        };
+    }, []);
+
     // Handle Start of interaction (move, resize, rotate)
     const handleStart = (e, type) => {
         e.preventDefault();
@@ -266,12 +277,21 @@ const GroupTransformBox = ({ selectedElements, canvasRef, dispatch, onSnapGuidel
             document.removeEventListener('mouseup', handleEnd);
             document.removeEventListener('touchmove', handleMove);
             document.removeEventListener('touchend', handleEnd);
+            dragCleanupRef.current = null;
 
             // Re-calculate true DOM bounds after interaction
             setTimeout(() => {
                 const b = computeBounds();
                 setBounds(b);
             }, 50);
+        };
+
+        dragCleanupRef.current = () => {
+            document.removeEventListener('mousemove', handleMove);
+            document.removeEventListener('mouseup', handleEnd);
+            document.removeEventListener('touchmove', handleMove);
+            document.removeEventListener('touchend', handleEnd);
+            dragCleanupRef.current = null;
         };
 
         document.addEventListener('mousemove', handleMove);

@@ -220,6 +220,15 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped, al
   const [isRotating, setIsRotating] = useState(false);
   const pointerStartRef = useRef(null);
   const isDraggingRef = useRef(false);
+  const pointerCleanupRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (pointerCleanupRef.current) {
+        pointerCleanupRef.current();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!allowInvert && isInverted) {
@@ -296,10 +305,16 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped, al
       }
     };
 
-    const handlePointerUp = () => {
+    const cleanup = () => {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
+      pointerCleanupRef.current = null;
+    };
+    pointerCleanupRef.current = cleanup;
+
+    const handlePointerUp = () => {
+      cleanup();
 
       if (!pointerStartRef.current) return;
       const wasDragging = isDraggingRef.current;
@@ -453,6 +468,15 @@ export default function BalanzaCartridge({
   const targetOriginalCountsRef = useRef({});
   const hasExpandedCardRef = useRef({});
   const hasCompletedTutorialCycleRef = useRef(false);
+  const photoDragCleanupRef = useRef(null);
+  const menuDragCleanupRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (photoDragCleanupRef.current) photoDragCleanupRef.current();
+      if (menuDragCleanupRef.current) menuDragCleanupRef.current();
+    };
+  }, []);
 
   const isTutorialMode = !!(config.tutorial || config.isTutorial || config.tutorialMode);
   const isPlayMode = !preview;
@@ -519,9 +543,15 @@ export default function BalanzaCartridge({
       setLocalPhotoPos({ x: currentPosX, y: currentPosY });
     };
 
-    const handlePointerUp = () => {
+    const cleanup = () => {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
+      photoDragCleanupRef.current = null;
+    };
+    photoDragCleanupRef.current = cleanup;
+
+    const handlePointerUp = () => {
+      cleanup();
       setIsDraggingPhoto(false);
 
       if (currentPosX !== startPosX || currentPosY !== startPosY) {
@@ -925,10 +955,16 @@ export default function BalanzaCartridge({
       const handleMove = (moveEvt) => {
         setDragPos({ x: moveEvt.clientX, y: moveEvt.clientY });
       };
-      const handleUp = (upEvt) => {
+      const cleanup = () => {
         window.removeEventListener('pointermove', handleMove);
         window.removeEventListener('pointerup', handleUp);
         window.removeEventListener('pointercancel', handleUp);
+        menuDragCleanupRef.current = null;
+      };
+      menuDragCleanupRef.current = cleanup;
+
+      const handleUp = (upEvt) => {
+        cleanup();
         handleTileDragEnd(upEvt, { point: { x: upEvt.clientX, y: upEvt.clientY } });
       };
       window.addEventListener('pointermove', handleMove);

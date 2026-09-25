@@ -1,6 +1,11 @@
 {
-  "id": "draft-1",
+  "id": "lessons/01-What Is a Variable-/lesson.json",
   "title": "What Is a Variable?",
+  "titlecardFrame": {
+    "zoom": 1.2,
+    "x": 1.1,
+    "y": -30.8
+  },
   "slides": [
     {
       "id": "slide-1790292913219",
@@ -391,10 +396,10 @@
         {
           "id": "el-1790281259019-9chom2lrh",
           "type": "text",
-          "content": "<b>d</b> stands for the <b>number</b> of days. <div><br></div><div>Whatever it is today.</div><div><br></div>",
-          "x": 30.833333333333325,
-          "y": 32.5,
-          "width": 45.55555555555555,
+          "content": "<b>d</b> stands for the <b>number</b> of days without acidents <div><br></div><div>Whatever it is</div><div>today.</div><div><br></div>",
+          "x": 29.583333333333332,
+          "y": 32.65625,
+          "width": 51.944444444444436,
           "height": 5,
           "rotation": 0,
           "scale": 1,
@@ -1431,7 +1436,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-24T18:59:24.845Z",
-  "updatedAt": "2026-09-24T23:36:10.217Z",
+  "updatedAt": "2026-09-25T00:52:12.913Z",
   "path": "lessons/01-What Is a Variable-/lesson.json",
   "textPreset": null,
   "_snapshots": [
@@ -1456,5 +1461,21 @@
       "title": "",
       "description": ""
     }
-  }
+  },
+  "name": "01-What Is a Variable-",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 1,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": null
 }

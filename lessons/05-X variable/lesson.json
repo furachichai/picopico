@@ -1,10 +1,10 @@
 {
-  "id": "lessons/2993-X variable/lesson.json",
+  "id": "lessons/05-X variable/lesson.json",
   "title": "X variable",
   "slides": [
     {
       "id": "slide-1",
-      "background": "#E1F5FE",
+      "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
       "elements": [
         {
           "id": "el-1789753463757-0-s8wevv",
@@ -1747,8 +1747,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T17:32:09.502Z",
-  "updatedAt": "2026-09-18T22:48:31.010Z",
-  "path": "lessons/2993-X variable/lesson.json",
+  "updatedAt": "2026-09-25T15:15:23.493Z",
+  "path": "lessons/05-X variable/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -1759,12 +1759,12 @@
       "description": ""
     }
   },
-  "name": "2993-X variable",
+  "name": "05-X variable",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
-  "order": 2993,
-  "status": "completed",
+  "order": 5,
+  "status": "active",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -1774,9 +1774,10 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 15,
-    "completed": true,
-    "lastPlayed": 1789767037056
+  "progress": null,
+  "titlecardFrame": {
+    "zoom": 1.2,
+    "x": 2.3,
+    "y": -81.2
   }
 }

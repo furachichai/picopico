@@ -1,10 +1,10 @@
 {
-  "id": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+  "id": "lessons/03-Any Number Over Itself Is 1/lesson.json",
   "title": "Any Number Over Itself Is 1",
   "slides": [
     {
       "id": "slide-1790102024224",
-      "background": "#E1F5FE",
+      "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
       "elements": [
         {
           "id": "el-1790102045614-dyjqvkt57",
@@ -1190,8 +1190,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-22T18:21:11.740Z",
-  "updatedAt": "2026-09-22T21:52:50.739Z",
-  "path": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+  "updatedAt": "2026-09-25T15:15:01.835Z",
+  "path": "lessons/03-Any Number Over Itself Is 1/lesson.json",
   "textPreset": null,
   "_snapshots": [
     {
@@ -1216,11 +1216,11 @@
       "description": ""
     }
   },
-  "name": "01-Any Number Over Itself Is 1",
+  "name": "03-Any Number Over Itself Is 1",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
-  "order": 1,
+  "order": 3,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -1231,9 +1231,10 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1790112616652
+  "progress": null,
+  "titlecardFrame": {
+    "zoom": 2.2,
+    "x": 18.9,
+    "y": -22.2
   }
 }

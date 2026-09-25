@@ -9,6 +9,7 @@ import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceN
 import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
 import TypeQuizKeyboard from './TypeQuizKeyboard';
 import { evaluateMathExpression, parseFieldExpression, generateFieldChoices, shuffleArray } from '../../utils/fieldQuizUtils';
+import { getSharedAudioContext, unlockSharedAudio } from '../../utils/audioContext';
 
 const generateFieldFlyId = () => Date.now() + Math.random();
 
@@ -330,8 +331,6 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     const [pemArrow, setPemArrow] = useState(false);
     const [pemGameLevel, setPemGameLevel] = useState(0);
     const [isPemPowerupActive, setIsPemPowerupActive] = useState(false);
-    const pemAudioCtx = React.useRef(null);
-    const globalAudioCtx = React.useRef(null);
 
     // Match Quiz State and Refs
     const [matchSquares, setMatchSquares] = useState([]);
@@ -400,13 +399,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     // -------------------------------------------------------------------------
     const ensureAudioAuthorized = () => {
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext && !globalAudioCtx.current) {
-                globalAudioCtx.current = new AudioContext();
-            }
-            if (globalAudioCtx.current && globalAudioCtx.current.state === 'suspended') {
-                globalAudioCtx.current.resume();
-            }
+            unlockSharedAudio();
         } catch (e) {
             console.warn('Failed to pre-authorize AudioContext:', e);
         }
@@ -430,12 +423,8 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         } catch (e) {}
 
         try {
-            if (!globalAudioCtx.current) {
-                const AC = window.AudioContext || window.webkitAudioContext;
-                if (!AC) return;
-                globalAudioCtx.current = new AC();
-            }
-            const ctx = globalAudioCtx.current;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
 
             const schedule = () => {
                 try {
@@ -518,35 +507,23 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     useEffect(() => {
         const unlockAudio = async () => {
             try {
-                const AC = window.AudioContext || window.webkitAudioContext;
-                if (!AC) return;
-                if (!globalAudioCtx.current) globalAudioCtx.current = new AC();
-                if (!pemAudioCtx.current) pemAudioCtx.current = new AC();
-                const contexts = [globalAudioCtx.current, pemAudioCtx.current];
-                for (const ctx of contexts) {
-                    if (!ctx) continue;
-                    if (ctx.state !== 'running') {
-                        await ctx.resume();
-                    }
-                    // Safari trick: play a silent buffer to fully unlock the context
-                    if (ctx.state === 'running') {
-                        try {
-                            const buf = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
-                            const src = ctx.createBufferSource();
-                            src.buffer = buf;
-                            src.connect(ctx.destination);
-                            src.start(0);
-                        } catch(e) {}
-                    }
+                const ctx = unlockSharedAudio();
+                if (ctx && ctx.state === 'running') {
+                    try {
+                        const buf = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
+                        const src = ctx.createBufferSource();
+                        src.buffer = buf;
+                        src.connect(ctx.destination);
+                        src.start(0);
+                    } catch(e) {}
                 }
             } catch (e) {}
         };
         // Re-resume when user returns from background/tab switch (Safari suspends on blur)
         const handleVisibility = () => {
             if (document.visibilityState === 'visible') {
-                [globalAudioCtx.current, pemAudioCtx.current].forEach(ctx => {
-                    if (ctx && ctx.state === 'suspended') ctx.resume();
-                });
+                const ctx = getSharedAudioContext();
+                if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
             }
         };
         window.addEventListener('click', unlockAudio);
@@ -3017,13 +2994,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const playNote = (noteIdx) => {
             try {
-                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const ctx = pemAudioCtx.current;
+                const ctx = getSharedAudioContext();
+                if (!ctx) return;
                 const schedule = () => {
                     try {
                         const now = ctx.currentTime;
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
+                        osc.onended = () => {
+                            try { osc.disconnect(); gain.disconnect(); } catch (_) {}
+                        };
                         osc.type = 'sine';
                         osc.frequency.setValueAtTime(C_MAJOR[noteIdx % C_MAJOR.length], now);
                         gain.gain.setValueAtTime(0.3, now);
@@ -3039,13 +3019,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const playErrorSfx = () => {
             try {
-                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const ctx = pemAudioCtx.current;
+                const ctx = getSharedAudioContext();
+                if (!ctx) return;
                 const schedule = () => {
                     try {
                         const now = ctx.currentTime;
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
+                        osc.onended = () => {
+                            try { osc.disconnect(); gain.disconnect(); } catch (_) {}
+                        };
                         osc.type = 'sawtooth';
                         osc.frequency.setValueAtTime(180, now);
                         gain.gain.setValueAtTime(0.2, now);
@@ -3178,13 +3161,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const playParenSound = () => {
             try {
-                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const ctx = pemAudioCtx.current;
+                const ctx = getSharedAudioContext();
+                if (!ctx) return;
                 const schedule = () => {
                     try {
                         const now = ctx.currentTime;
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
+                        osc.onended = () => {
+                            try { osc.disconnect(); gain.disconnect(); } catch (_) {}
+                        };
                         osc.type = 'sine';
                         osc.frequency.setValueAtTime(880, now);
                         gain.gain.setValueAtTime(0.15, now);
@@ -3215,14 +3201,21 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
 
         const playHeavyDragSound = () => {
             try {
-                if (!pemAudioCtx.current) pemAudioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const ctx = pemAudioCtx.current;
+                const ctx = getSharedAudioContext();
+                if (!ctx) return;
                 const schedule = () => {
                     try {
                         const now = ctx.currentTime;
                         const osc = ctx.createOscillator();
                         const filter = ctx.createBiquadFilter();
                         const gain = ctx.createGain();
+                        osc.onended = () => {
+                            try {
+                                osc.disconnect();
+                                filter.disconnect();
+                                gain.disconnect();
+                            } catch (_) {}
+                        };
                         
                         osc.type = 'sawtooth';
                         osc.frequency.setValueAtTime(40, now);

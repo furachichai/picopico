@@ -49,8 +49,10 @@ function syncPublicLessonsData() {
                 visible: content.visible !== false,
                 visibleInFeed: isFeedVis,
                 order: order,
+                titlecardFrame: content.titlecardFrame || null,
                 content: {
                     ...content,
+                    titlecardFrame: content.titlecardFrame || null,
                     visibleInFeed: isFeedVis
                 }
             });
@@ -58,6 +60,18 @@ function syncPublicLessonsData() {
 
         results.sort((a, b) => a.order - b.order);
         fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+        const bannersSrc = path.resolve(process.cwd(), 'lessons', 'banners.json');
+        const bannersDest = path.resolve(process.cwd(), 'public', 'banners.json');
+        if (fs.existsSync(bannersSrc)) {
+            fs.copyFileSync(bannersSrc, bannersDest);
+        }
+
+        const menuSrc = path.resolve(process.cwd(), 'lessons', 'menu-settings.json');
+        const menuDest = path.resolve(process.cwd(), 'public', 'menu-settings.json');
+        if (fs.existsSync(menuSrc)) {
+            fs.copyFileSync(menuSrc, menuDest);
+        }
     } catch (e) {
         console.error('Error syncing public/lessons-data.json:', e);
     }
@@ -229,8 +243,10 @@ export default function lessonManagerPlugin() {
                                 visible: content.visible !== false, // default true (controls Menu)
                                 visibleInFeed: isFeedVis, // controls TikTok Feed
                                 order: order,
+                                titlecardFrame: content.titlecardFrame || null,
                                 content: {
                                     ...content,
+                                    titlecardFrame: content.titlecardFrame || null,
                                     visibleInFeed: isFeedVis
                                 }
                             });
@@ -513,6 +529,102 @@ export default function lessonManagerPlugin() {
                         res.statusCode = 500;
                         res.end(JSON.stringify({ error: error.message }));
                     }
+                } else {
+                    next();
+                }
+            });
+
+            server.middlewares.use('/api/banners', (req, res, next) => {
+                const bannersFile = path.resolve(process.cwd(), 'lessons', 'banners.json');
+                const publicBannersFile = path.resolve(process.cwd(), 'public', 'banners.json');
+
+                if (req.method === 'GET') {
+                    try {
+                        let banners = [];
+                        if (fs.existsSync(bannersFile)) {
+                            banners = JSON.parse(fs.readFileSync(bannersFile, 'utf-8'));
+                        } else if (fs.existsSync(publicBannersFile)) {
+                            banners = JSON.parse(fs.readFileSync(publicBannersFile, 'utf-8'));
+                        }
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+                        res.end(JSON.stringify(banners));
+                    } catch (error) {
+                        console.error('Error reading banners:', error);
+                        res.statusCode = 500;
+                        res.end(JSON.stringify({ error: error.message }));
+                    }
+                } else if (req.method === 'POST') {
+                    let body = '';
+                    req.on('data', chunk => {
+                        body += chunk.toString();
+                    });
+                    req.on('end', () => {
+                        try {
+                            const banners = JSON.parse(body);
+                            if (!Array.isArray(banners)) throw new Error('Banners must be an array');
+                            fs.writeFileSync(bannersFile, JSON.stringify(banners, null, 2));
+                            fs.writeFileSync(publicBannersFile, JSON.stringify(banners, null, 2));
+                            res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.end(JSON.stringify({ success: true, banners }));
+                        } catch (error) {
+                            console.error('Error saving banners:', error);
+                            res.statusCode = 500;
+                            res.end(JSON.stringify({ error: error.message }));
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
+
+            server.middlewares.use('/api/menu-settings', (req, res, next) => {
+                const settingsFile = path.resolve(process.cwd(), 'lessons', 'menu-settings.json');
+                const publicSettingsFile = path.resolve(process.cwd(), 'public', 'menu-settings.json');
+
+                if (req.method === 'GET') {
+                    try {
+                        let settings = {
+                            menuBg: '#FFFFFF',
+                            buttonBorderColor: '#000000',
+                            buttonTitleColor: '#FFFFFF',
+                            buttonOverlayBg: 'rgba(0, 0, 0, 0.68)'
+                        };
+                        if (fs.existsSync(settingsFile)) {
+                            settings = JSON.parse(fs.readFileSync(settingsFile, 'utf-8'));
+                        } else if (fs.existsSync(publicSettingsFile)) {
+                            settings = JSON.parse(fs.readFileSync(publicSettingsFile, 'utf-8'));
+                        }
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+                        res.end(JSON.stringify(settings));
+                    } catch (error) {
+                        console.error('Error reading menu settings:', error);
+                        res.statusCode = 500;
+                        res.end(JSON.stringify({ error: error.message }));
+                    }
+                } else if (req.method === 'POST') {
+                    let body = '';
+                    req.on('data', chunk => {
+                        body += chunk.toString();
+                    });
+                    req.on('end', () => {
+                        try {
+                            const settings = JSON.parse(body);
+                            fs.writeFileSync(settingsFile, JSON.stringify(settings, null, 2));
+                            fs.writeFileSync(publicSettingsFile, JSON.stringify(settings, null, 2));
+                            res.statusCode = 200;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.end(JSON.stringify({ success: true, settings }));
+                        } catch (error) {
+                            console.error('Error saving menu settings:', error);
+                            res.statusCode = 500;
+                            res.end(JSON.stringify({ error: error.message }));
+                        }
+                    });
                 } else {
                     next();
                 }

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { getSharedAudioContext } from '../../utils/audioContext';
 import './IStickerPlayer.css';
 
 /**
@@ -41,16 +42,22 @@ const ExpressionScanner001 = ({ expression, isActive = true, onComplete, isWiggl
     // Play a discovery chime
     const playDiscoveryChime = useCallback(() => {
         try {
-            if (!audioCtxRef.current) {
-                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const ctx = audioCtxRef.current;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
 
             const now = ctx.currentTime;
             const osc1 = ctx.createOscillator();
             const osc2 = ctx.createOscillator();
             const gain = ctx.createGain();
+            const onEnded = () => {
+                try {
+                    osc1.disconnect();
+                    osc2.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
+            osc1.onended = onEnded;
 
             osc1.connect(gain);
             osc2.connect(gain);
@@ -266,16 +273,22 @@ const ExponentExpander = ({ expression, isActive = true, onComplete, isWiggling 
     // Play a step-change chime using C Major Pentatonic scale
     const playStepChime = useCallback((step) => {
         try {
-            if (!audioCtxRef.current) {
-                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const ctx = audioCtxRef.current;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
 
             const now = ctx.currentTime;
             const osc1 = ctx.createOscillator();
             const osc2 = ctx.createOscillator();
             const gain = ctx.createGain();
+            const onEnded = () => {
+                try {
+                    osc1.disconnect();
+                    osc2.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
+            osc1.onended = onEnded;
 
             osc1.connect(gain);
             osc2.connect(gain);
@@ -494,14 +507,18 @@ const PemdasTermSeparator = ({ expression, isActive = true, onComplete, isWiggli
     // Expanding sound (growing chime)
     const playSeparateSound = useCallback(() => {
         try {
-            if (!audioCtxRef.current) {
-                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const ctx = audioCtxRef.current;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
 
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            osc.onended = () => {
+                try {
+                    osc.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
             
             osc.type = 'sine';
             osc.frequency.setValueAtTime(300, ctx.currentTime);

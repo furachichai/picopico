@@ -25,6 +25,7 @@ import { saveLessonProgress, getLessonProgress } from '../../utils/storage';
 import FullscreenToggle from '../FullscreenToggle';
 import { X, Pencil } from 'lucide-react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { getSharedAudioContext } from '../../utils/audioContext';
 import { TypeQuizProvider } from '../../context/TypeQuizContext';
 import './Player.css';
 
@@ -108,16 +109,20 @@ const Player = () => {
     // Slide navigation SFX (use singleton context to prevent max contexts error)
     const playSlideSfx = () => {
         try {
-            if (!window._slideAudioCtx) {
-                window._slideAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const ctx = window._slideAudioCtx;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
             
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(ctx.destination);
+            osc.onended = () => {
+                try {
+                    osc.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
             osc.type = 'sine';
             osc.frequency.setValueAtTime(600, ctx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.08);
@@ -131,16 +136,20 @@ const Player = () => {
     // Stripper reveal SFX (gentle ascending chime)
     const playStripRevealSfx = () => {
         try {
-            if (!window._slideAudioCtx) {
-                window._slideAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const ctx = window._slideAudioCtx;
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
 
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(ctx.destination);
+            osc.onended = () => {
+                try {
+                    osc.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
             osc.type = 'sine';
             osc.frequency.setValueAtTime(500, ctx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
@@ -178,7 +187,13 @@ const Player = () => {
             }
 
             if (e.key === 'ArrowRight') {
-                nextSlide(true); // force = true, skip all blocking
+                const s = currentSlide;
+                const sActive = s?.stripper?.enabled && s.stripper?.dividers?.length > 0;
+                if (sActive && !visitedStripperSlides.has(currentSlideIndex)) {
+                    nextSlide(false);
+                } else {
+                    nextSlide(true); // force = true, skip all blocking
+                }
             } else if (e.key === 'ArrowLeft') {
                 prevSlide();
             } else if (e.key === 'Escape') {
@@ -287,7 +302,7 @@ const Player = () => {
         if (!force && stripperActive && !visitedStripperSlides.has(currentSlideIndex)) {
             const totalStrips = stripper.dividers.length; // number of dividers = number of additional strips
             if (stripperStep < totalStrips) {
-                // Check if any iSticker in the CURRENT strip needs solving first
+                // Check if any iSticker or quiz in the CURRENT strip needs solving first
                 const currentStripElements = slide.elements?.filter(el => {
                     const strip = getElementStrip(el.y, stripper.dividers);
                     return strip === stripperStep;
@@ -304,8 +319,24 @@ const Player = () => {
                     return;
                 }
 
+                const unsolvedQuizInStrip = currentStripElements?.find(
+                    el => el.type === 'quiz' && !solvedSlides.has(currentSlideIndex)
+                );
+                if (unsolvedQuizInStrip) {
+                    triggerSlideShake();
+                    return;
+                }
+
+                // Advance to next strip with elements (skipping empty strips if any)
+                let nextStep = stripperStep + 1;
+                while (nextStep < totalStrips) {
+                    const hasElements = slide.elements?.some(el => getElementStrip(el.y, stripper.dividers) === nextStep);
+                    if (hasElements) break;
+                    nextStep++;
+                }
+
                 playStripRevealSfx();
-                setStripperStep(prev => prev + 1);
+                setStripperStep(nextStep);
                 return;
             }
             // All strips revealed — mark as visited, then check for blocking interactives
@@ -338,6 +369,13 @@ const Player = () => {
             clearTimeout(autoNextTimeoutRef.current);
             autoNextTimeoutRef.current = null;
         }
+        const slide = slides[currentSlideIndex];
+        const stripperActive = slide?.stripper?.enabled && slide?.stripper?.dividers?.length > 0;
+        if (stripperActive && stripperStep > 0 && !visitedStripperSlides.has(currentSlideIndex)) {
+            playStripRevealSfx();
+            setStripperStep(prev => Math.max(0, prev - 1));
+            return;
+        }
         if (currentSlideIndex > 0) {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev - 1);
@@ -365,11 +403,20 @@ const Player = () => {
     // ── Web Audio SFX ──
     const playTone = (type) => {
         try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const ctx = getSharedAudioContext();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') ctx.resume();
+
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(ctx.destination);
+            osc.onended = () => {
+                try {
+                    osc.disconnect();
+                    gain.disconnect();
+                } catch (_) {}
+            };
 
             if (type === 'correct') {
                 // Happy ascending arpeggio
@@ -533,9 +580,32 @@ const Player = () => {
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
         const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
 
+        const stripperActive = currentSlide?.stripper?.enabled && currentSlide.stripper.dividers?.length > 0;
+        const isStripperStepping = stripperActive && !visitedStripperSlides.has(currentSlideIndex);
+
         if (direction === 'next') {
-            // Forward is blocked when there's an unsolved quiz, cartridge, isticker, stripper, or at last slide
-            if (hasCartridge || hasQuiz || hasISticker || stripperBlocking || currentSlideIndex >= slides.length - 1 || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
+            if (isStripperStepping) {
+                // If on a stripper slide and strips remain, forward nav advances the stripper!
+                const currentStripElements = currentSlide.elements?.filter(el => {
+                    const strip = getElementStrip(el.y, currentSlide.stripper.dividers);
+                    return strip === stripperStep;
+                });
+                const hasUnsolvedQuizInStrip = currentStripElements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
+                if (hasUnsolvedQuizInStrip) {
+                    triggerSlideShake();
+                    return;
+                }
+
+                setIsNavigating(true);
+                nextSlide(false);
+                setTimeout(() => {
+                    setIsNavigating(false);
+                }, 200);
+                return;
+            }
+
+            // Normal slide forward navigation (or stripper fully completed):
+            if (hasCartridge || hasQuiz || hasISticker || currentSlideIndex >= slides.length - 1 || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
                 if (hasCartridge) {
                     triggerCartridgeWiggle();
                 }
@@ -552,8 +622,8 @@ const Player = () => {
         } else {
             // Backward:
             //   - Cartridge/game: BLOCKED (can't leave mid-game)
-            //   - At first slide: BLOCKED (no previous slide)
-            if (hasCartridge || currentSlideIndex === 0 || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
+            //   - At first slide (and no strips to step back): BLOCKED (no previous slide)
+            if (hasCartridge || (currentSlideIndex === 0 && (!isStripperStepping || stripperStep === 0)) || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) {
                 triggerSlideShake();
                 return;
             }
@@ -600,6 +670,7 @@ const Player = () => {
         } else if (Math.abs(dx) <= TAP_TOLERANCE && Math.abs(dy) <= TAP_TOLERANCE) {
             // Tap vertical border columns to navigate:
             // Left border column navigates back; Right border column navigates forward.
+            // On a slide with active stripper, tapping anywhere on the slide (except the left back zone) reveals the next strip!
             const viewportRect = viewportRef.current?.getBoundingClientRect() || { left: 0, width: window.innerWidth };
             const stageWidth = 360 * scale;
             const stageLeft = viewportRect.left + (viewportRect.width - stageWidth) / 2;
@@ -608,9 +679,12 @@ const Player = () => {
             const isLeftBorder = e.clientX <= (stageLeft + stageWidth * 0.20) || e.clientX < stageLeft;
             const isRightBorder = e.clientX >= (stageRight - stageWidth * 0.20) || e.clientX > stageRight;
 
+            const stripperActive = currentSlide?.stripper?.enabled && currentSlide.stripper.dividers?.length > 0;
+            const isStripperStepping = stripperActive && !visitedStripperSlides.has(currentSlideIndex);
+
             if (isLeftBorder) {
                 handleHotzoneNav('prev');
-            } else if (isRightBorder) {
+            } else if (isRightBorder || isStripperStepping) {
                 handleHotzoneNav('next');
             }
         }

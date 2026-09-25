@@ -610,5 +610,10 @@
     "lastSlideIndex": 1,
     "completed": true,
     "lastPlayed": 1789843557275
+  },
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0.5,
+    "y": -44.3
   }
 }

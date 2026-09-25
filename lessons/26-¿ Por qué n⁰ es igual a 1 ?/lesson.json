@@ -3642,5 +3642,10 @@
     "completed": false,
     "lastPlayed": 1789342316342
   },
-  "visibleInFeed": true
+  "visibleInFeed": true,
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": -0.1,
+    "y": 37.6
+  }
 }

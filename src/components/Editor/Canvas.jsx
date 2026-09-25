@@ -110,6 +110,16 @@ const Canvas = (props) => {
     };
   }, []);
 
+  const marqueeCleanupRef = useRef(null);
+  const dividerCleanupRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (marqueeCleanupRef.current) marqueeCleanupRef.current();
+      if (dividerCleanupRef.current) dividerCleanupRef.current();
+    };
+  }, []);
+
   // Rulers and Guides State
   const [cursorPos, setCursorPos] = useState({ x: null, y: null });
   const [activeGuideDrag, setActiveGuideDrag] = useState(null);
@@ -385,9 +395,15 @@ const Canvas = (props) => {
       setMarquee(newMarquee);
     };
 
-    const handlePointerUp = () => {
+    const cleanup = () => {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
+      marqueeCleanupRef.current = null;
+    };
+    marqueeCleanupRef.current = cleanup;
+
+    const handlePointerUp = () => {
+      cleanup();
       
       const finalMarquee = marqueeRef.current;
       setMarquee(null);
@@ -442,11 +458,43 @@ const Canvas = (props) => {
           const dataUrl = e.target.result;
           const img = new Image();
           img.onload = () => {
+            const MAX_DIM = 1280;
+            let nw = img.naturalWidth;
+            let nh = img.naturalHeight;
+            let finalDataUrl = dataUrl;
+
+            if (nw > MAX_DIM || nh > MAX_DIM) {
+              try {
+                const canvas = document.createElement('canvas');
+                let w = nw;
+                let h = nh;
+                if (w > h) {
+                  h = Math.round((h * MAX_DIM) / w);
+                  w = MAX_DIM;
+                } else {
+                  w = Math.round((w * MAX_DIM) / h);
+                  h = MAX_DIM;
+                }
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                  ctx.drawImage(img, 0, 0, w, h);
+                  const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                  finalDataUrl = canvas.toDataURL(mime, 0.85);
+                  nw = w;
+                  nh = h;
+                }
+              } catch (err) {
+                console.warn('Failed to downscale ingested image', err);
+              }
+            }
+
             resolve({
               file,
-              dataUrl,
-              naturalWidth: img.naturalWidth,
-              naturalHeight: img.naturalHeight,
+              dataUrl: finalDataUrl,
+              naturalWidth: nw,
+              naturalHeight: nh,
               filename: file.name || 'image'
             });
           };
@@ -1189,9 +1237,15 @@ const Canvas = (props) => {
                 });
               };
 
-              const onUp = () => {
+              const cleanup = () => {
                 window.removeEventListener('mousemove', onMove);
                 window.removeEventListener('mouseup', onUp);
+                dividerCleanupRef.current = null;
+              };
+              dividerCleanupRef.current = cleanup;
+
+              const onUp = () => {
+                cleanup();
               };
 
               window.addEventListener('mousemove', onMove);
@@ -1216,9 +1270,15 @@ const Canvas = (props) => {
                 });
               };
 
-              const onEnd = () => {
+              const cleanup = () => {
                 window.removeEventListener('touchmove', onMove);
                 window.removeEventListener('touchend', onEnd);
+                dividerCleanupRef.current = null;
+              };
+              dividerCleanupRef.current = cleanup;
+
+              const onEnd = () => {
+                cleanup();
               };
 
               window.addEventListener('touchmove', onMove, { passive: false });

@@ -8,9 +8,19 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 1,
+    "titlecardFrame": {
+      "zoom": 1.2,
+      "x": 1.1,
+      "y": -30.8
+    },
     "content": {
-      "id": "draft-1",
+      "id": "lessons/01-What Is a Variable-/lesson.json",
       "title": "What Is a Variable?",
+      "titlecardFrame": {
+        "zoom": 1.2,
+        "x": 1.1,
+        "y": -30.8
+      },
       "slides": [
         {
           "id": "slide-1790292913219",
@@ -401,10 +411,10 @@
             {
               "id": "el-1790281259019-9chom2lrh",
               "type": "text",
-              "content": "<b>d</b> stands for the <b>number</b> of days. <div><br></div><div>Whatever it is today.</div><div><br></div>",
-              "x": 30.833333333333325,
-              "y": 32.5,
-              "width": 45.55555555555555,
+              "content": "<b>d</b> stands for the <b>number</b> of days without acidents <div><br></div><div>Whatever it is</div><div>today.</div><div><br></div>",
+              "x": 29.583333333333332,
+              "y": 32.65625,
+              "width": 51.944444444444436,
               "height": 5,
               "rotation": 0,
               "scale": 1,
@@ -1441,7 +1451,7 @@
       ],
       "author": "User",
       "createdAt": "2026-09-24T18:59:24.845Z",
-      "updatedAt": "2026-09-24T23:36:10.217Z",
+      "updatedAt": "2026-09-25T00:52:12.913Z",
       "path": "lessons/01-What Is a Variable-/lesson.json",
       "textPreset": null,
       "_snapshots": [
@@ -1467,7 +1477,22 @@
           "description": ""
         }
       },
-      "visibleInFeed": true
+      "name": "01-What Is a Variable-",
+      "type": "file",
+      "visible": true,
+      "visibleInFeed": true,
+      "order": 1,
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": null
     }
   },
   {
@@ -1479,6 +1504,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 2,
+    "titlecardFrame": {
+      "zoom": 1.2,
+      "x": 0.4,
+      "y": -24.9
+    },
     "content": {
       "id": "lessons/01-Spot the mistake!/lesson.json",
       "title": "Spot the mistake!",
@@ -1612,6 +1642,11 @@
         "lastSlideIndex": 2,
         "completed": false,
         "lastPlayed": 1790189963925
+      },
+      "titlecardFrame": {
+        "zoom": 1.2,
+        "x": 0.4,
+        "y": -24.9
       }
     }
   },
@@ -1624,13 +1659,18 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 3,
+    "titlecardFrame": {
+      "zoom": 2.2,
+      "x": 18.9,
+      "y": -22.2
+    },
     "content": {
-      "id": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+      "id": "lessons/03-Any Number Over Itself Is 1/lesson.json",
       "title": "Any Number Over Itself Is 1",
       "slides": [
         {
           "id": "slide-1790102024224",
-          "background": "#E1F5FE",
+          "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
           "elements": [
             {
               "id": "el-1790102045614-dyjqvkt57",
@@ -2816,8 +2856,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-22T18:21:11.740Z",
-      "updatedAt": "2026-09-22T21:52:50.739Z",
-      "path": "lessons/01-Any Number Over Itself Is 1/lesson.json",
+      "updatedAt": "2026-09-25T15:15:01.835Z",
+      "path": "lessons/03-Any Number Over Itself Is 1/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -2842,11 +2882,11 @@
           "description": ""
         }
       },
-      "name": "01-Any Number Over Itself Is 1",
+      "name": "03-Any Number Over Itself Is 1",
       "type": "file",
       "visible": true,
       "visibleInFeed": true,
-      "order": 1,
+      "order": 3,
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -2857,10 +2897,11 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1790112616652
+      "progress": null,
+      "titlecardFrame": {
+        "zoom": 2.2,
+        "x": 18.9,
+        "y": -22.2
       }
     }
   },
@@ -2873,6 +2914,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 4,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0.5,
+      "y": -44.3
+    },
     "content": {
       "id": "lessons/7127-Ecuación o Expresión/lesson.json",
       "title": "Ecuación o Expresión",
@@ -3485,6 +3531,11 @@
         "lastSlideIndex": 1,
         "completed": true,
         "lastPlayed": 1789843557275
+      },
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0.5,
+        "y": -44.3
       }
     }
   },
@@ -3497,13 +3548,18 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 5,
+    "titlecardFrame": {
+      "zoom": 1.2,
+      "x": 2.3,
+      "y": -81.2
+    },
     "content": {
-      "id": "lessons/2993-X variable/lesson.json",
+      "id": "lessons/05-X variable/lesson.json",
       "title": "X variable",
       "slides": [
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
           "elements": [
             {
               "id": "el-1789753463757-0-s8wevv",
@@ -5246,8 +5302,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-18T17:32:09.502Z",
-      "updatedAt": "2026-09-18T22:48:31.010Z",
-      "path": "lessons/2993-X variable/lesson.json",
+      "updatedAt": "2026-09-25T15:15:23.493Z",
+      "path": "lessons/05-X variable/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -5258,12 +5314,12 @@
           "description": ""
         }
       },
-      "name": "2993-X variable",
+      "name": "05-X variable",
       "type": "file",
       "visible": true,
       "visibleInFeed": true,
-      "order": 2993,
-      "status": "completed",
+      "order": 5,
+      "status": "active",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -5273,10 +5329,11 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 15,
-        "completed": true,
-        "lastPlayed": 1789767037056
+      "progress": null,
+      "titlecardFrame": {
+        "zoom": 1.2,
+        "x": 2.3,
+        "y": -81.2
       }
     }
   },
@@ -5289,6 +5346,7 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 6,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Tutorial Balanza",
@@ -5621,7 +5679,8 @@
         "lastSlideIndex": 0,
         "completed": false,
         "lastPlayed": 1789731804420
-      }
+      },
+      "titlecardFrame": null
     }
   },
   {
@@ -5633,6 +5692,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 7,
+    "titlecardFrame": {
+      "zoom": 1.2,
+      "x": -9.4,
+      "y": -31.5
+    },
     "content": {
       "id": "lessons/01-01 Algebra Scale/lesson.json",
       "title": "01 Algebra Scale",
@@ -6376,7 +6440,12 @@
         "completed": false,
         "lastPlayed": 1789732334616
       },
-      "visibleInFeed": true
+      "visibleInFeed": true,
+      "titlecardFrame": {
+        "zoom": 1.2,
+        "x": -9.4,
+        "y": -31.5
+      }
     }
   },
   {
@@ -6388,6 +6457,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 8,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": 0
+    },
     "content": {
       "id": "lessons/3323-Balancing act/lesson.json",
       "title": "Balancing act",
@@ -6720,6 +6794,11 @@
         "lastSlideIndex": 0,
         "completed": false,
         "lastPlayed": 1789731804420
+      },
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": 0
       }
     }
   },
@@ -6732,6 +6811,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 9,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": 0
+    },
     "content": {
       "id": "lessons/04-Untitled Lesson/lesson.json",
       "title": "test",
@@ -6935,6 +7019,11 @@
         "lastSlideIndex": 1,
         "completed": true,
         "lastPlayed": 1789786239023
+      },
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": 0
       }
     }
   },
@@ -6947,6 +7036,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 10,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": -0.2,
+      "y": -39.7
+    },
     "content": {
       "id": "lessons/04-Algebra Expressions/lesson.json",
       "title": "Algebra Expressions",
@@ -9997,7 +10091,12 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": null
+      "progress": null,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": -0.2,
+        "y": -39.7
+      }
     }
   },
   {
@@ -10009,6 +10108,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 11,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": 6.3
+    },
     "content": {
       "id": "lessons/9195-algebraka1/lesson.json",
       "title": "algebraka1",
@@ -11761,6 +11865,11 @@
         "lastSlideIndex": 0,
         "completed": false,
         "lastPlayed": 1789680441579
+      },
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": 6.3
       }
     }
   },
@@ -11773,6 +11882,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 12,
+    "titlecardFrame": {
+      "zoom": 1.6,
+      "x": 24.7,
+      "y": 5.4
+    },
     "content": {
       "id": "draft-1788356342548",
       "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
@@ -13144,7 +13258,12 @@
           "description": ""
         }
       },
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1.6,
+        "x": 24.7,
+        "y": 5.4
+      }
     }
   },
   {
@@ -13156,6 +13275,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 13,
+    "titlecardFrame": {
+      "zoom": 1.6,
+      "x": 11.9,
+      "y": -12.5
+    },
     "content": {
       "id": "lessons/09-Estafa/lesson.json",
       "title": "Estafa",
@@ -14053,6 +14177,11 @@
         "_owner": null,
         "_store": {}
       },
+      "titlecardFrame": {
+        "zoom": 1.6,
+        "x": 11.9,
+        "y": -12.5
+      },
       "visibleInFeed": true
     }
   },
@@ -14065,6 +14194,7 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 14,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/01-Pociones/lesson.json",
       "title": "Pociones",
@@ -14789,7 +14919,8 @@
       },
       "cardColor": "#8B5CF6",
       "hashtag": "#OrderOfOperations",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": null
     }
   },
   {
@@ -14801,6 +14932,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 15,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -32.4
+    },
     "content": {
       "id": "lessons/02-Pociones - Parte 2/lesson.json",
       "title": "Pociones - Parte 2",
@@ -15505,7 +15641,12 @@
       },
       "hashtag": "#OrderOfOperations",
       "cardColor": "#8B5CF6",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -32.4
+      }
     }
   },
   {
@@ -15517,6 +15658,7 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 16,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/03-Pociones - Parte 3/lesson.json",
       "title": "Pociones - Parte 3",
@@ -16046,7 +16188,8 @@
       },
       "hashtag": "#OrderOfOperations",
       "cardColor": "#8B5CF6",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": null
     }
   },
   {
@@ -16058,6 +16201,7 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 17,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/06-Expresiones/lesson.json",
       "title": "Expresiones",
@@ -17088,7 +17232,8 @@
         },
         "_owner": null,
         "_store": {}
-      }
+      },
+      "titlecardFrame": null
     }
   },
   {
@@ -17100,6 +17245,7 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 18,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/05-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
@@ -17800,7 +17946,8 @@
         },
         "_owner": null,
         "_store": {}
-      }
+      },
+      "titlecardFrame": null
     }
   },
   {
@@ -17812,6 +17959,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 19,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -37.6
+    },
     "content": {
       "id": "lessons/04-Pociones - parte 4/lesson.json",
       "title": "Pociones - parte 4",
@@ -18492,7 +18644,12 @@
       },
       "hashtag": "#OrderOfOperations",
       "cardColor": "#8B5CF6",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -37.6
+      }
     }
   },
   {
@@ -18504,6 +18661,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 20,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -24.7
+    },
     "content": {
       "id": "lessons/07-Separa los términos/lesson.json",
       "title": "Separa los términos",
@@ -19777,7 +19939,12 @@
       },
       "cardColor": "#8B5CF6",
       "hashtag": "#OrderOfOperations",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -24.7
+      }
     }
   },
   {
@@ -19789,6 +19956,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 21,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": -0.4,
+      "y": 20.4
+    },
     "content": {
       "id": "lessons/08-× ÷, luego + -/lesson.json",
       "title": "× ÷, luego + -",
@@ -20464,7 +20636,12 @@
         }
       },
       "cardColor": "#8B5CF6",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": -0.4,
+        "y": 20.4
+      }
     }
   },
   {
@@ -20476,6 +20653,7 @@
     "visible": false,
     "visibleInFeed": false,
     "order": 22,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/2713-TEST DELETEME/lesson.json",
       "title": "TEST DELETEME",
@@ -20609,6 +20787,7 @@
         "completed": true,
         "lastPlayed": 1780533034935
       },
+      "titlecardFrame": null,
       "visibleInFeed": false
     }
   },
@@ -20621,6 +20800,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 23,
+    "titlecardFrame": {
+      "zoom": 1.6,
+      "x": 25.8,
+      "y": -34.4
+    },
     "content": {
       "id": "lessons/11-exponents/lesson.json",
       "title": "exponents",
@@ -21516,7 +21700,12 @@
         }
       },
       "hashtag": "#OrderOfOperations",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1.6,
+        "x": 25.8,
+        "y": -34.4
+      }
     }
   },
   {
@@ -21528,6 +21717,7 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 24,
+    "titlecardFrame": null,
     "content": {
       "id": "lessons/12-Parenthesis/lesson.json",
       "title": "Parenthesis",
@@ -21834,7 +22024,8 @@
       "order": 12,
       "status": "active",
       "progress": null,
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": null
     }
   },
   {
@@ -21846,6 +22037,11 @@
     "visible": true,
     "visibleInFeed": false,
     "order": 25,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -38.9
+    },
     "content": {
       "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
       "title": "Why LEFT to RIGHT?",
@@ -22737,7 +22933,12 @@
       },
       "cardColor": "#14B8A6",
       "hashtag": "#OrderOfOperations",
-      "visibleInFeed": false
+      "visibleInFeed": false,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -38.9
+      }
     }
   },
   {
@@ -22749,6 +22950,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 26,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": -0.1,
+      "y": 37.6
+    },
     "content": {
       "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "title": "¿ Por qué n⁰ es igual a 1 ?",
@@ -26393,7 +26599,12 @@
         "completed": false,
         "lastPlayed": 1789342316342
       },
-      "visibleInFeed": true
+      "visibleInFeed": true,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": -0.1,
+        "y": 37.6
+      }
     }
   },
   {
@@ -26405,6 +26616,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 27,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -26.4
+    },
     "content": {
       "id": "lessons/4283-Exponentes negativos/lesson.json",
       "title": "Exponentes negativos",
@@ -29387,6 +29603,11 @@
         "lastSlideIndex": 19,
         "completed": true,
         "lastPlayed": 1789654087198
+      },
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -26.4
       }
     }
   }

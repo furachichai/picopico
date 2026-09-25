@@ -37,9 +37,13 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
     const [interactionType, setInteractionType] = useState(null); // 'move', 'resize', 'rotate'
     const wasSnappedXRef = useRef(false);
     const wasSnappedYRef = useRef(false);
+    const dragCleanupRef = useRef(null);
 
     useEffect(() => {
         return () => {
+            if (dragCleanupRef.current) {
+                dragCleanupRef.current();
+            }
             if (onSnapGuideline) {
                 onSnapGuideline({ vertical: false, horizontal: false, immediate: true });
             }
@@ -506,12 +510,21 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             document.removeEventListener('mouseup', handleEnd);
             document.removeEventListener('touchmove', handleMove);
             document.removeEventListener('touchend', handleEnd);
+            dragCleanupRef.current = null;
 
             // If user clicked without dragging on an already selected element while multiple items were selected,
             // isolate selection on release (respecting group membership or Alt drill-down)
             if (!historySaved && !isMultiSelectModifier && (state.selectedElementIds?.length > 1 || isAlt)) {
                 onSelect(element.id, false, isAlt);
             }
+        };
+
+        dragCleanupRef.current = () => {
+            document.removeEventListener('mousemove', handleMove);
+            document.removeEventListener('mouseup', handleEnd);
+            document.removeEventListener('touchmove', handleMove);
+            document.removeEventListener('touchend', handleEnd);
+            dragCleanupRef.current = null;
         };
 
         document.addEventListener('mousemove', handleMove);

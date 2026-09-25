@@ -17,10 +17,17 @@ export function useDraggable(id) {
         return null;
     });
     
+    const [isDragging, setIsDragging] = useState(false);
     const popupRef = useRef(null);
-    const isDragging = useRef(false);
+    const isDraggingRef = useRef(false);
     const startPos = useRef({ x: 0, y: 0 });
     const startMouse = useRef({ x: 0, y: 0 });
+    const cleanupRef = useRef(null);
+    const positionRef = useRef(position);
+
+    useEffect(() => {
+        positionRef.current = position;
+    }, [position]);
 
     const handleMouseDown = (e) => {
         // Only trigger on left mouse button
@@ -29,52 +36,72 @@ export function useDraggable(id) {
         // Prevent drag if clicking on interactive elements (buttons, inputs)
         if (e.target.closest('button') || e.target.closest('input')) return;
 
-        isDragging.current = true;
+        if (cleanupRef.current) {
+            cleanupRef.current();
+        }
+
+        isDraggingRef.current = true;
+        setIsDragging(true);
         startMouse.current = { x: e.clientX, y: e.clientY };
         
-        if (!position && popupRef.current) {
+        if (!positionRef.current && popupRef.current) {
             const rect = popupRef.current.getBoundingClientRect();
             startPos.current = { x: rect.left, y: rect.top };
             setPosition({ x: rect.left, y: rect.top });
-        } else {
-            startPos.current = { ...position };
+        } else if (positionRef.current) {
+            startPos.current = { ...positionRef.current };
         }
         
+        const handleMouseMove = (ev) => {
+            if (!isDraggingRef.current) return;
+            
+            const deltaX = ev.clientX - startMouse.current.x;
+            const deltaY = ev.clientY - startMouse.current.y;
+            
+            const newPos = {
+                x: Math.max(0, Math.min(startPos.current.x + deltaX, window.innerWidth - 100)),
+                y: Math.max(0, Math.min(startPos.current.y + deltaY, window.innerHeight - 50))
+            };
+            
+            setPosition(newPos);
+        };
+
+        const handleMouseUp = () => {
+            if (isDraggingRef.current) {
+                isDraggingRef.current = false;
+                setIsDragging(false);
+                if (cleanupRef.current) {
+                    cleanupRef.current();
+                }
+                // Save to localStorage once when dragging completes (avoids 60fps I/O lag)
+                if (positionRef.current) {
+                    try {
+                        localStorage.setItem(`draggable_${id}`, JSON.stringify(positionRef.current));
+                    } catch (err) {
+                        void err;
+                    }
+                }
+            }
+        };
+
+        cleanupRef.current = () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+            cleanupRef.current = null;
+        };
+
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
     };
 
-    const handleMouseMove = (e) => {
-        if (!isDragging.current) return;
-        
-        const deltaX = e.clientX - startMouse.current.x;
-        const deltaY = e.clientY - startMouse.current.y;
-        
-        const newPos = {
-            x: Math.max(0, Math.min(startPos.current.x + deltaX, window.innerWidth - 100)),
-            y: Math.max(0, Math.min(startPos.current.y + deltaY, window.innerHeight - 50))
-        };
-        
-        setPosition(newPos);
-    };
-
-    const handleMouseUp = () => {
-        if (isDragging.current) {
-            isDragging.current = false;
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        }
-    };
-    
+    // Clean up any active listeners on unmount
     useEffect(() => {
-        if (position) {
-            localStorage.setItem(`draggable_${id}`, JSON.stringify(position));
-        }
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
+            if (cleanupRef.current) {
+                cleanupRef.current();
+            }
         };
-    }, [position, id]);
+    }, []);
 
     // Use !important like style properties or combine with a class
     const style = position ? {
@@ -92,7 +119,7 @@ export function useDraggable(id) {
         popupRef,
         dragHandlers: {
             onMouseDown: handleMouseDown,
-            style: { cursor: isDragging.current ? 'grabbing' : 'grab' }
+            style: { cursor: isDragging ? 'grabbing' : 'grab' }
         },
         style
     };

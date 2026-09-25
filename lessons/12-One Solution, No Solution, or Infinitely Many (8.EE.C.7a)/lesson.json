@@ -1369,5 +1369,10 @@
       "description": ""
     }
   },
-  "visibleInFeed": false
+  "visibleInFeed": false,
+  "titlecardFrame": {
+    "zoom": 1.6,
+    "x": 24.7,
+    "y": 5.4
+  }
 }
