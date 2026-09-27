@@ -7,6 +7,11 @@ const VIEWPORT_SIZE = 220; // Diameter of the interactive editor viewport
 const CircleFrameModal = ({
   isOpen,
   lesson,
+  overlayHeight = 38,
+  overlayBg = 'rgba(0, 0, 0, 0.68)',
+  titleColor = '#FFFFFF',
+  titleShadow = '0 2px 4px rgba(0, 0, 0, 0.95)',
+  titleFontSize = '1.6rem',
   onSave,
   onClose
 }) => {
@@ -74,11 +79,11 @@ const CircleFrameModal = ({
     const dx = ((e.clientX - dragStartRef.current.pointerX) / VIEWPORT_SIZE) * 100;
     const dy = ((e.clientY - dragStartRef.current.pointerY) / VIEWPORT_SIZE) * 100;
 
-    const curZoom = Math.max(1, frame.zoom || 1);
+    const curZoom = Math.max(0.4, frame.zoom || 1);
     const scaledWidth = 360 * (VIEWPORT_SIZE / 360) * curZoom;
     const scaledHeight = 640 * (VIEWPORT_SIZE / 360) * curZoom;
-    const maxXPercent = ((scaledWidth - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
-    const maxYPercent = ((scaledHeight - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
+    const maxXPercent = (Math.abs(scaledWidth - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
+    const maxYPercent = (Math.abs(scaledHeight - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
 
     const rawX = dragStartRef.current.frameX + dx;
     const rawY = dragStartRef.current.frameY + dy;
@@ -106,11 +111,11 @@ const CircleFrameModal = ({
     e.preventDefault();
     const zoomDelta = -e.deltaY * 0.002;
     setFrame(prev => {
-      const newZoom = Math.min(4, Math.max(1, Math.round((prev.zoom + zoomDelta) * 100) / 100));
+      const newZoom = Math.min(4, Math.max(0.4, Math.round((prev.zoom + zoomDelta) * 100) / 100));
       const scaledWidth = 360 * (VIEWPORT_SIZE / 360) * newZoom;
       const scaledHeight = 640 * (VIEWPORT_SIZE / 360) * newZoom;
-      const maxXPercent = ((scaledWidth - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
-      const maxYPercent = ((scaledHeight - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
+      const maxXPercent = (Math.abs(scaledWidth - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
+      const maxYPercent = (Math.abs(scaledHeight - VIEWPORT_SIZE) / 2 / VIEWPORT_SIZE) * 100;
       return {
         ...prev,
         zoom: newZoom,
@@ -134,11 +139,11 @@ const CircleFrameModal = ({
     }
   };
 
-  const baseScale = (VIEWPORT_SIZE / 360) * frame.zoom * 1.01;
+  const baseScale = (VIEWPORT_SIZE / 360) * Math.max(0.4, frame.zoom || 1) * 1.01;
   const scaledWidth = 360 * baseScale;
   const scaledHeight = 640 * baseScale;
-  const maxOffsetX = Math.max(0, (scaledWidth - VIEWPORT_SIZE) / 2);
-  const maxOffsetY = Math.max(0, (scaledHeight - VIEWPORT_SIZE) / 2);
+  const maxOffsetX = Math.abs(scaledWidth - VIEWPORT_SIZE) / 2;
+  const maxOffsetY = Math.abs(scaledHeight - VIEWPORT_SIZE) / 2;
   const rawOffsetX = (frame.x / 100) * VIEWPORT_SIZE;
   const rawOffsetY = (frame.y / 100) * VIEWPORT_SIZE;
   const offsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, rawOffsetX));
@@ -337,15 +342,15 @@ const CircleFrameModal = ({
                 }} />
               </div>
 
-              {/* Bottom Third Semi-transparent Title Overlay */}
+              {/* Bottom Semi-transparent Title Overlay */}
               <div
                 style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: '38%',
-                  background: 'rgba(0, 0, 0, 0.68)',
+                  height: `${overlayHeight}%`,
+                  background: overlayBg,
                   backdropFilter: 'blur(5px)',
                   borderTop: '2.5px solid rgba(0, 0, 0, 0.4)',
                   display: 'flex',
@@ -354,17 +359,18 @@ const CircleFrameModal = ({
                   padding: '6px 12px',
                   boxSizing: 'border-box',
                   pointerEvents: 'none',
-                  zIndex: 5
+                  zIndex: 5,
+                  transition: 'height 0.1s ease, background 0.15s ease'
                 }}
               >
                 <div style={{
                   fontFamily: "'Outfit', 'Inter', sans-serif",
                   fontWeight: 900,
-                  fontSize: '1.25rem',
+                  fontSize: `${((parseFloat(titleFontSize) || 1.6) * 0.78).toFixed(2)}rem`,
                   lineHeight: 1.15,
-                  color: '#FFFFFF',
+                  color: titleColor,
                   textAlign: 'center',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.95)',
+                  textShadow: titleShadow,
                   overflow: 'hidden',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
@@ -460,7 +466,7 @@ const CircleFrameModal = ({
           }}>
             <button
               type="button"
-              onClick={() => setFrame(f => ({ ...f, zoom: Math.max(1, Math.round((f.zoom - 0.2) * 10) / 10) }))}
+              onClick={() => setFrame(f => ({ ...f, zoom: Math.max(0.4, Math.round((f.zoom - 0.1) * 10) / 10) }))}
               style={{
                 width: '32px',
                 height: '32px',
@@ -476,7 +482,7 @@ const CircleFrameModal = ({
             </button>
             <input
               type="range"
-              min="1"
+              min="0.4"
               max="4"
               step="0.05"
               value={frame.zoom}
@@ -485,7 +491,7 @@ const CircleFrameModal = ({
             />
             <button
               type="button"
-              onClick={() => setFrame(f => ({ ...f, zoom: Math.min(4, Math.round((f.zoom + 0.2) * 10) / 10) }))}
+              onClick={() => setFrame(f => ({ ...f, zoom: Math.min(4, Math.round((f.zoom + 0.1) * 10) / 10) }))}
               style={{
                 width: '32px',
                 height: '32px',

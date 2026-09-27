@@ -61,6 +61,8 @@ const Dashboard = () => {
     buttonTitleColor: '#FFFFFF',
     titleShadowColor: '#000000',
     buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
+    buttonTitleFontSize: '1.6rem',
+    buttonOverlayHeight: 38,
     showStars: true
   });
   const [isMenuSettingsOpen, setIsMenuSettingsOpen] = useState(false);
@@ -310,7 +312,9 @@ const Dashboard = () => {
           '--btn-shadow': menuSettings.buttonShadowColor || menuSettings.buttonBorderColor || '#000000',
           '--btn-overlay-bg': menuSettings.buttonOverlayBg || 'rgba(0, 0, 0, 0.68)',
           '--btn-title-color': menuSettings.buttonTitleColor || '#FFFFFF',
-          '--btn-title-shadow': titleShadow
+          '--btn-title-shadow': titleShadow,
+          '--btn-overlay-height': `${menuSettings.buttonOverlayHeight ?? 38}%`,
+          '--btn-title-font-size': menuSettings.buttonTitleFontSize || '1.6rem'
         }}
       >
         <style>{`
@@ -656,7 +660,7 @@ const Dashboard = () => {
           bottom: 0;
           left: 0;
           right: 0;
-          height: 38%;
+          height: var(--btn-overlay-height, 38%);
           background: var(--btn-overlay-bg, rgba(0, 0, 0, 0.68));
           backdrop-filter: blur(5px);
           -webkit-backdrop-filter: blur(5px);
@@ -673,7 +677,7 @@ const Dashboard = () => {
         .lesson-square-title {
           font-family: 'Outfit', 'Inter', sans-serif;
           font-weight: 900;
-          font-size: clamp(1.4rem, 5vw, 2.05rem);
+          font-size: var(--btn-title-font-size, 1.6rem);
           line-height: 1.12;
           color: var(--btn-title-color, #FFFFFF);
           text-shadow: var(--btn-title-shadow, 0 2px 4px rgba(0, 0, 0, 0.95));
@@ -1037,6 +1041,11 @@ const Dashboard = () => {
         <CircleFrameModal
           isOpen={!!editingFrameLesson}
           lesson={editingFrameLesson}
+          overlayHeight={menuSettings.buttonOverlayHeight ?? 38}
+          overlayBg={menuSettings.buttonOverlayBg || 'rgba(0, 0, 0, 0.68)'}
+          titleColor={menuSettings.buttonTitleColor || '#FFFFFF'}
+          titleShadow={titleShadow}
+          titleFontSize={menuSettings.buttonTitleFontSize || '1.6rem'}
           onSave={handleSaveCircleFrame}
           onClose={() => setEditingFrameLesson(null)}
         />

@@ -49,10 +49,6 @@ const BurgerMenu = ({ onInfo, onNew, onMenu, onLessons, onPresets, disabled }) =
                             <span className="menu-icon">🎨</span>
                             <span className="menu-text">Text Presets</span>
                         </button>
-                        <button className="menu-item" onClick={() => { onMenu(); setIsOpen(false); }}>
-                            <span className="menu-icon">🏠</span>
-                            <span className="menu-text">{t('editor.menu')}</span>
-                        </button>
                     </div>
 
                 </div>

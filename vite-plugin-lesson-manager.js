@@ -615,7 +615,9 @@ export default function lessonManagerPlugin() {
                             menuBg: '#FFFFFF',
                             buttonBorderColor: '#000000',
                             buttonTitleColor: '#FFFFFF',
-                            buttonOverlayBg: 'rgba(0, 0, 0, 0.68)'
+                            buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
+                            buttonTitleFontSize: '1.6rem',
+                            buttonOverlayHeight: 38
                         };
                         if (fs.existsSync(settingsFile)) {
                             settings = JSON.parse(fs.readFileSync(settingsFile, 'utf-8'));

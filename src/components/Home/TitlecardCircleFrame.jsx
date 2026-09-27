@@ -83,7 +83,7 @@ const TitlecardCircleFrame = ({
     );
   }
 
-  const zoom = Math.max(1, titlecardFrame?.zoom || 1);
+  const zoom = Math.max(0.4, titlecardFrame?.zoom || 1);
   const x = titlecardFrame?.x || 0; // percentage of container width
   const y = titlecardFrame?.y || 0; // percentage of container height
 
@@ -93,14 +93,14 @@ const TitlecardCircleFrame = ({
   const scaledWidth = 360 * baseScale;
   const scaledHeight = 640 * baseScale;
 
-  // Maximum allowed pan offset before any edge is pulled away from the frame boundary
-  const maxOffsetX = Math.max(0, (scaledWidth - activeSize) / 2);
-  const maxOffsetY = Math.max(0, (scaledHeight - activeSize) / 2);
+  // Maximum allowed pan offset so image fits cleanly within or fully covers boundaries
+  const maxOffsetX = Math.abs(scaledWidth - activeSize) / 2;
+  const maxOffsetY = Math.abs(scaledHeight - activeSize) / 2;
 
   const rawOffsetX = (x / 100) * activeSize;
   const rawOffsetY = (y / 100) * activeSize;
 
-  // Clamp offsets so artwork ALWAYS fully covers the frame
+  // Clamp offsets so artwork fits cleanly within the frame
   const offsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, rawOffsetX));
   const offsetY = Math.max(-maxOffsetY, Math.min(maxOffsetY, rawOffsetY));
 

@@ -338,7 +338,9 @@ const DEFAULT_SETTINGS = {
   bannerBorderColor: '#000000',
   buttonTitleColor: '#FFFFFF',
   titleShadowColor: '#000000',
-  buttonOverlayBg: 'rgba(0, 0, 0, 0.68)'
+  buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
+  buttonTitleFontSize: '1.6rem',
+  buttonOverlayHeight: 38
 };
 
 const MenuSettingsModal = ({
@@ -358,8 +360,10 @@ const MenuSettingsModal = ({
   const [bannerBorderColor, setBannerBorderColor] = useState('#000000');
   const [buttonTitleColor, setButtonTitleColor] = useState('#FFFFFF');
   const [titleShadowColor, setTitleShadowColor] = useState('#000000');
+  const [buttonTitleFontSize, setButtonTitleFontSize] = useState('1.6rem');
   const [overlayHex, setOverlayHex] = useState('#000000');
   const [overlayOpacity, setOverlayOpacity] = useState(68);
+  const [buttonOverlayHeight, setButtonOverlayHeight] = useState(38);
   const [saving, setSaving] = useState(false);
 
   // Popup palette state (when open, docked below the preview so the preview is NEVER covered)
@@ -376,9 +380,11 @@ const MenuSettingsModal = ({
       setBannerBorderColor(active.bannerBorderColor || '#000000');
       setButtonTitleColor(active.buttonTitleColor || '#FFFFFF');
       setTitleShadowColor(active.titleShadowColor !== undefined ? active.titleShadowColor : '#000000');
+      setButtonTitleFontSize(active.buttonTitleFontSize || '1.6rem');
       const parsed = parseRgba(active.buttonOverlayBg);
       setOverlayHex(parsed.hex);
       setOverlayOpacity(parsed.opacity);
+      setButtonOverlayHeight(active.buttonOverlayHeight !== undefined ? Number(active.buttonOverlayHeight) : 38);
       setActivePopupPicker(null);
       setPopupCategory('All');
     }
@@ -396,9 +402,11 @@ const MenuSettingsModal = ({
     setBannerBorderColor(DEFAULT_SETTINGS.bannerBorderColor);
     setButtonTitleColor(DEFAULT_SETTINGS.buttonTitleColor);
     setTitleShadowColor(DEFAULT_SETTINGS.titleShadowColor);
+    setButtonTitleFontSize(DEFAULT_SETTINGS.buttonTitleFontSize);
     const parsed = parseRgba(DEFAULT_SETTINGS.buttonOverlayBg);
     setOverlayHex(parsed.hex);
     setOverlayOpacity(parsed.opacity);
+    setButtonOverlayHeight(DEFAULT_SETTINGS.buttonOverlayHeight);
     setActivePopupPicker(null);
   };
 
@@ -413,7 +421,9 @@ const MenuSettingsModal = ({
         bannerBorderColor,
         buttonTitleColor,
         titleShadowColor,
-        buttonOverlayBg: computedOverlayBg
+        buttonTitleFontSize,
+        buttonOverlayBg: computedOverlayBg,
+        buttonOverlayHeight
       };
       await onSaveSettings(newSettings);
       onClose();
@@ -767,7 +777,8 @@ const MenuSettingsModal = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingBottom: '38%'
+                  paddingBottom: `${buttonOverlayHeight}%`,
+                  transition: 'padding-bottom 0.1s ease'
                 }}>
                   <span style={{ fontSize: '2.3rem' }}>🧪</span>
                 </div>
@@ -788,14 +799,14 @@ const MenuSettingsModal = ({
                   🎯
                 </div>
 
-                {/* Sample Bottom Third Semi-transparent Overlay */}
+                {/* Sample Bottom Semi-transparent Overlay */}
                 <div
                   style={{
                     position: 'absolute',
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    height: '38%',
+                    height: `${buttonOverlayHeight}%`,
                     backgroundColor: computedOverlayBg,
                     backdropFilter: 'blur(4px)',
                     borderTop: `1.5px solid rgba(0, 0, 0, 0.25)`,
@@ -806,14 +817,14 @@ const MenuSettingsModal = ({
                     boxSizing: 'border-box',
                     pointerEvents: 'none',
                     zIndex: 5,
-                    transition: 'background-color 0.15s ease'
+                    transition: 'background-color 0.15s ease, height 0.1s ease'
                   }}
                 >
                   <div
                     style={{
                       fontFamily: "'Outfit', 'Inter', sans-serif",
                       fontWeight: 900,
-                      fontSize: '0.9rem',
+                      fontSize: `${((parseFloat(buttonTitleFontSize) || 1.6) * 0.58).toFixed(2)}rem`,
                       lineHeight: 1.1,
                       color: buttonTitleColor,
                       textAlign: 'center',
@@ -1697,6 +1708,31 @@ const MenuSettingsModal = ({
                 </div>
               </div>
 
+              {/* Title Font Size Control */}
+              <div style={{ background: '#F8FAFC', padding: '8px 10px', borderRadius: '10px', border: '1.5px solid #E2E8F0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <label style={{ fontWeight: 800, fontSize: '0.82rem', color: '#1E293B' }}>
+                    Title Text Size
+                  </label>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#8B5CF6' }}>
+                    {buttonTitleFontSize} ({Math.round((parseFloat(buttonTitleFontSize) || 1.6) * 16)}px)
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>1.0rem</span>
+                  <input
+                    type="range"
+                    min="1.0"
+                    max="2.5"
+                    step="0.05"
+                    value={parseFloat(buttonTitleFontSize) || 1.6}
+                    onChange={e => setButtonTitleFontSize(`${e.target.value}rem`)}
+                    style={{ flex: 1, accentColor: '#8B5CF6', cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>2.5rem</span>
+                </div>
+              </div>
+
               {/* SECTION: SEMI-TRANSPARENT BOTTOM THIRD */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
@@ -1789,6 +1825,31 @@ const MenuSettingsModal = ({
                     style={{ flex: 1, accentColor: '#8B5CF6' }}
                   />
                   <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>95%</span>
+                </div>
+
+                {/* Overlay Height Percentage Slider */}
+                <div style={{ marginTop: '10px', background: '#F8FAFC', padding: '8px 10px', borderRadius: '10px', border: '1.5px solid #E2E8F0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <label style={{ fontWeight: 800, fontSize: '0.82rem', color: '#1E293B' }}>
+                      Bottom Coverage
+                    </label>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#8B5CF6' }}>
+                      {buttonOverlayHeight}%
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>20%</span>
+                    <input
+                      type="range"
+                      min="20"
+                      max="65"
+                      step="1"
+                      value={buttonOverlayHeight}
+                      onChange={e => setButtonOverlayHeight(parseInt(e.target.value, 10))}
+                      style={{ flex: 1, accentColor: '#8B5CF6', cursor: 'pointer' }}
+                    />
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>65%</span>
+                  </div>
                 </div>
               </div>
 

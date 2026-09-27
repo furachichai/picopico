@@ -1,18 +1,28 @@
 [
   {
-    "name": "01-What is Algebra good for-",
+    "name": "01-Why algebra?",
     "type": "file",
-    "path": "lessons/01-What is Algebra good for-/lesson.json",
-    "title": "What is Algebra good for?",
+    "path": "lessons/01-Why algebra?/lesson.json",
+    "title": "Why algebra?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
     "order": 1,
-    "titlecardFrame": null,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -15.6
+    },
     "content": {
-      "id": "draft-1790516774019",
-      "title": "What is Algebra good for?",
+      "id": "lessons/01-Why algebra?/lesson.json",
+      "title": "Why algebra?",
       "slides": [
+        {
+          "id": "slide-1790529573429",
+          "background": "url(\"/src/assets/backgrounds/titlecard_math_lady_smaller.png\")",
+          "elements": [],
+          "order": 0
+        },
         {
           "id": "slide-1790516813363",
           "background": "#E1F5FE",
@@ -62,7 +72,7 @@
               }
             }
           ],
-          "order": 0
+          "order": 1
         },
         {
           "id": "slide-1790516813364",
@@ -120,7 +130,7 @@
               }
             }
           ],
-          "order": 1
+          "order": 2
         },
         {
           "id": "slide-1790516813365",
@@ -171,7 +181,7 @@
               }
             }
           ],
-          "order": 2
+          "order": 3
         },
         {
           "id": "slide-1790516813366",
@@ -232,7 +242,7 @@
               }
             }
           ],
-          "order": 3
+          "order": 4
         },
         {
           "id": "slide-1790516813367",
@@ -261,7 +271,7 @@
               }
             }
           ],
-          "order": 4
+          "order": 5
         },
         {
           "id": "slide-1790516813368",
@@ -290,7 +300,7 @@
               }
             }
           ],
-          "order": 5
+          "order": 6
         },
         {
           "id": "slide-1790516813369",
@@ -341,7 +351,7 @@
               }
             }
           ],
-          "order": 6
+          "order": 7
         },
         {
           "id": "slide-1790516813370",
@@ -399,7 +409,7 @@
               }
             }
           ],
-          "order": 7
+          "order": 8
         },
         {
           "id": "slide-1790516813371",
@@ -460,13 +470,13 @@
               }
             }
           ],
-          "order": 8
+          "order": 9
         },
         {
           "id": "slide-1790516813372",
           "background": "#E1F5FE",
           "elements": [],
-          "order": 9
+          "order": 10
         },
         {
           "id": "slide-1790516813373",
@@ -524,7 +534,7 @@
               }
             }
           ],
-          "order": 10
+          "order": 11
         },
         {
           "id": "slide-1790516813374",
@@ -585,7 +595,7 @@
               }
             }
           ],
-          "order": 11
+          "order": 12
         },
         {
           "id": "slide-1790516813375",
@@ -636,7 +646,7 @@
               }
             }
           ],
-          "order": 12
+          "order": 13
         },
         {
           "id": "slide-1790516813376",
@@ -687,7 +697,7 @@
               }
             }
           ],
-          "order": 13
+          "order": 14
         },
         {
           "id": "slide-1790516813377",
@@ -745,7 +755,7 @@
               }
             }
           ],
-          "order": 14
+          "order": 15
         },
         {
           "id": "slide-1790516813378",
@@ -806,7 +816,7 @@
               }
             }
           ],
-          "order": 15
+          "order": 16
         },
         {
           "id": "slide-1790516813379",
@@ -835,7 +845,7 @@
               }
             }
           ],
-          "order": 16
+          "order": 17
         },
         {
           "id": "slide-1790516813380",
@@ -893,7 +903,7 @@
               }
             }
           ],
-          "order": 17
+          "order": 18
         },
         {
           "id": "slide-1790516813381",
@@ -954,7 +964,7 @@
               }
             }
           ],
-          "order": 18
+          "order": 19
         },
         {
           "id": "slide-1790516813382",
@@ -1005,7 +1015,7 @@
               }
             }
           ],
-          "order": 19
+          "order": 20
         },
         {
           "id": "slide-1790516813383",
@@ -1056,7 +1066,7 @@
               }
             }
           ],
-          "order": 20
+          "order": 21
         },
         {
           "id": "slide-1790516813384",
@@ -1117,7 +1127,7 @@
               }
             }
           ],
-          "order": 21
+          "order": 22
         },
         {
           "id": "slide-1790516813385",
@@ -1145,13 +1155,13 @@
               }
             }
           ],
-          "order": 22
+          "order": 23
         }
       ],
       "author": "User",
       "createdAt": "2026-09-27T13:46:14.019Z",
-      "updatedAt": "2026-09-27T14:14:53.822Z",
-      "path": "lessons/01-What is Algebra good for-/lesson.json",
+      "updatedAt": "2026-09-27T18:15:32.261Z",
+      "path": "lessons/01-Why algebra?/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -1172,12 +1182,35 @@
       "cardColor": "#8B5CF6",
       "translations": {
         "en": {
-          "title": "",
+          "title": "Why algebra?",
           "description": ""
         }
       },
-      "titlecardFrame": null,
-      "visibleInFeed": true
+      "name": "01-What is Algebra good for-",
+      "type": "file",
+      "visible": true,
+      "visibleInFeed": true,
+      "order": 1,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -15.6
+      },
+      "status": "active",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 0,
+        "completed": false,
+        "lastPlayed": 1790530095157
+      }
     }
   },
   {
@@ -4490,17 +4523,17 @@
     "visibleInFeed": false,
     "order": 4,
     "titlecardFrame": {
-      "zoom": 1.2,
-      "x": 1.1,
-      "y": -30.8
+      "zoom": 1,
+      "x": 0,
+      "y": -34.8
     },
     "content": {
       "id": "lessons/01-Types of variables/lesson.json",
       "title": "Types of variables",
       "titlecardFrame": {
-        "zoom": 1.2,
-        "x": 1.1,
-        "y": -30.8
+        "zoom": 1,
+        "x": 0,
+        "y": -34.8
       },
       "slides": [
         {
@@ -17958,9 +17991,9 @@
     "visibleInFeed": true,
     "order": 16,
     "titlecardFrame": {
-      "zoom": 1.6,
+      "zoom": 1.4,
       "x": 11.9,
-      "y": -12.5
+      "y": -12.2
     },
     "content": {
       "id": "lessons/09-Estafa/lesson.json",
@@ -18860,9 +18893,9 @@
         "_store": {}
       },
       "titlecardFrame": {
-        "zoom": 1.6,
+        "zoom": 1.4,
         "x": 11.9,
-        "y": -12.5
+        "y": -12.2
       },
       "visibleInFeed": true
     }

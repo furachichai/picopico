@@ -1260,11 +1260,18 @@ const Editor = () => {
                         <BurgerMenu
                             onInfo={() => setShowInfoModal(true)}
                             onNew={handleNewLesson}
-                            onMenu={handleGoToMenu}
                             onLessons={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
                             onPresets={() => setShowPresetPanel(true)}
                             disabled={isTranslating}
                         />
+                        <button
+                            className="btn-floating"
+                            onClick={handleGoToMenu}
+                            title={t('editor.menu')}
+                            style={{ fontSize: '1.5rem', cursor: 'pointer', background: 'white' }}
+                        >
+                            🏠
+                        </button>
                         <button
                             className="btn-floating"
                             onClick={() => dispatch({ type: 'SET_VIEW', payload: 'lessons' })}
