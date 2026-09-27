@@ -5,11 +5,22 @@ import { useDraggable } from '../../hooks/useDraggable';
 
 const FONTS = [
     { name: 'Acme', value: 'Acme' },
+    { name: 'Bangers (Comic)', value: '"Bangers", cursive, sans-serif' },
+    { name: 'HVD Comic', value: '"HVD Comic Serif Pro", sans-serif' },
     { name: 'Outfit', value: 'Outfit' },
     { name: 'Nunito', value: 'Nunito' },
+    { name: 'Nunito Sans', value: '"Nunito Sans"' },
+    { name: 'Noto Sans', value: '"Noto Sans"' },
+    { name: 'Source Sans', value: '"Source Sans 3"' },
+    { name: 'Fira Sans', value: '"Fira Sans"' },
+    { name: 'Atkinson', value: '"Atkinson Hyperlegible Next"' },
+    { name: 'EB Garamond', value: '"EB Garamond", serif' },
+    { name: 'Fredoka (SemiBold Italic)', value: '"Fredoka", sans-serif' },
+    { name: 'Latin Modern Math', value: '"Latin Modern Math", serif' },
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },
     { name: 'Serif', value: 'Georgia, serif' },
     { name: 'Monospace', value: 'monospace' },
+    { name: 'Verdana', value: 'Verdana, Arial, sans-serif' },
 ];
 
 const COLORS = [
@@ -91,7 +102,10 @@ const PresetPanel = ({ onClose }) => {
             <div className="preset-row">
                 <div className="preset-field">
                     <label>Font</label>
-                    <select value={font} onChange={e => setFont(e.target.value)}>
+                    <select
+                        value={FONTS.find(f => f.value === font || f.name.toLowerCase() === font?.toLowerCase() || (font && f.value.toLowerCase().includes(font.toLowerCase().replace(/['"]/g, ''))))?.value || font}
+                        onChange={e => setFont(e.target.value)}
+                    >
                         {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
                     </select>
                 </div>

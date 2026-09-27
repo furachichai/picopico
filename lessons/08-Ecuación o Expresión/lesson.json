@@ -1,5 +1,5 @@
 {
-  "id": "lessons/7127-Ecuación o Expresión/lesson.json",
+  "id": "lessons/04-Ecuación o Expresión/lesson.json",
   "title": "Ecuación o Expresión",
   "slides": [
     {
@@ -102,7 +102,7 @@
               "a math phrase",
               "an equivalence",
               "a geometrical figure",
-              "Option 4"
+              "an espresso"
             ],
             "correctIndex": 0,
             "correctIndices": [
@@ -189,7 +189,7 @@
             "fontFamily": "\"Fira Sans\"",
             "options": [
               "two phrases",
-              "variables, numbers and operators",
+              "variables, numbers or operators",
               "an equal sign"
             ],
             "correctIndex": 1,
@@ -257,6 +257,22 @@
             "borderRadius": 20,
             "skin": "comic",
             "showTape": false
+          }
+        },
+        {
+          "id": "el-1790374921593-ai80utors",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_hands_on_waist.png",
+          "x": 50,
+          "y": 53.90625,
+          "width": 40,
+          "height": 27.890625000000004,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 27.890625000000004,
+            "category": "characters"
           }
         }
       ],
@@ -579,8 +595,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-19T18:19:12.990Z",
-  "updatedAt": "2026-09-21T17:10:16.590Z",
-  "path": "lessons/7127-Ecuación o Expresión/lesson.json",
+  "updatedAt": "2026-09-25T22:22:06.175Z",
+  "path": "lessons/04-Ecuación o Expresión/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_game.png",
@@ -591,12 +607,12 @@
       "description": ""
     }
   },
-  "name": "7127-Ecuación o Expresión",
+  "name": "04-Ecuación o Expresión",
   "type": "file",
   "visible": true,
-  "visibleInFeed": true,
-  "order": 7127,
-  "status": "completed",
+  "visibleInFeed": false,
+  "order": 4,
+  "status": "active",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -607,9 +623,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 1,
-    "completed": true,
-    "lastPlayed": 1789843557275
+    "lastSlideIndex": 2,
+    "completed": false,
+    "lastPlayed": 1790349842268
   },
   "titlecardFrame": {
     "zoom": 1,

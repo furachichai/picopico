@@ -1,5 +1,5 @@
 {
-  "id": "lessons/04-Algebra Expressions/lesson.json",
+  "id": "lessons/10-Algebra Expressions/lesson.json",
   "title": "Algebra Expressions",
   "slides": [
     {
@@ -440,7 +440,7 @@
             "options": [
               "b+6",
               "b+b+b",
-              "3×b+6"
+              "3·b+6"
             ],
             "correctIndex": 2,
             "correctIndices": [
@@ -700,7 +700,7 @@
             "fontFamily": "\"Fira Sans\"",
             "options": [
               "12+2",
-              "12+2×x",
+              "12+2x",
               "12+6"
             ],
             "correctIndex": 1,
@@ -2535,7 +2535,7 @@
         {
           "id": "el-1789690361452-v2am3bcw4",
           "type": "text",
-          "content": "<font color=\"#fde74c\">16</font>",
+          "content": "<font color=\"#fde74c\"><span style=\"caret-color: rgb(253, 231, 76);\"> </span></font>",
           "x": 50,
           "y": 36.25,
           "width": 10,
@@ -3021,8 +3021,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-17T21:32:32.665Z",
-  "updatedAt": "2026-09-18T16:47:14.601Z",
-  "path": "lessons/04-Algebra Expressions/lesson.json",
+  "updatedAt": "2026-09-25T22:39:35.919Z",
+  "path": "lessons/10-Algebra Expressions/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -3033,11 +3033,11 @@
       "description": ""
     }
   },
-  "name": "04-Algebra Expressions",
+  "name": "10-Algebra Expressions",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
-  "order": 4,
+  "order": 10,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -3048,7 +3048,11 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null,
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1790349002526
+  },
   "titlecardFrame": {
     "zoom": 1,
     "x": -0.2,

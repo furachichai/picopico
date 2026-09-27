@@ -1,6 +1,6 @@
 {
-  "id": "lessons/05-X variable/lesson.json",
-  "title": "X variable",
+  "id": "lessons/05-What is a variable?/lesson.json",
+  "title": "What is a variable?",
   "slides": [
     {
       "id": "slide-1",
@@ -164,7 +164,7 @@
         {
           "id": "el-1789753784629-sb6qv6fw3",
           "type": "balloon",
-          "content": "Wait!<div>Remember the one that exploded?</div>",
+          "content": "<b>Wait</b>!<div>Remember the one that <b>exploded</b>?</div>",
           "x": 73.75,
           "y": 58.90625,
           "width": 47.50000000000001,
@@ -517,7 +517,7 @@
         {
           "id": "el-1789755144273-d9slloj3x",
           "type": "balloon",
-          "content": "Let's start weighing this one.",
+          "content": "Let's start with this one.",
           "x": 36.66666666666666,
           "y": 30.312500000000007,
           "width": 42.22222222222223,
@@ -749,9 +749,9 @@
         {
           "id": "el-1789763648130-fz3klz1cf",
           "type": "text",
-          "content": "No.<div><b>x </b>stands in for the <b>crate's weight.</b></div><div><div>&nbsp;<div>Since we don't know its actual <b>value</b> yet, we will call it <b>x </b>for now<b>.</b><div><br></div></div></div></div>",
-          "x": 69.30555555555556,
-          "y": 38.125,
+          "content": "No.<div><b>x is a number, not a thing.</b></div><div><b><br></b></div><div><div>This crate's <b>weight</b> is <b>x</b>.</div></div>",
+          "x": 70.41666666666667,
+          "y": 35.9375,
           "width": 50.83333333333333,
           "height": 5,
           "rotation": 0,
@@ -1034,6 +1034,22 @@
             "skin": "sticky",
             "showTape": false
           }
+        },
+        {
+          "id": "el-1790375137930-0ukvl8m6g",
+          "type": "result_field",
+          "content": "12",
+          "x": 59.72222222222222,
+          "y": 37.34375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "12",
+            "order": 1
+          }
         }
       ],
       "order": 10
@@ -1190,10 +1206,10 @@
         {
           "id": "el-1789755967406-jwyxiatmt",
           "type": "balloon",
-          "content": "That's good enough for me!",
-          "x": 82.63888888888887,
+          "content": "But that's good enough for me!",
+          "x": 80.55555555555554,
           "y": 78.4375,
-          "width": 32.50000000000001,
+          "width": 36.66666666666668,
           "height": 16.875,
           "rotation": 0,
           "scale": 1,
@@ -1320,7 +1336,7 @@
         {
           "id": "el-1789762101326-xim31f6wp",
           "type": "text",
-          "content": "<b><font color=\"#ffffff\">F</font></b>",
+          "content": "<b><font color=\"#ffffff\">f</font></b>",
           "x": 50,
           "y": 58.59375,
           "width": 10,
@@ -1747,8 +1763,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T17:32:09.502Z",
-  "updatedAt": "2026-09-25T15:15:23.493Z",
-  "path": "lessons/05-X variable/lesson.json",
+  "updatedAt": "2026-09-26T23:05:30.239Z",
+  "path": "lessons/05-What is a variable?/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -1762,9 +1778,9 @@
   "name": "05-X variable",
   "type": "file",
   "visible": true,
-  "visibleInFeed": true,
+  "visibleInFeed": false,
   "order": 5,
-  "status": "active",
+  "status": "completed",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -1774,7 +1790,11 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null,
+  "progress": {
+    "lastSlideIndex": 16,
+    "completed": true,
+    "lastPlayed": 1790463825880
+  },
   "titlecardFrame": {
     "zoom": 1.2,
     "x": 2.3,

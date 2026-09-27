@@ -1,5 +1,5 @@
 {
-  "id": "lessons/4283-Exponentes negativos/lesson.json",
+  "id": "lessons/27-Exponentes negativos/lesson.json",
   "title": "Exponentes negativos",
   "slides": [
     {
@@ -110,7 +110,7 @@
         {
           "id": "el-1789214316885-wb1uj1f7y",
           "type": "balloon",
-          "content": "Wait!<div>I don't want to be <b>huge</b> again!</div>",
+          "content": "Wait!<div><br><div>I don't want to be <b>huge</b> again!</div></div>",
           "x": 72.77777777777777,
           "y": 53.4375,
           "width": 55.55555555555556,
@@ -160,7 +160,7 @@
         {
           "id": "el-1789214383197-rrvfwhloi",
           "type": "balloon",
-          "content": "Don't worry!<div>I'll use a <b>negative</b> exponent!</div>",
+          "content": "Don't worry!<div><br><div>I'll use a <b>negative</b> exponent!</div></div>",
           "x": 66.94444444444444,
           "y": 26.875,
           "width": 43.333333333333336,
@@ -397,8 +397,8 @@
           "metadata": {
             "fontFamily": "\"Fira Sans\"",
             "options": [
-              "Results get multiplied by 2",
-              "Results get divided by 2"
+              "fix",
+              "correct"
             ],
             "correctIndex": 1,
             "correctIndices": [
@@ -2037,22 +2037,6 @@
             "quizType": "classic",
             "visualMode": false
           }
-        },
-        {
-          "id": "el-1789248644883-gmr2yt0o8",
-          "type": "image",
-          "content": "/src/assets/characters/yara_explains_03_1.png",
-          "x": 50,
-          "y": 50,
-          "width": 40,
-          "height": 44.917279411764696,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 40,
-            "height": 44.917279411764696,
-            "category": "characters"
-          }
         }
       ],
       "order": 14,
@@ -2594,38 +2578,6 @@
           }
         },
         {
-          "id": "el-1789654476314-qmojytmxw",
-          "type": "image",
-          "content": "/src/assets/objects/whole_crate_side_1x1_001.png",
-          "x": 16.944444444444443,
-          "y": 37.65625,
-          "width": 40,
-          "height": 21.341911764705877,
-          "rotation": 0,
-          "scale": 0.4636263889410255,
-          "metadata": {
-            "width": 40,
-            "height": 21.341911764705877,
-            "category": "characters"
-          }
-        },
-        {
-          "id": "el-1789654507055-6834dlmte",
-          "type": "image",
-          "content": "/src/assets/characters/yara_ray_gun_yara_rotfl_1.png",
-          "x": 19.166666666666668,
-          "y": 61.25,
-          "width": 40,
-          "height": 27.354988399071928,
-          "rotation": 0,
-          "scale": 0.7684436922502583,
-          "metadata": {
-            "width": 40,
-            "height": 27.354988399071928,
-            "category": "characters"
-          }
-        },
-        {
           "id": "el-1789654456961-8pr4wd3xw",
           "type": "number_line",
           "x": 28.611111111111114,
@@ -2646,6 +2598,38 @@
             "thickness": 8,
             "manualZ": true
           }
+        },
+        {
+          "id": "el-1790377599963-4vsmdo5tg",
+          "type": "image",
+          "content": "/src/assets/objects/item_crate_side_1x1_001.png",
+          "x": 16.11111111111111,
+          "y": 37.8125,
+          "width": 40,
+          "height": 21.447841726618705,
+          "rotation": 0,
+          "scale": 0.47924555734578694,
+          "metadata": {
+            "width": 40,
+            "height": 21.447841726618705,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790377631968-okj56njxy",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_raygun_afraid02.png",
+          "x": 25.555555555555557,
+          "y": 62.03125,
+          "width": 40,
+          "height": 20.64299424184261,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 20.64299424184261,
+            "category": "characters"
+          }
         }
       ],
       "order": 19,
@@ -2661,7 +2645,7 @@
         {
           "id": "el-1789248352400-0i7nrbowz",
           "type": "banner",
-          "content": "The dial is set to <font color=\"#000000\">−4</font>. Pesto's size is…",
+          "content": "THE DIAL IS SET TO 2!−4. PESTO'S SIZE IS…",
           "x": 50,
           "y": 22,
           "width": 78,
@@ -2949,8 +2933,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-12T11:54:58.023Z",
-  "updatedAt": "2026-09-17T14:23:22.419Z",
-  "path": "lessons/4283-Exponentes negativos/lesson.json",
+  "updatedAt": "2026-09-25T23:09:08.148Z",
+  "path": "lessons/27-Exponentes negativos/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -2961,12 +2945,12 @@
       "description": ""
     }
   },
-  "name": "4283-Exponentes negativos",
+  "name": "27-Exponentes negativos",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
-  "order": 4283,
-  "status": "completed",
+  "order": 27,
+  "status": "active",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -2977,9 +2961,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 19,
-    "completed": true,
-    "lastPlayed": 1789654087198
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1790349707709
   },
   "titlecardFrame": {
     "zoom": 1,

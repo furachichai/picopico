@@ -4,13 +4,13 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     const textRef = useRef(null);
     const lastElementId = useRef(null);
 
-    // Only set content when element changes, not on every render
+    // Sync content when element changes or from external updates, but never while actively typing
     useEffect(() => {
-        if (textRef.current && element.id !== lastElementId.current) {
+        if (textRef.current && (readOnly || element.id !== lastElementId.current || document.activeElement !== textRef.current)) {
             textRef.current.innerHTML = element.content || '';
             lastElementId.current = element.id;
         }
-    }, [element.id, element.content]);
+    }, [element.id, element.content, readOnly]);
 
     // Sync content changes
     const handleInput = (e) => {
@@ -235,6 +235,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                 {/* Editable Element: Handles text content */}
                 <div
                     ref={textRef}
+                    className="pico-balloon-text"
                     contentEditable={isSelected && !readOnly && !element.metadata?.locked}
                     suppressContentEditableWarning
                     onInput={handleInput}

@@ -1,0 +1,2576 @@
+{
+  "id": "lessons/01-Types of variables/lesson.json",
+  "title": "Types of variables",
+  "titlecardFrame": {
+    "zoom": 1.2,
+    "x": 1.1,
+    "y": -30.8
+  },
+  "slides": [
+    {
+      "id": "slide-1790292913219",
+      "background": "url(\"/src/assets/backgrounds/bkg_old_paper.png\")",
+      "elements": [
+        {
+          "id": "el-1790292953887-6re3sf57g",
+          "type": "image",
+          "content": "/src/assets/objects/prop_wanted.png",
+          "x": 50,
+          "y": 23.75,
+          "width": 40,
+          "height": 6.516768292682926,
+          "rotation": 0,
+          "scale": 2.0401699340009203,
+          "metadata": {
+            "width": 40,
+            "height": 6.516768292682926,
+            "category": "objects"
+          }
+        },
+        {
+          "id": "el-1790467926527-bj25u4wic",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 50,
+          "y": 61.25,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 2.4857450337955123,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1790276372960",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790278231291-0-1xl3z4",
+          "type": "banner",
+          "content": "<div><br></div>DAYS WITHOUT AN ACCIDENT:<div><font color=\"#000000\">0</font></div><div><br></div>",
+          "x": 30.500000000000007,
+          "y": 50.65625,
+          "width": 51,
+          "height": 18.75,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 29,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFE0B2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790277812790-0-1j5abh",
+          "type": "image",
+          "content": "/src/assets/objects/item_portable_stairs.png",
+          "x": 66.05555555555554,
+          "y": 90.14910333806819,
+          "width": 40,
+          "height": 22.386363636363637,
+          "rotation": 0,
+          "scale": 1.2629500802495415,
+          "metadata": {
+            "width": 40,
+            "height": 22.386363636363637,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790277418962-3",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_writes_pencil.png",
+          "x": 60.55555555555555,
+          "y": 65.15625,
+          "width": 40,
+          "height": 24.30868167202572,
+          "rotation": 0,
+          "scale": 1.4194809153021193,
+          "metadata": {
+            "width": 40,
+            "height": 24.30868167202572,
+            "flipX": true,
+            "hasShadow": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790278118837-4ydij31cp",
+          "type": "image",
+          "content": "/src/assets/characters/yara_opening_crate.png",
+          "x": 85.8333333333333,
+          "y": 32.65625,
+          "width": 40,
+          "height": 29.23857868020304,
+          "rotation": 0,
+          "scale": 0.7238589295728176,
+          "metadata": {
+            "width": 40,
+            "height": 29.23857868020304,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "sizeMode": "custom",
+        "grayscale": false,
+        "tintColor": "transparent",
+        "opacity": 0.25
+      }
+    },
+    {
+      "id": "slide-1790276372961",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790278034722-3",
+          "type": "image",
+          "content": "/src/assets/objects/prop_explosion_001.png",
+          "x": 91.66666666666666,
+          "y": 23.796492204899778,
+          "width": 40,
+          "height": 25.657015590200448,
+          "rotation": 0,
+          "scale": 1.5391312051611237,
+          "metadata": {
+            "width": 40,
+            "height": 25.657015590200448,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790278383554-0-e8fspm",
+          "type": "banner",
+          "content": "<div><br></div>DAYS WITHOUT AN ACCIDENT:<div><br></div><div><br></div>",
+          "x": 30.166666666666664,
+          "y": 50.625,
+          "width": 51,
+          "height": 18.75,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 29,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFE0B2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790291548760-0-ltl7ai",
+          "type": "image",
+          "content": "/src/assets/objects/item_portable_stairs.png",
+          "x": 66.00000000000007,
+          "y": 90.18035333806819,
+          "width": 40,
+          "height": 22.386363636363637,
+          "rotation": 0,
+          "scale": 1.2629500802495415,
+          "metadata": {
+            "width": 40,
+            "height": 22.386363636363637,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790277523422-0-bq0w60",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_writes_crayon.png",
+          "x": 60.279947916666664,
+          "y": 66.71875,
+          "width": 40,
+          "height": 29.003322259136212,
+          "rotation": -7.90727807901321,
+          "scale": 1.2427422722627655,
+          "metadata": {
+            "width": 40,
+            "height": 29.003322259136212,
+            "flipX": true,
+            "hasShadow": false,
+            "manualZ": true
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.34
+      }
+    },
+    {
+      "id": "slide-1790276372962",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790281066491-k7ihaam7c",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_mad.png",
+          "x": 22.22222222222222,
+          "y": 46.40625,
+          "width": 40,
+          "height": 23.03731343283582,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 23.03731343283582,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790281092340-dbyylslwv",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_wink.png",
+          "x": 73.88888888888889,
+          "y": 79.0625,
+          "width": 40,
+          "height": 21.253012048192772,
+          "rotation": 0,
+          "scale": 2.41281351984674,
+          "metadata": {
+            "width": 40,
+            "height": 21.253012048192772,
+            "category": "characters",
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790276373161",
+          "type": "balloon",
+          "content": "I've repainted this sign 400 times.",
+          "x": 41.52777777777778,
+          "y": 25,
+          "width": 48.05555555555556,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -20,
+              "y": 73
+            }
+          }
+        },
+        {
+          "id": "el-1790276373162",
+          "type": "balloon",
+          "content": "Then stop.<div><br><div>Just write <b>d</b>.</div></div>",
+          "x": 31.38888888888889,
+          "y": 65.75,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 62,
+              "y": 82
+            }
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1790276372963",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790281178475-0i1ji03d2",
+          "type": "image",
+          "content": "/src/assets/characters/yara_looks_down_holds_sign.png",
+          "x": 77.22222222222223,
+          "y": 48.59375,
+          "width": 40,
+          "height": 30.13392857142857,
+          "rotation": 0,
+          "scale": 2.579509489460322,
+          "metadata": {
+            "width": 40,
+            "height": 30.13392857142857,
+            "category": "characters",
+            "flipX": true,
+            "locked": true,
+            "groupId": "group-1790281311483-ihvh6r"
+          }
+        },
+        {
+          "id": "el-1790281146474-3ehr13qby",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_bored.png",
+          "x": 30.555555555555557,
+          "y": 81.40625,
+          "width": 40,
+          "height": 23.761682242990652,
+          "rotation": 0,
+          "scale": 1.5624686668850847,
+          "metadata": {
+            "width": 40,
+            "height": 23.761682242990652,
+            "category": "characters",
+            "hasShadow": true
+          }
+        },
+        {
+          "id": "el-1790281234365-k1h9qz9s4",
+          "type": "image",
+          "content": "/src/assets/objects/item_balloon_octo002.png",
+          "x": 31.944444444444443,
+          "y": 29.062500000000004,
+          "width": 40,
+          "height": 14.671658986175116,
+          "rotation": 0,
+          "scale": 1.903794726954736,
+          "metadata": {
+            "width": 40,
+            "height": 14.671658986175116,
+            "category": "objects",
+            "hasShadow": false,
+            "flipY": true
+          }
+        },
+        {
+          "id": "el-1790276373262",
+          "type": "balloon",
+          "content": "Usually zero...",
+          "x": 73.88888888888889,
+          "y": 70.4375,
+          "width": 43.333333333333336,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -105,
+              "y": 17
+            }
+          }
+        },
+        {
+          "id": "el-1790281259019-9chom2lrh",
+          "type": "text",
+          "content": "<b>d</b> stands for the <b>number</b> of days without acidents <div><br></div><div>Whatever it is</div><div>today.</div><div><br></div>",
+          "x": 29.583333333333332,
+          "y": 32.65625,
+          "width": 51.944444444444436,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20
+          }
+        },
+        {
+          "id": "el-1790281293653-wxzkkm6cs",
+          "type": "text",
+          "content": "d",
+          "x": 78.05555555555556,
+          "y": 50,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 34,
+            "groupId": "group-1790281311483-ihvh6r"
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1790276372964",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790281389181-c9n4mi3ds",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 67.22222222222223,
+          "y": 70.78125,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 3.0406715537965625,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790276373361",
+          "type": "balloon",
+          "content": "<b>d</b> is a<b> variable.</b><div><b><br></b></div><div>There are <b>two</b> <b>types</b> of <b>variables</b>:<b><br></b><div><ul><li>changing</li><li>unknown</li></ul></div></div>",
+          "x": 50,
+          "y": 27.265625,
+          "width": 65,
+          "height": 26.406249999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 106
+            }
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "slide-1790464267570",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790464279217-dqjqpr2cy",
+          "type": "banner",
+          "content": "",
+          "x": 49.98697916666667,
+          "y": 55.546875,
+          "width": 87.3888888888889,
+          "height": 40.15625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464339091-a8ij9fw46",
+          "type": "text",
+          "content": "<b>Days without an accident:</b>",
+          "x": 54.84809027777778,
+          "y": 40.625,
+          "width": 57.22222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464366525-0-7ejst9",
+          "type": "text",
+          "content": "d: 1<div>d: 0</div><div>d: 1</div><div>d: 2</div><div>d: 0</div><div>d: 0</div>",
+          "x": 64.84809027777779,
+          "y": 57.375,
+          "width": 20,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464429773-0-s6m14z",
+          "type": "text",
+          "content": "monday<div>tuesday</div><div>wednesday</div><div>thursday</div><div>friday</div><div>saturday</div>",
+          "x": 35.76475694444446,
+          "y": 57.25,
+          "width": 36.94444444444444,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "right",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464484568-ep5hmiu3f",
+          "type": "line",
+          "x": 55.12586805555555,
+          "y": 57.734375,
+          "width": 34.762199208726145,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#2E7D32",
+            "startCap": "none",
+            "endCap": "none",
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464630634-qj2c8xkqy",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 89.53125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "unknown",
+              "changing"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790464655947-xi7gynfdx",
+          "type": "banner",
+          "content": "What <font color=\"#000000\">type</font> of <font color=\"#000000\">variable</font> is <font color=\"#000000\">d </font>?",
+          "x": 50,
+          "y": 22.96875,
+          "width": 65.16666666666666,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1790464705395",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790464705395-r5tz5r88e",
+          "type": "banner",
+          "content": "",
+          "x": 49.98697916666667,
+          "y": 36.640625,
+          "width": 87.3888888888889,
+          "height": 40.15625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464705395-070swxfuo",
+          "type": "text",
+          "content": "<b>Days without an accident:</b>",
+          "x": 54.84809027777778,
+          "y": 21.71875,
+          "width": 57.22222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464705395-36quhkiqc",
+          "type": "text",
+          "content": "d: 1<div>d: 0</div><div>d: 1</div><div>d: 2</div><div>d: 0</div><div>d: 0</div>",
+          "x": 64.84809027777779,
+          "y": 38.46875,
+          "width": 20,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464705395-tpj2j2ymq",
+          "type": "text",
+          "content": "monday<div>tuesday</div><div>wednesday</div><div>thursday</div><div>friday</div><div>saturday</div>",
+          "x": 35.76475694444446,
+          "y": 38.34375,
+          "width": 36.94444444444444,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "right",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 20,
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464705395-fci8ys645",
+          "type": "line",
+          "x": 55.12586805555555,
+          "y": 38.828125,
+          "width": 34.762199208726145,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 2,
+            "isSymbol": true,
+            "symbolColor": "#2E7D32",
+            "startCap": "none",
+            "endCap": "none",
+            "groupId": "group-1790464618064-2d1fwq"
+          }
+        },
+        {
+          "id": "el-1790464772644-xp4772jsu",
+          "type": "image",
+          "content": "/src/assets/characters/yara_explains_03.png",
+          "x": 25,
+          "y": 99.375,
+          "width": 40,
+          "height": 44.917279411764696,
+          "rotation": 0,
+          "scale": 1.6375939967853357,
+          "metadata": {
+            "width": 40,
+            "height": 44.917279411764696,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790464783409-f681ts6mg",
+          "type": "balloon",
+          "content": "d's <b>value</b> <b>changes</b>.<div><div><br></div><div>It's a <b>changing</b> <b>variable</b>.</div></div>",
+          "x": 70.13888888888889,
+          "y": 73.59375,
+          "width": 59.166666666666664,
+          "height": 29.062500000000004,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -126,
+              "y": -7
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 7,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1790276372965",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276373461",
+          "type": "banner",
+          "content": "On the sign, <font color=\"#000000\">d</font> stands for…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276373462",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "The letter d",
+              "A number",
+              "The word \"days\"",
+              "67"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790291750180-0-r7lp8e",
+          "type": "banner",
+          "content": "<div><b><br></b></div><b>DAYS WITHOUT AN ACCIDENT</b>:<div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">d</span></font></div><div><br></div>",
+          "x": 50,
+          "y": 50,
+          "width": 51,
+          "height": 18.75,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Outfit",
+            "fontSize": 19,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FFE0B2",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "sticky",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1790276372966",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790281445280-vg4hnz4cm",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_confused.png",
+          "x": 20.27777777777778,
+          "y": 50,
+          "width": 40,
+          "height": 25.995145631067963,
+          "rotation": 0,
+          "scale": 1.3012466454411538,
+          "metadata": {
+            "width": 40,
+            "height": 25.995145631067963,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790281460372-88kx0a7rl",
+          "type": "image",
+          "content": "/src/assets/characters/yara_arms_in_waist_3.png",
+          "x": 74.16666666666667,
+          "y": 81.875,
+          "width": 40,
+          "height": 48.527874564459935,
+          "rotation": 0,
+          "scale": 1.7784302948955928,
+          "metadata": {
+            "width": 40,
+            "height": 48.527874564459935,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790276373561",
+          "type": "balloon",
+          "content": "So <b>d</b> means \"days\"!",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -41,
+              "y": 87
+            }
+          }
+        },
+        {
+          "id": "el-1790276373562",
+          "type": "balloon",
+          "content": "<b>d</b> means <b>how many</b> days.<div><br></div><div>A <b>variable</b> is <b>always</b> a <b>number</b>, not a word.</div>",
+          "x": 34.72222222222223,
+          "y": 82.78125,
+          "width": 65,
+          "height": 25.624999999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 80,
+              "y": -104
+            }
+          }
+        }
+      ],
+      "order": 9
+    },
+    {
+      "id": "slide-1790276372968",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790291969766-488tw50e7",
+          "type": "image",
+          "content": "/src/assets/characters/yara_laughs_off.png",
+          "x": 71.11111111111111,
+          "y": 62.5,
+          "width": 40,
+          "height": 50.90827338129497,
+          "rotation": 0,
+          "scale": 1.6025478702456353,
+          "metadata": {
+            "width": 40,
+            "height": 50.90827338129497,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790292107057-4s7031d0f",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_starstruck.png",
+          "x": 18.61111111111111,
+          "y": 83.59375,
+          "width": 40,
+          "height": 27.813653136531364,
+          "rotation": 0,
+          "scale": 1.4032778253819833,
+          "metadata": {
+            "width": 40,
+            "height": 27.813653136531364,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790292155051-0lwh6ccr2",
+          "type": "image",
+          "content": "/src/assets/objects/item_balloon_octo002.png",
+          "x": 38.333333333333336,
+          "y": 23.59375,
+          "width": 40,
+          "height": 14.671658986175116,
+          "rotation": 0,
+          "scale": 1.7843673388533334,
+          "metadata": {
+            "width": 40,
+            "height": 14.671658986175116,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790276373762",
+          "type": "balloon",
+          "content": "Like <b>x</b> = the amount of times that I hacked into crypto wallets.",
+          "x": 26.52777777777778,
+          "y": 44.21875,
+          "width": 51.388888888888886,
+          "height": 20.9375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 110,
+              "y": -3
+            }
+          }
+        },
+        {
+          "id": "el-1790276373763",
+          "type": "balloon",
+          "content": "How much is <b>x</b>?",
+          "x": 28.055555555555557,
+          "y": 59.53125,
+          "width": 49.44444444444444,
+          "height": 11.25,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -2,
+              "y": 56
+            }
+          }
+        },
+        {
+          "id": "el-1790292138194-iblb2u3w3",
+          "type": "text",
+          "content": "A <b>variable</b> can also be a <b>number</b> that <b>we don't yet know</b>.",
+          "x": 35.416666666666664,
+          "y": 22.34375,
+          "width": 48.61111111111111,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 21
+          }
+        }
+      ],
+      "order": 10
+    },
+    {
+      "id": "slide-1790465411946",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790465416959-at5zl58kf",
+          "type": "image",
+          "content": "/src/assets/characters/yara_looks_down_holds_sign.png",
+          "x": 69.72222222222221,
+          "y": 76.25,
+          "width": 40,
+          "height": 30.13392857142857,
+          "rotation": 0,
+          "scale": 3.365039652400899,
+          "metadata": {
+            "width": 40,
+            "height": 30.13392857142857,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790465508594-sjs75c4tn",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_looking_down_worried_scared.png",
+          "x": 6.944444444444442,
+          "y": 86.09375,
+          "width": 40,
+          "height": 27.44505494505495,
+          "rotation": 0,
+          "scale": 1.4664209414751388,
+          "metadata": {
+            "width": 40,
+            "height": 27.44505494505495,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790465469141-4zrneajzk",
+          "type": "text",
+          "content": "x - 2 = 363",
+          "x": 70.27777777777777,
+          "y": 78.4375,
+          "width": 30,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.4703338443054383,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Latin Modern Math\", serif",
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790465435149-nd0w96b1v",
+          "type": "balloon",
+          "content": "<div><b> </b>Here's a hint.</div><div><br></div><b>x</b> is the number of non-consensual borrowing from billionaires<div> that I did last year.</div>",
+          "x": 46.666666666666664,
+          "y": 27.890625000000004,
+          "width": 76.11111111111111,
+          "height": 27.03125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 31,
+              "y": 103
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 11
+    },
+    {
+      "id": "slide-1790276372970",
+      "background": "url(\"/src/assets/backgrounds/bkg_old_paper.png\")",
+      "elements": [
+        {
+          "id": "el-1790276373961",
+          "type": "banner",
+          "content": "<div><b><br></b></div><b>Yara got \"alternative funding\" <font color=\"#000000\">x</font> times.</b><div><div><b><br></b><div><b>What's the&nbsp; <font color=\"#000000\">value</font> of <font color=\"#000000\">x</font>?</b></div></div></div><div><br></div>",
+          "x": 52.77777777777778,
+          "y": 23.953125,
+          "width": 113.57572196150569,
+          "height": 30.192266985841904,
+          "rotation": 0,
+          "scale": 0.7001582470330795,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 29,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276373962",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "24, because x is the 24th letter",
+              "The word \"Kranky\"",
+              "A number we don't know",
+              "Always 1000"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790292825307-0",
+          "type": "image",
+          "content": "/src/assets/objects/prop_wanted.png",
+          "x": 50,
+          "y": 39.94474085365854,
+          "width": 40,
+          "height": 6.516768292682926,
+          "rotation": 0,
+          "scale": 1.670021341030821,
+          "metadata": {
+            "width": 40,
+            "height": 6.516768292682926,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790292850885-2j89qii03",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_shocked.png",
+          "x": 50,
+          "y": 52.1875,
+          "width": 40,
+          "height": 23.02734375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 23.02734375,
+            "category": "characters",
+            "brightness": 125
+          }
+        }
+      ],
+      "order": 12
+    },
+    {
+      "id": "slide-1790465714548",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790465716920-g1vl4csi8",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 90.3125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "unknown",
+              "changing"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790465719547-rild7x70q",
+          "type": "banner",
+          "content": "<span style=\"color: rgb(0, 0, 0);\">What </span><b style=\"color: rgb(0, 0, 0);\">kind</b><span style=\"color: rgb(0, 0, 0);\"> of </span><b style=\"color: rgb(0, 0, 0);\">variable</b><span style=\"color: rgb(0, 0, 0);\"> is </span><b style=\"color: rgb(0, 0, 0);\">x </b><span style=\"color: rgb(0, 0, 0);\">?</span><br>",
+          "x": 50,
+          "y": 27.03125,
+          "width": 51,
+          "height": 12.881512079161784,
+          "rotation": 0,
+          "scale": 1.6382181171646812,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Nunito Sans\"",
+            "fontSize": 13,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790468020231-azw5723oa",
+          "type": "image",
+          "content": "/src/assets/characters/yara_laughs_tears_off.png",
+          "x": 50,
+          "y": 58.125,
+          "width": 40,
+          "height": 48.1549815498155,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 48.1549815498155,
+            "category": "characters"
+          }
+        }
+      ],
+      "order": 13
+    },
+    {
+      "id": "slide-1790465521208",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790465608180-nb104scb1",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_afraid_trembling.png",
+          "x": 15.277777777777773,
+          "y": 54.21875,
+          "width": 40,
+          "height": 31.83609958506224,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.83609958506224,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790465623800-fd0ph7k1g",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 86.66666666666666,
+          "y": 77.34375,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 2.0865559368433666,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790465530013-1-l1ooks",
+          "type": "balloon",
+          "content": "x - 2 = 363<div>           &nbsp;</div><div>             x = 363 + 2</div><div><br></div><div><b>     x = 365</b></div>",
+          "x": 37.50000000000001,
+          "y": 23.937500000000007,
+          "width": 57.22222222222222,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -10,
+              "y": 104
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        },
+        {
+          "id": "el-1790465637990-yfs7a7h6h",
+          "type": "balloon",
+          "content": "I know...<div>Only once per day.</div><div><br></div><div>I'll do better this year.</div>",
+          "x": 23.47222222222222,
+          "y": 84.375,
+          "width": 46.38888888888889,
+          "height": 24.375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 104,
+              "y": -13
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 14
+    },
+    {
+      "id": "slide-1790276372969",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790466169289-5w79q1u44",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_afraid_trembling.png",
+          "x": 35.27777777777778,
+          "y": 80.3125,
+          "width": 40,
+          "height": 31.83609958506224,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.83609958506224,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790276373861",
+          "type": "balloon",
+          "content": "<b>x</b> i called an <b>unknown</b> variable.<div><br></div><div>Now that I <b>know</b> it,</div><div>I wish I didn't.</div>",
+          "x": 54.02777777777778,
+          "y": 42.8125,
+          "width": 81.94444444444444,
+          "height": 28.125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -16,
+              "y": 121
+            }
+          }
+        }
+      ],
+      "order": 15
+    },
+    {
+      "id": "slide-1790466267464",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790466275469-owbp55s00",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_wink.png",
+          "x": 66.66666666666666,
+          "y": 79.53125,
+          "width": 40,
+          "height": 21.253012048192772,
+          "rotation": 0,
+          "scale": 2.6709539071137542,
+          "metadata": {
+            "width": 40,
+            "height": 21.253012048192772,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790466282734-lpp9s57z0",
+          "type": "balloon",
+          "content": "<b>unknown</b> <b>variables</b> have a <b>fixed</b> <b>value</b>.<div><br></div><div>Unfortunately, the <b>number</b> of \"slips\" that I had last year <b>can't</b> <b>change</b>.</div>",
+          "x": 51.94444444444444,
+          "y": 33.671875,
+          "width": 72.22222222222221,
+          "height": 30.46875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 1,
+              "y": 113
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 16
+    },
+    {
+      "id": "slide-1790466541570",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790466544834-aogjz7o31",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 83.28125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Unknown (a single secret number)",
+              "Changing (grows as time passes)",
+              "Constant (stuck at 100)"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790466548442-24kvwhk3r",
+          "type": "banner",
+          "content": "<div><font color=\"#000000\" style=\"font-weight: normal;\">A Brazilian worker makes 8.000 dollars per year.</font></div><div><font color=\"#000000\" style=\"font-weight: normal;\"><br></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">8.000y= 1.000.000.000</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">y is the </span><span style=\"caret-color: rgb(0, 0, 0);\">years</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"> she needs to work to become a </span><span style=\"caret-color: rgb(0, 0, 0);\">billionaire</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">.</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\" style=\"font-weight: normal;\">What is ‭</font><font color=\"#000000\">y</font><font color=\"#000000\"> </font><font color=\"#000000\" style=\"font-weight: normal;\">?</font></div>",
+          "x": 50,
+          "y": 40.703125,
+          "width": 51,
+          "height": 28.73383063225835,
+          "rotation": 0,
+          "scale": 1.7613680127462443,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 13,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        }
+      ],
+      "order": 17
+    },
+    {
+      "id": "slide-1790476579013",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790476598025-w1bwzevi1",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_mad.png",
+          "x": 44.44444444444444,
+          "y": 76.71875,
+          "width": 40,
+          "height": 23.03731343283582,
+          "rotation": 0,
+          "scale": 1.8114605058369566,
+          "metadata": {
+            "width": 40,
+            "height": 23.03731343283582,
+            "category": "characters",
+            "hasShadow": true
+          }
+        },
+        {
+          "id": "el-1790476608746-1ig6145e4",
+          "type": "balloon",
+          "content": "<div><span class=\"pico-fraction\"><span class=\"pico-fraction-num\">1000000000</span><span class=\"pico-fraction-den\">8000</span></span>=125,000</div>",
+          "x": 38.05555555555556,
+          "y": 26.71875,
+          "width": 71.94444444444444,
+          "height": 18.75,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 0,
+              "y": 94
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        },
+        {
+          "id": "el-1790476828583-soxq2r87v",
+          "type": "balloon",
+          "content": "It'll take 125.000 years for the average Brazilian worker to become a billionaire.",
+          "x": 68.88888888888889,
+          "y": 48.671875,
+          "width": 63.33333333333333,
+          "height": 21.40625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -28,
+              "y": 106
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 18
+    },
+    {
+      "id": "slide-1790466706837",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790466706837-9kjaqz1ci",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 83.4375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Unknown (one hidden prize to uncover)",
+              "Changing (different for every worker)",
+              "Constant"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790466706837-5rhueww3z",
+          "type": "banner",
+          "content": "<div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">Salary gap between CEO's and workers:</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">G = 300</span><span style=\"caret-color: rgb(0, 0, 0);\">w</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: normal;\">What is </span><span style=\"caret-color: rgb(0, 0, 0);\">w</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: normal;\">?</span></font></div></div>",
+          "x": 50,
+          "y": 40.078125,
+          "width": 51,
+          "height": 22.87900646980452,
+          "rotation": 0,
+          "scale": 1.7613680127462443,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 14,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        }
+      ],
+      "order": 19,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1790476016847",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790476023238-s6yh7ocbs",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_afraid_trembling.png",
+          "x": 47.5,
+          "y": 56.25,
+          "width": 40,
+          "height": 31.83609958506224,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.83609958506224,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790476029986-vx7jfbm2y",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "True",
+              "False"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790476032615-eskf4ulxc",
+          "type": "balloon",
+          "content": "So a Corporate CEO makes 300 times the salary of one of his workers?",
+          "x": 51.94444444444445,
+          "y": 25.46875,
+          "width": 64.44444444444444,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -6,
+              "y": 77
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 20
+    },
+    {
+      "id": "slide-1790466710022",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790466710022-vsem17wpu",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 83.4375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Unknown (a single secret answer)",
+              "Changing (changes as time passes)",
+              "Constant (stuck at 100)"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790466710022-8csl6hoy9",
+          "type": "banner",
+          "content": "<font color=\"#000000\">Battery level</font><font color=\"#000000\" style=\"font-weight: normal;\"> is ‭</font><div><font color=\"#000000\" style=\"font-weight: normal;\">B = 100 - 15h‬‭‬‭‬</font></div><div><font color=\"#000000\" style=\"font-weight: normal;\"><br></font></div><div><font color=\"#000000\" style=\"font-weight: normal;\">where ‭</font><font color=\"#000000\">h‬</font><font color=\"#000000\" style=\"font-weight: normal;\"> is doomscroll hours.</font></div><div><font color=\"#000000\" style=\"font-weight: normal;\"><br></font></div><div><font color=\"#000000\" style=\"font-weight: normal;\">What is ‭</font><font color=\"#000000\">h</font><font color=\"#000000\"> </font><font color=\"#000000\" style=\"font-weight: normal;\">?</font></div>",
+          "x": 50,
+          "y": 40.078125,
+          "width": 51,
+          "height": 22.87900646980452,
+          "rotation": 0,
+          "scale": 1.7613680127462443,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 14,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        }
+      ],
+      "order": 21,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1790467105320-0-ehqxlz",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790467105320-snatmvlx3",
+          "type": "banner",
+          "content": "<br> 😅",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790467105320-5uecun5zh",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 73.515625,
+          "width": 51,
+          "height": 7.707458993121039,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790467105320-mqgmid7kg",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 56.796875,
+          "width": 54.713877931256626,
+          "height": 59.56521040088829,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790467105320-nzi6qm77m",
+          "type": "text",
+          "content": "A <b>variable</b> is a <b>symbol</b>—usually a <b>letter</b>—that stands in for an <b>unknown</b> or <b>changing</b> <b>amount</b>.<div><div><br></div><div><br></div><div><br></div><div><ul><li><b style=\"text-align: center;\">unknown variables </b><span style=\"text-align: center;\">have a fixed value that we don't yet know.</span></li></ul><br><div><br></div><div><br></div><div><br></div></div><div><br></div><div><br></div><div><ul><li><b style=\"text-align: center;\">changing variables </b><span style=\"text-align: center;\">can take on multiple values.</span><br></li></ul></div></div>",
+          "x": 50,
+          "y": 56.875,
+          "width": 45.86640700772255,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790467105320-996zeqyki",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> TYPES OF VarIABLES </span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        },
+        {
+          "id": "el-1790467341424-0-2b69gr",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 71.40625,
+          "width": 54.22407341441353,
+          "height": 12.603056528817625,
+          "rotation": 0,
+          "scale": 1.0338887813259277,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790467452136-0-ddeu4k",
+          "type": "text",
+          "content": "<div><span style=\"caret-color: rgb(33, 150, 243);\"><span style=\"font-weight: normal;\">Perimeter of a square of</span> <span style=\"font-weight: normal;\">side</span> <font color=\"#2196f3\">x</font></span></div><div><span style=\"caret-color: rgb(33, 150, 243);\">P = 4<font color=\"#2196f3\">x</font></span></div><div><span style=\"caret-color: rgb(33, 150, 243);\"><br></span></div>",
+          "x": 50,
+          "y": 73,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 10,
+            "color": "#000000",
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "id": "el-1790467539625-0-g62ebj",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 44.515625,
+          "width": 43.79070754520772,
+          "height": 5.003974322573931,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790467105320-z56sh6nqn",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">x </font>+<font color=\"#2196f3\"> </font>2<font color=\"#2196f3\"> </font>=<font color=\"#2196f3\"> </font>5</span>",
+          "x": 50,
+          "y": 44.0625,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 10,
+            "color": "#000000",
+            "manualZ": true,
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        }
+      ],
+      "order": 22,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790276372967",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276373661",
+          "type": "banner",
+          "content": "Pesto has <font color=\"#000000\">a</font> apples. What is <font color=\"#000000\">a</font>?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276373662",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "An apple",
+              "The first letter of \"apple\"",
+              "1, because a is the first letter",
+              "The number of apples"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 23
+    },
+    {
+      "id": "slide-1790276372972",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374161",
+          "type": "banner",
+          "content": "If <font color=\"#000000\">d</font> <font color=\"#000000\">= 4</font>, what is<div> <font color=\"#000000\">d + d </font>?</div>",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276374162",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "4",
+              "44",
+              "8",
+              "16"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 24
+    },
+    {
+      "id": "slide-1790276372973",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374261",
+          "type": "banner",
+          "content": "A variable is…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790276374262",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Always the letter x",
+              "A letter that stands for a number",
+              "Short for a word",
+              "A letter with a fixed value"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 25
+    },
+    {
+      "id": "slide-1790276372974",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374361",
+          "type": "banner",
+          "content": "If <font color=\"#000000\">n</font> <font color=\"#000000\">= 5</font>, what is&nbsp;<div><font color=\"#000000\">n</font> <font color=\"#000000\">+ 2</font>?</div>",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276374362",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "52",
+              "n2",
+              "5",
+              "7"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 26
+    },
+    {
+      "id": "slide-1790276372975",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374461",
+          "type": "banner",
+          "content": "Which letters can be used as variables?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790276374462",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Only x",
+              "Only x and y",
+              "Any letter",
+              "Only capital letters"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 27
+    },
+    {
+      "id": "slide-1790276372976",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374561",
+          "type": "banner",
+          "content": "On Monday, <font color=\"#000000\">d</font> <font color=\"#000000\">= 2</font>. On Tuesday, <font color=\"#000000\">d</font> <font color=\"#000000\">= 3</font>.&nbsp;<div>Is that allowed?</div>",
+          "x": 50,
+          "y": 25.984375,
+          "width": 78,
+          "height": 24.96875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790276374562",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Yes, a variable can change",
+              "No, d is fixed forever",
+              "Only if Yara says so",
+              "No, d must be 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 28
+    },
+    {
+      "id": "slide-1790276372977",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790276374661",
+          "type": "banner",
+          "content": "Can two <font color=\"#000000\">different</font> letters have the <font color=\"#000000\">same</font> <font color=\"#000000\">value</font>?",
+          "x": 50,
+          "y": 24.03125,
+          "width": 78,
+          "height": 21.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790276374662",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Never",
+              "Only for x and y",
+              "Only if they're next to each other",
+              "Yes"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 29
+    },
+    {
+      "id": "slide-1790276372978",
+      "background": "#1a1a2e",
+      "elements": [
+        {
+          "id": "el-1790276374761",
+          "type": "collectible",
+          "content": "A <b>variable</b> is a letter that stands for a number.\nIt can be a number that <b>changes</b> (days without an explosion: d) or one we <b>don't know yet</b> (Kranky's age: k).\nd means *how many* days — a number, not the word \"days.\"\nIn one problem, the same letter always means the same number.",
+          "x": 50,
+          "y": 50,
+          "width": 82,
+          "height": 60,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Outfit\", sans-serif",
+            "fontSize": 18,
+            "color": "#ffffff",
+            "textAlign": "center",
+            "backgroundColor": "rgba(255, 255, 255, 0.08)",
+            "borderRadius": "16px",
+            "border": "1px solid rgba(255, 255, 255, 0.15)",
+            "lineHeight": 1.4
+          }
+        }
+      ],
+      "order": 30
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-24T18:59:24.845Z",
+  "updatedAt": "2026-09-27T02:41:13.395Z",
+  "path": "lessons/01-Types of variables/lesson.json",
+  "textPreset": null,
+  "_snapshots": [
+    {
+      "timestamp": "2026-09-24T18:59:32.960Z",
+      "reason": "Before script import",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0
+        }
+      ]
+    }
+  ],
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "name": "01-Types of variables",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": false,
+  "order": 1,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 14,
+    "completed": false,
+    "lastPlayed": 1790465805454
+  }
+}

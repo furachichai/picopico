@@ -243,6 +243,9 @@ const FONTS = [
     { name: 'Source Sans', value: '"Source Sans 3"' },
     { name: 'Fira Sans', value: '"Fira Sans"' },
     { name: 'Atkinson', value: '"Atkinson Hyperlegible Next"' },
+    { name: 'EB Garamond', value: '"EB Garamond", serif' },
+    { name: 'Fredoka (SemiBold Italic)', value: '"Fredoka", sans-serif' },
+    { name: 'Latin Modern Math', value: '"Latin Modern Math", serif' },
     { name: 'Comic Sans', value: '"Comic Sans MS", "Chalkboard SE", sans-serif' },
     { name: 'Serif', value: 'Georgia, serif' },
     { name: 'Monospace', value: 'monospace' },
@@ -744,6 +747,66 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
         }
     };
 
+    const handleToggleBulletList = (e) => {
+        e.preventDefault();
+        const sel = window.getSelection();
+        let editableEl = null;
+
+        if (sel && sel.rangeCount > 0) {
+            const container = sel.getRangeAt(0).commonAncestorContainer;
+            editableEl = container.nodeType === 3
+                ? container.parentElement?.closest('[contenteditable="true"]')
+                : container.closest?.('[contenteditable="true"]');
+        }
+
+        if (!editableEl) {
+            if (document.activeElement?.getAttribute('contenteditable') === 'true') {
+                editableEl = document.activeElement;
+            } else if (element?.id) {
+                editableEl = document.querySelector(`.sticker[data-element-id="${element.id}"] [contenteditable="true"]`);
+            }
+        }
+
+        if (editableEl) {
+            if (document.activeElement !== editableEl || !sel || sel.rangeCount === 0 || !editableEl.contains(sel.getRangeAt(0).commonAncestorContainer)) {
+                editableEl.focus();
+                const range = document.createRange();
+                range.selectNodeContents(editableEl);
+                const s = window.getSelection();
+                s.removeAllRanges();
+                s.addRange(range);
+            }
+
+            document.execCommand('insertUnorderedList', false, null);
+
+            const optionIndex = editableEl.dataset?.optionIndex;
+            const matchAnswerIndex = editableEl.dataset?.matchAnswerIndex;
+            if (optionIndex !== undefined || matchAnswerIndex !== undefined) {
+                saveQuizOption(editableEl);
+            } else {
+                onChange(element.id, { content: editableEl.innerHTML });
+            }
+        } else if (element?.type === 'balloon' || element?.type === 'text' || element?.type === 'banner' || element?.type === 'collectible') {
+            const currentContent = element.content || '';
+            let newContent = '';
+            if (currentContent.includes('<ul>') || currentContent.includes('<li>')) {
+                newContent = currentContent
+                    .replace(/<\/?ul[^>]*>/gi, '')
+                    .replace(/<li[^>]*>/gi, '')
+                    .replace(/<\/li>/gi, '<br>')
+                    .replace(/(<br>)+$/gi, '');
+            } else {
+                const lines = currentContent.split(/<br\s*\/?>|\n/gi).filter(l => l.trim().length > 0);
+                if (lines.length > 0) {
+                    newContent = `<ul>${lines.map(l => `<li>${l}</li>`).join('')}</ul>`;
+                } else {
+                    newContent = '<ul><li></li></ul>';
+                }
+            }
+            onChange(element.id, { content: newContent });
+        }
+    };
+
     const handleFileUpload = (e, cardIndex) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -769,14 +832,20 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             <div className="menu-group">
                                 <label>Font</label>
                                 <select
-                                    value={metadata.fontFamily}
+                                    value={FONTS.find(f => f.value === metadata.fontFamily || f.name.toLowerCase() === metadata.fontFamily?.toLowerCase() || (metadata.fontFamily && f.value.toLowerCase().includes(metadata.fontFamily.toLowerCase().replace(/['"]/g, ''))))?.value || metadata.fontFamily}
                                     onChange={(e) => {
                                         const newFont = e.target.value;
                                         const isBangers = newFont && newFont.toLowerCase().includes('bangers');
-                                        updateMetadata({
+                                        const isFredoka = newFont && newFont.includes('Fredoka');
+                                        const updates = {
                                             fontFamily: newFont,
                                             textTransform: isBangers ? 'uppercase' : 'none'
-                                        });
+                                        };
+                                        if (isFredoka) {
+                                            updates.fontWeight = '600';
+                                            updates.fontStyle = 'italic';
+                                        }
+                                        updateMetadata(updates);
                                     }}
                                 >
                                     {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
@@ -831,6 +900,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     title="Toggle Uppercase / Normal Case (Aa)"
                                     style={{ fontWeight: 'bold', fontSize: '0.85rem' }}
                                 >Aa</button>
+                                <button
+                                    className="btn-icon"
+                                    onMouseDown={handleToggleBulletList}
+                                    title="Bullet List (Cmd+Shift+8)"
+                                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                                >
+                                    <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+                                        <circle cx="2.5" cy="3.5" r="1.75" />
+                                        <rect x="6.5" y="2.5" width="9" height="2" rx="1" />
+                                        <circle cx="2.5" cy="8" r="1.75" />
+                                        <rect x="6.5" y="7" width="9" height="2" rx="1" />
+                                        <circle cx="2.5" cy="12.5" r="1.75" />
+                                        <rect x="6.5" y="11.5" width="9" height="2" rx="1" />
+                                    </svg>
+                                </button>
                                 <button
                                     className={`btn-icon ${emojiPickerTarget === 'text' ? 'active' : ''}`}
                                     onMouseDown={(e) => {
@@ -3860,36 +3944,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
                     {/* Spot (Spot the Mistake) Settings */}
                     {element.cartridgeType === 'Spot' && (() => {
-                        const currentStepsText = element.config?.stepsText ?? '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n*2x + 3 = 8\n2x = 5\nx = 5/2';
-                        const lines = currentStepsText
-                            .split('\n')
-                            .map(l => l.trim())
-                            .filter(l => l && !l.startsWith('//') && !l.startsWith('#'));
-
-                        let detectedIdx = -1;
-                        lines.forEach((l, i) => {
-                            if (l.startsWith('*') || l.startsWith('!')) detectedIdx = i;
-                        });
-                        const currentMistakeIdx = detectedIdx !== -1 
-                            ? detectedIdx 
-                            : (element.config?.mistakeIndex ?? 3);
-
-                        const handleSelectMistake = (stepIdx) => {
-                            const updatedLines = currentStepsText.split('\n').map((l, i) => {
-                                const clean = l.replace(/^[*!]\s*/, '');
-                                if (i === stepIdx) {
-                                    return `*${clean}`;
-                                }
-                                return clean;
-                            });
-                            onChange('cartridge', {
-                                config: {
-                                    ...element.config,
-                                    stepsText: updatedLines.join('\n'),
-                                    mistakeIndex: stepIdx
-                                }
-                            });
-                        };
+                        const currentStepsText = element.config?.stepsText ?? '3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 5\nx = 5/2';
 
                         return (
                             <>
@@ -3901,7 +3956,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     <textarea
                                         value={currentStepsText}
                                         onChange={(e) => onChange('cartridge', { config: { ...element.config, stepsText: e.target.value } })}
-                                        placeholder={"3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\nx = 5/2\nTip: Mark error token with *3*"}
+                                        placeholder={"3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\nx = 5/2"}
                                         rows={6}
                                         style={{
                                             fontFamily: 'monospace',
@@ -3916,82 +3971,105 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         }}
                                     />
                                     <span style={{ fontSize: '0.65rem', color: '#64748b' }}>
-                                        Tip: Write divisions as (6x + 12)/3. Mark error token with *3*
+                                        Tip: Wrap the mistake in asterisks, e.g. 2x + *3* = 8
                                     </span>
                                 </div>
 
-                                {/* Mistake Selector Buttons */}
+                                {/* Vertical Position (Frame Y) */}
                                 <div className="menu-group" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
-                                        Mistake on Step:
-                                    </label>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', maxWidth: '210px' }}>
-                                        {lines.map((_, i) => {
-                                            const isSelected = i === currentMistakeIdx;
-                                            return (
-                                                <button
-                                                    key={i}
-                                                    type="button"
-                                                    onClick={() => handleSelectMistake(i)}
-                                                    style={{
-                                                        padding: '3px 8px',
-                                                        fontSize: '0.72rem',
-                                                        fontWeight: isSelected ? 700 : 500,
-                                                        borderRadius: '6px',
-                                                        border: isSelected ? '1.5px solid #dc2626' : '1px solid #cbd5e1',
-                                                        background: isSelected ? '#fef2f2' : '#ffffff',
-                                                        color: isSelected ? '#dc2626' : '#475569',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    {isSelected ? '🎯 ' : ''}Step {i + 1}
-                                                </button>
-                                            );
-                                        })}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                                        <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>
+                                            Vertical Position: <span style={{ color: '#2563eb' }}>{element.config?.frameY ?? 20}%</span>
+                                        </label>
+                                        <div style={{ display: 'flex', gap: '2px' }}>
+                                            <button
+                                                type="button"
+                                                className="btn-icon"
+                                                onClick={() => {
+                                                    const cur = element.config?.frameY ?? 20;
+                                                    onChange('cartridge', { config: { ...element.config, frameY: Math.max(14, cur - 2) } });
+                                                }}
+                                                title="Nudge Up"
+                                                style={{ width: '22px', height: '22px', fontSize: '0.7rem', padding: 0 }}
+                                            >
+                                                ▲
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn-icon"
+                                                onClick={() => {
+                                                    const cur = element.config?.frameY ?? 20;
+                                                    onChange('cartridge', { config: { ...element.config, frameY: Math.min(65, cur + 2) } });
+                                                }}
+                                                title="Nudge Down"
+                                                style={{ width: '22px', height: '22px', fontSize: '0.7rem', padding: 0 }}
+                                            >
+                                                ▼
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <input
+                                            type="range"
+                                            min="14"
+                                            max="65"
+                                            value={element.config?.frameY ?? 20}
+                                            onChange={(e) => onChange('cartridge', { config: { ...element.config, frameY: parseInt(e.target.value, 10) } })}
+                                            style={{ width: '100px', accentColor: '#2563eb', cursor: 'pointer' }}
+                                        />
+                                        <div style={{ display: 'flex', gap: '3px' }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => onChange('cartridge', { config: { ...element.config, frameY: 16 } })}
+                                                style={{
+                                                    fontSize: '0.65rem',
+                                                    padding: '2px 5px',
+                                                    borderRadius: '4px',
+                                                    border: (element.config?.frameY ?? 20) <= 18 ? '1px solid #2563eb' : '1px solid #cbd5e1',
+                                                    background: (element.config?.frameY ?? 20) <= 18 ? '#eff6ff' : '#ffffff',
+                                                    color: (element.config?.frameY ?? 20) <= 18 ? '#1d4ed8' : '#475569',
+                                                    cursor: 'pointer'
+                                                }}
+                                                title="Align towards top (16%)"
+                                            >
+                                                Top
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => onChange('cartridge', { config: { ...element.config, frameY: 30 } })}
+                                                style={{
+                                                    fontSize: '0.65rem',
+                                                    padding: '2px 5px',
+                                                    borderRadius: '4px',
+                                                    border: ((element.config?.frameY ?? 20) > 18 && (element.config?.frameY ?? 20) <= 38) ? '1px solid #2563eb' : '1px solid #cbd5e1',
+                                                    background: ((element.config?.frameY ?? 20) > 18 && (element.config?.frameY ?? 20) <= 38) ? '#eff6ff' : '#ffffff',
+                                                    color: ((element.config?.frameY ?? 20) > 18 && (element.config?.frameY ?? 20) <= 38) ? '#1d4ed8' : '#475569',
+                                                    cursor: 'pointer'
+                                                }}
+                                                title="Align towards middle (30%)"
+                                            >
+                                                Mid
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => onChange('cartridge', { config: { ...element.config, frameY: 48 } })}
+                                                style={{
+                                                    fontSize: '0.65rem',
+                                                    padding: '2px 5px',
+                                                    borderRadius: '4px',
+                                                    border: (element.config?.frameY ?? 20) > 38 ? '1px solid #2563eb' : '1px solid #cbd5e1',
+                                                    background: (element.config?.frameY ?? 20) > 38 ? '#eff6ff' : '#ffffff',
+                                                    color: (element.config?.frameY ?? 20) > 38 ? '#1d4ed8' : '#475569',
+                                                    cursor: 'pointer'
+                                                }}
+                                                title="Align towards bottom (48%)"
+                                            >
+                                                Low
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Error Token */}
-                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
-                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Error Token</label>
-                                    <input
-                                        type="text"
-                                        value={element.config?.errorToken ?? '3'}
-                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, errorToken: e.target.value } })}
-                                        placeholder="3"
-                                        style={{
-                                            fontSize: '0.75rem',
-                                            padding: '3px 6px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #cbd5e1',
-                                            width: '50px',
-                                            textAlign: 'center',
-                                            fontWeight: 'bold'
-                                        }}
-                                        title="Specific token or number to encircle with red pen"
-                                    />
-                                </div>
-
-                                {/* Correct Answer (Quiz) */}
-                                <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
-                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>Correct Answer</label>
-                                    <input
-                                        type="text"
-                                        value={element.config?.correctToken ?? element.config?.correctAnswer ?? ''}
-                                        onChange={(e) => onChange('cartridge', { config: { ...element.config, correctToken: e.target.value } })}
-                                        placeholder="Auto (e.g. 4)"
-                                        style={{
-                                            fontSize: '0.75rem',
-                                            padding: '3px 6px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #cbd5e1',
-                                            width: '80px',
-                                            textAlign: 'center',
-                                            fontWeight: 'bold'
-                                        }}
-                                        title="Correct answer for the follow-up quiz. Leave empty to auto-deduce."
-                                    />
-                                </div>
 
                                 {/* Max Attempts */}
                                 <div className="menu-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
@@ -4087,17 +4165,26 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group">
                         <label>Font</label>
                         <select
-                            value={metadata.fontFamily || '"Fira Sans"'}
+                            value={FONTS.find(f => f.value === metadata.fontFamily || f.name.toLowerCase() === metadata.fontFamily?.toLowerCase() || (metadata.fontFamily && f.value.toLowerCase().includes(metadata.fontFamily.toLowerCase().replace(/['"]/g, ''))))?.value || metadata.fontFamily || '"Fira Sans"'}
                             onMouseDown={saveSelection}
                             onChange={(e) => {
                                 const fontVal = e.target.value;
+                                const isFredoka = fontVal && fontVal.includes('Fredoka');
                                 if (restoreSelection()) {
                                     document.execCommand('fontName', false, fontVal);
+                                    if (isFredoka) {
+                                        document.execCommand('italic', false, null);
+                                    }
                                     const editableEl = getEditableFromSelection();
                                     saveQuizOption(editableEl);
                                     savedSelectionRef.current = null;
                                 } else {
-                                    updateMetadata({ fontFamily: fontVal });
+                                    const updates = { fontFamily: fontVal };
+                                    if (isFredoka) {
+                                        updates.fontWeight = '600';
+                                        updates.fontStyle = 'italic';
+                                    }
+                                    updateMetadata(updates);
                                 }
                             }}
                         >
@@ -4154,6 +4241,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             title="Underline"
                             style={{ textDecoration: 'underline', fontSize: '1rem' }}
                         >U</button>
+                        <button
+                            className="btn-icon"
+                            onMouseDown={handleToggleBulletList}
+                            title="Bullet List (Cmd+Shift+8)"
+                            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+                                <circle cx="2.5" cy="3.5" r="1.75" />
+                                <rect x="6.5" y="2.5" width="9" height="2" rx="1" />
+                                <circle cx="2.5" cy="8" r="1.75" />
+                                <rect x="6.5" y="7" width="9" height="2" rx="1" />
+                                <circle cx="2.5" cy="12.5" r="1.75" />
+                                <rect x="6.5" y="11.5" width="9" height="2" rx="1" />
+                            </svg>
+                        </button>
                         <button
                             className={`btn-icon ${emojiPickerTarget === 'text' ? 'active' : ''}`}
                             onMouseDown={(e) => {

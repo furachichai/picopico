@@ -13,6 +13,7 @@ import ExloreNLCartridge from './cartridges/ExploreNL/ExloreNLCartridge';
 import SpotCartridge from './cartridges/Spot/SpotCartridge';
 import DiscoverView from './components/Home/DiscoverView';
 import CardsView from './components/Home/CardsView';
+import BottomNav from './components/Home/BottomNav';
 import './components/Player/TypeQuizKeyboard.css';
 import './index.css'
 
@@ -359,9 +360,10 @@ const AppContent = () => {
         return (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            padding: '24px', fontFamily: "'Outfit', sans-serif", color: '#fff',
-            backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 70%)'
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+            padding: '24px 20px 0 20px', fontFamily: "'Outfit', sans-serif", color: '#fff',
+            backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+            boxSizing: 'border-box', overflowY: 'auto'
           }}>
             {/* Back Button */}
             <button
@@ -379,17 +381,18 @@ const AppContent = () => {
               ✕
             </button>
 
-            <h1 style={{
-              fontSize: '2.2rem', fontWeight: 900, marginBottom: '8px', letterSpacing: '-1px',
-              background: 'linear-gradient(135deg, #06b6d4, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-            }}>
-              PicoPico ARCADE
-            </h1>
-            <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '32px', textAlign: 'center' }}>
-              Choose a cartridge to load and play
-            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '340px', marginTop: 'auto', marginBottom: 'auto', padding: '24px 0 16px 0' }}>
+              <h1 style={{
+                fontSize: '2.2rem', fontWeight: 900, marginBottom: '8px', letterSpacing: '-1px',
+                background: 'linear-gradient(135deg, #06b6d4, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+              }}>
+                PicoPico ARCADE
+              </h1>
+              <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '32px', textAlign: 'center' }}>
+                Choose a cartridge to load and play
+              </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '340px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
               {/* PEMDAS Game Card */}
               <div
                 onClick={() => setSelectedGame('pemdas')}
@@ -548,7 +551,13 @@ const AppContent = () => {
                     Find the single step with the error in an equation. Tap on it within 2 attempts to win!
                   </p>
                 </div>
+                </div>
               </div>
+            </div>
+
+            {/* Bottom Nav */}
+            <div style={{ width: '100%', maxWidth: '480px', marginTop: 'auto' }}>
+              <BottomNav activeSector="game" theme="dark" />
             </div>
           </div>
         );

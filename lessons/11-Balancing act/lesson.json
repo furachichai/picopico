@@ -1,6 +1,6 @@
 {
   "id": "lessons/3323-Balancing act/lesson.json",
-  "title": "Tutorial Balanza",
+  "title": "Balancing act",
   "slides": [
     {
       "id": "slide-1",
@@ -70,11 +70,11 @@
           "id": "el-1789734172568-mtdgcuzu5",
           "type": "text",
           "content": "Learn the basics",
-          "x": 50,
-          "y": 26.875,
+          "x": 49.30555555555555,
+          "y": 20.3125,
           "width": 56.388888888888886,
           "height": 7.8125,
-          "rotation": -13.599244545208848,
+          "rotation": 0,
           "scale": 1.8586316360533637,
           "metadata": {
             "textAlign": "center",
@@ -299,8 +299,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T11:03:24.483Z",
-  "updatedAt": "2026-09-18T17:17:02.670Z",
-  "path": "lessons/3323-Balancing act/lesson.json",
+  "updatedAt": "2026-09-18T12:22:57.982Z",
+  "path": "lessons/08-Balancing act/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -314,7 +314,7 @@
   "name": "3323-Balancing act",
   "type": "file",
   "visible": true,
-  "visibleInFeed": true,
+  "visibleInFeed": false,
   "order": 3323,
   "status": "active",
   "statusIcon": {
@@ -330,5 +330,10 @@
     "lastSlideIndex": 0,
     "completed": false,
     "lastPlayed": 1789731804420
+  },
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0,
+    "y": 0
   }
 }

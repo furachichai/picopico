@@ -68,10 +68,294 @@ export const toSubscript = (str) => {
 };
 
 /**
+ * Helper to parse a parenthesized expression starting with '(' at startIndex,
+ * properly tracking nested parentheses so expressions like 3(2x + 4) or ((a+b)(c+d))
+ * are preserved completely without premature truncation.
+ */
+export const parseParenthesized = (str, startIndex) => {
+    if (!str || str[startIndex] !== '(') return null;
+    let depth = 0;
+    let content = '';
+    for (let i = startIndex; i < str.length; i++) {
+        if (str[i] === '(') {
+            depth++;
+            if (depth > 1) content += str[i];
+        } else if (str[i] === ')') {
+            depth--;
+            if (depth === 0) {
+                return { content, endIndex: i + 1 };
+            } else {
+                content += str[i];
+            }
+        } else {
+            content += str[i];
+        }
+    }
+    return null;
+};
+
+/**
+ * Helper to parse a braced expression starting with '{' at startIndex.
+ */
+export const parseBraced = (str, startIndex) => {
+    if (!str || str[startIndex] !== '{') return null;
+    let depth = 0;
+    let content = '';
+    for (let i = startIndex; i < str.length; i++) {
+        if (str[i] === '{') {
+            depth++;
+            if (depth > 1) content += str[i];
+        } else if (str[i] === '}') {
+            depth--;
+            if (depth === 0) {
+                return { content, endIndex: i + 1 };
+            } else {
+                content += str[i];
+            }
+        } else {
+            content += str[i];
+        }
+    }
+    return null;
+};
+
+/**
+ * Parses denominator after the slash '/'. Supports:
+ * - Parenthesized denominator: /(3) or /(2(x + 1))
+ * - Braced denominator: /{3}
+ * - Bare denominator: /3 or /3(x + 1)
+ */
+export const parseDenominator = (str, startIndex) => {
+    let i = startIndex;
+    while (i < str.length && /\s/.test(str[i])) i++;
+    if (i >= str.length) return null;
+
+    if (str[i] === '(') {
+        return parseParenthesized(str, i);
+    }
+    if (str[i] === '{') {
+        return parseBraced(str, i);
+    }
+
+    let content = '';
+    let depth = 0;
+    while (i < str.length) {
+        const ch = str[i];
+        if (ch === '(') depth++;
+        else if (ch === ')') {
+            if (depth > 0) depth--;
+            else break;
+        } else if (depth === 0 && (/[\s=;,]/.test(ch) || ch === '<')) {
+            break;
+        }
+        content += ch;
+        i++;
+    }
+    if (!content) return null;
+    return { content, endIndex: i };
+};
+
+/**
+ * Formats math symbols (dots, times, superscripts) inside fraction terms.
+ */
+const formatInnerMath = (text) => {
+    if (!text || typeof text !== 'string') return text;
+    let s = text;
+    s = s.replace(/!\./g, '·');
+    s = s.replace(/!=+/g, '≠');
+    s = s.replace(/\*/g, '×');
+    s = s.replace(/[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?/g, '<sup>$1</sup>');
+    return s;
+};
+
+/**
+ * Renders HTML for a stacked math fraction with vinculum aligned with the equal sign.
+ */
+export const renderFractionHtml = (num, den) => {
+    const formattedNum = formatInnerMath(num);
+    const formattedDen = formatInnerMath(den);
+    return `<span class="pico-fraction"><span class="pico-fraction-num">${formattedNum}</span><span class="pico-fraction-den">${formattedDen}</span></span>`;
+};
+
+/**
+ * Matches a complex fraction starting at index i.
+ * Supports:
+ * - !frac(num, den) or \frac(num, den) with balanced inner parens
+ * - !frac{num}{den} or \frac{num}{den} with balanced inner braces
+ * - !(num)/(den), !(num)/den, !(num)!/den with balanced inner parens
+ * - (num)!/(den), (num)!/den with balanced inner parens
+ */
+export const matchComplexFractionAt = (text, i) => {
+    if (!text || i >= text.length) return null;
+
+    // 1. !frac(num, den) or \frac(num, den)
+    const isFracParen = text.startsWith('!frac(', i) || text.startsWith('\\frac(', i);
+    if (isFracParen) {
+        const paren = parseParenthesized(text, i + 5);
+        if (paren) {
+            let commaIndex = -1;
+            let depth = 0;
+            for (let j = 0; j < paren.content.length; j++) {
+                if (paren.content[j] === '(') depth++;
+                else if (paren.content[j] === ')') depth--;
+                else if (paren.content[j] === ',' && depth === 0) {
+                    commaIndex = j;
+                    break;
+                }
+            }
+            if (commaIndex !== -1) {
+                return {
+                    num: paren.content.substring(0, commaIndex).trim(),
+                    den: paren.content.substring(commaIndex + 1).trim(),
+                    raw: text.substring(i, paren.endIndex),
+                    startIndex: i,
+                    endIndex: paren.endIndex
+                };
+            }
+        }
+    }
+
+    // 2. !frac{num}{den} or \frac{num}{den}
+    const isFracBraced = text.startsWith('!frac{', i) || text.startsWith('\\frac{', i);
+    if (isFracBraced) {
+        const numBraced = parseBraced(text, i + 5);
+        if (numBraced) {
+            let after = numBraced.endIndex;
+            while (after < text.length && /\s/.test(text[after])) after++;
+            if (text[after] === '{') {
+                const denBraced = parseBraced(text, after);
+                if (denBraced) {
+                    return {
+                        num: numBraced.content.trim(),
+                        den: denBraced.content.trim(),
+                        raw: text.substring(i, denBraced.endIndex),
+                        startIndex: i,
+                        endIndex: denBraced.endIndex
+                    };
+                }
+            }
+        }
+    }
+
+    // 3. !(num)/(den) or !(num)/den or !(num)!/den
+    if (text.startsWith('!(', i)) {
+        const numParen = parseParenthesized(text, i + 1);
+        if (numParen) {
+            let after = numParen.endIndex;
+            while (after < text.length && /\s/.test(text[after])) after++;
+            let hasSlash = false;
+            if (text.startsWith('!/', after)) {
+                hasSlash = true;
+                after += 2;
+            } else if (text[after] === '/') {
+                hasSlash = true;
+                after += 1;
+            }
+            if (hasSlash) {
+                while (after < text.length && /\s/.test(text[after])) after++;
+                const den = parseDenominator(text, after);
+                if (den) {
+                    return {
+                        num: numParen.content.trim(),
+                        den: den.content.trim(),
+                        raw: text.substring(i, den.endIndex),
+                        startIndex: i,
+                        endIndex: den.endIndex
+                    };
+                }
+            }
+        }
+    }
+
+    // 4. (num)!/(den) or (num)!/den
+    if (text[i] === '(') {
+        const numParen = parseParenthesized(text, i);
+        if (numParen) {
+            let after = numParen.endIndex;
+            while (after < text.length && /\s/.test(text[after])) after++;
+            if (text.startsWith('!/', after)) {
+                after += 2;
+                while (after < text.length && /\s/.test(text[after])) after++;
+                const den = parseDenominator(text, after);
+                if (den) {
+                    return {
+                        num: numParen.content.trim(),
+                        den: den.content.trim(),
+                        raw: text.substring(i, den.endIndex),
+                        startIndex: i,
+                        endIndex: den.endIndex
+                    };
+                }
+            }
+        }
+    }
+
+    return null;
+};
+
+/**
+ * Scans textBefore backwards to find a fraction shortcut ending right at the cursor.
+ */
+export const matchComplexFractionBeforeCursor = (textBefore) => {
+    if (!textBefore || typeof textBefore !== 'string') return null;
+    const candidates = [];
+    const prefixes = ['!frac', '\\frac', '!(', '('];
+    for (const p of prefixes) {
+        let pos = 0;
+        while ((pos = textBefore.indexOf(p, pos)) !== -1) {
+            candidates.push(pos);
+            pos += p.length;
+        }
+    }
+
+    candidates.sort((a, b) => b - a);
+    const seen = new Set();
+
+    for (const c of candidates) {
+        if (seen.has(c)) continue;
+        seen.add(c);
+        const match = matchComplexFractionAt(textBefore, c);
+        if (match && match.endIndex === textBefore.length) {
+            return match;
+        }
+    }
+    return null;
+};
+
+/**
+ * Replaces all complex fraction shortcuts in a string with stacked fraction HTML.
+ */
+export const replaceComplexFractions = (text) => {
+    if (!text || typeof text !== 'string') return text;
+    let result = '';
+    let i = 0;
+
+    while (i < text.length) {
+        const match = matchComplexFractionAt(text, i);
+        if (match) {
+            result += renderFractionHtml(match.num, match.den);
+            i = match.endIndex;
+            continue;
+        }
+        result += text[i];
+        i++;
+    }
+
+    return result;
+};
+
+/**
  * Matches a math shortcut pattern ending at the cursor position in textBefore.
  */
 export const matchMathShortcutBeforeCursor = (textBefore) => {
     if (!textBefore || typeof textBefore !== 'string') return null;
+    const complexMatch = matchComplexFractionBeforeCursor(textBefore);
+    if (complexMatch) {
+        const res = [complexMatch.raw];
+        res.index = complexMatch.startIndex;
+        res.input = textBefore;
+        return res;
+    }
     return textBefore.match(/!\.$/)
         || textBefore.match(/(?:[0-9a-zA-Z.]+\s*)?!\/\s*[0-9a-zA-Z.]+$/)
         || textBefore.match(/!\(?([0-9a-zA-Z.]+)\/([0-9a-zA-Z.]+)\)?$/)
@@ -85,6 +369,7 @@ export const matchMathShortcutBeforeCursor = (textBefore) => {
  * Replaces math shortcuts in a string:
  * - '!.' with '·' (multiplication middle dot)
  * - '!=' with '≠'
+ * - '!(numerator)/denominator' or '!frac(num, den)' with stacked fractions
  * - '1!/2' or '!/2' or '3!/4' with clean unicode fractions (e.g. '1!/2' -> '½')
  * - '*' with '×'
  * - '/' with '÷'
@@ -94,24 +379,23 @@ export const replaceMathShortcuts = (text) => {
     if (!text || typeof text !== 'string') return text;
     let res = text;
 
-    // 0. Multiplication dot: !. -> ·
+    // 0. Complex fractions first (handles !(3(2x+4))/3, !frac(3(2x+4), 3), etc.)
+    res = replaceComplexFractions(res);
+
+    // 1. Multiplication dot: !. -> ·
     res = res.replace(/!\./g, '·');
 
-    // 1. Not equal sign: != -> ≠
+    // 2. Not equal sign: != -> ≠
     res = res.replace(/!=+/g, '≠');
 
-    // 2. Fractions with !/: e.g. 1!/2 -> ½, 3!/4 -> ¾, !/2 -> ½
+    // 3. Vulgar fractions with !/: e.g. 1!/2 -> ½, 3!/4 -> ¾, !/2 -> ½
     res = res.replace(/(?:([0-9a-zA-Z.]+)\s*)?!\/\s*([0-9a-zA-Z.]+)/g, (_, num, den) => {
         const n = num || '1';
         const key = `${n}/${den}`;
         if (VULGAR_FRACTIONS[key]) {
             return VULGAR_FRACTIONS[key];
         }
-        const subDen = toSubscript(den);
-        if (subDen) {
-            return `${toSuperscript(n)}⁄${subDen}`;
-        }
-        return `${n}/${den}`;
+        return renderFractionHtml(n, den);
     });
 
     // Parenthesized or prefixed fraction: e.g. !(1/2) -> ½, !1/2 -> ½
@@ -120,20 +404,22 @@ export const replaceMathShortcuts = (text) => {
         if (VULGAR_FRACTIONS[key]) {
             return VULGAR_FRACTIONS[key];
         }
-        const subDen = toSubscript(den);
-        if (subDen) {
-            return `${toSuperscript(num)}⁄${subDen}`;
-        }
-        return `${num}/${den}`;
+        return renderFractionHtml(num, den);
     });
 
-    // 3. Multiplication and division operators
-    res = res.replace(/\*/g, '×');
-    res = res.replace(/\//g, '÷');
-
-    // 4. Superscripts
-    res = res.replace(/[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?/g, (_, exp) => toSuperscript(exp));
-    res = res.replace(/[!^]([0-9a-zA-Z+-]+)/g, (_, exp) => toSuperscript(exp));
+    // 4. Multiplication, division operators, and superscripts (protecting HTML tags from slash corruption)
+    const parts = res.split(/(<[^>]*>)/);
+    for (let i = 0; i < parts.length; i++) {
+        if (i % 2 === 0) {
+            let part = parts[i];
+            part = part.replace(/\*/g, '×');
+            part = part.replace(/\//g, '÷');
+            part = part.replace(/[!^]\(?([+-]?[0-9a-zA-Z.]+)\)?/g, (_, exp) => toSuperscript(exp));
+            part = part.replace(/[!^]([0-9a-zA-Z+-]+)/g, (_, exp) => toSuperscript(exp));
+            parts[i] = part;
+        }
+    }
+    res = parts.join('');
 
     return res;
 };
@@ -154,19 +440,20 @@ export const replaceMathInHtml = (html) => {
 
 export const formatExponents = (html) => {
     if (!html || typeof html !== 'string') return html;
-    if (!html.includes('!') && !html.includes('^')) return html;
+    if (!html.includes('!') && !html.includes('^') && !html.includes('\\frac')) return html;
     
     // Split by HTML tags to avoid replacing inside tags (like style="... !important")
     const parts = html.split(/(<[^>]*>)/);
     for (let i = 0; i < parts.length; i++) {
         if (i % 2 === 0) {
             let s = parts[i];
+            s = replaceComplexFractions(s);
             s = s.replace(/!\./g, '·');
             s = s.replace(/!=+/g, '≠');
             s = s.replace(/(?:([0-9a-zA-Z.]+)\s*)?!\/\s*([0-9a-zA-Z.]+)/g, (_, num, den) => {
                 const n = num || '1';
                 const key = `${n}/${den}`;
-                return VULGAR_FRACTIONS[key] || `${n}/${den}`;
+                return VULGAR_FRACTIONS[key] || renderFractionHtml(n, den);
             });
             s = s.replace(/!\(?([a-zA-Z0-9\-]+)\)?/g, '<sup>$1</sup>');
             parts[i] = s;

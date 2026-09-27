@@ -664,14 +664,48 @@ const LessonsPage = () => {
                             </div>
                         );
 
+                        const renderedBannerIds = new Set();
+
+                        const normalizeLessonKey = (p) => {
+                            if (!p || typeof p !== 'string') return '';
+                            return p
+                                .toLowerCase()
+                                .replace(/\\/g, '/')
+                                .replace(/^.*lessons\//, '')
+                                .replace(/\/lesson\.json$/, '')
+                                .replace(/^\d+[-_ ]*/, '')
+                                .replace(/[^a-z0-9]/g, '');
+                        };
+
+                        const matchesBannerLesson = (banner, lesson, index) => {
+                            if (!banner || !lesson) return false;
+                            if (banner.beforeLesson === lesson.path) return true;
+                            if (index === 0 && (banner.beforeLesson === 'START' || (lessons.length > 0 && banner.beforeLesson === lessons[0].path))) {
+                                return true;
+                            }
+                            if (banner.beforeLesson === 'END') return false;
+
+                            const bKey = normalizeLessonKey(banner.beforeLesson);
+                            const lKey = normalizeLessonKey(lesson.path);
+                            if (bKey && lKey && bKey === lKey) return true;
+
+                            return false;
+                        };
+
                         // Start banners
-                        const startBanners = banners.filter(b => b.beforeLesson === 'START' || (lessons.length > 0 && b.beforeLesson === lessons[0].path));
-                        startBanners.forEach(b => itemsToRender.push(renderBannerRow(b)));
+                        const startBanners = banners.filter(b => matchesBannerLesson(b, lessons[0], 0));
+                        startBanners.forEach(b => {
+                            renderedBannerIds.add(b.id);
+                            itemsToRender.push(renderBannerRow(b));
+                        });
 
                         lessons.forEach((item, idx) => {
                             if (idx > 0) {
-                                const matching = banners.filter(b => b.beforeLesson === item.path);
-                                matching.forEach(b => itemsToRender.push(renderBannerRow(b)));
+                                const matching = banners.filter(b => !renderedBannerIds.has(b.id) && matchesBannerLesson(b, item, idx));
+                                matching.forEach(b => {
+                                    renderedBannerIds.add(b.id);
+                                    itemsToRender.push(renderBannerRow(b));
+                                });
                             }
 
                             const isMenuVisible = item.visible !== false;
@@ -843,7 +877,18 @@ const LessonsPage = () => {
 
                         // End banners
                         const endBanners = banners.filter(b => b.beforeLesson === 'END');
-                        endBanners.forEach(b => itemsToRender.push(renderBannerRow(b)));
+                        endBanners.forEach(b => {
+                            renderedBannerIds.add(b.id);
+                            itemsToRender.push(renderBannerRow(b));
+                        });
+
+                        // Fallback: render any banners not yet placed
+                        banners.forEach(b => {
+                            if (!renderedBannerIds.has(b.id)) {
+                                renderedBannerIds.add(b.id);
+                                itemsToRender.push(renderBannerRow(b));
+                            }
+                        });
 
                         return itemsToRender;
                     })()

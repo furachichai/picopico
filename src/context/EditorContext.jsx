@@ -1697,6 +1697,7 @@ const editorReducer = (state, action) => {
                     if ((el.type === 'text' || el.type === 'collectible') && preset.text) {
                         let content = el.content || '';
                         if (preset.mathOperatorColor) content = colorMathOps(content, preset.mathOperatorColor);
+                        const isFredoka = preset.text.fontFamily?.includes('Fredoka');
                         return {
                             ...el,
                             content,
@@ -1705,12 +1706,14 @@ const editorReducer = (state, action) => {
                                 ...(preset.text.fontFamily && { fontFamily: preset.text.fontFamily }),
                                 ...(preset.text.fontSize && { fontSize: preset.text.fontSize }),
                                 ...(preset.text.color && { color: preset.text.color }),
+                                ...(isFredoka && { fontWeight: '600', fontStyle: 'italic' }),
                             }
                         };
                     }
                     if (el.type === 'balloon' && preset.balloon) {
                         let content = el.content || '';
                         if (preset.mathOperatorColor) content = colorMathOps(content, preset.mathOperatorColor);
+                        const isFredoka = preset.balloon.fontFamily?.includes('Fredoka');
                         return {
                             ...el,
                             content,
@@ -1719,6 +1722,7 @@ const editorReducer = (state, action) => {
                                 ...(preset.balloon.fontFamily && { fontFamily: preset.balloon.fontFamily }),
                                 ...(preset.balloon.fontSize && { fontSize: preset.balloon.fontSize }),
                                 ...(preset.balloon.color && { color: preset.balloon.color }),
+                                ...(isFredoka && { fontWeight: '600', fontStyle: 'italic' }),
                             }
                         };
                     }

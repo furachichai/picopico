@@ -11,6 +11,7 @@ import TitlecardCircleFrame from './TitlecardCircleFrame';
 import CircleFrameModal from './CircleFrameModal';
 import BannerModal from './BannerModal';
 import MenuSettingsModal from './MenuSettingsModal';
+import BottomNav from './BottomNav';
 
 // Mock translation function
 const t = (key) => {
@@ -850,6 +851,33 @@ const Dashboard = () => {
             (() => {
               let sectionLessonIndex = 0;
               const renderedElements = [];
+              const renderedBannerIds = new Set();
+
+              const normalizeLessonKey = (p) => {
+                if (!p || typeof p !== 'string') return '';
+                return p
+                  .toLowerCase()
+                  .replace(/\\/g, '/')
+                  .replace(/^.*lessons\//, '')
+                  .replace(/\/lesson\.json$/, '')
+                  .replace(/^\d+[-_ ]*/, '')
+                  .replace(/[^a-z0-9]/g, '');
+              };
+
+              const matchesBannerLesson = (banner, lesson, index) => {
+                if (!banner || !lesson) return false;
+                if (banner.beforeLesson === lesson.path) return true;
+                if (index === 0 && (banner.beforeLesson === 'START' || (lessons.length > 0 && banner.beforeLesson === lessons[0].path))) {
+                  return true;
+                }
+                if (banner.beforeLesson === 'END') return false;
+
+                const bKey = normalizeLessonKey(banner.beforeLesson);
+                const lKey = normalizeLessonKey(lesson.path);
+                if (bKey && lKey && bKey === lKey) return true;
+
+                return false;
+              };
 
               // Helper to render a banner
               const renderBanner = (banner) => {
@@ -907,18 +935,20 @@ const Dashboard = () => {
               };
 
               // 1. Render banners placed at 'START' or matching first lesson
-              const startBanners = banners.filter(b => b.beforeLesson === 'START' || (lessons.length > 0 && b.beforeLesson === lessons[0].path));
+              const startBanners = banners.filter(b => matchesBannerLesson(b, lessons[0], 0));
               startBanners.forEach(b => {
+                renderedBannerIds.add(b.id);
                 renderedElements.push(renderBanner(b));
                 sectionLessonIndex = 0; // reset zig-zag index per section
               });
 
               // 2. Iterate through lessons
               lessons.forEach((lesson, index) => {
-                // If banners are positioned before this lesson (and not already rendered as start banners)
+                // If banners are positioned before this lesson (and not already rendered)
                 if (index > 0) {
-                  const matchingBanners = banners.filter(b => b.beforeLesson === lesson.path);
+                  const matchingBanners = banners.filter(b => !renderedBannerIds.has(b.id) && matchesBannerLesson(b, lesson, index));
                   matchingBanners.forEach(b => {
+                    renderedBannerIds.add(b.id);
                     renderedElements.push(renderBanner(b));
                     sectionLessonIndex = 0; // reset zig-zag index under each banner!
                   });
@@ -981,7 +1011,16 @@ const Dashboard = () => {
               // 3. Render banners placed at 'END'
               const endBanners = banners.filter(b => b.beforeLesson === 'END');
               endBanners.forEach(b => {
+                renderedBannerIds.add(b.id);
                 renderedElements.push(renderBanner(b));
+              });
+
+              // 4. Fallback: render any banners that haven't been placed yet so none are lost
+              banners.forEach(b => {
+                if (!renderedBannerIds.has(b.id)) {
+                  renderedBannerIds.add(b.id);
+                  renderedElements.push(renderBanner(b));
+                }
               });
 
               return renderedElements;
@@ -991,39 +1030,7 @@ const Dashboard = () => {
       </div>
 
       {/* Bottom Nav */}
-      <div className="bottom-nav">
-        <button
-          className="nav-item active"
-          style={{ color: 'var(--primary)' }}
-        >
-          <BookOpen size={24} strokeWidth={2} />
-          <span className="nav-label">{t('dashboard.lessons')}</span>
-        </button>
-        <button
-          className="nav-item"
-          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'discover' })}
-          style={{ color: '#EC4899' }}
-        >
-          <Compass size={24} strokeWidth={2} />
-          <span className="nav-label">FEED</span>
-        </button>
-        <button
-          className="nav-item"
-          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'cards' })}
-          style={{ color: '#8B5CF6' }}
-        >
-          <Layers size={24} strokeWidth={2} />
-          <span className="nav-label">CARDS</span>
-        </button>
-        <button
-          className="nav-item"
-          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'game' })}
-          style={{ color: '#F59E0B' }}
-        >
-          <Gamepad2 size={24} strokeWidth={2} />
-          <span className="nav-label">{t('dashboard.game')}</span>
-        </button>
-      </div>
+      <BottomNav activeSector="lessons" theme="light" />
 
       {/* Circle Frame Adjuster Modal */}
       {editingFrameLesson && (

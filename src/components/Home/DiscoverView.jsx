@@ -11,6 +11,7 @@ import SwipeSorter from '../../cartridges/SwipeSorter/SwipeSorter';
 import { saveLessonProgress } from '../../utils/storage';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { formatExponents } from '../../utils/textFormatters';
+import BottomNav from './BottomNav';
 
 // The app's view-transition system remounts the outgoing view (its exit animation
 // renders in a fresh wrapper React can't reconcile against the prior mount), so this
@@ -748,7 +749,7 @@ const DiscoverView = () => {
             {/* Hint */}
             <div style={{
                 position: 'absolute',
-                bottom: '40px',
+                bottom: '68px',
                 width: '100%',
                 textAlign: 'center',
                 color: 'white',
@@ -757,6 +758,18 @@ const DiscoverView = () => {
                 pointerEvents: 'none'
             }}>
                 Swipe Right to Start • Up/Down to Browse
+            </div>
+
+            {/* Bottom Nav */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 5000,
+                pointerEvents: 'auto'
+            }}>
+                <BottomNav activeSector="feed" theme="dark" />
             </div>
         </div>
     );

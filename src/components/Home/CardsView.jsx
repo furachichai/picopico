@@ -21,6 +21,7 @@ import FractionSlicer from '../../cartridges/FractionSlicer/FractionSlicer';
 import QuizPlayer from '../Player/QuizPlayer';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { formatExponents } from '../../utils/textFormatters';
+import BottomNav from './BottomNav';
 import './CardsView.css';
 
 /**
@@ -671,6 +672,9 @@ const CardsView = () => {
           </div>
         )}
       </div>
+
+      {/* Bottom Nav */}
+      <BottomNav activeSector="cards" theme="light" />
 
       {/* Full-Size Isolated Card Modal */}
       {selectedCard && (

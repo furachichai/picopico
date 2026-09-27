@@ -1,10 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bangers&family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@400;700&family=Noto+Sans:wght@400;700&family=Source+Sans+3:wght@400;700&family=Fira+Sans:wght@400;700&family=Atkinson+Hyperlegible+Next:wght@400;700&family=Comic+Neue:wght@400;700&family=Outfit:wght@300;400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bangers&family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@400;700&family=Noto+Sans:wght@400;700&family=Source+Sans+3:wght@400;700&family=Fira+Sans:wght@400;700&family=Atkinson+Hyperlegible+Next:wght@400;700&family=Comic+Neue:wght@400;700&family=Outfit:wght@300;400;600;700;800;900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fredoka:wght@300..700&display=swap');
 
 @font-face {
     font-family: 'HVD Comic Serif Pro';
     font-style: normal;
     font-weight: 400;
     src: local('HVD Comic Serif Pro'), url('/assets/fonts/HVD_Comic_Serif_Pro.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Latin Modern Math';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Latin Modern Math'), local('LatinModernMath-Regular'), url('/assets/fonts/latinmodern-math.otf') format('opentype');
+    font-display: swap;
 }
 
 :root {
@@ -49,10 +57,87 @@
 
 [style*="Bangers"],
 [style*="Acme"],
+[style*="Fredoka"],
+[style*="Latin Modern Math"],
 .comic-banner-text,
 .comic-banner-card {
   font-synthesis: weight style;
 }
+
+/* Math Stacked Fractions */
+.pico-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 0.15em;
+  margin: 0 0.14em;
+  line-height: 1;
+  font-family: inherit;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+
+.pico-fraction-num {
+  display: block;
+  padding: 0.05em 0.18em 0.18em 0.18em;
+  border-bottom: 0.08em solid currentColor;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.pico-fraction-den {
+  display: block;
+  padding: 0.18em 0.18em 0.05em 0.18em;
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* Bullet & Numbered lists inside speech balloons, banners, stickers, and cards */
+.pico-balloon-text ul,
+.comic-banner-text ul,
+.sticker-text ul,
+.sticker-collectible ul,
+[contenteditable="true"] ul {
+  display: inline-block;
+  text-align: left;
+  max-width: 100%;
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 1.35em;
+  margin: 0.3em 0;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.pico-balloon-text ol,
+.comic-banner-text ol,
+.sticker-text ol,
+.sticker-collectible ol,
+[contenteditable="true"] ol {
+  display: inline-block;
+  text-align: left;
+  max-width: 100%;
+  list-style-type: decimal;
+  list-style-position: outside;
+  padding-left: 1.45em;
+  margin: 0.3em 0;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.pico-balloon-text li,
+.comic-banner-text li,
+.sticker-text li,
+.sticker-collectible li,
+[contenteditable="true"] li {
+  margin: 0.18em 0;
+  padding-left: 0.2em;
+  line-height: inherit;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
 
 * {
   box-sizing: border-box;

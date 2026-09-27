@@ -1,0 +1,1469 @@
+{
+  "id": "draft-1",
+  "title": "What Is Algebra?",
+  "slides": [
+    {
+      "id": "slide-1790478897587",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478897588",
+          "type": "balloon",
+          "content": "One day I'll buy a house!",
+          "x": 33.611111111111114,
+          "y": 24.21875,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478897589",
+          "type": "balloon",
+          "content": "Adorable.",
+          "x": 61.666666666666664,
+          "y": 57,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 134,
+              "y": 12
+            }
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
+      "id": "slide-1790478897588",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478897688",
+          "type": "balloon",
+          "content": "In the US, a typical home costs $400.000.<div><br></div><div>On average, a person saves $ 4.000 per year.</div>",
+          "x": 50,
+          "y": 29.609375,
+          "width": 65,
+          "height": 24.21875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478897689",
+          "type": "balloon",
+          "content": "So how many years do I need?",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -47,
+              "y": 82
+            }
+          }
+        },
+        {
+          "id": "el-1790478897690",
+          "type": "text",
+          "content": "**(Caption)** Source: Harvard JCHS, 2025",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1790478897589",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478897788",
+          "type": "balloon",
+          "content": "<b>100</b> <b>years</b>.<div><br></div><div>It'll take you a <b>full</b> <b>decade</b> just to be able to afford the <b>down</b>-<b>payment</b>.</div>",
+          "x": 61.666666666666664,
+          "y": 36.640625,
+          "width": 65,
+          "height": 27.65625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 25,
+              "y": 105
+            }
+          }
+        }
+      ],
+      "order": 2
+    },
+    {
+      "id": "slide-1790478897590",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478897888",
+          "type": "banner",
+          "content": "<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">4000</span></font>y <font color=\"#000000\">= 400</font>,0<font color=\"#000000\">00</font>. What is y?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478897889",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "330,000",
+              "100",
+              "495,000",
+              "50"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1790478897591",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478897988",
+          "type": "balloon",
+          "content": "And 64% of service workers get their schedule less than two weeks ahead.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478897989",
+          "type": "text",
+          "content": "**(Caption)** Source: The Shift Project, 2021",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        }
+      ],
+      "order": 4
+    },
+    {
+      "id": "slide-1790478897592",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898088",
+          "type": "balloon",
+          "content": "h is your hours. The rule stays the same. Your hours don't.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898089",
+          "type": "balloon",
+          "content": "So I never know my pay until it's too late.",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898090",
+          "type": "balloon",
+          "content": "Try planning a house with that.",
+          "x": 50,
+          "y": 78,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 5
+    },
+    {
+      "id": "slide-1790478897593",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898188",
+          "type": "banner",
+          "content": "Pay <font color=\"#000000\">= 15</font>h. This week, Pesto works <font color=\"#000000\">20</font> hours. What's his pay?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478898189",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "35",
+              "1520",
+              "3000",
+              "300"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 6
+    },
+    {
+      "id": "slide-1790478897594",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898288",
+          "type": "balloon",
+          "content": "From 2014 to 2018, the 25 richest Americans got $401 billion richer. They paid $13.6 billion in income tax.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898289",
+          "type": "balloon",
+          "content": "About $3.40 for every $100 they gained.",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898290",
+          "type": "text",
+          "content": "**(Caption)** Source: ProPublica, 2021",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        }
+      ],
+      "order": 7
+    },
+    {
+      "id": "slide-1790478897595",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898388",
+          "type": "balloon",
+          "content": "n is how many hundreds of dollars they gained. T is the tax.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898389",
+          "type": "balloon",
+          "content": "And normal families?",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898390",
+          "type": "balloon",
+          "content": "Over those same years: about $95 for every $100.",
+          "x": 50,
+          "y": 78,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 8
+    },
+    {
+      "id": "slide-1790478897596",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898488",
+          "type": "banner",
+          "content": "T <font color=\"#000000\">= 3.4</font>n. A billionaire gains $<font color=\"#000000\">1</font>,<font color=\"#000000\">000</font>, so n <font color=\"#000000\">= 10</font>. What is T?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478898489",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "34",
+              "340",
+              "13.4",
+              "3.4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 9
+    },
+    {
+      "id": "slide-1790478897597",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898588",
+          "type": "balloon",
+          "content": "The 50 richest billionaires took 184 private flights a year, on average. One year of one billionaire's flights pollutes like an average person does in 300 years.",
+          "x": 50,
+          "y": 32.8125,
+          "width": 65,
+          "height": 32.1875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -22,
+              "y": 138
+            }
+          }
+        },
+        {
+          "id": "el-1790478898589",
+          "type": "text",
+          "content": "**(Caption)** Source: Oxfam, 2024",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        }
+      ],
+      "order": 10
+    },
+    {
+      "id": "slide-1790478897598",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898688",
+          "type": "balloon",
+          "content": "How many whole lifetimes is that?",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898689",
+          "type": "balloon",
+          "content": "n = 4. Four lifetimes. In one year.",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898690",
+          "type": "balloon",
+          "content": "And I get yelled at for my one lab exhaust fan.",
+          "x": 50,
+          "y": 78,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 11
+    },
+    {
+      "id": "slide-1790478897599",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898788",
+          "type": "banner",
+          "content": "<font color=\"#000000\">75</font>n <font color=\"#000000\">= 300</font>. What is n?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478898789",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "225",
+              "375",
+              "4",
+              "22,500"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 12
+    },
+    {
+      "id": "slide-1790478897600",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898888",
+          "type": "balloon",
+          "content": "In the 2024 US elections, 150 billionaire families gave $1.9 billion. About $12.7 million per family.",
+          "x": 50,
+          "y": 31.953125,
+          "width": 65,
+          "height": 28.90625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 21,
+              "y": 137
+            }
+          }
+        },
+        {
+          "id": "el-1790478898889",
+          "type": "text",
+          "content": "**(Caption)** Source: Americans for Tax Fairness, 2024",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        }
+      ],
+      "order": 13
+    },
+    {
+      "id": "slide-1790478897601",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478898988",
+          "type": "balloon",
+          "content": "If a regular person gives $50, how many people match one family?",
+          "x": 50,
+          "y": 15,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898989",
+          "type": "balloon",
+          "content": "n = 254,000. A whole city, versus one family.",
+          "x": 50,
+          "y": 32.5,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898990",
+          "type": "balloon",
+          "content": "And I get one vote.",
+          "x": 50,
+          "y": 50,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478898991",
+          "type": "balloon",
+          "content": "Then use it. Loudly.",
+          "x": 50,
+          "y": 67.5,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 14
+    },
+    {
+      "id": "slide-1790478897602",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899088",
+          "type": "banner",
+          "content": "<font color=\"#000000\">50</font>n <font color=\"#000000\">= 12</font>,<font color=\"#000000\">700</font>,<font color=\"#000000\">000</font>. What is n?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899089",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "12,699,950",
+              "254,000",
+              "635,000,000",
+              "12,700,050"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 15
+    },
+    {
+      "id": "slide-1790478897603",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899188",
+          "type": "balloon",
+          "content": "Numbers alone are just data. Put them in an equation and they tell you something.",
+          "x": 50,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478899189",
+          "type": "balloon",
+          "content": "Algebra turns data into knowledge.",
+          "x": 50,
+          "y": 52,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 85,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790478899190",
+          "type": "balloon",
+          "content": "Even Pesto's.",
+          "x": 50,
+          "y": 78,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        }
+      ],
+      "order": 16
+    },
+    {
+      "id": "slide-1790478897604",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899288",
+          "type": "banner",
+          "content": "Pesto saves $<font color=\"#000000\">8</font>,<font color=\"#000000\">250</font> a year. <font color=\"#000000\">8</font>,<font color=\"#000000\">250</font>y <font color=\"#000000\">= 412</font>,<font color=\"#000000\">500</font>. How many years to buy the house?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899289",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "5",
+              "50",
+              "404,250",
+              "420,750"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 17
+    },
+    {
+      "id": "slide-1790478897605",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899388",
+          "type": "banner",
+          "content": "A typical household gains $<font color=\"#000000\">1</font>,<font color=\"#000000\">000</font>, so n <font color=\"#000000\">= 10</font>. Their tax is T <font color=\"#000000\">= 95</font>n. What is T?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899389",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "105",
+              "9.5",
+              "950",
+              "9,500"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 18
+    },
+    {
+      "id": "slide-1790478897606",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899488",
+          "type": "banner",
+          "content": "T <font color=\"#000000\">= 3.4</font>n is a rule. <font color=\"#000000\">3.4</font>n <font color=\"#000000\">= 34</font> asks you to…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899489",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Find one unknown number",
+              "List every possible n",
+              "Add 3.4 and 34",
+              "Ignore n"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 19
+    },
+    {
+      "id": "slide-1790478897607",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899588",
+          "type": "banner",
+          "content": "Why use letters instead of numbers?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899589",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "To make math harder",
+              "To write a rule that works for any number",
+              "Because we ran out of numbers",
+              "Letters look nicer"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 20
+    },
+    {
+      "id": "slide-1790478897608",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899688",
+          "type": "banner",
+          "content": "Algebra is…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899689",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Math with only the letter x",
+              "Math only scientists use",
+              "Math without numbers",
+              "Math where letters stand for numbers"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 21
+    },
+    {
+      "id": "slide-1790478897609",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790478899788",
+          "type": "banner",
+          "content": "Algebra turns data into…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790478899789",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "More data",
+              "Letters",
+              "Knowledge",
+              "Confusion"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 22
+    },
+    {
+      "id": "slide-1790478897610",
+      "background": "#1a1a2e",
+      "elements": [
+        {
+          "id": "el-1790478899888",
+          "type": "collectible",
+          "content": "<b>Algebra</b> is math where letters stand for numbers.\nIt lets you:\n<b>Write a rule</b> → Pay = 15h works for any number of hours.\n<b>Find an unknown</b> → 82,500y = 412,500, so y = 5.\n<b>Algebra turns data into knowledge.</b>\n## SOURCES\nhttps://www.jchs.harvard.edu/sites/default/files/interactive-item/files/Harvard_JCHS_State_of_the_Nations_Housing_2025_Press_Release.pdf\nhttps://www.cnbc.com/2022/06/13/service-workers-report-unpredictable-schedules-and-it-impacts-more-than-pay.html\nhttps://www.propublica.org/article/the-secret-irs-files-trove-of-never-before-seen-records-reveal-how-the-wealthiest-avoid-income-tax\nhttps://www.oxfam.org/en/press-releases/billionaires-emit-more-carbon-pollution-90-minutes-average-person-does-lifetime\nhttps://americansfortaxfairness.org/billionaire-clans-spend-nearly-2-billion-2024-elections/\n<b>Example (not data):</b> $15/hour wage, 75-year lifetime, $50 donation, $8,250/year savings (10% of $82,500).",
+          "x": 50,
+          "y": 50,
+          "width": 82,
+          "height": 60,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Outfit\", sans-serif",
+            "fontSize": 18,
+            "color": "#ffffff",
+            "textAlign": "center",
+            "backgroundColor": "rgba(255, 255, 255, 0.08)",
+            "borderRadius": "16px",
+            "border": "1px solid rgba(255, 255, 255, 0.15)",
+            "lineHeight": 1.4
+          }
+        }
+      ],
+      "order": 23
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-27T02:54:13.090Z",
+  "updatedAt": "2026-09-27T03:32:09.144Z",
+  "path": "lessons/01-What Is Algebra-/lesson.json",
+  "textPreset": null,
+  "_snapshots": [
+    {
+      "timestamp": "2026-09-27T03:14:57.587Z",
+      "reason": "Before script import",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0
+        }
+      ]
+    }
+  ],
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  }
+}

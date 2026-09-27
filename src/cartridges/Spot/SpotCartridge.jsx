@@ -10,9 +10,6 @@ import {
 } from './game/SpotSoundManager';
 import './SpotCartridge.css';
 
-// Classic quiz option palette matching regular PicoPico quiz
-const QUIZ_OPTION_COLORS = ['#65BBF9', '#F9D639', '#C084FC', '#FFA756'];
-
 /**
  * Strip outer balanced parentheses from a string:
  * e.g. "(6x + 12)" -> "6x + 12"
@@ -58,7 +55,6 @@ function HandDrawnCircleToken() {
  * Render sub-expression math tokens.
  * Each token (number, variable, operator) is interactively selectable in Spot mode.
  * When selected, the red circle is drawn around it.
- * In Quiz mode, the error target is rendered as a Result Field.
  */
 function renderMathTokens({
   str,
@@ -68,10 +64,7 @@ function renderMathTokens({
   fallbackErrorToken,
   selectedTokenKey,
   onSelectToken,
-  disabled,
-  quizMode = false,
-  quizResultValue = null,
-  quizResultState = null
+  disabled
 }) {
   if (!str) return null;
 
@@ -103,23 +96,11 @@ function renderMathTokens({
       fallbackMatched = true;
     }
 
-    // In Quiz Mode: place Result Field in place of the error token
-    if (quizMode && isErrorTarget) {
-      return (
-        <span
-          key={`quiz-res-${idx}`}
-          className={`spot-result-field ${quizResultState ? `is-${quizResultState}` : ''} ${quizResultValue !== null ? 'has-value' : 'is-empty'}`}
-        >
-          {quizResultValue !== null ? quizResultValue : '?'}
-        </span>
-      );
-    }
-
     const tokenKey = `${stepIdx}-${side}-${idx}`;
     const isSelected = selectedTokenKey === tokenKey;
 
     const isWhitespace = /^\s+$/.test(token);
-    const isClickable = !isWhitespace && !disabled && !quizMode;
+    const isClickable = !isWhitespace && !disabled;
 
     let tokenNode = null;
     if (isWhitespace) {
@@ -138,7 +119,6 @@ function renderMathTokens({
       tokenNode = <span className="spot-math-token">{token}</span>;
     }
 
-    // Always wrap in spot-interactive-token to keep exact dimensions and never shrink when disabled/won
     return (
       <span
         key={idx}
@@ -163,7 +143,7 @@ function renderMathTokens({
 
 /**
  * Render a mathematical expression (left or right side of equation).
- * Supports fractions, token-level selection, and quiz result fields.
+ * Supports fractions and token-level selection.
  */
 function renderMathExpression({
   rawStr,
@@ -173,10 +153,7 @@ function renderMathExpression({
   fallbackErrorToken,
   selectedTokenKey,
   onSelectToken,
-  disabled,
-  quizMode = false,
-  quizResultValue = null,
-  quizResultState = null
+  disabled
 }) {
   if (!rawStr) return null;
   const str = rawStr.trim();
@@ -202,10 +179,7 @@ function renderMathExpression({
               fallbackErrorToken,
               selectedTokenKey,
               onSelectToken,
-              disabled,
-              quizMode,
-              quizResultValue,
-              quizResultState
+              disabled
             })
           : null}
         <span className="spot-fraction">
@@ -218,10 +192,7 @@ function renderMathExpression({
               fallbackErrorToken,
               selectedTokenKey,
               onSelectToken,
-              disabled,
-              quizMode,
-              quizResultValue,
-              quizResultState
+              disabled
             })}
           </span>
           <span className="spot-fraction-bar" />
@@ -234,10 +205,7 @@ function renderMathExpression({
               fallbackErrorToken,
               selectedTokenKey,
               onSelectToken,
-              disabled,
-              quizMode,
-              quizResultValue,
-              quizResultState
+              disabled
             })}
           </span>
         </span>
@@ -250,10 +218,7 @@ function renderMathExpression({
               fallbackErrorToken,
               selectedTokenKey,
               onSelectToken,
-              disabled,
-              quizMode,
-              quizResultValue,
-              quizResultState
+              disabled
             })
           : null}
       </span>
@@ -270,284 +235,10 @@ function renderMathExpression({
         fallbackErrorToken,
         selectedTokenKey,
         onSelectToken,
-        disabled,
-        quizMode,
-        quizResultValue,
-        quizResultState
+        disabled
       })}
     </span>
   );
-}
-
-/**
- * Safe arithmetic expression evaluator for basic algebraic terms (+, -, *, /, parens).
- */
-function safeEvalMath(expr, xVal = 0, slotVal = null) {
-  if (!expr) return null;
-  try {
-    let s = expr
-      .replace(/·/g, '*')
-      .replace(/≠/g, '!=');
-    if (slotVal !== null) {
-      s = s.replace(/\*([^*]+)\*/g, String(slotVal));
-    }
-    // Implicit multiplication: 3( -> 3 * (
-    s = s.replace(/(\d)\s*\(/g, '$1 * (').replace(/\)\s*\(/g, ') * (').replace(/\)\s*(\d)/g, ') * $1');
-    // 2x -> 2 * (x)
-    s = s.replace(/(\d+)\s*([a-zA-Z])/g, `$1 * ($2)`);
-    // variable -> xVal
-    s = s.replace(/\b[a-zA-Z]\b/g, `(${xVal})`);
-
-    const tokens = s.match(/\d+(?:\.\d+)?|[+\-*/()]|\S/g);
-    if (!tokens) return null;
-
-    let pos = 0;
-
-    function parseExpression() {
-      let val = parseTerm();
-      while (pos < tokens.length && (tokens[pos] === '+' || tokens[pos] === '-')) {
-        const op = tokens[pos++];
-        const right = parseTerm();
-        val = op === '+' ? val + right : val - right;
-      }
-      return val;
-    }
-
-    function parseTerm() {
-      let val = parseFactor();
-      while (pos < tokens.length && (tokens[pos] === '*' || tokens[pos] === '/')) {
-        const op = tokens[pos++];
-        const right = parseFactor();
-        val = op === '*' ? val * right : val / right;
-      }
-      return val;
-    }
-
-    function parseFactor() {
-      if (pos >= tokens.length) return 0;
-      const tok = tokens[pos++];
-      if (tok === '+') return parseFactor();
-      if (tok === '-') return -parseFactor();
-      if (tok === '(') {
-        const val = parseExpression();
-        if (tokens[pos] === ')') pos++;
-        return val;
-      }
-      const num = parseFloat(tok);
-      return isNaN(num) ? 0 : num;
-    }
-
-    const res = parseExpression();
-    return Number.isFinite(res) ? res : null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Attempt to solve linear root x of step equation:
- */
-function solveLinearRoot(step) {
-  if (!step || !step.hasEquals) return null;
-  for (let x = -50; x <= 50; x++) {
-    const l = safeEvalMath(step.left, x);
-    const r = safeEvalMath(step.right, x);
-    if (l !== null && r !== null && Math.abs(l - r) < 0.0001) {
-      return x;
-    }
-  }
-  return null;
-}
-
-/**
- * Solve missing slot value in mistake step:
- */
-function solveMissingSlot(mistakeStep, rootX, errorToken) {
-  if (!mistakeStep || !mistakeStep.hasEquals) return null;
-  for (let v = -100; v <= 100; v++) {
-    let lStr = mistakeStep.left;
-    let rStr = mistakeStep.right;
-    if (lStr.includes(`*${errorToken}*`) || lStr.includes(errorToken)) {
-      lStr = lStr.replace(`*${errorToken}*`, String(v));
-    }
-    if (rStr.includes(`*${errorToken}*`) || rStr.includes(errorToken)) {
-      rStr = rStr.replace(`*${errorToken}*`, String(v));
-    }
-    const l = safeEvalMath(lStr, rootX !== null ? rootX : 0);
-    const r = safeEvalMath(rStr, rootX !== null ? rootX : 0);
-    if (l !== null && r !== null && Math.abs(l - r) < 0.0001) {
-      return v;
-    }
-  }
-  return null;
-}
-
-/**
- * Automatically deduce what the correct value should be from math context.
- */
-function deduceCorrectValue(prevStep, mistakeStep, errorToken) {
-  if (!prevStep || !mistakeStep) return null;
-
-  // 1. Solve root and substitute into missing slot
-  const rootX = solveLinearRoot(prevStep);
-  const solved = solveMissingSlot(mistakeStep, rootX, errorToken);
-  if (solved !== null) {
-    return String(solved);
-  }
-
-  // 2. Division term heuristic: (6x + 12)/3 -> 12/3 = 4
-  const fracMatch = prevStep.raw.match(/\(([^)]+)\)\s*\/\s*(\d+(?:\.\d+)?)/);
-  if (fracMatch) {
-    const numPart = fracMatch[1];
-    const denom = parseFloat(fracMatch[2]);
-    if (denom !== 0) {
-      const numbers = numPart.match(/\d+(?:\.\d+)?/g);
-      if (numbers) {
-        for (const numStr of numbers) {
-          const val = parseFloat(numStr);
-          const div = val / denom;
-          if (Number.isInteger(div) && String(div) !== String(errorToken)) {
-            return String(div);
-          }
-        }
-      }
-    }
-  }
-
-  // 3. Multiplication factor heuristic: 3(2x + 4) -> 3*4 = 12
-  const multMatch = prevStep.raw.match(/(\d+(?:\.\d+)?)\s*\(([^)]+)\)/);
-  if (multMatch) {
-    const factor = parseFloat(multMatch[1]);
-    const inner = multMatch[2];
-    const numbers = inner.match(/\d+(?:\.\d+)?/g);
-    if (numbers) {
-      for (const numStr of numbers) {
-        const val = parseFloat(numStr);
-        const prod = factor * val;
-        if (Number.isInteger(prod) && String(prod) !== String(errorToken)) {
-          return String(prod);
-        }
-      }
-    }
-  }
-
-  return null;
-}
-
-function shuffleArray(arr) {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-/**
- * Generate 4 distinct options (1 correct, 3 plausible distractors).
- */
-function generateFourOptions(correctValue, errorToken) {
-  const optsSet = new Set();
-  const cVal = String(correctValue).trim();
-  optsSet.add(cVal);
-
-  if (errorToken && String(errorToken).trim() !== cVal) {
-    optsSet.add(String(errorToken).trim());
-  }
-
-  const num = parseFloat(cVal);
-  if (!isNaN(num) && Number.isFinite(num)) {
-    const candidates = [
-      num + 2,
-      num - 2,
-      num + 1,
-      num - 1,
-      num * 2,
-      Math.floor(num / 2),
-      num + 3,
-      num - 3
-    ];
-    for (const c of candidates) {
-      if (optsSet.size >= 4) break;
-      if (c > 0 || num <= 0) {
-        optsSet.add(String(c));
-      }
-    }
-    let offset = 1;
-    while (optsSet.size < 4) {
-      optsSet.add(String(num + offset));
-      offset++;
-      if (optsSet.size < 4 && num - offset > 0) {
-        optsSet.add(String(num - offset));
-      }
-    }
-  } else {
-    const fallback = ['+', '-', '·', '÷', '=', '±', 'x', 'y', 'z', '2', '3', '4'];
-    for (const f of fallback) {
-      if (optsSet.size >= 4) break;
-      optsSet.add(f);
-    }
-  }
-
-  const result = Array.from(optsSet).slice(0, 4);
-  return shuffleArray(result);
-}
-
-/**
- * Automatically determine the correct replacement token and 4 options for the quiz.
- */
-function generateQuizData({ steps, mistakeIndex, errorToken, config = {} }) {
-  const explicitCorrect = config.correctToken || config.correctAnswer;
-  let correctValue = explicitCorrect ? String(explicitCorrect).trim() : null;
-
-  const prevIndex = mistakeIndex > 0 ? mistakeIndex - 1 : 0;
-  const prevStep = steps[prevIndex] || steps[0];
-  const mistakeStep = steps[mistakeIndex] || steps[0];
-
-  // 1. Check if error token has inline syntax: *3|4* or *3->4*
-  if (!correctValue && mistakeStep) {
-    const inlineMatch = mistakeStep.raw.match(/\*([^*|>-]+)(?:\||->)([^*]+)\*/);
-    if (inlineMatch) {
-      correctValue = inlineMatch[2].trim();
-    }
-  }
-
-  // 2. Term-by-term algebraic deduction from previous step
-  if (!correctValue) {
-    correctValue = deduceCorrectValue(prevStep, mistakeStep, errorToken);
-  }
-
-  // 3. Fallback
-  if (!correctValue) {
-    const num = parseFloat(errorToken);
-    if (!isNaN(num)) {
-      correctValue = String(num + 1);
-    } else {
-      correctValue = errorToken === '+' ? '-' : errorToken === '-' ? '+' : '4';
-    }
-  }
-
-  // 4. Generate 4 options
-  let options = [];
-  if (config.quizOptions) {
-    if (Array.isArray(config.quizOptions)) {
-      options = config.quizOptions.map(String);
-    } else if (typeof config.quizOptions === 'string') {
-      options = config.quizOptions.split(',').map(s => s.trim()).filter(Boolean);
-    }
-  }
-
-  if (options.length !== 4) {
-    options = generateFourOptions(correctValue, errorToken);
-  }
-
-  return {
-    correctValue,
-    options,
-    prevIndex,
-    prevStep,
-    mistakeStep
-  };
 }
 
 /**
@@ -568,134 +259,108 @@ function parseStepsConfig(stepsText, explicitMistakeIndex, explicitErrorToken) {
     .filter(line => line && !line.startsWith('//') && !line.startsWith('#'));
 
   let detectedMistakeIdx = -1;
-  let detectedToken = null;
-
   const parsedSteps = rawLines.map((line, idx) => {
     let cleanLine = line;
-    let isMarked = false;
+    let isMistake = false;
 
-    const inlineMatch = cleanLine.match(/\*([^*]+)\*/);
-    if (inlineMatch && !cleanLine.startsWith('* ') && !cleanLine.endsWith(' *')) {
-      isMarked = true;
-      detectedMistakeIdx = idx;
-      detectedToken = inlineMatch[1];
-    } else if (cleanLine.startsWith('*') || cleanLine.startsWith('!')) {
-      isMarked = true;
-      cleanLine = cleanLine.slice(1).trim();
+    if (cleanLine.startsWith('*') && !cleanLine.endsWith('*')) {
+      isMistake = true;
+      cleanLine = cleanLine.replace(/^\*\s*/, '');
+    } else if (cleanLine.startsWith('!') && !cleanLine.endsWith('!')) {
+      isMistake = true;
+      cleanLine = cleanLine.replace(/^!\s*/, '');
+    }
+
+    if (/\*[^*]+\*/.test(cleanLine)) {
+      isMistake = true;
+    }
+
+    if (isMistake && detectedMistakeIdx === -1) {
       detectedMistakeIdx = idx;
     }
 
-    const eqIdx = cleanLine.indexOf('=');
     let left = cleanLine;
     let right = '';
     let hasEquals = false;
 
+    const eqIdx = cleanLine.indexOf('=');
     if (eqIdx !== -1) {
-      left = cleanLine.slice(0, eqIdx).trim();
-      right = cleanLine.slice(eqIdx + 1).trim();
       hasEquals = true;
+      left = cleanLine.substring(0, eqIdx).trim();
+      right = cleanLine.substring(eqIdx + 1).trim();
     }
 
     return {
-      id: idx,
+      id: `step-${idx}`,
       raw: cleanLine,
       left,
       right,
       hasEquals,
-      isMarked
+      isMistake
     };
   });
 
-  let finalMistakeIndex = 0;
-  if (detectedMistakeIdx !== -1) {
-    finalMistakeIndex = detectedMistakeIdx;
-  } else if (typeof explicitMistakeIndex === 'number') {
-    if (explicitMistakeIndex >= parsedSteps.length && explicitMistakeIndex > 0) {
-      finalMistakeIndex = explicitMistakeIndex - 1;
+  const finalMistakeIndex = detectedMistakeIdx !== -1
+    ? detectedMistakeIdx
+    : (explicitMistakeIndex !== undefined ? explicitMistakeIndex : 3);
+
+  let finalErrorToken = explicitErrorToken || null;
+  if (!finalErrorToken && parsedSteps[finalMistakeIndex]) {
+    const targetRaw = parsedSteps[finalMistakeIndex].raw;
+    const match = targetRaw.match(/\*([^*]+)\*/);
+    if (match) {
+      finalErrorToken = match[1].trim();
     } else {
-      finalMistakeIndex = explicitMistakeIndex;
+      finalErrorToken = '3';
     }
-  } else {
-    finalMistakeIndex = Math.min(3, Math.max(0, parsedSteps.length - 2));
   }
 
-  const finalErrorToken = detectedToken || explicitErrorToken || '3';
-
-  return { steps: parsedSteps, mistakeIndex: finalMistakeIndex, errorToken: finalErrorToken };
+  return {
+    steps: parsedSteps,
+    mistakeIndex: finalMistakeIndex,
+    errorToken: finalErrorToken
+  };
 }
 
 export default function SpotCartridge({
   config = {},
   slideBackground = null,
-  onComplete,
-  preview = false
+  onComplete = null,
+  preview = false,
+  isSelected = false,
+  onSelect = null,
+  onConfigChange = null
 }) {
   const maxAttempts = config.maxAttempts || 2;
-
-  // Background resolution: cartridge config.background or inherited slideBackground
-  const bgImage = config.background || config.backgroundImage || config.globalBackground;
-  const hasAnyBackground = Boolean(bgImage || slideBackground);
-
-  const bgStyle = useMemo(() => {
-    if (!bgImage) {
-      if (slideBackground) {
-        return { background: 'transparent' };
-      }
-      return null;
-    }
-    const resolved = resolveAssetUrl(bgImage);
-    const isGradient = resolved.startsWith('linear-gradient(') || resolved.startsWith('radial-gradient(');
-    const isUrl = resolved.startsWith('url(') || resolved.startsWith('data:') || resolved.startsWith('http://') || resolved.startsWith('https://') || resolved.startsWith('/') || resolved.startsWith('./') || resolved.startsWith('blob:');
-
-    if (isGradient) {
-      return { backgroundImage: resolved };
-    }
-    if (isUrl) {
-      const formatted = resolved.startsWith('url(') ? resolved : `url("${resolved}")`;
-      return {
-        backgroundImage: formatted,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      };
-    }
-    return { backgroundColor: resolved };
-  }, [bgImage, slideBackground]);
+  const cartridgeRef = useRef(null);
 
   const { steps, mistakeIndex, errorToken } = useMemo(
     () => parseStepsConfig(config.stepsText, config.mistakeIndex, config.errorToken),
     [config.stepsText, config.mistakeIndex, config.errorToken]
   );
 
-  // Automatically generate quiz data (previous step, mistake step, correct value, 4 options)
-  const quizData = useMemo(
-    () => generateQuizData({ steps, mistakeIndex, errorToken, config }),
-    [steps, mistakeIndex, errorToken, config]
-  );
+  const frameY = config.frameY ?? 20;
+  const [localFrameY, setLocalFrameY] = useState(frameY);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Game Phases: 'spot' (spot the error) -> 'quiz' (replace error with correct token)
-  const [gamePhase, setGamePhase] = useState('spot');
+  useEffect(() => {
+    setLocalFrameY(config.frameY ?? 20);
+  }, [config.frameY]);
+
   const [attemptsLeft, setAttemptsLeft] = useState(maxAttempts);
   const [selectedToken, setSelectedToken] = useState(null);
-  const [selectedQuizOption, setSelectedQuizOption] = useState(null);
-  const [quizState, setQuizState] = useState(null); // 'correct' | 'wrong' | null
-  const [disabledQuizOptions, setDisabledQuizOptions] = useState([]);
   const [isShaking, setIsShaking] = useState(false);
   const [isWon, setIsWon] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const shakeTimerRef = useRef(null);
 
-  // Reset state during render if config changes (React recommended pattern)
-  const configKey = `${config.stepsText || ''}-${config.mistakeIndex ?? ''}-${config.errorToken || ''}-${config.correctToken || ''}-${config.correctAnswer || ''}-${maxAttempts}`;
+  // Reset state during render if config changes
+  const configKey = `${config.stepsText || ''}-${config.mistakeIndex ?? ''}-${config.errorToken || ''}-${config.frameY ?? ''}-${maxAttempts}`;
   const [prevConfigKey, setPrevConfigKey] = useState(configKey);
   if (prevConfigKey !== configKey) {
     setPrevConfigKey(configKey);
-    setGamePhase('spot');
     setAttemptsLeft(maxAttempts);
     setSelectedToken(null);
-    setSelectedQuizOption(null);
-    setQuizState(null);
-    setDisabledQuizOptions([]);
     setIsShaking(false);
     setIsWon(false);
     setIsFailed(false);
@@ -707,19 +372,59 @@ export default function SpotCartridge({
     };
   }, []);
 
+  const handleDragStart = (e) => {
+    if (!preview) return;
+    if (e.button && e.button !== 0) return;
+    e.stopPropagation();
+    if (onSelect) onSelect();
+
+    const parent = cartridgeRef.current?.closest('.slide-canvas') || cartridgeRef.current;
+    const rect = parent?.getBoundingClientRect() || { height: 640 };
+    const startClientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const startY = localFrameY;
+
+    setIsDragging(true);
+    let currentY = startY;
+
+    const handlePointerMove = (evt) => {
+      evt.preventDefault();
+      const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+      const dyPercent = ((clientY - startClientY) / rect.height) * 100;
+      currentY = Math.round(Math.max(14, Math.min(65, startY + dyPercent)));
+      setLocalFrameY(currentY);
+    };
+
+    const handlePointerUp = () => {
+      setIsDragging(false);
+      window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('mouseup', handlePointerUp);
+      window.removeEventListener('touchmove', handlePointerMove);
+      window.removeEventListener('touchend', handlePointerUp);
+
+      if (currentY !== startY && onConfigChange) {
+        onConfigChange({ frameY: currentY });
+      }
+    };
+
+    window.addEventListener('mousemove', handlePointerMove);
+    window.addEventListener('mouseup', handlePointerUp);
+    window.addEventListener('touchmove', handlePointerMove, { passive: false });
+    window.addEventListener('touchend', handlePointerUp);
+  };
+
   const handleSelectToken = (tokenData) => {
-    if (preview || isWon || isFailed || gamePhase !== 'spot') return;
+    if (preview || isWon || isFailed) return;
     unlockAudio();
     playCircleSketch();
     setSelectedToken(tokenData);
   };
 
   const handleGotcha = () => {
-    if (preview || isWon || isFailed || !selectedToken || gamePhase !== 'spot') return;
+    if (preview || isWon || isFailed || !selectedToken) return;
     unlockAudio();
 
     if (selectedToken.isErrorTarget) {
-      // Correct! Error validated!
+      // Correct! Mistake spotted!
       setIsWon(true);
       playVictory();
 
@@ -731,15 +436,12 @@ export default function SpotCartridge({
         zIndex: 9999
       });
 
-      // After confetti, automatically generate & transition to the Quiz phase
-      setTimeout(() => {
-        setGamePhase('quiz');
-        setIsWon(false);
-        setAttemptsLeft(maxAttempts);
-        setSelectedQuizOption(null);
-        setQuizState(null);
-        setDisabledQuizOptions([]);
-      }, 1250);
+      // Spotting the mistake wins the cartridge!
+      if (onComplete) {
+        setTimeout(() => {
+          onComplete();
+        }, 1200);
+      }
     } else {
       // Wrong selection!
       playWrong();
@@ -759,57 +461,6 @@ export default function SpotCartridge({
     }
   };
 
-  const handleQuizOptionSelect = (opt) => {
-    if (preview || isWon || isFailed || disabledQuizOptions.includes(opt) || gamePhase !== 'quiz') return;
-    unlockAudio();
-    setSelectedQuizOption(opt);
-
-    const isCorrect = String(opt).trim() === String(quizData.correctValue).trim();
-
-    if (isCorrect) {
-      setQuizState('correct');
-      playVictory();
-
-      // Confetti burst for solving the quiz!
-      confetti({
-        particleCount: 140,
-        spread: 80,
-        origin: { y: 0.5 },
-        zIndex: 9999
-      });
-
-      setIsWon(true);
-
-      if (onComplete) {
-        setTimeout(() => {
-          onComplete();
-        }, 1300);
-      }
-    } else {
-      setQuizState('wrong');
-      playWrong();
-      setDisabledQuizOptions(prev => [...prev, opt]);
-
-      setIsShaking(true);
-      if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
-      shakeTimerRef.current = setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
-
-      const nextAttempts = attemptsLeft - 1;
-      setAttemptsLeft(nextAttempts);
-
-      if (nextAttempts <= 0) {
-        setIsFailed(true);
-      } else {
-        setTimeout(() => {
-          setSelectedQuizOption(null);
-          setQuizState(null);
-        }, 750);
-      }
-    }
-  };
-
   const handleRetry = () => {
     unlockAudio();
     playTap();
@@ -817,22 +468,20 @@ export default function SpotCartridge({
     setIsShaking(false);
     setIsWon(false);
     setIsFailed(false);
-    if (gamePhase === 'quiz') {
-      setSelectedQuizOption(null);
-      setQuizState(null);
-      setDisabledQuizOptions([]);
-    } else {
-      setSelectedToken(null);
-    }
+    setSelectedToken(null);
   };
 
-  const prevStep = quizData.prevStep;
-  const mistakeStep = quizData.mistakeStep;
-  const prevIndex = quizData.prevIndex;
+  const hasAnyBackground = Boolean(config.background || slideBackground);
+  const bgStyle = config.background
+    ? { backgroundImage: `url(${resolveAssetUrl(config.background)})` }
+    : (slideBackground && slideBackground !== '#ffffff' && slideBackground !== 'transparent'
+      ? { background: slideBackground }
+      : null);
 
   return (
     <div
-      className={`spot-cartridge ${hasAnyBackground ? 'has-bg' : 'no-bg'} ${gamePhase === 'quiz' ? 'is-quiz-phase' : ''}`}
+      ref={cartridgeRef}
+      className={`spot-cartridge ${hasAnyBackground ? 'has-bg' : 'no-bg'}`}
       style={bgStyle || undefined}
     >
       {/* Live hearts below progress bar, top right */}
@@ -848,144 +497,106 @@ export default function SpotCartridge({
       </div>
 
       {/* Scrollable equations strictly under the progress bar */}
-      <div className="spot-scroll-container">
-        {gamePhase === 'spot' ? (
-          /* Spot Phase: Full Equation Steps */
-          <div className={`spot-steps-grid ${isShaking ? 'shake' : ''}`}>
-            {steps.map((step, idx) => {
-              const isTargetMistakeStep = idx === mistakeIndex;
+      <div
+        className="spot-scroll-container"
+        style={{
+          paddingTop: `${Math.max(0, Math.round((localFrameY - 14) * 6.4))}px`,
+          transition: isDragging ? 'none' : 'padding-top 0.15s ease'
+        }}
+      >
+        <div
+          className={`spot-steps-grid ${isShaking ? 'shake' : ''} ${preview && isSelected ? 'is-editor-selected' : ''}`}
+          onClick={preview ? (e) => { e.stopPropagation(); onSelect?.(); } : undefined}
+        >
+          {preview && isSelected && (
+            <div
+              className="spot-frame-drag-bar"
+              onMouseDown={handleDragStart}
+              onTouchStart={handleDragStart}
+              title="Drag up or down to vertically relocate the equations"
+            >
+              <span className="spot-frame-drag-grip">⋮⋮</span>
+              <span className="spot-frame-drag-label">↕ Drag vertically ({localFrameY}%)</span>
+            </div>
+          )}
+          {steps.map((step, idx) => {
+            const isTargetMistakeStep = idx === mistakeIndex;
 
-              if (step.hasEquals) {
-                return (
-                  <React.Fragment key={step.id}>
-                    {/* Left expression: Column 1, right-aligned to '=' */}
-                    <div className="spot-cell spot-cell-left">
-                      {renderMathExpression({
-                        rawStr: step.left,
-                        stepIdx: idx,
-                        side: 'left',
-                        isMistakeStep: isTargetMistakeStep,
-                        fallbackErrorToken: errorToken,
-                        selectedTokenKey: selectedToken?.tokenKey,
-                        onSelectToken: handleSelectToken,
-                        disabled: preview || isWon || isFailed
-                      })}
-                    </div>
-
-                    {/* '=' sign: Column 2, collinear across all rows */}
-                    <div className="spot-cell spot-cell-equals">
-                      <span
-                        className={`spot-interactive-token ${selectedToken?.tokenKey === `${idx}-equals` ? 'is-selected' : ''}`}
-                        onClick={(e) => {
-                          if (preview || isWon || isFailed) return;
-                          e.stopPropagation();
-                          handleSelectToken({
-                            stepIdx: idx,
-                            tokenKey: `${idx}-equals`,
-                            token: '=',
-                            isErrorTarget: isTargetMistakeStep && (errorToken === '=' || step.raw.includes('*=*'))
-                          });
-                        }}
-                      >
-                        =
-                        {selectedToken?.tokenKey === `${idx}-equals` && <HandDrawnCircleToken />}
-                      </span>
-                    </div>
-
-                    {/* Right expression: Column 3, left-aligned starting after '=' */}
-                    <div className="spot-cell spot-cell-right">
-                      {renderMathExpression({
-                        rawStr: step.right,
-                        stepIdx: idx,
-                        side: 'right',
-                        isMistakeStep: isTargetMistakeStep,
-                        fallbackErrorToken: errorToken,
-                        selectedTokenKey: selectedToken?.tokenKey,
-                        onSelectToken: handleSelectToken,
-                        disabled: preview || isWon || isFailed
-                      })}
-                    </div>
-                  </React.Fragment>
-                );
-              }
-
+            if (step.hasEquals) {
               return (
-                <div
-                  key={step.id}
-                  className="spot-cell spot-cell-full"
-                >
-                  {renderMathExpression({
-                    rawStr: step.raw,
-                    stepIdx: idx,
-                    side: 'center',
-                    isMistakeStep: isTargetMistakeStep,
-                    fallbackErrorToken: errorToken,
-                    selectedTokenKey: selectedToken?.tokenKey,
-                    onSelectToken: handleSelectToken,
-                    disabled: preview || isWon || isFailed
-                  })}
-                </div>
+                <React.Fragment key={step.id}>
+                  {/* Left expression: Column 1, right-aligned to '=' */}
+                  <div className="spot-cell spot-cell-left">
+                    {renderMathExpression({
+                      rawStr: step.left,
+                      stepIdx: idx,
+                      side: 'left',
+                      isMistakeStep: isTargetMistakeStep,
+                      fallbackErrorToken: errorToken,
+                      selectedTokenKey: selectedToken?.tokenKey,
+                      onSelectToken: handleSelectToken,
+                      disabled: preview || isWon || isFailed
+                    })}
+                  </div>
+
+                  {/* '=' sign: Column 2, collinear across all rows */}
+                  <div className="spot-cell spot-cell-equals">
+                    <span
+                      className={`spot-interactive-token ${selectedToken?.tokenKey === `${idx}-equals` ? 'is-selected' : ''}`}
+                      onClick={(e) => {
+                        if (preview || isWon || isFailed) return;
+                        e.stopPropagation();
+                        handleSelectToken({
+                          stepIdx: idx,
+                          tokenKey: `${idx}-equals`,
+                          token: '=',
+                          isErrorTarget: isTargetMistakeStep && (errorToken === '=' || step.raw.includes('*=*'))
+                        });
+                      }}
+                    >
+                      =
+                      {selectedToken?.tokenKey === `${idx}-equals` && <HandDrawnCircleToken />}
+                    </span>
+                  </div>
+
+                  {/* Right expression: Column 3, left-aligned starting after '=' */}
+                  <div className="spot-cell spot-cell-right">
+                    {renderMathExpression({
+                      rawStr: step.right,
+                      stepIdx: idx,
+                      side: 'right',
+                      isMistakeStep: isTargetMistakeStep,
+                      fallbackErrorToken: errorToken,
+                      selectedTokenKey: selectedToken?.tokenKey,
+                      onSelectToken: handleSelectToken,
+                      disabled: preview || isWon || isFailed
+                    })}
+                  </div>
+                </React.Fragment>
               );
-            })}
-          </div>
-        ) : (
-          /* Quiz Phase: Only previous step + step with result field (all text removed) */
-          <div className={`spot-steps-grid ${isShaking ? 'shake' : ''}`}>
-            {/* Row 1: Previous Step */}
-            <div className="spot-cell spot-cell-left spot-quiz-prev-row">
-              {renderMathExpression({
-                rawStr: prevStep.left,
-                stepIdx: prevIndex,
-                side: 'left',
-                disabled: true
-              })}
-            </div>
-            <div className="spot-cell spot-cell-equals spot-quiz-prev-row">
-              {prevStep.hasEquals ? '=' : ''}
-            </div>
-            <div className="spot-cell spot-cell-right spot-quiz-prev-row">
-              {renderMathExpression({
-                rawStr: prevStep.right,
-                stepIdx: prevIndex,
-                side: 'right',
-                disabled: true
-              })}
-            </div>
+            }
 
-            {/* Row 2: Step where the mistake was spotted, with Result Field */}
-            <div className="spot-cell spot-cell-left">
-              {renderMathExpression({
-                rawStr: mistakeStep.left,
-                stepIdx: mistakeIndex,
-                side: 'left',
-                isMistakeStep: true,
-                fallbackErrorToken: errorToken,
-                quizMode: true,
-                quizResultValue: selectedQuizOption,
-                quizResultState: quizState,
-                disabled: true
-              })}
-            </div>
-            <div className="spot-cell spot-cell-equals">
-              {mistakeStep.hasEquals ? '=' : ''}
-            </div>
-            <div className="spot-cell spot-cell-right">
-              {renderMathExpression({
-                rawStr: mistakeStep.right,
-                stepIdx: mistakeIndex,
-                side: 'right',
-                isMistakeStep: true,
-                fallbackErrorToken: errorToken,
-                quizMode: true,
-                quizResultValue: selectedQuizOption,
-                quizResultState: quizState,
-                disabled: true
-              })}
-            </div>
-          </div>
-        )}
+            return (
+              <div
+                key={step.id}
+                className="spot-cell spot-cell-full"
+              >
+                {renderMathExpression({
+                  rawStr: step.raw,
+                  stepIdx: idx,
+                  side: 'center',
+                  isMistakeStep: isTargetMistakeStep,
+                  fallbackErrorToken: errorToken,
+                  selectedTokenKey: selectedToken?.tokenKey,
+                  onSelectToken: handleSelectToken,
+                  disabled: preview || isWon || isFailed
+                })}
+              </div>
+            );
+          })}
+        </div>
 
-        {/* Retry button if player ran out of attempts in either phase */}
+        {/* Retry button if player ran out of attempts */}
         {isFailed && (
           <div className="spot-retry-wrapper">
             <button
@@ -1000,8 +611,8 @@ export default function SpotCartridge({
         )}
       </div>
 
-      {/* GOTCHA! Validation button at the bottom (only in spot phase) */}
-      {gamePhase === 'spot' && !isFailed && !preview && (
+      {/* GOTCHA! Validation button at the bottom */}
+      {!isFailed && !preview && (
         <div className="spot-bottom-bar">
           <button
             type="button"
@@ -1009,36 +620,8 @@ export default function SpotCartridge({
             disabled={!selectedToken || isWon}
             onClick={handleGotcha}
           >
-            GOTCHA!
+            {isWon ? '✓ SPOTTED!' : 'GOTCHA!'}
           </button>
-        </div>
-      )}
-
-      {/* Quiz Options at the bottom of the screen */}
-      {gamePhase === 'quiz' && !isFailed && !preview && (
-        <div className="spot-quiz-bottom-bar">
-          <div className="spot-quiz-options-grid">
-            {quizData.options.map((opt, idx) => {
-              const isSelected = selectedQuizOption === opt;
-              const isDisabled = disabledQuizOptions.includes(opt);
-              const optionClass = isSelected
-                ? (quizState === 'correct' ? 'is-correct' : 'is-wrong')
-                : (isDisabled ? 'is-disabled' : '');
-
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  disabled={isDisabled || isWon}
-                  className={`spot-quiz-option-btn ${optionClass}`}
-                  style={{ backgroundColor: QUIZ_OPTION_COLORS[idx % QUIZ_OPTION_COLORS.length] }}
-                  onClick={() => handleQuizOptionSelect(opt)}
-                >
-                  <span className="spot-quiz-option-val">{opt}</span>
-                </button>
-              );
-            })}
-          </div>
         </div>
       )}
     </div>

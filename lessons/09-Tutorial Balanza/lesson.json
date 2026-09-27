@@ -1,6 +1,6 @@
 {
-  "id": "lessons/3323-Balancing act/lesson.json",
-  "title": "Balancing act",
+  "id": "lessons/06-Tutorial Balanza/lesson.json",
+  "title": "Tutorial Balanza",
   "slides": [
     {
       "id": "slide-1",
@@ -70,11 +70,11 @@
           "id": "el-1789734172568-mtdgcuzu5",
           "type": "text",
           "content": "Learn the basics",
-          "x": 49.30555555555555,
-          "y": 20.3125,
+          "x": 50,
+          "y": 26.875,
           "width": 56.388888888888886,
           "height": 7.8125,
-          "rotation": 0,
+          "rotation": -13.599244545208848,
           "scale": 1.8586316360533637,
           "metadata": {
             "textAlign": "center",
@@ -198,10 +198,10 @@
         {
           "id": "el-1789729752977-0qd5vsfby",
           "type": "balloon",
-          "content": "Remove the tacos.",
-          "x": 56.111111111111114,
-          "y": 77.734375,
-          "width": 40,
+          "content": "Remove <b>all</b> the tacos from <b>both sides</b>.",
+          "x": 44.44444444444445,
+          "y": 27.421875,
+          "width": 63.33333333333333,
           "height": 15.46875,
           "rotation": 0,
           "scale": 1,
@@ -211,8 +211,8 @@
             "fontFamily": "\"Noto Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": -103,
-              "y": 39
+              "x": -17,
+              "y": 63
             },
             "shadow": "grey",
             "hasShadow": true,
@@ -225,7 +225,7 @@
         "type": "Balanza",
         "config": {
           "weightsText": "🍎=2",
-          "leftPlateText": "📦x, 🌮,🌮,🌮,🌮,🌮",
+          "leftPlateText": "📦x, 🌮,🌮",
           "rightPlateText": "🌮,🌮, 🎂",
           "menuText": "",
           "showZeroTiles": false,
@@ -299,8 +299,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T11:03:24.483Z",
-  "updatedAt": "2026-09-18T12:22:57.982Z",
-  "path": "lessons/3323-Balancing act/lesson.json",
+  "updatedAt": "2026-09-25T22:33:16.628Z",
+  "path": "lessons/06-Tutorial Balanza/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -311,12 +311,12 @@
       "description": ""
     }
   },
-  "name": "3323-Balancing act",
+  "name": "06-Tutorial Balanza",
   "type": "file",
   "visible": true,
-  "visibleInFeed": true,
-  "order": 3323,
-  "status": "active",
+  "visibleInFeed": false,
+  "order": 6,
+  "status": "completed",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -327,13 +327,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1789731804420
+    "lastSlideIndex": 3,
+    "completed": true,
+    "lastPlayed": 1790375354058
   },
-  "titlecardFrame": {
-    "zoom": 1,
-    "x": 0,
-    "y": 0
-  }
+  "titlecardFrame": null
 }

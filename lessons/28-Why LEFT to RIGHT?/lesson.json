@@ -1,11 +1,27 @@
 {
-  "id": "lessons/0416-Why LEFT to RIGHT?/lesson.json",
+  "id": "lessons/25-Why LEFT to RIGHT?/lesson.json",
   "title": "Why LEFT to RIGHT?",
   "slides": [
     {
       "id": "slide-1",
       "background": "url(\"/src/assets/backgrounds/left%20to%20right%20arrow%20background.jpg\")",
       "elements": [
+        {
+          "id": "el-1779144043763",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_front.png",
+          "x": 72.5,
+          "y": 75.625,
+          "width": 40,
+          "height": 23.677130044843047,
+          "rotation": 0,
+          "scale": 1.9543810434492883,
+          "metadata": {
+            "width": 40,
+            "height": 23.677130044843047,
+            "flipX": true
+          }
+        },
         {
           "id": "el-1779144006220",
           "type": "balloon",
@@ -30,22 +46,6 @@
             "en": {
               "content": "<b>Why</b> must we do operations<div><b>LEFT</b> <b>to</b> <b>RIGHT</b>?</div>"
             }
-          }
-        },
-        {
-          "id": "el-1779144043763",
-          "type": "image",
-          "content": "/src/assets/characters/pest_scratches%20head_front.png",
-          "x": 72.5,
-          "y": 75.625,
-          "width": 40,
-          "height": 23.677130044843047,
-          "rotation": 0,
-          "scale": 1.9543810434492883,
-          "metadata": {
-            "width": 40,
-            "height": 23.677130044843047,
-            "flipX": true
           }
         }
       ],
@@ -139,9 +139,9 @@
           "type": "image",
           "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
           "x": 75.27777777777777,
-          "y": 32.578125,
+          "y": 33.984375,
           "width": 40,
-          "height": 39.84375,
+          "height": 43.28125,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -158,9 +158,9 @@
           "type": "image",
           "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2210%22%20ry%3D%2210%22%20fill%3D%22%23ffc800%22%20%2F%3E%0A%3C%2Fsvg%3E",
           "x": 28.055555555555557,
-          "y": 32.5,
+          "y": 34.140625,
           "width": 40,
-          "height": 40,
+          "height": 43.28125,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -177,7 +177,7 @@
           "type": "text",
           "content": "<font color=\"#ffffff\">10 -</font> <font color=\"#1cb0f6\">4 + 2</font>",
           "x": 75.27777777777779,
-          "y": 17.968750000000004,
+          "y": 22.656250000000004,
           "width": 22.378022216115532,
           "height": 10,
           "rotation": 0,
@@ -197,7 +197,7 @@
           "type": "text",
           "content": "<font color=\"#ffffff\">10 -</font> 6 ",
           "x": 76.38888888888889,
-          "y": 32.1875,
+          "y": 36.875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -218,7 +218,7 @@
           "type": "text",
           "content": "<font color=\"#1cb0f6\">6</font> + 2",
           "x": 27.222222222222225,
-          "y": 32.5,
+          "y": 37.1875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -238,7 +238,7 @@
           "id": "el-1779148683882",
           "type": "line",
           "x": 27.638888888888886,
-          "y": 25.3125,
+          "y": 30,
           "width": 6.695042817333305,
           "height": 37.5,
           "rotation": 90,
@@ -256,7 +256,7 @@
           "id": "el-1779148697671",
           "type": "line",
           "x": 77.08333333333331,
-          "y": 25,
+          "y": 29.6875,
           "width": 6.13948726177775,
           "height": 37.5,
           "rotation": 90,
@@ -274,7 +274,7 @@
           "id": "el-1779148705764",
           "type": "line",
           "x": 77.08333333333331,
-          "y": 39.140625,
+          "y": 42.890625,
           "width": 6.417265039555526,
           "height": 37.5,
           "rotation": 90,
@@ -293,7 +293,7 @@
           "type": "text",
           "content": "<font color=\"#1cb0f6\">10 - 4</font> <font color=\"#ffffff\">+ 2</font>",
           "x": 27.916666666666668,
-          "y": 17.968750000000004,
+          "y": 22.656250000000004,
           "width": 22.547880945838074,
           "height": 10,
           "rotation": 0,
@@ -313,7 +313,7 @@
           "type": "text",
           "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">8</font></span>",
           "x": 27.22222222222221,
-          "y": 46.5625,
+          "y": 49.84375,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -334,7 +334,7 @@
           "type": "text",
           "content": "<span style=\"caret-color: rgb(236, 72, 153);\"><font color=\"#ffffff\">4</font></span>",
           "x": 76.66666666666667,
-          "y": 46.5625,
+          "y": 49.6875,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -354,7 +354,7 @@
           "id": "el-1779148712538",
           "type": "line",
           "x": 27.361111111111114,
-          "y": 39.21875,
+          "y": 43.125,
           "width": 5.583931706222193,
           "height": 37.5,
           "rotation": 90,
@@ -366,6 +366,21 @@
             "symbolColor": "#8B5CF6",
             "startCap": "none",
             "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1779565027710",
+          "type": "image",
+          "content": "/src/assets/characters/Chef_explain%20s_signals.png",
+          "x": 24.166666666666664,
+          "y": 81.09375,
+          "width": 40,
+          "height": 37.47761194029851,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 37.47761194029851
           }
         },
         {
@@ -396,18 +411,39 @@
           }
         },
         {
-          "id": "el-1779565027710",
-          "type": "image",
-          "content": "/src/assets/characters/Chef_explain%20s_signals.png",
-          "x": 24.166666666666664,
-          "y": 81.09375,
-          "width": 40,
-          "height": 37.47761194029851,
+          "id": "el-1790376851862-e97y2fgp7",
+          "type": "line",
+          "x": 21.944444444444443,
+          "y": 15.78125,
+          "width": 15.555555555555555,
+          "height": 10,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "width": 40,
-            "height": 37.47761194029851
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#4CAF50",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1790376870769-0-azp7uo",
+          "type": "line",
+          "x": 83.83333333333333,
+          "y": 15.8125,
+          "width": 15.555555555555555,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#F44336",
+            "startCap": "arrow",
+            "endCap": "none"
           }
         }
       ],
@@ -415,13 +451,19 @@
       "stripper": {
         "enabled": true,
         "dividers": [
-          23,
-          37,
-          51
+          28,
+          42,
+          59
         ]
       },
       "backgroundSettings": {
         "opacity": 0.21
+      },
+      "guides": {
+        "horizontal": [
+          15.9
+        ],
+        "vertical": []
       }
     },
     {
@@ -814,6 +856,22 @@
           }
         },
         {
+          "id": "el-1779160469024",
+          "type": "image",
+          "content": "/src/assets/characters/tucu%20tucu.png",
+          "x": 74.44444444444444,
+          "y": 91.40625,
+          "width": 40,
+          "height": 23.94,
+          "rotation": 0,
+          "scale": 0.8528588862682,
+          "metadata": {
+            "width": 40,
+            "height": 23.94,
+            "flipX": true
+          }
+        },
+        {
           "id": "el-1779155505752",
           "type": "balloon",
           "content": "<div>Para <b>evitar</b> diferencias, acordamos <b>SIEMPRE</b> hacer las <b>operaciones</b> de <b>IZQUIERDA a DERECHA</b>.</div>",
@@ -839,22 +897,6 @@
               "content": "To <b>avoid</b> getting<div>different results,</div><div>we <b>agree</b> to <b>ALWAYS</b></div><div>order operations</div><div><b>LEFT to RIGHT</b>.</div>"
             }
           }
-        },
-        {
-          "id": "el-1779160469024",
-          "type": "image",
-          "content": "/src/assets/characters/tucu%20tucu.png",
-          "x": 74.44444444444444,
-          "y": 91.40625,
-          "width": 40,
-          "height": 23.94,
-          "rotation": 0,
-          "scale": 0.8528588862682,
-          "metadata": {
-            "width": 40,
-            "height": 23.94,
-            "flipX": true
-          }
         }
       ],
       "order": 4,
@@ -865,21 +907,17 @@
   ],
   "author": "User",
   "createdAt": "2026-05-18T22:39:48.732Z",
-  "updatedAt": "2026-06-08T18:15:29.859Z",
-  "path": "lessons/13-Why LEFT to RIGHT?/lesson.json",
+  "updatedAt": "2026-09-25T22:58:10.590Z",
+  "path": "lessons/25-Why LEFT to RIGHT?/lesson.json",
   "textPreset": null,
-  "name": "0416-Why LEFT to RIGHT?",
+  "name": "25-Why LEFT to RIGHT?",
   "type": "file",
   "description": "",
   "visible": true,
-  "order": 416,
-  "status": "completed",
+  "order": 25,
+  "status": "active",
   "icon": "icon_textbook.png",
-  "progress": {
-    "lastSlideIndex": 4,
-    "completed": true,
-    "lastPlayed": 1779160199960
-  },
+  "progress": null,
   "translations": {
     "en": {
       "title": "Why LEFT to RIGHT?",
@@ -889,10 +927,19 @@
   },
   "cardColor": "#14B8A6",
   "hashtag": "#OrderOfOperations",
-  "visibleInFeed": false,
+  "visibleInFeed": true,
   "titlecardFrame": {
     "zoom": 1,
     "x": 0,
     "y": -38.9
+  },
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
   }
 }

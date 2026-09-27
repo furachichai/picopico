@@ -1,0 +1,447 @@
+{
+  "id": "lessons/02-Spot the mistake!/lesson.json",
+  "title": "Spot the mistake!",
+  "slides": [
+    {
+      "id": "slide-1790131833534",
+      "background": "url(\"/src/assets/backgrounds/titlecard_sherlock_titlecard.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790131098612",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790131108638-0",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holmes_003.png",
+          "x": 41.416666666666664,
+          "y": 65.7720462328767,
+          "width": 40,
+          "height": 34.67465753424658,
+          "rotation": 0,
+          "scale": 1.801591059968905,
+          "metadata": {
+            "width": 40,
+            "height": 34.67465753424658,
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790452168307-6zx6hrug3",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%23969696%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 79.16666666666666,
+          "y": 92.5,
+          "width": 19.44444444444447,
+          "height": 4.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-circle",
+            "symbolColor": "#969696",
+            "opacity": 0.73
+          }
+        },
+        {
+          "id": "el-1790131852577-7oh9nkjrn",
+          "type": "text",
+          "content": "x",
+          "x": 80.27777777777779,
+          "y": 87.03125,
+          "width": 31.666666666666664,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"EB Garamond\", serif",
+            "fontSize": 100,
+            "textTransform": "none",
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "id": "el-1790131127085-5quptg4c9",
+          "type": "balloon",
+          "content": "Somewhere in the next slides... a <b>crime</b> against algebra has been committed.",
+          "x": 47.361111111111114,
+          "y": 23.4375,
+          "width": 75.27777777777777,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -10,
+              "y": 90
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.37
+      }
+    },
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
+      "elements": [
+        {
+          "id": "el-1790461924857-ciyhgpnrt",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holmes_002.png",
+          "x": 50,
+          "y": 77.34375,
+          "width": 40,
+          "height": 23.347280334728033,
+          "rotation": 0,
+          "scale": 1.5631286045194674,
+          "metadata": {
+            "width": 40,
+            "height": 23.347280334728033,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790462209935-g0wn93ji9",
+          "type": "text",
+          "content": "<font color=\"#fde74c\" style=\"background-color: rgb(0, 0, 0);\"> Tap the mistake </font>",
+          "x": 34.72222222222222,
+          "y": 28.749999999999996,
+          "width": 53.888888888888886,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.491926445090456,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase"
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": {
+        "type": "Spot",
+        "config": {
+          "stepsText": "5y + 14 -2y = 50\n3y = *45*\ny = 12",
+          "mistakeIndex": 1,
+          "errorToken": "3",
+          "correctToken": "7",
+          "maxAttempts": 2,
+          "frameY": 26
+        }
+      }
+    },
+    {
+      "id": "slide-1790454012203",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790454015178-qoh67xdwr",
+          "type": "banner",
+          "content": "<font color=\"#000000\">5y + 15 = 50</font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><br></span></font><div><font color=\"#000000\">5y = </font></div><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">y = 7</font></div></div>",
+          "x": 50,
+          "y": 34.6875,
+          "width": 51,
+          "height": 17.297672257215904,
+          "rotation": 0,
+          "scale": 1.6283938504239568,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Latin Modern Math\", serif",
+            "fontSize": 15,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790454060653-ctqlh3q27",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 86.40625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "45",
+              "5",
+              "36"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790454071073-soquzumx6",
+          "type": "result_field",
+          "content": "35",
+          "x": 68.05555555555554,
+          "y": 34.84375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "35",
+            "order": 1
+          }
+        }
+      ],
+      "order": 3
+    },
+    {
+      "id": "slide-1790452921152",
+      "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
+      "elements": [
+        {
+          "id": "el-1790461949059-nl2uovfap",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holmes_003.png",
+          "x": 54.166666666666664,
+          "y": 91.5625,
+          "width": 40,
+          "height": 34.67465753424658,
+          "rotation": 0,
+          "scale": 1.2711456310458544,
+          "metadata": {
+            "width": 40,
+            "height": 34.67465753424658,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790462274331-0-k5mn92",
+          "type": "text",
+          "content": "<font color=\"#fde74c\" style=\"background-color: rgb(0, 0, 0);\"> Tap the mistake </font>",
+          "x": 33.833333333333336,
+          "y": 17.531249999999996,
+          "width": 53.888888888888886,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.491926445090456,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase"
+          }
+        }
+      ],
+      "order": 4,
+      "cartridge": {
+        "type": "Spot",
+        "config": {
+          "stepsText": "3(2x + 4) = 24\n6x + 12 = 24\n(6x + 12)/3 = 24/3\n2x + *3* = 8\n2x = 4\nx = 2",
+          "mistakeIndex": 3,
+          "errorToken": "3",
+          "correctToken": "4",
+          "maxAttempts": 2,
+          "enableQuiz": true,
+          "hasQuiz": true,
+          "frameY": 15
+        }
+      }
+    },
+    {
+      "id": "slide-1790461823273",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790461823273-kmly4tyel",
+          "type": "banner",
+          "content": "<font color=\"#000000\">5y + 15 = 50</font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><br></span></font><div><font color=\"#000000\">5y = </font></div><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">y = 7</font></div></div>",
+          "x": 50,
+          "y": 35.46875,
+          "width": 51,
+          "height": 17.297672257215904,
+          "rotation": 0,
+          "scale": 1.6283938504239568,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Latin Modern Math\", serif",
+            "fontSize": 15,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790461823273-557ts14vy",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 86.40625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "45",
+              "5",
+              "35"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1790461823273-ec6xi591a",
+          "type": "result_field",
+          "content": "35",
+          "x": 68.05555555555554,
+          "y": 35.625,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "locked": true,
+            "correctAnswer": "35",
+            "order": 1
+          }
+        }
+      ],
+      "order": 5,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1790130683591",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790462153543-gisqx3od1",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holmes_001.png",
+          "x": 78.88888888888889,
+          "y": 83.59375,
+          "width": 40,
+          "height": 26.96564885496183,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 26.96564885496183,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790462003630-sgwtih3r6",
+          "type": "balloon",
+          "content": "Elementary.",
+          "x": 35,
+          "y": 68.4375,
+          "width": 46.666666666666664,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 54,
+              "y": 68
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 6
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-22T22:43:41.519Z",
+  "updatedAt": "2026-09-26T22:38:01.027Z",
+  "path": "lessons/02-Spot the mistake!/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "name": "02-Spot the mistake!",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 2,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 2,
+    "completed": false,
+    "lastPlayed": 1790453041224
+  },
+  "titlecardFrame": {
+    "zoom": 1.2,
+    "x": 0.4,
+    "y": -24.9
+  }
+}

@@ -1,0 +1,80 @@
+/* Bottom Navigation Bar Styling */
+
+.pico-bottom-nav {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 4px 8px;
+  /* Support iOS safe area insets cleanly */
+  padding-bottom: max(6px, calc(6px + env(safe-area-inset-bottom, 0px)));
+  padding-left: max(8px, calc(8px + env(safe-area-inset-left, 0px)));
+  padding-right: max(8px, calc(8px + env(safe-area-inset-right, 0px)));
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 50;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  user-select: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Light Theme (Dashboard, CardsView) */
+.pico-bottom-nav.theme-light {
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid #F1F5F9;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark Theme (DiscoverView / Feed, Arcade) */
+.pico-bottom-nav.theme-dark {
+  background-color: rgba(12, 10, 20, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Navigation Item */
+.pico-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 12px 3px 12px;
+  border-radius: 14px;
+  position: relative;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  min-width: 68px;
+  height: auto;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, color 0.2s ease;
+}
+
+.pico-nav-item:active {
+  transform: scale(0.92);
+}
+
+/* Label */
+.pico-nav-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.35px;
+  line-height: 1;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+/* Subtle Active Indicator Bar */
+.pico-nav-indicator {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  margin-top: 2px;
+  transition: background-color 0.2s ease, width 0.2s ease, opacity 0.2s ease;
+}

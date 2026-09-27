@@ -1,5 +1,5 @@
 {
-  "id": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+  "id": "lessons/26-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
   "title": "¿ Por qué n⁰ es igual a 1 ?",
   "slides": [
     {
@@ -100,7 +100,7 @@
         {
           "id": "el-1788656023631",
           "type": "balloon",
-          "content": "Hold still.<div>I will make you</div><div><b>twice</b> your size.</div>",
+          "content": "Hold still.<div><br><div>I will make you</div><div><b>twice</b> your size.</div></div>",
           "x": 41.38888888888889,
           "y": 31.25,
           "width": 65,
@@ -122,7 +122,7 @@
         {
           "id": "el-1788656023632",
           "type": "balloon",
-          "content": "What?! Why?!",
+          "content": "What?!<div>&nbsp;<div>Why?!</div></div>",
           "x": 74.99999999999999,
           "y": 49.5,
           "width": 37.77777777777778,
@@ -1178,7 +1178,7 @@
           "type": "image",
           "content": "/src/assets/characters/pesto jumping.png",
           "x": 81.38888888888889,
-          "y": 85.9375,
+          "y": 87.5,
           "width": 40,
           "height": 26.642384105960264,
           "rotation": 0,
@@ -2455,7 +2455,7 @@
         {
           "id": "el-1788656024931",
           "type": "text",
-          "content": "4³ = 64<div>4² = 16</div><div>4¹ = 1</div>",
+          "content": "4³ = 64<div>4² = 16</div><div>4¹ = 4</div>",
           "x": 48.61111111111111,
           "y": 22,
           "width": 86,
@@ -3597,8 +3597,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-06T00:53:37.022Z",
-  "updatedAt": "2026-09-13T23:33:05.626Z",
-  "path": "lessons/7323-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+  "updatedAt": "2026-09-25T23:01:28.841Z",
+  "path": "lessons/26-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
   "textPreset": null,
   "_snapshots": [
     {
@@ -3623,10 +3623,10 @@
       "description": ""
     }
   },
-  "name": "7323-Why Anything to the Power of 0 Equals 1",
+  "name": "26-¿ Por qué n⁰ es igual a 1 ?",
   "type": "file",
   "visible": true,
-  "order": 7323,
+  "order": 26,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -3637,11 +3637,7 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1789342316342
-  },
+  "progress": null,
   "visibleInFeed": true,
   "titlecardFrame": {
     "zoom": 1,

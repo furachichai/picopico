@@ -686,7 +686,28 @@ const Editor = () => {
             }
 
             const isTextFormatShortcut = (e.metaKey || e.ctrlKey) && ['b', 'i', 'u'].includes(e.key.toLowerCase());
+            const isBulletShortcut = (e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === '8' || e.key === '*');
             const isMathShortcut = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e';
+
+            if (isBulletShortcut) {
+                const isEditable = e.target.isContentEditable || e.target.closest?.('[contenteditable="true"]');
+                if (isEditable) {
+                    e.preventDefault();
+                    document.execCommand('insertUnorderedList', false, null);
+                    const editableEl = e.target.isContentEditable ? e.target : e.target.closest('[contenteditable="true"]');
+                    if (editableEl) {
+                        const elId = editableEl.closest('.sticker')?.dataset?.elementId;
+                        if (elId) {
+                            dispatch({
+                                type: 'UPDATE_ELEMENT',
+                                payload: { id: elId, updates: { content: editableEl.innerHTML } }
+                            });
+                        }
+                    }
+                    return;
+                }
+            }
+
             if (
                 !isTextFormatShortcut && !isMathShortcut && (
                     e.target.isContentEditable ||
@@ -757,13 +778,13 @@ const Editor = () => {
                     }
                 }
 
-                // If nothing was selected/matched in focus, but a text/banner element is selected on canvas
+                // If nothing was selected/matched in focus, but a text/banner/balloon element is selected on canvas
                 if (!selectedText && state.selectedElementId) {
                     const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
                     const selectedElement = currentSlide?.elements.find(el => el.id === state.selectedElementId);
-                    if (selectedElement && (selectedElement.type === 'text' || selectedElement.type === 'banner')) {
+                    if (selectedElement && (selectedElement.type === 'text' || selectedElement.type === 'banner' || selectedElement.type === 'balloon')) {
                         const content = selectedElement.content || '';
-                        if (/[!^\*\/]|!=/.test(content)) {
+                        if (/[!^\*\/]|!=|\\frac/.test(content)) {
                             const newContent = replaceMathInHtml(content);
                             if (newContent !== content) {
                                 handleContextMenuChange(state.selectedElementId, { content: newContent });
@@ -792,7 +813,11 @@ const Editor = () => {
                         activeEl.setSelectionRange(start, start + replacement.length);
                         activeEl.dispatchEvent(new Event('input', { bubbles: true }));
                     } else {
-                        document.execCommand('insertText', false, replacement);
+                        if (/<[a-z][\s\S]*>/i.test(replacement)) {
+                            document.execCommand('insertHTML', false, replacement);
+                        } else {
+                            document.execCommand('insertText', false, replacement);
+                        }
                         
                         if (activeEl) {
                             activeEl.dispatchEvent(new Event('input', { bubbles: true }));

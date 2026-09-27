@@ -1,5 +1,5 @@
 {
-  "id": "lessons/9195-algebraka1/lesson.json",
+  "id": "lessons/11-algebraka1/lesson.json",
   "title": "algebraka1",
   "slides": [
     {
@@ -1511,8 +1511,8 @@
           "id": "el-1789680452309-4pep2scsw",
           "type": "quiz",
           "content": "Quiz",
-          "x": 58.611111111111114,
-          "y": 64.0625,
+          "x": 55,
+          "y": 63.90625,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -1556,22 +1556,6 @@
             "skin": "comic",
             "showTape": false,
             "manualZ": true
-          }
-        },
-        {
-          "id": "el-1789680464620-dv5ixcbnm",
-          "type": "image",
-          "content": "/src/assets/objects/item_bottle_square_orange.png",
-          "x": 40,
-          "y": 63.4375,
-          "width": 40,
-          "height": 26.420454545454547,
-          "rotation": 0,
-          "scale": 0.38477490236539513,
-          "metadata": {
-            "width": 40,
-            "height": 26.420454545454547,
-            "category": "characters"
           }
         },
         {
@@ -1708,6 +1692,82 @@
             "fontSize": 24,
             "manualZ": true
           }
+        },
+        {
+          "id": "el-1790376315712-wzewhmcjt",
+          "type": "text",
+          "content": "<b>c</b>",
+          "x": 40.833333333333336,
+          "y": 63.59375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 29
+          }
+        },
+        {
+          "id": "el-1790376338338-0-lq710r",
+          "type": "text",
+          "content": "c",
+          "x": 45.50000000000001,
+          "y": 34.25,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790376348236-0-f25y8m",
+          "type": "text",
+          "content": "c",
+          "x": 45.72222222222223,
+          "y": 28.1875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790376354627-0-k79qge",
+          "type": "text",
+          "content": "c",
+          "x": 36.77777777777778,
+          "y": 28.21875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790376362465-0-rpga3y",
+          "type": "text",
+          "content": "c",
+          "x": 37,
+          "y": 34.34375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
         }
       ],
       "order": 10,
@@ -1719,8 +1779,8 @@
   ],
   "author": "User",
   "createdAt": "2026-08-16T14:31:56.022Z",
-  "updatedAt": "2026-09-17T21:50:50.626Z",
-  "path": "lessons/9195-algebraka1/lesson.json",
+  "updatedAt": "2026-09-25T22:46:40.188Z",
+  "path": "lessons/11-algebraka1/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_game.png",
@@ -1732,10 +1792,10 @@
     }
   },
   "visibleInFeed": false,
-  "name": "9195-algebraka1",
+  "name": "11-algebraka1",
   "type": "file",
   "visible": true,
-  "order": 9195,
+  "order": 11,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -1746,11 +1806,7 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1789680441579
-  },
+  "progress": null,
   "titlecardFrame": {
     "zoom": 1,
     "x": 0,

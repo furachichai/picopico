@@ -488,6 +488,31 @@ export default function lessonManagerPlugin() {
                             // Rename to final
                             tempNames.forEach(t => fs.renameSync(t.tempPath, t.finalPath));
 
+                            // Update banners beforeLesson paths if matching renamed lessons
+                            const bannersFile = path.resolve(process.cwd(), 'lessons', 'banners.json');
+                            if (fs.existsSync(bannersFile)) {
+                                try {
+                                    let banners = JSON.parse(fs.readFileSync(bannersFile, 'utf-8'));
+                                    let modified = false;
+                                    tempNames.forEach(t => {
+                                        const oldRel = `lessons/${path.basename(t.oldPath)}/lesson.json`;
+                                        const newRel = `lessons/${path.basename(t.finalPath)}/lesson.json`;
+                                        banners = banners.map(b => {
+                                            if (b.beforeLesson === oldRel) {
+                                                modified = true;
+                                                return { ...b, beforeLesson: newRel };
+                                            }
+                                            return b;
+                                        });
+                                    });
+                                    if (modified) {
+                                        fs.writeFileSync(bannersFile, JSON.stringify(banners, null, 2));
+                                    }
+                                } catch (be) {
+                                    console.error('Error updating banners during reorder:', be);
+                                }
+                            }
+
                             syncPublicLessonsData();
 
                             res.statusCode = 200;

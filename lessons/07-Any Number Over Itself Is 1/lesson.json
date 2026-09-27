@@ -3,6 +3,29 @@
   "title": "Any Number Over Itself Is 1",
   "slides": [
     {
+      "id": "slide-1790374805706",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790374817850-0-cectka",
+          "type": "image",
+          "content": "/src/assets/characters/yara_sprays_camera.png",
+          "x": 63.00000000000001,
+          "y": 93.80357142857143,
+          "width": 40,
+          "height": 30.13392857142857,
+          "rotation": 0,
+          "scale": 6.97766218535334,
+          "metadata": {
+            "width": 40,
+            "height": 30.13392857142857,
+            "flipX": false
+          }
+        }
+      ],
+      "order": 0
+    },
+    {
       "id": "slide-1790102024224",
       "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
       "elements": [
@@ -99,7 +122,7 @@
           }
         }
       ],
-      "order": 0
+      "order": 1
     },
     {
       "id": "slide-1790102116063",
@@ -217,7 +240,7 @@
           }
         }
       ],
-      "order": 1,
+      "order": 2,
       "cartridge": null
     },
     {
@@ -227,7 +250,7 @@
         {
           "id": "el-1790102024425",
           "type": "banner",
-          "content": "For any number n <font color=\"#000000\">≠ 0</font>:<div>\n<b style=\"background-color: rgb(255, 249, 196);\"> n<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">/</span></font>n <font color=\"#000000\">=</font> <font color=\"#000000\">_ </font></b></div>",
+          "content": "For any number n <font color=\"#000000\">≠ 0</font>:<div>\n<b style=\"background-color: rgb(255, 249, 196);\"> <u><font color=\"#000000\"> </font>n<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"> </span></font></u> <font color=\"#000000\">=</font>&nbsp;?</b></div><div><b style=\"background-color: rgb(255, 249, 196);\"><font color=\"#2196f3\">n</font><font color=\"#000000\">      </font></b></div>",
           "x": 50,
           "y": 32.9375,
           "width": 78,
@@ -280,7 +303,7 @@
           }
         }
       ],
-      "order": 2
+      "order": 3
     },
     {
       "id": "slide-1790102024227",
@@ -392,7 +415,7 @@
           }
         }
       ],
-      "order": 3
+      "order": 4
     },
     {
       "id": "slide-1790102024228",
@@ -454,7 +477,7 @@
           }
         }
       ],
-      "order": 4
+      "order": 5
     },
     {
       "id": "slide-1790102024229",
@@ -643,7 +666,7 @@
           }
         }
       ],
-      "order": 5
+      "order": 6
     },
     {
       "id": "slide-1790102024230",
@@ -696,7 +719,7 @@
               "8x",
               "8"
             ],
-            "correctIndex": 3,
+            "correctIndex": 1,
             "correctIndices": [
               3
             ],
@@ -756,7 +779,7 @@
           }
         }
       ],
-      "order": 6
+      "order": 7
     },
     {
       "id": "slide-1790102024231",
@@ -805,7 +828,7 @@
             "fontFamily": "\"Fira Sans\"",
             "options": [
               "It's always 8, no matter what",
-              "n/n = 1, so it's just x × 1",
+              "n/n = 1, so it's just 1 × x",
               "The x's are added together",
               "x always equals 8"
             ],
@@ -869,18 +892,36 @@
           }
         }
       ],
-      "order": 7
+      "order": 8
     },
     {
       "id": "slide-1790102024232",
       "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
       "elements": [
         {
+          "id": "el-1790103835310-956ffnziy",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 25.555555555555564,
+          "y": 72.8125,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 2.3758769495406926,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false,
+            "locked": true
+          }
+        },
+        {
           "id": "el-1790102025025",
           "type": "balloon",
-          "content": "New rule:<div><br><div><u> a× x </u> = x.</div></div>",
-          "x": 32.22222222222223,
-          "y": 27.578125,
+          "content": "New rule:<div><br></div><div> <u>a·x</u>  = x</div>",
+          "x": 40.277777777777786,
+          "y": 28.828125,
           "width": 65,
           "height": 20.78125,
           "rotation": 0,
@@ -892,8 +933,8 @@
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 20,
-              "y": 120
+              "x": -2,
+              "y": 117
             },
             "manualZ": true,
             "groupId": "group-1790103904682-r1760z"
@@ -903,8 +944,8 @@
           "id": "el-1790103815227-4n8nser8y",
           "type": "image",
           "content": "/src/assets/objects/item_balloon_octo002.png",
-          "x": 74.16666666666666,
-          "y": 51.5625,
+          "x": 74.44444444444443,
+          "y": 52.34375,
           "width": 40,
           "height": 14.671658986175116,
           "rotation": 0,
@@ -923,8 +964,8 @@
           "id": "el-1790103404249-rxn4v8l3w",
           "type": "text",
           "content": "a",
-          "x": 27.500000000000007,
-          "y": 33.4375,
+          "x": 35.555555555555564,
+          "y": 34.6875,
           "width": 10,
           "height": 5,
           "rotation": 0,
@@ -940,8 +981,8 @@
           "id": "el-1790103782884-pd312w84a",
           "type": "text",
           "content": "Nothing mysterious. Just multiplying by 1.",
-          "x": 77.77777777777777,
-          "y": 50,
+          "x": 78.05555555555554,
+          "y": 50.78125,
           "width": 23.61681892276784,
           "height": 5,
           "rotation": 0,
@@ -952,26 +993,9 @@
             "fontSize": 10,
             "groupId": "group-1790103914926-ghs4vh"
           }
-        },
-        {
-          "id": "el-1790103835310-956ffnziy",
-          "type": "image",
-          "content": "/src/assets/characters/yara_avatar_smirk.png",
-          "x": 24.72222222222223,
-          "y": 73.4375,
-          "width": 40,
-          "height": 24.11944869831547,
-          "rotation": 0,
-          "scale": 2.3758769495406926,
-          "metadata": {
-            "width": 40,
-            "height": 24.11944869831547,
-            "category": "characters",
-            "hasShadow": false
-          }
         }
       ],
-      "order": 8
+      "order": 9
     },
     {
       "id": "slide-1790102024233",
@@ -1033,7 +1057,7 @@
           }
         }
       ],
-      "order": 9
+      "order": 10
     },
     {
       "id": "slide-1790102024234",
@@ -1061,7 +1085,7 @@
           }
         }
       ],
-      "order": 10
+      "order": 11
     },
     {
       "id": "slide-1790112700792",
@@ -1125,7 +1149,7 @@
           }
         }
       ],
-      "order": 11
+      "order": 12
     },
     {
       "id": "slide-1790113375117",
@@ -1171,13 +1195,13 @@
           }
         }
       ],
-      "order": 12
+      "order": 13
     },
     {
       "id": "slide-1790113431367",
       "background": "#E1F5FE",
       "elements": [],
-      "order": 13,
+      "order": 14,
       "cartridge": {
         "type": "AlgeBros",
         "config": {
@@ -1190,7 +1214,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-22T18:21:11.740Z",
-  "updatedAt": "2026-09-25T15:15:01.835Z",
+  "updatedAt": "2026-09-25T22:20:35.747Z",
   "path": "lessons/03-Any Number Over Itself Is 1/lesson.json",
   "textPreset": null,
   "_snapshots": [
@@ -1219,7 +1243,7 @@
   "name": "03-Any Number Over Itself Is 1",
   "type": "file",
   "visible": true,
-  "visibleInFeed": true,
+  "visibleInFeed": false,
   "order": 3,
   "status": "active",
   "statusIcon": {
@@ -1231,10 +1255,14 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null,
+  "progress": {
+    "lastSlideIndex": 2,
+    "completed": false,
+    "lastPlayed": 1790374372571
+  },
   "titlecardFrame": {
-    "zoom": 2.2,
-    "x": 18.9,
-    "y": -22.2
+    "zoom": 1,
+    "x": 0,
+    "y": -26
   }
 }
