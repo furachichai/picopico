@@ -6,7 +6,7 @@
   "bannerBorderColor": "#42DEE8",
   "buttonTitleColor": "#FFFFFF",
   "titleShadowColor": "#B81EAD",
-  "buttonTitleFontSize": "1.6rem",
+  "buttonTitleFontSize": "1.2rem",
   "buttonOverlayBg": "rgba(0, 86, 214, 0.1)",
-  "buttonOverlayHeight": 33
+  "buttonOverlayHeight": 29
 }

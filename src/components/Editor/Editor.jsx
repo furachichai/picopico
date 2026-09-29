@@ -1071,8 +1071,35 @@ const Editor = () => {
                 }
             }
 
+            // Command + Arrow keys: Change z-sort (layer order) of selected element(s)
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                const selectedIds = (state.selectedElementIds && state.selectedElementIds.length > 0)
+                    ? state.selectedElementIds
+                    : (state.selectedElementId ? [state.selectedElementId] : []);
+                const validIds = selectedIds.filter(id => id && id !== 'background' && id !== 'cartridge');
+
+                if (validIds.length > 0) {
+                    e.preventDefault();
+                    const direction = e.key === 'ArrowUp' ? 'forward' : 'backward';
+                    const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
+                    if (currentSlide) {
+                        const elements = currentSlide.elements;
+                        const sortedValidIds = [...validIds].sort((a, b) => {
+                            const indexA = elements.findIndex(el => el.id === a);
+                            const indexB = elements.findIndex(el => el.id === b);
+                            return direction === 'forward' ? indexB - indexA : indexA - indexB;
+                        });
+                        sortedValidIds.forEach(id => {
+                            dispatch({ type: 'REORDER_ELEMENT', payload: { elementId: id, direction } });
+                        });
+                    }
+                    return;
+                }
+            }
+
             // Arrow keys: move selected element(s) / group, or navigate slides if nothing selected
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                if (e.metaKey || e.ctrlKey) return;
                 const currentSlide = state.lesson.slides.find(s => s.id === state.currentSlideId);
                 const rawSelectedIds = (state.selectedElementIds && state.selectedElementIds.length > 0)
                     ? state.selectedElementIds

@@ -64,6 +64,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         });
     };
     const handleAddBanner = () => {
+        const preset = state.lesson?.textPreset;
         dispatch({
             type: 'ADD_ELEMENT',
             payload: {
@@ -76,11 +77,11 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                 metadata: {
                     width: 51,
                     height: 12.5,
-                    fontFamily: '"Bangers", cursive, sans-serif',
-                    fontSize: 26,
+                    fontFamily: preset?.banner?.fontFamily || '"Fredoka", sans-serif',
+                    fontSize: preset?.banner?.fontSize || 26,
                     fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    color: '#00b0ff',
+                    fontWeight: preset?.banner?.fontWeight || '600',
+                    color: preset?.banner?.color || '#000000',
                     textAlign: 'center',
                     backgroundColor: '#ffffff',
                     borderColor: '#000000',

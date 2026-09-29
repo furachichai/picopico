@@ -1,10 +1,10 @@
 {
-  "id": "lessons/01-Types of variables/lesson.json",
+  "id": "lessons/04-Types of variables/lesson.json",
   "title": "Types of variables",
   "titlecardFrame": {
     "zoom": 1,
     "x": 0,
-    "y": -34.8
+    "y": -32.4
   },
   "slides": [
     {
@@ -55,7 +55,7 @@
         {
           "id": "el-1790278231291-0-1xl3z4",
           "type": "banner",
-          "content": "<div><br></div>DAYS WITHOUT AN ACCIDENT:<div><font color=\"#000000\">0</font></div><div><br></div>",
+          "content": "<div><br></div>DAYS WITHOUT AN ACCIDENT:<div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">3</span></font></div><div><br></div>",
           "x": 30.500000000000007,
           "y": 50.65625,
           "width": 51,
@@ -209,11 +209,11 @@
           "id": "el-1790277523422-0-bq0w60",
           "type": "image",
           "content": "/src/assets/characters/pesto_writes_crayon.png",
-          "x": 60.279947916666664,
-          "y": 66.71875,
+          "x": 56.66883680555555,
+          "y": 66.40625,
           "width": 40,
           "height": 29.003322259136212,
-          "rotation": -7.90727807901321,
+          "rotation": -16.456803010316293,
           "scale": 1.2427422722627655,
           "metadata": {
             "width": 40,
@@ -221,6 +221,24 @@
             "flipX": true,
             "hasShadow": false,
             "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790688235544-jn9eitmic",
+          "type": "text",
+          "content": "0",
+          "x": 26.388888888888875,
+          "y": 55.625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 40,
+            "fontWeight": "bold",
+            "textTransform": "uppercase"
           }
         }
       ],
@@ -1011,7 +1029,7 @@
         {
           "id": "el-1790276373762",
           "type": "balloon",
-          "content": "Like <b>x</b> = the amount of times that I hacked into crypto wallets.",
+          "content": "Like <b>x</b> = the amount of times that I <b>hacked</b> into crypto wallets.",
           "x": 26.52777777777778,
           "y": 44.21875,
           "width": 51.388888888888886,
@@ -1128,7 +1146,7 @@
         {
           "id": "el-1790465435149-nd0w96b1v",
           "type": "balloon",
-          "content": "<div><b> </b>Here's a hint.</div><div><br></div><b>x</b> is the number of non-consensual borrowing from billionaires<div> that I did last year.</div>",
+          "content": "<div><b> </b>Here's a hint.</div><div><br></div><b>x</b> is the number of non-consensual <b>borrowing</b> from billionaires<div> that I did last year.</div>",
           "x": 46.666666666666664,
           "y": 27.890625000000004,
           "width": 76.11111111111111,
@@ -1435,7 +1453,7 @@
         {
           "id": "el-1790276373861",
           "type": "balloon",
-          "content": "<b>x</b> i called an <b>unknown</b> variable.<div><br></div><div>Now that I <b>know</b> it,</div><div>I wish I didn't.</div>",
+          "content": "<b>x</b> is called an <b>unknown</b> variable.<div><br></div><div>Now that I <b>know</b> it,</div><div>I wish I didn't.</div>",
           "x": 54.02777777777778,
           "y": 42.8125,
           "width": 81.94444444444444,
@@ -1793,7 +1811,7 @@
               "Changing (changes as time passes)",
               "Constant (stuck at 100)"
             ],
-            "correctIndex": 0,
+            "correctIndex": 1,
             "correctIndices": [
               0
             ],
@@ -2527,8 +2545,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-24T18:59:24.845Z",
-  "updatedAt": "2026-09-27T02:41:13.395Z",
-  "path": "lessons/01-Types of variables/lesson.json",
+  "updatedAt": "2026-09-29T13:25:00.466Z",
+  "path": "lessons/04-Types of variables/lesson.json",
   "textPreset": null,
   "_snapshots": [
     {
@@ -2553,11 +2571,11 @@
       "description": ""
     }
   },
-  "name": "01-Types of variables",
+  "name": "04-Types of variables",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,
-  "order": 1,
+  "order": 4,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -2569,8 +2587,8 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 14,
+    "lastSlideIndex": 0,
     "completed": false,
-    "lastPlayed": 1790465805454
+    "lastPlayed": 1790534897499
   }
 }

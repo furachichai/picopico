@@ -609,7 +609,7 @@ const LessonsPage = () => {
                                             <img src={resolveAssetUrl(banner.leftImage)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
                                     ) : null}
-                                    <span style={{ fontWeight: 900, fontSize: '0.95rem', letterSpacing: '1px', textTransform: 'uppercase', color: banner.textColor || '#1E293B' }}>
+                                    <span style={{ fontFamily: "'Fredoka', 'Outfit', sans-serif", fontWeight: 700, fontSize: '0.95rem', letterSpacing: '1px', textTransform: 'uppercase', color: banner.textColor || '#000000' }}>
                                         🏷️ {banner.title}
                                     </span>
                                     {banner.rightImage ? (

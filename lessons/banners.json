@@ -16,7 +16,7 @@
     "leftImage": "/src/assets/characters/wizard stirs cauldron.png",
     "rightImage": "",
     "backgroundColor": "#BAE6FD",
-    "textColor": "#1E293B"
+    "textColor": "#000000"
   },
   {
     "id": "banner-exponents",

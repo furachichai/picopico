@@ -73,6 +73,8 @@ const TitlecardCircleFrame = ({
         <img
           src={`/assets/graphics/${icon || 'icon_textbook.png'}`}
           alt=""
+          loading="lazy"
+          decoding="async"
           style={{
             width: shape === 'circle' ? '70%' : '48%',
             height: shape === 'circle' ? '70%' : '48%',

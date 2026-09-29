@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import './Sticker.css';
 import QuizEditor from './QuizEditor';
-import Balloon from './Balloon';
+import Balloon, { getBalloonTailGeometry } from './Balloon';
 import Banner from './Banner';
 import ResultField from '../ResultField/ResultField';
 import NumberLine from '../NumberLine/NumberLine';
@@ -175,6 +175,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
         const startScale = element.scale;
         const startCurvature = element.metadata?.curvature ?? -40;
         const startCurveSkew = element.metadata?.curveSkew ?? 0;
+        const startTailX = typeof element.metadata?.tailPos?.x === 'number' ? element.metadata.tailPos.x : 20;
+        const startTailY = typeof element.metadata?.tailPos?.y === 'number' ? element.metadata.tailPos.y : 60;
 
         // For rotation calculation
         const rect = stickerRef.current.getBoundingClientRect();
@@ -352,18 +354,74 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                 const rotationDiff = currentAngle - startAngle;
                 onChange(element.id, { rotation: startRotation + rotationDiff });
             } else if (type === 'tail') {
-                // Calculate relative position for tail
-                // We need to account for rotation and scale to make it intuitive, but for now simple relative
-                const dx = (moveCoords.x - startX) / element.scale; // Adjust for scale
-                const dy = (moveCoords.y - startY) / element.scale;
-
-                const currentTailX = element.metadata?.tailPos?.x || 0;
-                const currentTailY = element.metadata?.tailPos?.y || 60;
+                const localDelta = rotatePoint(moveCoords.x - startX, moveCoords.y - startY, -startRotation);
+                const localDx = localDelta.x / startScale;
+                const localDy = localDelta.y / startScale;
 
                 onChange(element.id, {
                     metadata: {
                         ...element.metadata,
-                        tailPos: { x: currentTailX + dx, y: currentTailY + dy }
+                        tailPos: { x: startTailX + localDx, y: startTailY + localDy }
+                    }
+                });
+            } else if (type === 'tailOrigin') {
+                const dxScreen = moveCoords.x - centerX;
+                const dyScreen = moveCoords.y - centerY;
+
+                const localDelta = rotatePoint(dxScreen, dyScreen, -startRotation);
+                const localX = localDelta.x / startScale;
+                const localY = localDelta.y / startScale;
+
+                const parentW = 360;
+                const parentH = 640;
+                const w = element.width ? (element.width / 100) * parentW : 200;
+                const h = element.height ? (element.height / 100) * parentH : 100;
+
+                const cx = w / 2;
+                const cy = h / 2;
+
+                const padding = 10;
+                const left = padding;
+                const right = w - padding;
+                const top = padding;
+                const bottom = h - padding;
+
+                const mx = cx + localX;
+                const my = cy + localY;
+
+                const normX = (mx - cx) / (w / 2);
+                const normY = (my - cy) / (h / 2);
+
+                let edge;
+                let offset;
+
+                if (Math.abs(normX) > Math.abs(normY)) {
+                    if (normX < 0) {
+                        edge = 'left';
+                    } else {
+                        edge = 'right';
+                    }
+                    offset = (my - top) / (bottom - top);
+                } else {
+                    if (normY < 0) {
+                        edge = 'top';
+                    } else {
+                        edge = 'bottom';
+                    }
+                    offset = (mx - left) / (right - left);
+                }
+
+                offset = Math.max(0, Math.min(1, offset));
+                if (Math.abs(offset - 0.5) < 0.04) {
+                    offset = 0.5;
+                }
+
+                const angle = Math.atan2(localY, localX);
+
+                onChange(element.id, {
+                    metadata: {
+                        ...element.metadata,
+                        tailOrigin: { edge, offset, angle }
                     }
                 });
             } else if (['resize-n', 'resize-s', 'resize-e', 'resize-w'].includes(type)) {
@@ -845,28 +903,80 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             onChange={onChange}
                             isSelected={isSelected}
                         />
-                        {isSelected && !translationMode && !element.metadata?.locked && (
-                            <div
-                                className="handle tail-handle"
-                                style={{
-                                    position: 'absolute',
-                                    left: '50%',
-                                    top: '50%',
-                                    transform: `translate(${element.metadata?.tailPos?.x || 0}px, ${element.metadata?.tailPos?.y || 60}px) scale(${1 / element.scale})`,
-                                }}
-                                onMouseDown={(e) => handleStart(e, 'tail')}
-                                onTouchStart={(e) => handleStart(e, 'tail')}
-                            >
-                                <div style={{
-                                    width: '12px',
-                                    height: '12px',
-                                    backgroundColor: '#3b82f6',
-                                    borderRadius: '50%',
-                                    border: '2px solid white',
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                }} />
-                            </div>
-                        )}
+                        {isSelected && !translationMode && !element.metadata?.locked && (() => {
+                            const tailGeo = getBalloonTailGeometry(element);
+                            return (
+                                <>
+                                    {/* Tail Tip Handle (Blue Dot) */}
+                                    <div
+                                        className="handle tail-handle"
+                                        title="Drag tail tip"
+                                        style={{
+                                            position: 'absolute',
+                                            left: '50%',
+                                            top: '50%',
+                                            transform: `translate(${tailGeo.tx - tailGeo.cx}px, ${tailGeo.ty - tailGeo.cy}px) scale(${1 / element.scale})`,
+                                            zIndex: 20,
+                                            width: '26px',
+                                            height: '26px',
+                                            marginLeft: '-13px',
+                                            marginTop: '-13px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'grab',
+                                            touchAction: 'none',
+                                        }}
+                                        onMouseDown={(e) => handleStart(e, 'tail')}
+                                        onTouchStart={(e) => handleStart(e, 'tail')}
+                                    >
+                                        <div style={{
+                                            width: '12px',
+                                            height: '12px',
+                                            backgroundColor: '#3b82f6',
+                                            borderRadius: '50%',
+                                            border: '2px solid white',
+                                            boxShadow: '0 2px 4px rgba(0,0,0,0.25)',
+                                            pointerEvents: 'none',
+                                        }} />
+                                    </div>
+
+                                    {/* Tail Origin Handle (Red Dot on Perimeter) */}
+                                    <div
+                                        className="handle tail-origin-handle"
+                                        title="Drag tail origin around perimeter"
+                                        style={{
+                                            position: 'absolute',
+                                            left: '50%',
+                                            top: '50%',
+                                            transform: `translate(${tailGeo.originRelX}px, ${tailGeo.originRelY}px) scale(${1 / element.scale})`,
+                                            zIndex: 21,
+                                            width: '26px',
+                                            height: '26px',
+                                            marginLeft: '-13px',
+                                            marginTop: '-13px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'grab',
+                                            touchAction: 'none',
+                                        }}
+                                        onMouseDown={(e) => handleStart(e, 'tailOrigin')}
+                                        onTouchStart={(e) => handleStart(e, 'tailOrigin')}
+                                    >
+                                        <div style={{
+                                            width: '14px',
+                                            height: '14px',
+                                            backgroundColor: '#ef4444',
+                                            borderRadius: '50%',
+                                            border: '2px solid white',
+                                            boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                                            pointerEvents: 'none',
+                                        }} />
+                                    </div>
+                                </>
+                            );
+                        })()}
                     </>
                 )}
                 {element.type === 'image' && (
@@ -876,6 +986,8 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             src={resolveAssetUrl(element.content)}
                             alt="sticker"
                             draggable="false"
+                            loading="lazy"
+                            decoding="async"
                             style={{
                                 position: 'relative',
                                 zIndex: 1,

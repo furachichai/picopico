@@ -10,16 +10,50 @@
     },
     {
       "id": "slide-1790516813363",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_009.png\")",
       "elements": [
+        {
+          "id": "el-1790547600023-7vc30s3po",
+          "type": "image",
+          "content": "/src/assets/characters/yara_walks_happy.png",
+          "x": 71.94444444444443,
+          "y": 56.40625,
+          "width": 40,
+          "height": 39.579015544041454,
+          "rotation": 0,
+          "scale": 1.446802856329858,
+          "metadata": {
+            "width": 40,
+            "height": 39.579015544041454,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790547702694-4sqv5f1n8",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_listens_engage.png",
+          "x": 15,
+          "y": 71.71875,
+          "width": 40,
+          "height": 30.035377358490567,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 30.035377358490567,
+            "category": "characters",
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
         {
           "id": "el-1790516813364",
           "type": "balloon",
-          "content": "Why are we walking around town for a math lesson?",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
+          "content": "Why are we <b>walking</b> around for a math <b>lesson</b>?",
+          "x": 22.91666666666666,
+          "y": 36.484375,
+          "width": 41.388888888888886,
+          "height": 26.09375,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -29,19 +63,28 @@
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 15,
-              "y": 83
+              "x": -15,
+              "y": 125
+            },
+            "tailOrigin": {
+              "edge": "bottom",
+              "offset": 0.3062015503875969
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Why are we walking around for a math lesson?"
             }
           }
         },
         {
           "id": "el-1790516813365",
           "type": "balloon",
-          "content": "Because algebra's not in a textbook.<div><br></div><div>It's all around us.</div>",
-          "x": 50,
-          "y": 53.953125,
-          "width": 65,
-          "height": 18.90625,
+          "content": "Because <b>algebra's</b> not in a textbook.<div><br></div><div>It's <b>all</b> <b>around</b> <b>us</b>.</div>",
+          "x": 62.77777777777778,
+          "y": 84.578125,
+          "width": 50.55555555555556,
+          "height": 24.53125,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -51,48 +94,55 @@
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 141,
-              "y": 33
+              "x": 25,
+              "y": -123
+            },
+            "tailOrigin": {
+              "edge": "top",
+              "offset": 0.5895061728395061
+            },
+            "skin": "rect"
+          },
+          "translations": {
+            "en": {
+              "content": "Because algebra's not in a textbook.<div><br></div><div>It's all around us.</div>"
             }
           }
         }
       ],
-      "order": 1
+      "order": 1,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)"
+      }
     },
     {
-      "id": "slide-1790516813364",
-      "background": "#E1F5FE",
+      "id": "slide-1790541078113",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_004.png\")",
       "elements": [
         {
-          "id": "el-1790516813464",
-          "type": "balloon",
-          "content": "Richest country in the world. Most of it belongs to almost nobody.",
-          "x": 44.166666666666664,
-          "y": 76.25,
-          "width": 65,
-          "height": 18.75,
+          "id": "el-1790543185715-0",
+          "type": "image",
+          "content": "/src/assets/objects/whole_bank.png",
+          "x": 33.888888888888886,
+          "y": 30.355239597544344,
+          "width": 40,
+          "height": 30.69577080491132,
           "rotation": 0,
-          "scale": 1,
+          "scale": 1.8382890737592414,
           "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 75,
-              "y": -97
-            }
+            "width": 40,
+            "height": 30.69577080491132
           }
         },
         {
-          "id": "el-1790517582465-j5z17ot0e",
+          "id": "el-1790541079914-aj2qh4dcy",
           "type": "banner",
-          "content": "<div><font color=\"#000000\">P: wealth of the richest person</font></div><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">Q: average wealth of most people</font></div><div><font color=\"#000000\"><br></font></div><font color=\"#000000\">p = Q₁ + Q₂ + ... + Q₉₀</font>",
-          "x": 50,
-          "y": 37.109375,
-          "width": 82.11111111111111,
-          "height": 41.71875,
+          "content": "p = q₁ + q₂ + ... + q₉₀",
+          "x": 62.5,
+          "y": 47.96875,
+          "width": 72.66666666666667,
+          "height": 10.625,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -102,32 +152,65 @@
             "fontSize": 26,
             "fontStyle": "italic",
             "fontWeight": "600",
-            "color": "#00b0ff",
+            "color": "#000000",
             "textAlign": "center",
             "backgroundColor": "#ffffff",
             "borderColor": "#000000",
             "shadow": "grey",
             "hasShadow": true,
             "borderRadius": 20,
-            "skin": "comic",
+            "skin": "signpost",
             "showTape": false,
-            "textTransform": "none"
+            "textTransform": "none",
+            "manualZ": true
+          },
+          "translations": {
+            "en": {
+              "content": "p = q₁ + q₂ + ... + q₉₀"
+            }
           }
-        }
-      ],
-      "order": 2
-    },
-    {
-      "id": "slide-1790516813365",
-      "background": "#E1F5FE",
-      "elements": [
+        },
         {
-          "id": "el-1790516813564",
+          "id": "el-1790547885352-ae2so2u34",
+          "type": "image",
+          "content": "/src/assets/characters/pest_scratches%20head_back.png",
+          "x": 30.277777777777782,
+          "y": 67.8125,
+          "width": 40,
+          "height": 26.422018348623855,
+          "rotation": 0,
+          "scale": 1.3484796647817126,
+          "metadata": {
+            "width": 40,
+            "height": 26.422018348623855,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790635735178-a6z7bul31",
+          "type": "image",
+          "content": "/src/assets/characters/yara_profile_right.png",
+          "x": 94.72222222222223,
+          "y": 90.625,
+          "width": 40,
+          "height": 34.8443579766537,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 34.8443579766537,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790541143402-0-a6kot4",
           "type": "balloon",
-          "content": "One person's money... equals ninety people's money?",
-          "x": 50,
-          "y": 25,
-          "width": 65,
+          "content": "Don't know what this means.",
+          "x": 77.1666666666667,
+          "y": 64.5625,
+          "width": 45.55555555555556,
           "height": 15,
           "rotation": 0,
           "scale": 1,
@@ -138,48 +221,71 @@
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 15,
-              "y": 83
+              "x": -93,
+              "y": -8
+            },
+            "manualZ": true,
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.41570723684210525
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Don't know what this means."
             }
           }
         },
         {
-          "id": "el-1790516813565",
+          "id": "el-1790635688102-0-7lympz",
           "type": "balloon",
-          "content": "Combined. Same total, both sides.",
-          "x": 50,
-          "y": 52,
-          "width": 65,
+          "content": "It's called an <b>equation</b>.",
+          "x": 46.27777777777781,
+          "y": 91.78125,
+          "width": 45.55555555555556,
           "height": 15,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "speaker": "Yara",
+            "speaker": "Pesto",
             "backgroundColor": "#ffffff",
             "color": "#000000",
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 123,
+              "x": 106,
               "y": 7
+            },
+            "tailOrigin": {
+              "edge": "right",
+              "offset": 0.5
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "It's called an <b>equation</b>."
             }
           }
         }
       ],
-      "order": 3
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.42,
+        "brightness": 95
+      }
     },
     {
-      "id": "slide-1790516813366",
-      "background": "#E1F5FE",
+      "id": "slide-1790641140028-1-petpmf",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
-          "id": "el-1790516813664",
+          "id": "el-1790641140028-1fldqfwtz",
           "type": "banner",
-          "content": "<font color=\"#000000\">The </font><font color=\"#2196f3\">TOP 1%</font><font color=\"#000000\"> of </font><font color=\"#2196f3\">RICH</font><font color=\"#000000\"> PEOPLE HAVE AS MUCH AS THE OTHER __% </font><font color=\"#2196f3\">COMBINED</font>",
+          "content": "Algebra is…",
           "x": 50,
-          "y": 28.640625,
+          "y": 22,
           "width": 78,
-          "height": 30.281250000000004,
+          "height": 17,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -198,6 +304,213 @@
             "borderRadius": 20,
             "skin": "comic",
             "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "Algebra is…"
+            }
+          }
+        },
+        {
+          "id": "el-1790641140028-bic5emxr4",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Math with only the letter x",
+              "Math only scientists use",
+              "Math without numbers",
+              "Math where letters stand for numbers"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "Math with only the letter x",
+                  "Math only scientists use",
+                  "Math without numbers",
+                  "Math where letters stand for numbers"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790547937430",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790547942771-0-5e6jgu",
+          "type": "banner",
+          "content": "p = q₁ + q₂ + ... + q₉₀",
+          "x": 53.27777777777778,
+          "y": 24.09375,
+          "width": 72.66666666666667,
+          "height": 10.625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "signpost",
+            "showTape": false,
+            "textTransform": "none"
+          },
+          "translations": {
+            "en": {
+              "content": "p = q₁ + q₂ + ... + q₉₀"
+            }
+          }
+        },
+        {
+          "id": "el-1790547957091-2sumawhn6",
+          "type": "image",
+          "content": "/src/assets/characters/yara_explains_02.png",
+          "x": 21.944444444444443,
+          "y": 60,
+          "width": 40,
+          "height": 63.88392857142857,
+          "rotation": 0,
+          "scale": 1.181101728962588,
+          "metadata": {
+            "width": 40,
+            "height": 63.88392857142857,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790547970663-0-4m8349",
+          "type": "balloon",
+          "content": "This one is about <b>wealth</b> <b>disparity</b> in the USA.",
+          "x": 69.66666666666666,
+          "y": 42.984375,
+          "width": 45.55555555555556,
+          "height": 18.59375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -124,
+              "y": -55
+            },
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.43623737373737376
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "This one is about <b>wealth</b> <b>disparity</b> in the USA."
+            }
+          }
+        },
+        {
+          "id": "el-1790547997002-0-ucqi0k",
+          "type": "balloon",
+          "content": "It uses <b>letters &amp; numbers</b> to describe <b>relationships</b>.",
+          "x": 61.27777777777777,
+          "y": 73.71875,
+          "width": 45.55555555555556,
+          "height": 23.4375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -60,
+              "y": -88
+            },
+            "tailOrigin": {
+              "edge": "top",
+              "offset": 0.3951822916666667
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "It uses <b>letters &amp; numbers</b> to describe <b>relationships</b>."
+            }
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {
+        "opacity": 0.5
+      }
+    },
+    {
+      "id": "slide-1790516813366",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
+      "elements": [
+        {
+          "id": "el-1790516813664",
+          "type": "banner",
+          "content": "<font color=\"#000000\">The </font><font color=\"#2196f3\">TOP 1%</font><font color=\"#000000\"> of </font><font color=\"#2196f3\">RICH</font><font color=\"#000000\"> PEOPLE HAVE AS MUCH AS THE BOTTOM ___% </font><font color=\"#2196f3\">COMBINED</font>",
+          "x": 50,
+          "y": 33.171875,
+          "width": 78,
+          "height": 30.281250000000004,
+          "rotation": 0,
+          "scale": 1.0645935143811833,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#000000\">The </font><font color=\"#2196f3\">TOP 1%</font><font color=\"#000000\"> of </font><font color=\"#2196f3\">RICH</font><font color=\"#000000\"> PEOPLE HAVE AS MUCH AS THE BOTTOM ___% </font><font color=\"#2196f3\">COMBINED</font>"
+            }
           }
         },
         {
@@ -216,89 +529,134 @@
               "9",
               "19",
               "90",
-              "900"
+              "29"
             ],
             "correctIndex": 2,
             "correctIndices": [
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "9",
+                  "19",
+                  "90",
+                  "29"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
           }
-        }
-      ],
-      "order": 4
-    },
-    {
-      "id": "slide-1790516813367",
-      "background": "#E1F5FE",
-      "elements": [
+        },
         {
-          "id": "el-1790516813764",
-          "type": "balloon",
-          "content": "That's the richest country on Earth. Let's see the rest of the world.",
+          "id": "el-1790545251920-55s80is14",
+          "type": "text",
+          "content": "🤑",
           "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
+          "y": 52.96875,
+          "width": 10,
+          "height": 5,
           "rotation": 0,
-          "scale": 1,
+          "scale": 5.412456117269466,
           "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          },
+          "translations": {
+            "en": {
+              "content": "🤑"
             }
           }
         }
       ],
-      "order": 5
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.48
+      }
     },
     {
-      "id": "slide-1790516813368",
-      "background": "#E1F5FE",
+      "id": "slide-1790516813365",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
       "elements": [
         {
-          "id": "el-1790516813864",
-          "type": "balloon",
-          "content": "Grew up two streets from here.",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
+          "id": "el-1790548210482-0-uciqq9",
+          "type": "banner",
+          "content": "p = q₁ + q₂ + ... + q₉₀",
+          "x": 70.72222222222221,
+          "y": 48.65625,
+          "width": 72.66666666666667,
+          "height": 10.625,
+          "rotation": 0,
+          "scale": 0.6273048489082119,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "signpost",
+            "showTape": false,
+            "textTransform": "none",
+            "manualZ": true
+          },
+          "translations": {
+            "en": {
+              "content": "p = q₁ + q₂ + ... + q₉₀"
+            }
+          }
+        },
+        {
+          "id": "el-1790548244712-zmvssw7da",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 84.44444444444444,
+          "y": 85,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 1.4776418919429948,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790550192856-0-f986tn",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_cant_believe_it.png",
+          "x": 25.500000000000004,
+          "y": 55.220978079490294,
+          "width": 40,
+          "height": 43.42718446601942,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
+            "width": 40,
+            "height": 43.42718446601942
           }
-        }
-      ],
-      "order": 6
-    },
-    {
-      "id": "slide-1790516813369",
-      "background": "#E1F5FE",
-      "elements": [
+        },
         {
-          "id": "el-1790516813964",
+          "id": "el-1790516813564",
           "type": "balloon",
-          "content": "Different prices for men and women?",
-          "x": 50,
-          "y": 25,
+          "content": "The richer 1% in the US has almost <b>as much money as everybody else combined</b>?",
+          "x": 35.27777777777777,
+          "y": 26.40625,
           "width": 65,
-          "height": 15,
+          "height": 22.5,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -308,19 +666,110 @@
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 15,
-              "y": 83
+              "x": -18,
+              "y": 86
             }
+          },
+          "translations": {
+            "en": {
+              "content": "The richer 1% in the US has almost <b>as much money as everybody else combined</b>?"
+            }
+          }
+        },
+        {
+          "id": "el-1790516813565",
+          "type": "balloon",
+          "content": "Yup.<div><br><div><b>Algebra</b> allows us to <b>research</b> and <b>explain</b> things like that.</div></div>",
+          "x": 31.66666666666667,
+          "y": 86.6875,
+          "width": 47.77777777777778,
+          "height": 27.500000000000004,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 113,
+              "y": 2
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Yup.<div><br><div><b>Algebra</b> allows us to <b>research</b> and <b>explain</b> things like that.</div></div>"
+            }
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {
+        "opacity": 0.48
+      }
+    },
+    {
+      "id": "slide-1790516813369",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_010.png\")",
+      "elements": [
+        {
+          "id": "el-1790543543986-m1qvix76y",
+          "type": "banner",
+          "content": "w = 0.8m",
+          "x": 55,
+          "y": 32.96875,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "signpost",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "w = 0.8m"
+            }
+          }
+        },
+        {
+          "id": "el-1790548596822-v6a1zr82s",
+          "type": "image",
+          "content": "/src/assets/characters/yara_arms_crossed.png",
+          "x": 86.11111111111111,
+          "y": 105.15625,
+          "width": 40,
+          "height": 56.06404958677687,
+          "rotation": 0,
+          "scale": 1.8473223606481202,
+          "metadata": {
+            "width": 40,
+            "height": 56.06404958677687,
+            "category": "characters"
           }
         },
         {
           "id": "el-1790516813965",
           "type": "balloon",
-          "content": "Just like paychecks.",
-          "x": 50,
-          "y": 52,
+          "content": "In this equation,&nbsp;<div><b><font color=\"#2196f3\">w</font></b> means <b>women's</b> <b>salaries</b> &amp;<div><b><font color=\"#2196f3\">m</font></b> <b>men's</b> salaries.</div></div>",
+          "x": 33.88888888888889,
+          "y": 69.5,
           "width": 65,
-          "height": 15,
+          "height": 20.9375,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -333,52 +782,39 @@
               "x": 131,
               "y": 30
             }
+          },
+          "translations": {
+            "en": {
+              "content": "In this equation,&nbsp;<div><b><font color=\"#2196f3\">w</font></b> means <b>women's</b> <b>salaries</b> &amp;<div><b><font color=\"#2196f3\">m</font></b> <b>men's</b> salaries.</div></div>"
+            }
           }
         }
       ],
-      "order": 7
+      "order": 7,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      }
     },
     {
-      "id": "slide-1790516813370",
-      "background": "#E1F5FE",
+      "id": "slide-1790516813371",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_003.png\")",
       "elements": [
         {
-          "id": "el-1790516814064",
-          "type": "balloon",
-          "content": "For the same work, she gets 20 less.",
+          "id": "el-1790516814164",
+          "type": "banner",
+          "content": "For the <font color=\"#000000\">same</font> <font color=\"#000000\">work</font>, a <font color=\"#000000\">man</font> here earns <font color=\"#000000\">100</font>.<div><br></div><div>How much does a <font color=\"#000000\">woman</font> earn?</div>",
           "x": 50,
-          "y": 62.65625,
-          "width": 65,
-          "height": 15,
+          "y": 33.5625,
+          "width": 75.22222222222223,
+          "height": 34.5,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
-          }
-        },
-        {
-          "id": "el-1790518163584-ml78zym7w",
-          "type": "banner",
-          "content": "<font color=\"#000000\">m = what a man earns for a job.</font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><br></span></font><div><font color=\"#000000\">w = what a woman gets for the </font><font color=\"#2196f3\">same</font><font color=\"#000000\"> job.</font><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">W = 0.8M</font></div></div></div>",
-          "x": 50,
-          "y": 32.578125,
-          "width": 48.52668617632765,
-          "height": 20.765596565140303,
-          "rotation": 0,
-          "scale": 1.9092693280672015,
-          "metadata": {
-            "width": 51,
-            "height": 12.5,
+            "width": 78,
+            "height": 17,
             "fontFamily": "\"Fredoka\", sans-serif",
-            "fontSize": 12,
+            "fontSize": 24,
             "fontStyle": "italic",
             "fontWeight": "600",
             "color": "#00b0ff",
@@ -391,41 +827,11 @@
             "skin": "comic",
             "showTape": false,
             "textTransform": "none"
-          }
-        }
-      ],
-      "order": 8
-    },
-    {
-      "id": "slide-1790516813371",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516814164",
-          "type": "banner",
-          "content": "For the same work, a man here earns <font color=\"#000000\">100</font>. How much does a woman earn?",
-          "x": 50,
-          "y": 27.234375,
-          "width": 78,
-          "height": 27.468750000000004,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 78,
-            "height": 17,
-            "fontFamily": "\"Bangers\", cursive, sans-serif",
-            "fontSize": 28,
-            "fontStyle": "normal",
-            "fontWeight": "normal",
-            "color": "#00b0ff",
-            "textAlign": "center",
-            "backgroundColor": "#ffffff",
-            "borderColor": "#000000",
-            "shadow": "grey",
-            "hasShadow": true,
-            "borderRadius": 20,
-            "skin": "comic",
-            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "For the <font color=\"#000000\">same</font> <font color=\"#000000\">work</font>, a <font color=\"#000000\">man</font> here earns <font color=\"#000000\">100</font>.<div><br></div><div>How much does a <font color=\"#000000\">woman</font> earn?</div>"
+            }
           }
         },
         {
@@ -451,52 +857,125 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
-          }
-        }
-      ],
-      "order": 9
-    },
-    {
-      "id": "slide-1790516813372",
-      "background": "#E1F5FE",
-      "elements": [],
-      "order": 10
-    },
-    {
-      "id": "slide-1790516813373",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516814364",
-          "type": "balloon",
-          "content": "Whatever x is, we've got double.",
-          "x": 42.22222222222222,
-          "y": 77.03125,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "100",
+                  "120",
+                  "80",
+                  "20"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
             }
           }
         },
         {
-          "id": "el-1790518274294-zlwcfkxt7",
+          "id": "el-1790545303226-0-4y4q72",
+          "type": "text",
+          "content": "💰",
+          "x": 14.444444444444443,
+          "y": 50,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 4.0070546941539105,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          },
+          "translations": {
+            "en": {
+              "content": "💰"
+            }
+          }
+        },
+        {
+          "id": "el-1790545385401-0-o7hrzm",
+          "type": "text",
+          "content": "💰",
+          "x": 86.33333333333333,
+          "y": 50,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 4.0070546941539105,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          },
+          "translations": {
+            "en": {
+              "content": "💰"
+            }
+          }
+        },
+        {
+          "id": "el-1790545393672-0-rxd3pb",
+          "type": "text",
+          "content": "💰",
+          "x": 14.666666666666664,
+          "y": 18.3125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 4.0070546941539105,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          },
+          "translations": {
+            "en": {
+              "content": "💰"
+            }
+          }
+        },
+        {
+          "id": "el-1790545404612-0-1hj62z",
+          "type": "text",
+          "content": "💰",
+          "x": 86.05555555555556,
+          "y": 17.375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 4.0070546941539105,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          },
+          "translations": {
+            "en": {
+              "content": "💰"
+            }
+          }
+        }
+      ],
+      "order": 8,
+      "backgroundSettings": {
+        "opacity": 0.54,
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1790549273141",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_008.png\")",
+      "elements": [
+        {
+          "id": "el-1790549296242-mq6fx30lj",
           "type": "banner",
-          "content": "<font color=\"#000000\">x = hunger rate in rich countries</font><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">y = the hunger rate in Oaxaca.</font><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">y = 2x</font></div></div>",
-          "x": 50,
-          "y": 39.0625,
-          "width": 73.77777777777779,
-          "height": 42.5,
+          "content": "",
+          "x": 50.05642361111111,
+          "y": 33.90625,
+          "width": 70.44444444444444,
+          "height": 21.875,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -504,31 +983,193 @@
             "height": 12.5,
             "fontFamily": "\"Fredoka\", sans-serif",
             "fontSize": 26,
-            "fontStyle": "italic",
+            "fontStyle": "normal",
             "fontWeight": "600",
-            "color": "#00b0ff",
+            "color": "#000000",
             "textAlign": "center",
             "backgroundColor": "#ffffff",
             "borderColor": "#000000",
             "shadow": "grey",
             "hasShadow": true,
             "borderRadius": 20,
-            "skin": "comic",
+            "skin": "notebook",
             "showTape": false,
-            "textTransform": "none"
+            "groupId": "group-1790549707699-305yx3"
+          },
+          "translations": {
+            "en": {
+              "content": ""
+            }
+          }
+        },
+        {
+          "id": "el-1790549311124-9ohbyvh5d",
+          "type": "text",
+          "content": "🇫🇮",
+          "x": 30.056423611111107,
+          "y": 29.21875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.7186296902102578,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "groupId": "group-1790549707699-305yx3"
+          },
+          "translations": {
+            "en": {
+              "content": "🇫🇮"
+            }
+          }
+        },
+        {
+          "id": "el-1790549338851-0-df0p5s",
+          "type": "text",
+          "content": "🇰🇷",
+          "x": 30.000868055555557,
+          "y": 38.3125,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.7186296902102578,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "groupId": "group-1790549707699-305yx3"
+          },
+          "translations": {
+            "en": {
+              "content": "🇰🇷"
+            }
+          }
+        },
+        {
+          "id": "el-1790549381660-ho7r4rm2f",
+          "type": "text",
+          "content": "w = 0.87m",
+          "x": 58.11197916666667,
+          "y": 29.84375,
+          "width": 41.11111111111111,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22,
+            "groupId": "group-1790549707699-305yx3"
+          },
+          "translations": {
+            "en": {
+              "content": "w = 0.87m"
+            }
+          }
+        },
+        {
+          "id": "el-1790549402265-0-w2fd9b",
+          "type": "text",
+          "content": "w = 0.70m",
+          "x": 58.33420138888889,
+          "y": 38.46875,
+          "width": 41.11111111111111,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 22,
+            "groupId": "group-1790549707699-305yx3"
+          },
+          "translations": {
+            "en": {
+              "content": "w = 0.70m"
+            }
+          }
+        },
+        {
+          "id": "el-1790549686980-givz71rxr",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 19.72222222222222,
+          "y": 80.46875,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 2.18013781359978,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790550218059-0-02sl1n",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_shocked_001.png",
+          "x": 80.5,
+          "y": 50,
+          "width": 40,
+          "height": 31.183533447684393,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.183533447684393,
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790549447974-wwr2e8kus",
+          "type": "balloon",
+          "content": "Algebra allows us to <b>calculate &amp;</b> <b>compare</b> gender salary gaps <b>between</b> countries.",
+          "x": 70.83333333333334,
+          "y": 79.0625,
+          "width": 55.833333333333336,
+          "height": 23.125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -101,
+              "y": -88
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "top",
+              "offset": 0.07739122928176796
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Algebra allows us to <b>calculate &amp;</b> <b>compare</b> gender salary gaps <b>between</b> countries."
+            }
           }
         }
       ],
-      "order": 11
+      "order": 9,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(103, 232, 249, 0.4)"
+      }
     },
     {
-      "id": "slide-1790516813374",
-      "background": "#E1F5FE",
+      "id": "slide-1790641140028-0-h1n05h",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
-          "id": "el-1790516814464",
+          "id": "el-1790641140028-sg3q0exul",
           "type": "banner",
-          "content": "Rich countries: x. Here: <font color=\"#000000\">2</font>x. What does <font color=\"#000000\">2</font>x mean?",
+          "content": "Why use letters instead of numbers?",
           "x": 50,
           "y": 22,
           "width": 78,
@@ -551,10 +1192,15 @@
             "borderRadius": 20,
             "skin": "comic",
             "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "Why use letters instead of numbers?"
+            }
           }
         },
         {
-          "id": "el-1790516814465",
+          "id": "el-1790641140028-8nh17dz1x",
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
@@ -566,158 +1212,48 @@
           "metadata": {
             "fontFamily": "\"Fira Sans\"",
             "options": [
-              "Half of x",
-              "x plus 2",
-              "Twice as much as x",
-              "x divided by 2"
+              "To make math harder",
+              "To write a rule that works for any number",
+              "Because we ran out of numbers",
+              "Letters look nicer"
             ],
-            "correctIndex": 2,
+            "correctIndex": 1,
             "correctIndices": [
-              2
+              1
             ],
             "quizType": "classic",
-            "visualMode": false
-          }
-        }
-      ],
-      "order": 12
-    },
-    {
-      "id": "slide-1790516813375",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516814564",
-          "type": "balloon",
-          "content": "Twice as likely to go hungry here.",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Pesto",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
-          }
-        },
-        {
-          "id": "el-1790516814565",
-          "type": "balloon",
-          "content": "And that's before no steady job, no land, no safety net if the crop fails.",
-          "x": 50,
-          "y": 55.203125,
-          "width": 65,
-          "height": 21.40625,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 131,
-              "y": 25
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "To make math harder",
+                  "To write a rule that works for any number",
+                  "Because we ran out of numbers",
+                  "Letters look nicer"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
             }
           }
         }
       ],
-      "order": 13
-    },
-    {
-      "id": "slide-1790516813376",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516814664",
-          "type": "balloon",
-          "content": "Wait, back to rich people?",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Pesto",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
-          }
-        },
-        {
-          "id": "el-1790516814665",
-          "type": "balloon",
-          "content": "They never really left.",
-          "x": 50,
-          "y": 52,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 125,
-              "y": 17
-            }
-          }
-        }
-      ],
-      "order": 14
+      "order": 10,
+      "cartridge": null,
+      "backgroundSettings": {}
     },
     {
       "id": "slide-1790516813377",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
       "elements": [
-        {
-          "id": "el-1790516814764",
-          "type": "balloon",
-          "content": "One private jet, flown for one year. Pollutes as much as 300 average people do in their whole lives.",
-          "x": 50,
-          "y": 73.125,
-          "width": 65,
-          "height": 25.937500000000004,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
-          }
-        },
         {
           "id": "el-1790518328503-wzqlr8voz",
           "type": "banner",
-          "content": "l = carbon <font color=\"#000000\">emissions</font> of one average person's <font color=\"#000000\">lifetime</font><div><br></div><div>j = billionaire <font color=\"#000000\">jet</font> emissions for <font color=\"#000000\">one year</font>.<div><br></div><div>j = 300l</div></div>",
+          "content": "<font color=\"#000000\">l</font> = carbon <font color=\"#000000\">emissions</font> of one average person's <font color=\"#000000\">lifetime</font><div><br></div><div><font color=\"#000000\">j</font> = billionaire <font color=\"#000000\">jet</font> emissions for <font color=\"#000000\">one year</font>.</div>",
           "x": 50,
-          "y": 34.53125000000001,
+          "y": 28.515625000000007,
           "width": 67.64487353214687,
-          "height": 26.938926437525,
+          "height": 18.253009752451373,
           "rotation": 0,
           "scale": 1.3851445317999858,
           "metadata": {
@@ -737,32 +1273,86 @@
             "skin": "comic",
             "showTape": false,
             "textTransform": "none"
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#000000\">l</font> = carbon <font color=\"#000000\">emissions</font> of one average person's <font color=\"#000000\">lifetime</font><div><br></div><div><font color=\"#000000\">j</font> = billionaire <font color=\"#000000\">jet</font> emissions for <font color=\"#000000\">one year</font>.</div>"
+            }
+          }
+        },
+        {
+          "id": "el-1790636609288-0-4o1n02",
+          "type": "banner",
+          "content": "j = <font color=\"#2196f3\">300</font>l",
+          "x": 70.49999999999999,
+          "y": 58,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 0.745020804969865,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "black",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "signpost",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "j = <font color=\"#2196f3\">300</font>l"
+            }
+          }
+        },
+        {
+          "id": "el-1790637724912-4cackr5lo",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_suitcase.png",
+          "x": 29.72222222222222,
+          "y": 75.9375,
+          "width": 40,
+          "height": 33.416666666666664,
+          "rotation": 0,
+          "scale": 1.4762764119883478,
+          "metadata": {
+            "width": 40,
+            "height": 33.416666666666664,
+            "category": "characters"
           }
         }
       ],
-      "order": 15
+      "order": 11
     },
     {
-      "id": "slide-1790516813378",
-      "background": "#E1F5FE",
+      "id": "slide-1790543777764",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_001.png\")",
       "elements": [
         {
-          "id": "el-1790516814864",
+          "id": "el-1790543777764-42drbrez3",
           "type": "banner",
-          "content": "According to the sign, <font color=\"#000000\">one year</font> of one <font color=\"#000000\">private jet</font> pollutes as much as how many average <font color=\"#000000\">lifetimes</font>?",
+          "content": "<span style=\"caret-color: rgb(0, 0, 0);\"><font color=\"#000000\">How many </font><font color=\"#2196f3\">years</font><font color=\"#000000\"> does an average </font><font color=\"#2196f3\">person</font><font color=\"#000000\"> need to live to </font><font color=\"#2196f3\">pollute</font><font color=\"#000000\"> as much as a </font><font color=\"#2196f3\">single</font><font color=\"#000000\"> </font><font color=\"#2196f3\">year</font><font color=\"#000000\"> of flying private?</font></span>",
           "x": 50,
-          "y": 28.640625,
-          "width": 78,
-          "height": 30.281250000000004,
+          "y": 36.453125,
+          "width": 84.66666666666667,
+          "height": 43.40625,
           "rotation": 0,
           "scale": 1,
           "metadata": {
             "width": 78,
             "height": 17,
-            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontFamily": "\"Fredoka\", sans-serif",
             "fontSize": 28,
-            "fontStyle": "normal",
-            "fontWeight": "normal",
+            "fontStyle": "italic",
+            "fontWeight": "600",
             "color": "#00b0ff",
             "textAlign": "center",
             "backgroundColor": "#ffffff",
@@ -771,11 +1361,17 @@
             "hasShadow": true,
             "borderRadius": 20,
             "skin": "comic",
-            "showTape": false
+            "showTape": false,
+            "textTransform": "none"
+          },
+          "translations": {
+            "en": {
+              "content": "<span style=\"caret-color: rgb(0, 0, 0);\"><font color=\"#000000\">How many </font><font color=\"#2196f3\">years</font><font color=\"#000000\"> does an average </font><font color=\"#2196f3\">person</font><font color=\"#000000\"> need to live to </font><font color=\"#2196f3\">pollute</font><font color=\"#000000\"> as much as a </font><font color=\"#2196f3\">single</font><font color=\"#000000\"> </font><font color=\"#2196f3\">year</font><font color=\"#000000\"> of flying private?</font></span>"
+            }
           }
         },
         {
-          "id": "el-1790516814865",
+          "id": "el-1790543777764-cukkt4o1h",
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
@@ -790,279 +1386,413 @@
               "1",
               "30",
               "300",
-              "3,000"
+              "3"
             ],
             "correctIndex": 2,
             "correctIndices": [
               2
             ],
             "quizType": "classic",
-            "visualMode": false
-          }
-        }
-      ],
-      "order": 16
-    },
-    {
-      "id": "slide-1790516813379",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516814964",
-          "type": "balloon",
-          "content": "Framed like a trophy. Save this one for last.",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
-          }
-        }
-      ],
-      "order": 17
-    },
-    {
-      "id": "slide-1790516813380",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516815064",
-          "type": "balloon",
-          "content": "Billionaires pay x.<div><br></div><div>Regular workers pay six times that.</div>",
-          "x": 50,
-          "y": 75.546875,
-          "width": 65,
-          "height": 22.03125,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "1",
+                  "30",
+                  "300",
+                  "3"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
             }
           }
         },
         {
-          "id": "el-1790518445977-2uw89108r",
-          "type": "banner",
-          "content": "<font color=\"#000000\">b = a billionaire's tax rate</font><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><br></span></font><div><font color=\"#000000\">w = a regular worker's tax rate.</font><div><font color=\"#000000\"><br></font></div><div><font color=\"#000000\">w = 6b</font></div></div></div>",
-          "x": 56.80555555555556,
-          "y": 35.078125,
-          "width": 71.83333333333334,
-          "height": 32.34375,
+          "id": "el-1790545512489-0-sw47il",
+          "type": "text",
+          "content": "✈️",
+          "x": 50,
+          "y": 58.8125,
+          "width": 10,
+          "height": 5,
           "rotation": 0,
-          "scale": 1,
+          "scale": 5.4458308150670005,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 10
+          },
+          "translations": {
+            "en": {
+              "content": "✈️"
+            }
+          }
+        }
+      ],
+      "order": 12,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.53
+      }
+    },
+    {
+      "id": "slide-1790637926972",
+      "background": "url(\"/src/assets/backgrounds/bkg_beach_001.png\")",
+      "elements": [
+        {
+          "id": "el-1790637927490-0-mb4i5a",
+          "type": "banner",
+          "content": "j = <font color=\"#2196f3\">300</font>l",
+          "x": 71.55555555555554,
+          "y": 28.1875,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 0.745020804969865,
           "metadata": {
             "width": 51,
             "height": 12.5,
             "fontFamily": "\"Fredoka\", sans-serif",
-            "fontSize": 21,
-            "fontStyle": "italic",
-            "fontWeight": "600",
-            "color": "#00b0ff",
-            "textAlign": "center",
-            "backgroundColor": "#ffffff",
-            "borderColor": "#000000",
-            "shadow": "grey",
-            "hasShadow": true,
-            "borderRadius": 20,
-            "skin": "comic",
-            "showTape": false,
-            "textTransform": "none"
-          }
-        }
-      ],
-      "order": 18
-    },
-    {
-      "id": "slide-1790516813381",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516815164",
-          "type": "banner",
-          "content": "Billionaire: x. Worker: <font color=\"#000000\">6</font>x. This means a regular worker pays how many <font color=\"#000000\">times</font> what a billionaire pays?",
-          "x": 50,
-          "y": 29.421875,
-          "width": 78,
-          "height": 31.843750000000004,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 78,
-            "height": 17,
-            "fontFamily": "\"Bangers\", cursive, sans-serif",
-            "fontSize": 28,
+            "fontSize": 26,
             "fontStyle": "normal",
-            "fontWeight": "normal",
-            "color": "#00b0ff",
+            "fontWeight": "600",
+            "color": "#000000",
             "textAlign": "center",
             "backgroundColor": "#ffffff",
             "borderColor": "#000000",
-            "shadow": "grey",
+            "shadow": "black",
             "hasShadow": true,
             "borderRadius": 20,
-            "skin": "comic",
+            "skin": "signpost",
             "showTape": false
-          }
-        },
-        {
-          "id": "el-1790516815165",
-          "type": "quiz",
-          "content": "Quiz",
-          "x": 50,
-          "y": 78.59375,
-          "width": 20,
-          "height": 10,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "fontFamily": "\"Fira Sans\"",
-            "options": [
-              "2 times",
-              "3 times",
-              "6 times",
-              "Half as much"
-            ],
-            "correctIndex": 2,
-            "correctIndices": [
-              2
-            ],
-            "quizType": "classic",
-            "visualMode": false
-          }
-        }
-      ],
-      "order": 19
-    },
-    {
-      "id": "slide-1790516813382",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516815264",
-          "type": "balloon",
-          "content": "So... deal with that, and—",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Pesto",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
+          },
+          "translations": {
+            "en": {
+              "content": "j = <font color=\"#2196f3\">300</font>l"
             }
           }
         },
         {
-          "id": "el-1790516815265",
-          "type": "balloon",
-          "content": "And there's much more money for the people, the climate, the planet.",
-          "x": 50,
-          "y": 56.0625,
-          "width": 65,
-          "height": 23.125,
+          "id": "el-1790637936531-bonwcc4yv",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_falls_in_shock.png",
+          "x": 33.88888888888889,
+          "y": 66.09375,
+          "width": 40,
+          "height": 26.72635135135135,
           "rotation": 0,
-          "scale": 1,
+          "scale": 1.776783659058777,
           "metadata": {
-            "speaker": "Yara",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 131,
-              "y": 13
-            }
-          }
-        }
-      ],
-      "order": 20
-    },
-    {
-      "id": "slide-1790516813383",
-      "background": "#E1F5FE",
-      "elements": [
-        {
-          "id": "el-1790516815364",
-          "type": "balloon",
-          "content": "So algebra's just... reading what's on the sign?",
-          "x": 50,
-          "y": 25,
-          "width": 65,
-          "height": 15,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "speaker": "Pesto",
-            "backgroundColor": "#ffffff",
-            "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
-            "fontSize": 19,
-            "tailPos": {
-              "x": 15,
-              "y": 83
-            }
+            "width": 40,
+            "height": 26.72635135135135,
+            "category": "characters",
+            "flipX": true
           }
         },
         {
-          "id": "el-1790516815365",
+          "id": "el-1790637971698-pllln6f7u",
           "type": "balloon",
-          "content": "It's how you find what a number's actually hiding.",
-          "x": 50,
-          "y": 52,
-          "width": 65,
-          "height": 15,
+          "content": "Can't believe private jets <b>pollute</b> so much!",
+          "x": 78.19444444444443,
+          "y": 59.53125,
+          "width": 38.05555555555556,
+          "height": 25,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "speaker": "Yara",
             "backgroundColor": "#ffffff",
             "color": "#000000",
-            "fontFamily": "\"Fira Sans\"",
+            "fontFamily": "\"Noto Sans\"",
             "fontSize": 19,
             "tailPos": {
-              "x": 132,
-              "y": 18
+              "x": -79,
+              "y": 4
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.6044560185185185,
+              "angle": 2.9428023945047594
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Can't believe private jets <b>pollute</b> so much!"
             }
           }
         }
       ],
-      "order": 21
+      "order": 13,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(134, 239, 172, 0.4)"
+      }
     },
     {
-      "id": "slide-1790516813384",
-      "background": "#E1F5FE",
+      "id": "slide-1790516813376",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_007.png\")",
       "elements": [
         {
-          "id": "el-1790516815464",
+          "id": "el-1790543571013-86h19ntlp",
           "type": "banner",
-          "content": "Algebra is…",
+          "content": "w = 370f",
+          "x": 66.38888888888889,
+          "y": 38.125,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 0.745020804969865,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "black",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "signpost",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "w = 370f"
+            }
+          }
+        },
+        {
+          "id": "el-1790550174446-5",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_shocked_001.png",
+          "x": 20.833333333333336,
+          "y": 43.12405358865781,
+          "width": 40,
+          "height": 31.183533447684393,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 31.183533447684393
+          }
+        },
+        {
+          "id": "el-1790636137950-t88fud7yd",
+          "type": "image",
+          "content": "/src/assets/characters/yara_laughs_tears_off.png",
+          "x": 63.33333333333334,
+          "y": 94.21875,
+          "width": 40,
+          "height": 48.1549815498155,
+          "rotation": 0,
+          "scale": 1.6321747736671424,
+          "metadata": {
+            "width": 40,
+            "height": 48.1549815498155,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790516814664",
+          "type": "balloon",
+          "content": "This one looks very scary.",
+          "x": 43.888888888888886,
+          "y": 22.5,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -30,
+              "y": 65
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "This one looks very scary."
+            }
+          }
+        },
+        {
+          "id": "el-1790516814665",
+          "type": "balloon",
+          "content": "Because it is.<div><br></div><div>Shows how many farts Kranky blows per week.</div>",
+          "x": 22.08333333333333,
+          "y": 66.0625,
+          "width": 47.5,
+          "height": 31.874999999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 98,
+              "y": 43
+            },
+            "skin": "oval",
+            "tailOrigin": {
+              "edge": "right",
+              "offset": 0.6656759510869565,
+              "angle": 0.4081238716194467
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Because it is.<div><br></div><div>Shows how many farts Kranky blows per week.</div>"
+            }
+          }
+        }
+      ],
+      "order": 14,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(192, 132, 252, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1790636310495",
+      "background": "url(\"/src/assets/backgrounds/bkg_forrest_001.png\")",
+      "elements": [
+        {
+          "id": "el-1790636349254-0jmautvel",
+          "type": "image",
+          "content": "/src/assets/characters/yara_ray_gun_yara_rotfl.png",
+          "x": 86.38888888888889,
+          "y": 97.5,
+          "width": 40,
+          "height": 27.354988399071928,
+          "rotation": 32.37543251315304,
+          "scale": 3.9514597850686872,
+          "metadata": {
+            "width": 40,
+            "height": 27.354988399071928,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790636385082-dtfbo7p3s",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_explains_001.png",
+          "x": 8.611111111111112,
+          "y": 30.78125,
+          "width": 40,
+          "height": 25.690909090909088,
+          "rotation": 55.15327240357562,
+          "scale": 2.1489421407319513,
+          "metadata": {
+            "width": 40,
+            "height": 25.690909090909088,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790636399631-49dtu2saq",
+          "type": "balloon",
+          "content": "Do octopi even fart?",
+          "x": 60.833333333333336,
+          "y": 23.75,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -87,
+              "y": 33
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "skin": "rect",
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.6507523148148148,
+              "angle": 2.7757498517683787
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Do octopi even fart?"
+            }
+          }
+        },
+        {
+          "id": "el-1790636430562-rjocddrrj",
+          "type": "balloon",
+          "content": "We pollute way less than a private jet.",
+          "x": 18.88888888888889,
+          "y": 62.265625,
+          "width": 40,
+          "height": 25.46875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 101,
+              "y": 24
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "right",
+              "offset": 0.5614073426573427,
+              "angle": 0.14775014031613554
+            },
+            "skin": "octo"
+          },
+          "translations": {
+            "en": {
+              "content": "We pollute way less than a private jet."
+            }
+          }
+        }
+      ],
+      "order": 15,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(148, 163, 184, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1790641140028-2-oewpmy",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_001.png\")",
+      "elements": [
+        {
+          "id": "el-1790641140028-6t1v886rg",
+          "type": "banner",
+          "content": "Algebra turns data into…",
           "x": 50,
-          "y": 22,
+          "y": 25.90625,
           "width": 78,
           "height": 17,
           "rotation": 0,
@@ -1083,6 +1813,196 @@
             "borderRadius": 20,
             "skin": "comic",
             "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "Algebra turns data into…"
+            }
+          }
+        },
+        {
+          "id": "el-1790641140028-2qyn5g0xk",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "More data",
+              "Letters",
+              "Knowledge",
+              "Confusion"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "More data",
+                  "Letters",
+                  "Knowledge",
+                  "Confusion"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 16,
+      "cartridge": null,
+      "backgroundSettings": {
+        "opacity": 0.48,
+        "grayscale": true,
+        "tintColor": "rgba(163, 230, 53, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1790516813370",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_002.png\")",
+      "elements": [
+        {
+          "id": "el-1790548749528-koy33ssqt",
+          "type": "image",
+          "content": "/src/assets/characters/yara_looking_at_paper_from_behind_1.png",
+          "x": 81.3888888888889,
+          "y": 90.625,
+          "width": 40,
+          "height": 45.03839590443686,
+          "rotation": 0,
+          "scale": 2.029450774571627,
+          "metadata": {
+            "width": 40,
+            "height": 45.03839590443686,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790641736376-0",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_happy_signals.png",
+          "x": 28.138888888888896,
+          "y": 58.81401209677419,
+          "width": 40,
+          "height": 32.90322580645161,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 32.90322580645161,
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790516814064",
+          "type": "balloon",
+          "content": "So <b>algebra</b> is a way to <b>write</b> down <b>relationships</b>?",
+          "x": 36.11111111111111,
+          "y": 25.15625,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -14,
+              "y": 87
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "So <b>algebra</b> is a way to <b>write</b> down <b>relationships</b>?"
+            }
+          }
+        },
+        {
+          "id": "el-1790548703829-0-6tc2cj",
+          "type": "balloon",
+          "content": "Indeed. It allows us to <b>uncover</b> <b>secrets</b>, too.",
+          "x": 68.55555555555556,
+          "y": 39.71875,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "Indeed. It allows us to <b>uncover</b> <b>secrets</b>, too."
+            }
+          }
+        }
+      ],
+      "order": 17,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(253, 164, 175, 0.4)",
+        "opacity": 0.49,
+        "brightness": 60
+      }
+    },
+    {
+      "id": "slide-1790516813384",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790516815464",
+          "type": "banner",
+          "content": "Algebra is…",
+          "x": 50,
+          "y": 26.53125,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          },
+          "translations": {
+            "en": {
+              "content": "Algebra is…"
+            }
           }
         },
         {
@@ -1108,44 +2028,244 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "Math with only the letter x",
+                  "A way to find the unknown number in a real situation",
+                  "Math without numbers",
+                  "Only for billionaires and scientists"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        },
+        {
+          "id": "el-1790638813092-vzu9hy9gt",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_bike.png",
+          "x": 50,
+          "y": 46.25,
+          "width": 40,
+          "height": 28.73177842565598,
+          "rotation": 0,
+          "scale": 1.3065085296572438,
+          "metadata": {
+            "width": 40,
+            "height": 28.73177842565598,
+            "category": "characters",
+            "hasShadow": false
           }
         }
       ],
-      "order": 22
+      "order": 18
     },
     {
-      "id": "slide-1790516813385",
-      "background": "#1a1a2e",
+      "id": "slide-1790640313158-0-1e3h1p",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
-          "id": "el-1790516815564",
-          "type": "collectible",
-          "content": "Every sign in this lesson already had the truth on it. Most people just walk past.\n<b>Algebra unlocks what a number is actually hiding.</b>\nWrite down what you see. Solve for the letter. You're not just getting an answer — you're learning to think.",
+          "id": "el-1790640313158-mlxo85qkv",
+          "type": "banner",
+          "content": "<br> 😅",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          },
+          "translations": {
+            "en": {
+              "content": "<br> 😅"
+            }
+          }
+        },
+        {
+          "id": "el-1790640313158-q8w47xxkn",
+          "type": "banner",
+          "content": "<br>",
           "x": 50,
-          "y": 50,
-          "width": 82,
-          "height": 60,
+          "y": 23.59375,
+          "width": 51,
+          "height": 8.813429994708493,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "<br>"
+            }
+          }
+        },
+        {
+          "id": "el-1790640313158-zeoxpqgao",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 62.578125,
+          "width": 51,
+          "height": 49.242814386072055,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          },
+          "translations": {
+            "en": {
+              "content": "<br>"
+            }
+          }
+        },
+        {
+          "id": "el-1790640313158-h7yf80bez",
+          "type": "text",
+          "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">e = mc²</span></font>",
+          "x": 50,
+          "y": 23.28125,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 14,
+            "color": "#000000"
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">e = mc²</span></font>"
+            }
+          }
+        },
+        {
+          "id": "el-1790640313158-t5tsxpn8p",
+          "type": "text",
+          "content": "<b>Algebra</b> is a way of <b>thinking</b>.<div><br><div>It uses <b>symbols</b> to uncover <b>patterns</b>, solve <b>mysteries</b>, and show how different things are <b>connected</b>.</div><div><br></div><div>It’s a <b>powerful</b> tool for <b>understanding</b> how the <b>world</b> works.</div></div>",
+          "x": 50,
+          "y": 52.96875,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>Algebra</b> is a way of <b>thinking</b>.<div><br><div>It uses <b>symbols</b> to uncover <b>patterns</b>, solve <b>mysteries</b>, and show how different things are <b>connected</b>.</div><div><br></div><div>It’s a <b>powerful</b> tool for <b>understanding</b> how the <b>world</b> works.</div></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1790640313158-renzvmhda",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> WHAT IS ALGEBRA</span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
           "rotation": 0,
           "scale": 1,
           "metadata": {
-            "fontFamily": "\"Outfit\", sans-serif",
-            "fontSize": 18,
-            "color": "#ffffff",
             "textAlign": "center",
-            "backgroundColor": "rgba(255, 255, 255, 0.08)",
-            "borderRadius": "16px",
-            "border": "1px solid rgba(255, 255, 255, 0.15)",
-            "lineHeight": 1.4
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> WHAT IS ALGEBRA</span></font>"
+            }
+          }
+        },
+        {
+          "id": "el-1790640856822-0",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_einstein.png",
+          "x": 50,
+          "y": 81.48437500000001,
+          "width": 40,
+          "height": 32.5,
+          "rotation": 0,
+          "scale": 0.7452029431254578,
+          "metadata": {
+            "width": 40,
+            "height": 32.5,
+            "flipX": true,
+            "hasShadow": false
           }
         }
       ],
-      "order": 23
+      "order": 19,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
     }
   ],
   "author": "User",
   "createdAt": "2026-09-27T13:46:14.019Z",
-  "updatedAt": "2026-09-27T18:15:32.261Z",
+  "updatedAt": "2026-09-29T13:00:15.684Z",
   "path": "lessons/01-Why algebra?/lesson.json",
   "textPreset": null,
   "_snapshots": [
@@ -1171,7 +2291,7 @@
       "description": ""
     }
   },
-  "name": "01-What is Algebra good for-",
+  "name": "01-Why algebra?",
   "type": "file",
   "visible": true,
   "visibleInFeed": true,
@@ -1194,6 +2314,6 @@
   "progress": {
     "lastSlideIndex": 0,
     "completed": false,
-    "lastPlayed": 1790530095157
+    "lastPlayed": 1790642252563
   }
 }

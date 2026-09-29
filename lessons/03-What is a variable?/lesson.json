@@ -1,5 +1,5 @@
 {
-  "id": "lessons/05-What is a variable?/lesson.json",
+  "id": "lessons/03-What is a variable?/lesson.json",
   "title": "What is a variable?",
   "slides": [
     {
@@ -381,7 +381,8 @@
             },
             "shadow": "grey",
             "hasShadow": true,
-            "borderColor": "#000000"
+            "borderColor": "#000000",
+            "manualZ": true
           }
         },
         {
@@ -1580,7 +1581,7 @@
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 83.59375,
+          "y": 82.65625,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -1763,8 +1764,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T17:32:09.502Z",
-  "updatedAt": "2026-09-26T23:05:30.239Z",
-  "path": "lessons/05-What is a variable?/lesson.json",
+  "updatedAt": "2026-09-29T13:34:24.635Z",
+  "path": "lessons/03-What is a variable?/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -1775,12 +1776,12 @@
       "description": ""
     }
   },
-  "name": "05-X variable",
+  "name": "03-What is a variable?",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,
-  "order": 5,
-  "status": "completed",
+  "order": 3,
+  "status": "active",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -1791,9 +1792,9 @@
     "_store": {}
   },
   "progress": {
-    "lastSlideIndex": 16,
-    "completed": true,
-    "lastPlayed": 1790463825880
+    "lastSlideIndex": 12,
+    "completed": false,
+    "lastPlayed": 1790640291713
   },
   "titlecardFrame": {
     "zoom": 1.2,

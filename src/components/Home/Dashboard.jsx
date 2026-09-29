@@ -44,6 +44,7 @@ const t = (key) => {
   return translations[key] || key;
 };
 
+
 const Dashboard = () => {
   const { state, dispatch } = useEditor();
   const { language } = useLanguage();
@@ -532,6 +533,8 @@ const Dashboard = () => {
           position: relative;
           margin: 14px 0 4px 0;
           box-sizing: border-box;
+          content-visibility: auto;
+          contain-intrinsic-size: 320px 80px;
         }
 
         .horizontal-banner {
@@ -570,12 +573,12 @@ const Dashboard = () => {
         }
 
         .horizontal-banner-title {
-          font-family: 'Outfit', 'Inter', sans-serif;
-          font-weight: 900;
+          font-family: 'Fredoka', 'Outfit', sans-serif;
+          font-weight: 700;
           font-size: 1.25rem;
-          letter-spacing: 2px;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
-          color: #1E293B;
+          color: #000000;
           text-align: center;
           flex: 1;
           padding: 0 8px;
@@ -617,6 +620,8 @@ const Dashboard = () => {
           position: relative;
           transition: transform 0.15s ease, box-shadow 0.15s ease;
           overflow: hidden;
+          content-visibility: auto;
+          contain-intrinsic-size: 220px 220px;
         }
 
         .lesson-square-card:active {
@@ -898,7 +903,7 @@ const Dashboard = () => {
                     >
                       {banner.leftImage ? (
                         <div className="horizontal-banner-img" style={{ borderColor: bBorder }}>
-                          <img src={resolveAssetUrl(banner.leftImage)} alt="" />
+                          <img src={resolveAssetUrl(banner.leftImage)} alt="" loading="lazy" decoding="async" />
                         </div>
                       ) : (
                         <div style={{ width: 56, height: 56, visibility: 'hidden', flexShrink: 0 }} />
@@ -906,14 +911,14 @@ const Dashboard = () => {
 
                       <span
                         className="horizontal-banner-title"
-                        style={{ color: banner.textColor || '#1E293B' }}
+                        style={{ color: banner.textColor || '#000000' }}
                       >
                         {banner.title}
                       </span>
 
                       {banner.rightImage ? (
                         <div className="horizontal-banner-img" style={{ borderColor: bBorder }}>
-                          <img src={resolveAssetUrl(banner.rightImage)} alt="" />
+                          <img src={resolveAssetUrl(banner.rightImage)} alt="" loading="lazy" decoding="async" />
                         </div>
                       ) : (
                         <div style={{ width: 56, height: 56, visibility: 'hidden', flexShrink: 0 }} />

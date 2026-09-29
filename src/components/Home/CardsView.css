@@ -78,6 +78,8 @@
   -webkit-user-select: none;
   box-sizing: border-box;
   pointer-events: auto;
+  content-visibility: auto;
+  contain-intrinsic-size: 160px 280px;
 }
 
 .card-thumbnail-box {

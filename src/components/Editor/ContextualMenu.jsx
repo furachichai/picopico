@@ -11,7 +11,7 @@ import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../.
 import { isCharacterElement, setImageShadowPreference } from '../../utils/characterShadow';
 import { evaluateMathExpression, parseFieldExpression } from '../../utils/fieldQuizUtils';
 import { parseBatchCards, optimizeImage } from '../../cartridges/SwipeSorter/swipeSorterUtils';
-import { EMOJI_DATA } from '../../utils/emojiData';
+import { EMOJI_DATA, EMOJI_CATEGORIES } from '../../utils/emojiData';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -144,94 +144,6 @@ function BalanzaInputField({ value, onChange, placeholder, style = {} }) {
     );
 }
 
-const EMOJI_CATEGORIES = [
-    {
-        name: '😀 Smileys & Emotion',
-        items: [
-            '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇',
-            '🥰', '😍', '🤩', '😘', '😗', '😚', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗',
-            '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥',
-            '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶',
-            '🥴', '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕', '😟', '🙁', '😮', '😯',
-            '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣',
-            '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '💀', '☠️', '💩', '🤡',
-            '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '🔥', '✨', '⭐', '🌟', '💥'
-        ]
-    },
-    {
-        name: '👋 People, Gestures & Hearts',
-        items: [
-            '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙',
-            '👈', '👉', '👆', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌',
-            '👐', '🤲', '🤝', '🙏', '✍️', '💪', '🧠', '👀', '👁️', '👅', '👄', '💋', '❤️',
-            '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓',
-            '💗', '💖', '💘', '💝', '🎉', '🎊', '🎈', '🏆', '👑'
-        ]
-    },
-    {
-        name: '📦 Crates & Mystery Boxes (Algebra)',
-        items: ['📦', '📦x', '📦?', '🧰', '🧱', '🪵', '🧺', '💼', '🪨', '💎', '🪙', '🧪', '⚗️', '🔮', '🏺', '🗝️', '💰', '🏆', '👑', '🏅', '🎖️']
-    },
-    {
-        name: '⚖️ Weights (Balanza)',
-        items: ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10', 'w12', 'w15', 'w20', 'w25', 'w50']
-    },
-    {
-        name: '🍎 Fruits, Vegetables & Food',
-        items: [
-            '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🥑',
-            '🍆', '🥕', '🌽', '🥒', '🥦', '🧄', '🧅', '🍄', '🥜', '🌰', '🍞', '🥐', '🥖', '🥨', '🥞', '🧇', '🧀', '🍖',
-            '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', '🌮', '🌯', '🫔', '🥗', '🍲', '🍜', '🍝', '🍠', '🍣', '🍤',
-            '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍿', '☕', '🍵', '🧃', '🥤'
-        ]
-    },
-    {
-        name: '🐶 Animals & Wildlife',
-        items: [
-            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦',
-            '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐜', '🦗', '🕷️', '🐢',
-            '🐍', '🦎', '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍',
-            '🦧', '🦣', '🐘', '🦛', '🦏', '🐪', '🐫', '🦒', '🦘', '🦬', '🐃', '🐂', '🐄', '🐎', '🐖', '🐏', '🐑', '🦙', '🐐', '🦌'
-        ]
-    },
-    {
-        name: '🎈 Objects, Sports & Toys',
-        items: [
-            '📦', '📦x', '📦?', '🎈', '🎁', '💎', '⭐', '🌟', '💥', '🔥', '✨', '⚡', '⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🥏',
-            '🎱', '🪀', '🏓', '🏸', '🏒', '🥊', '🥋', '🛹', '🛼', '🚗', '🚕', '🚙', '🚌', '🏎️', '🚓', '🚑', '🚒', '🚐',
-            '🛻', '🚚', '🚛', '🚜', '🛵', '🏍️', '🛺', '🚲', '🛴', '🚀', '🛸', '🚁', '✈️', '⛵', '🚤', '🚢', '🔔', '🔑',
-            '🎨', '🎲', '🎯', '🧸', '💡', '📚', '✏️', '🖍️', '🖌️', '📏', '📐', '✂️', '📌', '📎', '🔒', '🔓', '🧲', '🔭', '🔬', '🕹️', '🎮', '🧩', '🎸', '🎹', '🎺', '🎻', '🥁'
-        ]
-    },
-    {
-        name: '🌸 Nature, Plants & Weather',
-        items: [
-            '🌸', '🌺', '🌻', '🌹', '🌷', '🌼', '💐', '🌾', '🌿', '🍀', '🍁', '🍂', '🍃', '🌲', '🌳', '🌴', '🌵', '🌱',
-            '🪴', '🍄', '🌰', '🌍', '🌎', '🌏', '🌕', '🌙', '⭐', '🌟', '💫', '🪐', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️',
-            '🌧️', '⛈️', '🌩️', '🌨️', '❄️', '☃️', '⛄', '🌬️', '💨', '🌪️', '🌈', '🌊', '💧'
-        ]
-    },
-    {
-        name: '➕ Math, Numbers & Shapes',
-        items: [
-            '➕', '➖', '✖️', '➗', '🟰', '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🟤', '⬛', '⬜', '🔺', '🔻', '🔹', '🔶',
-            '🔷', '🔸', '💠', '🔘', '⚪', '⚫', '🟥', '🟧', '🟨', '🟩', '🟦', '🟪', '🟫', '⬛', '⬜', '💯', '❓', '❗',
-            '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟', '🔢', '🔣'
-        ]
-    },
-    {
-        name: '🚫 Signs, Warnings & Arrows',
-        items: [
-            '🚫', '⛔', '❌', '⭕', '🛑', '⚠️', '✅', '✔️', '☑️', '🚷', '🚭', '🚯', '🔇', '🔕', '🔞',
-            '➡️', '⬅️', '⬆️', '⬇️', '↗️', '↘️', '↙️', '↖️', '↕️', '↔️', '🔄', '🔃', '🔀', '🔁', '🔂',
-            '▶️', '⏸️', '⏹️', '⏺️', '⏭️', '⏮️', '⏩', '⏪',
-            '🔍', '🔎', '🔒', '🔓', '📢', '📣', '💬', '💭', '🗯️', '✉️', '📧', '📝', '🖊️', '🖋️', '📍', '🗑️',
-            '📱', '💻', '🖥️', '🖨️', '⌨️', '⏱️', '⏲️', '⏰', '⌛', '⏳',
-            '🏁', '🚩', '🎌', '🥇', '🥈', '🥉'
-        ]
-    }
-];
-
 const FONTS = [
     { name: 'Acme', value: 'Acme' },
     { name: 'Bangers (Comic)', value: '"Bangers", cursive, sans-serif' },
@@ -265,6 +177,26 @@ const COLORS = [
     '#B71C1C', '#E65100', '#FF6F00', '#1B5E20', '#004D40', '#0D47A1', '#4A148C', '#880E4F',
     // Row 6 — Neutrals & Monochrome
     '#FFFFFF', '#f6efdd', '#E2E8F0', '#CBD5E1', '#C8C8C8', '#969696', '#5A5A5A', '#000000',
+];
+
+const BACKGROUND_TINT_COLORS = [
+    { value: 'transparent', solid: '#ffffff', isNone: true },
+    { value: 'rgba(198, 138, 76, 0.4)', solid: '#c68a4c' },   // Sepia
+    { value: 'rgba(253, 224, 71, 0.4)', solid: '#fde047' },   // Amber Gold
+    { value: 'rgba(250, 204, 21, 0.4)', solid: '#facc15' },   // Sunny Yellow
+    { value: 'rgba(251, 146, 60, 0.4)', solid: '#fb923c' },   // Peach
+    { value: 'rgba(249, 115, 22, 0.4)', solid: '#f97316' },   // Sunset Coral
+    { value: 'rgba(239, 68, 68, 0.4)', solid: '#ef4444' },    // Crimson Red
+    { value: 'rgba(253, 164, 175, 0.4)', solid: '#fda4af' },  // Rose Pink
+    { value: 'rgba(217, 70, 239, 0.4)', solid: '#d946ef' },   // Magenta
+    { value: 'rgba(192, 132, 252, 0.4)', solid: '#c084fc' },  // Lavender
+    { value: 'rgba(99, 102, 241, 0.4)', solid: '#6366f1' },   // Indigo
+    { value: 'rgba(59, 130, 246, 0.4)', solid: '#3b82f6' },   // Sapphire Blue
+    { value: 'rgba(103, 232, 249, 0.4)', solid: '#67e8f9' },  // Ocean Cyan
+    { value: 'rgba(20, 184, 166, 0.4)', solid: '#14b8a6' },   // Teal
+    { value: 'rgba(134, 239, 172, 0.4)', solid: '#86efac' },  // Forest Green
+    { value: 'rgba(163, 230, 53, 0.4)', solid: '#a3e635' },   // Lime
+    { value: 'rgba(148, 163, 184, 0.4)', solid: '#94a3b8' }   // Slate Grey
 ];
 
 const ColorPickerDropdown = ({ label, color, onSelect, onMouseDownItem, children, align = 'center', allowNone = false, noneLabel = "No background", extraColors = [] }) => {
@@ -1083,6 +1015,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             const currentSkin = metadata.skin || 'comic';
                             const skins = [
                                 { id: 'comic', icon: '🪧', label: 'Comic Box', defaultBg: '#ffffff' },
+                                { id: 'signpost', icon: '🪵', label: 'Wooden Signpost', defaultBg: '#ffffff' },
                                 { id: 'paper', icon: '📜', label: 'Taped Paper', defaultBg: '#f6efdd' },
                                 { id: 'sticky', icon: '📝', label: 'Sticky Note', defaultBg: '#fff875' },
                                 { id: 'notebook', icon: '📓', label: 'Notebook Paper', defaultBg: '#ffffff' },
@@ -1120,6 +1053,24 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                             {currSkinObj.icon}
                                         </button>
                                     </div>
+                                    {currentSkin === 'signpost' && (
+                                        <div className="menu-group">
+                                            <label>Post</label>
+                                            <button
+                                                className="btn-icon active"
+                                                onClick={() => {
+                                                    const heights = [45, 75, 110, 150];
+                                                    const currH = metadata.postHeight || 75;
+                                                    const nextH = heights[(heights.indexOf(currH) + 1) % heights.length];
+                                                    updateMetadata({ postHeight: nextH });
+                                                }}
+                                                title={`Post Height: ${metadata.postHeight || 75}px (Click to cycle)`}
+                                                style={{ fontSize: '0.85rem', fontWeight: 800, minWidth: '38px', padding: '4px 6px' }}
+                                            >
+                                                {metadata.postHeight ? `${metadata.postHeight}px` : '75px'}
+                                            </button>
+                                        </div>
+                                    )}
                                     <div className="menu-group">
                                         <label>Tape</label>
                                         <button
@@ -1157,6 +1108,20 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             );
                         })()}
                         {element.type === 'balloon' && (() => {
+                            const rawSkin = metadata.skin;
+                            const currentSkin = (rawSkin === 'thought' || rawSkin === 'cloud')
+                                ? 'thought'
+                                : ((rawSkin === 'octo' || rawSkin === 'octopus')
+                                    ? 'octo'
+                                    : ((rawSkin === 'oval' || rawSkin === 'round') ? 'oval' : 'rect'));
+                            const skins = [
+                                { id: 'rect', icon: '💬', label: 'Box Bubble' },
+                                { id: 'oval', icon: '🗨️', label: 'Oval Bubble' },
+                                { id: 'thought', icon: '💭', label: 'Thought Cloud' },
+                                { id: 'octo', icon: '🐙', label: 'Octopus Tentacle' },
+                            ];
+                            const currSkinObj = skins.find(s => s.id === currentSkin) || skins[0];
+
                             const shadowMode = (() => {
                                 if (metadata.hasShadow === false || metadata.shadow === 'none') return 'none';
                                 if (metadata.shadow === 'black') return 'black';
@@ -1165,6 +1130,21 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
                             return (
                                 <>
+                                    <div className="menu-group">
+                                        <label>Skin</label>
+                                        <button
+                                            className="btn-icon active"
+                                            onClick={() => {
+                                                const currIdx = skins.findIndex(s => s.id === currentSkin);
+                                                const nextSkin = skins[(currIdx + 1) % skins.length];
+                                                updateMetadata({ skin: nextSkin.id });
+                                            }}
+                                            title={`Skin: ${currSkinObj.label} (${currSkinObj.icon}) - Click to cycle`}
+                                            style={{ fontSize: '1.1rem', minWidth: '36px', padding: '4px 6px' }}
+                                        >
+                                            {currSkinObj.icon}
+                                        </button>
+                                    </div>
                                     <ColorPickerDropdown
                                         label="Border"
                                         color={metadata.borderColor || '#000000'}
@@ -1360,47 +1340,50 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             <label style={{ marginBottom: '6px', display: 'block', fontWeight: 'bold' }}>Tint Color</label>
                             <div style={{
                                 display: 'flex',
-                                gap: '8px',
-                                overflowX: 'auto',
+                                flexWrap: 'wrap',
+                                gap: '6px',
+                                alignItems: 'center',
                                 padding: '4px 2px',
-                                width: '100%',
-                                scrollbarWidth: 'none',
-                                msOverflowStyle: 'none'
+                                maxWidth: '100%'
                             }}>
-                                {[
-                                    { name: 'None', value: 'transparent', display: '🚫' },
-                                    { name: 'Warm Sepia', value: 'rgba(198, 138, 76, 0.4)', display: '🟤' },
-                                    { name: 'Rose Pink', value: 'rgba(253, 164, 175, 0.4)', display: '🔴' },
-                                    { name: 'Ocean Cyan', value: 'rgba(103, 232, 249, 0.4)', display: '🔵' },
-                                    { name: 'Forest Green', value: 'rgba(134, 239, 172, 0.4)', display: '🟢' },
-                                    { name: 'Lavender Purple', value: 'rgba(192, 132, 252, 0.4)', display: '🟣' },
-                                    { name: 'Amber Gold', value: 'rgba(253, 224, 71, 0.4)', display: '🟡' },
-                                    { name: 'Slate Blue', value: 'rgba(148, 163, 184, 0.4)', display: '⚫' }
-                                ].map((t) => (
-                                    <button
-                                        key={t.value}
-                                        onClick={() => updateMetadata({ tintColor: t.value })}
-                                        style={{
-                                            border: (metadata.tintColor || 'transparent') === t.value ? '2px solid #3b82f6' : '1px solid rgba(0,0,0,0.15)',
-                                            borderRadius: '20px',
-                                            padding: '4px 10px',
-                                            fontSize: '0.75rem',
-                                            backgroundColor: (metadata.tintColor || 'transparent') === t.value ? 'rgba(59, 130, 246, 0.1)' : 'white',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '4px',
-                                            whiteSpace: 'nowrap',
-                                            transition: 'all 0.15s ease',
-                                            boxShadow: (metadata.tintColor || 'transparent') === t.value ? '0 2px 4px rgba(59, 130, 246, 0.2)' : 'none',
-                                            transform: (metadata.tintColor || 'transparent') === t.value ? 'scale(1.05)' : 'none'
-                                        }}
-                                        title={t.name}
-                                    >
-                                        <span>{t.display}</span>
-                                        <span style={{ fontWeight: (metadata.tintColor || 'transparent') === t.value ? 'bold' : 'normal' }}>{t.name}</span>
-                                    </button>
-                                ))}
+                                {BACKGROUND_TINT_COLORS.map((t) => {
+                                    const isSelected = (metadata.tintColor || 'transparent') === t.value;
+                                    return (
+                                        <button
+                                            key={t.value}
+                                            onClick={() => updateMetadata({ tintColor: t.value })}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                backgroundColor: t.solid,
+                                                border: isSelected ? '2px solid #2563eb' : '1.5px solid rgba(0,0,0,0.18)',
+                                                cursor: 'pointer',
+                                                position: 'relative',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                padding: 0,
+                                                flexShrink: 0,
+                                                boxShadow: isSelected ? '0 0 0 2px #ffffff, 0 2px 5px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
+                                                transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                                                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                                                overflow: 'hidden'
+                                            }}
+                                        >
+                                            {t.isNone && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    width: '100%',
+                                                    height: '2px',
+                                                    backgroundColor: '#ef4444',
+                                                    transform: 'rotate(-45deg)',
+                                                    transformOrigin: 'center'
+                                                }} />
+                                            )}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}

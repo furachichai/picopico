@@ -191,12 +191,18 @@
     z-index: -1;
 }
 
-.tail-handle {
-    background-color: #34A853;
-    border: 2px solid white;
-    border-radius: 50%;
-    color: white;
-    font-size: 10px;
+.tail-handle,
+.tail-origin-handle {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    cursor: grab;
+}
+
+.tail-handle:active,
+.tail-origin-handle:active {
+    cursor: grabbing;
 }
 
 .sticker-quiz-wysiwyg {

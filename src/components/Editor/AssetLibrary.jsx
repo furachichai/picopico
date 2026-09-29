@@ -10,6 +10,7 @@ import ConfirmationModal from './ConfirmationModal';
 import RecycleBinModal from './RecycleBinModal';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { getCustomCharacterTags, EVENT_CUSTOM_TAGS_CHANGED } from '../../utils/characterTags';
+import { EMOJI_DATA, EMOJI_CATEGORIES } from '../../utils/emojiData';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -29,13 +30,7 @@ const CRATE_MAP = {
 };
 
 const ASSETS = {
-    emojis: [
-        '📦', '📦x', '📦?', '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🍍', '🥥', '🥝',
-        '⭐', '🌟', '✨', '🔥', '💎', '🪙', '💰', '🏆', '👑', '🎈', '🎉', '🎁', '🍕', '🍔', '🍟', '🍦', '🍩', '🍪',
-        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦',
-        '🐥', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🦋', '🐢', '🐙', '🐬', '🐳',
-        '❤️', '👍', '👏', '🎯', '🚀', '🌸', '🌻', '🍀', '🌈', '⚡'
-    ],
+    emojis: EMOJI_CATEGORIES.flatMap(c => c.items),
     backgrounds: [
         '#ffffff', '#f0f0f0', '#ffcccc', '#ccffcc', '#ccccff', '#ffffcc', '#ffccff', '#ccffff', '#e5e5e5', '#333333', '#000000',
         'linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',
@@ -289,6 +284,9 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             localStorage.setItem('picopico_last_bg_tag', catId);
         } catch {}
     };
+
+    const [emojiSearch, setEmojiSearch] = useState('');
+    const [activeEmojiCategory, setActiveEmojiCategory] = useState('all');
 
     // Live asset sync from server
     const fetchServerAssets = useCallback(async () => {
@@ -858,6 +856,66 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                     </div>
                 )}
 
+                {activeTab === 'emojis' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '0 0 10px 0' }}>
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type="text"
+                                placeholder="Search emojis (e.g. flag, mexico, cat, pizza, fire)..."
+                                value={emojiSearch}
+                                onChange={(e) => setEmojiSearch(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '8px 12px 8px 32px',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(0,0,0,0.15)',
+                                    background: '#f8fafc',
+                                    fontSize: '0.9rem',
+                                    boxSizing: 'border-box'
+                                }}
+                            />
+                            <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, fontSize: '0.85rem', pointerEvents: 'none' }}>
+                                🔍
+                            </span>
+                            {emojiSearch && (
+                                <button
+                                    type="button"
+                                    onClick={() => setEmojiSearch('')}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '8px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#64748b',
+                                        cursor: 'pointer',
+                                        fontSize: '0.85rem'
+                                    }}
+                                >✕</button>
+                            )}
+                        </div>
+
+                        <div className="library-subcategories" style={{ overflowX: 'auto', paddingBottom: '4px' }}>
+                            <button
+                                className={`subcategory-pill ${activeEmojiCategory === 'all' ? 'active' : ''}`}
+                                onClick={() => setActiveEmojiCategory('all')}
+                            >
+                                All
+                            </button>
+                            {EMOJI_CATEGORIES.map(cat => (
+                                <button
+                                    key={cat.name}
+                                    className={`subcategory-pill ${activeEmojiCategory === cat.name ? 'active' : ''}`}
+                                    onClick={() => setActiveEmojiCategory(cat.name)}
+                                >
+                                    {cat.name.split(' ')[0]} {cat.name.split(' ').slice(1, 3).join(' ')}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <div className="assets-grid">
                     {activeTab === 'custom' && (() => {
                         const filtered = allImages.filter(src => {
@@ -1063,24 +1121,57 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                         );
                     })()}
 
-                    {activeTab === 'emojis' && ASSETS.emojis.map((item, index) => (
-                        <div
-                            key={index}
-                            className="asset-item emojis"
-                            onClick={() => handleSelect(item)}
-                            title={item}
-                        >
-                            {CRATE_MAP[item] ? (
-                                <img
-                                    src={CRATE_MAP[item]}
-                                    alt={item}
-                                    style={{ width: '60%', height: '60%', objectFit: 'contain', pointerEvents: 'none' }}
-                                />
-                            ) : (
-                                item
-                            )}
-                        </div>
-                    ))}
+                    {activeTab === 'emojis' && (() => {
+                        const queryWords = emojiSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
+                        const filteredList = [];
+
+                        EMOJI_CATEGORIES.forEach(cat => {
+                            if (activeEmojiCategory !== 'all' && activeEmojiCategory !== cat.name) return;
+                            cat.items.forEach(item => {
+                                if (queryWords.length === 0) {
+                                    if (!filteredList.includes(item)) filteredList.push(item);
+                                } else {
+                                    const keywords = (EMOJI_DATA[item] || '').toLowerCase();
+                                    const catName = cat.name.toLowerCase();
+                                    const match = queryWords.every(word =>
+                                        keywords.includes(word) ||
+                                        catName.includes(word) ||
+                                        item.includes(word)
+                                    );
+                                    if (match && !filteredList.includes(item)) {
+                                        filteredList.push(item);
+                                    }
+                                }
+                            });
+                        });
+
+                        if (filteredList.length === 0) {
+                            return (
+                                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '32px 16px', color: '#94a3b8' }}>
+                                    No emojis found for "{emojiSearch}"
+                                </div>
+                            );
+                        }
+
+                        return filteredList.map((item, index) => (
+                            <div
+                                key={`${item}-${index}`}
+                                className="asset-item emojis"
+                                onClick={() => handleSelect(item)}
+                                title={EMOJI_DATA[item] || item}
+                            >
+                                {CRATE_MAP[item] ? (
+                                    <img
+                                        src={CRATE_MAP[item]}
+                                        alt={item}
+                                        style={{ width: '60%', height: '60%', objectFit: 'contain', pointerEvents: 'none' }}
+                                    />
+                                ) : (
+                                    item
+                                )}
+                            </div>
+                        ));
+                    })()}
 
                     {activeTab === 'backgrounds' && ASSETS.backgrounds.map((item, index) => (
                         <div

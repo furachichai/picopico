@@ -28,8 +28,8 @@ const BG_COLOR_PALETTE = [
 ];
 
 const TEXT_COLOR_PALETTE = [
-  { label: 'Slate', color: '#1E293B' },
   { label: 'Black', color: '#000000' },
+  { label: 'Slate', color: '#1E293B' },
   { label: 'White', color: '#FFFFFF' },
   { label: 'Purple', color: '#7C3AED' },
   { label: 'Red', color: '#DC2626' },
@@ -67,7 +67,7 @@ const BannerModal = ({
   const [leftImage, setLeftImage] = useState('');
   const [rightImage, setRightImage] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
-  const [textColor, setTextColor] = useState('#1E293B');
+  const [textColor, setTextColor] = useState('#000000');
   const [borderColor, setBorderColor] = useState('#000000');
   const [saving, setSaving] = useState(false);
 
@@ -79,7 +79,7 @@ const BannerModal = ({
         setLeftImage(banner.leftImage || '');
         setRightImage(banner.rightImage || '');
         setBackgroundColor(banner.backgroundColor || '#FFFFFF');
-        setTextColor(banner.textColor || '#1E293B');
+        setTextColor(banner.textColor || '#000000');
         setBorderColor(banner.borderColor || defaultBorderColor || '#000000');
       } else {
         setTitle('');
@@ -87,7 +87,7 @@ const BannerModal = ({
         setLeftImage(POPULAR_AVATARS[1].path);
         setRightImage('');
         setBackgroundColor('#FFFFFF');
-        setTextColor('#1E293B');
+        setTextColor('#000000');
         setBorderColor(defaultBorderColor || '#000000');
       }
     }
@@ -110,7 +110,7 @@ const BannerModal = ({
         leftImage: leftImage.trim(),
         rightImage: rightImage.trim(),
         backgroundColor: backgroundColor || '#FFFFFF',
-        textColor: textColor || '#1E293B',
+        textColor: textColor || '#000000',
         borderColor: borderColor || '#000000'
       };
       await onSave(bannerData);
@@ -231,12 +231,12 @@ const BannerModal = ({
 
             <span
               style={{
-                fontFamily: "'Outfit', 'Inter', sans-serif",
-                fontWeight: 900,
+                fontFamily: "'Fredoka', 'Outfit', sans-serif",
+                fontWeight: 700,
                 fontSize: '1.25rem',
-                letterSpacing: '2px',
+                letterSpacing: '1.5px',
                 textTransform: 'uppercase',
-                color: textColor || '#1E293B',
+                color: textColor || '#000000',
                 textAlign: 'center',
                 flex: 1,
                 padding: '0 8px'
