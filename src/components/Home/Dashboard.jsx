@@ -47,7 +47,17 @@ const t = (key) => {
 
 const Dashboard = () => {
   const { state, dispatch } = useEditor();
-  const { language } = useLanguage();
+  const { language, setLanguage, SUPPORTED_LANGUAGES } = useLanguage();
+
+  const currentLangObj = SUPPORTED_LANGUAGES?.find(l => l.code === language) || { code: language, label: language, flag: '🇪🇸' };
+
+  const handleToggleLanguage = () => {
+    if (!SUPPORTED_LANGUAGES || SUPPORTED_LANGUAGES.length === 0) return;
+    const codes = SUPPORTED_LANGUAGES.map(l => l.code);
+    const idx = codes.indexOf(language);
+    const nextLang = codes[(idx + 1) % codes.length];
+    setLanguage(nextLang);
+  };
   const [lessons, setLessons] = useState([]);
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +74,8 @@ const Dashboard = () => {
     buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
     buttonTitleFontSize: '1.6rem',
     buttonOverlayHeight: 38,
-    showStars: true
+    showStars: true,
+    showLastSlide: true
   });
   const [isMenuSettingsOpen, setIsMenuSettingsOpen] = useState(false);
 
@@ -130,6 +141,89 @@ const Dashboard = () => {
     fetchLessons();
   }, []);
 
+  // When returning from completing a lesson, scroll so the next lesson button (completed + 1) is centered
+  useEffect(() => {
+    let targetPath = null;
+    let completedPath = null;
+
+    try {
+      targetPath = sessionStorage.getItem('picopico_scroll_to_lesson') || window.__pico_scroll_to_lesson;
+      completedPath = sessionStorage.getItem('picopico_completed_lesson') || window.__pico_completed_lesson;
+    } catch (e) {
+      targetPath = window.__pico_scroll_to_lesson;
+      completedPath = window.__pico_completed_lesson;
+    }
+
+    if (!targetPath && !completedPath) return;
+    if (loading || lessons.length === 0) return;
+
+    const norm = (p) => (p || '').replace(/\\/g, '/').toLowerCase().trim();
+
+    // If targetPath is not directly set, compute next lesson (completed + 1) from dashboard's own lessons array
+    if (!targetPath && completedPath) {
+      const cNorm = norm(completedPath);
+      const cIdx = lessons.findIndex(l => {
+        const lp = norm(l.path);
+        return (lp && (lp === cNorm || lp.endsWith(cNorm) || cNorm.endsWith(lp))) ||
+               (l.id && l.id === completedPath) ||
+               (l.name && cNorm.includes(norm(l.name)));
+      });
+      if (cIdx !== -1) {
+        const nextIdx = cIdx + 1 < lessons.length ? cIdx + 1 : cIdx;
+        targetPath = lessons[nextIdx]?.path || lessons[nextIdx]?.id;
+      }
+    }
+
+    if (!targetPath) return;
+
+    const targetNorm = norm(targetPath);
+
+    const performScroll = () => {
+      const scrollArea = document.querySelector('.scroll-area');
+      const cards = Array.from(document.querySelectorAll('.lesson-square-card'));
+      const card = cards.find(el => {
+        const elPath = norm(el.getAttribute('data-lesson-path'));
+        const elId = el.getAttribute('data-lesson-id');
+        const elName = norm(el.getAttribute('data-lesson-name'));
+        return (
+          (elPath && (elPath === targetNorm || elPath.endsWith(targetNorm) || targetNorm.endsWith(elPath))) ||
+          (elId && (elId === targetPath || elId === targetNorm)) ||
+          (elName && targetNorm.includes(elName))
+        );
+      });
+
+      if (scrollArea && card) {
+        const scrollAreaRect = scrollArea.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const targetScrollTop = scrollArea.scrollTop + (cardRect.top - scrollAreaRect.top) - (scrollAreaRect.height / 2) + (cardRect.height / 2);
+
+        scrollArea.scrollTo({ top: Math.max(0, targetScrollTop), behavior: 'smooth' });
+
+        card.classList.add('next-lesson-pulse');
+        setTimeout(() => card.classList.remove('next-lesson-pulse'), 3000);
+
+        try {
+          sessionStorage.removeItem('picopico_scroll_to_lesson');
+          sessionStorage.removeItem('picopico_completed_lesson');
+        } catch (e) {}
+        window.__pico_scroll_to_lesson = null;
+        window.__pico_completed_lesson = null;
+        return true;
+      }
+      return false;
+    };
+
+    // Execute scroll with a short delay for layout calculation and retry once if not ready
+    const timer1 = setTimeout(() => {
+      const ok = performScroll();
+      if (!ok) {
+        setTimeout(performScroll, 250);
+      }
+    }, 150);
+
+    return () => clearTimeout(timer1);
+  }, [loading, lessons]);
+
   const handleSaveMenuSettings = async (newSettings) => {
     try {
       setMenuSettings(newSettings);
@@ -183,7 +277,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleSaveCircleFrame = async (newFrame) => {
+  const handleSaveCircleFrame = async (newFrame, visibilityOptions = {}) => {
     if (!editingFrameLesson) return;
     try {
       const targetLesson = editingFrameLesson;
@@ -196,6 +290,15 @@ const Dashboard = () => {
         titlecardFrame: newFrame
       };
 
+      if (typeof visibilityOptions.visible === 'boolean') {
+        updated.visible = visibilityOptions.visible;
+        if (updated.content) updated.content.visible = visibilityOptions.visible;
+      }
+      if (typeof visibilityOptions.visibleInFeed === 'boolean') {
+        updated.visibleInFeed = visibilityOptions.visibleInFeed;
+        if (updated.content) updated.content.visibleInFeed = visibilityOptions.visibleInFeed;
+      }
+
       const saveRes = await fetch('/api/save-lesson', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -204,24 +307,33 @@ const Dashboard = () => {
 
       if (!saveRes.ok) throw new Error('Failed to save frame');
 
-      setLessons(prev => prev.map(l => {
-        if (l.path === targetLesson.path) {
-          return {
-            ...l,
+      try {
+        const { getLocalLessons, saveLocalLesson } = await import('../../utils/lessonStorage');
+        const local = getLocalLessons().find(l => l.path === targetLesson.path);
+        if (local) {
+          saveLocalLesson({
+            ...local,
             titlecardFrame: newFrame,
-            content: {
-              ...l.content,
-              titlecardFrame: newFrame
-            }
-          };
+            ...(typeof visibilityOptions.visible === 'boolean' && { visible: visibilityOptions.visible }),
+            ...(typeof visibilityOptions.visibleInFeed === 'boolean' && { visibleInFeed: visibilityOptions.visibleInFeed })
+          });
         }
-        return l;
-      }));
+      } catch (e) {
+        // Ignore
+      }
+
+      try {
+        const { invalidateDiscoverCache } = await import('./DiscoverView');
+        invalidateDiscoverCache();
+      } catch (e) {
+        // Ignore
+      }
 
       setEditingFrameLesson(null);
+      await fetchLessons();
     } catch (err) {
       console.error('Error saving titlecard frame:', err);
-      alert('Failed to save titlecard frame focus');
+      alert('Failed to save lesson settings');
     }
   };
 
@@ -354,10 +466,10 @@ const Dashboard = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 12px 20px;
+          padding: 12px clamp(12px, 3vw, 20px);
           padding-top: max(12px, calc(12px + env(safe-area-inset-top, 0px)));
-          padding-left: max(20px, calc(20px + env(safe-area-inset-left, 0px)));
-          padding-right: max(20px, calc(20px + env(safe-area-inset-right, 0px)));
+          padding-left: max(12px, calc(12px + env(safe-area-inset-left, 0px)));
+          padding-right: max(12px, calc(12px + env(safe-area-inset-right, 0px)));
           background-color: #FFFFFF !important;
           border-bottom: 2px solid #F1F5F9;
           z-index: 10;
@@ -369,12 +481,13 @@ const Dashboard = () => {
         .user-profile {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
+          min-width: 0;
         }
 
         .avatar {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
           background-color: #E2E8F0;
           border-radius: 50%;
           display: flex;
@@ -383,11 +496,15 @@ const Dashboard = () => {
           border: 2px solid #E2E8F0;
           box-shadow: var(--shadow);
           color: var(--primary);
+          flex-shrink: 0;
         }
 
         .greeting {
           font-weight: 700;
-          font-size: 1.1rem;
+          font-size: 1.05rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .gem-counter {
@@ -522,7 +639,7 @@ const Dashboard = () => {
           display: flex;
           flex-direction: column;
           gap: 22px;
-          padding-bottom: 36px;
+          padding-bottom: clamp(60px, 25vh, 220px);
           width: 100%;
           box-sizing: border-box;
         }
@@ -629,6 +746,17 @@ const Dashboard = () => {
           box-shadow: 3.5px 3.5px 0px var(--btn-shadow, var(--btn-border, #000000));
         }
 
+        @keyframes nextLessonGlow {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.08); box-shadow: 0 0 24px rgba(66, 222, 232, 0.8), 7px 7px 0px var(--btn-shadow, var(--btn-border, #000000)); }
+          100% { transform: scale(1); }
+        }
+
+        .lesson-square-card.next-lesson-pulse {
+          animation: nextLessonGlow 1s ease-in-out 2;
+          z-index: 10;
+        }
+
         /* Frameless & shadowless target icon button (just the emoji in place) */
         .lesson-adjust-frame-btn {
           position: absolute;
@@ -701,6 +829,14 @@ const Dashboard = () => {
           background-color: #F8FAFC !important;
         }
         .menu-wheel-btn:active {
+          transform: scale(0.92);
+        }
+
+        .menu-flag-btn:hover {
+          transform: scale(1.08);
+          background-color: #F8FAFC !important;
+        }
+        .menu-flag-btn:active {
           transform: scale(0.92);
         }
 
@@ -801,7 +937,34 @@ const Dashboard = () => {
           </div>
           <span className="greeting">{t('dashboard.greeting')}</span>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {/* Flag Toggle Button (Lesson Content Language) */}
+          <button
+            onClick={handleToggleLanguage}
+            title={`Language: ${currentLangObj.label}`}
+            className="menu-flag-btn"
+            style={{
+              backgroundColor: '#FFFFFF',
+              border: '2px solid #000000',
+              borderRadius: '12px',
+              width: '36px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '2px 2px 0px #000000',
+              fontSize: '1.25rem',
+              lineHeight: 1,
+              padding: 0,
+              flexShrink: 0,
+              transition: 'transform 0.15s ease',
+              userSelect: 'none'
+            }}
+          >
+            {currentLangObj.flag}
+          </button>
+
           <FullscreenToggle />
           {!state.readOnly && (
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -976,6 +1139,9 @@ const Dashboard = () => {
                 renderedElements.push(
                   <div
                     key={lesson.id}
+                    data-lesson-path={lesson.path}
+                    data-lesson-id={lesson.id}
+                    data-lesson-name={lesson.name}
                     className={`lesson-square-card status-${lesson.status}`}
                     style={{
                       ...zigZagStyle,
@@ -1001,7 +1167,7 @@ const Dashboard = () => {
                           e.stopPropagation();
                           setEditingFrameLesson(lesson);
                         }}
-                        title="Zoom & Drag Titlecard"
+                        title="Button Focus & Visibility"
                       >
                         🎯
                       </button>
@@ -1010,7 +1176,7 @@ const Dashboard = () => {
                     {/* Bottom third semi-transparent title overlay */}
                     <div className="lesson-title-overlay">
                       <div className="lesson-square-title">
-                        {(language !== 'es' && lesson.content?.translations?.[language]?.title) || lesson.title}
+                        {(language !== 'es' && (lesson.content?.translations?.[language]?.title || lesson.translations?.[language]?.title)) || lesson.title}
                       </div>
                     </div>
                   </div>

@@ -1,13 +1,92 @@
 [
   {
-    "name": "01-Why algebra?",
+    "name": "01-_last_card",
     "type": "file",
-    "path": "lessons/01-Why algebra?/lesson.json",
+    "path": "lessons/01-_last_card/lesson.json",
+    "title": "_last_card",
+    "description": "",
+    "visible": false,
+    "visibleInFeed": true,
+    "order": 1,
+    "titlecardFrame": null,
+    "content": {
+      "id": "draft-1790691723222",
+      "title": "_last_card",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "url(\"/src/assets/backgrounds/bkg_geom_007.png\")",
+          "elements": [
+            {
+              "id": "el-1790691742222-0ahudzxda",
+              "type": "image",
+              "content": "/src/assets/characters/yara_jumping_celebration.png",
+              "x": 41.94444444444444,
+              "y": 51.40625,
+              "width": 40,
+              "height": 29.31428571428571,
+              "rotation": 0,
+              "scale": 2.064956090406779,
+              "metadata": {
+                "width": 40,
+                "height": 29.31428571428571,
+                "category": "characters",
+                "hasShadow": false
+              }
+            },
+            {
+              "id": "el-1790691773805-trfqarz7g",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_blows_kiss.png",
+              "x": 81.66666666666667,
+              "y": 76.09375,
+              "width": 40,
+              "height": 28.483146067415728,
+              "rotation": 0,
+              "scale": 1.1599244053694049,
+              "metadata": {
+                "width": 40,
+                "height": 28.483146067415728,
+                "category": "characters",
+                "flipX": true
+              }
+            }
+          ],
+          "order": 0,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(103, 232, 249, 0.4)"
+          }
+        }
+      ],
+      "author": "User",
+      "createdAt": "2026-09-29T14:22:03.222Z",
+      "updatedAt": "2026-09-29T14:30:09.187Z",
+      "path": "lessons/01-_last_card/lesson.json",
+      "textPreset": null,
+      "description": "",
+      "icon": "icon_textbook.png",
+      "cardColor": "#8B5CF6",
+      "translations": {
+        "en": {
+          "title": "",
+          "description": ""
+        }
+      },
+      "visible": false,
+      "visibleInFeed": true,
+      "titlecardFrame": null
+    }
+  },
+  {
+    "name": "02-Why algebra?",
+    "type": "file",
+    "path": "lessons/02-Why algebra?/lesson.json",
     "title": "Why algebra?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 1,
+    "order": 2,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -2334,14 +2413,14 @@
     }
   },
   {
-    "name": "02-What Is Algebra-",
+    "name": "03-What Is Algebra-",
     "type": "file",
-    "path": "lessons/02-What Is Algebra-/lesson.json",
+    "path": "lessons/03-What Is Algebra-/lesson.json",
     "title": "What Is Algebra?",
     "description": "",
-    "visible": true,
-    "visibleInFeed": true,
-    "order": 2,
+    "visible": false,
+    "visibleInFeed": false,
+    "order": 3,
     "titlecardFrame": null,
     "content": {
       "id": "draft-1",
@@ -3786,7 +3865,7 @@
       "author": "User",
       "createdAt": "2026-09-27T02:54:13.090Z",
       "updatedAt": "2026-09-27T03:32:09.144Z",
-      "path": "lessons/01-What Is Algebra-/lesson.json",
+      "path": "lessons/02-What Is Algebra-/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -3811,31 +3890,59 @@
           "description": ""
         }
       },
-      "titlecardFrame": null,
-      "visibleInFeed": true
+      "visibleInFeed": false,
+      "visible": false,
+      "titlecardFrame": null
     }
   },
   {
-    "name": "03-What is a variable?",
+    "name": "04-What is a variable?",
     "type": "file",
-    "path": "lessons/03-What is a variable?/lesson.json",
+    "path": "lessons/04-What is a variable?/lesson.json",
     "title": "What is a variable?",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 3,
+    "order": 4,
     "titlecardFrame": {
-      "zoom": 1.2,
-      "x": 2.3,
-      "y": -81.2
+      "zoom": 1,
+      "x": 0,
+      "y": 9
     },
     "content": {
       "id": "lessons/03-What is a variable?/lesson.json",
       "title": "What is a variable?",
       "slides": [
         {
+          "id": "slide-1790689724600",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_2983.png\")",
+          "elements": [
+            {
+              "id": "el-1790689781498-7f3eeau7s",
+              "type": "image",
+              "content": "/src/assets/characters/yara_paints_x_on_crate.png",
+              "x": 57.77777777777778,
+              "y": 43.75,
+              "width": 40,
+              "height": 23.616071428571427,
+              "rotation": 0,
+              "scale": 2.6893950394073527,
+              "metadata": {
+                "width": 40,
+                "height": 23.616071428571427,
+                "category": "characters"
+              }
+            }
+          ],
+          "order": 0,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(99, 102, 241, 0.4)"
+          }
+        },
+        {
           "id": "slide-1",
-          "background": "url(\"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&q=80\")",
+          "background": "url(\"https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?w=400&q=80\")",
           "elements": [
             {
               "id": "el-1789753463757-0-s8wevv",
@@ -3892,12 +3999,12 @@
               "id": "el-1789753553491-w80o3t3qq",
               "type": "image",
               "content": "/src/assets/characters/yara_carrying_crate.png",
-              "x": 32.22222222222223,
-              "y": 81.71875,
+              "x": 36.111111111111114,
+              "y": 78.59375,
               "width": 40,
               "height": 27.65853658536585,
               "rotation": 0,
-              "scale": 1.1740954066388447,
+              "scale": 1.554097371307737,
               "metadata": {
                 "width": 40,
                 "height": 27.65853658536585,
@@ -3930,7 +4037,11 @@
               }
             }
           ],
-          "order": 0
+          "order": 1,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(163, 230, 53, 0.4)"
+          }
         },
         {
           "id": "slide-1789753711681-0-9fnau1",
@@ -4017,7 +4128,7 @@
               }
             }
           ],
-          "order": 1,
+          "order": 2,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -4028,7 +4139,7 @@
         },
         {
           "id": "slide-1789753845115",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_office.png\")",
           "elements": [
             {
               "id": "el-1789753872174-6min9y0s6",
@@ -4112,11 +4223,11 @@
               }
             }
           ],
-          "order": 2
+          "order": 3
         },
         {
           "id": "slide-1789754052142",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_office.png\")",
           "elements": [
             {
               "id": "el-1789754371247-0",
@@ -4234,7 +4345,14 @@
               }
             }
           ],
-          "order": 3
+          "order": 4,
+          "backgroundSettings": {
+            "blur": 0,
+            "positionX": 33,
+            "sizeMode": "custom",
+            "size": 132,
+            "positionY": 61
+          }
         },
         {
           "id": "slide-1789755144273",
@@ -4371,7 +4489,7 @@
               }
             }
           ],
-          "order": 4,
+          "order": 5,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -4513,7 +4631,7 @@
               }
             }
           ],
-          "order": 5,
+          "order": 6,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -4653,7 +4771,7 @@
               }
             }
           ],
-          "order": 6,
+          "order": 7,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -4664,7 +4782,7 @@
         },
         {
           "id": "slide-1789761347866",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1789761351529-lfttxza61",
@@ -4738,11 +4856,11 @@
               }
             }
           ],
-          "order": 7
+          "order": 8
         },
         {
           "id": "slide-1789764764432",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_blue_geom.png\")",
           "elements": [
             {
               "id": "el-1789764768561-nser9hvq5",
@@ -4786,13 +4904,13 @@
               }
             }
           ],
-          "order": 8
+          "order": 9
         },
         {
           "id": "slide-1789754717121",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_geom_005.png\")",
           "elements": [],
-          "order": 9,
+          "order": 10,
           "cartridge": {
             "type": "Balanza",
             "config": {
@@ -4807,11 +4925,14 @@
               "lockLeftPlate": true,
               "add": false
             }
+          },
+          "backgroundSettings": {
+            "opacity": 0.49
           }
         },
         {
           "id": "slide-1789764941463",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1789764948218-2dw6jfz6d",
@@ -4844,7 +4965,7 @@
               "type": "banner",
               "content": "x = __",
               "x": 50,
-              "y": 37.34375,
+              "y": 37.1875,
               "width": 51,
               "height": 12.5,
               "rotation": -0.01916919204566625,
@@ -4884,7 +5005,7 @@
               }
             }
           ],
-          "order": 10
+          "order": 11
         },
         {
           "id": "slide-1789755967406",
@@ -5084,7 +5205,7 @@
               }
             }
           ],
-          "order": 11,
+          "order": 12,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -5095,7 +5216,7 @@
         },
         {
           "id": "slide-1789762012378",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1789762015690-rc1la1rjl",
@@ -5181,7 +5302,7 @@
               }
             }
           ],
-          "order": 12
+          "order": 13
         },
         {
           "id": "slide-1789766272737",
@@ -5261,7 +5382,7 @@
               }
             }
           ],
-          "order": 13,
+          "order": 14,
           "backgroundSettings": {
             "grayscale": true,
             "tintColor": "rgba(192, 132, 252, 0.4)",
@@ -5278,7 +5399,7 @@
         },
         {
           "id": "slide-1789766699752",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_hallway.png\")",
           "elements": [
             {
               "id": "el-1789766764775-5gp6ylzdv",
@@ -5356,11 +5477,19 @@
               }
             }
           ],
-          "order": 14
+          "order": 15,
+          "backgroundSettings": {
+            "grayscale": true,
+            "tintColor": "rgba(250, 204, 21, 0.4)",
+            "blur": 0,
+            "sizeMode": "custom",
+            "size": 187,
+            "positionY": 56
+          }
         },
         {
           "id": "slide-1789766796764",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_park.png\")",
           "elements": [
             {
               "id": "el-1789766878569-m5kbjnzii",
@@ -5434,7 +5563,7 @@
               }
             }
           ],
-          "order": 15
+          "order": 16
         },
         {
           "id": "slide-1789769775486-0-8au6mb",
@@ -5503,9 +5632,9 @@
               "type": "banner",
               "content": "<br>",
               "x": 49.98424953884548,
-              "y": 57.03125,
+              "y": 64.921875,
               "width": 51,
-              "height": 33.88210603069076,
+              "height": 46.293558381838835,
               "rotation": 0,
               "scale": 1.2715071172585377,
               "metadata": {
@@ -5523,8 +5652,7 @@
                 "hasShadow": true,
                 "borderRadius": 20,
                 "skin": "comic",
-                "showTape": false,
-                "groupId": "group-1789770430363-z3egsj"
+                "showTape": false
               }
             },
             {
@@ -5560,8 +5688,7 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 16,
-                "textTransform": "none",
-                "groupId": "group-1789770430363-z3egsj"
+                "textTransform": "none"
               }
             },
             {
@@ -5580,9 +5707,26 @@
                 "textTransform": "uppercase",
                 "fontSize": 27
               }
+            },
+            {
+              "id": "el-1790689256571-otxe25wnc",
+              "type": "image",
+              "content": "/src/assets/characters/pesto_bike.png",
+              "x": 50,
+              "y": 82.03125,
+              "width": 40,
+              "height": 28.73177842565598,
+              "rotation": 0,
+              "scale": 0.6585162261681237,
+              "metadata": {
+                "width": 40,
+                "height": 28.73177842565598,
+                "category": "characters",
+                "hasShadow": false
+              }
             }
           ],
-          "order": 16,
+          "order": 17,
           "guides": {
             "horizontal": [],
             "vertical": [
@@ -5595,7 +5739,7 @@
       ],
       "author": "User",
       "createdAt": "2026-09-18T17:32:09.502Z",
-      "updatedAt": "2026-09-29T13:34:24.635Z",
+      "updatedAt": "2026-09-29T13:51:08.773Z",
       "path": "lessons/03-What is a variable?/lesson.json",
       "textPreset": null,
       "description": "",
@@ -5623,26 +5767,26 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 12,
+        "lastSlideIndex": 9,
         "completed": false,
-        "lastPlayed": 1790640291713
+        "lastPlayed": 1790689530582
       },
       "titlecardFrame": {
-        "zoom": 1.2,
-        "x": 2.3,
-        "y": -81.2
+        "zoom": 1,
+        "x": 0,
+        "y": 9
       }
     }
   },
   {
-    "name": "04-Types of variables",
+    "name": "05-Types of variables",
     "type": "file",
-    "path": "lessons/04-Types of variables/lesson.json",
+    "path": "lessons/05-Types of variables/lesson.json",
     "title": "Types of variables",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 4,
+    "order": 5,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -8244,23 +8388,39 @@
     }
   },
   {
-    "name": "05-Variable Trivia",
+    "name": "06-Variable Trivia",
     "type": "file",
-    "path": "lessons/05-Variable Trivia/lesson.json",
+    "path": "lessons/06-Variable Trivia/lesson.json",
     "title": "Variable Trivia",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 5,
-    "titlecardFrame": null,
+    "order": 6,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -9.7
+    },
     "content": {
-      "id": "lessons/01-Variable Trivia/lesson.json",
+      "id": "lessons/05-Variable Trivia/lesson.json",
       "title": "Variable Trivia",
       "slides": [
         {
+          "id": "slide-1790689994810",
+          "background": "url(\"/src/assets/backgrounds/FrozenPesto.png\")",
+          "elements": [],
+          "order": 0
+        },
+        {
           "id": "slide-1790477037301-0-ykpyal",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-6lclxag44",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037301-7uv5sp5c9",
               "type": "banner",
@@ -8317,14 +8477,20 @@
               }
             }
           ],
-          "order": 0,
+          "order": 1,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037301-1-o0gnz1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-334o4x9tb",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037301-ppn7e770z",
               "type": "banner",
@@ -8381,14 +8547,20 @@
               }
             }
           ],
-          "order": 1,
+          "order": 2,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037301-2-nwq145",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-tao31r0zj",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037301-0m7kogicj",
               "type": "banner",
@@ -8444,14 +8616,20 @@
               }
             }
           ],
-          "order": 2,
+          "order": 3,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037301-3-dikczs",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-4o1p70mn0",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037301-h0wqe9gn0",
               "type": "banner",
@@ -8508,14 +8686,20 @@
               }
             }
           ],
-          "order": 3,
+          "order": 4,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037302-4-wvsfgh",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-0iuwpsi85",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037302-97zaxg4pn",
               "type": "banner",
@@ -8571,14 +8755,20 @@
               }
             }
           ],
-          "order": 4,
+          "order": 5,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037302-5-0nqysf",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-3rm4qtu10",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037302-bhn64lxtw",
               "type": "banner",
@@ -8635,14 +8825,20 @@
               }
             }
           ],
-          "order": 5,
+          "order": 6,
           "cartridge": null,
           "backgroundSettings": {}
         },
         {
           "id": "slide-1790477037302-6-2rnt5x",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790689983879-bzhxy59ku",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790477037302-owpnharqg",
               "type": "banner",
@@ -8698,15 +8894,15 @@
               }
             }
           ],
-          "order": 6,
+          "order": 7,
           "cartridge": null,
           "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-09-27T02:43:03.053Z",
-      "updatedAt": "2026-09-27T02:44:02.692Z",
-      "path": "lessons/01-Variable Trivia/lesson.json",
+      "updatedAt": "2026-09-29T13:53:21.413Z",
+      "path": "lessons/05-Variable Trivia/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -8717,12 +8913,16 @@
           "description": ""
         }
       },
-      "name": "01-Variable Trivia",
+      "name": "05-Variable Trivia",
       "type": "file",
       "visible": true,
       "visibleInFeed": true,
-      "order": 1,
-      "titlecardFrame": null,
+      "order": 5,
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -9.7
+      },
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -8737,14 +8937,14 @@
     }
   },
   {
-    "name": "06-Spot the mistake!",
+    "name": "07-Spot the mistake!",
     "type": "file",
-    "path": "lessons/06-Spot the mistake!/lesson.json",
+    "path": "lessons/07-Spot the mistake!/lesson.json",
     "title": "Spot the mistake!",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 6,
+    "order": 7,
     "titlecardFrame": {
       "zoom": 1.2,
       "x": 0.4,
@@ -9199,21 +9399,21 @@
     }
   },
   {
-    "name": "07-Any Number Over Itself Is 1",
+    "name": "08-Any Number Over Itself Is 1",
     "type": "file",
-    "path": "lessons/07-Any Number Over Itself Is 1/lesson.json",
+    "path": "lessons/08-Any Number Over Itself Is 1/lesson.json",
     "title": "Any Number Over Itself Is 1",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 7,
+    "order": 8,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
       "y": -26
     },
     "content": {
-      "id": "lessons/03-Any Number Over Itself Is 1/lesson.json",
+      "id": "lessons/07-Any Number Over Itself Is 1/lesson.json",
       "title": "Any Number Over Itself Is 1",
       "slides": [
         {
@@ -10302,6 +10502,336 @@
           "order": 11
         },
         {
+          "id": "slide-1790690884518-0-3bhie7",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "elements": [
+            {
+              "id": "el-1790690884518-m1a6guy1g",
+              "type": "banner",
+              "content": "<br> 😅",
+              "x": 49.72222222222223,
+              "y": 55.546875,
+              "width": 53.46758575754757,
+              "height": 52.07324382096494,
+              "rotation": 0,
+              "scale": 1.5981549469140102,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#f6efdd",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1790690884518-c27xhw2jn",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 73.515625,
+              "width": 51,
+              "height": 7.707458993121039,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790690884518-zsrti76gj",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 56.640625,
+              "width": 54.713877931256626,
+              "height": 59.56521040088829,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#FCE4EC",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790690884518-pg0417sex",
+              "type": "text",
+              "content": "Therefore, if <b>a </b>is multiplied and divided by the same number <b>n</b>, it equals <b>a</b>",
+              "x": 50,
+              "y": 67.03125,
+              "width": 45.86640700772255,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.2138676431373434,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 16,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790690884518-flq9ooz25",
+              "type": "text",
+              "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> CROSS 'M OUT </span></font>",
+              "x": 50,
+              "y": 14.6875,
+              "width": 82.5,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "textTransform": "uppercase",
+                "fontSize": 27
+              }
+            },
+            {
+              "id": "el-1790690884518-259yhxhxo",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 51.875,
+              "width": 54.22407341441353,
+              "height": 12.603056528817625,
+              "rotation": 0,
+              "scale": 1.0338887813259277,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790690884518-osiyhnsvf",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 26.625,
+              "width": 43.79070754520772,
+              "height": 8.81342999470849,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790690884518-mnneccium",
+              "type": "text",
+              "content": "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">n</span><span class=\"pico-fraction-den\">n</span></span>= 1<br>",
+              "x": 50,
+              "y": 26.09375,
+              "width": 26.764489040083262,
+              "height": 5,
+              "rotation": 0,
+              "scale": 2.2037322077703445,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fredoka\", sans-serif",
+                "textTransform": "none",
+                "fontSize": 11,
+                "color": "#000000",
+                "manualZ": true,
+                "fontWeight": "600",
+                "fontStyle": "italic"
+              }
+            },
+            {
+              "id": "el-1790691205425-pqf70rqro",
+              "type": "text",
+              "content": "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">a.n</span><span class=\"pico-fraction-den\">n</span></span>= a<br>",
+              "x": 50,
+              "y": 52.1875,
+              "width": 34.166666666666664,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fredoka\", sans-serif",
+                "textTransform": "uppercase",
+                "fontWeight": "600",
+                "fontStyle": "italic",
+                "fontSize": 26
+              }
+            },
+            {
+              "id": "el-1790691364786-0-u8rsn4",
+              "type": "text",
+              "content": "<div>Any number* divided by itself equals 1.</div>",
+              "x": 50,
+              "y": 36.75,
+              "width": 45.86640700772255,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.2138676431373434,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 16,
+                "textTransform": "uppercase"
+              }
+            },
+            {
+              "id": "el-1790691483304-0-nkfg5l",
+              "type": "banner",
+              "content": "<br>",
+              "x": 49.97169833713107,
+              "y": 83.9375,
+              "width": 54.22407341441353,
+              "height": 12.603056528817625,
+              "rotation": 0,
+              "scale": 1.0338887813259277,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790691483304-1-xoo1xu",
+              "type": "text",
+              "content": "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">a.n</span><span class=\"pico-fraction-den\">n</span></span>= a<br>",
+              "x": 49.97169833713107,
+              "y": 84.25,
+              "width": 34.166666666666664,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fredoka\", sans-serif",
+                "textTransform": "none",
+                "fontWeight": "600",
+                "fontStyle": "italic",
+                "fontSize": 26
+              }
+            },
+            {
+              "id": "el-1790691518879-0-t51aol",
+              "type": "line",
+              "x": 47.11111111111111,
+              "y": 87.71875,
+              "width": 7.168604389202189,
+              "height": 10,
+              "rotation": -32.014726190883074,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 2,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "none"
+              }
+            },
+            {
+              "id": "el-1790691546024-0-tgn3vt",
+              "type": "line",
+              "x": 50,
+              "y": 81.8125,
+              "width": 7.168604389202189,
+              "height": 10,
+              "rotation": -32.014726190883074,
+              "scale": 1,
+              "metadata": {
+                "width": 50,
+                "height": 2,
+                "isSymbol": true,
+                "symbolColor": "#8B5CF6",
+                "startCap": "none",
+                "endCap": "none"
+              }
+            }
+          ],
+          "order": 12,
+          "guides": {
+            "horizontal": [],
+            "vertical": [
+              0
+            ]
+          },
+          "cartridge": null,
+          "backgroundSettings": {}
+        },
+        {
           "id": "slide-1790112700792",
           "background": "#E1F5FE",
           "elements": [
@@ -10363,7 +10893,7 @@
               }
             }
           ],
-          "order": 12
+          "order": 13
         },
         {
           "id": "slide-1790113375117",
@@ -10409,13 +10939,13 @@
               }
             }
           ],
-          "order": 13
+          "order": 14
         },
         {
           "id": "slide-1790113431367",
           "background": "#E1F5FE",
           "elements": [],
-          "order": 14,
+          "order": 15,
           "cartridge": {
             "type": "AlgeBros",
             "config": {
@@ -10428,8 +10958,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-22T18:21:11.740Z",
-      "updatedAt": "2026-09-25T22:20:35.747Z",
-      "path": "lessons/03-Any Number Over Itself Is 1/lesson.json",
+      "updatedAt": "2026-09-29T14:20:31.429Z",
+      "path": "lessons/07-Any Number Over Itself Is 1/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -10454,12 +10984,12 @@
           "description": ""
         }
       },
-      "name": "03-Any Number Over Itself Is 1",
+      "name": "07-Any Number Over Itself Is 1",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
-      "order": 3,
-      "status": "active",
+      "order": 7,
+      "status": "completed",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -10470,9 +11000,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 2,
-        "completed": false,
-        "lastPlayed": 1790374372571
+        "lastSlideIndex": 14,
+        "completed": true,
+        "lastPlayed": 1790690842043
       },
       "titlecardFrame": {
         "zoom": 1,
@@ -10482,16 +11012,16 @@
     }
   },
   {
-    "name": "08-Ecuación o Expresión",
+    "name": "09-Ecuación o Expresión",
     "type": "file",
-    "path": "lessons/08-Ecuación o Expresión/lesson.json",
+    "path": "lessons/09-Ecuación o Expresión/lesson.json",
     "title": "Ecuación o Expresión",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 8,
+    "order": 9,
     "titlecardFrame": {
-      "zoom": 1,
+      "zoom": 1.3,
       "x": 0.5,
       "y": -44.3
     },
@@ -11125,21 +11655,21 @@
         "lastPlayed": 1790349842268
       },
       "titlecardFrame": {
-        "zoom": 1,
+        "zoom": 1.3,
         "x": 0.5,
         "y": -44.3
       }
     }
   },
   {
-    "name": "09-Tutorial Balanza",
+    "name": "10-Tutorial Balanza",
     "type": "file",
-    "path": "lessons/09-Tutorial Balanza/lesson.json",
+    "path": "lessons/10-Tutorial Balanza/lesson.json",
     "title": "Tutorial Balanza",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 9,
+    "order": 10,
     "titlecardFrame": null,
     "content": {
       "id": "lessons/06-Tutorial Balanza/lesson.json",
@@ -11478,14 +12008,14 @@
     }
   },
   {
-    "name": "10-01 Algebra Scale",
+    "name": "11-01 Algebra Scale",
     "type": "file",
-    "path": "lessons/10-01 Algebra Scale/lesson.json",
+    "path": "lessons/11-01 Algebra Scale/lesson.json",
     "title": "01 Algebra Scale",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 10,
+    "order": 11,
     "titlecardFrame": {
       "zoom": 1.2,
       "x": -9.4,
@@ -12243,14 +12773,14 @@
     }
   },
   {
-    "name": "11-Balancing act",
+    "name": "12-Balancing act",
     "type": "file",
-    "path": "lessons/11-Balancing act/lesson.json",
+    "path": "lessons/12-Balancing act/lesson.json",
     "title": "Balancing act",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 11,
+    "order": 12,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -12597,14 +13127,14 @@
     }
   },
   {
-    "name": "12-test",
+    "name": "13-test",
     "type": "file",
-    "path": "lessons/12-test/lesson.json",
+    "path": "lessons/13-test/lesson.json",
     "title": "test",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 12,
+    "order": 13,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -12822,21 +13352,21 @@
     }
   },
   {
-    "name": "13-Algebra Expressions",
+    "name": "14-Algebra Expressions",
     "type": "file",
-    "path": "lessons/13-Algebra Expressions/lesson.json",
+    "path": "lessons/14-Algebra Expressions/lesson.json",
     "title": "Algebra Expressions",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 13,
+    "order": 14,
     "titlecardFrame": {
       "zoom": 1,
       "x": -0.2,
       "y": -39.7
     },
     "content": {
-      "id": "lessons/10-Algebra Expressions/lesson.json",
+      "id": "lessons/14-Algebra Expressions/lesson.json",
       "title": "Algebra Expressions",
       "slides": [
         {
@@ -12952,8 +13482,14 @@
         },
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-v6vh7rndc",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789680770754-m3dj4bke6",
               "type": "image",
@@ -13037,12 +13573,19 @@
               }
             }
           ],
-          "order": 2
+          "order": 2,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789681984691",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-088tmnfcs",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789682235095-3gsxjgau9",
               "type": "quiz",
@@ -13256,12 +13799,19 @@
               }
             }
           ],
-          "order": 3
+          "order": 3,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789682611082",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-pr8lnf0p8",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789682611082-e7gpigput",
               "type": "quiz",
@@ -13517,12 +14067,19 @@
             }
           ],
           "order": 4,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789682896472",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-ddsngvid4",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789682896472-w3524n2tp",
               "type": "quiz",
@@ -13746,12 +14303,19 @@
             }
           ],
           "order": 5,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789683061518",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-i4ok13l6e",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789683061518-5dcu7expc",
               "type": "banner",
@@ -14034,12 +14598,19 @@
             }
           ],
           "order": 6,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789683631966",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-2fpnhjlg6",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789683807143-ggiun5jfa",
               "type": "image",
@@ -14130,11 +14701,12 @@
               }
             }
           ],
-          "order": 7
+          "order": 7,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789683962887",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1789683966128-cn0lbnqv8",
@@ -14206,7 +14778,8 @@
               }
             }
           ],
-          "order": 8
+          "order": 8,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789689000128-0-s4kht8",
@@ -14954,8 +15527,14 @@
         },
         {
           "id": "slide-1789695111693",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-hov49egdz",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789695138944-7j5lbjab7",
               "type": "image",
@@ -15035,12 +15614,19 @@
               }
             }
           ],
-          "order": 13
+          "order": 13,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789695336584",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-15psr7z4s",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789695338651-bqvnn31cd",
               "type": "banner",
@@ -15113,12 +15699,19 @@
               }
             }
           ],
-          "order": 14
+          "order": 14,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789695920642",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-rv49hod3q",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789695953262-80kl7oawu",
               "type": "image",
@@ -15160,7 +15753,8 @@
               }
             }
           ],
-          "order": 15
+          "order": 15,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789690361452-3-kelzxh",
@@ -15626,8 +16220,14 @@
         },
         {
           "id": "slide-1789698311834",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790692393340-tgu52gce2",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1789698323865-w8hiqxz3v",
               "type": "quiz",
@@ -15699,7 +16299,8 @@
               }
             }
           ],
-          "order": 18
+          "order": 18,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1789695034706",
@@ -15858,8 +16459,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-17T21:32:32.665Z",
-      "updatedAt": "2026-09-25T22:39:35.919Z",
-      "path": "lessons/10-Algebra Expressions/lesson.json",
+      "updatedAt": "2026-09-29T14:33:23.826Z",
+      "path": "lessons/14-Algebra Expressions/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -15870,12 +16471,12 @@
           "description": ""
         }
       },
-      "name": "10-Algebra Expressions",
+      "name": "14-Algebra Expressions",
       "type": "file",
       "visible": true,
       "visibleInFeed": true,
-      "order": 10,
-      "status": "active",
+      "order": 14,
+      "status": "completed",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -15886,9 +16487,9 @@
         "_store": {}
       },
       "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1790349002526
+        "lastSlideIndex": 19,
+        "completed": true,
+        "lastPlayed": 1790692271081
       },
       "titlecardFrame": {
         "zoom": 1,
@@ -15898,14 +16499,14 @@
     }
   },
   {
-    "name": "14-algebraka1",
+    "name": "15-algebraka1",
     "type": "file",
-    "path": "lessons/14-algebraka1/lesson.json",
+    "path": "lessons/15-algebraka1/lesson.json",
     "title": "algebraka1",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 14,
+    "order": 15,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -17728,14 +18329,14 @@
     }
   },
   {
-    "name": "15-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
+    "name": "16-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "type": "file",
-    "path": "lessons/15-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
+    "path": "lessons/16-One Solution, No Solution, or Infinitely Many (8.EE.C.7a)/lesson.json",
     "title": "One Solution, No Solution, or Infinitely Many (8.EE.C.7a)",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 15,
+    "order": 16,
     "titlecardFrame": {
       "zoom": 1.6,
       "x": 24.7,
@@ -19121,14 +19722,14 @@
     }
   },
   {
-    "name": "16-Estafa",
+    "name": "17-Estafa",
     "type": "file",
-    "path": "lessons/16-Estafa/lesson.json",
+    "path": "lessons/17-Estafa/lesson.json",
     "title": "Estafa",
     "description": "¡Cuidate del estafador!",
     "visible": true,
     "visibleInFeed": true,
-    "order": 16,
+    "order": 17,
     "titlecardFrame": {
       "zoom": 1.4,
       "x": 11.9,
@@ -20040,17 +20641,17 @@
     }
   },
   {
-    "name": "17-Pociones",
+    "name": "18-Pociones",
     "type": "file",
-    "path": "lessons/17-Pociones/lesson.json",
+    "path": "lessons/18-Pociones/lesson.json",
     "title": "Pociones",
     "description": "Aprende a crear pociones mágicas",
     "visible": true,
     "visibleInFeed": false,
-    "order": 17,
+    "order": 18,
     "titlecardFrame": null,
     "content": {
-      "id": "lessons/01-Pociones/lesson.json",
+      "id": "lessons/18-Pociones/lesson.json",
       "title": "Pociones",
       "slides": [
         {
@@ -20440,6 +21041,22 @@
           "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
           "elements": [
             {
+              "id": "el-1778686426188",
+              "type": "image",
+              "content": "/src/assets/characters/wizard%20crystal%20ball.png",
+              "x": 50.55555555555554,
+              "y": 67.03125,
+              "width": 40,
+              "height": 33.5377358490566,
+              "rotation": 0,
+              "scale": 2.7105907383126553,
+              "metadata": {
+                "width": 40,
+                "height": 33.5377358490566,
+                "locked": false
+              }
+            },
+            {
               "id": "el-1778636057286",
               "type": "balloon",
               "content": "<div>Veamos qué pasa con estos símbolos...</div>",
@@ -20461,24 +21078,8 @@
               },
               "translations": {
                 "en": {
-                  "content": "<div>New symbols!</div><div>It gets HARDER!</div>"
+                  "content": "New symbols!"
                 }
-              }
-            },
-            {
-              "id": "el-1778686426188",
-              "type": "image",
-              "content": "/src/assets/characters/wizard%20crystal%20ball.png",
-              "x": 50.55555555555554,
-              "y": 67.03125,
-              "width": 40,
-              "height": 33.5377358490566,
-              "rotation": 0,
-              "scale": 2.7105907383126553,
-              "metadata": {
-                "width": 40,
-                "height": 33.5377358490566,
-                "locked": false
               }
             },
             {
@@ -20745,8 +21346,8 @@
       ],
       "author": "User",
       "createdAt": "2026-05-12T21:25:39.254Z",
-      "updatedAt": "2026-06-22T22:35:36.358Z",
-      "path": "lessons/01-Pociones/lesson.json",
+      "updatedAt": "2026-09-29T15:32:05.356Z",
+      "path": "lessons/18-Pociones/lesson.json",
       "textPreset": null,
       "subject": "Math",
       "topic": "PEMDAS",
@@ -20754,17 +21355,13 @@
       "chapterName": "Magic",
       "lessonId": "01",
       "visible": true,
-      "name": "01-Pociones",
+      "name": "18-Pociones",
       "type": "file",
       "description": "Aprende a crear pociones mágicas",
-      "order": 1,
+      "order": 18,
       "status": "active",
       "icon": "icon_potion.png",
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1782166764629
-      },
+      "progress": null,
       "translations": {
         "en": {
           "title": "Potions 101",
@@ -20774,18 +21371,27 @@
       "cardColor": "#8B5CF6",
       "hashtag": "#OrderOfOperations",
       "visibleInFeed": false,
-      "titlecardFrame": null
+      "titlecardFrame": null,
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      }
     }
   },
   {
-    "name": "18-Pociones - Parte 2",
+    "name": "19-Pociones - Parte 2",
     "type": "file",
-    "path": "lessons/18-Pociones - Parte 2/lesson.json",
+    "path": "lessons/19-Pociones - Parte 2/lesson.json",
     "title": "Pociones - Parte 2",
     "description": "Mezcla +-×÷ en el orden correcto",
     "visible": true,
     "visibleInFeed": false,
-    "order": 18,
+    "order": 19,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -21504,14 +22110,14 @@
     }
   },
   {
-    "name": "19-Pociones - Parte 3",
+    "name": "20-Pociones - Parte 3",
     "type": "file",
-    "path": "lessons/19-Pociones - Parte 3/lesson.json",
+    "path": "lessons/20-Pociones - Parte 3/lesson.json",
     "title": "Pociones - Parte 3",
     "description": "Exponentes",
     "visible": true,
     "visibleInFeed": false,
-    "order": 19,
+    "order": 20,
     "titlecardFrame": null,
     "content": {
       "id": "lessons/03-Pociones - Parte 3/lesson.json",
@@ -22047,22 +22653,22 @@
     }
   },
   {
-    "name": "20-Expresiones",
+    "name": "21-Expresiones",
     "type": "file",
-    "path": "lessons/20-Expresiones/lesson.json",
+    "path": "lessons/21-Expresiones/lesson.json",
     "title": "Expresiones",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 20,
+    "order": 21,
     "titlecardFrame": null,
     "content": {
-      "id": "lessons/06-Expresiones/lesson.json",
+      "id": "lessons/21-Expresiones/lesson.json",
       "title": "Expresiones",
       "slides": [
         {
           "id": "slide-1779384246851",
-          "background": "url(\"/src/assets/backgrounds/bkg_therightname.jpg\")",
+          "background": "url(\"/src/assets/backgrounds/titlecard_therightname_yara.png\")",
           "elements": [],
           "order": 0
         },
@@ -22071,18 +22677,20 @@
           "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
           "elements": [
             {
-              "id": "el-1779402740053",
+              "id": "el-1790696078705-vcipeuiqf",
               "type": "image",
-              "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
-              "x": 27.22222222222222,
-              "y": 67.34375,
+              "content": "/src/assets/characters/yara_looks_back_smirk.png",
+              "x": 26.666666666666664,
+              "y": 71.09375,
               "width": 40,
-              "height": 29.263005780346823,
+              "height": 36.409090909090914,
               "rotation": 0,
-              "scale": 1.887134764466538,
+              "scale": 1.5780760007034378,
               "metadata": {
                 "width": 40,
-                "height": 29.263005780346823
+                "height": 36.409090909090914,
+                "category": "characters",
+                "locked": true
               }
             },
             {
@@ -22103,10 +22711,10 @@
             {
               "id": "el-1779402747197",
               "type": "balloon",
-              "content": "Mi nombre es Chef.",
-              "x": 46.111111111111114,
-              "y": 27.1875,
-              "width": 40,
+              "content": "Mi nombre es Yara.",
+              "x": 50.41666666666667,
+              "y": 21.09375,
+              "width": 45.27777777777778,
               "height": 20,
               "rotation": 0,
               "scale": 1,
@@ -22114,10 +22722,10 @@
                 "backgroundColor": "#ffffff",
                 "color": "#000000",
                 "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
+                "fontSize": 21,
                 "tailPos": {
-                  "x": -23,
-                  "y": 77
+                  "x": -31,
+                  "y": 133
                 }
               },
               "translations": {
@@ -22129,7 +22737,7 @@
             {
               "id": "el-1779402757661",
               "type": "balloon",
-              "content": "¡Mi nombre es Pesto!",
+              "content": "¡Y yo Pesto!",
               "x": 78.33333333333334,
               "y": 45.3125,
               "width": 40,
@@ -22149,6 +22757,41 @@
               "translations": {
                 "en": {
                   "content": "My name is Pesto!"
+                }
+              }
+            },
+            {
+              "id": "el-1790696096548-lltsris7u",
+              "type": "balloon",
+              "content": "Soy Kranky.",
+              "x": 17.5,
+              "y": 33.671875,
+              "width": 40,
+              "height": 13.90625,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": 15,
+                  "y": 67
+                },
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderColor": "#000000",
+                "skin": "octo",
+                "tailOrigin": {
+                  "edge": "bottom",
+                  "offset": 0.6129032258064516,
+                  "angle": 1.2800137997151537
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "I'm Kranky."
                 }
               }
             }
@@ -22211,47 +22854,6 @@
               }
             },
             {
-              "id": "el-1779378679892",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains.png",
-              "x": 36.72222222222222,
-              "y": 74.03125,
-              "width": 40,
-              "height": 30.809659090909093,
-              "rotation": 0,
-              "scale": 1.7084055158590379,
-              "metadata": {
-                "width": 40,
-                "height": 30.809659090909093
-              }
-            },
-            {
-              "id": "el-1779302279638",
-              "type": "balloon",
-              "content": "¿Cómo le llamamos a esto?",
-              "x": 21.11111111111111,
-              "y": 40.546875,
-              "width": 40,
-              "height": 16.71875,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": 9,
-                  "y": 63
-                }
-              },
-              "translations": {
-                "en": {
-                  "content": "and what is their name?"
-                }
-              }
-            },
-            {
               "id": "el-1779302263520",
               "type": "text",
               "content": "<font color=\"#ffffff\">2 × 3 + 12 ÷ 4</font>",
@@ -22293,6 +22895,68 @@
               }
             },
             {
+              "id": "el-1790696245735-171a05urg",
+              "type": "image",
+              "content": "/src/assets/characters/yara_pointing_34.png",
+              "x": 20.555555555555554,
+              "y": 70.625,
+              "width": 40,
+              "height": 46.47160068846816,
+              "rotation": 0,
+              "scale": 1.1133264172247828,
+              "metadata": {
+                "width": 40,
+                "height": 46.47160068846816,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1779402965691",
+              "type": "text",
+              "content": "👄",
+              "x": 53.16666666666666,
+              "y": 56.5,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 2.267708829186052,
+              "metadata": {
+                "fontFamily": "\"Fira Sans\"",
+                "textAlign": "center"
+              },
+              "translations": {
+                "en": {
+                  "content": "👄"
+                }
+              }
+            },
+            {
+              "id": "el-1779302279638",
+              "type": "balloon",
+              "content": "¿Cómo le llamamos a esto?",
+              "x": 21.11111111111111,
+              "y": 40.546875,
+              "width": 40,
+              "height": 16.71875,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": 9,
+                  "y": 63
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "and what is their name?"
+                }
+              }
+            },
+            {
               "id": "el-1779302299058",
               "type": "balloon",
               "content": "¿Cuenta <font color=\"#c62828\">larga</font>?",
@@ -22315,26 +22979,6 @@
               "translations": {
                 "en": {
                   "content": "¿Long operation?"
-                }
-              }
-            },
-            {
-              "id": "el-1779402965691",
-              "type": "text",
-              "content": "👄",
-              "x": 53.16666666666666,
-              "y": 56.5,
-              "width": 20,
-              "height": 10,
-              "rotation": 0,
-              "scale": 2.267708829186052,
-              "metadata": {
-                "fontFamily": "\"Fira Sans\"",
-                "textAlign": "center"
-              },
-              "translations": {
-                "en": {
-                  "content": "👄"
                 }
               }
             }
@@ -22412,18 +23056,19 @@
               }
             },
             {
-              "id": "el-1780592783697",
+              "id": "el-1790696271832-6rajr3s7r",
               "type": "image",
-              "content": "/src/assets/characters/Chef_explain%20s_signals.png",
-              "x": 22.222222222222225,
-              "y": 69.84375,
+              "content": "/src/assets/characters/yara_leaning.png",
+              "x": 11.388888888888886,
+              "y": 69.6875,
               "width": 40,
-              "height": 37.47761194029851,
+              "height": 55.91201716738197,
               "rotation": 0,
-              "scale": 1.3950555298902578,
+              "scale": 1,
               "metadata": {
                 "width": 40,
-                "height": 37.47761194029851
+                "height": 55.91201716738197,
+                "category": "characters"
               }
             },
             {
@@ -22783,19 +23428,20 @@
               }
             },
             {
-              "id": "el-1779383116542",
+              "id": "el-1790696287054-xtdbvfn7g",
               "type": "image",
-              "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
-              "x": 20.833333333333332,
-              "y": 86.25,
+              "content": "/src/assets/characters/yara_avatar_calm.png",
+              "x": 13.055555555555555,
+              "y": 79.21875,
               "width": 40,
-              "height": 32.59797724399495,
+              "height": 25.44117647058824,
               "rotation": 0,
-              "scale": 1.91708938486618,
+              "scale": 2.34306564468059,
               "metadata": {
                 "width": 40,
-                "height": 32.59797724399495,
-                "flipX": true
+                "height": 25.44117647058824,
+                "category": "characters",
+                "hasShadow": false
               }
             },
             {
@@ -23054,20 +23700,20 @@
       ],
       "author": "User",
       "createdAt": "2026-05-20T18:37:37.224Z",
-      "updatedAt": "2026-09-12T23:11:04.450Z",
-      "path": "lessons/06-Expresiones/lesson.json",
+      "updatedAt": "2026-09-29T15:41:58.690Z",
+      "path": "lessons/21-Expresiones/lesson.json",
       "textPreset": null,
-      "name": "06-Expresiones",
+      "name": "21-Expresiones",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 6,
+      "order": 21,
       "status": "active",
       "icon": "icon_gym.png",
       "progress": {
         "lastSlideIndex": 0,
         "completed": false,
-        "lastPlayed": 1788987956837
+        "lastPlayed": 1790696057715
       },
       "translations": {
         "en": {
@@ -23091,37 +23737,40 @@
     }
   },
   {
-    "name": "21-Intro to PEMDAS",
+    "name": "22-Intro to PEMDAS",
     "type": "file",
-    "path": "lessons/21-Intro to PEMDAS/lesson.json",
+    "path": "lessons/22-Intro to PEMDAS/lesson.json",
     "title": "Intro to PEMDAS",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 21,
-    "titlecardFrame": null,
+    "order": 22,
+    "titlecardFrame": {
+      "zoom": 1,
+      "x": 0,
+      "y": -14.8
+    },
     "content": {
-      "id": "lessons/05-Intro to PEMDAS/lesson.json",
+      "id": "lessons/22-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
       "slides": [
         {
           "id": "slide-1778449564989",
-          "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png?t=1778448469826\")",
+          "background": "#ffffff",
           "elements": [
             {
-              "id": "el-1778449574610",
+              "id": "el-1790696987192-0",
               "type": "image",
-              "content": "/src/assets/characters/chef%20phone%20viral%20challenge.png?t=1778448462548",
-              "x": 52.77777777777778,
-              "y": 57.5,
+              "content": "/src/assets/characters/yara_viral_challenge_phone.png",
+              "x": 50,
+              "y": 64.5751953125,
               "width": 40,
-              "height": 39.97874601487779,
+              "height": 40,
               "rotation": 0,
-              "scale": 2.7841341841956515,
+              "scale": 2.588296324167277,
               "metadata": {
                 "width": 40,
-                "height": 39.97874601487779,
-                "opacity": 1
+                "height": 40
               }
             }
           ],
@@ -23766,8 +24415,8 @@
       ],
       "author": "User",
       "createdAt": "2026-05-10T21:44:26.467Z",
-      "updatedAt": "2026-09-13T16:40:57.061Z",
-      "path": "lessons/05-Intro to PEMDAS/lesson.json",
+      "updatedAt": "2026-09-29T15:50:26.540Z",
+      "path": "lessons/22-Intro to PEMDAS/lesson.json",
       "textPreset": null,
       "subject": "Math",
       "topic": "PEMDAS",
@@ -23775,10 +24424,10 @@
       "chapterName": "Chapter: Intro",
       "lessonId": "00",
       "visible": true,
-      "name": "05-Intro to PEMDAS",
+      "name": "22-Intro to PEMDAS",
       "type": "file",
       "description": "",
-      "order": 5,
+      "order": 22,
       "status": "active",
       "icon": "icon_gym.png",
       "progress": null,
@@ -23801,18 +24450,22 @@
         "_owner": null,
         "_store": {}
       },
-      "titlecardFrame": null
+      "titlecardFrame": {
+        "zoom": 1,
+        "x": 0,
+        "y": -14.8
+      }
     }
   },
   {
-    "name": "22-Pociones - parte 4",
+    "name": "23-Pociones - parte 4",
     "type": "file",
-    "path": "lessons/22-Pociones - parte 4/lesson.json",
+    "path": "lessons/23-Pociones - parte 4/lesson.json",
     "title": "Pociones - parte 4",
     "description": "Todo comienza aquí dentro ( )",
     "visible": true,
     "visibleInFeed": false,
-    "order": 22,
+    "order": 23,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
@@ -24507,21 +25160,21 @@
     }
   },
   {
-    "name": "23-Separa los términos",
+    "name": "24-Separa los términos",
     "type": "file",
-    "path": "lessons/23-Separa los términos/lesson.json",
+    "path": "lessons/24-Separa los términos/lesson.json",
     "title": "Separa los términos",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 23,
+    "order": 24,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
       "y": -24.7
     },
     "content": {
-      "id": "lessons/07-Separa los términos/lesson.json",
+      "id": "lessons/24-Separa los términos/lesson.json",
       "title": "Separa los términos",
       "slides": [
         {
@@ -24681,29 +25334,20 @@
               }
             },
             {
-              "id": "el-1778989454982",
-              "type": "balloon",
-              "content": "<div>luego identificamos los + y -.</div>",
-              "x": 78.75,
-              "y": 55,
-              "width": 43.611111111111086,
-              "height": 20,
+              "id": "el-1790697433663-gnv09i05p",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_smirk.png",
+              "x": 49.44444444444444,
+              "y": 60,
+              "width": 40,
+              "height": 24.11944869831547,
               "rotation": 0,
-              "scale": 1,
+              "scale": 0.9839073235592813,
               "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": -82,
-                  "y": 20
-                }
-              },
-              "translations": {
-                "en": {
-                  "content": "<div><b>+</b> <b>-</b> are</div><div>TERM</div><div>SEPARATORS</div>"
-                }
+                "width": 40,
+                "height": 24.11944869831547,
+                "category": "characters",
+                "hasShadow": false
               }
             },
             {
@@ -24745,6 +25389,32 @@
               "translations": {
                 "en": {
                   "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                }
+              }
+            },
+            {
+              "id": "el-1778989454982",
+              "type": "balloon",
+              "content": "<div>luego identificamos los + y -.</div>",
+              "x": 78.75,
+              "y": 55,
+              "width": 43.611111111111086,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -82,
+                  "y": 20
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "<div><b>+</b> <b>-</b> are</div><div>TERM</div><div>SEPARATORS</div>"
                 }
               }
             }
@@ -24846,21 +25516,6 @@
           "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
           "elements": [
             {
-              "id": "el-1780929972200",
-              "type": "image",
-              "content": "/src/assets/characters/chef_chopping_veggies.png",
-              "x": 52.5,
-              "y": 47.03125,
-              "width": 40,
-              "height": 23.385245901639344,
-              "rotation": 0,
-              "scale": 1.7902632507695173,
-              "metadata": {
-                "width": 40,
-                "height": 23.385245901639344
-              }
-            },
-            {
               "id": "el-1779301824002",
               "type": "text",
               "content": "- y + cortan la expresión en _________",
@@ -24916,6 +25571,22 @@
                   }
                 }
               }
+            },
+            {
+              "id": "el-1790697470598-l0ddhlur1",
+              "type": "image",
+              "content": "/src/assets/characters/Pesto%20dropping%20chili.png",
+              "x": 50,
+              "y": 50,
+              "width": 40,
+              "height": 17.125,
+              "rotation": 0,
+              "scale": 1.9056187132093698,
+              "metadata": {
+                "width": 40,
+                "height": 17.125,
+                "category": "characters"
+              }
             }
           ],
           "order": 3,
@@ -24941,6 +25612,28 @@
                 "width": 40,
                 "height": 13.660714285714286,
                 "locked": true
+              }
+            },
+            {
+              "id": "el-1779052317040",
+              "type": "text",
+              "content": "<font color=\"#f97316\"><b>+ -</b></font> cortan la<div><b>operación</b></div><div><b>combinada.</b></div>",
+              "x": 50,
+              "y": 20,
+              "width": 28.995467710378463,
+              "height": 10,
+              "rotation": 0,
+              "scale": 2.810057085593638,
+              "metadata": {
+                "fontFamily": "\"Nunito Sans\"",
+                "fontSize": 10,
+                "textAlign": "center",
+                "manualZ": true
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#f97316\">+ -</font> work as knives..."
+                }
               }
             },
             {
@@ -25071,66 +25764,21 @@
               }
             },
             {
-              "id": "el-1779056182257",
+              "id": "el-1790697498538-0-ti9euf",
               "type": "image",
-              "content": "/src/assets/characters/chef_scary_knife.png",
-              "x": 22.77777777777778,
-              "y": 19.84375,
+              "content": "/src/assets/characters/yara_avatar_smirk.png",
+              "x": 44.99999999999999,
+              "y": 75.03125,
               "width": 40,
-              "height": 26.688493919550982,
+              "height": 24.11944869831547,
               "rotation": 0,
-              "scale": 0.45819795305696026,
+              "scale": 0.9839073235592813,
               "metadata": {
                 "width": 40,
-                "height": 26.688493919550982
-              }
-            },
-            {
-              "id": "el-1779052317040",
-              "type": "text",
-              "content": "<font color=\"#f97316\"><b>+ -</b></font> cortan la<div><b>operación</b></div><div><b>combinada.</b></div>",
-              "x": 50.41666666666667,
-              "y": 20,
-              "width": 28.995467710378463,
-              "height": 10,
-              "rotation": 0,
-              "scale": 2.810057085593638,
-              "metadata": {
-                "fontFamily": "\"Nunito Sans\"",
-                "fontSize": 10,
-                "textAlign": "center"
-              },
-              "translations": {
-                "en": {
-                  "content": "<font color=\"#f97316\">+ -</font> work as knives..."
-                }
-              }
-            },
-            {
-              "id": "el-1779053480232",
-              "type": "balloon",
-              "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>separan los términos!</div>",
-              "x": 79.58333333333336,
-              "y": 77.421875,
-              "width": 45.27777777777778,
-              "height": 18.59375,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 19,
-                "tailPos": {
-                  "x": -88,
-                  "y": 14
-                },
-                "textDecoration": "none"
-              },
-              "translations": {
-                "en": {
-                  "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>slice the terms!</div>"
-                }
+                "height": 24.11944869831547,
+                "category": "characters",
+                "hasShadow": false,
+                "flipX": true
               }
             },
             {
@@ -25193,6 +25841,33 @@
               "translations": {
                 "en": {
                   "content": "<font color=\"#e11d48\"><b>-</b></font>"
+                }
+              }
+            },
+            {
+              "id": "el-1779053480232",
+              "type": "balloon",
+              "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>separan los términos!</div>",
+              "x": 79.58333333333336,
+              "y": 77.421875,
+              "width": 45.27777777777778,
+              "height": 18.59375,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 19,
+                "tailPos": {
+                  "x": -88,
+                  "y": 14
+                },
+                "textDecoration": "none"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#f97316\"><b>+ -&nbsp;</b></font><div>slice the terms!</div>"
                 }
               }
             }
@@ -25477,22 +26152,6 @@
           "background": "url(\"/src/assets/backgrounds/BAD%20card%20background.png\")",
           "elements": [
             {
-              "id": "el-1779023417786",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
-              "x": 18.611111111111107,
-              "y": 85.9375,
-              "width": 40,
-              "height": 33.30223880597015,
-              "rotation": 0,
-              "scale": 1.1028074703342168,
-              "metadata": {
-                "width": 40,
-                "height": 33.30223880597015,
-                "locked": true
-              }
-            },
-            {
               "id": "el-1779300339990",
               "type": "text",
               "content": "<span style=\"caret-color: rgb(88, 204, 2);\"><font color=\"#ffffff\">=</font><font color=\"#58cc02\"> 34</font></span>",
@@ -25695,6 +26354,23 @@
                   "content": "Calculate<div>the <b>terms</b>&nbsp;<div><b><font color=\"#0d9488\">×</font>  </b>&amp;<b> </b><b><span style=\"color: rgb(13, 148, 136);\">÷ </span></b>(left to right)</div></div>"
                 }
               }
+            },
+            {
+              "id": "el-1790697533568-v8w799vwv",
+              "type": "image",
+              "content": "/src/assets/characters/yara_explains_happy.png",
+              "x": 28.888888888888893,
+              "y": 90.9375,
+              "width": 40,
+              "height": 47.705278592375365,
+              "rotation": 0,
+              "scale": 0.6661518166439625,
+              "metadata": {
+                "width": 40,
+                "height": 47.705278592375365,
+                "category": "characters",
+                "flipX": true
+              }
             }
           ],
           "order": 7,
@@ -25774,14 +26450,14 @@
       ],
       "author": "User",
       "createdAt": "2026-05-15T18:19:21.767Z",
-      "updatedAt": "2026-06-22T20:48:27.633Z",
-      "path": "lessons/07-Separa los términos/lesson.json",
+      "updatedAt": "2026-09-29T15:59:05.213Z",
+      "path": "lessons/24-Separa los términos/lesson.json",
       "textPreset": null,
-      "name": "07-Separa los términos",
+      "name": "24-Separa los términos",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 7,
+      "order": 24,
       "status": "active",
       "icon": "icon_gym.png",
       "progress": null,
@@ -25798,37 +26474,86 @@
         "zoom": 1,
         "x": 0,
         "y": -24.7
+      },
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
       }
     }
   },
   {
-    "name": "24-× ÷, luego + -",
+    "name": "25-× ÷, luego + -",
     "type": "file",
-    "path": "lessons/24-× ÷, luego + -/lesson.json",
+    "path": "lessons/25-× ÷, luego + -/lesson.json",
     "title": "× ÷, luego + -",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 24,
+    "order": 25,
     "titlecardFrame": {
-      "zoom": 1,
-      "x": -0.4,
-      "y": 20.4
+      "zoom": 1.1,
+      "x": 5,
+      "y": 26
     },
     "content": {
-      "id": "lessons/08-× ÷, luego + -/lesson.json",
+      "id": "lessons/25-× ÷, luego + -/lesson.json",
       "title": "× ÷, luego + -",
       "slides": [
         {
           "id": "slide-1779554686535",
-          "background": "url(\"/src/assets/backgrounds/bkg_chef_gym.png\")",
+          "background": "url(\"/src/assets/backgrounds/titlecard_yara_gym.png\")",
           "elements": [],
           "order": 0
         },
         {
           "id": "slide-1779560643419",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790697315899-czhyc7g2e",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
+            {
+              "id": "el-1790697366484-a2oq34qva",
+              "type": "image",
+              "content": "/src/assets/characters/yara_arms_in_waist_3.png",
+              "x": 66.66666666666667,
+              "y": 65.15625,
+              "width": 40,
+              "height": 48.527874564459935,
+              "rotation": 0,
+              "scale": 1.2547193698270265,
+              "metadata": {
+                "width": 40,
+                "height": 48.527874564459935,
+                "category": "characters"
+              }
+            },
+            {
+              "id": "el-1779748340554",
+              "type": "popup",
+              "content": "/assets/characters/tutuTucaSticker_SMALL.png",
+              "x": 39.16666666666667,
+              "y": 71.875,
+              "width": 30,
+              "height": 30,
+              "rotation": 179.1461117615676,
+              "scale": 0.895876166267133,
+              "metadata": {
+                "popupText": "Hello from the popup!\n\nThis is the song of our lives. YES YES",
+                "width": 30,
+                "height": 30,
+                "flipX": false,
+                "flipY": true
+              }
+            },
             {
               "id": "el-1779560652731",
               "type": "balloon",
@@ -25849,81 +26574,35 @@
                   "y": 85
                 }
               }
-            },
-            {
-              "id": "el-1779560646927",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20approves%20without%20excitement.png",
-              "x": 66.11111111111111,
-              "y": 73.28125,
-              "width": 40,
-              "height": 32.59797724399495,
-              "rotation": 0,
-              "scale": 1.9513905364398278,
-              "metadata": {
-                "width": 40,
-                "height": 32.59797724399495
-              }
-            },
-            {
-              "id": "el-1779748340554",
-              "type": "popup",
-              "content": "/assets/characters/tutuTucaSticker_SMALL.png",
-              "x": 39.16666666666667,
-              "y": 71.875,
-              "width": 30,
-              "height": 30,
-              "rotation": 179.1461117615676,
-              "scale": 0.895876166267133,
-              "metadata": {
-                "popupText": "Hello from the popup!\n\nThis is the song of our lives. YES YES",
-                "width": 30,
-                "height": 30,
-                "flipX": false,
-                "flipY": true
-              }
             }
           ],
-          "order": 1
+          "order": 1,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779555807271",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1779555827154",
-              "type": "balloon",
-              "content": "First, do you remember the order of operations?",
-              "x": 61.111111111111114,
-              "y": 24.53125,
-              "width": 40,
-              "height": 20,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": -91,
-                  "y": -11
-                }
-              }
+              "id": "el-1790697315899-m8mf1dlx9",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
             },
             {
-              "id": "el-1779564973865",
+              "id": "el-1790697357051-kaigu6v4k",
               "type": "image",
-              "content": "/src/assets/characters/Chef_dipper.png",
-              "x": 26.11111111111111,
-              "y": 33.75,
+              "content": "/src/assets/characters/yara_pointing_accusing.png",
+              "x": 22.77777777777778,
+              "y": 38.4375,
               "width": 40,
-              "height": 37.5,
+              "height": 52.27443609022557,
               "rotation": 0,
               "scale": 1,
               "metadata": {
                 "width": 40,
-                "height": 37.5
+                "height": 52.27443609022557,
+                "category": "characters"
               }
             },
             {
@@ -25951,14 +26630,42 @@
                 "quizType": "reorder",
                 "visualMode": false
               }
+            },
+            {
+              "id": "el-1779555827154",
+              "type": "balloon",
+              "content": "First, do you remember the order of operations?",
+              "x": 61.111111111111114,
+              "y": 24.53125,
+              "width": 40,
+              "height": 20,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -91,
+                  "y": -11
+                }
+              }
             }
           ],
-          "order": 2
+          "order": 2,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790697315899-39292320i",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779482535388",
               "type": "quiz",
@@ -25985,25 +26692,34 @@
               }
             }
           ],
-          "order": 3
+          "order": 3,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779560704118",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1779560709871",
+              "id": "el-1790697315899-8jtl5o0f2",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
+            {
+              "id": "el-1790697331823-3aofmweq9",
               "type": "image",
-              "content": "/src/assets/characters/chef%20running%20and%20saying%20hi.png",
-              "x": 31.11111111111111,
-              "y": 73.59375,
+              "content": "/src/assets/characters/yara_resting_on_floor_seated.png",
+              "x": 43.61111111111111,
+              "y": 73.28125,
               "width": 40,
-              "height": 29.263005780346823,
+              "height": 29.365157480314956,
               "rotation": 0,
-              "scale": 1.5446897617817255,
+              "scale": 1.8092868516017369,
               "metadata": {
                 "width": 40,
-                "height": 29.263005780346823
+                "height": 29.365157480314956,
+                "category": "characters",
+                "hasShadow": false
               }
             },
             {
@@ -26028,7 +26744,8 @@
               }
             }
           ],
-          "order": 4
+          "order": 4,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779554551282",
@@ -26076,21 +26793,23 @@
         },
         {
           "id": "slide-1779633261919",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1779633265302",
+              "id": "el-1790697300402-8ncwpglcf",
               "type": "image",
-              "content": "/src/assets/characters/Chef_dynamic_jump.png",
-              "x": 47.22222222222222,
-              "y": 65,
+              "content": "/src/assets/characters/yara_agressive_jumps_in_air.png",
+              "x": 50,
+              "y": 65.3125,
               "width": 40,
-              "height": 46.44174757281554,
+              "height": 37.255192878338285,
               "rotation": 0,
-              "scale": 1.4464451546175463,
+              "scale": 1.694864333174076,
               "metadata": {
                 "width": 40,
-                "height": 46.44174757281554
+                "height": 37.255192878338285,
+                "category": "characters",
+                "hasShadow": false
               }
             },
             {
@@ -26109,18 +26828,25 @@
                 "fontFamily": "\"Noto Sans\"",
                 "fontSize": 16,
                 "tailPos": {
-                  "x": 20,
+                  "x": -6,
                   "y": 50
                 }
               }
             }
           ],
-          "order": 6
+          "order": 6,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779633520297",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790697315899-vftee7vf3",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779633667945",
               "type": "text",
@@ -26208,24 +26934,21 @@
               }
             },
             {
-              "id": "el-1779827882755",
-              "type": "balloon",
-              "content": "We just learned two rules.<div><br></div><div>Let's learn the rest!</div>",
-              "x": 26.666666666666668,
-              "y": 43.28125,
-              "width": 40,
-              "height": 30.312499999999996,
-              "rotation": 0,
+              "id": "el-1779828059880",
+              "type": "image",
+              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23F57C00%22%20%2F%3E%0A%3C%2Fsvg%3E",
+              "x": 91.79070559587801,
+              "y": 62.73907203131925,
+              "width": 18.41072621594372,
+              "height": 10,
+              "rotation": 42.79884401599702,
               "scale": 1,
               "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": -16,
-                  "y": 118
-                }
+                "width": 40,
+                "height": 40,
+                "isSymbol": true,
+                "symbolType": "shape-square",
+                "symbolColor": "#F57C00"
               }
             },
             {
@@ -26245,36 +26968,20 @@
               }
             },
             {
-              "id": "el-1779828059880",
+              "id": "el-1790697381610-obq0x5i7j",
               "type": "image",
-              "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23F57C00%22%20%2F%3E%0A%3C%2Fsvg%3E",
-              "x": 91.79070559587801,
-              "y": 62.73907203131925,
-              "width": 18.41072621594372,
-              "height": 10,
-              "rotation": 42.79884401599702,
+              "content": "/src/assets/characters/yara_explains_01.png",
+              "x": 19.722222222222225,
+              "y": 75.625,
+              "width": 40,
+              "height": 49.21875,
+              "rotation": 0,
               "scale": 1,
               "metadata": {
                 "width": 40,
-                "height": 40,
-                "isSymbol": true,
-                "symbolType": "shape-square",
-                "symbolColor": "#F57C00"
-              }
-            },
-            {
-              "id": "el-1779827857938",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains.png",
-              "x": 30,
-              "y": 87.34375,
-              "width": 40,
-              "height": 30.809659090909093,
-              "rotation": 0,
-              "scale": 2.2581430901854302,
-              "metadata": {
-                "width": 40,
-                "height": 30.809659090909093
+                "height": 49.21875,
+                "category": "characters",
+                "flipX": true
               }
             },
             {
@@ -26312,14 +27019,42 @@
                 "color": "#FFFFFF",
                 "fontSize": 22
               }
+            },
+            {
+              "id": "el-1779827882755",
+              "type": "balloon",
+              "content": "We just learned two rules.<div><br></div><div>Let's learn the rest!</div>",
+              "x": 26.666666666666668,
+              "y": 43.28125,
+              "width": 40,
+              "height": 30.312499999999996,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -16,
+                  "y": 118
+                }
+              }
             }
           ],
-          "order": 7
+          "order": 7,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779634174400",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790697315899-llupr3pkr",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779634174400-c4epmwdy3",
               "type": "text",
@@ -26463,25 +27198,26 @@
             }
           ],
           "order": 8,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-05-22T20:42:11.915Z",
-      "updatedAt": "2026-06-22T22:37:12.104Z",
-      "path": "lessons/21-× ÷, luego + -/lesson.json",
+      "updatedAt": "2026-09-29T15:56:28.801Z",
+      "path": "lessons/25-× ÷, luego + -/lesson.json",
       "textPreset": null,
-      "name": "08-× ÷, luego + -",
+      "name": "25-× ÷, luego + -",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 8,
+      "order": 25,
       "status": "active",
       "icon": "icon_textbook.png",
       "progress": {
         "lastSlideIndex": 0,
         "completed": false,
-        "lastPlayed": 1782167405802
+        "lastPlayed": 1790697251579
       },
       "translations": {
         "en": {
@@ -26492,21 +27228,30 @@
       "cardColor": "#8B5CF6",
       "visibleInFeed": false,
       "titlecardFrame": {
-        "zoom": 1,
-        "x": -0.4,
-        "y": 20.4
+        "zoom": 1.1,
+        "x": 5,
+        "y": 26
+      },
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
       }
     }
   },
   {
-    "name": "25-TEST DELETEME",
+    "name": "26-TEST DELETEME",
     "type": "file",
-    "path": "lessons/25-TEST DELETEME/lesson.json",
+    "path": "lessons/26-TEST DELETEME/lesson.json",
     "title": "TEST DELETEME",
     "description": "",
     "visible": false,
     "visibleInFeed": false,
-    "order": 25,
+    "order": 26,
     "titlecardFrame": null,
     "content": {
       "id": "lessons/2713-TEST DELETEME/lesson.json",
@@ -26646,40 +27391,47 @@
     }
   },
   {
-    "name": "26-exponents",
+    "name": "27-exponents",
     "type": "file",
-    "path": "lessons/26-exponents/lesson.json",
+    "path": "lessons/27-exponents/lesson.json",
     "title": "exponents",
     "description": "",
     "visible": true,
     "visibleInFeed": false,
-    "order": 26,
+    "order": 27,
     "titlecardFrame": {
       "zoom": 1.6,
       "x": 25.8,
       "y": -34.4
     },
     "content": {
-      "id": "lessons/11-exponents/lesson.json",
+      "id": "lessons/27-exponents/lesson.json",
       "title": "exponents",
       "slides": [
         {
           "id": "slide-1",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1780946083892",
+              "id": "el-1790693934869-eahelmkb0",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
+            {
+              "id": "el-1790694200813-lxaiqxf52",
               "type": "image",
-              "content": "/src/assets/characters/chef_juggles_fruit.png?t=1780946043664",
-              "x": 33.888888888888886,
-              "y": 66.875,
+              "content": "/src/assets/characters/yara_back_looks_camera.png",
+              "x": 35.27777777777778,
+              "y": 70.3125,
               "width": 40,
-              "height": 36.39705882352941,
+              "height": 57.34223300970874,
               "rotation": 0,
-              "scale": 1.6886355120911427,
+              "scale": 1,
               "metadata": {
                 "width": 40,
-                "height": 36.39705882352941
+                "height": 57.34223300970874,
+                "category": "characters"
               }
             },
             {
@@ -26704,20 +27456,60 @@
               }
             }
           ],
-          "order": 0
+          "order": 0,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1780946129161",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-drtr1jxjd",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
+            {
+              "id": "el-1790694218037-ozmab09lz",
+              "type": "image",
+              "content": "/src/assets/characters/yara_explains_01.png",
+              "x": 58.333333333333336,
+              "y": 53.4375,
+              "width": 40,
+              "height": 49.21875,
+              "rotation": 0,
+              "scale": 1.9282582426247776,
+              "metadata": {
+                "width": 40,
+                "height": 49.21875,
+                "category": "characters",
+                "flipX": true
+              }
+            },
+            {
+              "id": "el-1790693873866-ahmrjji19",
+              "type": "text",
+              "content": "<font color=\"#ffffff\" style=\"background-color: rgb(230, 81, 0);\">2⁴</font>",
+              "x": 88.61111111111106,
+              "y": 52.8125,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.5081246768044978,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 36
+              }
+            },
             {
               "id": "el-1780946134847-bz7beycjo",
               "type": "balloon",
-              "content": "This is an exponent:<div><b>2⁴</b></div>",
-              "x": 73.38888888888889,
-              "y": 27.78125,
-              "width": 51.66666666666667,
-              "height": 23.75,
+              "content": "This is an <b>exponent</b>:",
+              "x": 22.138888888888886,
+              "y": 28.71875,
+              "width": 45.277777777777786,
+              "height": 15.937499999999998,
               "rotation": 0,
               "scale": 1,
               "metadata": {
@@ -26726,33 +27518,30 @@
                 "fontFamily": "\"Noto Sans\"",
                 "fontSize": 23,
                 "tailPos": {
-                  "x": -59,
-                  "y": 95
+                  "x": 82,
+                  "y": 64
+                },
+                "tailOrigin": {
+                  "edge": "bottom",
+                  "offset": 0.8623251748251747,
+                  "angle": 0.5737419432493484
                 }
-              }
-            },
-            {
-              "id": "el-1780946251698",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20looking%20glass.png?t=1780946043633",
-              "x": 50,
-              "y": 74.0625,
-              "width": 40,
-              "height": 32.06250000000001,
-              "rotation": 0,
-              "scale": 2.0627740363669163,
-              "metadata": {
-                "width": 40,
-                "height": 32.06250000000001
               }
             }
           ],
-          "order": 1
+          "order": 1,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779846259262",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-5ofbrw8jt",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779846281740",
               "type": "text",
@@ -26814,12 +27603,19 @@
               }
             }
           ],
-          "order": 2
+          "order": 2,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779846457667",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-xe6za1ro1",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779846464396",
               "type": "text",
@@ -26860,27 +27656,35 @@
               }
             },
             {
-              "id": "el-1780946116854",
+              "id": "el-1790694277611-py7lrtf5p",
               "type": "image",
-              "content": "/src/assets/characters/chef_reading_Book.png",
+              "content": "/src/assets/characters/yara_explains_down.png",
               "x": 50,
-              "y": 50,
+              "y": 57.96875,
               "width": 40,
-              "height": 26.6767955801105,
+              "height": 37.78103044496487,
               "rotation": 0,
-              "scale": 1.6412797623120268,
+              "scale": 1.5643809231385941,
               "metadata": {
                 "width": 40,
-                "height": 26.6767955801105
+                "height": 37.78103044496487,
+                "category": "characters"
               }
             }
           ],
-          "order": 3
+          "order": 3,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779846776521",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-u0e4d2jqm",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779848749123-e8kb4lch2",
               "type": "line",
@@ -26990,21 +27794,6 @@
               }
             },
             {
-              "id": "el-1779848809733",
-              "type": "image",
-              "content": "/src/assets/characters/Chef_with_phone_flow.png",
-              "x": 11.111111111111107,
-              "y": 78.75,
-              "width": 40,
-              "height": 46.51442307692307,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "width": 40,
-                "height": 46.51442307692307
-              }
-            },
-            {
               "id": "el-1779848749123-l3qj9qd15",
               "type": "text",
               "content": "<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\"><b>                                        </b></span></font>",
@@ -27039,11 +27828,27 @@
               }
             },
             {
+              "id": "el-1790694295734-csaz0n4qw",
+              "type": "image",
+              "content": "/src/assets/characters/yara_explains_02_1.png",
+              "x": 13.055555555555557,
+              "y": 69.375,
+              "width": 40,
+              "height": 63.88392857142857,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 63.88392857142857,
+                "category": "characters"
+              }
+            },
+            {
               "id": "el-1779914077507",
               "type": "balloon",
               "content": "NEW RULE:<div><b>Start with exponents</b></div>",
-              "x": 17.22222222222222,
-              "y": 34.6875,
+              "x": 18.88888888888889,
+              "y": 29.375,
               "width": 40,
               "height": 20,
               "rotation": 0,
@@ -27056,16 +27861,24 @@
                 "tailPos": {
                   "x": -21,
                   "y": 90
-                }
+                },
+                "skin": "octo"
               }
             }
           ],
-          "order": 4
+          "order": 4,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779915271972",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-wn7mr3jut",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779915352678",
               "type": "quiz",
@@ -27121,7 +27934,7 @@
                   },
                   {
                     "type": "message",
-                    "text": "<div>We always go left to right.</div><div>So now all we need to solve is</div><div><br></div>&nbsp;11 - 5"
+                    "text": "<div>After exponents, we go left to right.</div><div><br></div>&nbsp;11 - 5"
                   },
                   {
                     "type": "quiz",
@@ -27139,12 +27952,19 @@
               }
             }
           ],
-          "order": 5
+          "order": 5,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779914384629",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-6r9pavkqn",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779914416955",
               "type": "quiz",
@@ -27172,12 +27992,19 @@
             }
           ],
           "order": 6,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779915721540",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-u4dvj93kd",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779915729078",
               "type": "quiz",
@@ -27239,12 +28066,19 @@
               }
             }
           ],
-          "order": 7
+          "order": 7,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779915095749",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-6xomkukzy",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779915146852",
               "type": "quiz",
@@ -27271,12 +28105,19 @@
               }
             }
           ],
-          "order": 8
+          "order": 8,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779916065980",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790693934869-kjadrzsbu",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779916071076",
               "type": "text",
@@ -27291,21 +28132,6 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 10
-              }
-            },
-            {
-              "id": "el-1780946189719",
-              "type": "image",
-              "content": "/src/assets/characters/chef_pile_plate.png?t=1780946043672",
-              "x": 49.44444444444444,
-              "y": 33.75,
-              "width": 40,
-              "height": 30.638925294888598,
-              "rotation": 0,
-              "scale": 1.1408281971414227,
-              "metadata": {
-                "width": 40,
-                "height": 30.638925294888598
               }
             },
             {
@@ -27333,9 +28159,26 @@
                 "quizType": "reorder",
                 "visualMode": false
               }
+            },
+            {
+              "id": "el-1790694332438-x4iaesprf",
+              "type": "image",
+              "content": "/src/assets/characters/yara_walking_flashlight_low.png",
+              "x": 50,
+              "y": 37.65625,
+              "width": 40,
+              "height": 36.50099403578529,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 36.50099403578529,
+                "category": "characters"
+              }
             }
           ],
-          "order": 9
+          "order": 9,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1780582475515",
@@ -27486,7 +28329,7 @@
         },
         {
           "id": "slide-1779914874032",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1779914890407",
@@ -27525,26 +28368,23 @@
               }
             }
           ],
-          "order": 11
+          "order": 11,
+          "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-05-26T20:41:51.156Z",
-      "updatedAt": "2026-06-22T22:34:01.202Z",
-      "path": "lessons/11-exponents/lesson.json",
+      "updatedAt": "2026-09-29T15:05:40.082Z",
+      "path": "lessons/27-exponents/lesson.json",
       "textPreset": null,
-      "name": "11-exponents",
+      "name": "27-exponents",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 11,
+      "order": 27,
       "status": "active",
       "icon": "icon_textbook.png",
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1782161629667
-      },
+      "progress": null,
       "cardColor": "#8B5CF6",
       "translations": {
         "en": {
@@ -27559,18 +28399,27 @@
         "zoom": 1.6,
         "x": 25.8,
         "y": -34.4
+      },
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
       }
     }
   },
   {
-    "name": "27-Parenthesis",
+    "name": "28-Parenthesis",
     "type": "file",
-    "path": "lessons/27-Parenthesis/lesson.json",
+    "path": "lessons/28-Parenthesis/lesson.json",
     "title": "Parenthesis",
     "description": "",
-    "visible": true,
+    "visible": false,
     "visibleInFeed": false,
-    "order": 27,
+    "order": 28,
     "titlecardFrame": null,
     "content": {
       "id": "lessons/12-Parenthesis/lesson.json",
@@ -27874,7 +28723,7 @@
       "hashtag": "#OrderOfOperations",
       "name": "12-Parenthesis",
       "type": "file",
-      "visible": true,
+      "visible": false,
       "order": 12,
       "status": "active",
       "progress": null,
@@ -27883,21 +28732,21 @@
     }
   },
   {
-    "name": "28-Why LEFT to RIGHT?",
+    "name": "29-Why LEFT to RIGHT?",
     "type": "file",
-    "path": "lessons/28-Why LEFT to RIGHT?/lesson.json",
+    "path": "lessons/29-Why LEFT to RIGHT?/lesson.json",
     "title": "Why LEFT to RIGHT?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 28,
+    "order": 29,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,
       "y": -38.9
     },
     "content": {
-      "id": "lessons/25-Why LEFT to RIGHT?/lesson.json",
+      "id": "lessons/29-Why LEFT to RIGHT?/lesson.json",
       "title": "Why LEFT to RIGHT?",
       "slides": [
         {
@@ -27955,22 +28804,23 @@
         },
         {
           "id": "slide-1779144057098",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1779144079438",
+              "id": "el-1790694419269-urj83vddz",
               "type": "image",
-              "content": "/src/assets/characters/chef%20sitting%20on%20mushroom.png",
-              "x": 33.333333333333336,
-              "y": 70,
+              "content": "/src/assets/characters/yara_gasps.png",
+              "x": 38.33333333333333,
+              "y": 66.71875,
               "width": 40,
-              "height": 29.456289978678036,
+              "height": 29.108744394618835,
               "rotation": 0,
-              "scale": 1.9267473730710742,
+              "scale": 2.020025993148766,
               "metadata": {
                 "width": 40,
-                "height": 29.456289978678036,
-                "locked": true
+                "height": 29.108744394618835,
+                "category": "characters",
+                "flipX": true
               }
             },
             {
@@ -28024,9 +28874,25 @@
                   "content": "The <b>direction</b> of operations can give <b>different</b> <b>results</b>."
                 }
               }
+            },
+            {
+              "id": "el-1790694429861-4y8e8yw1r",
+              "type": "text",
+              "content": "💩",
+              "x": 71.1111111111111,
+              "y": 91.5625,
+              "width": 10,
+              "height": 5,
+              "rotation": 0,
+              "scale": 2.372856370099528,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\""
+              }
             }
           ],
-          "order": 1
+          "order": 1,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779144192300",
@@ -28267,45 +29133,20 @@
               }
             },
             {
-              "id": "el-1779565027710",
+              "id": "el-1790694469511-qzup1n9qz",
               "type": "image",
-              "content": "/src/assets/characters/Chef_explain%20s_signals.png",
-              "x": 24.166666666666664,
-              "y": 81.09375,
+              "content": "/src/assets/characters/yara_looking_at_paper.png",
+              "x": 25.555555555555557,
+              "y": 80.3125,
               "width": 40,
-              "height": 37.47761194029851,
+              "height": 48.07377049180328,
               "rotation": 0,
-              "scale": 1,
+              "scale": 0.7034115467318396,
               "metadata": {
                 "width": 40,
-                "height": 37.47761194029851
-              }
-            },
-            {
-              "id": "el-1779144861208",
-              "type": "balloon",
-              "content": "<span style=\"font-weight: 400;\">El resultado es </span>distinto<span style=\"font-weight: 400;\"> según la </span>dirección<span style=\"font-weight: 400;\"> en que hagamos las operaciones.</span>",
-              "x": 69.30555555555556,
-              "y": 74.6875,
-              "width": 49.166666666666664,
-              "height": 28.125,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "backgroundColor": "#ffffff",
-                "color": "#000000",
-                "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
-                "tailPos": {
-                  "x": -101,
-                  "y": -32
-                },
-                "fontWeight": "bold"
-              },
-              "translations": {
-                "en": {
-                  "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>"
-                }
+                "height": 48.07377049180328,
+                "category": "characters",
+                "flipX": true
               }
             },
             {
@@ -28343,6 +29184,33 @@
                 "startCap": "arrow",
                 "endCap": "none"
               }
+            },
+            {
+              "id": "el-1779144861208",
+              "type": "balloon",
+              "content": "<span style=\"font-weight: 400;\">El resultado es </span>distinto<span style=\"font-weight: 400;\"> según la </span>dirección<span style=\"font-weight: 400;\"> en que hagamos las operaciones.</span>",
+              "x": 69.30555555555556,
+              "y": 74.6875,
+              "width": 49.166666666666664,
+              "height": 28.125,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "backgroundColor": "#ffffff",
+                "color": "#000000",
+                "fontFamily": "\"Noto Sans\"",
+                "fontSize": 16,
+                "tailPos": {
+                  "x": -101,
+                  "y": -32
+                },
+                "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\">As we can see,</span><div><span style=\"font-weight: normal;\">we get</span></div><div>different results <span style=\"font-weight: normal;\">depending on the </span>direction<span style=\"font-weight: normal;\">.</span></div>"
+                }
+              }
             }
           ],
           "order": 2,
@@ -28366,8 +29234,14 @@
         },
         {
           "id": "slide-1779144939174",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790694461276-xcggo761m",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1779147771098",
               "type": "image",
@@ -28406,22 +29280,6 @@
                 "symbolColor": "#ffc800",
                 "locked": true,
                 "roundCorners": true
-              }
-            },
-            {
-              "id": "el-1779145121909",
-              "type": "image",
-              "content": "/src/assets/characters/chef%20explains%20while%20cooking.png",
-              "x": 22.77777777777778,
-              "y": 77.03125,
-              "width": 40,
-              "height": 33.30223880597015,
-              "rotation": 0,
-              "scale": 1.7488739267620383,
-              "metadata": {
-                "width": 40,
-                "height": 33.30223880597015,
-                "locked": true
               }
             },
             {
@@ -28658,11 +29516,27 @@
               }
             },
             {
+              "id": "el-1790694485710-5iefuq29i",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looks_back_smirk.png",
+              "x": 24.444444444444446,
+              "y": 76.09375,
+              "width": 40,
+              "height": 36.409090909090914,
+              "rotation": 0,
+              "scale": 1.3249393494346529,
+              "metadata": {
+                "width": 40,
+                "height": 36.409090909090914,
+                "category": "characters"
+              }
+            },
+            {
               "id": "el-1779144939174-cqdt7o0j8",
               "type": "balloon",
               "content": "Mismo <b>problema</b> con<br><div>la <b>división</b><span style=\"font-weight: 400;\"> y la </span><b>multiplicación</b><span style=\"font-weight: 400;\">.</span></div>",
-              "x": 73.75,
-              "y": 67.03125,
+              "x": 75.13888888888889,
+              "y": 69.84375,
               "width": 49.166666666666664,
               "height": 28.125,
               "rotation": 0,
@@ -28694,7 +29568,8 @@
               37,
               51
             ]
-          }
+          },
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1779155476055",
@@ -28805,17 +29680,21 @@
       ],
       "author": "User",
       "createdAt": "2026-05-18T22:39:48.732Z",
-      "updatedAt": "2026-09-25T22:58:10.590Z",
-      "path": "lessons/25-Why LEFT to RIGHT?/lesson.json",
+      "updatedAt": "2026-09-29T15:08:14.484Z",
+      "path": "lessons/29-Why LEFT to RIGHT?/lesson.json",
       "textPreset": null,
-      "name": "25-Why LEFT to RIGHT?",
+      "name": "29-Why LEFT to RIGHT?",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 25,
-      "status": "active",
+      "order": 29,
+      "status": "completed",
       "icon": "icon_textbook.png",
-      "progress": null,
+      "progress": {
+        "lastSlideIndex": 4,
+        "completed": true,
+        "lastPlayed": 1790694378771
+      },
       "translations": {
         "en": {
           "title": "Why LEFT to RIGHT?",
@@ -28843,21 +29722,21 @@
     }
   },
   {
-    "name": "29-¿ Por qué n⁰ es igual a 1 ?",
+    "name": "30-¿ Por qué n⁰ es igual a 1 ?",
     "type": "file",
-    "path": "lessons/29-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+    "path": "lessons/30-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
     "title": "¿ Por qué n⁰ es igual a 1 ?",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 29,
+    "order": 30,
     "titlecardFrame": {
       "zoom": 1,
       "x": -0.1,
       "y": 37.6
     },
     "content": {
-      "id": "lessons/26-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+      "id": "lessons/30-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "title": "¿ Por qué n⁰ es igual a 1 ?",
       "slides": [
         {
@@ -28868,12 +29747,12 @@
               "id": "el-1789128420918-12zb87qsk",
               "type": "image",
               "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%238B5CF6%22%20%2F%3E%0A%3C%2Fsvg%3E",
-              "x": 33.05555555555556,
+              "x": 33.888888888888886,
               "y": 76.328125,
-              "width": 45.55555555555556,
+              "width": 53.42239693324705,
               "height": 23.28125,
               "rotation": 0,
-              "scale": 1,
+              "scale": 1.0592985079074673,
               "metadata": {
                 "width": 40,
                 "height": 40,
@@ -28886,10 +29765,10 @@
             {
               "id": "el-1789128457562-ew07b4yed",
               "type": "text",
-              "content": "<font color=\"#fde74c\"><b>Why n⁰ equals 1</b></font>",
-              "x": 32.77777777777778,
-              "y": 77.8125,
-              "width": 23.33288323492181,
+              "content": "<font color=\"#fde74c\"><b>¿Por qué n⁰ es igual a 1</b></font>",
+              "x": 34.72222222222222,
+              "y": 76.875,
+              "width": 28.331983038098755,
               "height": 5,
               "rotation": 0,
               "scale": 1.6669667863077007,
@@ -28898,6 +29777,11 @@
                 "fontFamily": "Nunito",
                 "fontSize": 21,
                 "textTransform": "none"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#fde74c\"><b>Why n⁰ equals 1</b></font>"
+                }
               }
             },
             {
@@ -28914,6 +29798,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Source Sans 3\"",
                 "color": "#000000"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#ffffff\" style=\"background-color: rgb(0, 0, 0);\"> exponents </font>"
+                }
               }
             }
           ],
@@ -28975,6 +29864,11 @@
                   "x": -34,
                   "y": 101
                 }
+              },
+              "translations": {
+                "en": {
+                  "content": "Hold still.<div><br><div>I will make you</div><div><b>twice</b> your size.</div></div>"
+                }
               }
             },
             {
@@ -28996,6 +29890,11 @@
                 "tailPos": {
                   "x": 13,
                   "y": 71
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "What?!<div>&nbsp;<div>Why?!</div></div>"
                 }
               }
             }
@@ -29052,6 +29951,11 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Nunito Sans\""
+              },
+              "translations": {
+                "en": {
+                  "content": "<b>2</b>"
+                }
               }
             },
             {
@@ -29078,7 +29982,19 @@
                 ],
                 "quizType": "classic",
                 "visualMode": false,
-                "autonext": false
+                "autonext": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -29104,6 +30020,11 @@
                 "borderRadius": 20,
                 "hideTape": true,
                 "skin": "comic"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-style: normal;\"><font color=\"#2196f3\">What </font><span style=\"font-weight: normal;\"><font color=\"#4caf50\">power</font></span><font color=\"#2196f3\"> should&nbsp; we set to make Pesto </font><font color=\"#4caf50\">2 times</font><font color=\"#2196f3\"> bigger?</font></span>"
+                }
               }
             },
             {
@@ -29119,6 +30040,11 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Bangers\", cursive, sans-serif"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> Challenge </span></font>"
+                }
               }
             }
           ],
@@ -29260,6 +30186,11 @@
                 "borderRadius": 20,
                 "skin": "sticky",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<b>2¹=2</b>"
+                }
               }
             },
             {
@@ -29280,6 +30211,11 @@
                 "tailPos": {
                   "x": 30,
                   "y": 86
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "Wow!<div>\nYour ray gun worked!</div>"
                 }
               }
             }
@@ -29342,6 +30278,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Nunito Sans\"",
                 "groupId": "group-1789002375370-ja0ps3"
+              },
+              "translations": {
+                "en": {
+                  "content": "<b>2</b>"
+                }
               }
             },
             {
@@ -29367,7 +30308,19 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -29392,6 +30345,11 @@
                 "hasShadow": true,
                 "borderRadius": 20,
                 "hideTape": true
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\">What </font><font color=\"#4caf50\" style=\"font-style: normal;\">power</font><font color=\"#2196f3\" style=\"font-style: normal;\"> should&nbsp; we set to make Pesto&nbsp;</font></span><div><span style=\"font-weight: normal;\"><font color=\"#4caf50\" style=\"font-style: normal;\">4 times</font><font color=\"#2196f3\"><span style=\"font-style: normal;\"> bigger?</span></font></span></div>"
+                }
               }
             }
           ],
@@ -29480,6 +30438,11 @@
                   "y": -46
                 },
                 "locked": false
+              },
+              "translations": {
+                "en": {
+                  "content": "Please, stop!"
+                }
               }
             },
             {
@@ -29506,6 +30469,11 @@
                 "borderRadius": 20,
                 "skin": "sticky",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "2² = 2×2 = <font color=\"#2196f3\">4</font>"
+                }
               }
             },
             {
@@ -29527,6 +30495,11 @@
                 "tailPos": {
                   "x": -31,
                   "y": 149
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "<div>Now you're <font color=\"#2196f3\"><b>4</b></font> times<br></div><div>your size!</div>"
                 }
               }
             }
@@ -29597,7 +30570,19 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -29613,6 +30598,11 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Nunito Sans\""
+              },
+              "translations": {
+                "en": {
+                  "content": "<b>2</b>"
+                }
               }
             },
             {
@@ -29637,6 +30627,11 @@
                 "hasShadow": true,
                 "borderRadius": 20,
                 "hideTape": true
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\">What </font><font color=\"#4caf50\" style=\"font-style: normal;\">power</font><font color=\"#2196f3\" style=\"font-style: normal;\"> should&nbsp; we set to make Pesto</font></span><div><span style=\"font-weight: normal;\"><font color=\"#2196f3\" style=\"font-style: normal;\"> </font><font color=\"#4caf50\" style=\"font-style: normal;\">8 times</font><font color=\"#2196f3\"><span style=\"font-style: normal;\"> bigger?</span></font></span></div>"
+                }
               }
             }
           ],
@@ -29706,6 +30701,11 @@
                   "x": 22,
                   "y": -73
                 }
+              },
+              "translations": {
+                "en": {
+                  "content": "I want to go back to normal!"
+                }
               }
             },
             {
@@ -29727,6 +30727,11 @@
                 "tailPos": {
                   "x": -4,
                   "y": 108
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "<div><div>You're <b><font color=\"#2196f3\">8</font></b> times taller now.</div></div>"
                 }
               }
             },
@@ -29775,6 +30780,11 @@
                 "borderRadius": 20,
                 "skin": "sticky",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "2³ = 2×2×2 = <font color=\"#2196f3\">8</font>"
+                }
               }
             }
           ],
@@ -29842,6 +30852,11 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Nunito Sans\""
+              },
+              "translations": {
+                "en": {
+                  "content": "<b>2</b>"
+                }
               }
             },
             {
@@ -29858,6 +30873,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Nunito Sans\"",
                 "fontSize": 10
+              },
+              "translations": {
+                "en": {
+                  "content": "<b><font color=\"#f57c00\">0</font></b>"
+                }
               }
             },
             {
@@ -29879,6 +30899,11 @@
                 "tailPos": {
                   "x": -141,
                   "y": -39
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "Don't worry!\n\nI'll set the power to <b><font color=\"#f57c00\">0</font></b>."
                 }
               }
             }
@@ -29925,6 +30950,11 @@
                 "tailPos": {
                   "x": 15,
                   "y": 83
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "Zero?!\nI'll disappear!"
                 }
               }
             }
@@ -29975,6 +31005,11 @@
                   "x": -79,
                   "y": 101
                 }
+              },
+              "translations": {
+                "en": {
+                  "content": "2⁰ will just&nbsp;<div>get you back\n to size 1.</div>"
+                }
               }
             },
             {
@@ -29996,6 +31031,11 @@
                 "tailPos": {
                   "x": -24,
                   "y": 90
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "What a drama queen!"
                 }
               }
             }
@@ -30082,6 +31122,11 @@
                   "y": -61
                 },
                 "lineHeight": 1.2
+              },
+              "translations": {
+                "en": {
+                  "content": "Of course!<br>"
+                }
               }
             },
             {
@@ -30102,6 +31147,11 @@
                 "tailPos": {
                   "x": 14,
                   "y": 87
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "I'm still alive!"
                 }
               }
             },
@@ -30129,6 +31179,11 @@
                 "borderRadius": 20,
                 "skin": "sticky",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "2⁰ = <font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">1</span></font>"
+                }
               }
             }
           ],
@@ -30199,6 +31254,11 @@
                   "x": 15,
                   "y": 83
                 }
+              },
+              "translations": {
+                "en": {
+                  "content": "I don't understand why<div>2⁰ is 1</div>"
+                }
               }
             }
           ],
@@ -30245,6 +31305,11 @@
                 "tailPos": {
                   "x": 0,
                   "y": 78
+                }
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#2196f3\"><b>Play</b></font> around and see what you <font color=\"#2196f3\"><b>notice</b></font>."
                 }
               }
             }
@@ -30312,7 +31377,17 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "Results get multiplied by 2",
+                      "Results get divided by 2"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -30339,6 +31414,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "What HAPPENS AS <font color=\"#f57c00\">exponents</font> MOVE <font color=\"#f57c00\">DOWN</font>?"
+                }
               }
             },
             {
@@ -30416,6 +31496,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "normal"
+              },
+              "translations": {
+                "en": {
+                  "content": "2³="
+                }
               }
             },
             {
@@ -30456,6 +31541,11 @@
                   "x": -126,
                   "y": 1
                 }
+              },
+              "translations": {
+                "en": {
+                  "content": "Let's take a closer look..."
+                }
               }
             },
             {
@@ -30476,7 +31566,14 @@
                   0
                 ],
                 "quizType": "type",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -30549,6 +31646,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30566,6 +31668,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= </span>"
+                }
               }
             },
             {
@@ -30583,6 +31690,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "normal"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\">2³= 8</font>"
+                }
               }
             },
             {
@@ -30603,7 +31715,14 @@
                   0
                 ],
                 "quizType": "type",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -30676,6 +31795,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30713,6 +31837,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30730,6 +31859,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\">2</span>¹<span style=\"font-weight: normal;\">=   </span>"
+                }
               }
             },
             {
@@ -30747,6 +31881,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= 4</span></font>"
+                }
               }
             },
             {
@@ -30764,6 +31903,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "normal"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\">2³= 8</font>"
+                }
               }
             },
             {
@@ -30784,7 +31928,14 @@
                   0
                 ],
                 "quizType": "type",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -30856,6 +32007,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30893,6 +32049,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30910,6 +32071,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: normal;\">2</span>⁰<span style=\"font-weight: normal;\">=      </span>"
+                }
               }
             },
             {
@@ -30947,6 +32113,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -30964,6 +32135,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>¹<span style=\"font-weight: normal;\">= 2  </span></font>"
+                }
               }
             },
             {
@@ -30981,6 +32157,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">2</span>²<span style=\"font-weight: normal;\">= 4</span></font>"
+                }
               }
             },
             {
@@ -30998,6 +32179,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "normal"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\">2³= 8</font>"
+                }
               }
             },
             {
@@ -31018,7 +32204,14 @@
                   0
                 ],
                 "quizType": "type",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31089,6 +32282,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷3</font>"
+                }
               }
             },
             {
@@ -31126,6 +32324,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷3</font>"
+                }
               }
             },
             {
@@ -31143,6 +32346,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"font-weight: 400;\">3</span>⁰<span style=\"font-weight: normal;\">= 1    </span>"
+                }
               }
             },
             {
@@ -31180,6 +32388,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 30
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷3</font>"
+                }
               }
             },
             {
@@ -31197,6 +32410,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\"><span style=\"font-weight: 400;\">3</span>¹<span style=\"font-weight: normal;\">= 3  </span></font>"
+                }
               }
             },
             {
@@ -31214,6 +32432,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "bold"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\"><span style=\"font-weight: normal;\">3</span>²<span style=\"font-weight: normal;\">= 9</span></font>"
+                }
               }
             },
             {
@@ -31231,6 +32454,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 55,
                 "fontWeight": "normal"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#969696\">3³= 27</font>"
+                }
               }
             },
             {
@@ -31272,6 +32500,11 @@
                   "y": 10
                 },
                 "lineHeight": 1.2
+              },
+              "translations": {
+                "en": {
+                  "content": "a⁰ is <b>always</b> 1, no matter what <b>number</b>."
+                }
               }
             }
           ],
@@ -31308,6 +32541,11 @@
                 "locked": true,
                 "fontSize": 16,
                 "manualZ": true
+              },
+              "translations": {
+                "en": {
+                  "content": "4⁰ =         "
+                }
               }
             },
             {
@@ -31326,6 +32564,11 @@
                 "fontSize": 28,
                 "lineHeight": 1.5,
                 "fontWeight": "600"
+              },
+              "translations": {
+                "en": {
+                  "content": "4³ = 64<div>4² = 16</div><div>4¹ = 4</div>"
+                }
               }
             },
             {
@@ -31384,7 +32627,19 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "0",
+                      "3",
+                      "1",
+                      "9"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             }
           ],
@@ -31420,7 +32675,19 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "1",
+                      "0",
+                      "7",
+                      "7³"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31447,6 +32714,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#000000\">7³</font> ÷ <font color=\"#000000\">7³</font> = <font color=\"#000000\">?</font>"
+                }
               }
             },
             {
@@ -31491,6 +32763,11 @@
                 "fontWeight": "600",
                 "backgroundColor": "#4CAF50",
                 "locked": false
+              },
+              "translations": {
+                "en": {
+                  "content": "913471⁰ =        "
+                }
               }
             },
             {
@@ -31529,7 +32806,18 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "71",
+                      "0",
+                      "1"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31582,7 +32870,19 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "0",
+                      "1",
+                      "9",
+                      "90"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31624,6 +32924,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#000000\">8⁰ =</font>      "
+                }
               }
             },
             {
@@ -31671,6 +32976,11 @@
                 "lineHeight": 1.35,
                 "fontWeight": "600",
                 "backgroundColor": "#FFC107"
+              },
+              "translations": {
+                "en": {
+                  "content": "Which one is NOT equal to 1?"
+                }
               }
             },
             {
@@ -31696,7 +33006,19 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "4⁰",
+                      "100⁰",
+                      "4¹",
+                      "1⁰"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31749,7 +33071,19 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "1",
+                      "0",
+                      "5",
+                      "−5"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31783,6 +33117,11 @@
                 "lineHeight": 1.35,
                 "fontWeight": "600",
                 "backgroundColor": "#F57C00"
+              },
+              "translations": {
+                "en": {
+                  "content": "5³ = 125 <div>5² = 25</div><div>5¹ = 5</div><div><br></div><div>5⁰ = </div>"
+                }
               }
             },
             {
@@ -31837,7 +33176,19 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "−6",
+                      "−1",
+                      "0",
+                      "1"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31864,6 +33215,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#000000\">(−6)</font>⁰ = <font color=\"#000000\">?</font>"
+                }
               }
             },
             {
@@ -31923,7 +33279,19 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "0",
+                      "2",
+                      "6",
+                      "1"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -31950,6 +33318,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "3⁰ <font color=\"#000000\">+</font> 3⁰ <font color=\"#000000\">=</font> <font color=\"#000000\">?</font>"
+                }
               }
             },
             {
@@ -31997,6 +33370,11 @@
                 "fontSize": 20,
                 "lineHeight": 1.35,
                 "fontWeight": "600"
+              },
+              "translations": {
+                "en": {
+                  "content": "<br>"
+                }
               }
             },
             {
@@ -32022,7 +33400,19 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "translations": {
+                  "en": {
+                    "options": [
+                      "It doesn't",
+                      "Because 2 − 2 = 0",
+                      "Because it's 5¹ ÷ 5",
+                      "It's a convention"
+                    ],
+                    "matchAnswers": [],
+                    "chatNodes": []
+                  }
+                }
               }
             },
             {
@@ -32049,6 +33439,11 @@
                 "borderRadius": 20,
                 "skin": "sticky",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<span style=\"caret-color: rgb(0, 0, 0);\"><font color=\"#ffffff\">Why does 5⁰ equal 1?</font></span>"
+                }
               }
             }
           ],
@@ -32088,6 +33483,11 @@
                 "skin": "comic",
                 "showTape": false,
                 "locked": true
+              },
+              "translations": {
+                "en": {
+                  "content": "<br>"
+                }
               }
             },
             {
@@ -32119,6 +33519,11 @@
                 "locked": false,
                 "manualZ": true,
                 "hidden": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<br>"
+                }
               }
             },
             {
@@ -32147,6 +33552,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<br>"
+                }
               }
             },
             {
@@ -32175,6 +33585,11 @@
                 "borderRadius": 20,
                 "skin": "comic",
                 "showTape": false
+              },
+              "translations": {
+                "en": {
+                  "content": "<br>"
+                }
               }
             },
             {
@@ -32192,6 +33607,11 @@
                 "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
                 "textTransform": "none",
                 "fontSize": 20
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">n⁰ = 1</span></font>"
+                }
               }
             },
             {
@@ -32208,6 +33628,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 16
+              },
+              "translations": {
+                "en": {
+                  "content": "any number with exponent zero<div>equals to 1</div>"
+                }
               }
             },
             {
@@ -32225,6 +33650,11 @@
                 "fontFamily": "\"Bangers\", cursive, sans-serif",
                 "textTransform": "uppercase",
                 "fontSize": 27
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#ffffff\" style=\"background-color: rgb(0, 0, 0);\"> exponent zero </font>"
+                }
               }
             },
             {
@@ -32242,6 +33672,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22,
                 "groupId": "group-1789317506900-8y48dq"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -32259,6 +33694,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22,
                 "groupId": "group-1789317506900-8y48dq"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -32276,6 +33716,11 @@
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22,
                 "groupId": "group-1789317506900-8y48dq"
+              },
+              "translations": {
+                "en": {
+                  "content": "<font color=\"#880e4f\">÷2</font>"
+                }
               }
             },
             {
@@ -32358,6 +33803,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22
+              },
+              "translations": {
+                "en": {
+                  "content": "2"
+                }
               }
             },
             {
@@ -32374,6 +33824,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22
+              },
+              "translations": {
+                "en": {
+                  "content": "2"
+                }
               }
             },
             {
@@ -32390,6 +33845,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22
+              },
+              "translations": {
+                "en": {
+                  "content": "2"
+                }
               }
             },
             {
@@ -32406,6 +33866,11 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 22
+              },
+              "translations": {
+                "en": {
+                  "content": "2"
+                }
               }
             }
           ],
@@ -32455,8 +33920,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-06T00:53:37.022Z",
-      "updatedAt": "2026-09-25T23:01:28.841Z",
-      "path": "lessons/26-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
+      "updatedAt": "2026-09-29T15:09:43.963Z",
+      "path": "lessons/30-¿ Por qué n⁰ es igual a 1 ?/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -32481,10 +33946,10 @@
           "description": ""
         }
       },
-      "name": "26-¿ Por qué n⁰ es igual a 1 ?",
+      "name": "30-¿ Por qué n⁰ es igual a 1 ?",
       "type": "file",
       "visible": true,
-      "order": 26,
+      "order": 30,
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -32505,14 +33970,14 @@
     }
   },
   {
-    "name": "30-Exponentes negativos",
+    "name": "31-Exponentes negativos",
     "type": "file",
-    "path": "lessons/30-Exponentes negativos/lesson.json",
+    "path": "lessons/31-Exponentes negativos/lesson.json",
     "title": "Exponentes negativos",
     "description": "",
     "visible": true,
     "visibleInFeed": true,
-    "order": 30,
+    "order": 31,
     "titlecardFrame": {
       "zoom": 1,
       "x": 0,

@@ -18,6 +18,8 @@ const CircleFrameModal = ({
   const [slide, setSlide] = useState(null);
   const [frame, setFrame] = useState({ zoom: 1, x: 0, y: 0 });
   const [useIcon, setUseIcon] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isVisibleInFeed, setIsVisibleInFeed] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -25,6 +27,18 @@ const CircleFrameModal = ({
 
   useEffect(() => {
     if (isOpen && lesson) {
+      const v = lesson.visible !== undefined
+        ? lesson.visible !== false
+        : (lesson.content?.visible !== undefined ? lesson.content.visible !== false : true);
+      setIsVisible(v);
+
+      const vf = lesson.visibleInFeed !== undefined
+        ? lesson.visibleInFeed !== false
+        : (lesson.content?.visibleInFeed !== undefined
+            ? lesson.content.visibleInFeed !== false
+            : v);
+      setIsVisibleInFeed(vf);
+
       const existingFrame = lesson.titlecardFrame || lesson.content?.titlecardFrame;
       if (existingFrame && typeof existingFrame.zoom === 'number') {
         setFrame({
@@ -43,12 +57,18 @@ const CircleFrameModal = ({
       if (firstSlide) {
         setSlide(firstSlide);
       } else if (lesson.path) {
-        // Fetch lesson data to get slides
+        // Fetch lesson data to get slides & fresh visibility flags
         fetch(`/api/load-lesson?path=${encodeURIComponent(lesson.path)}`)
           .then(res => res.json())
           .then(data => {
             if (data?.slides?.[0]) {
               setSlide(data.slides[0]);
+            }
+            if (data?.visible !== undefined) {
+              setIsVisible(data.visible !== false);
+            }
+            if (data?.visibleInFeed !== undefined) {
+              setIsVisibleInFeed(data.visibleInFeed !== false);
             }
           })
           .catch(err => console.error('Error loading slide for circle frame:', err));
@@ -129,11 +149,14 @@ const CircleFrameModal = ({
     setSaving(true);
     try {
       const finalFrame = useIcon ? null : frame;
-      await onSave(finalFrame);
+      await onSave(finalFrame, {
+        visible: isVisible,
+        visibleInFeed: isVisibleInFeed
+      });
       onClose();
     } catch (error) {
-      console.error('Failed to save circle frame:', error);
-      alert('Failed to save circle frame focus');
+      console.error('Failed to save settings:', error);
+      alert('Failed to save settings');
     } finally {
       setSaving(false);
     }
@@ -175,6 +198,8 @@ const CircleFrameModal = ({
           border: '3.5px solid #000000',
           boxShadow: '8px 8px 0px #000000',
           maxWidth: '420px',
+          maxHeight: '90vh',
+          overflowY: 'auto',
           width: '100%',
           padding: '24px',
           boxSizing: 'border-box',
@@ -601,6 +626,85 @@ const CircleFrameModal = ({
           </div>
         </div>
 
+        {/* Visibility Settings */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          background: '#F8FAFC',
+          padding: '12px 14px',
+          borderRadius: '16px',
+          border: '2px solid #E2E8F0'
+        }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            Visibility:
+          </span>
+
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            userSelect: 'none'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '1.2rem' }}>{isVisible ? '👁️' : '🚫'}</span>
+              <div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1E293B' }}>
+                  Show in Main Menu
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                  {isVisible ? 'Visible on lesson road' : 'Hidden from main menu'}
+                </div>
+              </div>
+            </div>
+            <input
+              type="checkbox"
+              checked={isVisible}
+              onChange={(e) => setIsVisible(e.target.checked)}
+              style={{
+                width: '18px',
+                height: '18px',
+                accentColor: '#8B5CF6',
+                cursor: 'pointer'
+              }}
+            />
+          </label>
+
+          <div style={{ height: '1px', background: '#E2E8F0' }} />
+
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            userSelect: 'none'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '1.2rem' }}>{isVisibleInFeed ? '🎬' : '🚫'}</span>
+              <div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1E293B' }}>
+                  Show in Feed
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                  {isVisibleInFeed ? 'Included in Discover swipe feed' : 'Hidden from Discover feed'}
+                </div>
+              </div>
+            </div>
+            <input
+              type="checkbox"
+              checked={isVisibleInFeed}
+              onChange={(e) => setIsVisibleInFeed(e.target.checked)}
+              style={{
+                width: '18px',
+                height: '18px',
+                accentColor: '#8B5CF6',
+                cursor: 'pointer'
+              }}
+            />
+          </label>
+        </div>
+
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
           <button
@@ -636,7 +740,7 @@ const CircleFrameModal = ({
               cursor: saving ? 'wait' : 'pointer'
             }}
           >
-            {saving ? 'Saving...' : 'Save Focus'}
+            {saving ? 'Saving...' : 'Save'}
           </button>
         </div>
       </div>

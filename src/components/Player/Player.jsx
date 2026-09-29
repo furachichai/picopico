@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEditor } from '../../context/EditorContext';
 import { useLanguage, getTranslatedContent } from '../../context/LanguageContext';
@@ -29,6 +29,51 @@ import { getSharedAudioContext } from '../../utils/audioContext';
 import { TypeQuizProvider } from '../../context/TypeQuizContext';
 import './Player.css';
 
+// Default fallback celebration slide matching _last_card / _last_slide
+const DEFAULT_LAST_SLIDE = {
+    background: 'url("/src/assets/backgrounds/bkg_geom_007.png")',
+    backgroundSettings: {
+        grayscale: true,
+        tintColor: 'rgba(103, 232, 249, 0.4)'
+    },
+    elements: [
+        {
+            id: 'el-last-slide-yara',
+            type: 'image',
+            content: '/src/assets/characters/yara_jumping_celebration.png',
+            x: 41.94444444444444,
+            y: 51.40625,
+            width: 40,
+            height: 29.31428571428571,
+            rotation: 0,
+            scale: 2.064956090406779,
+            metadata: {
+                width: 40,
+                height: 29.31428571428571,
+                category: 'characters',
+                hasShadow: false
+            }
+        },
+        {
+            id: 'el-last-slide-pesto',
+            type: 'image',
+            content: '/src/assets/characters/pesto_blows_kiss.png',
+            x: 81.66666666666667,
+            y: 76.09375,
+            width: 40,
+            height: 28.483146067415728,
+            rotation: 0,
+            scale: 1.1599244053694049,
+            metadata: {
+                width: 40,
+                height: 28.483146067415728,
+                category: 'characters',
+                flipX: true
+            }
+        }
+    ]
+};
+
 // Helper to detect if a cartridge or slide has an open manipulative without a win scenario
 const isOpenManipulative = (cartridge) => {
     if (!cartridge) return false;
@@ -47,21 +92,73 @@ const Player = () => {
     const { language, setLanguage, SUPPORTED_LANGUAGES } = useLanguage();
     const { lesson } = state;
 
+    // Check if the current lesson is _last_card / _last_slide itself (avoid appending to itself)
+    const isSelfLastCard = lesson?.title === '_last_card' || lesson?.title === '_last_slide' ||
+        lesson?.path?.includes('_last_card') || lesson?.path?.includes('_last_slide') ||
+        lesson?.id === 'draft-1790691723222';
+
+    const [showLastSlideSetting, setShowLastSlideSetting] = useState(true);
+    const [celebrationSlideTemplate, setCelebrationSlideTemplate] = useState(null);
+    const [orderedLessons, setOrderedLessons] = useState([]);
+
+    // Fetch menu settings & lessons to get the latest authored _last_slide and lesson order
+    useEffect(() => {
+        let isMounted = true;
+        const isDev = import.meta.env.DEV;
+
+        fetch(isDev ? '/api/menu-settings' : '/menu-settings.json')
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (isMounted && data && typeof data.showLastSlide === 'boolean') {
+                    setShowLastSlideSetting(data.showLastSlide);
+                }
+            })
+            .catch(err => console.error('Error fetching menu-settings in Player:', err));
+
+        fetch(isDev ? '/api/list-lessons' : '/lessons-data.json')
+            .then(res => res.ok ? res.json() : null)
+            .then(list => {
+                if (!isMounted || !Array.isArray(list)) return;
+                const lastCardLesson = list.find(item => {
+                    const title = item.title?.toLowerCase() || '';
+                    const p = item.path?.toLowerCase() || '';
+                    return title === '_last_slide' || title === '_last_card' ||
+                           p.includes('_last_slide') || p.includes('_last_card');
+                });
+                const tSlide = lastCardLesson?.content?.slides?.[0] || lastCardLesson?.slides?.[0];
+                if (tSlide) {
+                    setCelebrationSlideTemplate(tSlide);
+                }
+                const visible = list.filter(item => item.visible !== false);
+                setOrderedLessons(visible);
+            })
+            .catch(err => console.error('Error fetching lessons in Player:', err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    // Compose slides array, conditionally appending the celebration slide at the end
+    const slides = useMemo(() => {
+        const base = lesson?.slides || [];
+        if (!showLastSlideSetting || isSelfLastCard || base.length === 0) {
+            return base;
+        }
+        const template = celebrationSlideTemplate || DEFAULT_LAST_SLIDE;
+        const lastSlide = {
+            ...template,
+            id: '_last_slide_celebration',
+            isLastSlideCelebration: true,
+            order: base.length
+        };
+        return [...base, lastSlide];
+    }, [lesson?.slides, showLastSlideSetting, isSelfLastCard, celebrationSlideTemplate]);
+
     // Initialize index based on the currentSlideId set by Dashboard or Editor
-    const initialIndex = lesson.slides.findIndex(s => s.id === state.currentSlideId);
+    const initialIndex = slides.findIndex(s => s.id === state.currentSlideId);
     const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
 
-    // START: Update storage when slide changes
-    useEffect(() => {
-        if (lesson.path) {
-            saveLessonProgress(lesson.path, {
-                lastSlideIndex: currentSlideIndex,
-                // If this is the last slide, mark complete?
-                // Let's rely on explicit completion logic if needed, or just "reached last slide"
-                completed: currentSlideIndex === lesson.slides.length - 1
-            });
-        }
-    }, [currentSlideIndex, lesson.path, lesson.slides.length]);
     const touchStartRef = useRef(null);
     const [isGameActive, setIsGameActive] = useState(false); // Enable/Disable navigation
     const [solvedSlides, setSolvedSlides] = useState(new Set()); // Track slides whose quiz/cartridge is complete
@@ -80,16 +177,27 @@ const Player = () => {
         setActivePopupText(null);
     }, [currentSlideIndex]);
 
-    const slides = lesson.slides;
     const currentSlide = slides[currentSlideIndex];
 
-    // Keep currentSlideId in sync with the slide being played
+    // Keep currentSlideId in sync with the slide being played (ignore celebration slide to preserve editor slide id)
     useEffect(() => {
         const slide = slides[currentSlideIndex];
         if (slide?.id && state.currentSlideId !== slide.id) {
-            dispatch({ type: 'SET_CURRENT_SLIDE', payload: slide.id });
+            if (!slide.isLastSlideCelebration) {
+                dispatch({ type: 'SET_CURRENT_SLIDE', payload: slide.id });
+            }
         }
     }, [currentSlideIndex, slides, state.currentSlideId, dispatch]);
+
+    // Update storage when slide changes
+    useEffect(() => {
+        if (lesson.path) {
+            saveLessonProgress(lesson.path, {
+                lastSlideIndex: currentSlideIndex,
+                completed: currentSlideIndex >= (lesson.slides?.length ? lesson.slides.length - 1 : 0)
+            });
+        }
+    }, [currentSlideIndex, lesson.path, lesson.slides?.length]);
 
     // Check if current slide has a cartridge/quiz and enable game mode
     // Only block navigation if the slide hasn't been solved yet (open manipulatives are not blocking games)
@@ -170,6 +278,18 @@ const Player = () => {
         return sorted.length; // Last strip
     };
 
+    // Check if the current slide is playing an active (unsolved) Match Drag quiz
+    const isMatchDragActive = !!(
+        currentSlide?.elements?.some(el =>
+            el.type === 'quiz' && (
+                el.metadata?.quizType === 'match' ||
+                el.quizType === 'match' ||
+                el.metadata?.quizType === 'conecta' ||
+                el.quizType === 'conecta'
+            )
+        ) && !solvedSlides.has(currentSlideIndex)
+    );
+
     useEffect(() => {
         const handleKeyDown = (e) => {
             // Debug toggle (T)
@@ -179,8 +299,8 @@ const Player = () => {
             }
 
             // Keyboard navigation is UNRESTRICTED (testing/dev with physical keyboard)
-            // EXCEPT when playing Spot or games that lock navigation
-            if (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex)) {
+            // EXCEPT when playing Spot, Match Drag, or games that lock navigation until completed
+            if ((currentSlide?.cartridge?.type === 'Spot' || isMatchDragActive) && !solvedSlides.has(currentSlideIndex)) {
                 if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                     return;
                 }
@@ -203,7 +323,7 @@ const Player = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentSlideIndex, isGameActive, currentSlide]);
+    }, [currentSlideIndex, isGameActive, currentSlide, solvedSlides, isMatchDragActive]);
 
     const [wiggleIStickerId, setWiggleIStickerId] = useState(null);
     const [wiggleCartridge, setWiggleCartridge] = useState(false);
@@ -289,6 +409,62 @@ const Player = () => {
         }
     };
 
+    const handleMenu = async () => {
+        try {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) await elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
+            }
+        } catch (err) {
+            // Ignore
+        }
+        dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
+    };
+
+    const handleBackToMenuWithScroll = () => {
+        if (lesson?.path) {
+            saveLessonProgress(lesson.path, {
+                completed: true,
+                lastSlideIndex: lesson.slides?.length ? lesson.slides.length - 1 : 0
+            });
+        }
+
+        // Always record the completed lesson
+        const completedPath = lesson?.path || lesson?.id;
+        if (completedPath) {
+            try { sessionStorage.setItem('picopico_completed_lesson', completedPath); } catch (e) {}
+            window.__pico_completed_lesson = completedPath;
+        }
+
+        // Determine the next lesson in menu order (completed + 1)
+        if (orderedLessons.length > 0 && lesson) {
+            const norm = (p) => (p || '').replace(/\\/g, '/').toLowerCase().trim();
+            const currentNorm = norm(lesson.path);
+            const currentIdx = orderedLessons.findIndex(item => {
+                const itemNorm = norm(item.path);
+                return (
+                    (currentNorm && (itemNorm === currentNorm || itemNorm.endsWith(currentNorm) || currentNorm.endsWith(itemNorm))) ||
+                    (lesson.id && (item.id === lesson.id || item.content?.id === lesson.id)) ||
+                    (lesson.name && item.name === lesson.name) ||
+                    (lesson.title && (item.title === lesson.title || item.content?.title === lesson.title))
+                );
+            });
+
+            if (currentIdx !== -1) {
+                const nextIdx = currentIdx + 1 < orderedLessons.length ? currentIdx + 1 : currentIdx;
+                const nextLesson = orderedLessons[nextIdx];
+                if (nextLesson?.path) {
+                    try { sessionStorage.setItem('picopico_scroll_to_lesson', nextLesson.path); } catch (e) {}
+                    window.__pico_scroll_to_lesson = nextLesson.path;
+                }
+            }
+        }
+
+        handleMenu();
+    };
+
     const nextSlide = (force = false) => {
         if (autoNextTimeoutRef.current) {
             clearTimeout(autoNextTimeoutRef.current);
@@ -360,7 +536,7 @@ const Player = () => {
             playSlideSfx();
             setCurrentSlideIndex(prev => prev + 1);
         } else {
-            handleMenu();
+            handleBackToMenuWithScroll();
         }
     };
 
@@ -504,21 +680,7 @@ const Player = () => {
         return () => observer.disconnect();
     }, []);
 
-    const progress = ((currentSlideIndex + 1) / lesson.slides.length) * 100;
-
-    const handleMenu = async () => {
-        try {
-            const elem = document.documentElement;
-            if (!document.fullscreenElement) {
-                if (elem.requestFullscreen) await elem.requestFullscreen();
-                else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
-                else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
-            }
-        } catch (err) {
-            // Ignore
-        }
-        dispatch({ type: 'SET_VIEW', payload: 'dashboard' });
-    };
+    const progress = ((currentSlideIndex + 1) / slides.length) * 100;
 
     const handleEdit = () => {
         const slide = slides[currentSlideIndex];
@@ -541,7 +703,7 @@ const Player = () => {
             '.balanza-tile, .balanza-menu-tile, .balanza-restart-btn, ' +
             '.algebros-cartridge, .algebros-equation-banner, .algebros-card, .algebros-slot, .algebros-op-btn, .term-card, .term-item-wrapper, .term-group-wrapper, .drop-slot-placeholder, .dot-separator-btn, .operator-btn, .factor-option-btn, .floating-reset-btn, .ready-submit-btn, ' +
             '.fraction-slice, .swipe-card, ' +
-            '.quiz-option, .chatquiz-option-btn, .match-card, .conecta-item, .nl-knob-player, .quiz-ready-btn, ' +
+            '.quiz-option, .quiz-option-match, .quiz-options-container-match, .match-mode, .conecta-item, .conecta-card, .conecta-column, .conecta-columns-container, .conecta-mode, .chatquiz-option-btn, .match-card, .nl-knob-player, .quiz-ready-btn, ' +
             '.explorenl-pointer, .explorenl-equation-card, ' +
             '.type-quiz-keyboard-container, .type-quiz-key-btn, .type-quiz-action-btn, ' +
             '.field-player-bottom-portal, .field-choices-section, .field-choice-cell, .field-choice-btn, .field-ok-section, .field-ok-btn, .field-player-expression-card, .field-player-slot, .field-placed-choice-btn, ' +
@@ -568,14 +730,14 @@ const Player = () => {
 
     // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
-        if (isNavigating) return;
+        if (isNavigating || isMatchDragActive) return;
 
         // Determine what kind of interactive is on the current slide (open manipulatives are not blocking games)
         const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
         const hasCartridge = !!isGame && !solvedSlides.has(currentSlideIndex);
 
-        // While playing a game cartridge (or Spot specifically), navigation is completely disabled with NO shaking
-        if (hasCartridge || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) return;
+        // While playing a game cartridge, Match Drag, or Spot specifically, navigation is completely disabled with NO shaking
+        if (hasCartridge || isGameActive || isMatchDragActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex))) return;
 
         const hasQuiz = currentSlide?.elements?.some(el => el.type === 'quiz') && !solvedSlides.has(currentSlideIndex);
         const hasISticker = currentSlide?.elements?.some(el => el.type === 'isticker') && !solvedSlides.has(currentSlideIndex);
@@ -644,7 +806,7 @@ const Player = () => {
     const swipeRef = useRef(null);
 
     const handlePointerDown = (e) => {
-        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex));
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex)) || isMatchDragActive;
         if (isGamePlaying || isInteractiveElement(e.target)) {
             swipeRef.current = null;
             return;
@@ -657,7 +819,7 @@ const Player = () => {
         swipeRef.current = null;
         if (!gesture) return;
 
-        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex));
+        const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex)) || isMatchDragActive;
         if (isGamePlaying) return;
 
         const dx = e.clientX - gesture.startX;
@@ -668,6 +830,9 @@ const Player = () => {
             // Swiping left pulls next slide in, swiping right pulls previous slide
             handleHotzoneNav(dx < 0 ? 'next' : 'prev');
         } else if (Math.abs(dx) <= TAP_TOLERANCE && Math.abs(dy) <= TAP_TOLERANCE) {
+            // Navigational border columns are inactive until all matches are completed
+            if (isMatchDragActive) return;
+
             // Tap vertical border columns to navigate:
             // Left border column navigates back; Right border column navigates forward.
             // On a slide with active stripper, tapping anywhere on the slide (except the left back zone) reveals the next strip!
@@ -746,7 +911,7 @@ const Player = () => {
                 onPointerDown={handlePointerDown}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerCancel}
-                style={{ touchAction: hasCartridge ? 'none' : 'pan-y' }}
+                style={{ touchAction: (hasCartridge || isMatchDragActive) ? 'none' : 'pan-y' }}
             >
                 {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
@@ -785,7 +950,7 @@ const Player = () => {
                             alignItems: 'center'
                         }}>
                             <button
-                                onClick={handleMenu}
+                                onClick={currentSlide?.isLastSlideCelebration ? handleBackToMenuWithScroll : handleMenu}
                                 title={t('player.menu')}
                                 className="player-top-btn"
                             >
@@ -820,7 +985,7 @@ const Player = () => {
                                 {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag}
                             </button>
 
-                            {!state.readOnly && (
+                            {!state.readOnly && !currentSlide?.isLastSlideCelebration && (
                                 <button
                                     onClick={handleEdit}
                                     title={t('common.edit')}
@@ -942,21 +1107,23 @@ const Player = () => {
                                     }}
                                 />
                             )}
-                            <div className={`player-progress-bar ${
-                                !solvedSlides.has(currentSlideIndex) && (
-                                    (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'Spot')) ||
-                                    currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'pem')
-                                )
-                                    ? 'greyed-out'
-                                    : ''
-                            }`}>
-                                {slides.map((_, i) => (
-                                    <div
-                                        key={i}
-                                        className={`progress-segment ${i <= currentSlideIndex ? 'active' : ''}`}
-                                    />
-                                ))}
-                            </div>
+                            {!slide.isLastSlideCelebration && (
+                                <div className={`player-progress-bar ${
+                                    !solvedSlides.has(currentSlideIndex) && (
+                                        (currentSlide?.cartridge && (currentSlide.cartridge.type === 'Potiondas' || currentSlide.cartridge.type === 'PEMDAS' || currentSlide.cartridge.type === 'AlgeBros' || currentSlide.cartridge.type === 'Balanza' || currentSlide.cartridge.type === 'Spot')) ||
+                                        currentSlide?.elements?.some(el => el.type === 'quiz' && el.metadata?.quizType === 'pem')
+                                    )
+                                        ? 'greyed-out'
+                                        : ''
+                                }`}>
+                                    {slides.filter(s => !s.isLastSlideCelebration).map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className={`progress-segment ${i <= currentSlideIndex ? 'active' : ''}`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
 
                             {/* Cartridge Layer - Below Stickers but above background */}
                             {slide.cartridge && (
@@ -1481,6 +1648,25 @@ const Player = () => {
 
                             return renderedElements;
                         })()}
+
+                            {/* Celebration Last Slide Back to Menu Button */}
+                            {slide.isLastSlideCelebration && (
+                                <div className="player-back-to-menu-container">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleBackToMenuWithScroll();
+                                        }}
+                                        className="player-back-to-menu-btn"
+                                    >
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="19" y1="12" x2="5" y2="12" />
+                                            <polyline points="12 19 5 12 12 5" />
+                                        </svg>
+                                        {t('player.backToMenu', 'BACK TO MENU')}
+                                    </button>
+                                </div>
+                            )}
 
                             {/* Popup Overlay Modal */}
                             {index === currentSlideIndex && activePopupText !== null && (

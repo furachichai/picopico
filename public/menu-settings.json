@@ -8,5 +8,6 @@
   "titleShadowColor": "#B81EAD",
   "buttonTitleFontSize": "1.2rem",
   "buttonOverlayBg": "rgba(0, 86, 214, 0.1)",
-  "buttonOverlayHeight": 29
+  "buttonOverlayHeight": 29,
+  "showLastSlide": true
 }

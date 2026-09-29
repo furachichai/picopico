@@ -17,13 +17,14 @@ import { evaluateMathExpression, parseFieldExpression, generateFieldChoices } fr
 const STICKER_DIR = '/assets/images/stickers/';
 
 const CHARACTERS = [
-    { id: 'chef', name: 'Chef', avatar: 'avatar_chef.png', defaultSide: 'left' },
+    { id: 'yara', name: 'Yara', avatar: 'yara_chat_icon.png', defaultSide: 'left' },
     { id: 'pesto', name: 'Pesto', avatar: 'avatar_pesto.png', defaultSide: 'right' },
     { id: 'dilla', name: 'Dilla', avatar: 'avatar_dilla.png', defaultSide: 'left' },
     { id: 'sales', name: 'Sales', avatar: 'avatar_sales.png', defaultSide: 'right' }
 ];
 
 const getCharacterByAvatar = (avatar) => {
+    if (avatar === 'avatar_chef.png') return CHARACTERS[0];
     return CHARACTERS.find(c => c.avatar === avatar) || CHARACTERS[0];
 };
 
@@ -381,10 +382,10 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
             for (let i = chatNodes.length - 1; i >= 0; i--) {
                 const node = chatNodes[i];
                 if (node.type === 'message' && node.style !== 'narrator' && node.avatar) {
-                    return node.avatar;
+                    return node.avatar === 'avatar_chef.png' ? 'yara_chat_icon.png' : node.avatar;
                 }
             }
-            return 'avatar_chef.png';
+            return 'yara_chat_icon.png';
         };
 
         const getLastRightAvatar = () => {
@@ -550,12 +551,12 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
                                             }}
                                         >
                                             <img 
-                                                src={`/assets/characters/${node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')}`} 
+                                                src={`/assets/characters/${(node.avatar === 'avatar_chef.png' ? 'yara_chat_icon.png' : node.avatar) || (node.type === 'message' ? 'yara_chat_icon.png' : 'avatar_pesto.png')}`} 
                                                 alt="avatar" 
                                                 className="chatquiz-avatar-selector-icon" 
                                             />
                                             <span className="chatquiz-avatar-selector-name">
-                                                {getCharacterByAvatar(node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')).name}
+                                                {getCharacterByAvatar((node.avatar === 'avatar_chef.png' ? 'yara_chat_icon.png' : node.avatar) || (node.type === 'message' ? 'yara_chat_icon.png' : 'avatar_pesto.png')).name}
                                             </span>
                                             <span className="chatquiz-avatar-selector-arrow">▼</span>
                                         </button>
@@ -565,7 +566,7 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
                                                 {CHARACTERS.map((char) => (
                                                     <button
                                                         key={char.id}
-                                                        className={`chatquiz-avatar-dropdown-item ${(node.avatar || (node.type === 'message' ? 'avatar_chef.png' : 'avatar_pesto.png')) === char.avatar ? 'selected' : ''}`}
+                                                        className={`chatquiz-avatar-dropdown-item ${((node.avatar === 'avatar_chef.png' ? 'yara_chat_icon.png' : node.avatar) || (node.type === 'message' ? 'yara_chat_icon.png' : 'avatar_pesto.png')) === char.avatar ? 'selected' : ''}`}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             const newNodes = [...chatNodes];

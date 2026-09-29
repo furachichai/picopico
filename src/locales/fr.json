@@ -51,7 +51,8 @@
     "player": {
         "menu": "Menu",
         "close": "Fermer",
-        "hint": "Glissez ou utilisez les Flèches"
+        "hint": "Glissez ou utilisez les Flèches",
+        "backToMenu": "RETOUR AU MENU"
     },
     "quiz": {
         "check": "VÉRIFIER",

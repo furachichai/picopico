@@ -1181,24 +1181,34 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             </button>
                         )}
                         {element.type === 'background' && onApplyBackgroundToAll && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '36px', padding: '0 8px', background: 'rgba(0,0,0,0.05)', borderRadius: '6px', marginLeft: 'auto' }}>
-                                <input
-                                    type="checkbox"
-                                    id="apply-bg-all"
-                                    checked={applyToAllChecked}
-                                    onChange={(e) => {
-                                        setApplyToAllChecked(e.target.checked);
-                                        if (e.target.checked) {
-                                            onApplyBackgroundToAll(element);
-                                            setTimeout(() => setApplyToAllChecked(false), 1500);
-                                        }
-                                    }}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                <label htmlFor="apply-bg-all" style={{ fontSize: '0.8rem', cursor: 'pointer', margin: 0, fontWeight: '500' }}>
-                                    Apply to all
-                                </label>
-                            </div>
+                            <button
+                                type="button"
+                                id="apply-bg-all"
+                                className="btn-secondary"
+                                onClick={() => {
+                                    onApplyBackgroundToAll(element);
+                                    setApplyToAllChecked(true);
+                                    setTimeout(() => setApplyToAllChecked(false), 1500);
+                                }}
+                                title="Apply background to other slides without custom background"
+                                style={{
+                                    fontSize: '0.8rem',
+                                    padding: '6px 12px',
+                                    height: '36px',
+                                    fontWeight: 'bold',
+                                    marginLeft: 'auto',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    background: applyToAllChecked ? '#4CAF50' : undefined,
+                                    color: applyToAllChecked ? 'white' : undefined,
+                                    borderColor: applyToAllChecked ? '#4CAF50' : undefined,
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                {applyToAllChecked ? '✓ Applied' : 'Apply to all'}
+                            </button>
                         )}
                         {element.type === 'background' && isInteractiveSlide && renderAutonextButton()}
                     </div>

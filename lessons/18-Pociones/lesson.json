@@ -1,0 +1,732 @@
+{
+  "id": "lessons/18-Pociones/lesson.json",
+  "title": "Pociones",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1778621155899",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20tells%20you%20a%20secret.png",
+          "x": 46.94444444444445,
+          "y": 51.71875,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.9147329960692745,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778621246924",
+          "type": "balloon",
+          "content": "Necesito tu ayuda...",
+          "x": 56.25000000000001,
+          "y": 69.21875,
+          "width": 53.61111111111111,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 21,
+            "tailPos": {
+              "x": -9,
+              "y": -85
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "I need your help..."
+            }
+          }
+        }
+      ],
+      "order": 0,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1778621173532",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1778621177838",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20making%20natural%20potions.jpg",
+          "x": 50,
+          "y": 50,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.9862066212476392,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1778621311270",
+          "type": "balloon",
+          "content": "...para crear mis pociones.",
+          "x": 24.72222222222222,
+          "y": 61.5625,
+          "width": 46.666666666666664,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 21,
+            "tailPos": {
+              "x": 48,
+              "y": -93
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "...to brew my potions."
+            }
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1778621288245",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1778621293082",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20with%20jacko%20no%20lightning.png",
+          "x": 43.055555555555564,
+          "y": 56.25,
+          "width": 40,
+          "height": 25.10502049180328,
+          "rotation": 0,
+          "scale": 3.46529665124954,
+          "metadata": {
+            "width": 40,
+            "height": 25.10502049180328,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1778621356990",
+          "type": "balloon",
+          "content": "¡Descubre el<div>ORDEN CORRECTO</div><div>de las recetas!</div>",
+          "x": 41.80555555555556,
+          "y": 55.78125,
+          "width": 66.94444444444444,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 18,
+            "tailPos": {
+              "x": 18,
+              "y": -89
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "¡Find the recipe's RIGHT ORDER!"
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1778621428728",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 3,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {
+          "levelsText": "x\nxx>\nxxx>\n/xx n/\nx/x\nx//x//",
+          "monsterType": "plant"
+        }
+      }
+    },
+    {
+      "id": "slide-1778621187219",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1778686377401",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20thinking.png",
+          "x": 49.44444444444444,
+          "y": 54.84375,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.008362813417761,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1778621596290",
+          "type": "text",
+          "content": "¿Cuál va primero?",
+          "x": 50.69444444444445,
+          "y": 20.312500000000014,
+          "width": 79.16666666666666,
+          "height": 10,
+          "rotation": -8.007086120649006,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "monospace",
+            "fontSize": 25,
+            "backgroundColor": "#58cc02",
+            "color": "#ffffff",
+            "textAlign": "center"
+          },
+          "translations": {
+            "en": {
+              "content": "Which one goes first?"
+            }
+          }
+        },
+        {
+          "id": "el-1778622334897",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 82.1875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Primero ×",
+              "<b>Primero <font face=\"Verdana, Arial, sans-serif\">÷</font></b>",
+              "Cualquiera, de izquierda a derecha"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "fontSize": 18,
+            "fontFamily": "\"Atkinson Hyperlegible Next\"",
+            "fontWeight": "bold",
+            "translations": {
+              "en": {
+                "options": [
+                  "First x",
+                  "<b>First <font face=\"Verdana, Arial, sans-serif\">÷</font></b>",
+                  "Either, from left to right"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1780581764338",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1780581764338-49munff7k",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780581959311",
+          "type": "text",
+          "content": "<b>                            </b>",
+          "x": 49.166666666666664,
+          "y": 39.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>                            </b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780581764338-ipy73pxyj",
+          "type": "text",
+          "content": "<b>REGLAS</b>",
+          "x": 49.58333333333333,
+          "y": 31.5625,
+          "width": 18.641369509582738,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>RULES</b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780581789189",
+          "type": "text",
+          "content": "<b>                </b><div><b>                               </b></div>",
+          "x": 49.166666666666664,
+          "y": 77.8125,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>                </b><div><b>                               </b></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780581936154",
+          "type": "text",
+          "content": "<b>                           </b>",
+          "x": 48.888888888888886,
+          "y": 50.9375,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>                           </b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780581764338-2l4e9lblv",
+          "type": "text",
+          "content": "<font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\"><b>×</b> o <b>÷</b> </span></font><div><font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\">de izquierda a derecha</span></font></div>",
+          "x": 48.88888888888888,
+          "y": 64.53125,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 19,
+            "backgroundColor": "#F44336",
+            "color": "#969696"
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\"><b>×</b> or <b>÷</b> </span></font><div><font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\">from left to right</span></font></div>"
+            }
+          }
+        }
+      ],
+      "order": 5,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      }
+    },
+    {
+      "id": "slide-1778636034579",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1778686426188",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20crystal%20ball.png",
+          "x": 50.55555555555554,
+          "y": 67.03125,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.7105907383126553,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566,
+            "locked": false
+          }
+        },
+        {
+          "id": "el-1778636057286",
+          "type": "balloon",
+          "content": "<div>Veamos qué pasa con estos símbolos...</div>",
+          "x": 38.33333333333334,
+          "y": 22.8125,
+          "width": 76.66666666666667,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 19,
+              "y": 79
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "New symbols!"
+            }
+          }
+        },
+        {
+          "id": "el-1778704067171",
+          "type": "text",
+          "content": "<font color=\"#e91e8f\">+-</font>",
+          "x": 50.63815284243228,
+          "y": 78.90625,
+          "width": 13.88888888888889,
+          "height": 10,
+          "rotation": 0,
+          "scale": 3.6666686979489573,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 26,
+            "textAlign": "center"
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#ce82ff\">+-</font>"
+            }
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1780587712034",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 7,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {
+          "levelsText": "-\n-+>\n+->\n+-++>\n+-++\n---\n+++\n-+-+-"
+        }
+      }
+    },
+    {
+      "id": "slide-1780587964900",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1780587964900-sw95u71ml",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20thinking.png",
+          "x": 49.44444444444444,
+          "y": 54.84375,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.008362813417761,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1780587964900-bwx3qpxzq",
+          "type": "text",
+          "content": "¿Cuál va primero?",
+          "x": 50.69444444444445,
+          "y": 20.312500000000014,
+          "width": 79.16666666666666,
+          "height": 10,
+          "rotation": -8.007086120649006,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "monospace",
+            "fontSize": 25,
+            "backgroundColor": "#58cc02",
+            "color": "#ffffff",
+            "textAlign": "center"
+          },
+          "translations": {
+            "en": {
+              "content": "Which one goes first?"
+            }
+          }
+        },
+        {
+          "id": "el-1780587964900-8psoljk1n",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 82.1875,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "options": [
+              "Primero +",
+              "<b>Primero <font face=\"Verdana, Arial, sans-serif\">-</font></b>",
+              "Cualquiera, de izquierda a derecha"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "fontSize": 18,
+            "fontFamily": "\"Atkinson Hyperlegible Next\"",
+            "fontWeight": "bold",
+            "translations": {
+              "en": {
+                "options": [
+                  "First +",
+                  "<b>First <font face=\"Verdana, Arial, sans-serif\">-</font></b>",
+                  "Either, from left to right"
+                ],
+                "matchAnswers": [],
+                "chatNodes": []
+              }
+            }
+          }
+        }
+      ],
+      "order": 8,
+      "backgroundSettings": {},
+      "cartridge": null
+    },
+    {
+      "id": "slide-1780592151405",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1780592151405-d0morfnzl",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780592151405-mfnsld9na",
+          "type": "text",
+          "content": "<b>                            </b>",
+          "x": 49.166666666666664,
+          "y": 39.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>                            </b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780592151405-k5qvz76br",
+          "type": "text",
+          "content": "<b>                           </b>",
+          "x": 48.888888888888886,
+          "y": 50.9375,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>                           </b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780592151405-d6lw7g404",
+          "type": "text",
+          "content": "              <div>                                                   </div>",
+          "x": 48.88888888888888,
+          "y": 64.53125,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 19,
+            "backgroundColor": "#C8C8C8",
+            "color": "#C8C8C8"
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\"><b>×</b> or <b>÷</b> </span></font><div><font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\">from left to right</span></font></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780592151405-sv8il4pjl",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><b>+</b> o <b>-</b> </font><div><div><font color=\"#ffffff\">de izquierda a derecha</font></div></div>",
+          "x": 49.166666666666664,
+          "y": 77.8125,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#F44336"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>+ or - </b><div><b>from left to right</b></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780592151405-hvl1ao9ac",
+          "type": "text",
+          "content": "<b>REGLAS</b>",
+          "x": 49.58333333333333,
+          "y": 31.5625,
+          "width": 18.641369509582738,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>RULES</b>"
+            }
+          }
+        }
+      ],
+      "order": 9,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-12T21:25:39.254Z",
+  "updatedAt": "2026-09-29T15:32:05.356Z",
+  "path": "lessons/18-Pociones/lesson.json",
+  "textPreset": null,
+  "subject": "Math",
+  "topic": "PEMDAS",
+  "chapterId": "01",
+  "chapterName": "Magic",
+  "lessonId": "01",
+  "visible": true,
+  "name": "18-Pociones",
+  "type": "file",
+  "description": "Aprende a crear pociones mágicas",
+  "order": 18,
+  "status": "active",
+  "icon": "icon_potion.png",
+  "progress": null,
+  "translations": {
+    "en": {
+      "title": "Potions 101",
+      "description": "Learn how to craft potions"
+    }
+  },
+  "cardColor": "#8B5CF6",
+  "hashtag": "#OrderOfOperations",
+  "visibleInFeed": false,
+  "titlecardFrame": null,
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  }
+}

@@ -1,0 +1,534 @@
+{
+  "id": "lessons/05-Variable Trivia/lesson.json",
+  "title": "Variable Trivia",
+  "slides": [
+    {
+      "id": "slide-1790689994810",
+      "background": "url(\"/src/assets/backgrounds/FrozenPesto.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790477037301-0-ykpyal",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-6lclxag44",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037301-7uv5sp5c9",
+          "type": "banner",
+          "content": "Pesto has <font color=\"#000000\">a</font> apples. What is <font color=\"#000000\">a</font>?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790477037301-ifen8dp28",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "An apple",
+              "The first letter of \"apple\"",
+              "1, because a is the first letter",
+              "The number of apples"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 1,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037301-1-o0gnz1",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-334o4x9tb",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037301-ppn7e770z",
+          "type": "banner",
+          "content": "If <font color=\"#000000\">d</font> <font color=\"#000000\">= 4</font>, what is<div> <font color=\"#000000\">d + d </font>?</div>",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790477037301-qlpxjne2m",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "4",
+              "44",
+              "8",
+              "16"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037301-2-nwq145",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-tao31r0zj",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037301-0m7kogicj",
+          "type": "banner",
+          "content": "A variable is…",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790477037301-gu44nrxha",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Always the letter x",
+              "A letter that stands for a number",
+              "Short for a word",
+              "A letter with a fixed value"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 3,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037301-3-dikczs",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-4o1p70mn0",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037301-h0wqe9gn0",
+          "type": "banner",
+          "content": "If <font color=\"#000000\">n</font> <font color=\"#000000\">= 5</font>, what is&nbsp;<div><font color=\"#000000\">n</font> <font color=\"#000000\">+ 2</font>?</div>",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790477037302-xzmacui55",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "52",
+              "n2",
+              "5",
+              "7"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 4,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037302-4-wvsfgh",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-0iuwpsi85",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037302-97zaxg4pn",
+          "type": "banner",
+          "content": "Which letters can be used as variables?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790477037302-gb9tvtkl1",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Only x",
+              "Only x and y",
+              "Any letter",
+              "Only capital letters"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 5,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037302-5-0nqysf",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-3rm4qtu10",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037302-bhn64lxtw",
+          "type": "banner",
+          "content": "On Monday, <font color=\"#000000\">d</font> <font color=\"#000000\">= 2</font>. On Tuesday, <font color=\"#000000\">d</font> <font color=\"#000000\">= 3</font>.&nbsp;<div>Is that allowed?</div>",
+          "x": 50,
+          "y": 25.984375,
+          "width": 78,
+          "height": 24.96875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "Outfit",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790477037302-favh8u3lq",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Yes, a variable can change",
+              "No, d is fixed forever",
+              "Only if Yara says so",
+              "No, d must be 4"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 6,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790477037302-6-2rnt5x",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790689983879-bzhxy59ku",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790477037302-owpnharqg",
+          "type": "banner",
+          "content": "Can two <font color=\"#000000\">different</font> letters have the <font color=\"#000000\">same</font> <font color=\"#000000\">value</font>?",
+          "x": 50,
+          "y": 24.03125,
+          "width": 78,
+          "height": 21.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790477037302-1oekrwen4",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "Never",
+              "Only for x and y",
+              "Only if they're next to each other",
+              "Yes"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        }
+      ],
+      "order": 7,
+      "cartridge": null,
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-27T02:43:03.053Z",
+  "updatedAt": "2026-09-29T13:53:21.413Z",
+  "path": "lessons/05-Variable Trivia/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "name": "05-Variable Trivia",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 5,
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0,
+    "y": -9.7
+  },
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": null
+}

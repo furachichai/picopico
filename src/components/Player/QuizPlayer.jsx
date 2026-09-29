@@ -2878,7 +2878,7 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                             }
                             return (
                                 <div key={idx} className="chat-bubble-row chat-row-tutor">
-                                    <div className="chat-avatar"><img src={`/assets/characters/${node.avatar || 'avatar_chef.png'}`} alt="Avatar" className="chat-avatar-img" /></div>
+                                    <div className="chat-avatar"><img src={`/assets/characters/${(node.avatar === 'avatar_chef.png' ? 'yara_chat_icon.png' : node.avatar) || 'yara_chat_icon.png'}`} alt="Avatar" className="chat-avatar-img" /></div>
                                     <div className="chat-bubble chat-bubble-tutor"
                                         style={{
                                             ...(data.metadata?.fontFamily && { fontFamily: data.metadata.fontFamily }),

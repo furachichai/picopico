@@ -215,7 +215,7 @@ const LessonsPage = () => {
         }
     };
 
-    const handleSaveCircleFrame = async (newFrame) => {
+    const handleSaveCircleFrame = async (newFrame, visibilityOptions = {}) => {
         if (!editingFrameLesson) return;
         try {
             const targetLesson = editingFrameLesson;
@@ -228,12 +228,37 @@ const LessonsPage = () => {
                 titlecardFrame: newFrame
             };
 
+            if (typeof visibilityOptions.visible === 'boolean') {
+                updated.visible = visibilityOptions.visible;
+                if (updated.content) updated.content.visible = visibilityOptions.visible;
+            }
+            if (typeof visibilityOptions.visibleInFeed === 'boolean') {
+                updated.visibleInFeed = visibilityOptions.visibleInFeed;
+                if (updated.content) updated.content.visibleInFeed = visibilityOptions.visibleInFeed;
+            }
+
             await fetch('/api/save-lesson', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path: targetLesson.path, content: updated })
             });
 
+            try {
+                const { getLocalLessons, saveLocalLesson } = await import('../../utils/lessonStorage');
+                const local = getLocalLessons().find(l => l.path === targetLesson.path);
+                if (local) {
+                    saveLocalLesson({
+                        ...local,
+                        titlecardFrame: newFrame,
+                        ...(typeof visibilityOptions.visible === 'boolean' && { visible: visibilityOptions.visible }),
+                        ...(typeof visibilityOptions.visibleInFeed === 'boolean' && { visibleInFeed: visibilityOptions.visibleInFeed })
+                    });
+                }
+            } catch (e) {
+                // Ignore
+            }
+
+            invalidateDiscoverCache();
             await fetchLessons();
             setEditingFrameLesson(null);
         } catch (err) {

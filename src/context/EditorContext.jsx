@@ -570,6 +570,35 @@ const editorReducer = (state, action) => {
             };
             saveLastBackground(bgData);
 
+            const isImageBackground = (bg) => {
+                if (!bg || typeof bg !== 'string') return false;
+                const trimmed = bg.trim();
+                if (trimmed === '') return false;
+                return (
+                    trimmed.includes('url(') ||
+                    trimmed.startsWith('data:image/') ||
+                    trimmed.startsWith('blob:') ||
+                    trimmed.startsWith('http://') ||
+                    trimmed.startsWith('https://') ||
+                    trimmed.startsWith('/assets/') ||
+                    trimmed.startsWith('assets/') ||
+                    /\.(png|jpe?g|webp|svg|gif|avif)(\?.*)?$/i.test(trimmed)
+                );
+            };
+
+            const isDefaultColorBackground = (bg) => {
+                if (!bg || typeof bg !== 'string') return true;
+                const clean = bg.trim().toLowerCase();
+                return (
+                    clean === '' ||
+                    clean === '#e1f5fe' ||
+                    clean === '#e1f5feff' ||
+                    clean === 'rgb(225, 245, 254)' ||
+                    clean === 'rgba(225, 245, 254, 1)' ||
+                    clean === 'rgba(225, 245, 254, 1.0)'
+                );
+            };
+
             const newPast = pushToPast(state);
             
             return {
@@ -580,14 +609,30 @@ const editorReducer = (state, action) => {
                 lesson: {
                     ...state.lesson,
                     slides: state.lesson.slides.map((slide) => {
-                        // Create a new copy of elements without any existing background
+                        if (slide.id === state.currentSlideId) {
+                            return {
+                                ...slide,
+                                background: backgroundElement.background,
+                                backgroundSettings: backgroundElement.metadata ? { ...backgroundElement.metadata } : slide.backgroundSettings
+                            };
+                        }
+
+                        // Determine if target slide currently has an image background or a not-default color background
+                        const hasImageBg = isImageBackground(slide.background);
+                        const hasNotDefaultColorBg = !hasImageBg && !isDefaultColorBackground(slide.background);
+
+                        // If it currently has an image background or a not-default color background, leave it untouched
+                        if (hasImageBg || hasNotDefaultColorBg) {
+                            return slide;
+                        }
+
+                        // Otherwise apply the current slide's background to this slide
                         const otherElements = slide.elements.filter(el => el.type !== 'background');
-                        // Clone the background element with a new id
                         const newBgElement = {
                             ...backgroundElement,
                             id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
                         };
-                        // Background should typically be the first element (lowest z-index)
+
                         return {
                             ...slide,
                             background: backgroundElement.background,

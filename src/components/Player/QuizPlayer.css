@@ -1642,6 +1642,7 @@
     border: 3px solid #000000;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
     will-change: transform;
     transition: opacity 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s;
     box-sizing: border-box;
