@@ -37,6 +37,7 @@ import {
   playVictory,
   playPopFX
 } from './game/AlgeBrosSoundManager';
+import LikeTermsTutorial from './LikeTermsTutorial';
 import './AlgeBrosCartridge.css';
 
 function ParticlesBG() {
@@ -258,29 +259,47 @@ function ScaledReorderGroup({ children, isValidating, ...props }) {
   );
 }
 
-export default function AlgeBrosCartridge({ config = {}, onComplete, preview = false }) {
-  const [screen, setScreen] = useState('game');
-  const [levels, setLevels] = useState([]);
-  const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
-  
+export default function AlgeBrosCartridge({
+  config = {},
+  slideBackground = null,
+  onComplete,
+  preview = false,
+  isSelected = false,
+  onSelect = null,
+  onConfigChange = null
+}) {
   // Topic from config (defaults to equations)
   const topic = config.topic || 'equations';
+  const [screen, setScreen] = useState(topic === 'liketerms' ? 'tutorial' : 'game');
+  const [levels, setLevels] = useState([]);
+  const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
+  const hasEverPlayedTutorialRef = useRef(false);
+  const prevTopicRef = useRef(topic);
 
-  // Background style from config (library, file upload, or preset)
-  const bgImage = config.background || config.backgroundImage || config.globalBackground;
+  // Background style from config (library, file upload, or preset) or slide background
+  const hasExplicitBg = Boolean(config.background || config.backgroundImage || config.globalBackground);
+  const rawBg = config.background || config.backgroundImage || config.globalBackground || (slideBackground && slideBackground !== '#ffffff' && slideBackground !== 'transparent' ? slideBackground : null);
+  const hasBackground = Boolean(rawBg);
+
   const bgStyle = useMemo(() => {
-    if (!bgImage) return null;
-    const resolved = resolveAssetUrl(bgImage);
-    const formatted = resolved.startsWith('url(') || resolved.startsWith('linear-gradient(') || resolved.startsWith('radial-gradient(')
-      ? resolved
-      : `url(${resolved})`;
+    const bgVal = config.background || config.backgroundImage || config.globalBackground;
+    if (!bgVal) return null;
+    const resolved = resolveAssetUrl(bgVal);
+    const isColor = resolved.startsWith('#') || resolved.startsWith('rgb(') || resolved.startsWith('rgba(') || resolved.startsWith('hsl(');
+    const isGradient = resolved.startsWith('linear-gradient(') || resolved.startsWith('radial-gradient(');
+    const isUrl = resolved.startsWith('url(') || (!isColor && !isGradient);
+
+    if (isColor) {
+      return { backgroundColor: resolved };
+    }
+    const formatted = isUrl ? (resolved.startsWith('url(') ? resolved : `url(${resolved})`) : resolved;
     return {
       backgroundImage: formatted,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat'
     };
-  }, [bgImage]);
+  }, [config.background, config.backgroundImage, config.globalBackground]);
   
   // Level Gameplay State
   const [terms, setTerms] = useState([]);
@@ -496,8 +515,24 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
       totalMistakes: 0,
       perfectLevels: 0
     });
-    setScreen('game');
-  }, [generateLevelsForConfig, config.startLevel, loadLevel]);
+    if (topic === 'liketerms' && !hasEverPlayedTutorialRef.current) {
+      setScreen('tutorial');
+    } else {
+      setScreen('game');
+    }
+  }, [generateLevelsForConfig, config.startLevel, loadLevel, topic]);
+
+  useEffect(() => {
+    if (prevTopicRef.current !== topic) {
+      prevTopicRef.current = topic;
+      hasEverPlayedTutorialRef.current = false;
+      if (topic === 'liketerms') {
+        setScreen('tutorial');
+      } else {
+        setScreen('game');
+      }
+    }
+  }, [topic]);
 
   const handleDecompose = (term, splitA, splitB, type) => {
     setActiveFactorMenu(null);
@@ -2046,11 +2081,17 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
   // Preview Card for Slide Thumbnails/Editor Preview
   if (preview) {
     return (
-      <div className={`algebros-cartridge ${bgStyle ? 'has-background' : ''}`} style={{ pointerEvents: 'none', background: bgStyle ? 'transparent' : '#ffffff' }}>
-        {bgStyle && <div className="algebros-bg-layer" style={bgStyle} />}
+      <div
+        className={`algebros-cartridge ${hasBackground ? 'has-background' : ''}`}
+        style={{
+          pointerEvents: 'none',
+          background: hasBackground ? 'transparent' : '#ffffff'
+        }}
+      >
+        {bgStyle && hasExplicitBg && <div className="algebros-bg-layer" style={bgStyle} />}
         <ParticlesBG />
         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%', padding: '16px' }}>
-          <div className="algebros-equation-banner" style={{ padding: '12px 20px', minHeight: 'auto' }}>
+          <div className="algebros-equation-banner" style={{ padding: '12px 20px', minHeight: 'auto', background: '#ffffff' }}>
             <h1 className="start-logo" style={{ fontSize: '1.6rem', margin: 0 }}>algeBROS</h1>
           </div>
         </div>
@@ -2058,15 +2099,22 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
     );
   }
 
+  const totalLevels = Math.max(1, levels.length || (config.levels ? config.levels.length : 10));
+  const completedLevels = isValidating
+    ? Math.min(totalLevels, currentLevelIndex + 1)
+    : Math.min(totalLevels, currentLevelIndex);
+  const progressPercent = Math.min(100, Math.max(0, (completedLevels / totalLevels) * 100));
+  const isGameComplete = completedLevels >= totalLevels;
+
   return (
     <div
       ref={cartridgeRef}
-      className={`algebros-cartridge ${bgStyle ? 'has-background' : ''}`}
+      className={`algebros-cartridge ${hasBackground ? 'has-background' : ''}`}
       style={{
-        background: bgStyle ? 'transparent' : '#ffffff'
+        background: hasBackground ? 'transparent' : '#ffffff'
       }}
     >
-      {bgStyle && <div className="algebros-bg-layer" style={bgStyle} />}
+      {bgStyle && hasExplicitBg && <div className="algebros-bg-layer" style={bgStyle} />}
       <ParticlesBG />
       
       <div className={`screen-container ${activeFactorMenu ? 'has-active-popover' : ''}`}>
@@ -2084,6 +2132,16 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
           }}
         />
         <AnimatePresence mode="wait">
+          {screen === 'tutorial' && topic === 'liketerms' && (
+            <LikeTermsTutorial
+              key="tutorial"
+              onPlay={() => {
+                hasEverPlayedTutorialRef.current = true;
+                setScreen('game');
+              }}
+            />
+          )}
+
           {screen === 'game' && (
             <motion.div
               key="game"
@@ -2093,26 +2151,56 @@ export default function AlgeBrosCartridge({ config = {}, onComplete, preview = f
               exit={{ opacity: 0 }}
               style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}
             >
-              {/* HUD */}
-              <div className="hud-header">
-                <div className="hud-badge">
-                  LVL <span className="font-mono">{currentLevelIndex + 1} / {levels.length || 10}</span>
+              {/* HUD & Level Progress */}
+              <div className="hud-top-wrapper">
+                <div className="hud-header">
+                  <div className="hud-badge">
+                    LVL <span className="font-mono">{currentLevelIndex + 1} / {levels.length || 10}</span>
+                  </div>
+                  <div 
+                    className="hud-badge"
+                    style={{
+                      filter: isElegantCompleted ? 'none' : 'grayscale(100%) opacity(0.35)',
+                      transition: 'all 0.5s ease-in-out',
+                      borderColor: isElegantCompleted ? 'rgba(236, 72, 153, 0.4)' : 'rgba(15,23,42,0.08)',
+                      boxShadow: isElegantCompleted ? '0 0 10px rgba(236, 72, 153, 0.15)' : 'none',
+                      color: isElegantCompleted ? '#ec4899' : 'inherit'
+                    }}
+                    title={isElegantCompleted ? "Elegant solution!" : "Solve with variables sorted alphabetically and exponents descending to get the flower!"}
+                  >
+                    🌸 <span style={{ fontSize: '0.75rem', fontWeight: 800, marginLeft: '2px' }}>ELEGANT</span>
+                  </div>
+                  <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
+                    {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
+                  </div>
                 </div>
-                <div 
-                  className="hud-badge"
-                  style={{
-                    filter: isElegantCompleted ? 'none' : 'grayscale(100%) opacity(0.35)',
-                    transition: 'all 0.5s ease-in-out',
-                    borderColor: isElegantCompleted ? 'rgba(236, 72, 153, 0.4)' : 'rgba(15,23,42,0.08)',
-                    boxShadow: isElegantCompleted ? '0 0 10px rgba(236, 72, 153, 0.15)' : 'none',
-                    color: isElegantCompleted ? '#ec4899' : 'inherit'
-                  }}
-                  title={isElegantCompleted ? "Elegant solution!" : "Solve with variables sorted alphabetically and exponents descending to get the flower!"}
-                >
-                  🌸 <span style={{ fontSize: '0.75rem', fontWeight: 800, marginLeft: '2px' }}>ELEGANT</span>
-                </div>
-                <div className={`hud-badge ${userPresses > minPresses ? '' : 'hud-badge-highlight'}`}>
-                  {topic === 'divisions' || topic === 'equations' ? 'STEPS' : 'PRESSES'}: <span className="font-mono">{userPresses}</span> <span style={{ opacity: 0.5 }}>/ {minPresses}</span>
+
+                {/* Videogame-Style AlgeBros Level Progress Bar */}
+                <div className="algebros-level-progress" title={`Level ${currentLevelIndex + 1} of ${totalLevels}`}>
+                  <span className="algebros-progress-icon">⚡</span>
+                  <div className="algebros-progress-track">
+                    {/* Progress Fill */}
+                    <div
+                      className="algebros-progress-fill"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+
+                    {/* Checkpoint Dividers */}
+                    {totalLevels > 1 && Array.from({ length: totalLevels - 1 }).map((_, idx) => (
+                      <div
+                        key={`divider-${idx}`}
+                        className="algebros-progress-divider"
+                        style={{ left: `${((idx + 1) / totalLevels) * 100}%` }}
+                      />
+                    ))}
+                  </div>
+
+                  <span className={`algebros-progress-trophy ${isGameComplete ? 'is-complete' : ''}`}>
+                    🏆
+                  </span>
+                  <span className="algebros-progress-text font-mono">
+                    {completedLevels}/{totalLevels}
+                  </span>
                 </div>
               </div>
 

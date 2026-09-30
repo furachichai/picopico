@@ -132,7 +132,8 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                 type: ELEMENT_TYPES.QUIZ,
                 content: isType ? 'Type Answer' : 'Quiz',
                 metadata: {
-                    fontFamily: (isMatch || isConecta) ? "'Bangers', cursive, sans-serif" : '"Fira Sans"',
+                    fontFamily: isConecta ? '"Fredoka", sans-serif' : (isMatch ? "'Bangers', cursive, sans-serif" : '"Fira Sans"'),
+                    ...(isConecta && { fontWeight: '600' }),
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select

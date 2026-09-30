@@ -34,7 +34,11 @@
         "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette diapositive?",
         "moveLeft": "Déplacer Gauche",
         "moveRight": "Déplacer Droite",
-        "delete": "Supprimer Diapositive"
+        "delete": "Supprimer Diapositive",
+        "addCard": "Insérer le modèle de carte à collectionner (_collectible_card)",
+        "cardInserted": "Carte à collectionner insérée !",
+        "cardNotFound": "Modèle de carte à collectionner introuvable !",
+        "cardInsertFailed": "Échec de l'insertion de la carte"
     },
     "library": {
         "title": "Bibliothèque",

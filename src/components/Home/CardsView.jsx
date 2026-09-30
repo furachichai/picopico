@@ -258,6 +258,8 @@ const CardsView = () => {
               <ErrorBoundary>
                 <AlgeBrosCartridge
                   config={slide.cartridge.config}
+                  slideBackground={slide.background}
+                  preview={true}
                   onComplete={() => {}}
                 />
               </ErrorBoundary>

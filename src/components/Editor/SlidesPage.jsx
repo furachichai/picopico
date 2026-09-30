@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { useTranslation } from 'react-i18next';
+import { fetchCollectibleCardSlide } from '../../utils/collectibleCard';
 import SlideThumbnail from './SlideThumbnail';
 import ConfirmationModal from './ConfirmationModal';
 import ErrorBoundary from '../ErrorBoundary';
@@ -20,6 +21,8 @@ const SlidesPage = () => {
     const [slidesToDelete, setSlidesToDelete] = useState(null);
     const [slideToSplit, setSlideToSplit] = useState(null);
     const [feedbackMessage, setFeedbackMessage] = useState('');
+    const [isLoadingCard, setIsLoadingCard] = useState(false);
+    const pendingSelectNewSlideRef = useRef(false);
 
     const [draggedSlideId, setDraggedSlideId] = useState(null);
     const [dragOverInfo, setDragOverInfo] = useState(null); // { targetId: string, position: 'before' | 'after' }
@@ -37,8 +40,15 @@ const SlidesPage = () => {
         setTimeout(() => setFeedbackMessage(''), 2000);
     };
 
-    // Clean up selection if slides change
+    // Clean up selection if slides change, or select newly inserted slide
     useEffect(() => {
+        if (pendingSelectNewSlideRef.current && state.currentSlideId) {
+            pendingSelectNewSlideRef.current = false;
+            setSelectedSlideIds([state.currentSlideId]);
+            setLastSelectedSlideId(state.currentSlideId);
+            return;
+        }
+
         setSelectedSlideIds(prev => {
             const existingIds = new Set(lesson.slides.map(s => s.id));
             const valid = prev.filter(id => existingIds.has(id));
@@ -48,11 +58,48 @@ const SlidesPage = () => {
             }
             return lesson.slides.length > 0 ? [lesson.slides[0].id] : [];
         });
-    }, [lesson.slides]);
+    }, [lesson.slides, state.currentSlideId]);
 
     const handleAddSlide = () => {
         dispatch({ type: 'ADD_SLIDE' });
         dispatch({ type: 'SET_VIEW', payload: 'editor' });
+    };
+
+    const handleAddCardSlide = async () => {
+        if (isLoadingCard) return;
+        setIsLoadingCard(true);
+        try {
+            const cardSlide = await fetchCollectibleCardSlide();
+            if (!cardSlide) {
+                showFeedback(t('slides.cardNotFound') || 'Collectible card template not found!');
+                return;
+            }
+
+            let targetId = lastSelectedSlideId || state.currentSlideId;
+            if (selectedSlideIds.length > 0) {
+                const sortedSelected = [...lesson.slides].filter(s => selectedSlideIds.includes(s.id));
+                if (sortedSelected.length > 0) {
+                    targetId = sortedSelected[sortedSelected.length - 1].id;
+                }
+            }
+
+            pendingSelectNewSlideRef.current = true;
+
+            dispatch({
+                type: 'PASTE_SLIDES',
+                payload: {
+                    slides: [cardSlide],
+                    targetSlideId: targetId
+                }
+            });
+
+            showFeedback(t('slides.cardInserted') || 'Collectible card inserted!');
+        } catch (err) {
+            console.error('Failed to insert collectible card slide:', err);
+            showFeedback(t('slides.cardInsertFailed') || 'Failed to insert card');
+        } finally {
+            setIsLoadingCard(false);
+        }
     };
 
     const handleEditSlide = (id) => {
@@ -392,7 +439,7 @@ const SlidesPage = () => {
         }
     };
 
-    const handleDrop = (e, slideId) => {
+    const handleDrop = (e) => {
         e.preventDefault();
         if (!draggedSlideId || !dragOverInfo) {
             setDraggedSlideId(null);
@@ -579,6 +626,14 @@ const SlidesPage = () => {
                             🗑️ ({selectedSlideIds.length})
                         </button>
                     )}
+                    <button
+                        className="btn-card"
+                        onClick={handleAddCardSlide}
+                        disabled={isLoadingCard}
+                        title={t('slides.addCard') || 'Insert collectible card template (_collectible_card)'}
+                    >
+                        + CARD
+                    </button>
                     <button className="btn-primary btn-create" onClick={handleAddSlide}>
                         + {t('slides.create')}
                     </button>

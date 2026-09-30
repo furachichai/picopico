@@ -88,6 +88,38 @@
     font-weight: 800;
 }
 
+.btn-card {
+    background-color: #8B5CF6;
+    color: white;
+    border: none;
+    border-bottom: 3px solid #6D28D9 !important;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.1s;
+    user-select: none;
+}
+
+.btn-card:hover:not(:disabled) {
+    background-color: #7C3AED;
+}
+
+.btn-card:active:not(:disabled) {
+    transform: translateY(2px);
+    border-bottom-width: 1px !important;
+}
+
+.btn-card:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-bottom-width: 1px !important;
+}
+
 .btn-header {
     background-color: #f1f5f9;
     color: #334155;

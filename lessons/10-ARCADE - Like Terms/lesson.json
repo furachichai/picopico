@@ -1,0 +1,90 @@
+{
+  "id": "draft-1790791492349",
+  "title": "ARCADE - Like Terms",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/titlecard_arcade.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790791529227",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001b.png\")",
+      "elements": [],
+      "order": 1,
+      "cartridge": {
+        "type": "AlgeBros",
+        "config": {
+          "startLevel": 1,
+          "targetLevel": 10,
+          "topic": "liketerms"
+        }
+      }
+    },
+    {
+      "id": "slide-1790791501818-0-ty3xoc",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790791501818-3nq1bd509",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 72.03125,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "'Bangers', cursive, sans-serif",
+            "options": [
+              "2x + 7x",
+              "y + 3y",
+              "7 + 2",
+              "2 + 2",
+              "<font style=\"font-size: 15px;\">3a + b + 4a + b</font>",
+              "a + a + b + b"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "conecta",
+            "visualMode": false,
+            "matchAnswers": [
+              "9x",
+              "4y",
+              "9",
+              "4",
+              "<div>7a + 2b</div>",
+              "2a + 2b"
+            ],
+            "autonext": true,
+            "enableBubbles": false
+          }
+        }
+      ],
+      "order": 2,
+      "autonext": true,
+      "backgroundSettings": {
+        "opacity": 0.27
+      },
+      "cartridge": null
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-30T18:04:52.349Z",
+  "updatedAt": "2026-09-30T18:05:46.018Z",
+  "path": "lessons/01-ARCADE - Like Terms/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  }
+}

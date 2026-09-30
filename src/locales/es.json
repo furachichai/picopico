@@ -33,7 +33,11 @@
         "confirmDelete": "¿Estás seguro de que quieres eliminar esta diapositiva?",
         "moveLeft": "Mover Izquierda",
         "moveRight": "Mover Derecha",
-        "delete": "Eliminar Diapositiva"
+        "delete": "Eliminar Diapositiva",
+        "addCard": "Insertar plantilla de tarjeta coleccionable (_collectible_card)",
+        "cardInserted": "¡Tarjeta coleccionable insertada!",
+        "cardNotFound": "¡No se encontró la plantilla de tarjeta coleccionable!",
+        "cardInsertFailed": "Error al insertar la tarjeta"
     },
     "library": {
         "title": "Biblioteca",

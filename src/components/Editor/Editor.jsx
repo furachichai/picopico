@@ -563,7 +563,7 @@ const Editor = () => {
             setLibraryCallback(null);
         }
         const sel = state.lesson.slides.find(s => s.id === state.currentSlideId)?.elements.find(e => e.id === state.selectedElementId);
-        if (sel?.type === 'background' || state.selectedElementId === 'background') {
+        if (sel?.type === 'background' || state.selectedElementId === 'background' || tab === 'custom-bg' || tab === 'backgrounds') {
             setLibraryTab(tab || 'custom-bg');
             setLibraryAllowedTabs(['custom-bg', 'backgrounds']);
         } else {

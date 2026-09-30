@@ -1049,7 +1049,28 @@ const Canvas = (props) => {
                   <PEMDASCartridge config={currentSlide.cartridge.config} preview={true} />
                 )}
                 {currentSlide.cartridge.type === 'AlgeBros' && (
-                  <AlgeBrosCartridge config={currentSlide.cartridge.config} preview={true} />
+                  <AlgeBrosCartridge
+                    config={currentSlide.cartridge.config}
+                    slideBackground={currentSlide.background}
+                    preview={true}
+                    isSelected={state.selectedElementId === 'cartridge'}
+                    onSelect={() => dispatch({ type: 'SELECT_ELEMENT', payload: 'cartridge' })}
+                    onConfigChange={(newConfig) => {
+                      dispatch({ type: 'SAVE_HISTORY' });
+                      dispatch({
+                        type: 'UPDATE_SLIDE',
+                        payload: {
+                          cartridge: {
+                            ...currentSlide.cartridge,
+                            config: {
+                              ...currentSlide.cartridge.config,
+                              ...newConfig
+                            }
+                          }
+                        }
+                      });
+                    }}
+                  />
                 )}
                 {currentSlide.cartridge.type === 'Spot' && (
                   <SpotCartridge

@@ -1111,14 +1111,17 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                             const rawSkin = metadata.skin;
                             const currentSkin = (rawSkin === 'thought' || rawSkin === 'cloud')
                                 ? 'thought'
-                                : ((rawSkin === 'octo' || rawSkin === 'octopus')
-                                    ? 'octo'
-                                    : ((rawSkin === 'oval' || rawSkin === 'round') ? 'oval' : 'rect'));
+                                : ((rawSkin === 'octo_rect' || rawSkin === 'octo-rect' || rawSkin === 'octopus_rect' || rawSkin === 'octopus-rect')
+                                    ? 'octo_rect'
+                                    : ((rawSkin === 'octo' || rawSkin === 'octopus' || rawSkin === 'octo_oval')
+                                        ? 'octo'
+                                        : ((rawSkin === 'oval' || rawSkin === 'round') ? 'oval' : 'rect')));
                             const skins = [
                                 { id: 'rect', icon: '💬', label: 'Box Bubble' },
                                 { id: 'oval', icon: '🗨️', label: 'Oval Bubble' },
                                 { id: 'thought', icon: '💭', label: 'Thought Cloud' },
-                                { id: 'octo', icon: '🐙', label: 'Octopus Tentacle' },
+                                { id: 'octo', icon: '🐙', label: 'Octopus (Oval)' },
+                                { id: 'octo_rect', icon: '🐙', label: 'Octopus (Box)' },
                             ];
                             const currSkinObj = skins.find(s => s.id === currentSkin) || skins[0];
 
@@ -4158,7 +4161,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     <div className="menu-group">
                         <label>Font</label>
                         <select
-                            value={FONTS.find(f => f.value === metadata.fontFamily || f.name.toLowerCase() === metadata.fontFamily?.toLowerCase() || (metadata.fontFamily && f.value.toLowerCase().includes(metadata.fontFamily.toLowerCase().replace(/['"]/g, ''))))?.value || metadata.fontFamily || '"Fira Sans"'}
+                            value={FONTS.find(f => f.value === metadata.fontFamily || f.name.toLowerCase() === metadata.fontFamily?.toLowerCase() || (metadata.fontFamily && f.value.toLowerCase().includes(metadata.fontFamily.toLowerCase().replace(/['"]/g, ''))))?.value || metadata.fontFamily || (metadata.quizType === 'conecta' ? '"Fredoka", sans-serif' : '"Fira Sans"')}
                             onMouseDown={saveSelection}
                             onChange={(e) => {
                                 const fontVal = e.target.value;

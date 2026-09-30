@@ -1,0 +1,193 @@
+{
+  "id": "lessons/01-_collectible_card/lesson.json",
+  "title": "_collectible_card",
+  "slides": [
+    {
+      "id": "slide-1790786602829-0-i6q7l0",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790786602829-09ladhvo8",
+          "type": "banner",
+          "content": "<br> 😅",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790786602829-r5111dcjw",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 25.703125,
+          "width": 51,
+          "height": 10.165172329982045,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1790786602829-h4bamkfi7",
+          "type": "banner",
+          "content": "<br>",
+          "x": 49.98424953884548,
+          "y": 64.921875,
+          "width": 51,
+          "height": 46.293558381838835,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790786602829-anfe3lmnl",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">x </font>+<font color=\"#2196f3\"> 8 </font>=<font color=\"#2196f3\"> 20</font></span>",
+          "x": 50,
+          "y": 25.625,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 14,
+            "color": "#000000",
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1790786602829-j5bc7c45d",
+          "type": "text",
+          "content": "A <b>variable</b> is a <b>symbol</b>—usually a <b>letter</b>—that stands in for an <b>unknown</b> or <b>changing</b> <b>amount</b>.<br><div><br></div><div><b>Any</b> letter works, though <i>lowercase</i> ‭<b>x</b>‬, ‭<b>y</b>‬, and <b>‭z</b>‬ are the most common.</div>",
+          "x": 49.98424953884548,
+          "y": 56.875,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790786602829-73wn3yyvt",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> VarIABLE </span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        },
+        {
+          "id": "el-1790786602829-qn9ruh7bn",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_bike.png",
+          "x": 50,
+          "y": 82.03125,
+          "width": 40,
+          "height": 28.73177842565598,
+          "rotation": 0,
+          "scale": 0.6585162261681237,
+          "metadata": {
+            "width": 40,
+            "height": 28.73177842565598,
+            "category": "characters",
+            "hasShadow": false
+          }
+        }
+      ],
+      "order": 0,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-30T16:43:19.075Z",
+  "updatedAt": "2026-09-30T16:43:55.339Z",
+  "path": "lessons/01-_collectible_card/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "visibleInFeed": false,
+  "visible": false
+}

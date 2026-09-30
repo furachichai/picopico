@@ -465,6 +465,36 @@ const Player = () => {
         handleMenu();
     };
 
+    const handleBackToMenuCurrentLesson = () => {
+        const currentPath = lesson?.path || lesson?.id;
+        if (currentPath) {
+            try {
+                sessionStorage.setItem('picopico_scroll_to_lesson', currentPath);
+                sessionStorage.removeItem('picopico_completed_lesson');
+            } catch (e) {}
+            window.__pico_scroll_to_lesson = currentPath;
+            window.__pico_completed_lesson = null;
+        }
+        handleMenu();
+    };
+
+    const handleTopBackToMenu = () => {
+        const baseSlides = lesson?.slides || [];
+        const lastContentIndex = Math.max(0, baseSlides.length - 1);
+        const isCompletedExceptLastSlide =
+            !!currentSlide?.isLastSlideCelebration ||
+            (
+                currentSlideIndex >= lastContentIndex &&
+                !slideHasUnsolvedInteractive(currentSlideIndex)
+            );
+
+        if (isCompletedExceptLastSlide) {
+            handleBackToMenuWithScroll();
+        } else {
+            handleBackToMenuCurrentLesson();
+        }
+    };
+
     const nextSlide = (force = false) => {
         if (autoNextTimeoutRef.current) {
             clearTimeout(autoNextTimeoutRef.current);
@@ -950,7 +980,7 @@ const Player = () => {
                             alignItems: 'center'
                         }}>
                             <button
-                                onClick={currentSlide?.isLastSlideCelebration ? handleBackToMenuWithScroll : handleMenu}
+                                onClick={handleTopBackToMenu}
                                 title={t('player.menu')}
                                 className="player-top-btn"
                             >
@@ -1178,6 +1208,7 @@ const Player = () => {
                                         <ErrorBoundary>
                                             <AlgeBrosCartridge
                                                 config={slide.cartridge.config}
+                                                slideBackground={slide.background}
                                                 onComplete={() => {
                                                     handleInteractiveSolve(index, true, 1000);
                                                     setIsGameActive(false);

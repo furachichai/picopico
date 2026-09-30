@@ -236,6 +236,8 @@ const ConectaCard = ({ card, isSolved, isFailed, disabled, cardShape, baseStyle,
             style={{
                 pointerEvents: (isSolved || isFailed || disabled || isMatched) ? 'none' : 'auto',
                 position: 'relative',
+                fontFamily: baseStyle?.fontFamily,
+                fontWeight: baseStyle?.fontWeight,
                 transform: (() => {
                     let s = 1;
                     let r = 0;
@@ -2301,8 +2303,10 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
                 origin: { y: 0.6 }
             });
             if (onBanner) onBanner('correct');
+            if (onSolve) onSolve('completed');
+            if (onNext) onNext(true);
         }
-    }, [conectaLeft, quizType, isSolved]);
+    }, [conectaLeft, quizType, isSolved, onBanner, onSolve, onNext]);
 
     useEffect(() => {
         if (quizType !== 'match' || !matchContainerRef.current) return;
@@ -3496,10 +3500,16 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
     // CONECTA RENDER LOGIC
     if (quizType === 'conecta') {
         const enableBubbles = data.metadata?.enableBubbles !== false;
+        const fontFam = data.metadata?.fontFamily;
+        const resolvedFont = (!fontFam || fontFam === '"Fira Sans"' || fontFam === "'Bangers', cursive, sans-serif" || fontFam === '"Bangers", cursive, sans-serif')
+            ? '"Fredoka", sans-serif'
+            : fontFam;
+        const isFredoka = resolvedFont.includes('Fredoka');
+
         const baseStyle = {
-            fontFamily: (!data.metadata?.fontFamily || data.metadata?.fontFamily === '"Fira Sans"') ? "'Bangers', cursive, sans-serif" : data.metadata.fontFamily,
+            fontFamily: resolvedFont,
             fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
-            fontWeight: data.metadata?.fontWeight,
+            fontWeight: data.metadata?.fontWeight || (isFredoka ? 600 : undefined),
             fontStyle: data.metadata?.fontStyle || 'normal',
             textDecoration: data.metadata?.textDecoration,
             color: data.metadata?.color || '#000000',

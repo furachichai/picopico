@@ -34,7 +34,11 @@
         "confirmDelete": "Are you sure you want to delete this slide?",
         "moveLeft": "Move Left",
         "moveRight": "Move Right",
-        "delete": "Delete Slide"
+        "delete": "Delete Slide",
+        "addCard": "Insert collectible card template (_collectible_card)",
+        "cardInserted": "Collectible card inserted!",
+        "cardNotFound": "Collectible card template not found!",
+        "cardInsertFailed": "Failed to insert card"
     },
     "library": {
         "title": "Library",

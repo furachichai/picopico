@@ -810,9 +810,9 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
                                 }}
                                 style={{
                                     resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
-                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontFamily: element.metadata?.fontFamily || (quizType === 'conecta' ? '"Fredoka", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontWeight: element.metadata?.fontWeight || (quizType === 'conecta' ? '600' : 'normal'),
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none',
                                     color: element.metadata?.color || '#000000'
@@ -841,9 +841,9 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
                                 }}
                                 style={{
                                     resize: 'none', overflow: 'hidden', minHeight: '1.2em', outline: 'none', cursor: 'text', userSelect: 'text',
-                                    fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                                    fontFamily: element.metadata?.fontFamily || (quizType === 'conecta' ? '"Fredoka", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
                                     fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '16px',
-                                    fontWeight: element.metadata?.fontWeight || 'normal',
+                                    fontWeight: element.metadata?.fontWeight || (quizType === 'conecta' ? '600' : 'normal'),
                                     fontStyle: element.metadata?.fontStyle || 'normal',
                                     textDecoration: element.metadata?.textDecoration || 'none',
                                     color: element.metadata?.color || '#000000'

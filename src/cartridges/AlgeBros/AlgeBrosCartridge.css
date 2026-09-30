@@ -163,18 +163,122 @@
   transform: translateY(1px);
 }
 
-/* HUD Header */
+/* HUD Header & Top Wrapper */
+.algebros-cartridge .hud-top-wrapper {
+  width: 100%;
+  margin-top: 72px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
 .algebros-cartridge .hud-header {
   width: calc(100% - 3.6%);
   margin-left: 1.8%;
   margin-right: 1.8%;
-  margin-top: 72px;
-  margin-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 0;
   gap: 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 10;
+}
+
+/* ─── Videogame-Style AlgeBros Level Progress Bar ─── */
+.algebros-cartridge .algebros-level-progress {
+  width: 58%;
+  max-width: 215px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 4px 8px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.algebros-cartridge.has-background .algebros-level-progress {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.algebros-cartridge .algebros-progress-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.6));
+  user-select: none;
+}
+
+.algebros-cartridge .algebros-progress-track {
+  flex: 1;
+  height: 11px;
+  background: #0f172a;
+  border-radius: 999px;
+  border: 1.5px solid rgba(234, 179, 8, 0.35);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 6px rgba(234, 179, 8, 0.15);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.algebros-cartridge .algebros-progress-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.algebros-cartridge .algebros-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+  box-shadow: 0 0 8px rgba(234, 179, 8, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: width 0.4s ease-out;
+  z-index: 2;
+}
+
+.algebros-cartridge .algebros-progress-trophy {
+  font-size: 0.95rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.algebros-cartridge .algebros-progress-trophy.is-complete {
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
+}
+
+.algebros-cartridge .algebros-progress-text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+  user-select: none;
+}
+
+.algebros-cartridge.has-background .algebros-progress-text {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .algebros-cartridge .banner-reset-btn {
@@ -308,7 +412,7 @@
 }
 
 .algebros-cartridge.has-background .algebros-equation-banner {
-  background: #ffffff;
+  background: #ffffff !important;
   border-radius: 20px;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.14), 0 3px 8px rgba(0, 0, 0, 0.08);
   border: 1.5px solid rgba(15, 23, 42, 0.08);
@@ -573,6 +677,10 @@
   color: var(--accent-red);
 }
 
+.algebros-cartridge.has-background .feedback-msg {
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 /* Bottom Controls Area (Ready Button, Feedback) */
 .algebros-cartridge .bottom-controls {
   width: 100%;
@@ -585,7 +693,7 @@
 
 /* Ready Button */
 .algebros-cartridge .ready-btn {
-  background: rgba(139, 92, 246, 0.1);
+  background: var(--accent-purple);
   border: 2px solid var(--accent-purple);
   color: #fff;
   border-radius: 20px;
@@ -593,7 +701,7 @@
   font-size: 1.2rem;
   font-weight: 800;
   letter-spacing: 1px;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.4);
   transition: all 0.25s;
   width: 100%;
   max-width: 320px;
@@ -1018,3 +1126,108 @@
   justify-content: center;
   margin-bottom: 4px;
 }
+
+/* ==========================================================================
+   Like Terms Tutorial Styles
+   ========================================================================== */
+
+.algebros-cartridge .tutorial-banner {
+  min-height: 140px;
+  position: relative;
+  overflow: visible !important;
+}
+
+.algebros-cartridge .tutorial-expression-list {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  min-height: 54px;
+  position: relative;
+}
+
+.algebros-cartridge .term-card.is-lifted-drag {
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.35);
+  border-color: var(--accent-purple);
+  z-index: 30;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s, border-color 0.25s;
+}
+
+.algebros-cartridge .operator-btn.is-tutorial-pressed {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border-color: var(--accent-green) !important;
+  transform: scale(0.86);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+  transition: all 0.15s ease-out;
+}
+
+@keyframes termMergePop {
+  0% { transform: scale(0.7); opacity: 0.5; }
+  50% { transform: scale(1.18); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.algebros-cartridge .term-card.is-merge-pop {
+  animation: termMergePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  border-color: var(--accent-green) !important;
+}
+
+@keyframes tapRipple {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+.algebros-cartridge .tutorial-feedback {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: all 0.25s ease-in-out;
+}
+
+.algebros-cartridge .tutorial-play-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 2px solid #10b981;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 14px 28px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: auto;
+  min-width: 150px;
+  max-width: 180px;
+  cursor: pointer;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.algebros-cartridge .tutorial-play-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.algebros-cartridge .tutorial-play-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.algebros-cartridge .hud-help-btn {
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.algebros-cartridge .hud-help-btn:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.95);
+}
+
