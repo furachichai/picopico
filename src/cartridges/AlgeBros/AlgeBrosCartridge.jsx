@@ -38,6 +38,7 @@ import {
   playPopFX
 } from './game/AlgeBrosSoundManager';
 import LikeTermsTutorial from './LikeTermsTutorial';
+import DivisionsTutorial from './DivisionsTutorial';
 import './AlgeBrosCartridge.css';
 
 function ParticlesBG() {
@@ -270,7 +271,7 @@ export default function AlgeBrosCartridge({
 }) {
   // Topic from config (defaults to equations)
   const topic = config.topic || 'equations';
-  const [screen, setScreen] = useState(topic === 'liketerms' ? 'tutorial' : 'game');
+  const [screen, setScreen] = useState((topic === 'liketerms' || topic === 'divisions') ? 'tutorial' : 'game');
   const [levels, setLevels] = useState([]);
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const hasEverPlayedTutorialRef = useRef(false);
@@ -385,6 +386,57 @@ export default function AlgeBrosCartridge({
   const slicedRightNumRef = React.useRef(slicedRightNum);
   const slicedRightDenRef = React.useRef(slicedRightDen);
 
+  const topicRef = React.useRef(topic);
+  const isValidatingRef = React.useRef(isValidating);
+  const isMatchingFadingRef = React.useRef(isMatchingFading);
+  const crossedOutNumRef = React.useRef(crossedOutNum);
+  const crossedOutDenRef = React.useRef(crossedOutDen);
+  const crossedOutRightNumRef = React.useRef(crossedOutRightNum);
+  const crossedOutRightDenRef = React.useRef(crossedOutRightDen);
+  const compareAndCrossOutSliceRef = React.useRef(null);
+
+  const isGlobalSlicing = React.useRef(false);
+  const canvasRef = React.useRef(null);
+  const swipePoints = React.useRef([]);
+  const tempSlicedNum = React.useRef(null);
+  const tempSlicedDen = React.useRef(null);
+  const sliceAnimFrameRef = React.useRef(null);
+
+  const clearSliceCanvas = useCallback(() => {
+    swipePoints.current = [];
+    isGlobalSlicing.current = false;
+    tempSlicedNum.current = null;
+    tempSlicedDen.current = null;
+    if (sliceAnimFrameRef.current) {
+      cancelAnimationFrame(sliceAnimFrameRef.current);
+      sliceAnimFrameRef.current = null;
+    }
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  }, []);
+
+  // Keep refs immediately fresh
+  numTermsRef.current = numTerms;
+  denTermsRef.current = denTerms;
+  slicedNumRef.current = slicedNum;
+  slicedDenRef.current = slicedDen;
+  rightNumTermsRef.current = rightNumTerms;
+  rightDenTermsRef.current = rightDenTerms;
+  slicedRightNumRef.current = slicedRightNum;
+  slicedRightDenRef.current = slicedRightDen;
+  topicRef.current = topic;
+  isValidatingRef.current = isValidating;
+  isMatchingFadingRef.current = isMatchingFading;
+  crossedOutNumRef.current = crossedOutNum;
+  crossedOutDenRef.current = crossedOutDen;
+  crossedOutRightNumRef.current = crossedOutRightNum;
+  crossedOutRightDenRef.current = crossedOutRightDen;
+
   React.useEffect(() => {
     numTermsRef.current = numTerms;
     denTermsRef.current = denTerms;
@@ -395,7 +447,15 @@ export default function AlgeBrosCartridge({
     rightDenTermsRef.current = rightDenTerms;
     slicedRightNumRef.current = slicedRightNum;
     slicedRightDenRef.current = slicedRightDen;
-  }, [numTerms, denTerms, slicedNum, slicedDen, rightNumTerms, rightDenTerms, slicedRightNum, slicedRightDen]);
+
+    topicRef.current = topic;
+    isValidatingRef.current = isValidating;
+    isMatchingFadingRef.current = isMatchingFading;
+    crossedOutNumRef.current = crossedOutNum;
+    crossedOutDenRef.current = crossedOutDen;
+    crossedOutRightNumRef.current = crossedOutRightNum;
+    crossedOutRightDenRef.current = crossedOutRightDen;
+  }, [numTerms, denTerms, slicedNum, slicedDen, rightNumTerms, rightDenTerms, slicedRightNum, slicedRightDen, topic, isValidating, isMatchingFading, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen]);
 
   // Game-wide statistics
   const [stats, setStats] = useState({
@@ -418,6 +478,7 @@ export default function AlgeBrosCartridge({
   }, []);
 
   const loadLevel = useCallback((levelObj) => {
+    clearSliceCanvas();
     threeTermScaleRef.current = null;
     if (topic === 'divisions') {
       setNumTerms(levelObj.initialNum || []);
@@ -515,7 +576,7 @@ export default function AlgeBrosCartridge({
       totalMistakes: 0,
       perfectLevels: 0
     });
-    if (topic === 'liketerms' && !hasEverPlayedTutorialRef.current) {
+    if ((topic === 'liketerms' || topic === 'divisions') && !hasEverPlayedTutorialRef.current) {
       setScreen('tutorial');
     } else {
       setScreen('game');
@@ -526,7 +587,7 @@ export default function AlgeBrosCartridge({
     if (prevTopicRef.current !== topic) {
       prevTopicRef.current = topic;
       hasEverPlayedTutorialRef.current = false;
-      if (topic === 'liketerms') {
+      if (topic === 'liketerms' || topic === 'divisions') {
         setScreen('tutorial');
       } else {
         setScreen('game');
@@ -909,6 +970,7 @@ export default function AlgeBrosCartridge({
   }, []);
 
   const handleDragStartInit = (term, currentType, event, info) => {
+    clearSliceCanvas();
     setActiveFactorMenu(null);
     setIsDraggingTerm(true);
     setDraggingCardId(term.id);
@@ -1279,10 +1341,6 @@ export default function AlgeBrosCartridge({
     };
   }, [isDraggingTerm, dragOverlayTerm, dragHintState]);
 
-  const isGlobalSlicing = React.useRef(false);
-  const canvasRef = React.useRef(null);
-  const swipePoints = React.useRef([]);
-
   // Resize canvas to match bounds on screen changes or viewport resize
   useEffect(() => {
     const handleResize = () => {
@@ -1290,12 +1348,13 @@ export default function AlgeBrosCartridge({
       if (canvas) {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
+        clearSliceCanvas();
       }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [screen]);
+  }, [screen, clearSliceCanvas]);
 
   // Click outside to close factor popovers
   useEffect(() => {
@@ -1332,33 +1391,26 @@ export default function AlgeBrosCartridge({
     });
   }, [activeFactorMenu]);
 
-  const compareAndCrossOutSlice = useCallback((numId, denId, side) => {
+  const compareAndCrossOutSlice = useCallback((numId, denId, side, gestureAngle) => {
     const isLeft = side === 'left';
-    const numList = isLeft ? numTerms : rightNumTerms;
-    const denList = isLeft ? denTerms : rightDenTerms;
+    const numList = isLeft ? numTermsRef.current : rightNumTermsRef.current;
+    const denList = isLeft ? denTermsRef.current : rightDenTermsRef.current;
     const crossedNumSetter = isLeft ? setCrossedOutNum : setCrossedOutRightNum;
     const crossedDenSetter = isLeft ? setCrossedOutDen : setCrossedOutRightDen;
-    const sliceNumSetter = isLeft ? setSlicedNum : setSlicedRightNum;
-    const sliceDenSetter = isLeft ? setSlicedDen : setSlicedRightDen;
     const numSetter = isLeft ? setNumTerms : setRightNumTerms;
     const denSetter = isLeft ? setDenTerms : setRightDenTerms;
 
     const termA = numList.find(t => t.id === numId);
     const termB = denList.find(t => t.id === denId);
 
-    if (!termA || !termB) return;
-
-    const clearSliceVisuals = () => {
-      sliceNumSetter(prev => prev.filter(x => x !== numId));
-      sliceDenSetter(prev => prev.filter(x => x !== denId));
-      setCardAngles(prev => {
-        const next = { ...prev };
-        delete next[numId];
-        delete next[denId];
-        return next;
-      });
-      setIsMatchingFading(false);
-    };
+    if (!termA || !termB) {
+      clearSliceCanvas();
+      setSlicedNum([]);
+      setSlicedDen([]);
+      setSlicedRightNum([]);
+      setSlicedRightDen([]);
+      return;
+    }
 
     const failCancel = (message) => {
       setMistakes(m => m + 1);
@@ -1367,8 +1419,11 @@ export default function AlgeBrosCartridge({
       if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
       triggerShake();
       showFeedback(message, 'error');
-      setIsMatchingFading(true);
-      setTimeout(clearSliceVisuals, 300);
+      clearSliceCanvas();
+      setSlicedNum([]);
+      setSlicedDen([]);
+      setSlicedRightNum([]);
+      setSlicedRightDen([]);
     };
 
     if (!areEqualTerms(termA, termB)) {
@@ -1381,7 +1436,7 @@ export default function AlgeBrosCartridge({
     // exposed in every group, and it's removed from all of them plus the denominator in
     // one atomic action. (In `divisions` the numerator is a PRODUCT, so one pair is right.)
     let numIdsToCancel = [numId];
-    if (topic === 'equations') {
+    if (topicRef.current === 'equations') {
       const picks = findDistributiveCancel(numList, termB);
       if (!picks) {
         failCancel(`Every term on top needs a factor of ${formatTerm(termB, true).value} first!`);
@@ -1391,7 +1446,7 @@ export default function AlgeBrosCartridge({
     }
 
     const pickSet = new Set(numIdsToCancel);
-    const nextNum = topic === 'equations'
+    const nextNum = topicRef.current === 'equations'
       ? splitIntoAdditiveGroups(numList.filter(t => t.coeff !== 0)).map(group => {
           const kept = group.filter(t => !pickSet.has(t.id));
           // A group emptied by the cancel is worth 1, not nothing: (2 + …)/2 -> 1 + …
@@ -1403,6 +1458,13 @@ export default function AlgeBrosCartridge({
         })();
     const nextDen = denList.filter(t => t.id !== denId);
 
+    const angle = gestureAngle ?? -12;
+    setCardAngles(prev => {
+      const next = { ...prev, [denId]: angle };
+      numIdsToCancel.forEach(id => { next[id] = angle; });
+      return next;
+    });
+
     playPopFX();
     setIsMatchingFading(true);
 
@@ -1411,8 +1473,11 @@ export default function AlgeBrosCartridge({
 
     setUserPresses(p => p + 1);
 
-    sliceNumSetter(prev => prev.filter(x => x !== numId));
-    sliceDenSetter(prev => prev.filter(x => x !== denId));
+    setSlicedNum([]);
+    setSlicedDen([]);
+    setSlicedRightNum([]);
+    setSlicedRightDen([]);
+    clearSliceCanvas();
 
     setTimeout(() => {
       numSetter(nextNum);
@@ -1426,24 +1491,31 @@ export default function AlgeBrosCartridge({
       crossedNumSetter(prev => prev.filter(id => !numIdsToCancel.includes(id)));
       crossedDenSetter(prev => prev.filter(id => id !== denId));
       setIsMatchingFading(false);
+      clearSliceCanvas();
     }, 300);
-  }, [topic, numTerms, denTerms, rightNumTerms, rightDenTerms, isLevelPerfect, playWrong, playMerge, triggerShake, showFeedback]);
-
-  const tempSlicedNum = React.useRef(null);
-  const tempSlicedDen = React.useRef(null);
-  const sliceAnimFrameRef = React.useRef(null);
+  }, [isLevelPerfect, playWrong, playMerge, triggerShake, showFeedback, clearSliceCanvas]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    
+    compareAndCrossOutSliceRef.current = compareAndCrossOutSlice;
+  }, [compareAndCrossOutSlice]);
+
+  useEffect(() => {
     const animateCanvas = () => {
+      const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
+      if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      if (!isGlobalSlicing.current) {
+        swipePoints.current = [];
+        sliceAnimFrameRef.current = null;
+        return;
+      }
+
       const now = Date.now();
-      // Filter out points older than 250ms for a snappy, fast-fading tail
-      swipePoints.current = swipePoints.current.filter(p => now - p.time < 250);
+      // Filter out points older than 180ms for a snappy trail
+      swipePoints.current = swipePoints.current.filter(p => now - p.time < 180);
       
       if (swipePoints.current.length > 1) {
         ctx.beginPath();
@@ -1460,15 +1532,13 @@ export default function AlgeBrosCartridge({
         ctx.stroke();
       }
       
-      if (isGlobalSlicing.current || swipePoints.current.length > 0) {
-        sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
-      } else {
-        sliceAnimFrameRef.current = null;
-      }
+      sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
     };
 
     const handleGlobalDown = (e) => {
-      if (isValidating || isMatchingFading || (topic !== 'divisions' && topic !== 'equations')) return;
+      if (isValidatingRef.current || isMatchingFadingRef.current) return;
+      const curTopic = topicRef.current;
+      if (curTopic !== 'divisions' && curTopic !== 'equations') return;
       
       // If starting on a card, do not slice (allows horizontal dragging/reordering)
       if (
@@ -1484,9 +1554,13 @@ export default function AlgeBrosCartridge({
       
       const canvasEl = canvasRef.current;
       if (!canvasEl) return;
+      if (canvasEl.width !== canvasEl.clientWidth || canvasEl.height !== canvasEl.clientHeight) {
+        canvasEl.width = canvasEl.clientWidth;
+        canvasEl.height = canvasEl.clientHeight;
+      }
       const rect = canvasEl.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * (canvasEl.width / rect.width);
-      const y = (e.clientY - rect.top) * (canvasEl.height / rect.height);
+      const x = (e.clientX - rect.left) * (canvasEl.width / (rect.width || 1));
+      const y = (e.clientY - rect.top) * (canvasEl.height / (rect.height || 1));
       
       isGlobalSlicing.current = true;
       tempSlicedNum.current = null;
@@ -1509,8 +1583,8 @@ export default function AlgeBrosCartridge({
       const canvasEl = canvasRef.current;
       if (!canvasEl) return;
       const rect = canvasEl.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * (canvasEl.width / rect.width);
-      const y = (e.clientY - rect.top) * (canvasEl.height / rect.height);
+      const x = (e.clientX - rect.left) * (canvasEl.width / (rect.width || 1));
+      const y = (e.clientY - rect.top) * (canvasEl.height / (rect.height || 1));
       
       const lastPoint = swipePoints.current[swipePoints.current.length - 1];
       const newPoint = {
@@ -1543,19 +1617,19 @@ export default function AlgeBrosCartridge({
             
             if (id && type) {
               if (type === 'num') {
-                if (!crossedOutNum.includes(id)) {
+                if (!crossedOutNumRef.current.includes(id)) {
                   tempSlicedNum.current = { id, side: 'left' };
                 }
               } else if (type === 'den') {
-                if (!crossedOutDen.includes(id)) {
+                if (!crossedOutDenRef.current.includes(id)) {
                   tempSlicedDen.current = { id, side: 'left' };
                 }
               } else if (type === 'rightNum') {
-                if (!crossedOutRightNum.includes(id)) {
+                if (!crossedOutRightNumRef.current.includes(id)) {
                   tempSlicedNum.current = { id, side: 'right' };
                 }
               } else if (type === 'rightDen') {
-                if (!crossedOutRightDen.includes(id)) {
+                if (!crossedOutRightDenRef.current.includes(id)) {
                   tempSlicedDen.current = { id, side: 'right' };
                 }
               }
@@ -1572,90 +1646,62 @@ export default function AlgeBrosCartridge({
       const numSlice = tempSlicedNum.current;
       const denSlice = tempSlicedDen.current;
       
-      // Reset slices if the slice begins and ends outside of a card, without crossing any card
-      const endsOutside = !e || !e.target || !e.target.closest('.term-card');
-      const crossedAny = numSlice || denSlice;
+      let angle = -12;
+      const points = swipePoints.current;
+      if (points.length > 1) {
+        const first = points[0];
+        const last = points[points.length - 1];
+        const dx = last.clientX - first.clientX;
+        const dy = last.clientY - first.clientY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+          let rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+          while (rawAngle > 90) rawAngle -= 180;
+          while (rawAngle < -90) rawAngle += 180;
+          angle = rawAngle;
+        }
+      }
+
+      // Immediately clear the slice canvas so no green line lingers on screen
+      clearSliceCanvas();
       
-      if (endsOutside && !crossedAny) {
+      // Both numerator and denominator must be sliced on the same side
+      if (!numSlice || !denSlice || numSlice.side !== denSlice.side) {
         setSlicedNum([]);
         setSlicedDen([]);
-        setCrossedOutNum([]);
-        setCrossedOutDen([]);
         setSlicedRightNum([]);
         setSlicedRightDen([]);
-        setCrossedOutRightNum([]);
-        setCrossedOutRightDen([]);
-        setCardAngles({});
         return;
       }
       
-      if (numSlice || denSlice) {
-        unlockAudio();
-        
-        // Calculate the slice gesture's direction/angle
-        let angle = -12; // default fallback
-        const points = swipePoints.current;
-        if (points.length > 1) {
-          const first = points[0];
-          const last = points[points.length - 1];
-          const dx = last.clientX - first.clientX;
-          const dy = last.clientY - first.clientY;
-          if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-            let rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-            // Normalize to [-90, 90] degrees to keep the line oriented nicely
-            while (rawAngle > 90) rawAngle -= 180;
-            while (rawAngle < -90) rawAngle += 180;
-            angle = rawAngle;
-          }
-        }
-        
-        // Save angles for crossed card IDs
-        const anglesObj = {};
-        if (numSlice) anglesObj[numSlice.id] = angle;
-        if (denSlice) anglesObj[denSlice.id] = angle;
-        setCardAngles(prev => ({ ...prev, ...anglesObj }));
-        
-        const side = numSlice ? numSlice.side : denSlice.side;
-        if (numSlice && denSlice && numSlice.side !== denSlice.side) {
-          return; // invalid cross-side slice
-        }
-
-        const isLeft = side === 'left';
-        const sliceNumSetter = isLeft ? setSlicedNum : setSlicedRightNum;
-        const sliceDenSetter = isLeft ? setSlicedDen : setSlicedRightDen;
-        const sliceNumRef = isLeft ? slicedNumRef : slicedRightNumRef;
-        const sliceDenRef = isLeft ? slicedDenRef : slicedRightDenRef;
-
-        if (numSlice) {
-          sliceNumSetter([numSlice.id]);
-        }
-        if (denSlice) {
-          sliceDenSetter([denSlice.id]);
-        }
-        
-        setTimeout(() => {
-          const activeNumId = sliceNumRef.current[0];
-          const activeDenId = sliceDenRef.current[0];
-          if (activeNumId && activeDenId) {
-            compareAndCrossOutSlice(activeNumId, activeDenId, side);
-          }
-        }, 10);
+      unlockAudio();
+      if (compareAndCrossOutSliceRef.current) {
+        compareAndCrossOutSliceRef.current(numSlice.id, denSlice.id, numSlice.side, angle);
       }
+    };
+
+    const handleGlobalCancel = () => {
+      clearSliceCanvas();
+      setSlicedNum([]);
+      setSlicedDen([]);
+      setSlicedRightNum([]);
+      setSlicedRightDen([]);
     };
 
     window.addEventListener('pointerdown', handleGlobalDown);
     window.addEventListener('pointermove', handleGlobalMove);
     window.addEventListener('pointerup', handleGlobalUp);
+    window.addEventListener('pointercancel', handleGlobalCancel);
+    window.addEventListener('blur', handleGlobalCancel);
+
     return () => {
-      if (sliceAnimFrameRef.current) {
-        cancelAnimationFrame(sliceAnimFrameRef.current);
-        sliceAnimFrameRef.current = null;
-      }
+      clearSliceCanvas();
       window.removeEventListener('pointerdown', handleGlobalDown);
       window.removeEventListener('pointermove', handleGlobalMove);
       window.removeEventListener('pointerup', handleGlobalUp);
+      window.removeEventListener('pointercancel', handleGlobalCancel);
+      window.removeEventListener('blur', handleGlobalCancel);
     };
-  }, [numTerms, denTerms, rightNumTerms, rightDenTerms, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen, compareAndCrossOutSlice, topic, isValidating, isMatchingFading]);
+  }, [clearSliceCanvas]);
 
 
   const handleCombine = (index) => {
@@ -2134,7 +2180,17 @@ export default function AlgeBrosCartridge({
         <AnimatePresence mode="wait">
           {screen === 'tutorial' && topic === 'liketerms' && (
             <LikeTermsTutorial
-              key="tutorial"
+              key="tutorial-liketerms"
+              onPlay={() => {
+                hasEverPlayedTutorialRef.current = true;
+                setScreen('game');
+              }}
+            />
+          )}
+
+          {screen === 'tutorial' && topic === 'divisions' && (
+            <DivisionsTutorial
+              key="tutorial-divisions"
               onPlay={() => {
                 hasEverPlayedTutorialRef.current = true;
                 setScreen('game');

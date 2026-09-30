@@ -1,6 +1,6 @@
 {
-  "id": "lessons/08-Any Number Over Itself Is 1/lesson.json",
-  "title": "Any Number Over Itself Is 1",
+  "id": "lessons/14-Cancelling Coefficients/lesson.json",
+  "title": "Cancelling Coefficients",
   "slides": [
     {
       "id": "slide-1790374805706",
@@ -1610,8 +1610,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-22T18:21:11.740Z",
-  "updatedAt": "2026-09-29T16:46:45.943Z",
-  "path": "lessons/08-Any Number Over Itself Is 1/lesson.json",
+  "updatedAt": "2026-09-30T20:42:33.604Z",
+  "path": "lessons/14-Cancelling Coefficients/lesson.json",
   "textPreset": null,
   "_snapshots": [
     {
@@ -1632,15 +1632,15 @@
   "cardColor": "#8B5CF6",
   "translations": {
     "en": {
-      "title": "",
+      "title": "Cancelling Coefficients",
       "description": ""
     }
   },
-  "name": "08-Any Number Over Itself Is 1",
+  "name": "14-Any Number Over Itself Is 1",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,
-  "order": 8,
+  "order": 14,
   "status": "active",
   "statusIcon": {
     "type": {},

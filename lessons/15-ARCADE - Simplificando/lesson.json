@@ -1,0 +1,50 @@
+{
+  "id": "draft-1790800961033",
+  "title": "ARCADE - Simplificando",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/titlecard_arcade.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790801006219",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_002.png\")",
+      "elements": [],
+      "order": 1,
+      "cartridge": {
+        "type": "AlgeBros",
+        "config": {
+          "startLevel": 1,
+          "targetLevel": 10,
+          "topic": "divisions"
+        }
+      },
+      "backgroundSettings": {
+        "opacity": 0.25
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-30T20:42:41.033Z",
+  "updatedAt": "2026-09-30T20:43:49.893Z",
+  "path": "lessons/01-ARCADE - Simplificando/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "ARCADE - Cancelling Coefficients",
+      "description": ""
+    }
+  },
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0,
+    "y": -4
+  },
+  "visible": true,
+  "visibleInFeed": true
+}

@@ -223,15 +223,155 @@ const AppContent = () => {
             </div>
           );
         }
-        if (selectedGame === 'algebros') {
+        if (selectedGame === 'algebros-menu') {
+          return (
+            <div style={{
+              position: 'fixed', inset: 0, zIndex: 100, background: '#090810',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+              padding: '24px 20px 0 20px', fontFamily: "'Outfit', sans-serif", color: '#fff',
+              backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 70%)',
+              boxSizing: 'border-box', overflowY: 'auto'
+            }}>
+              {/* Back Button to Arcade Menu */}
+              <button
+                onClick={() => setSelectedGame(null)}
+                style={{
+                  position: 'absolute', top: 12, left: 12, zIndex: 200,
+                  background: '#ffffff', border: '3px solid #000000',
+                  borderRadius: '50%', width: 42, height: 42,
+                  color: '#000000', fontSize: '1.2rem', fontWeight: 900, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '3.5px 3.5px 0px #000000',
+                  boxSizing: 'border-box'
+                }}
+              >
+                ✕
+              </button>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '340px', marginTop: 'auto', marginBottom: 'auto', padding: '24px 0 16px 0' }}>
+                <h1 style={{
+                  fontSize: '2.4rem', fontWeight: 900, marginBottom: '8px', letterSpacing: '-1px',
+                  textShadow: '0 0 24px rgba(236, 72, 153, 0.4)'
+                }}>
+                  <span style={{ color: '#ec4899' }}>alge</span><span style={{ color: '#a855f7' }}>BROS</span>
+                </h1>
+                <p style={{ fontSize: '0.95rem', color: '#94a3b8', marginBottom: '28px', textAlign: 'center' }}>
+                  Choose a flavor to play
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
+                  {/* LIKE TERMS */}
+                  <div
+                    onClick={() => setSelectedGame('algebros-liketerms')}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '20px', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                      gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                    }}
+                  >
+                    <div style={{
+                      fontSize: '2.2rem', background: 'rgba(6, 182, 212, 0.1)', width: '60px', height: '60px',
+                      borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      border: '1px solid rgba(6, 182, 212, 0.2)'
+                    }}>
+                      📐
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>LIKE TERMS</h3>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.35 }}>
+                        Reorder terms and combine matching variables.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* DIVISIONS */}
+                  <div
+                    onClick={() => setSelectedGame('algebros-divisions')}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '20px', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                      gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                    }}
+                  >
+                    <div style={{
+                      fontSize: '2.2rem', background: 'rgba(236, 72, 153, 0.1)', width: '60px', height: '60px',
+                      borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      border: '1px solid rgba(236, 72, 153, 0.2)'
+                    }}>
+                      ➗
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>DIVISIONS</h3>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.35 }}>
+                        Decompose factors, divide, and cancel out terms.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* EQUATIONS */}
+                  <div
+                    onClick={() => setSelectedGame('algebros-equations')}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '20px', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                      gap: '16px', transition: 'transform 0.2s, border-color 0.2s', backdropFilter: 'blur(10px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                    }}
+                  >
+                    <div style={{
+                      fontSize: '2.2rem', background: 'rgba(139, 92, 246, 0.1)', width: '60px', height: '60px',
+                      borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      border: '1px solid rgba(139, 92, 246, 0.2)'
+                    }}>
+                      ⚖️
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>EQUATIONS</h3>
+                      <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.35 }}>
+                        Transpose and divide across sides to isolate x.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+        if (selectedGame === 'algebros-liketerms' || selectedGame === 'algebros-divisions' || selectedGame === 'algebros-equations' || selectedGame === 'algebros') {
+          const topic = selectedGame === 'algebros-liketerms' ? 'liketerms'
+                      : selectedGame === 'algebros-divisions' ? 'divisions'
+                      : 'equations';
           return (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#ffffff' }}>
               <AlgeBrosCartridge
-                config={{ startLevel: 1, targetLevel: 10 }}
-                onComplete={() => setSelectedGame(null)}
+                config={{ topic, startLevel: 1, targetLevel: 10 }}
+                onComplete={() => setSelectedGame('algebros-menu')}
               />
               <button
-                onClick={() => setSelectedGame(null)}
+                onClick={() => setSelectedGame('algebros-menu')}
                 style={{
                   position: 'absolute', top: 12, left: 12, zIndex: 200,
                   background: '#ffffff', border: '3px solid #000000',
@@ -427,7 +567,7 @@ const AppContent = () => {
 
               {/* algeBROS Game Card */}
               <div
-                onClick={() => setSelectedGame('algebros')}
+                onClick={() => setSelectedGame('algebros-menu')}
                 style={{
                   background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: '20px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center',
