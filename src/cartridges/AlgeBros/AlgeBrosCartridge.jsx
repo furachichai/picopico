@@ -1507,9 +1507,11 @@ export default function AlgeBrosCartridge({
       if (!ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      
       if (!isGlobalSlicing.current) {
         swipePoints.current = [];
         sliceAnimFrameRef.current = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         return;
       }
 
@@ -1540,9 +1542,8 @@ export default function AlgeBrosCartridge({
       const curTopic = topicRef.current;
       if (curTopic !== 'divisions' && curTopic !== 'equations') return;
       
-      // If starting on a card, do not slice (allows horizontal dragging/reordering)
+      // Do not slice if interacting with buttons, factor menus or dot operators
       if (
-        e.target.closest('.term-card') || 
         e.target.closest('.dot-separator-btn') || 
         e.target.closest('.factor-menu-popover') ||
         e.target.closest('.factor-menu-portal') ||
@@ -1565,6 +1566,24 @@ export default function AlgeBrosCartridge({
       isGlobalSlicing.current = true;
       tempSlicedNum.current = null;
       tempSlicedDen.current = null;
+      
+      // If pointerdown is directly on a term card, record it immediately
+      const card = e.target.closest('.term-card');
+      if (card) {
+        const id = card.getAttribute('data-id');
+        const type = card.getAttribute('data-type');
+        if (id && type) {
+          if (type === 'num' && !crossedOutNumRef.current.includes(id)) {
+            tempSlicedNum.current = { id, side: 'left' };
+          } else if (type === 'den' && !crossedOutDenRef.current.includes(id)) {
+            tempSlicedDen.current = { id, side: 'left' };
+          } else if (type === 'rightNum' && !crossedOutRightNumRef.current.includes(id)) {
+            tempSlicedNum.current = { id, side: 'right' };
+          } else if (type === 'rightDen' && !crossedOutRightDenRef.current.includes(id)) {
+            tempSlicedDen.current = { id, side: 'right' };
+          }
+        }
+      }
       
       swipePoints.current = [{
         x,
@@ -1602,7 +1621,7 @@ export default function AlgeBrosCartridge({
         const dx = e.clientX - lastPoint.clientX;
         const dy = e.clientY - lastPoint.clientY;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const steps = Math.max(1, Math.floor(dist / 8)); // sample every 8px
+        const steps = Math.max(1, Math.floor(dist / 6)); // sample every 6px for responsive detection
         
         for (let s = 0; s <= steps; s++) {
           const t = steps === 0 ? 0 : s / steps;
@@ -1687,18 +1706,24 @@ export default function AlgeBrosCartridge({
       setSlicedRightDen([]);
     };
 
-    window.addEventListener('pointerdown', handleGlobalDown);
-    window.addEventListener('pointermove', handleGlobalMove);
-    window.addEventListener('pointerup', handleGlobalUp);
-    window.addEventListener('pointercancel', handleGlobalCancel);
+    window.addEventListener('pointerdown', handleGlobalDown, { passive: true });
+    window.addEventListener('pointermove', handleGlobalMove, { passive: true });
+    window.addEventListener('pointerup', handleGlobalUp, { capture: true, passive: true });
+    window.addEventListener('pointercancel', handleGlobalCancel, { capture: true, passive: true });
+    window.addEventListener('mouseup', handleGlobalUp, { capture: true, passive: true });
+    window.addEventListener('touchend', handleGlobalUp, { capture: true, passive: true });
+    window.addEventListener('touchcancel', handleGlobalCancel, { capture: true, passive: true });
     window.addEventListener('blur', handleGlobalCancel);
 
     return () => {
       clearSliceCanvas();
       window.removeEventListener('pointerdown', handleGlobalDown);
       window.removeEventListener('pointermove', handleGlobalMove);
-      window.removeEventListener('pointerup', handleGlobalUp);
-      window.removeEventListener('pointercancel', handleGlobalCancel);
+      window.removeEventListener('pointerup', handleGlobalUp, { capture: true });
+      window.removeEventListener('pointercancel', handleGlobalCancel, { capture: true });
+      window.removeEventListener('mouseup', handleGlobalUp, { capture: true });
+      window.removeEventListener('touchend', handleGlobalUp, { capture: true });
+      window.removeEventListener('touchcancel', handleGlobalCancel, { capture: true });
       window.removeEventListener('blur', handleGlobalCancel);
     };
   }, [clearSliceCanvas]);
@@ -2603,7 +2628,7 @@ export default function AlgeBrosCartridge({
                                         <div
                                           className="strike-line"
                                           style={{
-                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                            transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
                                           }}
                                         />
                                       )}
@@ -2898,7 +2923,7 @@ export default function AlgeBrosCartridge({
                                         <div
                                           className="strike-line"
                                           style={{
-                                            transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                            transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
                                           }}
                                         />
                                       )}
@@ -2991,7 +3016,7 @@ export default function AlgeBrosCartridge({
                                   <div
                                     className="strike-line"
                                     style={{
-                                      transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                      transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
                                     }}
                                   />
                                 )}
@@ -3067,7 +3092,7 @@ export default function AlgeBrosCartridge({
                                       <div
                                         className="strike-line"
                                         style={{
-                                          transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                          transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
                                         }}
                                       />
                                     )}
@@ -3157,7 +3182,7 @@ export default function AlgeBrosCartridge({
                                     <div
                                       className="strike-line"
                                       style={{
-                                        transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                        transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
                                       }}
                                     />
                                   )}

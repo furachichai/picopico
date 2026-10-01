@@ -6765,7 +6765,7 @@
       "y": -32.4
     },
     "content": {
-      "id": "lessons/04-Types of variables/lesson.json",
+      "id": "lessons/07-Types of variables/lesson.json",
       "title": "Types of variables",
       "titlecardFrame": {
         "zoom": 1,
@@ -7015,8 +7015,14 @@
         },
         {
           "id": "slide-1790276372962",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-r3d71ei6e",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790281066491-k7ihaam7c",
               "type": "image",
@@ -7096,12 +7102,19 @@
               }
             }
           ],
-          "order": 3
+          "order": 3,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372963",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-t095n0ohl",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790281178475-0i1ji03d2",
               "type": "image",
@@ -7212,12 +7225,19 @@
               }
             }
           ],
-          "order": 4
+          "order": 4,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372964",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-mzx5dy9d2",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790281389181-c9n4mi3ds",
               "type": "image",
@@ -7259,12 +7279,19 @@
               }
             }
           ],
-          "order": 5
+          "order": 5,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790464267570",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-ro7ripu9l",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790464279217-dqjqpr2cy",
               "type": "banner",
@@ -7417,12 +7444,19 @@
               }
             }
           ],
-          "order": 6
+          "order": 6,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790464705395",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-7i8v9gf53",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790464705395-r5tz5r88e",
               "type": "banner",
@@ -7563,12 +7597,19 @@
             }
           ],
           "order": 7,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372965",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-d4gwqw9ju",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276373461",
               "type": "banner",
@@ -7654,12 +7695,19 @@
               }
             }
           ],
-          "order": 8
+          "order": 8,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372966",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-bxiv3is4b",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790281445280-vg4hnz4cm",
               "type": "image",
@@ -7737,12 +7785,19 @@
               }
             }
           ],
-          "order": 9
+          "order": 9,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372968",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-lfeg2rbkf",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790291969766-488tw50e7",
               "type": "image",
@@ -7853,12 +7908,19 @@
               }
             }
           ],
-          "order": 10
+          "order": 10,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790465411946",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-2i3kjbct0",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790465416959-at5zl58kf",
               "type": "image",
@@ -7934,7 +7996,8 @@
               }
             }
           ],
-          "order": 11
+          "order": 11,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372970",
@@ -8033,8 +8096,14 @@
         },
         {
           "id": "slide-1790465714548",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-z5dvj5vw3",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790465716920-g1vl4csi8",
               "type": "quiz",
@@ -8105,12 +8174,19 @@
               }
             }
           ],
-          "order": 13
+          "order": 13,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790465521208",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-3opmero8w",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790465608180-nb104scb1",
               "type": "image",
@@ -8194,12 +8270,19 @@
               }
             }
           ],
-          "order": 14
+          "order": 14,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372969",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-s1vhfzgxg",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790466169289-5w79q1u44",
               "type": "image",
@@ -8239,12 +8322,19 @@
               }
             }
           ],
-          "order": 15
+          "order": 15,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790466267464",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-na5pa3nhj",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790466275469-owbp55s00",
               "type": "image",
@@ -8288,12 +8378,19 @@
               }
             }
           ],
-          "order": 16
+          "order": 16,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790466541570",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-9vz3tabdk",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790466544834-aogjz7o31",
               "type": "quiz",
@@ -8349,11 +8446,12 @@
               }
             }
           ],
-          "order": 17
+          "order": 17,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790476579013",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
               "id": "el-1790476598025-w1bwzevi1",
@@ -8421,12 +8519,19 @@
               }
             }
           ],
-          "order": 18
+          "order": 18,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790466706837",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-2xnzb418y",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790466706837-9kjaqz1ci",
               "type": "quiz",
@@ -8483,12 +8588,19 @@
             }
           ],
           "order": 19,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790476016847",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-6feiiymzi",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790476023238-s6yh7ocbs",
               "type": "image",
@@ -8554,12 +8666,19 @@
               }
             }
           ],
-          "order": 20
+          "order": 20,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790466710022",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-oaffuj1o5",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790466710022-vsem17wpu",
               "type": "quiz",
@@ -8616,7 +8735,8 @@
             }
           ],
           "order": 21,
-          "cartridge": null
+          "cartridge": null,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790467105320-0-ehqxlz",
@@ -8851,8 +8971,14 @@
         },
         {
           "id": "slide-1790276372967",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-y4pgwdukf",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276373661",
               "type": "banner",
@@ -8909,12 +9035,19 @@
               }
             }
           ],
-          "order": 23
+          "order": 23,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372972",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-vpuamw52w",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374161",
               "type": "banner",
@@ -8971,12 +9104,19 @@
               }
             }
           ],
-          "order": 24
+          "order": 24,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372973",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-megpucfor",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374261",
               "type": "banner",
@@ -9032,12 +9172,19 @@
               }
             }
           ],
-          "order": 25
+          "order": 25,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372974",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-mfzfjdy3o",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374361",
               "type": "banner",
@@ -9094,12 +9241,19 @@
               }
             }
           ],
-          "order": 26
+          "order": 26,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372975",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-70ra1l5x5",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374461",
               "type": "banner",
@@ -9155,12 +9309,19 @@
               }
             }
           ],
-          "order": 27
+          "order": 27,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372976",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-zm21q5m2j",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374561",
               "type": "banner",
@@ -9217,12 +9378,19 @@
               }
             }
           ],
-          "order": 28
+          "order": 28,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372977",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
+            {
+              "id": "el-1790863955237-vyu489xwq",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
             {
               "id": "el-1790276374661",
               "type": "banner",
@@ -9278,7 +9446,8 @@
               }
             }
           ],
-          "order": 29
+          "order": 29,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1790276372978",
@@ -9311,8 +9480,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-24T18:59:24.845Z",
-      "updatedAt": "2026-09-29T13:25:00.466Z",
-      "path": "lessons/04-Types of variables/lesson.json",
+      "updatedAt": "2026-10-01T14:12:37.087Z",
+      "path": "lessons/07-Types of variables/lesson.json",
       "textPreset": null,
       "_snapshots": [
         {
@@ -9337,11 +9506,11 @@
           "description": ""
         }
       },
-      "name": "04-Types of variables",
+      "name": "07-Types of variables",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
-      "order": 4,
+      "order": 7,
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -9352,11 +9521,7 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1790534897499
-      }
+      "progress": null
     }
   },
   {
@@ -11845,7 +12010,11 @@
     "visible": true,
     "visibleInFeed": true,
     "order": 10,
-    "titlecardFrame": null,
+    "titlecardFrame": {
+      "zoom": 1.1,
+      "x": -5,
+      "y": 0.8
+    },
     "content": {
       "id": "draft-1790791492349",
       "title": "ARCADE - Like Terms",
@@ -11935,7 +12104,12 @@
           "description": ""
         }
       },
-      "titlecardFrame": null,
+      "titlecardFrame": {
+        "zoom": 1.1,
+        "x": -5,
+        "y": 0.8
+      },
+      "visible": true,
       "visibleInFeed": true
     }
   },
@@ -19152,7 +19326,7 @@
       "y": -44.3
     },
     "content": {
-      "id": "lessons/04-Ecuación o Expresión/lesson.json",
+      "id": "lessons/16-Ecuación o Expresión/lesson.json",
       "title": "Ecuación o Expresión",
       "slides": [
         {
@@ -19748,23 +19922,23 @@
       ],
       "author": "User",
       "createdAt": "2026-09-19T18:19:12.990Z",
-      "updatedAt": "2026-09-25T22:22:06.175Z",
-      "path": "lessons/04-Ecuación o Expresión/lesson.json",
+      "updatedAt": "2026-09-30T21:13:58.411Z",
+      "path": "lessons/16-Ecuación o Expresión/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_game.png",
       "cardColor": "#8B5CF6",
       "translations": {
         "en": {
-          "title": "",
+          "title": "Equation or Expression",
           "description": ""
         }
       },
-      "name": "04-Ecuación o Expresión",
+      "name": "16-Ecuación o Expresión",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
-      "order": 4,
+      "order": 16,
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -19775,11 +19949,7 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 2,
-        "completed": false,
-        "lastPlayed": 1790349842268
-      },
+      "progress": null,
       "titlecardFrame": {
         "zoom": 1.3,
         "x": 0.5,
