@@ -1670,9 +1670,9 @@ export default function AlgeBrosCartridge({
         if (dist >= 10) {
           isSwipe = true;
           let rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-          while (rawAngle > 90) rawAngle -= 180;
-          while (rawAngle < -90) rawAngle -= 180;
-          angle = rawAngle;
+          if (rawAngle > 90) rawAngle -= 180;
+          if (rawAngle < -90) rawAngle += 180;
+          angle = Math.max(-85, Math.min(85, rawAngle));
         }
       }
 
