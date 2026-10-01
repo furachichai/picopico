@@ -92,6 +92,8 @@
 
 /* TF MODE */
 .quiz-options-container-tf {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -672,6 +674,8 @@
    ========================================== */
 
 .quiz-options-container-reorder {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 8px;

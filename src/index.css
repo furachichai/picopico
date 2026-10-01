@@ -15,6 +15,46 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Bangers';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bangers'), url('/assets/fonts/Bangers-Regular.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 300 700;
+    src: local('Fredoka'), url('/assets/fonts/Fredoka-Variable.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 300 900;
+    src: local('Nunito'), url('/assets/fonts/Nunito-Variable.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Fira Sans Regular'), local('FiraSans-Regular'), url('/assets/fonts/FiraSans-Regular.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Fira Sans Bold'), local('FiraSans-Bold'), url('/assets/fonts/FiraSans-Bold.woff2') format('woff2');
+    font-display: swap;
+}
+
 :root {
   font-family: 'Nunito', system-ui, sans-serif;
   line-height: 1.5;

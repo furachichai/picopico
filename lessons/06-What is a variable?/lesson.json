@@ -1337,7 +1337,19 @@
               0
             ],
             "quizType": "tf",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Una variable es un símbolo o letra que representa un número o cantidad.\nPaso 2: Aunque x, y, y z son las más comunes, cualquier letra del alfabeto (como f, a, b o n) puede utilizarse como variable.\nConclusión: Es Cierto: se puede elegir cualquier letra para nombrar una variable.",
+              "en": "Step 1: A variable is a symbol or letter that represents an unknown or changing amount.\nStep 2: Although x, y, and z are the most common, any letter of the alphabet (like f, a, b, or n) can be chosen as a variable.\nConclusion: It is True: we can pick any letter to name a variable."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: A variable is a symbol or letter that represents an unknown or changing amount.\nStep 2: Although x, y, and z are the most common, any letter of the alphabet (like f, a, b, or n) can be chosen as a variable.\nConclusion: It is True: we can pick any letter to name a variable."
+              },
+              "es": {
+                "explanation": "Paso 1: Una variable es un símbolo o letra que representa un número o cantidad.\nPaso 2: Aunque x, y, y z son las más comunes, cualquier letra del alfabeto (como f, a, b o n) puede utilizarse como variable.\nConclusión: Es Cierto: se puede elegir cualquier letra para nombrar una variable."
+              }
+            }
           }
         },
         {

@@ -3,6 +3,7 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { formatExponents } from '../../utils/textFormatters';
 import ReactDOM from 'react-dom';
 import confetti from 'canvas-confetti';
+import { sanitizeFontFamily } from '../../utils/fontSanitizer';
 import './QuizPlayer.css';
 import { parseFraction, FractionComponent } from '../../utils/FractionUtils.jsx';
 import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceNodeWithResult, simplifyParens, isFullySimplified, getParenGroups, findNodeById, getNodeIdsInScope, getOperationTokenIds, resetIdCounter } from '../../cartridges/PEMDAS/game/ExpressionEngine';
@@ -2719,9 +2720,15 @@ const QuizPlayer = ({
     const measuredItemHeight = React.useRef(80); // Default, updated on drag start
 
     // Initialize shuffled items on mount
+    const optionsKey = useMemo(() => JSON.stringify(options), [options]);
     useEffect(() => {
         if (quizType !== 'reorder') return;
         const items = options.map((text, i) => ({ text, originalIndex: i }));
+        if (initialSolved) {
+            setReorderItems(items);
+            setIsShuffling(false);
+            return;
+        }
         // Fisher-Yates shuffle (ensure different order)
         const shuffled = [...items];
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -2738,7 +2745,7 @@ const QuizPlayer = ({
         setIsShuffling(true);
         const timer = setTimeout(() => setIsShuffling(false), 700);
         return () => clearTimeout(timer);
-    }, [quizType]);
+    }, [quizType, optionsKey, initialSolved]);
 
     const handleReorderDragStart = (e, index) => {
         ensureAudioAuthorized();
@@ -3428,9 +3435,32 @@ const QuizPlayer = ({
 
     // REORDER MODE
     if (quizType === 'reorder') {
+        const effectiveExplanation = explanationText || data.metadata?.explanation;
+        const canShowExplain = showExplainWhy && Boolean(effectiveExplanation) && (isSolved || isFailed || initialSolved);
+
         return (
             <div className={`quiz-player-2 reorder-mode`}>
                 <div className="quiz-options-container-reorder" ref={reorderContainerRef}>
+                    {canShowExplain && (
+                        <div className="quiz-explain-why-row">
+                            <button
+                                type="button"
+                                className="player-explain-why-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
+                                    const text = typeof effectiveExplanation === 'string'
+                                        ? effectiveExplanation
+                                        : (effectiveExplanation[buttonLabel === 'Explain why' ? 'en' : 'es'] || effectiveExplanation.es || effectiveExplanation.en);
+                                    onOpenExplanation?.(text, buttonLabel);
+                                }}
+                                title={buttonLabel}
+                            >
+                                <span className="player-explain-why-icon">💡</span>
+                                <span>{buttonLabel}</span>
+                            </button>
+                        </div>
+                    )}
                     {reorderItems.map((item, index) => {
                         const isDragged = index === draggedIndex;
                         let transformY = 0;
@@ -3459,7 +3489,7 @@ const QuizPlayer = ({
                 </div>
                 <button
                     className="reorder-ok-btn"
-                    style={{ visibility: (isSolved || isFailed) ? 'hidden' : 'visible' }}
+                    style={{ visibility: (isSolved || isFailed || initialSolved) ? 'hidden' : 'visible' }}
                     onClick={(e) => {
                         e.stopPropagation();
                         handleReorderSubmit();
@@ -3887,9 +3917,9 @@ const QuizPlayer = ({
     }
 
     // Classic / TF / 4SQ Render
-    const isClassicQuiz = quizType === 'classic';
+    const isSupportedQuiz = quizType === 'classic' || quizType === 'tf';
     const effectiveExplanation = explanationText || data.metadata?.explanation;
-    const canShowExplain = showExplainWhy && isClassicQuiz && Boolean(effectiveExplanation) && (isSolved || isFailed || initialSolved);
+    const canShowExplain = showExplainWhy && isSupportedQuiz && Boolean(effectiveExplanation) && (isSolved || isFailed || initialSolved);
 
     return (
         <div className={`quiz-player-2 ${quizType === 'tf' ? 'tf-mode' : ''} ${quizType === '4sq' ? 'four-sq-mode' : ''}`}>
@@ -3937,10 +3967,12 @@ const QuizPlayer = ({
                                 style={{
                                     backgroundColor: colors[index % colors.length],
                                     pointerEvents: (isFailed || isSolved || disabled) ? 'none' : 'auto',
-                                    fontFamily: data.metadata?.fontFamily || "'Bangers', cursive, sans-serif",
+                                    fontFamily: quizType === 'tf'
+                                        ? (data.metadata?.fontFamily ? sanitizeFontFamily(data.metadata.fontFamily) : "'Nunito', system-ui, sans-serif")
+                                        : sanitizeFontFamily(data.metadata?.fontFamily || "'Bangers', 'Comic Neue', 'Fredoka', sans-serif"),
                                     fontSize: data.metadata?.fontSize ? `${data.metadata.fontSize}px` : undefined,
-                                    fontWeight: data.metadata?.fontWeight || undefined,
-                                    fontStyle: data.metadata?.fontStyle || 'italic',
+                                    fontWeight: data.metadata?.fontWeight || (quizType === 'tf' ? 800 : undefined),
+                                    fontStyle: data.metadata?.fontStyle || 'normal',
                                     textDecoration: data.metadata?.textDecoration || undefined,
                                     color: data.metadata?.color || '#000000'
                                 }}

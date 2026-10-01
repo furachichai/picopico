@@ -255,7 +255,19 @@
               0
             ],
             "quizType": "tf",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Una expresión matemática es una combinación de números, variables y operaciones (como 3x + 5), y NO tiene signo igual.\nPaso 2: Las fórmulas que sí tienen un signo igual (=) se llaman ecuaciones.\nConclusión: Es Falso: las expresiones no incluyen el signo igual (=).",
+              "en": "Step 1: A mathematical expression is a combination of numbers, variables, and operators (like 3x + 5), and does NOT contain an equal sign.\nStep 2: Statements that include an equal sign (=) connecting two sides are called equations.\nConclusion: It is False: expressions do not include an equal sign."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: A mathematical expression is a combination of numbers, variables, and operators (like 3x + 5), and does NOT contain an equal sign.\nStep 2: Statements that include an equal sign (=) connecting two sides are called equations.\nConclusion: It is False: expressions do not include an equal sign."
+              },
+              "es": {
+                "explanation": "Paso 1: Una expresión matemática es una combinación de números, variables y operaciones (como 3x + 5), y NO tiene signo igual.\nPaso 2: Las fórmulas que sí tienen un signo igual (=) se llaman ecuaciones.\nConclusión: Es Falso: las expresiones no incluyen el signo igual (=)."
+              }
+            }
           }
         },
         {
@@ -330,7 +342,19 @@
               0
             ],
             "quizType": "tf",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Una ecuación establece que dos expresiones tienen exactamente el mismo valor.\nPaso 2: Por ejemplo, en 2x + 3 = 11, la expresión de la izquierda (2x + 3) está conectada con la de la derecha (11) mediante el signo igual (=).\nConclusión: Es Cierto: una ecuación está compuesta por dos expresiones unidas por un signo igual.",
+              "en": "Step 1: An equation states that two expressions have equal value.\nStep 2: For example, in 2x + 3 = 11, the left expression (2x + 3) is connected to the right expression (11) by an equal sign (=).\nConclusion: It is True: an equation consists of two expressions connected by an equal sign."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: An equation states that two expressions have equal value.\nStep 2: For example, in 2x + 3 = 11, the left expression (2x + 3) is connected to the right expression (11) by an equal sign (=).\nConclusion: It is True: an equation consists of two expressions connected by an equal sign."
+              },
+              "es": {
+                "explanation": "Paso 1: Una ecuación establece que dos expresiones tienen exactamente el mismo valor.\nPaso 2: Por ejemplo, en 2x + 3 = 11, la expresión de la izquierda (2x + 3) está conectada con la de la derecha (11) mediante el signo igual (=).\nConclusión: Es Cierto: una ecuación está compuesta por dos expresiones unidas por un signo igual."
+              }
+            }
           }
         },
         {

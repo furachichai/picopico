@@ -615,8 +615,16 @@
                   "False"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: In the expression 30 + 50 + 20 × 2, multiplication must be done before addition.\nStep 2: First calculate the multiplication: 20 × 2 = 40.\nStep 3: Then add: 30 + 50 + 40 = 120.\nConclusion: It is False: adding first (30 + 50 + 20 = 100) violates the order of operations; the correct answer is 120, not 200."
+              },
+              "es": {
+                "explanation": "Paso 1: En la expresión 30 + 50 + 20 × 2, la multiplicación tiene prioridad sobre la suma.\nPaso 2: Primero se debe multiplicar 20 × 2 = 40.\nPaso 3: Luego sumamos: 30 + 50 + 40 = 120.\nConclusión: Es Falso: sumar primero (30 + 50 + 20 = 100) viola la jerarquía de operaciones; el resultado correcto es 120, no 200."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: En la expresión 30 + 50 + 20 × 2, la multiplicación tiene prioridad sobre la suma.\nPaso 2: Primero se debe multiplicar 20 × 2 = 40.\nPaso 3: Luego sumamos: 30 + 50 + 40 = 120.\nConclusión: Es Falso: sumar primero (30 + 50 + 20 = 100) viola la jerarquía de operaciones; el resultado correcto es 120, no 200.",
+              "en": "Step 1: In the expression 30 + 50 + 20 × 2, multiplication must be done before addition.\nStep 2: First calculate the multiplication: 20 × 2 = 40.\nStep 3: Then add: 30 + 50 + 40 = 120.\nConclusion: It is False: adding first (30 + 50 + 20 = 100) violates the order of operations; the correct answer is 120, not 200."
             }
           }
         },

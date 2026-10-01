@@ -126,7 +126,25 @@
               0
             ],
             "quizType": "reorder",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Analiza la expresión completa para identificar todos los términos y signos.\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nPaso 4: ¡Haz un bailecito para celebrar que obtuviste el resultado correcto!\nConclusión: La multiplicación y la división siempre se resuelven antes que la suma y la resta.",
+              "en": "Step 1: Analyze the whole expression to identify all terms and operation signs.\nStep 2: Solve multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve additions (+) and subtractions (-) from left to right.\nStep 4: Do a little dance to celebrate getting the correct answer!\nConclusion: Multiplication and division are always resolved before addition and subtraction."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Analyze the whole expression to identify all terms and operation signs.\nStep 2: Solve multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve additions (+) and subtractions (-) from left to right.\nStep 4: Do a little dance to celebrate getting the correct answer!\nConclusion: Multiplication and division are always resolved before addition and subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Analiza la expresión completa para identificar todos los términos y signos.\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nPaso 4: ¡Haz un bailecito para celebrar que obtuviste el resultado correcto!\nConclusión: La multiplicación y la división siempre se resuelven antes que la suma y la resta.",
+                "options": [
+                  "Analiza la expresión completa",
+                  "Resuelve × o ÷ de izquierda a derecha",
+                  "Resuelve + o - de izquierda a derecha",
+                  "Haz un bailecito para celebrar"
+                ]
+              }
+            }
           }
         },
         {

@@ -762,7 +762,25 @@
               0
             ],
             "quizType": "reorder",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Calcula primero todos los exponentes (potencias).\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nResultado: Llegas al resultado final de la expresión.\nConclusión: Los exponentes tienen mayor prioridad que la multiplicación y la división, las cuales a su vez van antes que la suma y la resta.",
+              "en": "Step 1: Calculate all exponents (powers) first.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nResult: You reach the final result of the expression.\nConclusion: Exponents take precedence over multiplication and division, which in turn come before addition and subtraction."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Calculate all exponents (powers) first.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nResult: You reach the final result of the expression.\nConclusion: Exponents take precedence over multiplication and division, which in turn come before addition and subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Calcula primero todos los exponentes (potencias).\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nResultado: Llegas al resultado final de la expresión.\nConclusión: Los exponentes tienen mayor prioridad que la multiplicación y la división, las cuales a su vez van antes que la suma y la resta.",
+                "options": [
+                  "exponentes",
+                  "× ÷ de izquierda a derecha",
+                  "+ - de izquierda a derecha",
+                  "resultado final"
+                ]
+              }
+            }
           }
         },
         {

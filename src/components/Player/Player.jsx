@@ -26,6 +26,7 @@ import FullscreenToggle from '../FullscreenToggle';
 import { X, Pencil } from 'lucide-react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { getSharedAudioContext } from '../../utils/audioContext';
+import { sanitizeFontFamily } from '../../utils/fontSanitizer';
 import { TypeQuizProvider } from '../../context/TypeQuizContext';
 import './Player.css';
 
@@ -1004,6 +1005,30 @@ const Player = () => {
                 onPointerCancel={handlePointerCancel}
                 style={{ touchAction: (hasCartridge || isMatchDragActive) ? 'none' : 'pan-y' }}
             >
+                {/* Full-bleed ambient backdrop to eliminate black letterbox bars on tall mobile screens */}
+                {slides[currentSlideIndex]?.background && (
+                    <div
+                        className="player-viewport-backdrop"
+                        style={{
+                            position: 'absolute',
+                            inset: '-20px',
+                            backgroundImage: slides[currentSlideIndex].background.includes('url')
+                                ? resolveAssetUrl(slides[currentSlideIndex].background)
+                                : undefined,
+                            backgroundColor: (!slides[currentSlideIndex].background.includes('url') && !slides[currentSlideIndex].background.includes('gradient'))
+                                ? slides[currentSlideIndex].background
+                                : undefined,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            filter: 'blur(30px) brightness(0.7)',
+                            opacity: 0.85,
+                            transform: 'scale(1.1)',
+                            zIndex: 0,
+                            pointerEvents: 'none',
+                        }}
+                    />
+                )}
+
                 {/* Controls Overlay - Matches Slide Dimensions */}
                 <div style={{
                     position: 'absolute',
@@ -1375,7 +1400,8 @@ const Player = () => {
                                                     top: isTypeQuiz ? 'auto' : (isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`)),
                                                     bottom: isTypeQuiz ? '0' : undefined,
                                                     width: (isFullScreenQuiz || isTypeQuiz) ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
-                                                    height: isTypeQuiz ? '30%' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
+                                                    height: isTypeQuiz ? '30%' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' || element.type === 'banner' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
+                                                    minHeight: element.type === 'banner' ? `${element.height}%` : undefined,
                                                     transform: isTypeQuiz ? 'none' : (isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`),
                                                     zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (isTypeQuiz ? 1000 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))))),
                                                     pointerEvents: (isFullScreenQuiz || isTypeQuiz || element.type === 'result_field' || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
@@ -1385,7 +1411,7 @@ const Player = () => {
                                                 <div
                                                     className={element.type === 'collectible' ? "player-collectible" : "player-text"}
                                                     style={{
-                                                        fontFamily: element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif'),
+                                                        fontFamily: sanitizeFontFamily(element.metadata?.fontFamily || (element.type === 'collectible' ? '"Outfit", sans-serif' : '"HVD Comic Serif Pro", sans-serif')),
                                                         fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : (element.type === 'collectible' ? '18px' : '16px'),
                                                         fontWeight: element.metadata?.fontWeight || (element.type === 'collectible' ? '500' : 'normal'),
                                                         fontStyle: element.metadata?.fontStyle || 'normal',

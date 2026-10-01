@@ -395,13 +395,22 @@
               "en": {
                 "options": [
                   "Analyze whole expression",
-                  "e!2",
+                  "( )",
+                  "e²",
                   "x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
                   "+ or -"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside parentheses ( ) first.\nStep 3: Calculate exponents (e²).\nStep 4: Solve multiplications (×) and divisions (÷) from left to right.\nStep 5: Solve additions (+) and subtractions (-) from left to right.\nConclusion: This is the complete PEMDAS order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los paréntesis ( ).\nPaso 3: Calcula los exponentes (e²).\nPaso 4: Resuelve multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 5: Resuelve sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (PEMDAS): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los paréntesis ( ).\nPaso 3: Calcula los exponentes (e²).\nPaso 4: Resuelve multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 5: Resuelve sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (PEMDAS): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta.",
+              "en": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside parentheses ( ) first.\nStep 3: Calculate exponents (e²).\nStep 4: Solve multiplications (×) and divisions (÷) from left to right.\nStep 5: Solve additions (+) and subtractions (-) from left to right.\nConclusion: This is the complete PEMDAS order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
             }
           }
         }

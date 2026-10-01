@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
+import { sanitizeFontFamily } from '../../utils/fontSanitizer';
 
 // Scotch tape asset (served from /src/assets/banners/scotch_tape.png in dev, /assets/banners/scotch_tape.png in prod)
 const SCOTCH_TAPE_SRC = resolveAssetUrl('/src/assets/banners/scotch_tape.png');
@@ -122,7 +123,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     // Card styling based on active skin
     let containerStyle = {
         width: '100%',
-        height: '100%',
+        height: readOnly ? 'auto' : '100%',
         minHeight: '100%',
         position: 'relative',
         boxSizing: 'border-box',
@@ -785,7 +786,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
                     minHeight: '1.2em',
                     position: 'relative',
                     zIndex: 3,
-                    fontFamily: meta.fontFamily || '"Fredoka", sans-serif',
+                    fontFamily: sanitizeFontFamily(meta.fontFamily),
                     fontSize: meta.fontSize ? `${meta.fontSize}px` : '26px',
                     fontWeight: meta.fontWeight || '600',
                     fontStyle: meta.fontStyle || 'normal',

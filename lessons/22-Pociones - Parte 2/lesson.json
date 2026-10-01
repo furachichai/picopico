@@ -446,8 +446,16 @@
                   "False"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: In the order of operations, multiplication and division take higher precedence than addition and subtraction.\nStep 2: That is why you always calculate all divisions (÷) and multiplications (×) first, followed by subtractions (-) and additions (+).\nConclusion: It is True: first solve ÷ or ×, then solve - or +."
+              },
+              "es": {
+                "explanation": "Paso 1: En la jerarquía de operaciones, la multiplicación y la división tienen mayor prioridad que la suma y la resta.\nPaso 2: Por esa razón, siempre se resuelven primero todas las divisiones (÷) y multiplicaciones (×), y posteriormente las restas (-) y sumas (+).\nConclusión: Es Cierto: primero se resuelven ÷ ó ×, y luego - ó +."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: En la jerarquía de operaciones, la multiplicación y la división tienen mayor prioridad que la suma y la resta.\nPaso 2: Por esa razón, siempre se resuelven primero todas las divisiones (÷) y multiplicaciones (×), y posteriormente las restas (-) y sumas (+).\nConclusión: Es Cierto: primero se resuelven ÷ ó ×, y luego - ó +.",
+              "en": "Step 1: In the order of operations, multiplication and division take higher precedence than addition and subtraction.\nStep 2: That is why you always calculate all divisions (÷) and multiplications (×) first, followed by subtractions (-) and additions (+).\nConclusion: It is True: first solve ÷ or ×, then solve - or +."
             }
           }
         },
@@ -552,8 +560,16 @@
                   "All the + or -"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Analyze the whole expression to identify which operations appear.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nConclusion: In the order of operations, multiplication and division always take priority before addition and subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Analiza toda la serie para identificar qué operaciones aparecen en la expresión.\nPaso 2: Resuelve todas las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve todas las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: En la jerarquía matemática, la multiplicación y la división siempre tienen prioridad antes que la suma y la resta."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Analiza toda la serie para identificar qué operaciones aparecen en la expresión.\nPaso 2: Resuelve todas las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve todas las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: En la jerarquía matemática, la multiplicación y la división siempre tienen prioridad antes que la suma y la resta.",
+              "en": "Step 1: Analyze the whole expression to identify which operations appear.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nConclusion: In the order of operations, multiplication and division always take priority before addition and subtraction."
             }
           }
         }

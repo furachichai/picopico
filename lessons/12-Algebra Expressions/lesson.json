@@ -1398,7 +1398,19 @@
               0
             ],
             "quizType": "tf",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Multiplicar por 3 significa sumar esa misma cantidad 3 veces.\nPaso 2: Por lo tanto, 3x representa la suma repetida de x tres veces: x + x + x.\nConclusión: Es Cierto: 3x es exactamente igual a x + x + x.",
+              "en": "Step 1: Multiplying by 3 means adding the exact same quantity 3 times.\nStep 2: Therefore, 3x represents repeated addition of x three times: x + x + x.\nConclusion: It is True: 3x is exactly equal to x + x + x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Multiplying by 3 means adding the exact same quantity 3 times.\nStep 2: Therefore, 3x represents repeated addition of x three times: x + x + x.\nConclusion: It is True: 3x is exactly equal to x + x + x."
+              },
+              "es": {
+                "explanation": "Paso 1: Multiplicar por 3 significa sumar esa misma cantidad 3 veces.\nPaso 2: Por lo tanto, 3x representa la suma repetida de x tres veces: x + x + x.\nConclusión: Es Cierto: 3x es exactamente igual a x + x + x."
+              }
+            }
           }
         },
         {

@@ -1700,17 +1700,17 @@
           "type": "banner",
           "content": "<div><font color=\"#000000\" style=\"font-weight: normal;\">A Brazilian worker makes 8.000 dollars per year.</font></div><div><font color=\"#000000\" style=\"font-weight: normal;\"><br></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">8.000y= 1.000.000.000</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">y is the </span><span style=\"caret-color: rgb(0, 0, 0);\">years</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"> she needs to work to become a </span><span style=\"caret-color: rgb(0, 0, 0);\">billionaire</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">.</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\" style=\"font-weight: normal;\">What is ‭</font><font color=\"#000000\">y</font><font color=\"#000000\"> </font><font color=\"#000000\" style=\"font-weight: normal;\">?</font></div>",
           "x": 50,
-          "y": 40.703125,
+          "y": 35,
           "width": 51,
-          "height": 28.73383063225835,
+          "height": 34,
           "rotation": 0,
-          "scale": 1.7613680127462443,
+          "scale": 1.65,
           "metadata": {
             "width": 51,
-            "height": 12.5,
+            "height": 34,
             "fontFamily": "\"Fredoka\", sans-serif",
             "fontSize": 13,
-            "fontStyle": "italic",
+            "fontStyle": "normal",
             "fontWeight": "600",
             "color": "#00b0ff",
             "textAlign": "center",
@@ -1926,7 +1926,19 @@
               0
             ],
             "quizType": "tf",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: En muchas grandes corporaciones modernas, la proporción salarial promedio entre el director ejecutivo (CEO) y el trabajador medio supera las 300 a 1.\nPaso 2: La ecuación c = 300 · w ilustra cómo una variable multiplicadora relaciona ambas cantidades.\nConclusión: Es Cierto: en promedio, el salario de un CEO corporativo es aproximadamente 300 veces el de un trabajador.",
+              "en": "Step 1: In many major corporations today, the average compensation ratio of a CEO to a median worker exceeds 300 to 1.\nStep 2: The equation c = 300 · w illustrates how a variable multiplier links these two values.\nConclusion: It is True: on average, a corporate CEO earns around 300 times the salary of a typical worker."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: In many major corporations today, the average compensation ratio of a CEO to a median worker exceeds 300 to 1.\nStep 2: The equation c = 300 · w illustrates how a variable multiplier links these two values.\nConclusion: It is True: on average, a corporate CEO earns around 300 times the salary of a typical worker."
+              },
+              "es": {
+                "explanation": "Paso 1: En muchas grandes corporaciones modernas, la proporción salarial promedio entre el director ejecutivo (CEO) y el trabajador medio supera las 300 a 1.\nPaso 2: La ecuación c = 300 · w ilustra cómo una variable multiplicadora relaciona ambas cantidades.\nConclusión: Es Cierto: en promedio, el salario de un CEO corporativo es aproximadamente 300 veces el de un trabajador."
+              }
+            }
           }
         },
         {

@@ -6273,7 +6273,19 @@
                   0
                 ],
                 "quizType": "tf",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Una variable es un símbolo o letra que representa un número o cantidad.\nPaso 2: Aunque x, y, y z son las más comunes, cualquier letra del alfabeto (como f, a, b o n) puede utilizarse como variable.\nConclusión: Es Cierto: se puede elegir cualquier letra para nombrar una variable.",
+                  "en": "Step 1: A variable is a symbol or letter that represents an unknown or changing amount.\nStep 2: Although x, y, and z are the most common, any letter of the alphabet (like f, a, b, or n) can be chosen as a variable.\nConclusion: It is True: we can pick any letter to name a variable."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: A variable is a symbol or letter that represents an unknown or changing amount.\nStep 2: Although x, y, and z are the most common, any letter of the alphabet (like f, a, b, or n) can be chosen as a variable.\nConclusion: It is True: we can pick any letter to name a variable."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Una variable es un símbolo o letra que representa un número o cantidad.\nPaso 2: Aunque x, y, y z son las más comunes, cualquier letra del alfabeto (como f, a, b o n) puede utilizarse como variable.\nConclusión: Es Cierto: se puede elegir cualquier letra para nombrar una variable."
+                  }
+                }
               }
             },
             {
@@ -8537,17 +8549,17 @@
               "type": "banner",
               "content": "<div><font color=\"#000000\" style=\"font-weight: normal;\">A Brazilian worker makes 8.000 dollars per year.</font></div><div><font color=\"#000000\" style=\"font-weight: normal;\"><br></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">8.000y= 1.000.000.000</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">y is the </span><span style=\"caret-color: rgb(0, 0, 0);\">years</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"> she needs to work to become a </span><span style=\"caret-color: rgb(0, 0, 0);\">billionaire</span><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\">.</span></font></div><div><font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0); font-weight: 400;\"><br></span></font></div><div><font color=\"#000000\" style=\"font-weight: normal;\">What is ‭</font><font color=\"#000000\">y</font><font color=\"#000000\"> </font><font color=\"#000000\" style=\"font-weight: normal;\">?</font></div>",
               "x": 50,
-              "y": 40.703125,
+              "y": 35,
               "width": 51,
-              "height": 28.73383063225835,
+              "height": 34,
               "rotation": 0,
-              "scale": 1.7613680127462443,
+              "scale": 1.65,
               "metadata": {
                 "width": 51,
-                "height": 12.5,
+                "height": 34,
                 "fontFamily": "\"Fredoka\", sans-serif",
                 "fontSize": 13,
-                "fontStyle": "italic",
+                "fontStyle": "normal",
                 "fontWeight": "600",
                 "color": "#00b0ff",
                 "textAlign": "center",
@@ -8763,7 +8775,19 @@
                   0
                 ],
                 "quizType": "tf",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: En muchas grandes corporaciones modernas, la proporción salarial promedio entre el director ejecutivo (CEO) y el trabajador medio supera las 300 a 1.\nPaso 2: La ecuación c = 300 · w ilustra cómo una variable multiplicadora relaciona ambas cantidades.\nConclusión: Es Cierto: en promedio, el salario de un CEO corporativo es aproximadamente 300 veces el de un trabajador.",
+                  "en": "Step 1: In many major corporations today, the average compensation ratio of a CEO to a median worker exceeds 300 to 1.\nStep 2: The equation c = 300 · w illustrates how a variable multiplier links these two values.\nConclusion: It is True: on average, a corporate CEO earns around 300 times the salary of a typical worker."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: In many major corporations today, the average compensation ratio of a CEO to a median worker exceeds 300 to 1.\nStep 2: The equation c = 300 · w illustrates how a variable multiplier links these two values.\nConclusion: It is True: on average, a corporate CEO earns around 300 times the salary of a typical worker."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: En muchas grandes corporaciones modernas, la proporción salarial promedio entre el director ejecutivo (CEO) y el trabajador medio supera las 300 a 1.\nPaso 2: La ecuación c = 300 · w ilustra cómo una variable multiplicadora relaciona ambas cantidades.\nConclusión: Es Cierto: en promedio, el salario de un CEO corporativo es aproximadamente 300 veces el de un trabajador."
+                  }
+                }
               }
             },
             {
@@ -14352,7 +14376,19 @@
                   0
                 ],
                 "quizType": "tf",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Multiplicar por 3 significa sumar esa misma cantidad 3 veces.\nPaso 2: Por lo tanto, 3x representa la suma repetida de x tres veces: x + x + x.\nConclusión: Es Cierto: 3x es exactamente igual a x + x + x.",
+                  "en": "Step 1: Multiplying by 3 means adding the exact same quantity 3 times.\nStep 2: Therefore, 3x represents repeated addition of x three times: x + x + x.\nConclusion: It is True: 3x is exactly equal to x + x + x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Multiplying by 3 means adding the exact same quantity 3 times.\nStep 2: Therefore, 3x represents repeated addition of x three times: x + x + x.\nConclusion: It is True: 3x is exactly equal to x + x + x."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Multiplicar por 3 significa sumar esa misma cantidad 3 veces.\nPaso 2: Por lo tanto, 3x representa la suma repetida de x tres veces: x + x + x.\nConclusión: Es Cierto: 3x es exactamente igual a x + x + x."
+                  }
+                }
               }
             },
             {
@@ -20105,7 +20141,19 @@
                   0
                 ],
                 "quizType": "tf",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Una expresión matemática es una combinación de números, variables y operaciones (como 3x + 5), y NO tiene signo igual.\nPaso 2: Las fórmulas que sí tienen un signo igual (=) se llaman ecuaciones.\nConclusión: Es Falso: las expresiones no incluyen el signo igual (=).",
+                  "en": "Step 1: A mathematical expression is a combination of numbers, variables, and operators (like 3x + 5), and does NOT contain an equal sign.\nStep 2: Statements that include an equal sign (=) connecting two sides are called equations.\nConclusion: It is False: expressions do not include an equal sign."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: A mathematical expression is a combination of numbers, variables, and operators (like 3x + 5), and does NOT contain an equal sign.\nStep 2: Statements that include an equal sign (=) connecting two sides are called equations.\nConclusion: It is False: expressions do not include an equal sign."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Una expresión matemática es una combinación de números, variables y operaciones (como 3x + 5), y NO tiene signo igual.\nPaso 2: Las fórmulas que sí tienen un signo igual (=) se llaman ecuaciones.\nConclusión: Es Falso: las expresiones no incluyen el signo igual (=)."
+                  }
+                }
               }
             },
             {
@@ -20180,7 +20228,19 @@
                   0
                 ],
                 "quizType": "tf",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Una ecuación establece que dos expresiones tienen exactamente el mismo valor.\nPaso 2: Por ejemplo, en 2x + 3 = 11, la expresión de la izquierda (2x + 3) está conectada con la de la derecha (11) mediante el signo igual (=).\nConclusión: Es Cierto: una ecuación está compuesta por dos expresiones unidas por un signo igual.",
+                  "en": "Step 1: An equation states that two expressions have equal value.\nStep 2: For example, in 2x + 3 = 11, the left expression (2x + 3) is connected to the right expression (11) by an equal sign (=).\nConclusion: It is True: an equation consists of two expressions connected by an equal sign."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: An equation states that two expressions have equal value.\nStep 2: For example, in 2x + 3 = 11, the left expression (2x + 3) is connected to the right expression (11) by an equal sign (=).\nConclusion: It is True: an equation consists of two expressions connected by an equal sign."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Una ecuación establece que dos expresiones tienen exactamente el mismo valor.\nPaso 2: Por ejemplo, en 2x + 3 = 11, la expresión de la izquierda (2x + 3) está conectada con la de la derecha (11) mediante el signo igual (=).\nConclusión: Es Cierto: una ecuación está compuesta por dos expresiones unidas por un signo igual."
+                  }
+                }
               }
             },
             {
@@ -24051,8 +24111,16 @@
                       "False"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: In the order of operations, multiplication and division take higher precedence than addition and subtraction.\nStep 2: That is why you always calculate all divisions (÷) and multiplications (×) first, followed by subtractions (-) and additions (+).\nConclusion: It is True: first solve ÷ or ×, then solve - or +."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: En la jerarquía de operaciones, la multiplicación y la división tienen mayor prioridad que la suma y la resta.\nPaso 2: Por esa razón, siempre se resuelven primero todas las divisiones (÷) y multiplicaciones (×), y posteriormente las restas (-) y sumas (+).\nConclusión: Es Cierto: primero se resuelven ÷ ó ×, y luego - ó +."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: En la jerarquía de operaciones, la multiplicación y la división tienen mayor prioridad que la suma y la resta.\nPaso 2: Por esa razón, siempre se resuelven primero todas las divisiones (÷) y multiplicaciones (×), y posteriormente las restas (-) y sumas (+).\nConclusión: Es Cierto: primero se resuelven ÷ ó ×, y luego - ó +.",
+                  "en": "Step 1: In the order of operations, multiplication and division take higher precedence than addition and subtraction.\nStep 2: That is why you always calculate all divisions (÷) and multiplications (×) first, followed by subtractions (-) and additions (+).\nConclusion: It is True: first solve ÷ or ×, then solve - or +."
                 }
               }
             },
@@ -24157,8 +24225,16 @@
                       "All the + or -"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Analyze the whole expression to identify which operations appear.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nConclusion: In the order of operations, multiplication and division always take priority before addition and subtraction."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Analiza toda la serie para identificar qué operaciones aparecen en la expresión.\nPaso 2: Resuelve todas las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve todas las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: En la jerarquía matemática, la multiplicación y la división siempre tienen prioridad antes que la suma y la resta."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Analiza toda la serie para identificar qué operaciones aparecen en la expresión.\nPaso 2: Resuelve todas las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve todas las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: En la jerarquía matemática, la multiplicación y la división siempre tienen prioridad antes que la suma y la resta.",
+                  "en": "Step 1: Analyze the whole expression to identify which operations appear.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nConclusion: In the order of operations, multiplication and division always take priority before addition and subtraction."
                 }
               }
             }
@@ -24642,8 +24718,16 @@
                       "+ or -"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta.",
+                  "en": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
                 }
               }
             },
@@ -25494,8 +25578,16 @@
                       "False"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: In the expression 30 + 50 + 20 × 2, multiplication must be done before addition.\nStep 2: First calculate the multiplication: 20 × 2 = 40.\nStep 3: Then add: 30 + 50 + 40 = 120.\nConclusion: It is False: adding first (30 + 50 + 20 = 100) violates the order of operations; the correct answer is 120, not 200."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: En la expresión 30 + 50 + 20 × 2, la multiplicación tiene prioridad sobre la suma.\nPaso 2: Primero se debe multiplicar 20 × 2 = 40.\nPaso 3: Luego sumamos: 30 + 50 + 40 = 120.\nConclusión: Es Falso: sumar primero (30 + 50 + 20 = 100) viola la jerarquía de operaciones; el resultado correcto es 120, no 200."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: En la expresión 30 + 50 + 20 × 2, la multiplicación tiene prioridad sobre la suma.\nPaso 2: Primero se debe multiplicar 20 × 2 = 40.\nPaso 3: Luego sumamos: 30 + 50 + 40 = 120.\nConclusión: Es Falso: sumar primero (30 + 50 + 20 = 100) viola la jerarquía de operaciones; el resultado correcto es 120, no 200.",
+                  "en": "Step 1: In the expression 30 + 50 + 20 × 2, multiplication must be done before addition.\nStep 2: First calculate the multiplication: 20 × 2 = 40.\nStep 3: Then add: 30 + 50 + 40 = 120.\nConclusion: It is False: adding first (30 + 50 + 20 = 100) violates the order of operations; the correct answer is 120, not 200."
                 }
               }
             },
@@ -28217,13 +28309,22 @@
                   "en": {
                     "options": [
                       "Analyze whole expression",
-                      "e!2",
+                      "( )",
+                      "e²",
                       "x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
                       "+ or -"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside parentheses ( ) first.\nStep 3: Calculate exponents (e²).\nStep 4: Solve multiplications (×) and divisions (÷) from left to right.\nStep 5: Solve additions (+) and subtractions (-) from left to right.\nConclusion: This is the complete PEMDAS order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los paréntesis ( ).\nPaso 3: Calcula los exponentes (e²).\nPaso 4: Resuelve multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 5: Resuelve sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (PEMDAS): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los paréntesis ( ).\nPaso 3: Calcula los exponentes (e²).\nPaso 4: Resuelve multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 5: Resuelve sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (PEMDAS): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta.",
+                  "en": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside parentheses ( ) first.\nStep 3: Calculate exponents (e²).\nStep 4: Solve multiplications (×) and divisions (÷) from left to right.\nStep 5: Solve additions (+) and subtractions (-) from left to right.\nConclusion: This is the complete PEMDAS order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
                 }
               }
             }
@@ -29987,7 +30088,25 @@
                   0
                 ],
                 "quizType": "reorder",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Analiza la expresión completa para identificar todos los términos y signos.\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nPaso 4: ¡Haz un bailecito para celebrar que obtuviste el resultado correcto!\nConclusión: La multiplicación y la división siempre se resuelven antes que la suma y la resta.",
+                  "en": "Step 1: Analyze the whole expression to identify all terms and operation signs.\nStep 2: Solve multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve additions (+) and subtractions (-) from left to right.\nStep 4: Do a little dance to celebrate getting the correct answer!\nConclusion: Multiplication and division are always resolved before addition and subtraction."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Analyze the whole expression to identify all terms and operation signs.\nStep 2: Solve multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve additions (+) and subtractions (-) from left to right.\nStep 4: Do a little dance to celebrate getting the correct answer!\nConclusion: Multiplication and division are always resolved before addition and subtraction."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Analiza la expresión completa para identificar todos los términos y signos.\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nPaso 4: ¡Haz un bailecito para celebrar que obtuviste el resultado correcto!\nConclusión: La multiplicación y la división siempre se resuelven antes que la suma y la resta.",
+                    "options": [
+                      "Analiza la expresión completa",
+                      "Resuelve × o ÷ de izquierda a derecha",
+                      "Resuelve + o - de izquierda a derecha",
+                      "Haz un bailecito para celebrar"
+                    ]
+                  }
+                }
               }
             },
             {
@@ -31527,7 +31646,25 @@
                   0
                 ],
                 "quizType": "reorder",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Calcula primero todos los exponentes (potencias).\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nResultado: Llegas al resultado final de la expresión.\nConclusión: Los exponentes tienen mayor prioridad que la multiplicación y la división, las cuales a su vez van antes que la suma y la resta.",
+                  "en": "Step 1: Calculate all exponents (powers) first.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nResult: You reach the final result of the expression.\nConclusion: Exponents take precedence over multiplication and division, which in turn come before addition and subtraction."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Calculate all exponents (powers) first.\nStep 2: Solve all multiplications (×) and divisions (÷) from left to right.\nStep 3: Solve all additions (+) and subtractions (-) from left to right.\nResult: You reach the final result of the expression.\nConclusion: Exponents take precedence over multiplication and division, which in turn come before addition and subtraction."
+                  },
+                  "es": {
+                    "explanation": "Paso 1: Calcula primero todos los exponentes (potencias).\nPaso 2: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 3: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nResultado: Llegas al resultado final de la expresión.\nConclusión: Los exponentes tienen mayor prioridad que la multiplicación y la división, las cuales a su vez van antes que la suma y la resta.",
+                    "options": [
+                      "exponentes",
+                      "× ÷ de izquierda a derecha",
+                      "+ - de izquierda a derecha",
+                      "resultado final"
+                    ]
+                  }
+                }
               }
             },
             {

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { sanitizeFontFamily } from '../../utils/fontSanitizer';
 
 function catmullRomToBezier(points) {
     if (!points || points.length === 0) return '';
@@ -943,7 +944,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
                         window.getSelection()?.removeAllRanges();
                     }}
                     style={{
-                        fontFamily: element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif',
+                        fontFamily: sanitizeFontFamily(element.metadata?.fontFamily || '"HVD Comic Serif Pro", sans-serif'),
                         fontSize: element.metadata?.fontSize ? `${element.metadata.fontSize}px` : '19px',
                         fontWeight: element.metadata?.fontWeight || 'normal',
                         fontStyle: element.metadata?.fontStyle || 'normal',

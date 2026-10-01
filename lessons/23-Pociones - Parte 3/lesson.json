@@ -310,8 +310,16 @@
                   "+ or -"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta.",
+              "en": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
             }
           }
         },
@@ -824,8 +832,16 @@
                     "+ or -"
                   ],
                   "matchAnswers": [],
-                  "chatNodes": []
+                  "chatNodes": [],
+                  "explanation": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
+                },
+                "es": {
+                  "explanation": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta."
                 }
+              },
+              "explanation": {
+                "es": "Paso 1: Analiza toda la serie para ver todas las operaciones presentes.\nPaso 2: Calcula primero los exponentes (e²).\nPaso 3: Resuelve las multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 4: Resuelve las sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Los exponentes tienen mayor jerarquía y deben resolverse antes que la multiplicación, división, suma o resta.",
+                "en": "Step 1: Analyze the whole expression to see all operations present.\nStep 2: Calculate any exponents (e²) first.\nStep 3: Solve multiplications (×) and divisions (÷) from left to right.\nStep 4: Solve additions (+) and subtractions (-) from left to right.\nConclusion: Exponents have higher precedence and must be evaluated before multiplication, division, addition, or subtraction."
               }
             }
           },
