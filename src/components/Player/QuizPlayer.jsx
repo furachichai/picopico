@@ -267,7 +267,21 @@ const ConectaCard = ({ card, isSolved, isFailed, disabled, cardShape, baseStyle,
 };
 
 
-const QuizPlayer = ({ data, onNext, onNextSlide, onBanner, disabled = false, debugMode = false, isActive = true, onSolve }) => {
+const QuizPlayer = ({
+    data,
+    onNext,
+    onNextSlide,
+    onBanner,
+    disabled = false,
+    debugMode = false,
+    isActive = true,
+    onSolve,
+    initialSolved = false,
+    showExplainWhy = true,
+    explanationText = null,
+    buttonLabel = '¿Por qué?',
+    onOpenExplanation = null
+}) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
     // -------------------------------------------------------------------------
@@ -298,7 +312,13 @@ const QuizPlayer = ({ data, onNext, onNextSlide, onBanner, disabled = false, deb
     // Common State
     const [selectedOption, setSelectedOption] = useState(null);
     const [wrongIndices, setWrongIndices] = useState(new Set());
-    const [isSolved, setIsSolved] = useState(false);
+    const [isSolved, setIsSolved] = useState(initialSolved);
+
+    useEffect(() => {
+        if (initialSolved) {
+            setIsSolved(true);
+        }
+    }, [initialSolved]);
     const [isFailed, setIsFailed] = useState(false);
     const [shakingIndex, setShakingIndex] = useState(null);
     const [pulse, setPulse] = useState(false);
@@ -3867,9 +3887,33 @@ const QuizPlayer = ({ data, onNext, onNextSlide, onBanner, disabled = false, deb
     }
 
     // Classic / TF / 4SQ Render
+    const isClassicQuiz = quizType === 'classic';
+    const effectiveExplanation = explanationText || data.metadata?.explanation;
+    const canShowExplain = showExplainWhy && isClassicQuiz && Boolean(effectiveExplanation) && (isSolved || isFailed || initialSolved);
+
     return (
         <div className={`quiz-player-2 ${quizType === 'tf' ? 'tf-mode' : ''} ${quizType === '4sq' ? 'four-sq-mode' : ''}`}>
             <div className={getContainerClass()}>
+                {canShowExplain && (
+                    <div className="quiz-explain-why-row">
+                        <button
+                            type="button"
+                            className="player-explain-why-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
+                                const text = typeof effectiveExplanation === 'string'
+                                    ? effectiveExplanation
+                                    : (effectiveExplanation[buttonLabel === 'Explain why' ? 'en' : 'es'] || effectiveExplanation.es || effectiveExplanation.en);
+                                onOpenExplanation?.(text, buttonLabel);
+                            }}
+                            title={buttonLabel}
+                        >
+                            <span className="player-explain-why-icon">💡</span>
+                            <span>{buttonLabel}</span>
+                        </button>
+                    </div>
+                )}
                 {options.map((option, index) => {
                     let className = getOptionClass(index);
                     const isWrong = wrongIndices.has(index);

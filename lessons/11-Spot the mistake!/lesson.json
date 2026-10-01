@@ -203,7 +203,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: La ecuación es 5y + 15 = 50.\nPaso 2: Para despejar 5y, restamos 15 en ambos lados: 5y = 50 - 15.\nPaso 3: La resta correcta es 50 - 15 = 35.\nPaso 4: El error mostrado en el ejercicio fue escribir 36 en vez de 35.\nResultado: 36 es el error.",
+              "en": "Step 1: The equation is 5y + 15 = 50.\nStep 2: To isolate 5y, subtract 15 from both sides: 5y = 50 - 15.\nStep 3: The correct subtraction is 50 - 15 = 35.\nStep 4: The mistake in the problem was writing 36 instead of 35.\nResult: 36 is the mistake."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The equation is 5y + 15 = 50.\nStep 2: To isolate 5y, subtract 15 from both sides: 5y = 50 - 15.\nStep 3: The correct subtraction is 50 - 15 = 35.\nStep 4: The mistake in the problem was writing 36 instead of 35.\nResult: 36 is the mistake."
+              }
+            }
           }
         },
         {
@@ -333,7 +342,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Ecuación inicial: 5y + 15 = 50.\nPaso 2: Resta 15 en ambos lados: 5y = 50 - 15.\nPaso 3: 50 - 15 = 35.\nPaso 4: Al continuar, dividimos entre 5: y = 35 ÷ 5 = 7.\nResultado: 35.",
+              "en": "Step 1: Initial equation: 5y + 15 = 50.\nStep 2: Subtract 15 from both sides: 5y = 50 - 15.\nStep 3: 50 - 15 = 35.\nStep 4: Dividing by 5 confirms: y = 35 ÷ 5 = 7.\nResult: 35."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Initial equation: 5y + 15 = 50.\nStep 2: Subtract 15 from both sides: 5y = 50 - 15.\nStep 3: 50 - 15 = 35.\nStep 4: Dividing by 5 confirms: y = 35 ÷ 5 = 7.\nResult: 35."
+              }
+            }
           }
         },
         {

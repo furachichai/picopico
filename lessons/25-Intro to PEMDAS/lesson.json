@@ -684,7 +684,16 @@
             "quizType": "classic",
             "visualMode": false,
             "fontWeight": "bold",
-            "color": "#000000"
+            "color": "#000000",
+            "explanation": {
+              "es": "PEMDAS es el acrónimo mnemotécnico para el orden de operaciones:\nP: Paréntesis (Parenthesis)\nE: Exponentes (Exponents)\nM: Multiplicación (Multiplication)\nD: División (Division)\nA: Adición / Suma (Addition)\nS: Sustracción / Resta (Subtraction)",
+              "en": "PEMDAS is the acronym for the order of operations:\nP: Parentheses\nE: Exponents\nM: Multiplication\nD: Division\nA: Addition\nS: Subtraction"
+            },
+            "translations": {
+              "en": {
+                "explanation": "PEMDAS is the acronym for the order of operations:\nP: Parentheses\nE: Exponents\nM: Multiplication\nD: Division\nA: Addition\nS: Subtraction"
+              }
+            }
           }
         },
         {

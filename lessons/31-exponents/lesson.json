@@ -246,7 +246,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Un exponente indica cuántas veces se multiplica un número (la base) por sí mismo. Por ejemplo, 2³ = 2 × 2 × 2 = 8.",
+              "en": "An exponent tells you how many times a base number is multiplied by itself. For example, 2³ = 2 × 2 × 2 = 8."
+            },
+            "translations": {
+              "en": {
+                "explanation": "An exponent tells you how many times a base number is multiplied by itself. For example, 2³ = 2 × 2 × 2 = 8."
+              }
+            }
           }
         },
         {

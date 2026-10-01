@@ -598,3 +598,223 @@
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000000;
 }
+
+/* ─── Quiz Explain Why Button & Modal ─────────────────────────────── */
+
+.quiz-explain-why-row {
+    position: absolute;
+    bottom: calc(100% - 6px);
+    right: 15px;
+    display: flex;
+    justify-content: flex-end;
+    pointer-events: auto;
+    z-index: 50;
+}
+
+.player-explain-why-btn {
+    position: relative;
+    z-index: 50;
+    background: #FEF08A;
+    color: #1E293B;
+    border: 2px solid #000000;
+    border-radius: 9999px;
+    padding: 5px 12px;
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    box-shadow: 2.5px 2.5px 0px #000000;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, background-color 0.12s ease;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: popInExplainBtn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes popInExplainBtn {
+    from {
+        transform: scale(0.65);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.player-explain-why-btn:hover {
+    background: #FDE047;
+    transform: scale(1.05);
+    box-shadow: 3.5px 3.5px 0px #000000;
+}
+
+.player-explain-why-btn:active {
+    transform: translate(1.5px, 1.5px) scale(0.96);
+    box-shadow: 1px 1px 0px #000000;
+}
+
+.player-explain-why-icon {
+    font-size: 0.88rem;
+    line-height: 1;
+}
+
+.explanation-modal-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+    padding: 16px;
+    box-sizing: border-box;
+    animation: fadeInExplanation 0.2s ease-out forwards;
+}
+
+@keyframes fadeInExplanation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.explanation-modal-window {
+    position: relative;
+    width: 100%;
+    max-width: 324px;
+    max-height: 82%;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 3.5px solid #000000;
+    box-shadow: 6px 6px 0px #000000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: scaleInExplanation 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scaleInExplanation {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.explanation-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2.5px solid #000000;
+    background: #FEF08A;
+    flex-shrink: 0;
+}
+
+.explanation-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Outfit', 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.95rem;
+    color: #1E293B;
+}
+
+.explanation-title-badge {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.explanation-modal-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    box-shadow: 2px 2px 0px #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 900;
+    color: #000000;
+    line-height: 1;
+    padding: 0;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.explanation-modal-close:hover {
+    transform: scale(1.08);
+    box-shadow: 2.5px 2.5px 0px #000000;
+}
+
+.explanation-modal-close:active {
+    transform: translate(1px, 1px);
+    box-shadow: 0.5px 0.5px 0px #000000;
+}
+
+.explanation-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px 16px 14px;
+    font-family: 'Outfit', 'Nunito', 'Fira Sans', sans-serif;
+    color: #1F2937;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.explanation-steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.explanation-step-card {
+    background: #F8FAFC;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+
+.explanation-step-card.result-card {
+    background: #ECFDF5;
+    border-color: #10B981;
+}
+
+.explanation-step-label {
+    font-weight: 900;
+    font-size: 0.74rem;
+    color: #4F46E5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.explanation-step-card.result-card .explanation-step-label {
+    color: #059669;
+}
+
+.explanation-step-text {
+    font-weight: 600;
+    color: #1E293B;
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.explanation-paragraph {
+    font-weight: 600;
+    color: #1E293B;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0;
+    padding: 4px 2px;
+}

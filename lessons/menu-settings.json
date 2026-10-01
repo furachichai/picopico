@@ -2,6 +2,7 @@
   "menuBg": "#160A52",
   "showStars": true,
   "showLastSlide": true,
+  "showExplainWhy": true,
   "buttonBorderColor": "#42DEE8",
   "buttonShadowColor": "#2c1376",
   "bannerBorderColor": "#42DEE8",

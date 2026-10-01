@@ -256,8 +256,13 @@
                   "4"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The dial base is 2.\nStep 2: We want Pesto to be 2 times larger.\nStep 3: 2¹ = 2.\nResult: The exponent must be set to 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La base del dial es 2.\nPaso 2: Queremos que Pesto aumente exactamente 2 veces.\nPaso 3: 2¹ = 2.\nResultado: La potencia debe ser 1.",
+              "en": "Step 1: The dial base is 2.\nStep 2: We want Pesto to be 2 times larger.\nStep 3: 2¹ = 2.\nResult: The exponent must be set to 1."
             }
           }
         },
@@ -582,8 +587,13 @@
                   "4"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The base is 2 and we want a 4x increase.\nStep 2: Calculating powers of 2: 2² = 2 × 2 = 4.\nResult: The exponent must be set to 2."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La base es 2 y buscamos un aumento de 4 veces.\nPaso 2: Calculamos potencias de 2: 2² = 2 × 2 = 4.\nResultado: La potencia debe ser 2.",
+              "en": "Step 1: The base is 2 and we want a 4x increase.\nStep 2: Calculating powers of 2: 2² = 2 × 2 = 4.\nResult: The exponent must be set to 2."
             }
           }
         },
@@ -844,8 +854,13 @@
                   "4"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The base is 2 and we want an 8x increase.\nStep 2: 2³ = 2 × 2 × 2 = 8.\nResult: The exponent must be set to 3."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La base es 2 y buscamos un aumento de 8 veces.\nPaso 2: 2³ = 2 × 2 × 2 = 8.\nResultado: La potencia debe ser 3.",
+              "en": "Step 1: The base is 2 and we want an 8x increase.\nStep 2: 2³ = 2 × 2 × 2 = 8.\nResult: The exponent must be set to 3."
             }
           }
         },
@@ -1649,8 +1664,13 @@
                   "Results get divided by 2"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Observe the pattern as exponents decrease:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nStep 2: Each step down divides the previous result by the base (2).\nResult: Results get divided by 2."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Observa la secuencia al reducir los exponentes:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nPaso 2: Cada paso hacia abajo divide el resultado anterior entre la base (2).\nResultado: Los resultados se dividen entre 2 (Results get divided by 2).",
+              "en": "Step 1: Observe the pattern as exponents decrease:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nStep 2: Each step down divides the previous result by the base (2).\nResult: Results get divided by 2."
             }
           }
         },
@@ -2901,8 +2921,13 @@
                   "9"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Going down powers of base 4 divides by 4 at each step:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nStep 2: To calculate 4⁰, divide 4¹ by 4:\n4 ÷ 4 = 1.\nResult: 4⁰ = 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Al bajar en exponentes de base 4, cada paso divide entre 4:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nPaso 2: Para calcular 4⁰, dividimos el valor de 4¹ entre 4:\n4 ÷ 4 = 1.\nResultado: 4⁰ = 1.",
+              "en": "Step 1: Going down powers of base 4 divides by 4 at each step:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nStep 2: To calculate 4⁰, divide 4¹ by 4:\n4 ÷ 4 = 1.\nResult: 4⁰ = 1."
             }
           }
         }
@@ -2949,8 +2974,13 @@
                   "7³"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Any non-zero number divided by itself equals 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nStep 2: By exponent laws: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResult: 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Cualquier número no nulo dividido entre sí mismo es igual a 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nPaso 2: Por leyes de exponentes: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResultado: 1.",
+              "en": "Step 1: Any non-zero number divided by itself equals 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nStep 2: By exponent laws: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResult: 1."
             }
           }
         },
@@ -3079,8 +3109,13 @@
                   "1"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Universal exponent rule: any non-zero number raised to the power 0 equals 1 (n⁰ = 1).\nStep 2: Since base 913471 is non-zero, 913471⁰ = 1.\nResult: 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Regla universal de exponentes: cualquier número distinto de cero elevado a la potencia 0 es igual a 1 (n⁰ = 1).\nPaso 2: Como la base 913471 no es cero, 913471⁰ = 1.\nResultado: 1.",
+              "en": "Step 1: Universal exponent rule: any non-zero number raised to the power 0 equals 1 (n⁰ = 1).\nStep 2: Since base 913471 is non-zero, 913471⁰ = 1.\nResult: 1."
             }
           }
         },
@@ -3144,8 +3179,13 @@
                   "90"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: By the zero exponent rule: n⁰ = 1 for any n ≠ 0.\nStep 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResult: 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Por la regla del exponente cero: n⁰ = 1 para cualquier n ≠ 0.\nPaso 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResultado: 1.",
+              "en": "Step 1: By the zero exponent rule: n⁰ = 1 for any n ≠ 0.\nStep 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResult: 1."
             }
           }
         },
@@ -3280,8 +3320,13 @@
                   "1⁰"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Evaluate each option:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nStep 2: 4¹ equals 4, so it is NOT equal to 1.\nResult: 4¹."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Evalúa cada opción:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nPaso 2: 4¹ es igual a 4, por lo que NO es igual a 1.\nResultado: 4¹.",
+              "en": "Step 1: Evaluate each option:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nStep 2: 4¹ equals 4, so it is NOT equal to 1.\nResult: 4¹."
             }
           }
         },
@@ -3345,8 +3390,13 @@
                   "−5"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The sequence of powers divides by 5 at each step:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nStep 2: To find 5⁰, divide 5¹ by 5: 5 ÷ 5 = 1.\nResult: 5⁰ = 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La secuencia de potencias divide entre 5 a cada paso:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nPaso 2: Para hallar 5⁰, dividimos 5¹ entre 5: 5 ÷ 5 = 1.\nResultado: 5⁰ = 1.",
+              "en": "Step 1: The sequence of powers divides by 5 at each step:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nStep 2: To find 5⁰, divide 5¹ by 5: 5 ÷ 5 = 1.\nResult: 5⁰ = 1."
             }
           }
         },
@@ -3450,8 +3500,13 @@
                   "1"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The base (-6) is grouped in parentheses and raised to power 0.\nStep 2: Any non-zero base raised to power 0 equals 1.\nStep 3: (−6)⁰ = 1.\nResult: 1."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La base (-6) está agrupada en paréntesis y elevada a 0.\nPaso 2: Cualquier base distinta de cero elevada a la potencia 0 es igual a 1.\nPaso 3: (−6)⁰ = 1.\nResultado: 1.",
+              "en": "Step 1: The base (-6) is grouped in parentheses and raised to power 0.\nStep 2: Any non-zero base raised to power 0 equals 1.\nStep 3: (−6)⁰ = 1.\nResult: 1."
             }
           }
         },
@@ -3553,8 +3608,13 @@
                   "1"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Evaluate the first term: 3⁰ = 1.\nStep 2: Evaluate the second term: 3⁰ = 1.\nStep 3: Add both values: 1 + 1 = 2.\nResult: 2."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Evalúa el primer término: 3⁰ = 1.\nPaso 2: Evalúa el segundo término: 3⁰ = 1.\nPaso 3: Suma ambos valores: 1 + 1 = 2.\nResultado: 2.",
+              "en": "Step 1: Evaluate the first term: 3⁰ = 1.\nStep 2: Evaluate the second term: 3⁰ = 1.\nStep 3: Add both values: 1 + 1 = 2.\nResult: 2."
             }
           }
         },
@@ -3674,8 +3734,13 @@
                   "It's a convention"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Decreasing the exponent by 1 repeatedly divides by the base (5).\nStep 2: Stepping down from 5¹ to 5⁰ means dividing: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResult: Because it's 5¹ ÷ 5."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Al decrecer el exponente de uno en uno, se divide repetidamente entre la base (5).\nPaso 2: Pasar de 5¹ a 5⁰ significa dividir: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResultado: Porque es 5¹ ÷ 5 (Because it's 5¹ ÷ 5).",
+              "en": "Step 1: Decreasing the exponent by 1 repeatedly divides by the base (5).\nStep 2: Stepping down from 5¹ to 5⁰ means dividing: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResult: Because it's 5¹ ÷ 5."
             }
           }
         },

@@ -618,7 +618,8 @@ export default function lessonManagerPlugin() {
                             buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
                             buttonTitleFontSize: '1.6rem',
                             buttonOverlayHeight: 38,
-                            showLastSlide: true
+                            showLastSlide: true,
+                            showExplainWhy: true
                         };
                         if (fs.existsSync(settingsFile)) {
                             settings = JSON.parse(fs.readFileSync(settingsFile, 'utf-8'));

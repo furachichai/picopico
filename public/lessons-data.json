@@ -643,8 +643,13 @@
                       "Math where letters stand for numbers"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Algebra is the branch of math where letters (variables) stand for numbers that are unknown or can change, allowing us to describe general rules and patterns."
                   }
+                },
+                "explanation": {
+                  "es": "El álgebra es la rama de las matemáticas donde usamos letras (variables) para representar números desconocidos o que pueden cambiar, permitiéndonos formular reglas y patrones generales.",
+                  "en": "Algebra is the branch of math where letters (variables) stand for numbers that are unknown or can change, allowing us to describe general rules and patterns."
                 }
               }
             }
@@ -845,8 +850,13 @@
                       "29"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The equation p = q₁ + q₂ + ... + q₉₀ sums the portions from percentile 1 through 90.\nStep 2: This represents the bottom 90% of the population.\nStep 3: The top 1% richest holds as much wealth as that 90% combined.\nResult: 90."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La ecuación p = q₁ + q₂ + ... + q₉₀ suma las porciones del percentil 1 al 90.\nPaso 2: Esto representa al 90% de la población.\nPaso 3: El 1% más rico posee tanta riqueza como ese 90% combinado.\nResultado: 90.",
+                  "en": "Step 1: The equation p = q₁ + q₂ + ... + q₉₀ sums the portions from percentile 1 through 90.\nStep 2: This represents the bottom 90% of the population.\nStep 3: The top 1% richest holds as much wealth as that 90% combined.\nResult: 90."
                 }
               }
             },
@@ -1166,8 +1176,13 @@
                       "20"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The given formula is w = 0.8 · m, where w is women's salary and m is men's salary.\nStep 2: Substitute the man's salary: m = 100.\nStep 3: Calculate: w = 0.8 · 100 = 80.\nResult: 80."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La fórmula dada es w = 0.8 · m, donde w es el salario femenino y m el masculino.\nPaso 2: Sustituye el salario del hombre: m = 100.\nPaso 3: Calcula: w = 0.8 · 100 = 80.\nResultado: 80.",
+                  "en": "Step 1: The given formula is w = 0.8 · m, where w is women's salary and m is men's salary.\nStep 2: Substitute the man's salary: m = 100.\nStep 3: Calculate: w = 0.8 · 100 = 80.\nResult: 80."
                 }
               }
             },
@@ -1531,8 +1546,13 @@
                       "Letters look nicer"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Variables allow us to write universal rules and relationships that work for any number, rather than having to calculate every specific case individually."
                   }
+                },
+                "explanation": {
+                  "es": "Las variables nos permiten formular reglas y relaciones universales que funcionan para cualquier valor numérico, en lugar de resolver cada caso por separado.",
+                  "en": "Variables allow us to write universal rules and relationships that work for any number, rather than having to calculate every specific case individually."
                 }
               }
             }
@@ -1702,8 +1722,13 @@
                       "3"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The relationship is j = 300 · l, where j is a jet’s annual emissions and l is an average lifetime of emissions.\nStep 2: Since j equals 300 lifetimes (l), an average person would need to live 300 lifetimes to pollute as much as 1 year of private flying.\nResult: 300."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La relación es j = 300 · l, donde j son las emisiones anuales de un jet y l las emisiones de toda una vida promedio.\nPaso 2: Como j equivale a 300 vidas completas (l), una persona necesitaría vivir 300 vidas de emisiones para igualar un solo año de jet privado.\nResultado: 300.",
+                  "en": "Step 1: The relationship is j = 300 · l, where j is a jet’s annual emissions and l is an average lifetime of emissions.\nStep 2: Since j equals 300 lifetimes (l), an average person would need to live 300 lifetimes to pollute as much as 1 year of private flying.\nResult: 300."
                 }
               }
             },
@@ -2152,8 +2177,13 @@
                       "Confusion"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Algebra takes raw data and reveals the underlying patterns and connections, turning raw numbers into meaningful knowledge."
                   }
+                },
+                "explanation": {
+                  "es": "El álgebra toma datos numéricos y descubre los patrones y conexiones que hay detrás de ellos, transformando datos en conocimiento comprensible y útil.",
+                  "en": "Algebra takes raw data and reveals the underlying patterns and connections, turning raw numbers into meaningful knowledge."
                 }
               }
             }
@@ -2337,8 +2367,13 @@
                       "Only for billionaires and scientists"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Algebra provides logical tools to model real-world situations with variables and find unknown quantities."
                   }
+                },
+                "explanation": {
+                  "es": "El álgebra nos brinda herramientas lógicas para representar situaciones de la vida real mediante variables y resolver para hallar valores desconocidos.",
+                  "en": "Algebra provides logical tools to model real-world situations with variables and find unknown quantities."
                 }
               }
             },
@@ -4633,7 +4668,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La balanza de dos platillos está en perfecto equilibrio.\nPaso 2: En un platillo se encuentra la caja misteriosa y en el otro hay un diamante.\nPaso 3: Al estar equilibrada, ambos lados tienen el mismo peso y valor.\nResultado: El valor de la caja es exactamente un diamante (One diamond).",
+                  "en": "Step 1: The two-pan balance scale is in perfect equilibrium.\nStep 2: One pan holds the mystery crate and the other holds one diamond.\nStep 3: Because the scale is level, both sides have equal weight and value.\nResult: The crate's value is exactly one diamond."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The two-pan balance scale is in perfect equilibrium.\nStep 2: One pan holds the mystery crate and the other holds one diamond.\nStep 3: Because the scale is level, both sides have equal weight and value.\nResult: The crate's value is exactly one diamond."
+                  }
+                }
               }
             },
             {
@@ -4818,7 +4862,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: En la balanza nivelada, el platillo izquierdo contiene x y el platillo derecho contiene una bolsa de dinero.\nPaso 2: Dado que la balanza está equilibrada, el valor de x es igual al contenido del otro platillo.\nResultado: 1 bolsa de dinero (1 bag of money).",
+                  "en": "Step 1: On the level balance, the left pan holds x and the right pan holds one bag of money.\nStep 2: Because the scale is balanced, x equals the opposite pan's weight.\nResult: 1 bag of money."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: On the level balance, the left pan holds x and the right pan holds one bag of money.\nStep 2: Because the scale is balanced, x equals the opposite pan's weight.\nResult: 1 bag of money."
+                  }
+                }
               }
             }
           ],
@@ -5778,7 +5831,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Una variable es un símbolo, normalmente una letra del abecedario, que representa un número que todavía no conocemos o cuyo valor puede cambiar.",
+                  "en": "A variable is a symbol, usually an alphabet letter, that stands in place of a number we do not know yet or whose value can change."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "A variable is a symbol, usually an alphabet letter, that stands in place of a number we do not know yet or whose value can change."
+                  }
+                }
               }
             },
             {
@@ -6531,7 +6593,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Las cajas pesan 12 unidades.\nPaso 2: Al abrirlas, Yara descubre que están repletas de latas de sardinas que pesan exactamente 12.\nResultado: Latas de sardinas (Sardine tins).",
+                  "en": "Step 1: The crates weigh 12 units each.\nStep 2: When pried open, Yara discovers they are filled with sardine tins weighing exactly 12.\nResult: Sardine tins."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The crates weigh 12 units each.\nStep 2: When pried open, Yara discovers they are filled with sardine tins weighing exactly 12.\nResult: Sardine tins."
+                  }
+                }
               }
             }
           ],
@@ -7411,7 +7482,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "El número de días sin accidentes (d) cambia cada día: aumenta en 1 cada jornada segura o se reinicia a 0 si hay un percance. Por eso es una variable cambiante (changing).",
+                  "en": "The number of days without an accident (d) changes each day: it increases by 1 on safe days or resets to 0 if an accident occurs. Thus, it is a changing variable."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "The number of days without an accident (d) changes each day: it increases by 1 on safe days or resets to 0 if an accident occurs. Thus, it is a changing variable."
+                  }
+                }
               }
             },
             {
@@ -7662,7 +7742,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "En el cartel, la letra d siempre representa un valor numérico: el total de días acumulados.",
+                  "en": "On the sign, the letter d always stands for a number: the total count of elapsed days."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "On the sign, the letter d always stands for a number: the total count of elapsed days."
+                  }
+                }
               }
             },
             {
@@ -8055,7 +8144,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "La letra x representa una cantidad secreta que no ha sido revelada, es decir, un número que no conocemos (a number we don't know).",
+                  "en": "The letter x represents a secret quantity that has not been disclosed, meaning a number we don't know."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "The letter x represents a secret quantity that has not been disclosed, meaning a number we don't know."
+                  }
+                }
               }
             },
             {
@@ -8125,7 +8223,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "La variable x es una incógnita (unknown) porque tiene un valor fijo y determinado en esa situación, pero que aún no sabemos.",
+                  "en": "The variable x is an unknown because it has a single, specific value in that situation that we simply do not know yet."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "The variable x is an unknown because it has a single, specific value in that situation that we simply do not know yet."
+                  }
+                }
               }
             },
             {
@@ -8413,7 +8520,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La ecuación es 8,000 · y = 1,000,000,000.\nPaso 2: Hay una sola cantidad fija de años para alcanzar esa meta: y = 1,000,000,000 ÷ 8,000 = 125,000 años.\nPaso 3: Al tener un único valor específico por resolver, y es una incógnita fija (unknown).",
+                  "en": "Step 1: The equation is 8,000 · y = 1,000,000,000.\nStep 2: There is a single exact number of years to reach that goal: y = 1,000,000,000 ÷ 8,000 = 125,000 years.\nStep 3: Because it is a single secret target number to uncover, y is an unknown."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The equation is 8,000 · y = 1,000,000,000.\nStep 2: There is a single exact number of years to reach that goal: y = 1,000,000,000 ÷ 8,000 = 125,000 years.\nStep 3: Because it is a single secret target number to uncover, y is an unknown."
+                  }
+                }
               }
             },
             {
@@ -8497,7 +8613,7 @@
             {
               "id": "el-1790476828583-soxq2r87v",
               "type": "balloon",
-              "content": "It'll take 125.000 years for the average Brazilian worker to become a billionaire.",
+              "content": "It'll take <b>125.000</b> <b>years</b> for the average Brazilian worker to become a <b>billionaire</b>.",
               "x": 68.88888888888889,
               "y": 48.671875,
               "width": 63.33333333333333,
@@ -8554,7 +8670,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "En la fórmula G = 300w, cada trabajador tiene un salario diferente (w). Por tanto, w varía de empleado en empleado: es una variable cambiante (changing).",
+                  "en": "In the formula G = 300w, each worker earns a different salary (w). Therefore, w varies across different employees: it is a changing variable."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "In the formula G = 300w, each worker earns a different salary (w). Therefore, w varies across different employees: it is a changing variable."
+                  }
+                }
               }
             },
             {
@@ -8701,7 +8826,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "En B = 100 - 15h, el tiempo de uso h aumenta a medida que pasan las horas, cambiando de forma continua el nivel de batería B.",
+                  "en": "In B = 100 - 15h, the screen time h increases as hours tick by, continuously changing the battery level B."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "In B = 100 - 15h, the screen time h increases as hours tick by, continuously changing the battery level B."
+                  }
+                }
               }
             },
             {
@@ -9031,7 +9165,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "En álgebra las variables representan cantidades numéricas, por lo que \"a\" representa el número de manzanas que tiene Pesto, no la fruta física.",
+                  "en": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+                  }
+                }
               }
             }
           ],
@@ -9100,7 +9243,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Reemplaza la variable d por su valor numérico 4: 4 + 4.\nPaso 2: Suma: 4 + 4 = 8.\nResultado: 8.",
+                  "en": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+                  }
+                }
               }
             }
           ],
@@ -9168,7 +9320,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Una variable es una letra o símbolo que ocupa el lugar de un número en expresiones y ecuaciones matemáticas.",
+                  "en": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+                  }
+                }
               }
             }
           ],
@@ -9237,7 +9398,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Reemplaza n por 5 en la expresión: 5 + 2.\nPaso 2: Suma: 5 + 2 = 7.\nResultado: 7.",
+                  "en": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+                  }
+                }
               }
             }
           ],
@@ -9305,7 +9475,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Cualquier letra del alfabeto (como x, y, z, a, b, n, d) puede utilizarse como variable en matemáticas.",
+                  "en": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+                  }
+                }
               }
             }
           ],
@@ -9374,7 +9553,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "¡Sí! Por definición, una variable puede tomar distintos valores en diferentes días o situaciones.",
+                  "en": "Yes! By definition, a variable can take different values on different days or under different conditions."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Yes! By definition, a variable can take different values on different days or under different conditions."
+                  }
+                }
               }
             }
           ],
@@ -9442,7 +9630,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Sí, dos letras distintas como x e y pueden coincidir y valer exactamente lo mismo (por ejemplo, x = 4 e y = 4).",
+                  "en": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+                  }
+                }
               }
             }
           ],
@@ -9480,7 +9677,7 @@
       ],
       "author": "User",
       "createdAt": "2026-09-24T18:59:24.845Z",
-      "updatedAt": "2026-10-01T14:12:37.087Z",
+      "updatedAt": "2026-10-01T21:55:30.778Z",
       "path": "lessons/07-Types of variables/lesson.json",
       "textPreset": null,
       "_snapshots": [
@@ -9521,7 +9718,11 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": null
+      "progress": {
+        "lastSlideIndex": 18,
+        "completed": false,
+        "lastPlayed": 1790863944269
+      }
     }
   },
   {
@@ -9610,7 +9811,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "En álgebra las variables representan cantidades numéricas, por lo que \"a\" representa el número de manzanas que tiene Pesto, no la fruta física.",
+                  "en": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+                  }
+                }
               }
             }
           ],
@@ -9680,7 +9890,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Reemplaza la variable d por su valor numérico 4: 4 + 4.\nPaso 2: Suma: 4 + 4 = 8.\nResultado: 8.",
+                  "en": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+                  }
+                }
               }
             }
           ],
@@ -9749,7 +9968,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Una variable es una letra o símbolo que ocupa el lugar de un número en expresiones y ecuaciones matemáticas.",
+                  "en": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+                  }
+                }
               }
             }
           ],
@@ -9819,7 +10047,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Reemplaza n por 5 en la expresión: 5 + 2.\nPaso 2: Suma: 5 + 2 = 7.\nResultado: 7.",
+                  "en": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+                  }
+                }
               }
             }
           ],
@@ -9888,7 +10125,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Cualquier letra del alfabeto (como x, y, z, a, b, n, d) puede utilizarse como variable en matemáticas.",
+                  "en": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+                  }
+                }
               }
             }
           ],
@@ -9958,7 +10204,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "¡Sí! Por definición, una variable puede tomar distintos valores en diferentes días o situaciones.",
+                  "en": "Yes! By definition, a variable can take different values on different days or under different conditions."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Yes! By definition, a variable can take different values on different days or under different conditions."
+                  }
+                }
               }
             }
           ],
@@ -10027,7 +10282,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Sí, dos letras distintas como x e y pueden coincidir y valer exactamente lo mismo (por ejemplo, x = 4 e y = 4).",
+                  "en": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+                  }
+                }
               }
             }
           ],
@@ -10857,7 +11121,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Cada x tiene coeficiente 1: 1x + 1x.\nPaso 2: Suma los coeficientes numéricos: 1 + 1 = 2.\nPaso 3: Conserva la variable: 2x.\nResultado: 2x.",
+                  "en": "Step 1: Each x has an implied coefficient of 1: 1x + 1x.\nStep 2: Add the numeric coefficients: 1 + 1 = 2.\nStep 3: Keep the variable part: 2x.\nResult: 2x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Each x has an implied coefficient of 1: 1x + 1x.\nStep 2: Add the numeric coefficients: 1 + 1 = 2.\nStep 3: Keep the variable part: 2x.\nResult: 2x."
+                  }
+                }
               }
             }
           ],
@@ -11036,7 +11309,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: 2 viales de suero valen x cada uno, lo que da 2x.\nPaso 2: 5 viales de agua valen 1 cada uno, lo que da 5.\nPaso 3: Como 2x y 5 no son términos semejantes, no pueden fusionarse en 7x.\nResultado: 2x + 5.",
+                  "en": "Step 1: 2 serum vials each worth x give 2x.\nStep 2: 5 water vials each worth 1 give 5.\nStep 3: Because 2x and 5 are unlike terms, they cannot merge into 7x.\nResult: 2x + 5."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: 2 serum vials each worth x give 2x.\nStep 2: 5 water vials each worth 1 give 5.\nStep 3: Because 2x and 5 are unlike terms, they cannot merge into 7x.\nResult: 2x + 5."
+                  }
+                }
               }
             }
           ],
@@ -11243,7 +11525,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Agrupa los términos semejantes con x: 2x + 1x = 3x.\nPaso 2: Agrupa los términos semejantes con y: 1y + 1y = 2y.\nPaso 3: Combina ambos grupos: 3x + 2y.\nResultado: 3x + 2y.",
+                  "en": "Step 1: Group like terms with x: 2x + 1x = 3x.\nStep 2: Group like terms with y: 1y + 1y = 2y.\nStep 3: Combine both groups: 3x + 2y.\nResult: 3x + 2y."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Group like terms with x: 2x + 1x = 3x.\nStep 2: Group like terms with y: 1y + 1y = 2y.\nStep 3: Combine both groups: 3x + 2y.\nResult: 3x + 2y."
+                  }
+                }
               }
             }
           ],
@@ -11376,7 +11667,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Los términos semejantes deben compartir exactamente la misma variable y exponente. Tanto 4x como 7x tienen la variable x con exponente 1.",
+                  "en": "Like terms must share the exact same variable with the same exponent. Both 4x and 7x have variable x to the first power."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Like terms must share the exact same variable with the same exponent. Both 4x and 7x have variable x to the first power."
+                  }
+                }
               }
             }
           ],
@@ -11448,7 +11748,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Verifica que ambos términos compartan la misma variable: ambos tienen x.\nPaso 2: Suma sus coeficientes: 3 + 4 = 7.\nPaso 3: Mantén la variable: 7x.\nResultado: 7x.",
+                  "en": "Step 1: Verify both terms share the same variable: both have x.\nStep 2: Add their coefficients: 3 + 4 = 7.\nStep 3: Keep the variable: 7x.\nResult: 7x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Verify both terms share the same variable: both have x.\nStep 2: Add their coefficients: 3 + 4 = 7.\nStep 3: Keep the variable: 7x.\nResult: 7x."
+                  }
+                }
               }
             }
           ],
@@ -11520,7 +11829,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: El término 3x contiene una variable, mientras que 4 es un número constante.\nPaso 2: Al ser términos diferentes (no semejantes), no pueden sumarse en un solo término como 7x.\nResultado: La expresión queda intacta como 3x + 4.",
+                  "en": "Step 1: The term 3x contains a variable, while 4 is a constant number.\nStep 2: Because they are unlike terms, they cannot combine into a single term like 7x.\nResult: The expression stays as 3x + 4."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The term 3x contains a variable, while 4 is a constant number.\nStep 2: Because they are unlike terms, they cannot combine into a single term like 7x.\nResult: The expression stays as 3x + 4."
+                  }
+                }
               }
             }
           ],
@@ -11592,7 +11910,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Suma los términos semejantes con x: 1x + 1x + 1x = 3x.\nPaso 2: El número constante 2 no se puede sumar con 3x.\nResultado: 3x + 2.",
+                  "en": "Step 1: Add the like terms with x: 1x + 1x + 1x = 3x.\nStep 2: The constant 2 cannot combine with 3x.\nResult: 3x + 2."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Add the like terms with x: 1x + 1x + 1x = 3x.\nStep 2: The constant 2 cannot combine with 3x.\nResult: 3x + 2."
+                  }
+                }
               }
             }
           ],
@@ -11664,7 +11991,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Identifica las constantes numéricas semejantes: 5 y 3.\nPaso 2: Suma las constantes: 5 + 3 = 8.\nPaso 3: Junta con el término variable: 2x + 8.\nResultado: 2x + 8.",
+                  "en": "Step 1: Identify the constant like terms: 5 and 3.\nStep 2: Add the constants: 5 + 3 = 8.\nStep 3: Join with the variable term: 2x + 8.\nResult: 2x + 8."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Identify the constant like terms: 5 and 3.\nStep 2: Add the constants: 5 + 3 = 8.\nStep 3: Join with the variable term: 2x + 8.\nResult: 2x + 8."
+                  }
+                }
               }
             }
           ],
@@ -11736,7 +12072,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: 4 viales de suero valen x cada uno = 4x.\nPaso 2: 3 viales de agua valen 1 cada uno = 3.\nPaso 3: Uniendo ambos ingredientes obtenemos 4x + 3.\nResultado: 4x + 3.",
+                  "en": "Step 1: 4 serum vials worth x each = 4x.\nStep 2: 3 water vials worth 1 each = 3.\nStep 3: Combining both ingredients yields 4x + 3.\nResult: 4x + 3."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: 4 serum vials worth x each = 4x.\nStep 2: 3 water vials worth 1 each = 3.\nStep 3: Combining both ingredients yields 4x + 3.\nResult: 4x + 3."
+                  }
+                }
               }
             }
           ],
@@ -12332,7 +12677,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La ecuación es 5y + 15 = 50.\nPaso 2: Para despejar 5y, restamos 15 en ambos lados: 5y = 50 - 15.\nPaso 3: La resta correcta es 50 - 15 = 35.\nPaso 4: El error mostrado en el ejercicio fue escribir 36 en vez de 35.\nResultado: 36 es el error.",
+                  "en": "Step 1: The equation is 5y + 15 = 50.\nStep 2: To isolate 5y, subtract 15 from both sides: 5y = 50 - 15.\nStep 3: The correct subtraction is 50 - 15 = 35.\nStep 4: The mistake in the problem was writing 36 instead of 35.\nResult: 36 is the mistake."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The equation is 5y + 15 = 50.\nStep 2: To isolate 5y, subtract 15 from both sides: 5y = 50 - 15.\nStep 3: The correct subtraction is 50 - 15 = 35.\nStep 4: The mistake in the problem was writing 36 instead of 35.\nResult: 36 is the mistake."
+                  }
+                }
               }
             },
             {
@@ -12462,7 +12816,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Ecuación inicial: 5y + 15 = 50.\nPaso 2: Resta 15 en ambos lados: 5y = 50 - 15.\nPaso 3: 50 - 15 = 35.\nPaso 4: Al continuar, dividimos entre 5: y = 35 ÷ 5 = 7.\nResultado: 35.",
+                  "en": "Step 1: Initial equation: 5y + 15 = 50.\nStep 2: Subtract 15 from both sides: 5y = 50 - 15.\nStep 3: 50 - 15 = 35.\nStep 4: Dividing by 5 confirms: y = 35 ÷ 5 = 7.\nResult: 35."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Initial equation: 5y + 15 = 50.\nStep 2: Subtract 15 from both sides: 5y = 50 - 15.\nStep 3: 50 - 15 = 35.\nStep 4: Dividing by 5 confirms: y = 35 ÷ 5 = 7.\nResult: 35."
+                  }
+                }
               }
             },
             {
@@ -12833,7 +13196,16 @@
                 ],
                 "quizType": "classic",
                 "visualMode": false,
-                "fontWeight": "normal"
+                "fontWeight": "normal",
+                "explanation": {
+                  "es": "Paso 1: En el platillo hay dos cajas marcadas con \"a\" y una pesa de 8.\nPaso 2: Sumando cada elemento: a + a + 8.\nResultado: a+a+8.",
+                  "en": "Step 1: The scale contains two boxes labeled \"a\" and a weight of 8.\nStep 2: Adding each element together gives: a + a + 8.\nResult: a+a+8."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The scale contains two boxes labeled \"a\" and a weight of 8.\nStep 2: Adding each element together gives: a + a + 8.\nResult: a+a+8."
+                  }
+                }
               }
             },
             {
@@ -13059,7 +13431,16 @@
                 ],
                 "quizType": "classic",
                 "visualMode": false,
-                "fontWeight": "normal"
+                "fontWeight": "normal",
+                "explanation": {
+                  "es": "Paso 1: Hay 3 cajas idénticas \"b\", lo que se escribe como 3 · b (o 3b).\nPaso 2: Añadimos la pesa de 6.\nPaso 3: La expresión total es 3 · b + 6.\nResultado: 3·b+6.",
+                  "en": "Step 1: There are 3 identical \"b\" boxes, written as 3 · b (or 3b).\nStep 2: Add the weight of 6.\nStep 3: The full expression is 3 · b + 6.\nResult: 3·b+6."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: There are 3 identical \"b\" boxes, written as 3 · b (or 3b).\nStep 2: Add the weight of 6.\nStep 3: The full expression is 3 · b + 6.\nResult: 3·b+6."
+                  }
+                }
               }
             },
             {
@@ -13327,7 +13708,16 @@
                 ],
                 "quizType": "classic",
                 "visualMode": false,
-                "fontWeight": "normal"
+                "fontWeight": "normal",
+                "explanation": {
+                  "es": "Paso 1: Tenemos una pesa de 12 y dos cajas \"x\", que equivalen a 2x.\nPaso 2: Sumando ambas partes: 12 + 2x.\nResultado: 12+2x.",
+                  "en": "Step 1: We have a weight of 12 and two \"x\" boxes, which equal 2x.\nStep 2: Summing both parts: 12 + 2x.\nResult: 12+2x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: We have a weight of 12 and two \"x\" boxes, which equal 2x.\nStep 2: Summing both parts: 12 + 2x.\nResult: 12+2x."
+                  }
+                }
               }
             },
             {
@@ -13904,7 +14294,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Para no confundir el signo de multiplicar (×) con la letra variable x, en álgebra se coloca el coeficiente pegado a la letra: 4x.",
+                  "en": "To avoid confusing the multiplication symbol (×) with the variable letter x, mathematicians write the coefficient directly next to the variable: 4x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "To avoid confusing the multiplication symbol (×) with the variable letter x, mathematicians write the coefficient directly next to the variable: 4x."
+                  }
+                }
               }
             },
             {
@@ -14903,7 +15302,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Una expresión matemática nunca contiene un signo de igualdad (=).\nPaso 2: 7x + 9 = 16 contiene el signo \"=\", lo cual la convierte en una ecuación, no una expresión.\nResultado: 7x + 9 = 16.",
+                  "en": "Step 1: A mathematical expression never has an equals sign (=).\nStep 2: 7x + 9 = 16 contains an \"=\" sign, making it an equation, not an expression.\nResult: 7x + 9 = 16."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: A mathematical expression never has an equals sign (=).\nStep 2: 7x + 9 = 16 contains an \"=\" sign, making it an equation, not an expression.\nResult: 7x + 9 = 16."
+                  }
+                }
               }
             },
             {
@@ -15475,7 +15883,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Una expresión es una frase matemática formada por variables, números y signos de operación, sin signo de igualdad.",
+                  "en": "An expression is a mathematical phrase composed of variables, numbers, or operators, without an equals sign."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "An expression is a mathematical phrase composed of variables, numbers, or operators, without an equals sign."
+                  }
+                }
               }
             },
             {
@@ -17906,7 +18323,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Cualquier número dividido entre sí mismo es igual a 1 (por ejemplo, 7 ÷ 7 = 1).\nPaso 2: Por lo tanto, para cualquier número n ≠ 0, n/n = 1.\nResultado: 1.",
+                  "en": "Step 1: Any number divided by itself equals 1 (for example, 7 ÷ 7 = 1).\nStep 2: Therefore, for any non-zero number n, n/n = 1.\nResult: 1."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Any number divided by itself equals 1 (for example, 7 ÷ 7 = 1).\nStep 2: Therefore, for any non-zero number n, n/n = 1.\nResult: 1."
+                  }
+                }
               }
             }
           ],
@@ -18094,7 +18520,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: El número 1 es el elemento neutro de la multiplicación.\nPaso 2: Multiplicar cualquier cantidad por 1 no altera su valor: n × 1 = n.\nResultado: n.",
+                  "en": "Step 1: The number 1 is the multiplicative identity.\nStep 2: Multiplying any quantity by 1 leaves it unchanged: n × 1 = n.\nResult: n."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The number 1 is the multiplicative identity.\nStep 2: Multiplying any quantity by 1 leaves it unchanged: n × 1 = n.\nResult: n."
+                  }
+                }
               }
             }
           ],
@@ -18359,7 +18794,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Descompón la fracción: 8x / 8 = (8/8) · x.\nPaso 2: Como 8 ÷ 8 = 1, tenemos 1 · x.\nPaso 3: 1 · x = x.\nResultado: x.",
+                  "en": "Step 1: Decompose the fraction: 8x / 8 = (8/8) · x.\nStep 2: Since 8 ÷ 8 = 1, we have 1 · x.\nStep 3: 1 · x = x.\nResult: x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Decompose the fraction: 8x / 8 = (8/8) · x.\nStep 2: Since 8 ÷ 8 = 1, we have 1 · x.\nStep 3: 1 · x = x.\nResult: x."
+                  }
+                }
               }
             },
             {
@@ -18479,7 +18923,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "8x / 8 es igual a x porque 8 ÷ 8 = 1 (n ÷ n = 1), dejando 1 · x, que es simplemente x.",
+                  "en": "8x / 8 equals x because 8 ÷ 8 = 1 (n ÷ n = 1), leaving 1 · x, which is just x."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "8x / 8 equals x because 8 ÷ 8 = 1 (n ÷ n = 1), leaving 1 · x, which is just x."
+                  }
+                }
               }
             },
             {
@@ -18699,7 +19152,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Separa la expresión: 12x / x = 12 · (x / x).\nPaso 2: Dado que x ÷ x = 1, los términos x se cancelan a 1.\nPaso 3: Multiplica: 12 · 1 = 12.\nResultado: 12.",
+                  "en": "Step 1: Separate the expression: 12x / x = 12 · (x / x).\nStep 2: Since x ÷ x = 1, the x terms cancel to 1.\nStep 3: Multiply: 12 · 1 = 12.\nResult: 12."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Separate the expression: 12x / x = 12 · (x / x).\nStep 2: Since x ÷ x = 1, the x terms cancel to 1.\nStep 3: Multiply: 12 · 1 = 12.\nResult: 12."
+                  }
+                }
               }
             }
           ],
@@ -19415,7 +19877,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Revisa la expresión: 5x + 2y - 8.\nPaso 2: No tiene signo de igualdad (=).\nPaso 3: Por lo tanto, no es una ecuación sino una expresión.\nResultado: Expresión (Expression).",
+                  "en": "Step 1: Check the formula: 5x + 2y - 8.\nStep 2: It does not have an equals sign (=).\nStep 3: Therefore, it is an expression, not an equation.\nResult: Expression."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Check the formula: 5x + 2y - 8.\nStep 2: It does not have an equals sign (=).\nStep 3: Therefore, it is an expression, not an equation.\nResult: Expression."
+                  }
+                }
               }
             },
             {
@@ -19497,7 +19968,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Una expresión matemática es una frase numérica o algebraica que describe un cálculo sin establecer una igualdad.",
+                  "en": "A mathematical expression is a math phrase that describes a calculation without asserting an equality."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "A mathematical expression is a math phrase that describes a calculation without asserting an equality."
+                  }
+                }
               }
             },
             {
@@ -19585,7 +20065,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Las expresiones matemáticas están compuestas por variables (letras), números (constantes) y operadores de cálculo (+, -, ×, ÷).",
+                  "en": "Mathematical expressions are composed of variables, numbers, and operators (+, -, ×, ÷)."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Mathematical expressions are composed of variables, numbers, and operators (+, -, ×, ÷)."
+                  }
+                }
               }
             }
           ],
@@ -20292,7 +20781,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La balanza está en equilibrio.\nPaso 2: La regla de oro del álgebra establece que si quitas o agregas exactamente el mismo peso en ambos lados, el equilibrio se mantiene.\nResultado: Se mantiene equilibrada (stays balanced).",
+                  "en": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+                  }
+                }
               }
             },
             {
@@ -20638,7 +21136,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La balanza está en equilibrio.\nPaso 2: La regla de oro del álgebra establece que si quitas o agregas exactamente el mismo peso en ambos lados, el equilibrio se mantiene.\nResultado: Se mantiene equilibrada (stays balanced).",
+                  "en": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+                  }
+                }
               }
             },
             {
@@ -22579,8 +23086,13 @@
                       "Either, from left to right"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Multiplication and division share equal priority in order of operations.\nStep 2: When both appear in an expression, calculate them strictly from left to right.\nResult: Either, from left to right."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La multiplicación y la división tienen la misma jerarquía de operaciones.\nPaso 2: Cuando aparecen juntas en una expresión, se calculan en orden estricto de izquierda a derecha.\nResultado: Cualquiera, de izquierda a derecha.",
+                  "en": "Step 1: Multiplication and division share equal priority in order of operations.\nStep 2: When both appear in an expression, calculate them strictly from left to right.\nResult: Either, from left to right."
                 }
               }
             }
@@ -22885,8 +23397,13 @@
                       "Either, from left to right"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Addition and subtraction have equal priority in order of operations.\nStep 2: Neither comes first by default; calculate them strictly from left to right.\nResult: Either, from left to right."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La suma y la resta tienen la misma jerarquía de operaciones.\nPaso 2: Ninguna tiene preferencia sobre la otra; se resuelven en orden de izquierda a derecha.\nResultado: Cualquiera, de izquierda a derecha.",
+                  "en": "Step 1: Addition and subtraction have equal priority in order of operations.\nStep 2: Neither comes first by default; calculate them strictly from left to right.\nResult: Either, from left to right."
                 }
               }
             }
@@ -25965,7 +26482,16 @@
                 "quizType": "classic",
                 "visualMode": false,
                 "fontWeight": "bold",
-                "color": "#000000"
+                "color": "#000000",
+                "explanation": {
+                  "es": "PEMDAS es el acrónimo mnemotécnico para el orden de operaciones:\nP: Paréntesis (Parenthesis)\nE: Exponentes (Exponents)\nM: Multiplicación (Multiplication)\nD: División (Division)\nA: Adición / Suma (Addition)\nS: Sustracción / Resta (Subtraction)",
+                  "en": "PEMDAS is the acronym for the order of operations:\nP: Parentheses\nE: Exponents\nM: Multiplication\nD: Division\nA: Addition\nS: Subtraction"
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "PEMDAS is the acronym for the order of operations:\nP: Parentheses\nE: Exponents\nM: Multiplication\nD: Division\nA: Addition\nS: Subtraction"
+                  }
+                }
               }
             },
             {
@@ -26843,8 +27369,13 @@
                       "it combines surgeries"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "It is called a combined operation because it combines two or more different arithmetic operations (+, -, ×, ÷) in a single expression."
                   }
+                },
+                "explanation": {
+                  "es": "Se le llama operación combinada porque combina y reúne dos o más operaciones aritméticas distintas (+, -, ×, ÷) en una misma expresión.",
+                  "en": "It is called a combined operation because it combines two or more different arithmetic operations (+, -, ×, ÷) in a single expression."
                 }
               }
             }
@@ -26932,8 +27463,13 @@
                       "both names are correct"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "A calculation like 2 × 3 + 12 ÷ 4 is both an arithmetic expression and a combined operation. Both names are completely correct."
                   }
+                },
+                "explanation": {
+                  "es": "Un cálculo como 2 × 3 + 12 ÷ 4 es formalmente una expresión aritmética y también una operación combinada. Ambos nombres son totalmente correctos.",
+                  "en": "A calculation like 2 × 3 + 12 ÷ 4 is both an arithmetic expression and a combined operation. Both names are completely correct."
                 }
               }
             }
@@ -28293,8 +28829,13 @@
                       "&gt; &amp; &lt;"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Plus (+) and minus (-) signs divide an expression into separate blocks.\nStep 2: Multiplication and division bind numbers together inside each term.\nResult: + and -."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Los signos de suma (+) y resta (-) dividen la expresión en bloques independientes.\nPaso 2: La multiplicación y la división mantienen los números agrupados dentro de cada término.\nResultado: + y -.",
+                  "en": "Step 1: Plus (+) and minus (-) signs divide an expression into separate blocks.\nStep 2: Multiplication and division bind numbers together inside each term.\nResult: + and -."
                 }
               }
             },
@@ -28380,8 +28921,13 @@
                       "terms"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "The + and - signs divide a mathematical expression into sections called \"terms\"."
                   }
+                },
+                "explanation": {
+                  "es": "Los signos + y - cortan una expresión matemática en partes llamadas \"términos\".",
+                  "en": "The + and - signs divide a mathematical expression into sections called \"terms\"."
                 }
               }
             },
@@ -30465,7 +31011,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Un exponente indica cuántas veces se multiplica un número (la base) por sí mismo. Por ejemplo, 2³ = 2 × 2 × 2 = 8.",
+                  "en": "An exponent tells you how many times a base number is multiplied by itself. For example, 2³ = 2 × 2 × 2 = 8."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "An exponent tells you how many times a base number is multiplied by itself. For example, 2³ = 2 × 2 × 2 = 8."
+                  }
+                }
               }
             },
             {
@@ -32812,8 +33367,13 @@
                       "4"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The dial base is 2.\nStep 2: We want Pesto to be 2 times larger.\nStep 3: 2¹ = 2.\nResult: The exponent must be set to 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La base del dial es 2.\nPaso 2: Queremos que Pesto aumente exactamente 2 veces.\nPaso 3: 2¹ = 2.\nResultado: La potencia debe ser 1.",
+                  "en": "Step 1: The dial base is 2.\nStep 2: We want Pesto to be 2 times larger.\nStep 3: 2¹ = 2.\nResult: The exponent must be set to 1."
                 }
               }
             },
@@ -33138,8 +33698,13 @@
                       "4"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The base is 2 and we want a 4x increase.\nStep 2: Calculating powers of 2: 2² = 2 × 2 = 4.\nResult: The exponent must be set to 2."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La base es 2 y buscamos un aumento de 4 veces.\nPaso 2: Calculamos potencias de 2: 2² = 2 × 2 = 4.\nResultado: La potencia debe ser 2.",
+                  "en": "Step 1: The base is 2 and we want a 4x increase.\nStep 2: Calculating powers of 2: 2² = 2 × 2 = 4.\nResult: The exponent must be set to 2."
                 }
               }
             },
@@ -33400,8 +33965,13 @@
                       "4"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The base is 2 and we want an 8x increase.\nStep 2: 2³ = 2 × 2 × 2 = 8.\nResult: The exponent must be set to 3."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La base es 2 y buscamos un aumento de 8 veces.\nPaso 2: 2³ = 2 × 2 × 2 = 8.\nResultado: La potencia debe ser 3.",
+                  "en": "Step 1: The base is 2 and we want an 8x increase.\nStep 2: 2³ = 2 × 2 × 2 = 8.\nResult: The exponent must be set to 3."
                 }
               }
             },
@@ -34205,8 +34775,13 @@
                       "Results get divided by 2"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Observe the pattern as exponents decrease:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nStep 2: Each step down divides the previous result by the base (2).\nResult: Results get divided by 2."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Observa la secuencia al reducir los exponentes:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nPaso 2: Cada paso hacia abajo divide el resultado anterior entre la base (2).\nResultado: Los resultados se dividen entre 2 (Results get divided by 2).",
+                  "en": "Step 1: Observe the pattern as exponents decrease:\n2³ = 8\n2² = 4 (8 ÷ 2)\n2¹ = 2 (4 ÷ 2)\nStep 2: Each step down divides the previous result by the base (2).\nResult: Results get divided by 2."
                 }
               }
             },
@@ -35457,8 +36032,13 @@
                       "9"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Going down powers of base 4 divides by 4 at each step:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nStep 2: To calculate 4⁰, divide 4¹ by 4:\n4 ÷ 4 = 1.\nResult: 4⁰ = 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Al bajar en exponentes de base 4, cada paso divide entre 4:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nPaso 2: Para calcular 4⁰, dividimos el valor de 4¹ entre 4:\n4 ÷ 4 = 1.\nResultado: 4⁰ = 1.",
+                  "en": "Step 1: Going down powers of base 4 divides by 4 at each step:\n4³ = 64\n4² = 16 (64 ÷ 4)\n4¹ = 4 (16 ÷ 4)\nStep 2: To calculate 4⁰, divide 4¹ by 4:\n4 ÷ 4 = 1.\nResult: 4⁰ = 1."
                 }
               }
             }
@@ -35505,8 +36085,13 @@
                       "7³"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Any non-zero number divided by itself equals 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nStep 2: By exponent laws: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResult: 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Cualquier número no nulo dividido entre sí mismo es igual a 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nPaso 2: Por leyes de exponentes: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResultado: 1.",
+                  "en": "Step 1: Any non-zero number divided by itself equals 1:\n7³ ÷ 7³ = 343 ÷ 343 = 1.\nStep 2: By exponent laws: 7³ ÷ 7³ = 7³⁻³ = 7⁰ = 1.\nResult: 1."
                 }
               }
             },
@@ -35635,8 +36220,13 @@
                       "1"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Universal exponent rule: any non-zero number raised to the power 0 equals 1 (n⁰ = 1).\nStep 2: Since base 913471 is non-zero, 913471⁰ = 1.\nResult: 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Regla universal de exponentes: cualquier número distinto de cero elevado a la potencia 0 es igual a 1 (n⁰ = 1).\nPaso 2: Como la base 913471 no es cero, 913471⁰ = 1.\nResultado: 1.",
+                  "en": "Step 1: Universal exponent rule: any non-zero number raised to the power 0 equals 1 (n⁰ = 1).\nStep 2: Since base 913471 is non-zero, 913471⁰ = 1.\nResult: 1."
                 }
               }
             },
@@ -35700,8 +36290,13 @@
                       "90"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: By the zero exponent rule: n⁰ = 1 for any n ≠ 0.\nStep 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResult: 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Por la regla del exponente cero: n⁰ = 1 para cualquier n ≠ 0.\nPaso 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResultado: 1.",
+                  "en": "Step 1: By the zero exponent rule: n⁰ = 1 for any n ≠ 0.\nStep 2: 8⁰ = 8¹ ÷ 8 = 8 ÷ 8 = 1.\nResult: 1."
                 }
               }
             },
@@ -35836,8 +36431,13 @@
                       "1⁰"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Evaluate each option:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nStep 2: 4¹ equals 4, so it is NOT equal to 1.\nResult: 4¹."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Evalúa cada opción:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nPaso 2: 4¹ es igual a 4, por lo que NO es igual a 1.\nResultado: 4¹.",
+                  "en": "Step 1: Evaluate each option:\n4⁰ = 1\n100⁰ = 1\n1⁰ = 1\n4¹ = 4\nStep 2: 4¹ equals 4, so it is NOT equal to 1.\nResult: 4¹."
                 }
               }
             },
@@ -35901,8 +36501,13 @@
                       "−5"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The sequence of powers divides by 5 at each step:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nStep 2: To find 5⁰, divide 5¹ by 5: 5 ÷ 5 = 1.\nResult: 5⁰ = 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La secuencia de potencias divide entre 5 a cada paso:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nPaso 2: Para hallar 5⁰, dividimos 5¹ entre 5: 5 ÷ 5 = 1.\nResultado: 5⁰ = 1.",
+                  "en": "Step 1: The sequence of powers divides by 5 at each step:\n5³ = 125\n5² = 25 (125 ÷ 5)\n5¹ = 5 (25 ÷ 5)\nStep 2: To find 5⁰, divide 5¹ by 5: 5 ÷ 5 = 1.\nResult: 5⁰ = 1."
                 }
               }
             },
@@ -36006,8 +36611,13 @@
                       "1"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: The base (-6) is grouped in parentheses and raised to power 0.\nStep 2: Any non-zero base raised to power 0 equals 1.\nStep 3: (−6)⁰ = 1.\nResult: 1."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: La base (-6) está agrupada en paréntesis y elevada a 0.\nPaso 2: Cualquier base distinta de cero elevada a la potencia 0 es igual a 1.\nPaso 3: (−6)⁰ = 1.\nResultado: 1.",
+                  "en": "Step 1: The base (-6) is grouped in parentheses and raised to power 0.\nStep 2: Any non-zero base raised to power 0 equals 1.\nStep 3: (−6)⁰ = 1.\nResult: 1."
                 }
               }
             },
@@ -36109,8 +36719,13 @@
                       "1"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Evaluate the first term: 3⁰ = 1.\nStep 2: Evaluate the second term: 3⁰ = 1.\nStep 3: Add both values: 1 + 1 = 2.\nResult: 2."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Evalúa el primer término: 3⁰ = 1.\nPaso 2: Evalúa el segundo término: 3⁰ = 1.\nPaso 3: Suma ambos valores: 1 + 1 = 2.\nResultado: 2.",
+                  "en": "Step 1: Evaluate the first term: 3⁰ = 1.\nStep 2: Evaluate the second term: 3⁰ = 1.\nStep 3: Add both values: 1 + 1 = 2.\nResult: 2."
                 }
               }
             },
@@ -36230,8 +36845,13 @@
                       "It's a convention"
                     ],
                     "matchAnswers": [],
-                    "chatNodes": []
+                    "chatNodes": [],
+                    "explanation": "Step 1: Decreasing the exponent by 1 repeatedly divides by the base (5).\nStep 2: Stepping down from 5¹ to 5⁰ means dividing: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResult: Because it's 5¹ ÷ 5."
                   }
+                },
+                "explanation": {
+                  "es": "Paso 1: Al decrecer el exponente de uno en uno, se divide repetidamente entre la base (5).\nPaso 2: Pasar de 5¹ a 5⁰ significa dividir: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResultado: Porque es 5¹ ÷ 5 (Because it's 5¹ ÷ 5).",
+                  "en": "Step 1: Decreasing the exponent by 1 repeatedly divides by the base (5).\nStep 2: Stepping down from 5¹ to 5⁰ means dividing: 5¹ ÷ 5 = 5 ÷ 5 = 1.\nResult: Because it's 5¹ ÷ 5."
                 }
               }
             },
@@ -37036,7 +37656,16 @@
                 ],
                 "quizType": "classic",
                 "visualMode": false,
-                "autonext": false
+                "autonext": false,
+                "explanation": {
+                  "es": "Paso 1: Los exponentes positivos multiplican y aumentan el tamaño de Pesto (2¹ = 2x, 2² = 4x).\nPaso 2: Un exponente negativo invierte la operación a división: 2⁻¹ = 1/2.\nPaso 3: Al multiplicarse por 1/2, Pesto reduce su tamaño a la mitad.\nResultado: Pesto se hará más pequeño (Pesto will get smaller).",
+                  "en": "Step 1: Positive exponents multiply and enlarge Pesto (2¹ = 2x, 2² = 4x).\nStep 2: A negative exponent inverts to division: 2⁻¹ = 1/2.\nStep 3: Multiplying by 1/2 cuts Pesto’s size in half.\nResult: Pesto will get smaller."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Positive exponents multiply and enlarge Pesto (2¹ = 2x, 2² = 4x).\nStep 2: A negative exponent inverts to division: 2⁻¹ = 1/2.\nStep 3: Multiplying by 1/2 cuts Pesto’s size in half.\nResult: Pesto will get smaller."
+                  }
+                }
               }
             },
             {
@@ -37195,7 +37824,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Un exponente negativo no hace negativo al número, sino que lo invierte en una fracción con exponente positivo: a⁻ⁿ = 1 / aⁿ.\nPaso 2: La respuesta marcada es correcta.",
+                  "en": "Step 1: A negative exponent does not make the number negative; it flips it into a reciprocal with a positive power: a⁻ⁿ = 1 / aⁿ.\nStep 2: The marked answer is correct."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: A negative exponent does not make the number negative; it flips it into a reciprocal with a positive power: a⁻ⁿ = 1 / aⁿ.\nStep 2: The marked answer is correct."
+                  }
+                }
               }
             },
             {
@@ -38581,7 +39219,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Regla del exponente negativo: a⁻¹ = 1 / a¹.\nPaso 2: Sustituye la base 2: 2⁻¹ = 1 / 2¹.\nPaso 3: 2¹ = 2, por lo que 2⁻¹ = 1/2.\nResultado: 1/2.",
+                  "en": "Step 1: Negative exponent rule: a⁻¹ = 1 / a¹.\nStep 2: Substitute base 2: 2⁻¹ = 1 / 2¹.\nStep 3: 2¹ = 2, so 2⁻¹ = 1/2.\nResult: 1/2."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Negative exponent rule: a⁻¹ = 1 / a¹.\nStep 2: Substitute base 2: 2⁻¹ = 1 / 2¹.\nStep 3: 2¹ = 2, so 2⁻¹ = 1/2.\nResult: 1/2."
+                  }
+                }
               }
             },
             {
@@ -38663,7 +39310,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Aplica la regla a⁻ⁿ = 1 / aⁿ.\nPaso 2: Con base 5 y exponente -2: 5⁻² = 1 / 5².\nPaso 3: Calcula 5² = 5 × 5 = 25.\nPaso 4: 1 / 5² = 1/25.\nResultado: 1/25.",
+                  "en": "Step 1: Apply the rule a⁻ⁿ = 1 / aⁿ.\nStep 2: With base 5 and exponent -2: 5⁻² = 1 / 5².\nStep 3: Calculate 5² = 5 × 5 = 25.\nStep 4: 1 / 5² = 1/25.\nResult: 1/25."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Apply the rule a⁻ⁿ = 1 / aⁿ.\nStep 2: With base 5 and exponent -2: 5⁻² = 1 / 5².\nStep 3: Calculate 5² = 5 × 5 = 25.\nStep 4: 1 / 5² = 1/25.\nResult: 1/25."
+                  }
+                }
               }
             },
             {
@@ -38744,7 +39400,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: La regla general indica que a⁻ⁿ = 1 / aⁿ.\nPaso 2: Para 3⁻², invertimos la potencia al denominador con signo positivo: 1 / 3².\nResultado: 1/3².",
+                  "en": "Step 1: The general rule states that a⁻ⁿ = 1 / aⁿ.\nStep 2: For 3⁻², flip the power into the denominator with a positive exponent: 1 / 3².\nResult: 1/3²."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The general rule states that a⁻ⁿ = 1 / aⁿ.\nStep 2: For 3⁻², flip the power into the denominator with a positive exponent: 1 / 3².\nResult: 1/3²."
+                  }
+                }
               }
             },
             {
@@ -38825,7 +39490,16 @@
                   3
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Un exponente negativo significa invertir la base pasando la potencia al denominador con signo positivo: a⁻ⁿ = 1 / aⁿ (Flip to 1 over the positive power).",
+                  "en": "A negative exponent means taking the reciprocal: flip the base to 1 over the positive power: a⁻ⁿ = 1 / aⁿ."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "A negative exponent means taking the reciprocal: flip the base to 1 over the positive power: a⁻ⁿ = 1 / aⁿ."
+                  }
+                }
               }
             }
           ],
@@ -38891,7 +39565,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Aplica la regla: 10⁻³ = 1 / 10³.\nPaso 2: Calcula 10³: 10 × 10 × 10 = 1000.\nPaso 3: 1 / 1000 = 0.001.\nResultado: 1/1000.",
+                  "en": "Step 1: Apply the rule: 10⁻³ = 1 / 10³.\nStep 2: Compute 10³: 10 × 10 × 10 = 1000.\nStep 3: 1 / 1000 = 0.001.\nResult: 1/1000."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Apply the rule: 10⁻³ = 1 / 10³.\nStep 2: Compute 10³: 10 × 10 × 10 = 1000.\nStep 3: 1 / 1000 = 0.001.\nResult: 1/1000."
+                  }
+                }
               }
             },
             {
@@ -39010,7 +39693,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: El monstruo tiene tamaño 2 en la recta y la caja requiere que se reduzca a la mitad (1/2).\nPaso 2: Con base 2 en el dial, el factor 1/2 se obtiene con el exponente -1: 2⁻¹ = 1/2.\nResultado: 2⁻¹.",
+                  "en": "Step 1: The monster has size 2 and needs to be scaled down to half its size (1/2) to fit in the crate.\nStep 2: With base 2 on the dial, a factor of 1/2 is achieved with exponent -1: 2⁻¹ = 1/2.\nResult: 2⁻¹."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The monster has size 2 and needs to be scaled down to half its size (1/2) to fit in the crate.\nStep 2: With base 2 on the dial, a factor of 1/2 is achieved with exponent -1: 2⁻¹ = 1/2.\nResult: 2⁻¹."
+                  }
+                }
               }
             },
             {
@@ -39146,7 +39838,16 @@
                   1
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Calcula 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nPaso 2: Calcula 4⁰: 4⁰ = 1 = 4/4.\nPaso 3: Suma las fracciones: 1/4 + 4/4 = 5/4.\nResultado: 5/4.",
+                  "en": "Step 1: Compute 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nStep 2: Compute 4⁰: 4⁰ = 1 = 4/4.\nStep 3: Add the fractions: 1/4 + 4/4 = 5/4.\nResult: 5/4."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Compute 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nStep 2: Compute 4⁰: 4⁰ = 1 = 4/4.\nStep 3: Add the fractions: 1/4 + 4/4 = 5/4.\nResult: 5/4."
+                  }
+                }
               }
             },
             {
@@ -39228,7 +39929,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: Observa que 16 es igual a 4² (4 × 4 = 16).\nPaso 2: Por lo tanto, 1/16 = 1 / 4².\nPaso 3: Pasando al numerador con exponente negativo: 1 / 4² = 4⁻².\nResultado: 4⁻².",
+                  "en": "Step 1: Notice that 16 equals 4² (4 × 4 = 16).\nStep 2: Therefore, 1/16 = 1 / 4².\nStep 3: Moving to numerator with a negative exponent: 1 / 4² = 4⁻².\nResult: 4⁻²."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: Notice that 16 equals 4² (4 × 4 = 16).\nStep 2: Therefore, 1/16 = 1 / 4².\nStep 3: Moving to numerator with a negative exponent: 1 / 4² = 4⁻².\nResult: 4⁻²."
+                  }
+                }
               }
             },
             {
@@ -39296,7 +40006,16 @@
                   0
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: El monstruo debe reducirse a un tercio (1/3) de su tamaño para entrar en la caja.\nPaso 2: Con base 3 en el dial, el factor 1/3 se genera con el exponente -1: 3⁻¹ = 1/3.\nResultado: 3⁻¹.",
+                  "en": "Step 1: The monster needs to shrink to one third (1/3) of its size to fit the crate.\nStep 2: With dial base 3, a factor of 1/3 is produced by exponent -1: 3⁻¹ = 1/3.\nResult: 3⁻¹."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The monster needs to shrink to one third (1/3) of its size to fit the crate.\nStep 2: With dial base 3, a factor of 1/3 is produced by exponent -1: 3⁻¹ = 1/3.\nResult: 3⁻¹."
+                  }
+                }
               }
             },
             {
@@ -39483,7 +40202,16 @@
                   2
                 ],
                 "quizType": "classic",
-                "visualMode": false
+                "visualMode": false,
+                "explanation": {
+                  "es": "Paso 1: El dial está fijado en 2⁻⁴.\nPaso 2: Regla de exponente negativo: 2⁻⁴ = 1 / 2⁴.\nPaso 3: Calcula 2⁴: 2 × 2 × 2 × 2 = 16.\nPaso 4: 2⁻⁴ = 1/16.\nResultado: 1/16 de su tamaño normal (1/16 times normal).",
+                  "en": "Step 1: The dial is set to 2⁻⁴.\nStep 2: Negative exponent rule: 2⁻⁴ = 1 / 2⁴.\nStep 3: Compute 2⁴: 2 × 2 × 2 × 2 = 16.\nStep 4: 2⁻⁴ = 1/16.\nResult: 1/16 times normal."
+                },
+                "translations": {
+                  "en": {
+                    "explanation": "Step 1: The dial is set to 2⁻⁴.\nStep 2: Negative exponent rule: 2⁻⁴ = 1 / 2⁴.\nStep 3: Compute 2⁴: 2 × 2 × 2 × 2 = 16.\nStep 4: 2⁻⁴ = 1/16.\nResult: 1/16 times normal."
+                  }
+                }
               }
             },
             {

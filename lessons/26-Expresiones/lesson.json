@@ -641,8 +641,13 @@
                   "it combines surgeries"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "It is called a combined operation because it combines two or more different arithmetic operations (+, -, ×, ÷) in a single expression."
               }
+            },
+            "explanation": {
+              "es": "Se le llama operación combinada porque combina y reúne dos o más operaciones aritméticas distintas (+, -, ×, ÷) en una misma expresión.",
+              "en": "It is called a combined operation because it combines two or more different arithmetic operations (+, -, ×, ÷) in a single expression."
             }
           }
         }
@@ -730,8 +735,13 @@
                   "both names are correct"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "A calculation like 2 × 3 + 12 ÷ 4 is both an arithmetic expression and a combined operation. Both names are completely correct."
               }
+            },
+            "explanation": {
+              "es": "Un cálculo como 2 × 3 + 12 ÷ 4 es formalmente una expresión aritmética y también una operación combinada. Ambos nombres son totalmente correctos.",
+              "en": "A calculation like 2 × 3 + 12 ÷ 4 is both an arithmetic expression and a combined operation. Both names are completely correct."
             }
           }
         }

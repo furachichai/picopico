@@ -75,7 +75,8 @@ const Dashboard = () => {
     buttonTitleFontSize: '1.6rem',
     buttonOverlayHeight: 38,
     showStars: true,
-    showLastSlide: true
+    showLastSlide: true,
+    showExplainWhy: true
   });
   const [isMenuSettingsOpen, setIsMenuSettingsOpen] = useState(false);
 

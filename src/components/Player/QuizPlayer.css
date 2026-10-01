@@ -11,6 +11,7 @@
 
 /* CLASSIC MODE */
 .quiz-options-container-classic {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

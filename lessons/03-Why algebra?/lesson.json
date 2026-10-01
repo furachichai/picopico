@@ -344,8 +344,13 @@
                   "Math where letters stand for numbers"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Algebra is the branch of math where letters (variables) stand for numbers that are unknown or can change, allowing us to describe general rules and patterns."
               }
+            },
+            "explanation": {
+              "es": "El álgebra es la rama de las matemáticas donde usamos letras (variables) para representar números desconocidos o que pueden cambiar, permitiéndonos formular reglas y patrones generales.",
+              "en": "Algebra is the branch of math where letters (variables) stand for numbers that are unknown or can change, allowing us to describe general rules and patterns."
             }
           }
         }
@@ -546,8 +551,13 @@
                   "29"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The equation p = q₁ + q₂ + ... + q₉₀ sums the portions from percentile 1 through 90.\nStep 2: This represents the bottom 90% of the population.\nStep 3: The top 1% richest holds as much wealth as that 90% combined.\nResult: 90."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La ecuación p = q₁ + q₂ + ... + q₉₀ suma las porciones del percentil 1 al 90.\nPaso 2: Esto representa al 90% de la población.\nPaso 3: El 1% más rico posee tanta riqueza como ese 90% combinado.\nResultado: 90.",
+              "en": "Step 1: The equation p = q₁ + q₂ + ... + q₉₀ sums the portions from percentile 1 through 90.\nStep 2: This represents the bottom 90% of the population.\nStep 3: The top 1% richest holds as much wealth as that 90% combined.\nResult: 90."
             }
           }
         },
@@ -867,8 +877,13 @@
                   "20"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The given formula is w = 0.8 · m, where w is women's salary and m is men's salary.\nStep 2: Substitute the man's salary: m = 100.\nStep 3: Calculate: w = 0.8 · 100 = 80.\nResult: 80."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La fórmula dada es w = 0.8 · m, donde w es el salario femenino y m el masculino.\nPaso 2: Sustituye el salario del hombre: m = 100.\nPaso 3: Calcula: w = 0.8 · 100 = 80.\nResultado: 80.",
+              "en": "Step 1: The given formula is w = 0.8 · m, where w is women's salary and m is men's salary.\nStep 2: Substitute the man's salary: m = 100.\nStep 3: Calculate: w = 0.8 · 100 = 80.\nResult: 80."
             }
           }
         },
@@ -1232,8 +1247,13 @@
                   "Letters look nicer"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Variables allow us to write universal rules and relationships that work for any number, rather than having to calculate every specific case individually."
               }
+            },
+            "explanation": {
+              "es": "Las variables nos permiten formular reglas y relaciones universales que funcionan para cualquier valor numérico, en lugar de resolver cada caso por separado.",
+              "en": "Variables allow us to write universal rules and relationships that work for any number, rather than having to calculate every specific case individually."
             }
           }
         }
@@ -1403,8 +1423,13 @@
                   "3"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: The relationship is j = 300 · l, where j is a jet’s annual emissions and l is an average lifetime of emissions.\nStep 2: Since j equals 300 lifetimes (l), an average person would need to live 300 lifetimes to pollute as much as 1 year of private flying.\nResult: 300."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La relación es j = 300 · l, donde j son las emisiones anuales de un jet y l las emisiones de toda una vida promedio.\nPaso 2: Como j equivale a 300 vidas completas (l), una persona necesitaría vivir 300 vidas de emisiones para igualar un solo año de jet privado.\nResultado: 300.",
+              "en": "Step 1: The relationship is j = 300 · l, where j is a jet’s annual emissions and l is an average lifetime of emissions.\nStep 2: Since j equals 300 lifetimes (l), an average person would need to live 300 lifetimes to pollute as much as 1 year of private flying.\nResult: 300."
             }
           }
         },
@@ -1853,8 +1878,13 @@
                   "Confusion"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Algebra takes raw data and reveals the underlying patterns and connections, turning raw numbers into meaningful knowledge."
               }
+            },
+            "explanation": {
+              "es": "El álgebra toma datos numéricos y descubre los patrones y conexiones que hay detrás de ellos, transformando datos en conocimiento comprensible y útil.",
+              "en": "Algebra takes raw data and reveals the underlying patterns and connections, turning raw numbers into meaningful knowledge."
             }
           }
         }
@@ -2038,8 +2068,13 @@
                   "Only for billionaires and scientists"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Algebra provides logical tools to model real-world situations with variables and find unknown quantities."
               }
+            },
+            "explanation": {
+              "es": "El álgebra nos brinda herramientas lógicas para representar situaciones de la vida real mediante variables y resolver para hallar valores desconocidos.",
+              "en": "Algebra provides logical tools to model real-world situations with variables and find unknown quantities."
             }
           }
         },

@@ -43,18 +43,82 @@ export default defineConfig({
         ]
       },
       workbox: {
-        // Only precache core application shell (HTML, CSS, JS, SVG, icons)
-        // Images are cached on-demand below to avoid multi-hundred-megabyte downloads on every visit
-        globPatterns: ['**/*.{js,css,html,ico,svg}'],
+        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
+        globPatterns: ['**/*.{js,css,html,ico,svg,woff,woff2,otf}'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/assets/'),
+            // Dynamic lesson and menu data (NetworkFirst ensures fresh content online, immediate offline fallback)
+            urlPattern: ({ url }) =>
+              url.pathname.endsWith('/lessons-data.json') ||
+              url.pathname.endsWith('/menu-settings.json') ||
+              url.pathname.endsWith('/banners.json') ||
+              url.pathname.endsWith('/manifest.webmanifest') ||
+              url.pathname.endsWith('/manifest.json'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pico-data-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Audio & Sound effects
+            urlPattern: ({ url }) =>
+              url.pathname.startsWith('/sounds/') ||
+              /\.(?:mp3|wav|ogg|m4a|aac)$/i.test(url.pathname),
             handler: 'CacheFirst',
             options: {
-              cacheName: 'assets-cache',
+              cacheName: 'pico-sounds-cache',
               expiration: {
-                maxEntries: 150,
+                maxEntries: 60,
+                maxAgeSeconds: 60 * 60 * 24 * 60 // 60 Days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Images, illustrations, characters, stickers, backgrounds
+            urlPattern: ({ url }) =>
+              url.pathname.startsWith('/assets/') ||
+              url.pathname.startsWith('/src/assets/') ||
+              /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/i.test(url.pathname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pico-assets-cache',
+              expiration: {
+                maxEntries: 1000,
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Google Fonts stylesheets
+            urlPattern: ({ url }) => url.origin === 'https://fonts.googleapis.com',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts-stylesheets'
+            }
+          },
+          {
+            // Google Fonts webfont files
+            urlPattern: ({ url }) => url.origin === 'https://fonts.gstatic.com',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 Year
               },
               cacheableResponse: {
                 statuses: [0, 200]

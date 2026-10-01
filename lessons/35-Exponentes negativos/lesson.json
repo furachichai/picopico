@@ -227,7 +227,16 @@
             ],
             "quizType": "classic",
             "visualMode": false,
-            "autonext": false
+            "autonext": false,
+            "explanation": {
+              "es": "Paso 1: Los exponentes positivos multiplican y aumentan el tamaño de Pesto (2¹ = 2x, 2² = 4x).\nPaso 2: Un exponente negativo invierte la operación a división: 2⁻¹ = 1/2.\nPaso 3: Al multiplicarse por 1/2, Pesto reduce su tamaño a la mitad.\nResultado: Pesto se hará más pequeño (Pesto will get smaller).",
+              "en": "Step 1: Positive exponents multiply and enlarge Pesto (2¹ = 2x, 2² = 4x).\nStep 2: A negative exponent inverts to division: 2⁻¹ = 1/2.\nStep 3: Multiplying by 1/2 cuts Pesto’s size in half.\nResult: Pesto will get smaller."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Positive exponents multiply and enlarge Pesto (2¹ = 2x, 2² = 4x).\nStep 2: A negative exponent inverts to division: 2⁻¹ = 1/2.\nStep 3: Multiplying by 1/2 cuts Pesto’s size in half.\nResult: Pesto will get smaller."
+              }
+            }
           }
         },
         {
@@ -386,7 +395,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Un exponente negativo no hace negativo al número, sino que lo invierte en una fracción con exponente positivo: a⁻ⁿ = 1 / aⁿ.\nPaso 2: La respuesta marcada es correcta.",
+              "en": "Step 1: A negative exponent does not make the number negative; it flips it into a reciprocal with a positive power: a⁻ⁿ = 1 / aⁿ.\nStep 2: The marked answer is correct."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: A negative exponent does not make the number negative; it flips it into a reciprocal with a positive power: a⁻ⁿ = 1 / aⁿ.\nStep 2: The marked answer is correct."
+              }
+            }
           }
         },
         {
@@ -1772,7 +1790,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Regla del exponente negativo: a⁻¹ = 1 / a¹.\nPaso 2: Sustituye la base 2: 2⁻¹ = 1 / 2¹.\nPaso 3: 2¹ = 2, por lo que 2⁻¹ = 1/2.\nResultado: 1/2.",
+              "en": "Step 1: Negative exponent rule: a⁻¹ = 1 / a¹.\nStep 2: Substitute base 2: 2⁻¹ = 1 / 2¹.\nStep 3: 2¹ = 2, so 2⁻¹ = 1/2.\nResult: 1/2."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Negative exponent rule: a⁻¹ = 1 / a¹.\nStep 2: Substitute base 2: 2⁻¹ = 1 / 2¹.\nStep 3: 2¹ = 2, so 2⁻¹ = 1/2.\nResult: 1/2."
+              }
+            }
           }
         },
         {
@@ -1854,7 +1881,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Aplica la regla a⁻ⁿ = 1 / aⁿ.\nPaso 2: Con base 5 y exponente -2: 5⁻² = 1 / 5².\nPaso 3: Calcula 5² = 5 × 5 = 25.\nPaso 4: 1 / 5² = 1/25.\nResultado: 1/25.",
+              "en": "Step 1: Apply the rule a⁻ⁿ = 1 / aⁿ.\nStep 2: With base 5 and exponent -2: 5⁻² = 1 / 5².\nStep 3: Calculate 5² = 5 × 5 = 25.\nStep 4: 1 / 5² = 1/25.\nResult: 1/25."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Apply the rule a⁻ⁿ = 1 / aⁿ.\nStep 2: With base 5 and exponent -2: 5⁻² = 1 / 5².\nStep 3: Calculate 5² = 5 × 5 = 25.\nStep 4: 1 / 5² = 1/25.\nResult: 1/25."
+              }
+            }
           }
         },
         {
@@ -1935,7 +1971,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: La regla general indica que a⁻ⁿ = 1 / aⁿ.\nPaso 2: Para 3⁻², invertimos la potencia al denominador con signo positivo: 1 / 3².\nResultado: 1/3².",
+              "en": "Step 1: The general rule states that a⁻ⁿ = 1 / aⁿ.\nStep 2: For 3⁻², flip the power into the denominator with a positive exponent: 1 / 3².\nResult: 1/3²."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The general rule states that a⁻ⁿ = 1 / aⁿ.\nStep 2: For 3⁻², flip the power into the denominator with a positive exponent: 1 / 3².\nResult: 1/3²."
+              }
+            }
           }
         },
         {
@@ -2016,7 +2061,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Un exponente negativo significa invertir la base pasando la potencia al denominador con signo positivo: a⁻ⁿ = 1 / aⁿ (Flip to 1 over the positive power).",
+              "en": "A negative exponent means taking the reciprocal: flip the base to 1 over the positive power: a⁻ⁿ = 1 / aⁿ."
+            },
+            "translations": {
+              "en": {
+                "explanation": "A negative exponent means taking the reciprocal: flip the base to 1 over the positive power: a⁻ⁿ = 1 / aⁿ."
+              }
+            }
           }
         }
       ],
@@ -2082,7 +2136,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Aplica la regla: 10⁻³ = 1 / 10³.\nPaso 2: Calcula 10³: 10 × 10 × 10 = 1000.\nPaso 3: 1 / 1000 = 0.001.\nResultado: 1/1000.",
+              "en": "Step 1: Apply the rule: 10⁻³ = 1 / 10³.\nStep 2: Compute 10³: 10 × 10 × 10 = 1000.\nStep 3: 1 / 1000 = 0.001.\nResult: 1/1000."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Apply the rule: 10⁻³ = 1 / 10³.\nStep 2: Compute 10³: 10 × 10 × 10 = 1000.\nStep 3: 1 / 1000 = 0.001.\nResult: 1/1000."
+              }
+            }
           }
         },
         {
@@ -2201,7 +2264,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: El monstruo tiene tamaño 2 en la recta y la caja requiere que se reduzca a la mitad (1/2).\nPaso 2: Con base 2 en el dial, el factor 1/2 se obtiene con el exponente -1: 2⁻¹ = 1/2.\nResultado: 2⁻¹.",
+              "en": "Step 1: The monster has size 2 and needs to be scaled down to half its size (1/2) to fit in the crate.\nStep 2: With base 2 on the dial, a factor of 1/2 is achieved with exponent -1: 2⁻¹ = 1/2.\nResult: 2⁻¹."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The monster has size 2 and needs to be scaled down to half its size (1/2) to fit in the crate.\nStep 2: With base 2 on the dial, a factor of 1/2 is achieved with exponent -1: 2⁻¹ = 1/2.\nResult: 2⁻¹."
+              }
+            }
           }
         },
         {
@@ -2337,7 +2409,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Calcula 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nPaso 2: Calcula 4⁰: 4⁰ = 1 = 4/4.\nPaso 3: Suma las fracciones: 1/4 + 4/4 = 5/4.\nResultado: 5/4.",
+              "en": "Step 1: Compute 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nStep 2: Compute 4⁰: 4⁰ = 1 = 4/4.\nStep 3: Add the fractions: 1/4 + 4/4 = 5/4.\nResult: 5/4."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Compute 4⁻¹: 4⁻¹ = 1/4 = 0.25.\nStep 2: Compute 4⁰: 4⁰ = 1 = 4/4.\nStep 3: Add the fractions: 1/4 + 4/4 = 5/4.\nResult: 5/4."
+              }
+            }
           }
         },
         {
@@ -2419,7 +2500,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Observa que 16 es igual a 4² (4 × 4 = 16).\nPaso 2: Por lo tanto, 1/16 = 1 / 4².\nPaso 3: Pasando al numerador con exponente negativo: 1 / 4² = 4⁻².\nResultado: 4⁻².",
+              "en": "Step 1: Notice that 16 equals 4² (4 × 4 = 16).\nStep 2: Therefore, 1/16 = 1 / 4².\nStep 3: Moving to numerator with a negative exponent: 1 / 4² = 4⁻².\nResult: 4⁻²."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Notice that 16 equals 4² (4 × 4 = 16).\nStep 2: Therefore, 1/16 = 1 / 4².\nStep 3: Moving to numerator with a negative exponent: 1 / 4² = 4⁻².\nResult: 4⁻²."
+              }
+            }
           }
         },
         {
@@ -2487,7 +2577,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: El monstruo debe reducirse a un tercio (1/3) de su tamaño para entrar en la caja.\nPaso 2: Con base 3 en el dial, el factor 1/3 se genera con el exponente -1: 3⁻¹ = 1/3.\nResultado: 3⁻¹.",
+              "en": "Step 1: The monster needs to shrink to one third (1/3) of its size to fit the crate.\nStep 2: With dial base 3, a factor of 1/3 is produced by exponent -1: 3⁻¹ = 1/3.\nResult: 3⁻¹."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The monster needs to shrink to one third (1/3) of its size to fit the crate.\nStep 2: With dial base 3, a factor of 1/3 is produced by exponent -1: 3⁻¹ = 1/3.\nResult: 3⁻¹."
+              }
+            }
           }
         },
         {
@@ -2674,7 +2773,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: El dial está fijado en 2⁻⁴.\nPaso 2: Regla de exponente negativo: 2⁻⁴ = 1 / 2⁴.\nPaso 3: Calcula 2⁴: 2 × 2 × 2 × 2 = 16.\nPaso 4: 2⁻⁴ = 1/16.\nResultado: 1/16 de su tamaño normal (1/16 times normal).",
+              "en": "Step 1: The dial is set to 2⁻⁴.\nStep 2: Negative exponent rule: 2⁻⁴ = 1 / 2⁴.\nStep 3: Compute 2⁴: 2 × 2 × 2 × 2 = 16.\nStep 4: 2⁻⁴ = 1/16.\nResult: 1/16 times normal."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The dial is set to 2⁻⁴.\nStep 2: Negative exponent rule: 2⁻⁴ = 1 / 2⁴.\nStep 3: Compute 2⁴: 2 × 2 × 2 × 2 = 16.\nStep 4: 2⁻⁴ = 1/16.\nResult: 1/16 times normal."
+              }
+            }
           }
         },
         {

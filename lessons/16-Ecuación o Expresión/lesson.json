@@ -27,7 +27,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Revisa la expresión: 5x + 2y - 8.\nPaso 2: No tiene signo de igualdad (=).\nPaso 3: Por lo tanto, no es una ecuación sino una expresión.\nResultado: Expresión (Expression).",
+              "en": "Step 1: Check the formula: 5x + 2y - 8.\nStep 2: It does not have an equals sign (=).\nStep 3: Therefore, it is an expression, not an equation.\nResult: Expression."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Check the formula: 5x + 2y - 8.\nStep 2: It does not have an equals sign (=).\nStep 3: Therefore, it is an expression, not an equation.\nResult: Expression."
+              }
+            }
           }
         },
         {
@@ -109,7 +118,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Una expresión matemática es una frase numérica o algebraica que describe un cálculo sin establecer una igualdad.",
+              "en": "A mathematical expression is a math phrase that describes a calculation without asserting an equality."
+            },
+            "translations": {
+              "en": {
+                "explanation": "A mathematical expression is a math phrase that describes a calculation without asserting an equality."
+              }
+            }
           }
         },
         {
@@ -197,7 +215,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Las expresiones matemáticas están compuestas por variables (letras), números (constantes) y operadores de cálculo (+, -, ×, ÷).",
+              "en": "Mathematical expressions are composed of variables, numbers, and operators (+, -, ×, ÷)."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Mathematical expressions are composed of variables, numbers, and operators (+, -, ×, ÷)."
+              }
+            }
           }
         }
       ],

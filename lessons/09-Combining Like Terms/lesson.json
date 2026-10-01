@@ -772,7 +772,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Cada x tiene coeficiente 1: 1x + 1x.\nPaso 2: Suma los coeficientes numéricos: 1 + 1 = 2.\nPaso 3: Conserva la variable: 2x.\nResultado: 2x.",
+              "en": "Step 1: Each x has an implied coefficient of 1: 1x + 1x.\nStep 2: Add the numeric coefficients: 1 + 1 = 2.\nStep 3: Keep the variable part: 2x.\nResult: 2x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Each x has an implied coefficient of 1: 1x + 1x.\nStep 2: Add the numeric coefficients: 1 + 1 = 2.\nStep 3: Keep the variable part: 2x.\nResult: 2x."
+              }
+            }
           }
         }
       ],
@@ -951,7 +960,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: 2 viales de suero valen x cada uno, lo que da 2x.\nPaso 2: 5 viales de agua valen 1 cada uno, lo que da 5.\nPaso 3: Como 2x y 5 no son términos semejantes, no pueden fusionarse en 7x.\nResultado: 2x + 5.",
+              "en": "Step 1: 2 serum vials each worth x give 2x.\nStep 2: 5 water vials each worth 1 give 5.\nStep 3: Because 2x and 5 are unlike terms, they cannot merge into 7x.\nResult: 2x + 5."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: 2 serum vials each worth x give 2x.\nStep 2: 5 water vials each worth 1 give 5.\nStep 3: Because 2x and 5 are unlike terms, they cannot merge into 7x.\nResult: 2x + 5."
+              }
+            }
           }
         }
       ],
@@ -1158,7 +1176,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Agrupa los términos semejantes con x: 2x + 1x = 3x.\nPaso 2: Agrupa los términos semejantes con y: 1y + 1y = 2y.\nPaso 3: Combina ambos grupos: 3x + 2y.\nResultado: 3x + 2y.",
+              "en": "Step 1: Group like terms with x: 2x + 1x = 3x.\nStep 2: Group like terms with y: 1y + 1y = 2y.\nStep 3: Combine both groups: 3x + 2y.\nResult: 3x + 2y."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Group like terms with x: 2x + 1x = 3x.\nStep 2: Group like terms with y: 1y + 1y = 2y.\nStep 3: Combine both groups: 3x + 2y.\nResult: 3x + 2y."
+              }
+            }
           }
         }
       ],
@@ -1291,7 +1318,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Los términos semejantes deben compartir exactamente la misma variable y exponente. Tanto 4x como 7x tienen la variable x con exponente 1.",
+              "en": "Like terms must share the exact same variable with the same exponent. Both 4x and 7x have variable x to the first power."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Like terms must share the exact same variable with the same exponent. Both 4x and 7x have variable x to the first power."
+              }
+            }
           }
         }
       ],
@@ -1363,7 +1399,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Verifica que ambos términos compartan la misma variable: ambos tienen x.\nPaso 2: Suma sus coeficientes: 3 + 4 = 7.\nPaso 3: Mantén la variable: 7x.\nResultado: 7x.",
+              "en": "Step 1: Verify both terms share the same variable: both have x.\nStep 2: Add their coefficients: 3 + 4 = 7.\nStep 3: Keep the variable: 7x.\nResult: 7x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Verify both terms share the same variable: both have x.\nStep 2: Add their coefficients: 3 + 4 = 7.\nStep 3: Keep the variable: 7x.\nResult: 7x."
+              }
+            }
           }
         }
       ],
@@ -1435,7 +1480,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: El término 3x contiene una variable, mientras que 4 es un número constante.\nPaso 2: Al ser términos diferentes (no semejantes), no pueden sumarse en un solo término como 7x.\nResultado: La expresión queda intacta como 3x + 4.",
+              "en": "Step 1: The term 3x contains a variable, while 4 is a constant number.\nStep 2: Because they are unlike terms, they cannot combine into a single term like 7x.\nResult: The expression stays as 3x + 4."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The term 3x contains a variable, while 4 is a constant number.\nStep 2: Because they are unlike terms, they cannot combine into a single term like 7x.\nResult: The expression stays as 3x + 4."
+              }
+            }
           }
         }
       ],
@@ -1507,7 +1561,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Suma los términos semejantes con x: 1x + 1x + 1x = 3x.\nPaso 2: El número constante 2 no se puede sumar con 3x.\nResultado: 3x + 2.",
+              "en": "Step 1: Add the like terms with x: 1x + 1x + 1x = 3x.\nStep 2: The constant 2 cannot combine with 3x.\nResult: 3x + 2."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Add the like terms with x: 1x + 1x + 1x = 3x.\nStep 2: The constant 2 cannot combine with 3x.\nResult: 3x + 2."
+              }
+            }
           }
         }
       ],
@@ -1579,7 +1642,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Identifica las constantes numéricas semejantes: 5 y 3.\nPaso 2: Suma las constantes: 5 + 3 = 8.\nPaso 3: Junta con el término variable: 2x + 8.\nResultado: 2x + 8.",
+              "en": "Step 1: Identify the constant like terms: 5 and 3.\nStep 2: Add the constants: 5 + 3 = 8.\nStep 3: Join with the variable term: 2x + 8.\nResult: 2x + 8."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Identify the constant like terms: 5 and 3.\nStep 2: Add the constants: 5 + 3 = 8.\nStep 3: Join with the variable term: 2x + 8.\nResult: 2x + 8."
+              }
+            }
           }
         }
       ],
@@ -1651,7 +1723,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: 4 viales de suero valen x cada uno = 4x.\nPaso 2: 3 viales de agua valen 1 cada uno = 3.\nPaso 3: Uniendo ambos ingredientes obtenemos 4x + 3.\nResultado: 4x + 3.",
+              "en": "Step 1: 4 serum vials worth x each = 4x.\nStep 2: 3 water vials worth 1 each = 3.\nStep 3: Combining both ingredients yields 4x + 3.\nResult: 4x + 3."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: 4 serum vials worth x each = 4x.\nStep 2: 3 water vials worth 1 each = 3.\nStep 3: Combining both ingredients yields 4x + 3.\nResult: 4x + 3."
+              }
+            }
           }
         }
       ],

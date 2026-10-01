@@ -645,7 +645,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "El número de días sin accidentes (d) cambia cada día: aumenta en 1 cada jornada segura o se reinicia a 0 si hay un percance. Por eso es una variable cambiante (changing).",
+              "en": "The number of days without an accident (d) changes each day: it increases by 1 on safe days or resets to 0 if an accident occurs. Thus, it is a changing variable."
+            },
+            "translations": {
+              "en": {
+                "explanation": "The number of days without an accident (d) changes each day: it increases by 1 on safe days or resets to 0 if an accident occurs. Thus, it is a changing variable."
+              }
+            }
           }
         },
         {
@@ -896,7 +905,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "En el cartel, la letra d siempre representa un valor numérico: el total de días acumulados.",
+              "en": "On the sign, the letter d always stands for a number: the total count of elapsed days."
+            },
+            "translations": {
+              "en": {
+                "explanation": "On the sign, the letter d always stands for a number: the total count of elapsed days."
+              }
+            }
           }
         },
         {
@@ -1289,7 +1307,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "La letra x representa una cantidad secreta que no ha sido revelada, es decir, un número que no conocemos (a number we don't know).",
+              "en": "The letter x represents a secret quantity that has not been disclosed, meaning a number we don't know."
+            },
+            "translations": {
+              "en": {
+                "explanation": "The letter x represents a secret quantity that has not been disclosed, meaning a number we don't know."
+              }
+            }
           }
         },
         {
@@ -1359,7 +1386,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "La variable x es una incógnita (unknown) porque tiene un valor fijo y determinado en esa situación, pero que aún no sabemos.",
+              "en": "The variable x is an unknown because it has a single, specific value in that situation that we simply do not know yet."
+            },
+            "translations": {
+              "en": {
+                "explanation": "The variable x is an unknown because it has a single, specific value in that situation that we simply do not know yet."
+              }
+            }
           }
         },
         {
@@ -1647,7 +1683,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: La ecuación es 8,000 · y = 1,000,000,000.\nPaso 2: Hay una sola cantidad fija de años para alcanzar esa meta: y = 1,000,000,000 ÷ 8,000 = 125,000 años.\nPaso 3: Al tener un único valor específico por resolver, y es una incógnita fija (unknown).",
+              "en": "Step 1: The equation is 8,000 · y = 1,000,000,000.\nStep 2: There is a single exact number of years to reach that goal: y = 1,000,000,000 ÷ 8,000 = 125,000 years.\nStep 3: Because it is a single secret target number to uncover, y is an unknown."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The equation is 8,000 · y = 1,000,000,000.\nStep 2: There is a single exact number of years to reach that goal: y = 1,000,000,000 ÷ 8,000 = 125,000 years.\nStep 3: Because it is a single secret target number to uncover, y is an unknown."
+              }
+            }
           }
         },
         {
@@ -1731,7 +1776,7 @@
         {
           "id": "el-1790476828583-soxq2r87v",
           "type": "balloon",
-          "content": "It'll take 125.000 years for the average Brazilian worker to become a billionaire.",
+          "content": "It'll take <b>125.000</b> <b>years</b> for the average Brazilian worker to become a <b>billionaire</b>.",
           "x": 68.88888888888889,
           "y": 48.671875,
           "width": 63.33333333333333,
@@ -1788,7 +1833,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "En la fórmula G = 300w, cada trabajador tiene un salario diferente (w). Por tanto, w varía de empleado en empleado: es una variable cambiante (changing).",
+              "en": "In the formula G = 300w, each worker earns a different salary (w). Therefore, w varies across different employees: it is a changing variable."
+            },
+            "translations": {
+              "en": {
+                "explanation": "In the formula G = 300w, each worker earns a different salary (w). Therefore, w varies across different employees: it is a changing variable."
+              }
+            }
           }
         },
         {
@@ -1935,7 +1989,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "En B = 100 - 15h, el tiempo de uso h aumenta a medida que pasan las horas, cambiando de forma continua el nivel de batería B.",
+              "en": "In B = 100 - 15h, the screen time h increases as hours tick by, continuously changing the battery level B."
+            },
+            "translations": {
+              "en": {
+                "explanation": "In B = 100 - 15h, the screen time h increases as hours tick by, continuously changing the battery level B."
+              }
+            }
           }
         },
         {
@@ -2265,7 +2328,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "En álgebra las variables representan cantidades numéricas, por lo que \"a\" representa el número de manzanas que tiene Pesto, no la fruta física.",
+              "en": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+            },
+            "translations": {
+              "en": {
+                "explanation": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+              }
+            }
           }
         }
       ],
@@ -2334,7 +2406,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Reemplaza la variable d por su valor numérico 4: 4 + 4.\nPaso 2: Suma: 4 + 4 = 8.\nResultado: 8.",
+              "en": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+              }
+            }
           }
         }
       ],
@@ -2402,7 +2483,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Una variable es una letra o símbolo que ocupa el lugar de un número en expresiones y ecuaciones matemáticas.",
+              "en": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+            },
+            "translations": {
+              "en": {
+                "explanation": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+              }
+            }
           }
         }
       ],
@@ -2471,7 +2561,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Reemplaza n por 5 en la expresión: 5 + 2.\nPaso 2: Suma: 5 + 2 = 7.\nResultado: 7.",
+              "en": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+              }
+            }
           }
         }
       ],
@@ -2539,7 +2638,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Cualquier letra del alfabeto (como x, y, z, a, b, n, d) puede utilizarse como variable en matemáticas.",
+              "en": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+              }
+            }
           }
         }
       ],
@@ -2608,7 +2716,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "¡Sí! Por definición, una variable puede tomar distintos valores en diferentes días o situaciones.",
+              "en": "Yes! By definition, a variable can take different values on different days or under different conditions."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Yes! By definition, a variable can take different values on different days or under different conditions."
+              }
+            }
           }
         }
       ],
@@ -2676,7 +2793,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Sí, dos letras distintas como x e y pueden coincidir y valer exactamente lo mismo (por ejemplo, x = 4 e y = 4).",
+              "en": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+              }
+            }
           }
         }
       ],
@@ -2714,7 +2840,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-24T18:59:24.845Z",
-  "updatedAt": "2026-10-01T14:12:37.087Z",
+  "updatedAt": "2026-10-01T21:55:30.778Z",
   "path": "lessons/07-Types of variables/lesson.json",
   "textPreset": null,
   "_snapshots": [
@@ -2755,5 +2881,9 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": null
+  "progress": {
+    "lastSlideIndex": 18,
+    "completed": false,
+    "lastPlayed": 1790863944269
+  }
 }

@@ -262,7 +262,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: La balanza está en equilibrio.\nPaso 2: La regla de oro del álgebra establece que si quitas o agregas exactamente el mismo peso en ambos lados, el equilibrio se mantiene.\nResultado: Se mantiene equilibrada (stays balanced).",
+              "en": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The scale is balanced.\nStep 2: The golden rule of algebra states that removing the exact same weight from both sides preserves balance.\nResult: Stays balanced."
+              }
+            }
           }
         },
         {

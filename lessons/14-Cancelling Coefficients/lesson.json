@@ -319,7 +319,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Cualquier número dividido entre sí mismo es igual a 1 (por ejemplo, 7 ÷ 7 = 1).\nPaso 2: Por lo tanto, para cualquier número n ≠ 0, n/n = 1.\nResultado: 1.",
+              "en": "Step 1: Any number divided by itself equals 1 (for example, 7 ÷ 7 = 1).\nStep 2: Therefore, for any non-zero number n, n/n = 1.\nResult: 1."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Any number divided by itself equals 1 (for example, 7 ÷ 7 = 1).\nStep 2: Therefore, for any non-zero number n, n/n = 1.\nResult: 1."
+              }
+            }
           }
         }
       ],
@@ -507,7 +516,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: El número 1 es el elemento neutro de la multiplicación.\nPaso 2: Multiplicar cualquier cantidad por 1 no altera su valor: n × 1 = n.\nResultado: n.",
+              "en": "Step 1: The number 1 is the multiplicative identity.\nStep 2: Multiplying any quantity by 1 leaves it unchanged: n × 1 = n.\nResult: n."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The number 1 is the multiplicative identity.\nStep 2: Multiplying any quantity by 1 leaves it unchanged: n × 1 = n.\nResult: n."
+              }
+            }
           }
         }
       ],
@@ -772,7 +790,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Descompón la fracción: 8x / 8 = (8/8) · x.\nPaso 2: Como 8 ÷ 8 = 1, tenemos 1 · x.\nPaso 3: 1 · x = x.\nResultado: x.",
+              "en": "Step 1: Decompose the fraction: 8x / 8 = (8/8) · x.\nStep 2: Since 8 ÷ 8 = 1, we have 1 · x.\nStep 3: 1 · x = x.\nResult: x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Decompose the fraction: 8x / 8 = (8/8) · x.\nStep 2: Since 8 ÷ 8 = 1, we have 1 · x.\nStep 3: 1 · x = x.\nResult: x."
+              }
+            }
           }
         },
         {
@@ -892,7 +919,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "8x / 8 es igual a x porque 8 ÷ 8 = 1 (n ÷ n = 1), dejando 1 · x, que es simplemente x.",
+              "en": "8x / 8 equals x because 8 ÷ 8 = 1 (n ÷ n = 1), leaving 1 · x, which is just x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "8x / 8 equals x because 8 ÷ 8 = 1 (n ÷ n = 1), leaving 1 · x, which is just x."
+              }
+            }
           }
         },
         {
@@ -1112,7 +1148,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Separa la expresión: 12x / x = 12 · (x / x).\nPaso 2: Dado que x ÷ x = 1, los términos x se cancelan a 1.\nPaso 3: Multiplica: 12 · 1 = 12.\nResultado: 12.",
+              "en": "Step 1: Separate the expression: 12x / x = 12 · (x / x).\nStep 2: Since x ÷ x = 1, the x terms cancel to 1.\nStep 3: Multiply: 12 · 1 = 12.\nResult: 12."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Separate the expression: 12x / x = 12 · (x / x).\nStep 2: Since x ÷ x = 1, the x terms cancel to 1.\nStep 3: Multiply: 12 · 1 = 12.\nResult: 12."
+              }
+            }
           }
         }
       ],

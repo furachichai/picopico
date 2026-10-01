@@ -341,7 +341,8 @@ const DEFAULT_SETTINGS = {
   buttonOverlayBg: 'rgba(0, 0, 0, 0.68)',
   buttonTitleFontSize: '1.6rem',
   buttonOverlayHeight: 38,
-  showLastSlide: true
+  showLastSlide: true,
+  showExplainWhy: true
 };
 
 const MenuSettingsModal = ({
@@ -357,6 +358,7 @@ const MenuSettingsModal = ({
   const [menuBg, setMenuBg] = useState('#FFFFFF');
   const [showStars, setShowStars] = useState(true);
   const [showLastSlide, setShowLastSlide] = useState(true);
+  const [showExplainWhy, setShowExplainWhy] = useState(true);
   const [buttonBorderColor, setButtonBorderColor] = useState('#000000');
   const [buttonShadowColor, setButtonShadowColor] = useState('#000000');
   const [bannerBorderColor, setBannerBorderColor] = useState('#000000');
@@ -378,6 +380,7 @@ const MenuSettingsModal = ({
       setMenuBg(active.menuBg || '#FFFFFF');
       setShowStars(active.showStars !== undefined ? active.showStars : true);
       setShowLastSlide(active.showLastSlide !== undefined ? active.showLastSlide : true);
+      setShowExplainWhy(active.showExplainWhy !== undefined ? active.showExplainWhy : true);
       setButtonBorderColor(active.buttonBorderColor || '#000000');
       setButtonShadowColor(active.buttonShadowColor || active.buttonBorderColor || '#000000');
       setBannerBorderColor(active.bannerBorderColor || '#000000');
@@ -401,6 +404,7 @@ const MenuSettingsModal = ({
     setMenuBg(DEFAULT_SETTINGS.menuBg);
     setShowStars(DEFAULT_SETTINGS.showStars);
     setShowLastSlide(DEFAULT_SETTINGS.showLastSlide);
+    setShowExplainWhy(DEFAULT_SETTINGS.showExplainWhy);
     setButtonBorderColor(DEFAULT_SETTINGS.buttonBorderColor);
     setButtonShadowColor(DEFAULT_SETTINGS.buttonShadowColor);
     setBannerBorderColor(DEFAULT_SETTINGS.bannerBorderColor);
@@ -421,6 +425,7 @@ const MenuSettingsModal = ({
         menuBg,
         showStars,
         showLastSlide,
+        showExplainWhy,
         buttonBorderColor,
         buttonShadowColor,
         bannerBorderColor,
@@ -1368,6 +1373,36 @@ const MenuSettingsModal = ({
                   />
                   <span style={{ fontSize: '0.82rem', fontWeight: 800, color: showLastSlide ? '#6D28D9' : '#475569' }}>
                     🎬 _last_slide (celebration slide at end of lesson)
+                  </span>
+                </label>
+
+                {/* Explain Why Button Checkbox Toggle */}
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                  marginTop: '8px',
+                  padding: '7px 10px',
+                  backgroundColor: showExplainWhy ? '#F5F3FF' : '#F8FAFC',
+                  borderRadius: '10px',
+                  border: showExplainWhy ? '1.5px solid #8B5CF6' : '1.5px solid #CBD5E1',
+                  transition: 'all 0.15s ease'
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={showExplainWhy}
+                    onChange={e => setShowExplainWhy(e.target.checked)}
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      accentColor: '#8B5CF6',
+                      cursor: 'pointer'
+                    }}
+                  />
+                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: showExplainWhy ? '#6D28D9' : '#475569' }}>
+                    💡 "Explain why" / "¿Por qué?" button on quizzes
                   </span>
                 </label>
               </div>

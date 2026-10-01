@@ -70,7 +70,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "En álgebra las variables representan cantidades numéricas, por lo que \"a\" representa el número de manzanas que tiene Pesto, no la fruta física.",
+              "en": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+            },
+            "translations": {
+              "en": {
+                "explanation": "In algebra, variables represent numerical quantities, so \"a\" stands for the number of apples Pesto has, not the fruit itself."
+              }
+            }
           }
         }
       ],
@@ -140,7 +149,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Reemplaza la variable d por su valor numérico 4: 4 + 4.\nPaso 2: Suma: 4 + 4 = 8.\nResultado: 8.",
+              "en": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Replace the variable d with its numeric value 4: 4 + 4.\nStep 2: Add: 4 + 4 = 8.\nResult: 8."
+              }
+            }
           }
         }
       ],
@@ -209,7 +227,16 @@
               1
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Una variable es una letra o símbolo que ocupa el lugar de un número en expresiones y ecuaciones matemáticas.",
+              "en": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+            },
+            "translations": {
+              "en": {
+                "explanation": "A variable is a letter or symbol that stands in place of a number in mathematical expressions and equations."
+              }
+            }
           }
         }
       ],
@@ -279,7 +306,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Reemplaza n por 5 en la expresión: 5 + 2.\nPaso 2: Suma: 5 + 2 = 7.\nResultado: 7.",
+              "en": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Replace n with 5 in the expression: 5 + 2.\nStep 2: Add: 5 + 2 = 7.\nResult: 7."
+              }
+            }
           }
         }
       ],
@@ -348,7 +384,16 @@
               2
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Cualquier letra del alfabeto (como x, y, z, a, b, n, d) puede utilizarse como variable en matemáticas.",
+              "en": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Any letter of the alphabet (such as x, y, z, a, b, n, d) can be used as a variable in mathematics."
+              }
+            }
           }
         }
       ],
@@ -418,7 +463,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "¡Sí! Por definición, una variable puede tomar distintos valores en diferentes días o situaciones.",
+              "en": "Yes! By definition, a variable can take different values on different days or under different conditions."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Yes! By definition, a variable can take different values on different days or under different conditions."
+              }
+            }
           }
         }
       ],
@@ -487,7 +541,16 @@
               3
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Sí, dos letras distintas como x e y pueden coincidir y valer exactamente lo mismo (por ejemplo, x = 4 e y = 4).",
+              "en": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Yes, two different letters like x and y can happen to share the exact same value (for example, x = 4 and y = 4)."
+              }
+            }
           }
         }
       ],

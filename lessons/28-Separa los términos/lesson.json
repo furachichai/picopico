@@ -305,8 +305,13 @@
                   "&gt; &amp; &lt;"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Plus (+) and minus (-) signs divide an expression into separate blocks.\nStep 2: Multiplication and division bind numbers together inside each term.\nResult: + and -."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: Los signos de suma (+) y resta (-) dividen la expresión en bloques independientes.\nPaso 2: La multiplicación y la división mantienen los números agrupados dentro de cada término.\nResultado: + y -.",
+              "en": "Step 1: Plus (+) and minus (-) signs divide an expression into separate blocks.\nStep 2: Multiplication and division bind numbers together inside each term.\nResult: + and -."
             }
           }
         },
@@ -392,8 +397,13 @@
                   "terms"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "The + and - signs divide a mathematical expression into sections called \"terms\"."
               }
+            },
+            "explanation": {
+              "es": "Los signos + y - cortan una expresión matemática en partes llamadas \"términos\".",
+              "en": "The + and - signs divide a mathematical expression into sections called \"terms\"."
             }
           }
         },

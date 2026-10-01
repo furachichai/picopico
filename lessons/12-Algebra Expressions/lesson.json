@@ -242,7 +242,16 @@
             ],
             "quizType": "classic",
             "visualMode": false,
-            "fontWeight": "normal"
+            "fontWeight": "normal",
+            "explanation": {
+              "es": "Paso 1: En el platillo hay dos cajas marcadas con \"a\" y una pesa de 8.\nPaso 2: Sumando cada elemento: a + a + 8.\nResultado: a+a+8.",
+              "en": "Step 1: The scale contains two boxes labeled \"a\" and a weight of 8.\nStep 2: Adding each element together gives: a + a + 8.\nResult: a+a+8."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The scale contains two boxes labeled \"a\" and a weight of 8.\nStep 2: Adding each element together gives: a + a + 8.\nResult: a+a+8."
+              }
+            }
           }
         },
         {
@@ -468,7 +477,16 @@
             ],
             "quizType": "classic",
             "visualMode": false,
-            "fontWeight": "normal"
+            "fontWeight": "normal",
+            "explanation": {
+              "es": "Paso 1: Hay 3 cajas idénticas \"b\", lo que se escribe como 3 · b (o 3b).\nPaso 2: Añadimos la pesa de 6.\nPaso 3: La expresión total es 3 · b + 6.\nResultado: 3·b+6.",
+              "en": "Step 1: There are 3 identical \"b\" boxes, written as 3 · b (or 3b).\nStep 2: Add the weight of 6.\nStep 3: The full expression is 3 · b + 6.\nResult: 3·b+6."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: There are 3 identical \"b\" boxes, written as 3 · b (or 3b).\nStep 2: Add the weight of 6.\nStep 3: The full expression is 3 · b + 6.\nResult: 3·b+6."
+              }
+            }
           }
         },
         {
@@ -736,7 +754,16 @@
             ],
             "quizType": "classic",
             "visualMode": false,
-            "fontWeight": "normal"
+            "fontWeight": "normal",
+            "explanation": {
+              "es": "Paso 1: Tenemos una pesa de 12 y dos cajas \"x\", que equivalen a 2x.\nPaso 2: Sumando ambas partes: 12 + 2x.\nResultado: 12+2x.",
+              "en": "Step 1: We have a weight of 12 and two \"x\" boxes, which equal 2x.\nStep 2: Summing both parts: 12 + 2x.\nResult: 12+2x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: We have a weight of 12 and two \"x\" boxes, which equal 2x.\nStep 2: Summing both parts: 12 + 2x.\nResult: 12+2x."
+              }
+            }
           }
         },
         {
@@ -1313,7 +1340,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Para no confundir el signo de multiplicar (×) con la letra variable x, en álgebra se coloca el coeficiente pegado a la letra: 4x.",
+              "en": "To avoid confusing the multiplication symbol (×) with the variable letter x, mathematicians write the coefficient directly next to the variable: 4x."
+            },
+            "translations": {
+              "en": {
+                "explanation": "To avoid confusing the multiplication symbol (×) with the variable letter x, mathematicians write the coefficient directly next to the variable: 4x."
+              }
+            }
           }
         },
         {
@@ -2312,7 +2348,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Una expresión matemática nunca contiene un signo de igualdad (=).\nPaso 2: 7x + 9 = 16 contiene el signo \"=\", lo cual la convierte en una ecuación, no una expresión.\nResultado: 7x + 9 = 16.",
+              "en": "Step 1: A mathematical expression never has an equals sign (=).\nStep 2: 7x + 9 = 16 contains an \"=\" sign, making it an equation, not an expression.\nResult: 7x + 9 = 16."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: A mathematical expression never has an equals sign (=).\nStep 2: 7x + 9 = 16 contains an \"=\" sign, making it an equation, not an expression.\nResult: 7x + 9 = 16."
+              }
+            }
           }
         },
         {
@@ -2884,7 +2929,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Una expresión es una frase matemática formada por variables, números y signos de operación, sin signo de igualdad.",
+              "en": "An expression is a mathematical phrase composed of variables, numbers, or operators, without an equals sign."
+            },
+            "translations": {
+              "en": {
+                "explanation": "An expression is a mathematical phrase composed of variables, numbers, or operators, without an equals sign."
+              }
+            }
           }
         },
         {

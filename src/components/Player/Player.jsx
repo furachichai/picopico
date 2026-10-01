@@ -86,6 +86,59 @@ const isOpenManipulative = (cartridge) => {
     return false;
 };
 
+// Helper to extract quiz explanation for current language
+const getQuizExplanation = (quizElement, language) => {
+    if (!quizElement || !quizElement.metadata) return null;
+    const meta = quizElement.metadata;
+    if (meta.explanation) {
+        if (typeof meta.explanation === 'object') {
+            return meta.explanation[language] || meta.explanation.es || meta.explanation.en;
+        }
+        if (typeof meta.explanation === 'string') {
+            if (language !== 'es' && meta.translations?.[language]?.explanation) {
+                return meta.translations[language].explanation;
+            }
+            return meta.explanation;
+        }
+    }
+    if (meta.translations?.[language]?.explanation) {
+        return meta.translations[language].explanation;
+    }
+    return null;
+};
+
+// Formatter for explanation content with support for step cards
+const formatExplanationContent = (rawText) => {
+    if (!rawText) return null;
+    const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+    return (
+        <div className="explanation-steps-container">
+            {lines.map((line, idx) => {
+                const stepMatch = line.match(/^(Paso \d+|Step \d+|Resultado|Result|Conclusión|Conclusion):?\s*(.*)$/i);
+                if (stepMatch) {
+                    const isResult = /^(Resultado|Result|Conclusión|Conclusion)/i.test(stepMatch[1]);
+                    return (
+                        <div key={idx} className={`explanation-step-card ${isResult ? 'result-card' : ''}`}>
+                            <span className="explanation-step-label">{stepMatch[1]}</span>
+                            <span
+                                className="explanation-step-text"
+                                dangerouslySetInnerHTML={{ __html: formatExponents(stepMatch[2]) }}
+                            />
+                        </div>
+                    );
+                }
+                return (
+                    <div
+                        key={idx}
+                        className="explanation-paragraph"
+                        dangerouslySetInnerHTML={{ __html: formatExponents(line) }}
+                    />
+                );
+            })}
+        </div>
+    );
+};
+
 const Player = () => {
     const { state, dispatch } = useEditor();
     const { t } = useTranslation();
@@ -98,6 +151,7 @@ const Player = () => {
         lesson?.id === 'draft-1790691723222';
 
     const [showLastSlideSetting, setShowLastSlideSetting] = useState(true);
+    const [showExplainWhySetting, setShowExplainWhySetting] = useState(true);
     const [celebrationSlideTemplate, setCelebrationSlideTemplate] = useState(null);
     const [orderedLessons, setOrderedLessons] = useState([]);
 
@@ -109,8 +163,13 @@ const Player = () => {
         fetch(isDev ? '/api/menu-settings' : '/menu-settings.json')
             .then(res => res.ok ? res.json() : null)
             .then(data => {
-                if (isMounted && data && typeof data.showLastSlide === 'boolean') {
-                    setShowLastSlideSetting(data.showLastSlide);
+                if (isMounted && data) {
+                    if (typeof data.showLastSlide === 'boolean') {
+                        setShowLastSlideSetting(data.showLastSlide);
+                    }
+                    if (typeof data.showExplainWhy === 'boolean') {
+                        setShowExplainWhySetting(data.showExplainWhy);
+                    }
                 }
             })
             .catch(err => console.error('Error fetching menu-settings in Player:', err));
@@ -171,10 +230,12 @@ const Player = () => {
 
     // Popup state
     const [activePopupText, setActivePopupText] = useState(null);
+    const [activeExplanation, setActiveExplanation] = useState(null);
 
-    // Close open popup when changing slides
+    // Close open popup / explanation when changing slides
     useEffect(() => {
         setActivePopupText(null);
+        setActiveExplanation(null);
     }, [currentSlideIndex]);
 
     const currentSlide = slides[currentSlideIndex];
@@ -1581,6 +1642,20 @@ const Player = () => {
                                                     disabled={isNavigating}
                                                     debugMode={debugMode}
                                                     isActive={index === currentSlideIndex}
+                                                    initialSolved={solvedSlides.has(index)}
+                                                    showExplainWhy={showExplainWhySetting}
+                                                    explanationText={getQuizExplanation(element, language)}
+                                                    buttonLabel={language === 'en' ? 'Explain why' : '¿Por qué?'}
+                                                    onOpenExplanation={(text, title) => {
+                                                        if (autoNextTimeoutRef.current) {
+                                                            clearTimeout(autoNextTimeoutRef.current);
+                                                            autoNextTimeoutRef.current = null;
+                                                        }
+                                                        setActiveExplanation({
+                                                            text: text || getQuizExplanation(element, language),
+                                                            title: title || (language === 'en' ? 'Explain why' : '¿Por qué?')
+                                                        });
+                                                    }}
                                                 />
                                             )}
                                             {element.type === 'game' && (
@@ -1710,6 +1785,30 @@ const Player = () => {
                                         <button className="popup-modal-close" onClick={() => setActivePopupText(null)}>×</button>
                                         <div className="popup-modal-content">
                                             {activePopupText}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Explanation Overlay Modal */}
+                            {index === currentSlideIndex && activeExplanation !== null && (
+                                <div className="explanation-modal-overlay" onClick={() => setActiveExplanation(null)}>
+                                    <div className="explanation-modal-window" onClick={(e) => e.stopPropagation()}>
+                                        <div className="explanation-modal-header">
+                                            <div className="explanation-modal-title">
+                                                <span className="explanation-title-badge">💡</span>
+                                                <span>{language === 'en' ? 'Why is this correct?' : '¿Por qué es correcto?'}</span>
+                                            </div>
+                                            <button
+                                                className="explanation-modal-close"
+                                                onClick={() => setActiveExplanation(null)}
+                                                aria-label="Close"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                        <div className="explanation-modal-content">
+                                            {formatExplanationContent(activeExplanation.text)}
                                         </div>
                                     </div>
                                 </div>

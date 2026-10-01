@@ -895,7 +895,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Una variable es un símbolo, normalmente una letra del abecedario, que representa un número que todavía no conocemos o cuyo valor puede cambiar.",
+              "en": "A variable is a symbol, usually an alphabet letter, that stands in place of a number we do not know yet or whose value can change."
+            },
+            "translations": {
+              "en": {
+                "explanation": "A variable is a symbol, usually an alphabet letter, that stands in place of a number we do not know yet or whose value can change."
+              }
+            }
           }
         },
         {
@@ -1648,7 +1657,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Las cajas pesan 12 unidades.\nPaso 2: Al abrirlas, Yara descubre que están repletas de latas de sardinas que pesan exactamente 12.\nResultado: Latas de sardinas (Sardine tins).",
+              "en": "Step 1: The crates weigh 12 units each.\nStep 2: When pried open, Yara discovers they are filled with sardine tins weighing exactly 12.\nResult: Sardine tins."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The crates weigh 12 units each.\nStep 2: When pried open, Yara discovers they are filled with sardine tins weighing exactly 12.\nResult: Sardine tins."
+              }
+            }
           }
         }
       ],

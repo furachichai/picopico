@@ -238,8 +238,13 @@
                   "Either, from left to right"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Multiplication and division share equal priority in order of operations.\nStep 2: When both appear in an expression, calculate them strictly from left to right.\nResult: Either, from left to right."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La multiplicación y la división tienen la misma jerarquía de operaciones.\nPaso 2: Cuando aparecen juntas en una expresión, se calculan en orden estricto de izquierda a derecha.\nResultado: Cualquiera, de izquierda a derecha.",
+              "en": "Step 1: Multiplication and division share equal priority in order of operations.\nStep 2: When both appear in an expression, calculate them strictly from left to right.\nResult: Either, from left to right."
             }
           }
         }
@@ -544,8 +549,13 @@
                   "Either, from left to right"
                 ],
                 "matchAnswers": [],
-                "chatNodes": []
+                "chatNodes": [],
+                "explanation": "Step 1: Addition and subtraction have equal priority in order of operations.\nStep 2: Neither comes first by default; calculate them strictly from left to right.\nResult: Either, from left to right."
               }
+            },
+            "explanation": {
+              "es": "Paso 1: La suma y la resta tienen la misma jerarquía de operaciones.\nPaso 2: Ninguna tiene preferencia sobre la otra; se resuelven en orden de izquierda a derecha.\nResultado: Cualquiera, de izquierda a derecha.",
+              "en": "Step 1: Addition and subtraction have equal priority in order of operations.\nStep 2: Neither comes first by default; calculate them strictly from left to right.\nResult: Either, from left to right."
             }
           }
         }

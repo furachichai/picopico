@@ -521,7 +521,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: La balanza de dos platillos está en perfecto equilibrio.\nPaso 2: En un platillo se encuentra la caja misteriosa y en el otro hay un diamante.\nPaso 3: Al estar equilibrada, ambos lados tienen el mismo peso y valor.\nResultado: El valor de la caja es exactamente un diamante (One diamond).",
+              "en": "Step 1: The two-pan balance scale is in perfect equilibrium.\nStep 2: One pan holds the mystery crate and the other holds one diamond.\nStep 3: Because the scale is level, both sides have equal weight and value.\nResult: The crate's value is exactly one diamond."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The two-pan balance scale is in perfect equilibrium.\nStep 2: One pan holds the mystery crate and the other holds one diamond.\nStep 3: Because the scale is level, both sides have equal weight and value.\nResult: The crate's value is exactly one diamond."
+              }
+            }
           }
         },
         {
@@ -706,7 +715,16 @@
               0
             ],
             "quizType": "classic",
-            "visualMode": false
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: En la balanza nivelada, el platillo izquierdo contiene x y el platillo derecho contiene una bolsa de dinero.\nPaso 2: Dado que la balanza está equilibrada, el valor de x es igual al contenido del otro platillo.\nResultado: 1 bolsa de dinero (1 bag of money).",
+              "en": "Step 1: On the level balance, the left pan holds x and the right pan holds one bag of money.\nStep 2: Because the scale is balanced, x equals the opposite pan's weight.\nResult: 1 bag of money."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: On the level balance, the left pan holds x and the right pan holds one bag of money.\nStep 2: Because the scale is balanced, x equals the opposite pan's weight.\nResult: 1 bag of money."
+              }
+            }
           }
         }
       ],
