@@ -1,5 +1,5 @@
 {
-  "id": "lessons/22-Intro to PEMDAS/lesson.json",
+  "id": "lessons/25-Intro to PEMDAS/lesson.json",
   "title": "Intro to PEMDAS",
   "slides": [
     {
@@ -47,6 +47,23 @@
           }
         },
         {
+          "id": "el-1790870226900-t2jausb7u",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_shocked.png",
+          "x": 46.111111111111114,
+          "y": 35.9375,
+          "width": 40,
+          "height": 23.02734375,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 23.02734375,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
           "id": "el-1778449663005",
           "type": "balloon",
           "content": "16",
@@ -68,6 +85,23 @@
           }
         },
         {
+          "id": "el-1778449469024",
+          "type": "text",
+          "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
+          "x": 51.25,
+          "y": 19.6875,
+          "width": 39.72222222222222,
+          "height": 10,
+          "rotation": 0,
+          "scale": 2.1335235508432833,
+          "metadata": {
+            "color": "#ce82ff",
+            "fontFamily": "monospace",
+            "fontSize": 25,
+            "backgroundColor": "#ffc800"
+          }
+        },
+        {
           "id": "el-1778449690651",
           "type": "balloon",
           "content": "11",
@@ -86,23 +120,6 @@
               "x": -2,
               "y": 58
             }
-          }
-        },
-        {
-          "id": "el-1778449469024",
-          "type": "text",
-          "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
-          "x": 51.25,
-          "y": 19.6875,
-          "width": 39.72222222222222,
-          "height": 10,
-          "rotation": 0,
-          "scale": 2.1335235508432833,
-          "metadata": {
-            "color": "#ce82ff",
-            "fontFamily": "monospace",
-            "fontSize": 25,
-            "backgroundColor": "#ffc800"
           }
         }
       ],
@@ -205,11 +222,28 @@
           }
         },
         {
+          "id": "el-1790870203972-9khf48hzz",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_shocked.png",
+          "x": 50,
+          "y": 27.65625,
+          "width": 40,
+          "height": 23.02734375,
+          "rotation": 0,
+          "scale": 0.6793453303996223,
+          "metadata": {
+            "width": 40,
+            "height": 23.02734375,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
           "id": "el-1778452577298",
           "type": "balloon",
           "content": "11",
-          "x": 82.08333333333333,
-          "y": 46.25,
+          "x": 84.02777777777777,
+          "y": 46.5625,
           "width": 27.500000000000004,
           "height": 12.5,
           "rotation": 0,
@@ -366,11 +400,11 @@
         {
           "id": "el-1778451447261",
           "type": "balloon",
-          "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= <b><font color=\"#9333ea\">11</font></b>",
-          "x": 67.3611111111111,
-          "y": 46.09375,
-          "width": 68.61111111111113,
-          "height": 14.6875,
+          "content": "5+<font color=\"#ce82ff\">3x2</font><div>= 5+<font color=\"#ce82ff\">6</font></div><div>= <b><font color=\"#9333ea\">11</font></b></div>",
+          "x": 26.944444444444443,
+          "y": 32.890625,
+          "width": 35.833333333333364,
+          "height": 23.59375,
           "rotation": 0,
           "scale": 1,
           "metadata": {
@@ -379,18 +413,24 @@
             "fontFamily": "monospace",
             "fontSize": 24,
             "tailPos": {
-              "x": 8,
-              "y": 63
-            }
+              "x": 1,
+              "y": 119
+            },
+            "tailOrigin": {
+              "edge": "bottom",
+              "offset": 0.609090909090909,
+              "angle": 1.3112272594020689
+            },
+            "textAlign": "left"
           }
         },
         {
           "id": "el-1778451128684",
           "type": "balloon",
           "content": "5+3<font color=\"#000000\">x2=</font><div>8<font color=\"#000000\">x2=</font></div><div><b><font color=\"#9333ea\">16</font></b></div>",
-          "x": 34.72222222222222,
-          "y": 25.46875,
-          "width": 68.8888888888889,
+          "x": 76.52777777777779,
+          "y": 36.71875,
+          "width": 41.94444444444445,
           "height": 23.4375,
           "rotation": 0,
           "scale": 1,
@@ -400,8 +440,8 @@
             "fontFamily": "monospace",
             "fontSize": 24,
             "tailPos": {
-              "x": -32,
-              "y": 110
+              "x": -15,
+              "y": 113
             }
           }
         }
@@ -484,27 +524,34 @@
     },
     {
       "id": "slide-1778453102804",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
-          "id": "el-1778453116073",
+          "id": "el-1790869872122-cs05lpyyi",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790870166142-602i5capx",
           "type": "image",
-          "content": "/src/assets/characters/chef%20with%20ice%20cream%20cone.png?t=1778452495183",
-          "x": 30.833333333333332,
-          "y": 58.90625,
+          "content": "/src/assets/characters/yara_ray_gun_yara_half_body_epic_.png",
+          "x": 50,
+          "y": 78.75,
           "width": 40,
-          "height": 58.318739054290724,
+          "height": 22.34302325581395,
           "rotation": 0,
-          "scale": 1.3049954822663998,
+          "scale": 3.8120801102302138,
           "metadata": {
             "width": 40,
-            "height": 58.318739054290724
+            "height": 22.34302325581395,
+            "category": "characters"
           }
         },
         {
           "id": "el-1778453122998",
           "type": "balloon",
-          "content": "If everyone got different results, bridges would fall and rockets would miss the moon.",
+          "content": "If everyone got <b>different</b> <b>results</b>, bridges would fall and rockets would miss the moon.",
           "x": 68.61111111111111,
           "y": 30.3125,
           "width": 50,
@@ -517,38 +564,40 @@
             "fontFamily": "monospace",
             "fontSize": 16,
             "tailPos": {
-              "x": -107,
-              "y": 1
+              "x": -108,
+              "y": 27
             }
           }
         }
       ],
-      "order": 7
+      "order": 7,
+      "backgroundSettings": {}
     },
     {
       "id": "slide-1778453153922",
-      "background": "#E1F5FE",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
       "elements": [
         {
-          "id": "el-1778453163112",
+          "id": "el-1790870148970-9q3dcvj9s",
           "type": "image",
-          "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
-          "x": 45.83333333333332,
-          "y": 62.03125,
+          "content": "/src/assets/characters/yara_explains_down.png",
+          "x": 32.22222222222222,
+          "y": 59.53125,
           "width": 40,
-          "height": 30.809659090909093,
+          "height": 37.78103044496487,
           "rotation": 0,
-          "scale": 2.5681461438141,
+          "scale": 2.043921074681268,
           "metadata": {
             "width": 40,
-            "height": 30.809659090909093,
-            "locked": true
+            "height": 37.78103044496487,
+            "category": "characters",
+            "flipX": true
           }
         },
         {
           "id": "el-1778453169358",
           "type": "balloon",
-          "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
+          "content": "<div><br></div>For everybody to get the <b>same</b> <b>result</b>,<div>we <b>agree</b> on a set of <b>rules</b>.<div><br></div></div>",
           "x": 70.41666666666666,
           "y": 23.75,
           "width": 59.166666666666664,
@@ -569,7 +618,7 @@
         {
           "id": "el-1778453225745",
           "type": "balloon",
-          "content": "<div>It's called</div><div>PEMDAS</div>",
+          "content": "<div>It's called</div><div><b>PEMDAS</b></div>",
           "x": 76.80555555555556,
           "y": 69.21875,
           "width": 43.05555555555556,
@@ -588,7 +637,8 @@
           }
         }
       ],
-      "order": 8
+      "order": 8,
+      "backgroundSettings": {}
     },
     {
       "id": "slide-1778453284631",
@@ -616,7 +666,7 @@
           "type": "quiz",
           "content": "Quiz",
           "x": 50,
-          "y": 81.09375,
+          "y": 77.65625,
           "width": 20,
           "height": 10,
           "rotation": 0,
@@ -659,12 +709,166 @@
         "grayscale": true,
         "tintColor": "rgba(253, 164, 175, 0.4)"
       }
+    },
+    {
+      "id": "slide-1790869896708-0-uhdjvo",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790869896708-gy0clsyc7",
+          "type": "banner",
+          "content": "<br> 😅",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790869896708-jzwmvzlns",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 25.703125,
+          "width": 51,
+          "height": 10.165172329982045,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1790869896708-9hk803jnw",
+          "type": "banner",
+          "content": "<br>",
+          "x": 49.98424953884548,
+          "y": 64.921875,
+          "width": 51,
+          "height": 46.293558381838835,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790869896708-qnidmu3c6",
+          "type": "text",
+          "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">2 + 3² ÷ 5 × 4</span></font>",
+          "x": 50,
+          "y": 25.625,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 14,
+            "color": "#000000",
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1790869896708-bbbzp7cqh",
+          "type": "text",
+          "content": "<div>In order for <b>everybody</b> to always get the <b>same</b> <b>result</b>, we have <b>agreed</b> on a set of <b>rules</b> that apply to the <b>Order of Operations</b>.</div><div><br></div><div>These rules are sometimes called <b>PEMDAS</b> (<b>P</b>arenthesis, <b>E</b>xponents, <b>M</b>ultiplication, <b>D</b>ivision, <b>A</b>ddition, <b>S</b>ubtraction)</div>",
+          "x": 50,
+          "y": 64.0625,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790869896708-zww8hoc0m",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> PEMDAS </span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        }
+      ],
+      "order": 10,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
     }
   ],
   "author": "User",
   "createdAt": "2026-05-10T21:44:26.467Z",
-  "updatedAt": "2026-09-29T15:50:26.540Z",
-  "path": "lessons/22-Intro to PEMDAS/lesson.json",
+  "updatedAt": "2026-10-01T15:57:14.437Z",
+  "path": "lessons/25-Intro to PEMDAS/lesson.json",
   "textPreset": null,
   "subject": "Math",
   "topic": "PEMDAS",
@@ -672,10 +876,10 @@
   "chapterName": "Chapter: Intro",
   "lessonId": "00",
   "visible": true,
-  "name": "22-Intro to PEMDAS",
+  "name": "25-Intro to PEMDAS",
   "type": "file",
   "description": "",
-  "order": 22,
+  "order": 25,
   "status": "active",
   "icon": "icon_gym.png",
   "progress": null,

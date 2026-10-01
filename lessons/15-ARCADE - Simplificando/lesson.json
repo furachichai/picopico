@@ -1,5 +1,5 @@
 {
-  "id": "draft-1790800961033",
+  "id": "lessons/15-ARCADE - Simplificando/lesson.json",
   "title": "ARCADE - Simplificando",
   "slides": [
     {
@@ -24,12 +24,58 @@
       "backgroundSettings": {
         "opacity": 0.25
       }
+    },
+    {
+      "id": "slide-1790868606916",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790868615712-eicnojmk0",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 57.5,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontWeight": "600",
+            "options": [
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">2a</span><span class=\"pico-fraction-den\">2</span></span>",
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">x<sup>2</sup></span><span class=\"pico-fraction-den\">x</span></span>",
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">x<sup>3</sup></span><span class=\"pico-fraction-den\">x</span></span>",
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">4X</span><span class=\"pico-fraction-den\">2X</span></span>",
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">15X</span><span class=\"pico-fraction-den\">5</span></span>",
+              "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">2XY</span><span class=\"pico-fraction-den\">Y</span></span>"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "conecta",
+            "visualMode": false,
+            "matchAnswers": [
+              "a",
+              "x",
+              "x²",
+              "2",
+              "3X",
+              "2X"
+            ],
+            "autonext": true
+          }
+        }
+      ],
+      "order": 2,
+      "autonext": true
     }
   ],
   "author": "User",
   "createdAt": "2026-09-30T20:42:41.033Z",
-  "updatedAt": "2026-09-30T20:43:49.893Z",
-  "path": "lessons/01-ARCADE - Simplificando/lesson.json",
+  "updatedAt": "2026-10-01T15:34:55.024Z",
+  "path": "lessons/15-ARCADE - Simplificando/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -46,5 +92,23 @@
     "y": -4
   },
   "visible": true,
-  "visibleInFeed": true
+  "visibleInFeed": true,
+  "name": "15-ARCADE - Simplificando",
+  "type": "file",
+  "order": 15,
+  "status": "completed",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 1,
+    "completed": true,
+    "lastPlayed": 1790867955862
+  }
 }

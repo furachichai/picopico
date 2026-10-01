@@ -1,5 +1,5 @@
 {
-  "id": "lessons/27-exponents/lesson.json",
+  "id": "lessons/31-exponents/lesson.json",
   "title": "exponents",
   "slides": [
     {
@@ -298,6 +298,24 @@
           }
         },
         {
+          "id": "el-1790870503680-pinphoa00",
+          "type": "image",
+          "content": "/src/assets/characters/yara_looking_at_paper.png",
+          "x": 15.833333333333336,
+          "y": 65.3125,
+          "width": 40,
+          "height": 48.07377049180328,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 40,
+            "height": 48.07377049180328,
+            "category": "characters",
+            "flipX": true,
+            "manualZ": true
+          }
+        },
+        {
           "id": "el-1779848749123-atm370ouj",
           "type": "line",
           "x": 52,
@@ -419,22 +437,6 @@
             "textAlign": "center",
             "fontFamily": "\"Fira Sans\"",
             "fontSize": 10
-          }
-        },
-        {
-          "id": "el-1790694295734-csaz0n4qw",
-          "type": "image",
-          "content": "/src/assets/characters/yara_explains_02_1.png",
-          "x": 13.055555555555557,
-          "y": 69.375,
-          "width": 40,
-          "height": 63.88392857142857,
-          "rotation": 0,
-          "scale": 1,
-          "metadata": {
-            "width": 40,
-            "height": 63.88392857142857,
-            "category": "characters"
           }
         },
         {
@@ -815,9 +817,9 @@
           "id": "el-1780582475515-ofz43ixm5",
           "type": "text",
           "content": "<b>RULES</b>",
-          "x": 48.61111111111111,
+          "x": 47.916666666666664,
           "y": 31.40625,
-          "width": 10,
+          "width": 14.514148251274564,
           "height": 5,
           "rotation": 0,
           "scale": 2.153722403662122,
@@ -968,17 +970,21 @@
   ],
   "author": "User",
   "createdAt": "2026-05-26T20:41:51.156Z",
-  "updatedAt": "2026-09-29T15:05:40.082Z",
-  "path": "lessons/27-exponents/lesson.json",
+  "updatedAt": "2026-10-01T16:02:09.466Z",
+  "path": "lessons/31-exponents/lesson.json",
   "textPreset": null,
-  "name": "27-exponents",
+  "name": "31-exponents",
   "type": "file",
   "description": "",
   "visible": true,
-  "order": 27,
-  "status": "active",
+  "order": 31,
+  "status": "completed",
   "icon": "icon_textbook.png",
-  "progress": null,
+  "progress": {
+    "lastSlideIndex": 11,
+    "completed": true,
+    "lastPlayed": 1790870463330
+  },
   "cardColor": "#8B5CF6",
   "translations": {
     "en": {

@@ -1,5 +1,5 @@
 {
-  "id": "lessons/02-Pociones - Parte 2/lesson.json",
+  "id": "lessons/22-Pociones - Parte 2/lesson.json",
   "title": "Pociones - Parte 2",
   "slides": [
     {
@@ -138,7 +138,7 @@
         {
           "id": "el-1780582247743-pl7163enq",
           "type": "text",
-          "content": "<b>× </b>o<b> ÷ </b><div>de izquierda a derecha</div>",
+          "content": "<b>× </b>ó<b> ÷ </b><div>de izquierda a derecha</div>",
           "x": 47.77777777777777,
           "y": 64.0625,
           "width": 68.33333333333333,
@@ -160,7 +160,7 @@
         {
           "id": "el-1780582247743-9u9so77o2",
           "type": "text",
-          "content": "<font color=\"#969696\"><b>+ </b>o<b> - </b><br></font><div><font color=\"#969696\">de izquierda a derecha</font></div>",
+          "content": "<font color=\"#969696\"><b>+ </b>ó<b> - </b><br></font><div><font color=\"#969696\">de izquierda a derecha</font></div>",
           "x": 48.05555555555555,
           "y": 78.90625,
           "width": 68.33333333333333,
@@ -198,7 +198,7 @@
         {
           "id": "el-1780588266159",
           "type": "balloon",
-          "content": "<b>Primero</b><div>hacemos<b> ÷ </b>o<b> ×</b></div>",
+          "content": "<b>Primero</b><div>hacemos</div><div><b>todos</b> los<b>&nbsp;</b></div><div><b>÷ </b>ó<b> ×</b></div>",
           "x": 47.36111111111112,
           "y": 44.84375,
           "width": 56.94444444444444,
@@ -217,7 +217,7 @@
           },
           "translations": {
             "en": {
-              "content": "<b>First</b><div>we do<b> ÷ </b>or<b> ×</b></div>"
+              "content": "<b>First</b><div>we do</div><div><b>all the</b></div><div><b> ÷ </b>or<b> ×</b></div>"
             }
           }
         }
@@ -351,7 +351,7 @@
         {
           "id": "el-1780588303754-d6fj6nvzy",
           "type": "balloon",
-          "content": "<b>luego</b><br><div>hacemos <b>-</b> o <b>+</b></div>",
+          "content": "<b>then</b>,<div><b>all</b> the<br><div><b>-</b> or <b>+</b></div></div>",
           "x": 30.416666666666668,
           "y": 50.15625,
           "width": 56.94444444444444,
@@ -370,7 +370,7 @@
           },
           "translations": {
             "en": {
-              "content": "<b>then</b>,<br><div><b>-</b> or <b>+</b></div>"
+              "content": "<b>then</b>,<div><b>all</b> the<br><div><b>-</b> or <b>+</b></div></div>"
             }
           }
         }
@@ -535,8 +535,8 @@
             "fontFamily": "Verdana, Arial, sans-serif",
             "options": [
               "Analiza toda la serie",
-              "Pulsa × ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
-              "Pulsa + ó -"
+              "Todos los × ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+              "Todos los + ó -"
             ],
             "correctIndex": 0,
             "correctIndices": [
@@ -548,8 +548,8 @@
               "en": {
                 "options": [
                   "Analyze whole expression",
-                  "x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
-                  "+ or -"
+                  "All the x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+                  "All the + or -"
                 ],
                 "matchAnswers": [],
                 "chatNodes": []
@@ -674,8 +674,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-06-22T22:36:12.723Z",
-  "path": "lessons/02-Pociones - Parte 2/lesson.json",
+  "updatedAt": "2026-10-01T15:46:18.835Z",
+  "path": "lessons/22-Pociones - Parte 2/lesson.json",
   "textPreset": null,
   "subject": "Math",
   "topic": "PEMDAS",
@@ -683,17 +683,13 @@
   "chapterName": "Magic",
   "lessonId": "01",
   "visible": true,
-  "name": "02-Pociones - Parte 2",
+  "name": "22-Pociones - Parte 2",
   "type": "file",
   "description": "Mezcla +-×÷ en el orden correcto",
-  "order": 2,
+  "order": 22,
   "status": "active",
   "icon": "icon_potion.png",
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1782167743819
-  },
+  "progress": null,
   "translations": {
     "en": {
       "title": "Pociones - Part 2",
@@ -707,5 +703,14 @@
     "zoom": 1,
     "x": 0,
     "y": -32.4
+  },
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
   }
 }

@@ -1,5 +1,5 @@
 {
-  "id": "lessons/21-Expresiones/lesson.json",
+  "id": "lessons/26-Expresiones/lesson.json",
   "title": "Expresiones",
   "slides": [
     {
@@ -47,7 +47,7 @@
         {
           "id": "el-1779402747197",
           "type": "balloon",
-          "content": "Mi nombre es Yara.",
+          "content": "My name is <b>Yara</b>.",
           "x": 50.41666666666667,
           "y": 21.09375,
           "width": 45.27777777777778,
@@ -66,14 +66,14 @@
           },
           "translations": {
             "en": {
-              "content": "My name is Chef"
+              "content": "My name is <b>Yara</b>."
             }
           }
         },
         {
           "id": "el-1779402757661",
           "type": "balloon",
-          "content": "¡Y yo Pesto!",
+          "content": "My name is <b>Pesto</b>!",
           "x": 78.33333333333334,
           "y": 45.3125,
           "width": 40,
@@ -84,7 +84,7 @@
             "backgroundColor": "#ffffff",
             "color": "#000000",
             "fontFamily": "\"Noto Sans\"",
-            "fontSize": 16,
+            "fontSize": 20,
             "tailPos": {
               "x": 3,
               "y": 79
@@ -92,14 +92,14 @@
           },
           "translations": {
             "en": {
-              "content": "My name is Pesto!"
+              "content": "My name is <b>Pesto</b>!"
             }
           }
         },
         {
           "id": "el-1790696096548-lltsris7u",
           "type": "balloon",
-          "content": "Soy Kranky.",
+          "content": "I'm <b>Kranky</b>.",
           "x": 17.5,
           "y": 33.671875,
           "width": 40,
@@ -127,7 +127,7 @@
           },
           "translations": {
             "en": {
-              "content": "I'm Kranky."
+              "content": "I'm <b>Kranky</b>."
             }
           }
         }
@@ -410,7 +410,7 @@
         {
           "id": "el-1779302354058",
           "type": "balloon",
-          "content": "En matemática me llamo \"expresión\".",
+          "content": "In math they call me an <b>expression</b>.",
           "x": 67.5,
           "y": 65.3125,
           "width": 40,
@@ -429,7 +429,7 @@
           },
           "translations": {
             "en": {
-              "content": "In math they call me an expression."
+              "content": "In math they call me an <b>expression</b>."
             }
           }
         },
@@ -1036,21 +1036,17 @@
   ],
   "author": "User",
   "createdAt": "2026-05-20T18:37:37.224Z",
-  "updatedAt": "2026-09-29T15:41:58.690Z",
-  "path": "lessons/21-Expresiones/lesson.json",
+  "updatedAt": "2026-10-01T15:58:17.090Z",
+  "path": "lessons/26-Expresiones/lesson.json",
   "textPreset": null,
-  "name": "21-Expresiones",
+  "name": "26-Expresiones",
   "type": "file",
   "description": "",
   "visible": true,
-  "order": 21,
+  "order": 26,
   "status": "active",
   "icon": "icon_gym.png",
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1790696057715
-  },
+  "progress": null,
   "translations": {
     "en": {
       "title": "Expressions",

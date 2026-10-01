@@ -267,7 +267,7 @@ const ConectaCard = ({ card, isSolved, isFailed, disabled, cardShape, baseStyle,
 };
 
 
-const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = false, isActive = true, onSolve }) => {
+const QuizPlayer = ({ data, onNext, onNextSlide, onBanner, disabled = false, debugMode = false, isActive = true, onSolve }) => {
     // -------------------------------------------------------------------------
     // 1. DATA EXTRACTION (Common + NL)
     // -------------------------------------------------------------------------
@@ -2821,8 +2821,13 @@ const QuizPlayer = ({ data, onNext, onBanner, disabled = false, debugMode = fals
         const handleChatDone = () => {
             if (chatFinished) return;
             setChatFinished(true);
-            // Go directly to next slide — no banner
-            if (onNext) onNext(true);
+            playSound('attach');
+            // Automatically slide to next slide
+            if (onNextSlide) {
+                onNextSlide();
+            } else if (onNext) {
+                onNext(true, true);
+            }
         };
 
         const handleChatOptionClick = (nodeIdx, optIdx) => {

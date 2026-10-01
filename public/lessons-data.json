@@ -19261,7 +19261,7 @@
       "y": -4
     },
     "content": {
-      "id": "draft-1790800961033",
+      "id": "lessons/15-ARCADE - Simplificando/lesson.json",
       "title": "ARCADE - Simplificando",
       "slides": [
         {
@@ -19286,12 +19286,58 @@
           "backgroundSettings": {
             "opacity": 0.25
           }
+        },
+        {
+          "id": "slide-1790868606916",
+          "background": "#E1F5FE",
+          "elements": [
+            {
+              "id": "el-1790868615712-eicnojmk0",
+              "type": "quiz",
+              "content": "Quiz",
+              "x": 50,
+              "y": 57.5,
+              "width": 20,
+              "height": 10,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "fontFamily": "\"Fredoka\", sans-serif",
+                "fontWeight": "600",
+                "options": [
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">2a</span><span class=\"pico-fraction-den\">2</span></span>",
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">x<sup>2</sup></span><span class=\"pico-fraction-den\">x</span></span>",
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">x<sup>3</sup></span><span class=\"pico-fraction-den\">x</span></span>",
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">4X</span><span class=\"pico-fraction-den\">2X</span></span>",
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">15X</span><span class=\"pico-fraction-den\">5</span></span>",
+                  "<span class=\"pico-fraction\"><span class=\"pico-fraction-num\">2XY</span><span class=\"pico-fraction-den\">Y</span></span>"
+                ],
+                "correctIndex": 0,
+                "correctIndices": [
+                  0
+                ],
+                "quizType": "conecta",
+                "visualMode": false,
+                "matchAnswers": [
+                  "a",
+                  "x",
+                  "x²",
+                  "2",
+                  "3X",
+                  "2X"
+                ],
+                "autonext": true
+              }
+            }
+          ],
+          "order": 2,
+          "autonext": true
         }
       ],
       "author": "User",
       "createdAt": "2026-09-30T20:42:41.033Z",
-      "updatedAt": "2026-09-30T20:43:49.893Z",
-      "path": "lessons/01-ARCADE - Simplificando/lesson.json",
+      "updatedAt": "2026-10-01T15:34:55.024Z",
+      "path": "lessons/15-ARCADE - Simplificando/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -19308,7 +19354,25 @@
         "y": -4
       },
       "visible": true,
-      "visibleInFeed": true
+      "visibleInFeed": true,
+      "name": "15-ARCADE - Simplificando",
+      "type": "file",
+      "order": 15,
+      "status": "completed",
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
+      },
+      "progress": {
+        "lastSlideIndex": 1,
+        "completed": true,
+        "lastPlayed": 1790867955862
+      }
     }
   },
   {
@@ -22287,7 +22351,7 @@
     "order": 21,
     "titlecardFrame": null,
     "content": {
-      "id": "lessons/18-Pociones/lesson.json",
+      "id": "lessons/21-Pociones/lesson.json",
       "title": "Pociones",
       "slides": [
         {
@@ -22909,7 +22973,7 @@
             {
               "id": "el-1780592151405-d6lw7g404",
               "type": "text",
-              "content": "              <div>                                                   </div>",
+              "content": "<span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\"><b>×</b> o <b>÷</b> </font></span><div><span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\">de izq. a derecha</font></span></div>",
               "x": 48.88888888888888,
               "y": 64.53125,
               "width": 68.33333333333333,
@@ -22925,7 +22989,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "<font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\"><b>×</b> or <b>÷</b> </span></font><div><font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\">from left to right</span></font></div>"
+                  "content": "<span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\"><b>×</b> or <b>÷</b> </font></span><div><span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\">from left to right</font></span></div>"
                 }
               }
             },
@@ -22982,8 +23046,8 @@
       ],
       "author": "User",
       "createdAt": "2026-05-12T21:25:39.254Z",
-      "updatedAt": "2026-09-29T15:32:05.356Z",
-      "path": "lessons/18-Pociones/lesson.json",
+      "updatedAt": "2026-10-01T15:43:36.690Z",
+      "path": "lessons/21-Pociones/lesson.json",
       "textPreset": null,
       "subject": "Math",
       "topic": "PEMDAS",
@@ -22991,10 +23055,10 @@
       "chapterName": "Magic",
       "lessonId": "01",
       "visible": true,
-      "name": "18-Pociones",
+      "name": "21-Pociones",
       "type": "file",
       "description": "Aprende a crear pociones mágicas",
-      "order": 18,
+      "order": 21,
       "status": "active",
       "icon": "icon_potion.png",
       "progress": null,
@@ -23034,7 +23098,7 @@
       "y": -32.4
     },
     "content": {
-      "id": "lessons/02-Pociones - Parte 2/lesson.json",
+      "id": "lessons/22-Pociones - Parte 2/lesson.json",
       "title": "Pociones - Parte 2",
       "slides": [
         {
@@ -23173,7 +23237,7 @@
             {
               "id": "el-1780582247743-pl7163enq",
               "type": "text",
-              "content": "<b>× </b>o<b> ÷ </b><div>de izquierda a derecha</div>",
+              "content": "<b>× </b>ó<b> ÷ </b><div>de izquierda a derecha</div>",
               "x": 47.77777777777777,
               "y": 64.0625,
               "width": 68.33333333333333,
@@ -23195,7 +23259,7 @@
             {
               "id": "el-1780582247743-9u9so77o2",
               "type": "text",
-              "content": "<font color=\"#969696\"><b>+ </b>o<b> - </b><br></font><div><font color=\"#969696\">de izquierda a derecha</font></div>",
+              "content": "<font color=\"#969696\"><b>+ </b>ó<b> - </b><br></font><div><font color=\"#969696\">de izquierda a derecha</font></div>",
               "x": 48.05555555555555,
               "y": 78.90625,
               "width": 68.33333333333333,
@@ -23233,7 +23297,7 @@
             {
               "id": "el-1780588266159",
               "type": "balloon",
-              "content": "<b>Primero</b><div>hacemos<b> ÷ </b>o<b> ×</b></div>",
+              "content": "<b>Primero</b><div>hacemos</div><div><b>todos</b> los<b>&nbsp;</b></div><div><b>÷ </b>ó<b> ×</b></div>",
               "x": 47.36111111111112,
               "y": 44.84375,
               "width": 56.94444444444444,
@@ -23252,7 +23316,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "<b>First</b><div>we do<b> ÷ </b>or<b> ×</b></div>"
+                  "content": "<b>First</b><div>we do</div><div><b>all the</b></div><div><b> ÷ </b>or<b> ×</b></div>"
                 }
               }
             }
@@ -23386,7 +23450,7 @@
             {
               "id": "el-1780588303754-d6fj6nvzy",
               "type": "balloon",
-              "content": "<b>luego</b><br><div>hacemos <b>-</b> o <b>+</b></div>",
+              "content": "<b>then</b>,<div><b>all</b> the<br><div><b>-</b> or <b>+</b></div></div>",
               "x": 30.416666666666668,
               "y": 50.15625,
               "width": 56.94444444444444,
@@ -23405,7 +23469,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "<b>then</b>,<br><div><b>-</b> or <b>+</b></div>"
+                  "content": "<b>then</b>,<div><b>all</b> the<br><div><b>-</b> or <b>+</b></div></div>"
                 }
               }
             }
@@ -23570,8 +23634,8 @@
                 "fontFamily": "Verdana, Arial, sans-serif",
                 "options": [
                   "Analiza toda la serie",
-                  "Pulsa × ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
-                  "Pulsa + ó -"
+                  "Todos los × ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+                  "Todos los + ó -"
                 ],
                 "correctIndex": 0,
                 "correctIndices": [
@@ -23583,8 +23647,8 @@
                   "en": {
                     "options": [
                       "Analyze whole expression",
-                      "x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
-                      "+ or -"
+                      "All the x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+                      "All the + or -"
                     ],
                     "matchAnswers": [],
                     "chatNodes": []
@@ -23709,8 +23773,8 @@
       ],
       "author": "User",
       "createdAt": "2026-05-12T21:25:39.254Z",
-      "updatedAt": "2026-06-22T22:36:12.723Z",
-      "path": "lessons/02-Pociones - Parte 2/lesson.json",
+      "updatedAt": "2026-10-01T15:46:18.835Z",
+      "path": "lessons/22-Pociones - Parte 2/lesson.json",
       "textPreset": null,
       "subject": "Math",
       "topic": "PEMDAS",
@@ -23718,17 +23782,13 @@
       "chapterName": "Magic",
       "lessonId": "01",
       "visible": true,
-      "name": "02-Pociones - Parte 2",
+      "name": "22-Pociones - Parte 2",
       "type": "file",
       "description": "Mezcla +-×÷ en el orden correcto",
-      "order": 2,
+      "order": 22,
       "status": "active",
       "icon": "icon_potion.png",
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1782167743819
-      },
+      "progress": null,
       "translations": {
         "en": {
           "title": "Pociones - Part 2",
@@ -23742,6 +23802,15 @@
         "zoom": 1,
         "x": 0,
         "y": -32.4
+      },
+      "statusIcon": {
+        "type": {},
+        "key": null,
+        "props": {
+          "size": 24
+        },
+        "_owner": null,
+        "_store": {}
       }
     }
   },
@@ -25222,7 +25291,7 @@
       "y": -14.8
     },
     "content": {
-      "id": "lessons/22-Intro to PEMDAS/lesson.json",
+      "id": "lessons/25-Intro to PEMDAS/lesson.json",
       "title": "Intro to PEMDAS",
       "slides": [
         {
@@ -25270,6 +25339,23 @@
               }
             },
             {
+              "id": "el-1790870226900-t2jausb7u",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_shocked.png",
+              "x": 46.111111111111114,
+              "y": 35.9375,
+              "width": 40,
+              "height": 23.02734375,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 23.02734375,
+                "category": "characters",
+                "hasShadow": false
+              }
+            },
+            {
               "id": "el-1778449663005",
               "type": "balloon",
               "content": "16",
@@ -25291,6 +25377,23 @@
               }
             },
             {
+              "id": "el-1778449469024",
+              "type": "text",
+              "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
+              "x": 51.25,
+              "y": 19.6875,
+              "width": 39.72222222222222,
+              "height": 10,
+              "rotation": 0,
+              "scale": 2.1335235508432833,
+              "metadata": {
+                "color": "#ce82ff",
+                "fontFamily": "monospace",
+                "fontSize": 25,
+                "backgroundColor": "#ffc800"
+              }
+            },
+            {
               "id": "el-1778449690651",
               "type": "balloon",
               "content": "11",
@@ -25309,23 +25412,6 @@
                   "x": -2,
                   "y": 58
                 }
-              }
-            },
-            {
-              "id": "el-1778449469024",
-              "type": "text",
-              "content": "<font color=\"#000000\">2</font>x<font color=\"#000000\">3</font>+<font color=\"#000000\">5</font>=<font color=\"#000000\">?</font>",
-              "x": 51.25,
-              "y": 19.6875,
-              "width": 39.72222222222222,
-              "height": 10,
-              "rotation": 0,
-              "scale": 2.1335235508432833,
-              "metadata": {
-                "color": "#ce82ff",
-                "fontFamily": "monospace",
-                "fontSize": 25,
-                "backgroundColor": "#ffc800"
               }
             }
           ],
@@ -25428,11 +25514,28 @@
               }
             },
             {
+              "id": "el-1790870203972-9khf48hzz",
+              "type": "image",
+              "content": "/src/assets/characters/yara_avatar_shocked.png",
+              "x": 50,
+              "y": 27.65625,
+              "width": 40,
+              "height": 23.02734375,
+              "rotation": 0,
+              "scale": 0.6793453303996223,
+              "metadata": {
+                "width": 40,
+                "height": 23.02734375,
+                "category": "characters",
+                "hasShadow": false
+              }
+            },
+            {
               "id": "el-1778452577298",
               "type": "balloon",
               "content": "11",
-              "x": 82.08333333333333,
-              "y": 46.25,
+              "x": 84.02777777777777,
+              "y": 46.5625,
               "width": 27.500000000000004,
               "height": 12.5,
               "rotation": 0,
@@ -25589,11 +25692,11 @@
             {
               "id": "el-1778451447261",
               "type": "balloon",
-              "content": "5+<font color=\"#ce82ff\">3x2</font>= 5+<font color=\"#ce82ff\">6</font>= <b><font color=\"#9333ea\">11</font></b>",
-              "x": 67.3611111111111,
-              "y": 46.09375,
-              "width": 68.61111111111113,
-              "height": 14.6875,
+              "content": "5+<font color=\"#ce82ff\">3x2</font><div>= 5+<font color=\"#ce82ff\">6</font></div><div>= <b><font color=\"#9333ea\">11</font></b></div>",
+              "x": 26.944444444444443,
+              "y": 32.890625,
+              "width": 35.833333333333364,
+              "height": 23.59375,
               "rotation": 0,
               "scale": 1,
               "metadata": {
@@ -25602,18 +25705,24 @@
                 "fontFamily": "monospace",
                 "fontSize": 24,
                 "tailPos": {
-                  "x": 8,
-                  "y": 63
-                }
+                  "x": 1,
+                  "y": 119
+                },
+                "tailOrigin": {
+                  "edge": "bottom",
+                  "offset": 0.609090909090909,
+                  "angle": 1.3112272594020689
+                },
+                "textAlign": "left"
               }
             },
             {
               "id": "el-1778451128684",
               "type": "balloon",
               "content": "5+3<font color=\"#000000\">x2=</font><div>8<font color=\"#000000\">x2=</font></div><div><b><font color=\"#9333ea\">16</font></b></div>",
-              "x": 34.72222222222222,
-              "y": 25.46875,
-              "width": 68.8888888888889,
+              "x": 76.52777777777779,
+              "y": 36.71875,
+              "width": 41.94444444444445,
               "height": 23.4375,
               "rotation": 0,
               "scale": 1,
@@ -25623,8 +25732,8 @@
                 "fontFamily": "monospace",
                 "fontSize": 24,
                 "tailPos": {
-                  "x": -32,
-                  "y": 110
+                  "x": -15,
+                  "y": 113
                 }
               }
             }
@@ -25707,27 +25816,34 @@
         },
         {
           "id": "slide-1778453102804",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1778453116073",
+              "id": "el-1790869872122-cs05lpyyi",
+              "type": "background",
+              "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+              "metadata": {}
+            },
+            {
+              "id": "el-1790870166142-602i5capx",
               "type": "image",
-              "content": "/src/assets/characters/chef%20with%20ice%20cream%20cone.png?t=1778452495183",
-              "x": 30.833333333333332,
-              "y": 58.90625,
+              "content": "/src/assets/characters/yara_ray_gun_yara_half_body_epic_.png",
+              "x": 50,
+              "y": 78.75,
               "width": 40,
-              "height": 58.318739054290724,
+              "height": 22.34302325581395,
               "rotation": 0,
-              "scale": 1.3049954822663998,
+              "scale": 3.8120801102302138,
               "metadata": {
                 "width": 40,
-                "height": 58.318739054290724
+                "height": 22.34302325581395,
+                "category": "characters"
               }
             },
             {
               "id": "el-1778453122998",
               "type": "balloon",
-              "content": "If everyone got different results, bridges would fall and rockets would miss the moon.",
+              "content": "If everyone got <b>different</b> <b>results</b>, bridges would fall and rockets would miss the moon.",
               "x": 68.61111111111111,
               "y": 30.3125,
               "width": 50,
@@ -25740,38 +25856,40 @@
                 "fontFamily": "monospace",
                 "fontSize": 16,
                 "tailPos": {
-                  "x": -107,
-                  "y": 1
+                  "x": -108,
+                  "y": 27
                 }
               }
             }
           ],
-          "order": 7
+          "order": 7,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1778453153922",
-          "background": "#E1F5FE",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
           "elements": [
             {
-              "id": "el-1778453163112",
+              "id": "el-1790870148970-9q3dcvj9s",
               "type": "image",
-              "content": "/src/assets/characters/chef%20explains.png?t=1778452495161",
-              "x": 45.83333333333332,
-              "y": 62.03125,
+              "content": "/src/assets/characters/yara_explains_down.png",
+              "x": 32.22222222222222,
+              "y": 59.53125,
               "width": 40,
-              "height": 30.809659090909093,
+              "height": 37.78103044496487,
               "rotation": 0,
-              "scale": 2.5681461438141,
+              "scale": 2.043921074681268,
               "metadata": {
                 "width": 40,
-                "height": 30.809659090909093,
-                "locked": true
+                "height": 37.78103044496487,
+                "category": "characters",
+                "flipX": true
               }
             },
             {
               "id": "el-1778453169358",
               "type": "balloon",
-              "content": "<div><br></div>For everybody to get the same result,<div>we agree on a set of rules.<div><br></div></div>",
+              "content": "<div><br></div>For everybody to get the <b>same</b> <b>result</b>,<div>we <b>agree</b> on a set of <b>rules</b>.<div><br></div></div>",
               "x": 70.41666666666666,
               "y": 23.75,
               "width": 59.166666666666664,
@@ -25792,7 +25910,7 @@
             {
               "id": "el-1778453225745",
               "type": "balloon",
-              "content": "<div>It's called</div><div>PEMDAS</div>",
+              "content": "<div>It's called</div><div><b>PEMDAS</b></div>",
               "x": 76.80555555555556,
               "y": 69.21875,
               "width": 43.05555555555556,
@@ -25811,7 +25929,8 @@
               }
             }
           ],
-          "order": 8
+          "order": 8,
+          "backgroundSettings": {}
         },
         {
           "id": "slide-1778453284631",
@@ -25839,7 +25958,7 @@
               "type": "quiz",
               "content": "Quiz",
               "x": 50,
-              "y": 81.09375,
+              "y": 77.65625,
               "width": 20,
               "height": 10,
               "rotation": 0,
@@ -25882,12 +26001,166 @@
             "grayscale": true,
             "tintColor": "rgba(253, 164, 175, 0.4)"
           }
+        },
+        {
+          "id": "slide-1790869896708-0-uhdjvo",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "elements": [
+            {
+              "id": "el-1790869896708-gy0clsyc7",
+              "type": "banner",
+              "content": "<br> 😅",
+              "x": 49.72222222222223,
+              "y": 55.546875,
+              "width": 53.46758575754757,
+              "height": 52.07324382096494,
+              "rotation": 0,
+              "scale": 1.5981549469140102,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#f6efdd",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "locked": true
+              }
+            },
+            {
+              "id": "el-1790869896708-jzwmvzlns",
+              "type": "banner",
+              "content": "<br>",
+              "x": 50,
+              "y": 25.703125,
+              "width": 51,
+              "height": 10.165172329982045,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#ffffff",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false,
+                "groupId": "group-1789689818834-nbba7m"
+              }
+            },
+            {
+              "id": "el-1790869896708-9hk803jnw",
+              "type": "banner",
+              "content": "<br>",
+              "x": 49.98424953884548,
+              "y": 64.921875,
+              "width": 51,
+              "height": 46.293558381838835,
+              "rotation": 0,
+              "scale": 1.2715071172585377,
+              "metadata": {
+                "width": 51,
+                "height": 12.5,
+                "fontFamily": "Georgia, serif",
+                "fontSize": 26,
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+                "color": "#00b0ff",
+                "textAlign": "center",
+                "backgroundColor": "#FCE4EC",
+                "borderColor": "#000000",
+                "shadow": "grey",
+                "hasShadow": true,
+                "borderRadius": 20,
+                "skin": "comic",
+                "showTape": false
+              }
+            },
+            {
+              "id": "el-1790869896708-qnidmu3c6",
+              "type": "text",
+              "content": "<font color=\"#2196f3\"><span style=\"caret-color: rgb(33, 150, 243);\">2 + 3² ÷ 5 × 4</span></font>",
+              "x": 50,
+              "y": 25.625,
+              "width": 26.764489040083262,
+              "height": 5,
+              "rotation": 0,
+              "scale": 2.2037322077703445,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+                "textTransform": "none",
+                "fontSize": 14,
+                "color": "#000000",
+                "groupId": "group-1789689818834-nbba7m"
+              }
+            },
+            {
+              "id": "el-1790869896708-bbbzp7cqh",
+              "type": "text",
+              "content": "<div>In order for <b>everybody</b> to always get the <b>same</b> <b>result</b>, we have <b>agreed</b> on a set of <b>rules</b> that apply to the <b>Order of Operations</b>.</div><div><br></div><div>These rules are sometimes called <b>PEMDAS</b> (<b>P</b>arenthesis, <b>E</b>xponents, <b>M</b>ultiplication, <b>D</b>ivision, <b>A</b>ddition, <b>S</b>ubtraction)</div>",
+              "x": 50,
+              "y": 64.0625,
+              "width": 44.72222222222222,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1.2138676431373434,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Fira Sans\"",
+                "fontSize": 16,
+                "textTransform": "none"
+              }
+            },
+            {
+              "id": "el-1790869896708-zww8hoc0m",
+              "type": "text",
+              "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> PEMDAS </span></font>",
+              "x": 50,
+              "y": 14.6875,
+              "width": 82.5,
+              "height": 5,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "textAlign": "center",
+                "fontFamily": "\"Bangers\", cursive, sans-serif",
+                "textTransform": "uppercase",
+                "fontSize": 27
+              }
+            }
+          ],
+          "order": 10,
+          "guides": {
+            "horizontal": [],
+            "vertical": [
+              0
+            ]
+          },
+          "cartridge": null,
+          "backgroundSettings": {}
         }
       ],
       "author": "User",
       "createdAt": "2026-05-10T21:44:26.467Z",
-      "updatedAt": "2026-09-29T15:50:26.540Z",
-      "path": "lessons/22-Intro to PEMDAS/lesson.json",
+      "updatedAt": "2026-10-01T15:57:14.437Z",
+      "path": "lessons/25-Intro to PEMDAS/lesson.json",
       "textPreset": null,
       "subject": "Math",
       "topic": "PEMDAS",
@@ -25895,10 +26168,10 @@
       "chapterName": "Chapter: Intro",
       "lessonId": "00",
       "visible": true,
-      "name": "22-Intro to PEMDAS",
+      "name": "25-Intro to PEMDAS",
       "type": "file",
       "description": "",
-      "order": 22,
+      "order": 25,
       "status": "active",
       "icon": "icon_gym.png",
       "progress": null,
@@ -25939,7 +26212,7 @@
     "order": 26,
     "titlecardFrame": null,
     "content": {
-      "id": "lessons/21-Expresiones/lesson.json",
+      "id": "lessons/26-Expresiones/lesson.json",
       "title": "Expresiones",
       "slides": [
         {
@@ -25987,7 +26260,7 @@
             {
               "id": "el-1779402747197",
               "type": "balloon",
-              "content": "Mi nombre es Yara.",
+              "content": "My name is <b>Yara</b>.",
               "x": 50.41666666666667,
               "y": 21.09375,
               "width": 45.27777777777778,
@@ -26006,14 +26279,14 @@
               },
               "translations": {
                 "en": {
-                  "content": "My name is Chef"
+                  "content": "My name is <b>Yara</b>."
                 }
               }
             },
             {
               "id": "el-1779402757661",
               "type": "balloon",
-              "content": "¡Y yo Pesto!",
+              "content": "My name is <b>Pesto</b>!",
               "x": 78.33333333333334,
               "y": 45.3125,
               "width": 40,
@@ -26024,7 +26297,7 @@
                 "backgroundColor": "#ffffff",
                 "color": "#000000",
                 "fontFamily": "\"Noto Sans\"",
-                "fontSize": 16,
+                "fontSize": 20,
                 "tailPos": {
                   "x": 3,
                   "y": 79
@@ -26032,14 +26305,14 @@
               },
               "translations": {
                 "en": {
-                  "content": "My name is Pesto!"
+                  "content": "My name is <b>Pesto</b>!"
                 }
               }
             },
             {
               "id": "el-1790696096548-lltsris7u",
               "type": "balloon",
-              "content": "Soy Kranky.",
+              "content": "I'm <b>Kranky</b>.",
               "x": 17.5,
               "y": 33.671875,
               "width": 40,
@@ -26067,7 +26340,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "I'm Kranky."
+                  "content": "I'm <b>Kranky</b>."
                 }
               }
             }
@@ -26350,7 +26623,7 @@
             {
               "id": "el-1779302354058",
               "type": "balloon",
-              "content": "En matemática me llamo \"expresión\".",
+              "content": "In math they call me an <b>expression</b>.",
               "x": 67.5,
               "y": 65.3125,
               "width": 40,
@@ -26369,7 +26642,7 @@
               },
               "translations": {
                 "en": {
-                  "content": "In math they call me an expression."
+                  "content": "In math they call me an <b>expression</b>."
                 }
               }
             },
@@ -26976,21 +27249,17 @@
       ],
       "author": "User",
       "createdAt": "2026-05-20T18:37:37.224Z",
-      "updatedAt": "2026-09-29T15:41:58.690Z",
-      "path": "lessons/21-Expresiones/lesson.json",
+      "updatedAt": "2026-10-01T15:58:17.090Z",
+      "path": "lessons/26-Expresiones/lesson.json",
       "textPreset": null,
-      "name": "21-Expresiones",
+      "name": "26-Expresiones",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 21,
+      "order": 26,
       "status": "active",
       "icon": "icon_gym.png",
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1790696057715
-      },
+      "progress": null,
       "translations": {
         "en": {
           "title": "Expressions",
@@ -29960,7 +30229,7 @@
       "y": -34.4
     },
     "content": {
-      "id": "lessons/27-exponents/lesson.json",
+      "id": "lessons/31-exponents/lesson.json",
       "title": "exponents",
       "slides": [
         {
@@ -30259,6 +30528,24 @@
               }
             },
             {
+              "id": "el-1790870503680-pinphoa00",
+              "type": "image",
+              "content": "/src/assets/characters/yara_looking_at_paper.png",
+              "x": 15.833333333333336,
+              "y": 65.3125,
+              "width": 40,
+              "height": 48.07377049180328,
+              "rotation": 0,
+              "scale": 1,
+              "metadata": {
+                "width": 40,
+                "height": 48.07377049180328,
+                "category": "characters",
+                "flipX": true,
+                "manualZ": true
+              }
+            },
+            {
               "id": "el-1779848749123-atm370ouj",
               "type": "line",
               "x": 52,
@@ -30380,22 +30667,6 @@
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
                 "fontSize": 10
-              }
-            },
-            {
-              "id": "el-1790694295734-csaz0n4qw",
-              "type": "image",
-              "content": "/src/assets/characters/yara_explains_02_1.png",
-              "x": 13.055555555555557,
-              "y": 69.375,
-              "width": 40,
-              "height": 63.88392857142857,
-              "rotation": 0,
-              "scale": 1,
-              "metadata": {
-                "width": 40,
-                "height": 63.88392857142857,
-                "category": "characters"
               }
             },
             {
@@ -30776,9 +31047,9 @@
               "id": "el-1780582475515-ofz43ixm5",
               "type": "text",
               "content": "<b>RULES</b>",
-              "x": 48.61111111111111,
+              "x": 47.916666666666664,
               "y": 31.40625,
-              "width": 10,
+              "width": 14.514148251274564,
               "height": 5,
               "rotation": 0,
               "scale": 2.153722403662122,
@@ -30929,17 +31200,21 @@
       ],
       "author": "User",
       "createdAt": "2026-05-26T20:41:51.156Z",
-      "updatedAt": "2026-09-29T15:05:40.082Z",
-      "path": "lessons/27-exponents/lesson.json",
+      "updatedAt": "2026-10-01T16:02:09.466Z",
+      "path": "lessons/31-exponents/lesson.json",
       "textPreset": null,
-      "name": "27-exponents",
+      "name": "31-exponents",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 27,
-      "status": "active",
+      "order": 31,
+      "status": "completed",
       "icon": "icon_textbook.png",
-      "progress": null,
+      "progress": {
+        "lastSlideIndex": 11,
+        "completed": true,
+        "lastPlayed": 1790870463330
+      },
       "cardColor": "#8B5CF6",
       "translations": {
         "en": {

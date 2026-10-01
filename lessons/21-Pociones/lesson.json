@@ -1,5 +1,5 @@
 {
-  "id": "lessons/18-Pociones/lesson.json",
+  "id": "lessons/21-Pociones/lesson.json",
   "title": "Pociones",
   "slides": [
     {
@@ -621,7 +621,7 @@
         {
           "id": "el-1780592151405-d6lw7g404",
           "type": "text",
-          "content": "              <div>                                                   </div>",
+          "content": "<span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\"><b>×</b> o <b>÷</b> </font></span><div><span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\">de izq. a derecha</font></span></div>",
           "x": 48.88888888888888,
           "y": 64.53125,
           "width": 68.33333333333333,
@@ -637,7 +637,7 @@
           },
           "translations": {
             "en": {
-              "content": "<font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\"><b>×</b> or <b>÷</b> </span></font><div><font color=\"#d6dce5\"><span style=\"caret-color: rgb(214, 220, 229);\">from left to right</span></font></div>"
+              "content": "<span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\"><b>×</b> or <b>÷</b> </font></span><div><span style=\"caret-color: rgb(214, 220, 229);\"><font color=\"#5a5a5a\">from left to right</font></span></div>"
             }
           }
         },
@@ -694,8 +694,8 @@
   ],
   "author": "User",
   "createdAt": "2026-05-12T21:25:39.254Z",
-  "updatedAt": "2026-09-29T15:32:05.356Z",
-  "path": "lessons/18-Pociones/lesson.json",
+  "updatedAt": "2026-10-01T15:43:36.690Z",
+  "path": "lessons/21-Pociones/lesson.json",
   "textPreset": null,
   "subject": "Math",
   "topic": "PEMDAS",
@@ -703,10 +703,10 @@
   "chapterName": "Magic",
   "lessonId": "01",
   "visible": true,
-  "name": "18-Pociones",
+  "name": "21-Pociones",
   "type": "file",
   "description": "Aprende a crear pociones mágicas",
-  "order": 18,
+  "order": 21,
   "status": "active",
   "icon": "icon_potion.png",
   "progress": null,

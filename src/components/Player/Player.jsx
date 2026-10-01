@@ -1570,6 +1570,10 @@ const Player = () => {
                                                     onNext={(isSuccess = false, force = false) => {
                                                          handleInteractiveSolve(index, isSuccess, 1000, force);
                                                      }}
+                                                    onNextSlide={() => {
+                                                         markSlideSolved(index);
+                                                         nextSlide(true);
+                                                     }}
                                                     onSolve={(answer) => {
                                                         setSolvedAnswers(prev => ({ ...prev, [index]: answer }));
                                                     }}
