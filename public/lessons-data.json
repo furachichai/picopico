@@ -18432,8 +18432,8 @@
               "type": "banner",
               "content": "<div><br></div><div><br></div><div>because…<br></div>",
               "x": 50,
-              "y": 32.390625,
-              "width": 78,
+              "y": 31.609375,
+              "width": 74.66666666666667,
               "height": 19.968749999999996,
               "rotation": 0,
               "scale": 1,
@@ -18470,7 +18470,7 @@
                 "fontFamily": "\"Fira Sans\"",
                 "options": [
                   "It's always 8, no matter what",
-                  "n/n = 1, so it's just 1 × x",
+                  "n÷n = 1, so it's just 1·x",
                   "The x's are added together",
                   "x always equals 8"
                 ],
@@ -18495,8 +18495,7 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
-                "fontSize": 33,
-                "groupId": "group-1790112112868-gq0759"
+                "fontSize": 33
               }
             },
             {
@@ -18512,25 +18511,23 @@
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
-                "fontSize": 33,
-                "groupId": "group-1790112112868-gq0759"
+                "fontSize": 33
               }
             },
             {
               "id": "el-1790112102083-2-bjt5wu",
               "type": "text",
-              "content": "= x",
-              "x": 56.086371527777715,
+              "content": "= x ",
+              "x": 60.253038194444386,
               "y": 28.875,
-              "width": 10,
+              "width": 17.22222222222222,
               "height": 5,
               "rotation": 0,
               "scale": 1,
               "metadata": {
                 "textAlign": "center",
                 "fontFamily": "\"Fira Sans\"",
-                "fontSize": 33,
-                "groupId": "group-1790112112868-gq0759"
+                "fontSize": 33
               }
             }
           ],
@@ -18653,7 +18650,7 @@
             {
               "id": "el-1790102025125",
               "type": "banner",
-              "content": "<font color=\"#000000\">12</font>x<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">/</span></font>x <font color=\"#000000\">=</font> ?",
+              "content": "<font color=\"#000000\"><span class=\"pico-fraction\"><span class=\"pico-fraction-num\">12x</span><span class=\"pico-fraction-den\">x</span></span> = ?</font><br>",
               "x": 50,
               "y": 22,
               "width": 78,
@@ -19197,7 +19194,7 @@
       ],
       "author": "User",
       "createdAt": "2026-09-22T18:21:11.740Z",
-      "updatedAt": "2026-09-30T20:42:33.604Z",
+      "updatedAt": "2026-10-01T16:40:16.508Z",
       "path": "lessons/14-Cancelling Coefficients/lesson.json",
       "textPreset": null,
       "_snapshots": [
@@ -19223,7 +19220,7 @@
           "description": ""
         }
       },
-      "name": "14-Any Number Over Itself Is 1",
+      "name": "14-Cancelling Coefficients",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
@@ -20032,7 +20029,7 @@
     "order": 17,
     "titlecardFrame": null,
     "content": {
-      "id": "lessons/06-Tutorial Balanza/lesson.json",
+      "id": "lessons/17-Tutorial Balanza/lesson.json",
       "title": "Tutorial Balanza",
       "slides": [
         {
@@ -20290,7 +20287,7 @@
                   "stays balanced",
                   "becomes empty"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "correctIndices": [
                   0
                 ],
@@ -20332,8 +20329,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-18T11:03:24.483Z",
-      "updatedAt": "2026-09-25T22:33:16.628Z",
-      "path": "lessons/06-Tutorial Balanza/lesson.json",
+      "updatedAt": "2026-10-01T16:29:42.901Z",
+      "path": "lessons/17-Tutorial Balanza/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -20344,12 +20341,12 @@
           "description": ""
         }
       },
-      "name": "06-Tutorial Balanza",
+      "name": "17-Tutorial Balanza",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
-      "order": 6,
-      "status": "completed",
+      "order": 17,
+      "status": "active",
       "statusIcon": {
         "type": {},
         "key": null,
@@ -20359,11 +20356,7 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 3,
-        "completed": true,
-        "lastPlayed": 1790375354058
-      },
+      "progress": null,
       "titlecardFrame": null
     }
   },
@@ -20382,7 +20375,7 @@
       "y": 0
     },
     "content": {
-      "id": "lessons/3323-Balancing act/lesson.json",
+      "id": "lessons/18-Balancing act/lesson.json",
       "title": "Balancing act",
       "slides": [
         {
@@ -20640,7 +20633,7 @@
                   "stays balanced",
                   "becomes empty"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "correctIndices": [
                   0
                 ],
@@ -20682,8 +20675,8 @@
       ],
       "author": "User",
       "createdAt": "2026-09-18T11:03:24.483Z",
-      "updatedAt": "2026-09-18T12:22:57.982Z",
-      "path": "lessons/08-Balancing act/lesson.json",
+      "updatedAt": "2026-10-01T16:30:23.083Z",
+      "path": "lessons/18-Balancing act/lesson.json",
       "textPreset": null,
       "description": "",
       "icon": "icon_textbook.png",
@@ -20694,11 +20687,11 @@
           "description": ""
         }
       },
-      "name": "3323-Balancing act",
+      "name": "18-Balancing act",
       "type": "file",
       "visible": true,
       "visibleInFeed": false,
-      "order": 3323,
+      "order": 18,
       "status": "active",
       "statusIcon": {
         "type": {},
@@ -20709,11 +20702,7 @@
         "_owner": null,
         "_store": {}
       },
-      "progress": {
-        "lastSlideIndex": 0,
-        "completed": false,
-        "lastPlayed": 1789731804420
-      },
+      "progress": null,
       "titlecardFrame": {
         "zoom": 1,
         "x": 0,
@@ -27998,7 +27987,7 @@
       "y": -24.7
     },
     "content": {
-      "id": "lessons/24-Separa los términos/lesson.json",
+      "id": "lessons/28-Separa los términos/lesson.json",
       "title": "Separa los términos",
       "slides": [
         {
@@ -28904,7 +28893,7 @@
                       },
                       {
                         "type": "message",
-                        "text": "Let's do × and ÷ then."
+                        "text": "Let's do × and ÷"
                       },
                       {
                         "type": "message",
@@ -29274,14 +29263,14 @@
       ],
       "author": "User",
       "createdAt": "2026-05-15T18:19:21.767Z",
-      "updatedAt": "2026-09-29T15:59:05.213Z",
-      "path": "lessons/24-Separa los términos/lesson.json",
+      "updatedAt": "2026-10-01T16:35:21.153Z",
+      "path": "lessons/28-Separa los términos/lesson.json",
       "textPreset": null,
-      "name": "24-Separa los términos",
+      "name": "28-Separa los términos",
       "type": "file",
       "description": "",
       "visible": true,
-      "order": 24,
+      "order": 28,
       "status": "active",
       "icon": "icon_gym.png",
       "progress": null,

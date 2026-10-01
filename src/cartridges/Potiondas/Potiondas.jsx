@@ -349,7 +349,9 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
   });
   const totalLevels = levels.length;
   const expressionRef = useRef(null);
+  const expressionAreaRef = useRef(null);
   const opRefs = useRef({});
+  const [expressionScale, setExpressionScale] = useState(1);
 
   // Game state
   const [level, setLevel] = useState(isAlreadySolved ? totalLevels - 1 : 0);
@@ -444,10 +446,11 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         const containerRect = container.getBoundingClientRect();
         const firstRect = children[0].getBoundingClientRect();
         const lastRect = children[children.length - 1].getBoundingClientRect();
-        const totalW = (lastRect.left + lastRect.width) - firstRect.left;
+        const s = expressionScale || 1;
+        const totalW = ((lastRect.left + lastRect.width) - firstRect.left) / s;
         const arrowW = totalW / 3;
         setExpressionWidth({
-          left: firstRect.left - containerRect.left,
+          left: (firstRect.left - containerRect.left) / s,
           width: totalW,
           arrowWidth: arrowW,
           slideDist: totalW - arrowW
@@ -456,7 +459,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       const timer = setTimeout(measure, 50);
       return () => clearTimeout(timer);
     }
-  }, [level, levelKey, currentEmojis]);
+  }, [level, levelKey, currentEmojis, expressionScale]);
 
   // Compute valid actions dynamically based on current state.
   // Each parenthesized group is treated as an independent PEMDAS sub-expression.
@@ -500,8 +503,15 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     ]);
 
     for (const groupId of allGroupIds) {
-      // Root-level ops (-1) are only valid when ALL paren groups are fully solved
-      if (groupId === -1 && hasUnsolvedParenContent) continue;
+      // Root-level ops (-1) are only valid when ALL paren groups are fully solved.
+      // However, root-level exponents have no operands and can be evaluated at any time!
+      if (groupId === -1 && hasUnsolvedParenContent) {
+        const rootExps = expsByGroup[-1] || [];
+        if (rootExps.length > 0) {
+          rootExps.forEach(exp => result.push({ type: 'exponent', emojiIdx: exp.emojiIdx }));
+        }
+        continue;
+      }
 
       // Check if this group has nested sub-groups with unsolved content
       if (groupId >= 0) {
@@ -582,9 +592,10 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     const firstRect = firstEl.getBoundingClientRect();
     const lastRect = lastEl.getBoundingClientRect();
 
+    const s = expressionScale || 1;
     // Span from left edge of first op to right edge of last op
-    const startLeft = firstRect.left - containerRect.left;
-    const totalWidth = (lastRect.left + lastRect.width) - firstRect.left;
+    const startLeft = (firstRect.left - containerRect.left) / s;
+    const totalWidth = ((lastRect.left + lastRect.width) - firstRect.left) / s;
     const arrowWidth = Math.max(totalWidth / 3, 16);
 
     setArrowStyle({
@@ -592,7 +603,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       width: arrowWidth,
       slideDistance: totalWidth - arrowWidth
     });
-  }, []);
+  }, [expressionScale]);
 
   // Helper to advance step after a correct action
   const advanceStep = useCallback(() => {
@@ -697,7 +708,8 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     }
   }, [validActions, levelData, lives, getSamePriorityGroup, computeArrowFromRefs, onComplete]);
 
-  const handleExponentClick = useCallback((emojiIdx) => {
+  const handleExponentClick = useCallback((emojiIdx, e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     if (isPowerupActive || levelSolved || gameOver || merging || showRestart || wrongIdx !== null) return;
     // Check if this exponent is in the valid actions
     const isValid = validActions.some(a => a.type === 'exponent' && a.emojiIdx === emojiIdx);
@@ -713,9 +725,24 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
         return newEmojis;
       });
       advanceStep();
+    } else {
+      // Pulse parens containing valid actions to guide the player
+      playErrorSfx();
+      const deeperGroups = new Set();
+      validActions.forEach(a => {
+        if (a.type === 'op') {
+          const gid = levelData.innerGroupOf?.[a.opIdx];
+          if (gid !== undefined && gid >= 0) deeperGroups.add(gid);
+        } else if (a.type === 'exponent') {
+          const groups = levelData.exponentGroups?.[a.emojiIdx] || [];
+          groups.forEach(g => deeperGroups.add(g));
+        }
+      });
+      if (deeperGroups.size > 0) {
+        setPulsingParens([...deeperGroups]);
+      }
     }
-    // If wrong exponent tapped, just ignore
-  }, [validActions, levelSolved, gameOver, merging, showRestart, wrongIdx, noteIndex, advanceStep]);
+  }, [validActions, levelData, levelSolved, gameOver, merging, showRestart, wrongIdx, noteIndex, advanceStep]);
 
   const handleOpClick = useCallback((opIdx) => {
     if (isPowerupActive || levelSolved || gameOver || merging || showRestart || solvedOps.has(opIdx) || wrongIdx !== null) return;
@@ -816,6 +843,34 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
     }
     return result;
   }, [currentEmojis, solvedOps, solvedExponents, levelData]);
+
+  // Auto-fit expression scale to prevent overflowing the screen
+  useEffect(() => {
+    const updateScale = () => {
+      const area = expressionAreaRef.current;
+      const expr = expressionRef.current;
+      if (!area || !expr) return;
+
+      const areaWidth = area.clientWidth;
+      if (!areaWidth) return;
+
+      const maxAllowedWidth = Math.max(areaWidth - 16, 180);
+      const naturalWidth = expr.offsetWidth;
+
+      if (naturalWidth > maxAllowedWidth) {
+        setExpressionScale(Math.max(0.55, maxAllowedWidth / naturalWidth));
+      } else {
+        setExpressionScale(1);
+      }
+    };
+
+    const rafId = requestAnimationFrame(updateScale);
+    window.addEventListener('resize', updateScale);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateScale);
+    };
+  }, [level, levelKey, tokens]);
 
   const resetGame = () => {
     setLevel(0);
@@ -965,8 +1020,14 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
       </div>
 
       {/* Expression Area */}
-      <div className="pot-expression-area" style={{ transition: 'opacity 0.6s ease-out', opacity: winFadeOut ? 0 : 1 }}>
-        <div className={`pot-expression ${isPowerupActive ? 'pot-powerup-active' : ''}`} ref={expressionRef}>
+      <div className="pot-expression-area" ref={expressionAreaRef} style={{ transition: 'opacity 0.6s ease-out', opacity: winFadeOut ? 0 : 1 }}>
+        <div 
+          className={`pot-expression ${isPowerupActive ? 'pot-powerup-active' : ''}`} 
+          ref={expressionRef}
+          style={{
+            transform: expressionScale < 1 ? `scale(${expressionScale})` : undefined
+          }}
+        >
           {tokens.map((token, i) => {
             if (token.type === 'emoji') {
               const isMergeLeft = merging?.phase === 'slide' && token.emojiIdx === merging.leftIdx;
@@ -991,7 +1052,7 @@ export default function Potiondas({ config = {}, isAlreadySolved = false, onComp
                 <span
                   key={`exp-${token.emojiIdx}-${levelKey}`}
                   className={`pot-token pot-token-op pot-token-exponent ${flashExponentIdx === token.emojiIdx ? 'pot-flash-correct' : ''}`}
-                  onClick={() => handleExponentClick(token.emojiIdx)}
+                  onClick={(e) => handleExponentClick(token.emojiIdx, e)}
                 >
                   <span className="pot-op-circle pot-exp-circle">
                     <span className="pot-exp-star">e</span>

@@ -1,5 +1,5 @@
 {
-  "id": "lessons/24-Separa los términos/lesson.json",
+  "id": "lessons/28-Separa los términos/lesson.json",
   "title": "Separa los términos",
   "slides": [
     {
@@ -905,7 +905,7 @@
                   },
                   {
                     "type": "message",
-                    "text": "Let's do × and ÷ then."
+                    "text": "Let's do × and ÷"
                   },
                   {
                     "type": "message",
@@ -1275,14 +1275,14 @@
   ],
   "author": "User",
   "createdAt": "2026-05-15T18:19:21.767Z",
-  "updatedAt": "2026-09-29T15:59:05.213Z",
-  "path": "lessons/24-Separa los términos/lesson.json",
+  "updatedAt": "2026-10-01T16:35:21.153Z",
+  "path": "lessons/28-Separa los términos/lesson.json",
   "textPreset": null,
-  "name": "24-Separa los términos",
+  "name": "28-Separa los términos",
   "type": "file",
   "description": "",
   "visible": true,
-  "order": 24,
+  "order": 28,
   "status": "active",
   "icon": "icon_gym.png",
   "progress": null,

@@ -1,5 +1,5 @@
 {
-  "id": "lessons/06-Tutorial Balanza/lesson.json",
+  "id": "lessons/17-Tutorial Balanza/lesson.json",
   "title": "Tutorial Balanza",
   "slides": [
     {
@@ -257,7 +257,7 @@
               "stays balanced",
               "becomes empty"
             ],
-            "correctIndex": 1,
+            "correctIndex": 2,
             "correctIndices": [
               0
             ],
@@ -299,8 +299,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T11:03:24.483Z",
-  "updatedAt": "2026-09-25T22:33:16.628Z",
-  "path": "lessons/06-Tutorial Balanza/lesson.json",
+  "updatedAt": "2026-10-01T16:29:42.901Z",
+  "path": "lessons/17-Tutorial Balanza/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -311,12 +311,12 @@
       "description": ""
     }
   },
-  "name": "06-Tutorial Balanza",
+  "name": "17-Tutorial Balanza",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,
-  "order": 6,
-  "status": "completed",
+  "order": 17,
+  "status": "active",
   "statusIcon": {
     "type": {},
     "key": null,
@@ -326,10 +326,6 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 3,
-    "completed": true,
-    "lastPlayed": 1790375354058
-  },
+  "progress": null,
   "titlecardFrame": null
 }

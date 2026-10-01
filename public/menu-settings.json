@@ -1,6 +1,7 @@
 {
   "menuBg": "#160A52",
   "showStars": true,
+  "showLastSlide": true,
   "buttonBorderColor": "#42DEE8",
   "buttonShadowColor": "#2c1376",
   "bannerBorderColor": "#42DEE8",
@@ -8,6 +9,5 @@
   "titleShadowColor": "#B81EAD",
   "buttonTitleFontSize": "1.2rem",
   "buttonOverlayBg": "rgba(0, 86, 214, 0.1)",
-  "buttonOverlayHeight": 29,
-  "showLastSlide": true
+  "buttonOverlayHeight": 21
 }

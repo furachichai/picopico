@@ -845,8 +845,8 @@
           "type": "banner",
           "content": "<div><br></div><div><br></div><div>because…<br></div>",
           "x": 50,
-          "y": 32.390625,
-          "width": 78,
+          "y": 31.609375,
+          "width": 74.66666666666667,
           "height": 19.968749999999996,
           "rotation": 0,
           "scale": 1,
@@ -883,7 +883,7 @@
             "fontFamily": "\"Fira Sans\"",
             "options": [
               "It's always 8, no matter what",
-              "n/n = 1, so it's just 1 × x",
+              "n÷n = 1, so it's just 1·x",
               "The x's are added together",
               "x always equals 8"
             ],
@@ -908,8 +908,7 @@
           "metadata": {
             "textAlign": "center",
             "fontFamily": "\"Fira Sans\"",
-            "fontSize": 33,
-            "groupId": "group-1790112112868-gq0759"
+            "fontSize": 33
           }
         },
         {
@@ -925,25 +924,23 @@
           "metadata": {
             "textAlign": "center",
             "fontFamily": "\"Fira Sans\"",
-            "fontSize": 33,
-            "groupId": "group-1790112112868-gq0759"
+            "fontSize": 33
           }
         },
         {
           "id": "el-1790112102083-2-bjt5wu",
           "type": "text",
-          "content": "= x",
-          "x": 56.086371527777715,
+          "content": "= x ",
+          "x": 60.253038194444386,
           "y": 28.875,
-          "width": 10,
+          "width": 17.22222222222222,
           "height": 5,
           "rotation": 0,
           "scale": 1,
           "metadata": {
             "textAlign": "center",
             "fontFamily": "\"Fira Sans\"",
-            "fontSize": 33,
-            "groupId": "group-1790112112868-gq0759"
+            "fontSize": 33
           }
         }
       ],
@@ -1066,7 +1063,7 @@
         {
           "id": "el-1790102025125",
           "type": "banner",
-          "content": "<font color=\"#000000\">12</font>x<font color=\"#000000\"><span style=\"caret-color: rgb(0, 0, 0);\">/</span></font>x <font color=\"#000000\">=</font> ?",
+          "content": "<font color=\"#000000\"><span class=\"pico-fraction\"><span class=\"pico-fraction-num\">12x</span><span class=\"pico-fraction-den\">x</span></span> = ?</font><br>",
           "x": 50,
           "y": 22,
           "width": 78,
@@ -1610,7 +1607,7 @@
   ],
   "author": "User",
   "createdAt": "2026-09-22T18:21:11.740Z",
-  "updatedAt": "2026-09-30T20:42:33.604Z",
+  "updatedAt": "2026-10-01T16:40:16.508Z",
   "path": "lessons/14-Cancelling Coefficients/lesson.json",
   "textPreset": null,
   "_snapshots": [
@@ -1636,7 +1633,7 @@
       "description": ""
     }
   },
-  "name": "14-Any Number Over Itself Is 1",
+  "name": "14-Cancelling Coefficients",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,

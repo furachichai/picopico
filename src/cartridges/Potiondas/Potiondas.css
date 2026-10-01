@@ -57,7 +57,10 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
   position: relative;
+  box-sizing: border-box;
+  padding: 0 4px;
 }
 
 .pot-expression {
@@ -65,9 +68,13 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+  width: max-content;
+  max-width: none;
   gap: 3.8px; /* Scaled up 8% */
   padding: 20px 0; /* Removed horizontal padding to fit larger expressions */
   position: relative;
+  transform-origin: center center;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ─── Tokens ────────────────────────────────────────── */
@@ -94,17 +101,19 @@
 
 /* Extra spacing for exponent tiles to avoid tap overlap */
 .pot-token-exponent {
-  margin: 0 2.2px;
+  margin: 0 4px;
+  position: relative;
+  z-index: 2;
 }
 
-/* Invisible larger tap area — consistent size for both ops and exponents */
+/* Invisible larger tap area — expand vertically without overlapping horizontal neighbors */
 .pot-token-op::before {
   content: '';
   position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
+  top: -12px;
+  left: 0;
+  right: 0;
+  bottom: -12px;
 }
 
 /* ─── Parenthesis Tokens ───────────────────────────── */

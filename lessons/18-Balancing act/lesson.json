@@ -1,5 +1,5 @@
 {
-  "id": "lessons/3323-Balancing act/lesson.json",
+  "id": "lessons/18-Balancing act/lesson.json",
   "title": "Balancing act",
   "slides": [
     {
@@ -257,7 +257,7 @@
               "stays balanced",
               "becomes empty"
             ],
-            "correctIndex": 1,
+            "correctIndex": 2,
             "correctIndices": [
               0
             ],
@@ -299,8 +299,8 @@
   ],
   "author": "User",
   "createdAt": "2026-09-18T11:03:24.483Z",
-  "updatedAt": "2026-09-18T12:22:57.982Z",
-  "path": "lessons/08-Balancing act/lesson.json",
+  "updatedAt": "2026-10-01T16:30:23.083Z",
+  "path": "lessons/18-Balancing act/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -311,11 +311,11 @@
       "description": ""
     }
   },
-  "name": "3323-Balancing act",
+  "name": "18-Balancing act",
   "type": "file",
   "visible": true,
   "visibleInFeed": false,
-  "order": 3323,
+  "order": 18,
   "status": "active",
   "statusIcon": {
     "type": {},
@@ -326,11 +326,7 @@
     "_owner": null,
     "_store": {}
   },
-  "progress": {
-    "lastSlideIndex": 0,
-    "completed": false,
-    "lastPlayed": 1789731804420
-  },
+  "progress": null,
   "titlecardFrame": {
     "zoom": 1,
     "x": 0,
