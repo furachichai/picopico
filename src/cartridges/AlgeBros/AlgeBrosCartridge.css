@@ -448,8 +448,16 @@
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
   cursor: grab;
   position: relative;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
   padding: 0 14px;
+}
+
+.algebros-cartridge .term-item-wrapper,
+.algebros-cartridge .term-group-wrapper,
+.algebros-cartridge .expression-list,
+.algebros-cartridge .equation-layout,
+.algebros-cartridge .division-container {
+  transition: none !important;
 }
 
 .algebros-cartridge .term-card.is-dragging {

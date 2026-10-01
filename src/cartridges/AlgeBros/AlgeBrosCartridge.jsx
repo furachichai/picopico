@@ -202,8 +202,8 @@ function ScaledReorderGroup({ children, isValidating, ...props }) {
   const transformPagePoint = useCallback((point) => correctParentTransform(groupRef)(point), []);
 
   return (
-    <Reorder.Group ref={groupRef} transition={isValidating ? { duration: 0 } : undefined} {...props}>
-      <MotionConfig transformPagePoint={transformPagePoint} transition={isValidating ? { duration: 0 } : undefined}>
+    <Reorder.Group ref={groupRef} transition={{ duration: 0 }} {...props}>
+      <MotionConfig transformPagePoint={transformPagePoint} transition={{ duration: 0 }}>
         {children}
       </MotionConfig>
     </Reorder.Group>
@@ -2440,7 +2440,7 @@ export default function AlgeBrosCartridge({
                           transformOrigin: 'center',
                           position: 'relative'
                         }}
-                        transition={isValidating ? { duration: 0 } : undefined}
+                        transition={{ duration: 0 }}
                       >
                         {/* Left Side */}
                         <div className="equation-side left-side" style={{ zIndex: isDraggingFromLeft ? 99999 : 1, position: 'relative' }}>
@@ -2453,176 +2453,10 @@ export default function AlgeBrosCartridge({
                                 position: 'relative'
                               }}
                             >
-                              <AnimatePresence>
-                                {isLeftEmpty ? (
-                                  dragHintState?.side === 'leftNum' ? (
-                                    <motion.div
-                                      key="hint-slot-num-left-empty"
-                                      initial={{ opacity: 0, scale: 0.8 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      exit={{ opacity: 0, scale: 0.8 }}
-                                      transition={{ duration: 0.12 }}
-                                      className="term-group-wrapper"
-                                      style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-                                    >
-                                      {dragHintState.signHint === '-' && (
-                                        <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
-                                      )}
-                                      <div className="term-card drop-slot-placeholder" />
-                                    </motion.div>
-                                  ) : topic === 'equations' ? (
-                                    (denTerms.length > 0 && !isDenOne(denTerms)) ? (
-                                      <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
-                                    ) : (
-                                      <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
-                                    )
-                                  ) : (
-                                    <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
-                                  )
-                                ) : (
-                                  <>
-                                    {splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).map((group, groupIdx) => {
-                                      const showHintHere = dragHintState?.side === 'leftNum' && dragHintState.insertIndex === groupIdx;
-                                  return (
-                                    <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
-                                      {showHintHere && (
-                                        <motion.div
-                                          key="hint-slot-num-left"
-                                          initial={{ opacity: 0, scale: 0.8 }}
-                                          animate={{ opacity: 1, scale: 1 }}
-                                          exit={{ opacity: 0, scale: 0.8 }}
-                                          transition={{ duration: 0.12 }}
-                                          className="term-group-wrapper"
-                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-                                        >
-                                          {(groupIdx > 0 || dragHintState.signHint === '-') && (
-                                            <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
-                                              {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
-                                            </span>
-                                          )}
-                                          <div className="term-card drop-slot-placeholder" />
-                                        </motion.div>
-                                      )}
-                                      {groupIdx > 0 && (
-                                        <button
-                                          className="operator-btn"
-                                          style={{
-                                            pointerEvents: 'auto',
-                                            margin: '0 4px',
-                                            visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
-                                          }}
-                                          onMouseDown={(e) => e.stopPropagation()}
-                                          onTouchStart={(e) => e.stopPropagation()}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'num');
-                                          }}
-                                        >
-                                          {group[0].coeff < 0 ? '-' : '+'}
-                                        </button>
-                                      )}
-                                      <motion.div
-                                        className="term-group-wrapper"
-                                        style={{
-                                          display: 'flex',
-                                          flexDirection: 'row',
-                                          alignItems: 'center',
-                                          position: 'relative',
-                                          overflow: 'visible',
-                                          zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
-                                        }}
-                                      >
-                                        {group.map((term, termIdx) => {
-                                          const index = numTerms.findIndex(t => t.id === term.id);
-                                          const oneChar = isOneChar(term);
-                                          const isSliced = slicedNum.includes(term.id);
-                                          const isCrossed = crossedOutNum.includes(term.id);
-                                          return (
-                                            <div
-                                              key={term.id}
-                                              className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                              style={{
-                                                zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
-                                                position: 'relative',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                              }}
-                                            >
-                                              {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
-                                                <span
-                                                  className="operator-static"
-                                                  style={{
-                                                    marginRight: '4px',
-                                                    fontWeight: 800,
-                                                    visibility: draggingCardId === term.id ? 'hidden' : 'visible'
-                                                  }}
-                                                >
-                                                  -
-                                                </span>
-                                              )}
-                                              {termIdx > 0 && (
-                                                <button
-                                                  className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                                  style={{
-                                                    pointerEvents: 'auto',
-                                                    visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
-                                                  }}
-                                                  onMouseDown={e => e.stopPropagation()}
-                                                  onTouchStart={e => e.stopPropagation()}
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'num');
-                                                  }}
-                                                >
-                                                  {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
-                                                </button>
-                                              )}
-                                              <motion.div
-                                                className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
-                                                data-id={term.id}
-                                                data-type="num"
-                                                data-index={index}
-                                                drag={!isValidating && term.coeff !== 0}
-                                                dragConstraints={bannerRef}
-                                                dragSnapToOrigin={true}
-                                                dragElastic={0}
-                                                whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
-                                                transition={isValidating ? { duration: 0 } : undefined}
-                                                onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
-                                                onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
-                                                onDragEnd={(e, info) => {
-                                                  setIsDraggingTerm(false);
-                                                  setDraggingCardId(null);
-                                                  handleDragEndCross(term, 'num', e, info);
-                                                }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
-                                                onTap={() => handleCardTap(term, 'num')}
-                                              >
-                                                {draggingCardId === term.id && term.coeff < 0 && (
-                                                  <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
-                                                )}
-                                                {renderTermValue(term)}
-                                                {(isSliced || isCrossed) && (
-                                                  <div
-                                                    className="strike-line"
-                                                    style={{
-                                                      transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
-                                                    }}
-                                                  />
-                                                )}
-                                              </motion.div>
-                                            </div>
-                                          );
-                                        })}
-                                        {showLeftDenMirrors && renderDenMirror(denTerms)}
-                                      </motion.div>
-                                    </React.Fragment>
-                                  );
-                                })}
-                                {dragHintState?.side === 'leftNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(numTerms).length && (
+                              {isLeftEmpty ? (
+                                dragHintState?.side === 'leftNum' ? (
                                   <motion.div
-                                    key="hint-slot-num-left-end"
+                                    key="hint-slot-num-left-empty"
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
@@ -2630,17 +2464,181 @@ export default function AlgeBrosCartridge({
                                     className="term-group-wrapper"
                                     style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
                                   >
-                                    {(splitIntoAdditiveGroups(numTerms).length > 0 || dragHintState.signHint === '-') && (
-                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
-                                        {splitIntoAdditiveGroups(numTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
-                                      </span>
+                                    {dragHintState.signHint === '-' && (
+                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
                                     )}
                                     <div className="term-card drop-slot-placeholder" />
                                   </motion.div>
-                                )}
-                              </>
-                            )}
-                          </AnimatePresence>
+                                ) : topic === 'equations' ? (
+                                  (denTerms.length > 0 && !isDenOne(denTerms)) ? (
+                                    <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                  ) : (
+                                    <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
+                                  )
+                                ) : (
+                                  <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                )
+                              ) : (
+                                <>
+                                  {splitIntoAdditiveGroups(numTerms.filter(t => t.coeff !== 0 || numTerms.length === 1)).map((group, groupIdx) => {
+                                    const showHintHere = dragHintState?.side === 'leftNum' && dragHintState.insertIndex === groupIdx;
+                                return (
+                                  <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
+                                    {showHintHere && (
+                                      <motion.div
+                                        key="hint-slot-num-left"
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.12 }}
+                                        className="term-group-wrapper"
+                                        style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                      >
+                                        {(groupIdx > 0 || dragHintState.signHint === '-') && (
+                                          <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                            {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                          </span>
+                                        )}
+                                        <div className="term-card drop-slot-placeholder" />
+                                      </motion.div>
+                                    )}
+                                    {groupIdx > 0 && (
+                                      <button
+                                        className="operator-btn"
+                                        style={{
+                                          pointerEvents: 'auto',
+                                          margin: '0 4px',
+                                          visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                        }}
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                        onTouchStart={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleCombineEquationGroup(groupIdx, 'num');
+                                        }}
+                                      >
+                                        {group[0].coeff < 0 ? '-' : '+'}
+                                      </button>
+                                    )}
+                                    <div
+                                      className="term-group-wrapper"
+                                      style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        position: 'relative',
+                                        overflow: 'visible',
+                                        zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
+                                      }}
+                                    >
+                                      {group.map((term, termIdx) => {
+                                        const index = numTerms.findIndex(t => t.id === term.id);
+                                        const oneChar = isOneChar(term);
+                                        const isSliced = slicedNum.includes(term.id);
+                                        const isCrossed = crossedOutNum.includes(term.id);
+                                        return (
+                                          <div
+                                            key={term.id}
+                                            className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                            style={{
+                                              zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
+                                              position: 'relative',
+                                              display: 'flex',
+                                              flexDirection: 'row',
+                                              alignItems: 'center'
+                                            }}
+                                          >
+                                            {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
+                                              <span
+                                                className="operator-static"
+                                                style={{
+                                                  marginRight: '4px',
+                                                  fontWeight: 800,
+                                                  visibility: draggingCardId === term.id ? 'hidden' : 'visible'
+                                                }}
+                                              >
+                                                -
+                                              </span>
+                                            )}
+                                            {termIdx > 0 && (
+                                              <button
+                                                className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                                style={{
+                                                  pointerEvents: 'auto',
+                                                  visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
+                                                }}
+                                                onMouseDown={e => e.stopPropagation()}
+                                                onTouchStart={e => e.stopPropagation()}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleMultiplyAdjacent(index, 'num');
+                                                }}
+                                              >
+                                                {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
+                                              </button>
+                                            )}
+                                            <motion.div
+                                              className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                              data-id={term.id}
+                                              data-type="num"
+                                              data-index={index}
+                                              drag={!isValidating && term.coeff !== 0}
+                                              dragConstraints={bannerRef}
+                                              dragSnapToOrigin={true}
+                                              dragElastic={0}
+                                              whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
+                                              transition={{ duration: 0 }}
+                                              onDragStart={(e, info) => handleDragStartInit(term, 'num', e, info)}
+                                              onDrag={(e, info) => handleDragCross(term, 'num', e, info)}
+                                              onDragEnd={(e, info) => {
+                                                setIsDraggingTerm(false);
+                                                setDraggingCardId(null);
+                                                handleDragEndCross(term, 'num', e, info);
+                                              }}
+                                              style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
+                                              onTap={() => handleCardTap(term, 'num')}
+                                            >
+                                              {draggingCardId === term.id && term.coeff < 0 && (
+                                                <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+                                              )}
+                                              {renderTermValue(term)}
+                                              {(isSliced || isCrossed) && (
+                                                <div
+                                                  className="strike-line"
+                                                  style={{
+                                                    transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                                  }}
+                                                />
+                                              )}
+                                            </motion.div>
+                                          </div>
+                                        );
+                                      })}
+                                      {showLeftDenMirrors && renderDenMirror(denTerms)}
+                                    </div>
+                                  </React.Fragment>
+                                );
+                              })}
+                              {dragHintState?.side === 'leftNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(numTerms).length && (
+                                <motion.div
+                                  key="hint-slot-num-left-end"
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.8 }}
+                                  transition={{ duration: 0.12 }}
+                                  className="term-group-wrapper"
+                                  style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                >
+                                  {(splitIntoAdditiveGroups(numTerms).length > 0 || dragHintState.signHint === '-') && (
+                                    <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                      {splitIntoAdditiveGroups(numTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                    </span>
+                                  )}
+                                  <div className="term-card drop-slot-placeholder" />
+                                </motion.div>
+                              )}
+                            </>
+                          )}
                         </div>
                         {/* Division Line */}
                         <div
@@ -2659,17 +2657,14 @@ export default function AlgeBrosCartridge({
                               position: 'relative'
                             }}
                           >
-                            <AnimatePresence>
                               {denTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
                                 const isSliced = slicedDen.includes(term.id);
                                 const isCrossed = crossedOutDen.includes(term.id);
                                 return (
-                                  <motion.div
+                                  <div
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    
-                                    transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -2700,6 +2695,7 @@ export default function AlgeBrosCartridge({
                                       dragSnapToOrigin={true}
                                       dragElastic={0}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      transition={{ duration: 0 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDrag={(e, info) => handleDragCross(term, 'den', e, info)}
                                       onDragEnd={(e, info) => {
@@ -2719,7 +2715,7 @@ export default function AlgeBrosCartridge({
                                         />
                                       )}
                                     </motion.div>
-                                  </motion.div>
+                                  </div>
                                 );
                               })}
                               {dragHintState?.side === 'leftDen' && (
@@ -2730,7 +2726,6 @@ export default function AlgeBrosCartridge({
                                   <div className="term-card drop-slot-placeholder" />
                                 </div>
                               )}
-                            </AnimatePresence>
                           </div>
                         )}
                       </div>
@@ -2748,194 +2743,192 @@ export default function AlgeBrosCartridge({
                                 position: 'relative'
                               }}
                             >
-                                  <AnimatePresence>
-                                    {isRightEmpty ? (
-                                      dragHintState?.side === 'rightNum' ? (
-                                        <motion.div
-                                          key="hint-slot-num-right-empty"
-                                          initial={{ opacity: 0, scale: 0.8 }}
-                                          animate={{ opacity: 1, scale: 1 }}
-                                          exit={{ opacity: 0, scale: 0.8 }}
-                                          transition={{ duration: 0.12 }}
-                                          className="term-group-wrapper"
-                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-                                        >
-                                          {dragHintState.signHint === '-' && (
-                                            <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
-                                          )}
-                                          <div className="term-card drop-slot-placeholder" />
-                                        </motion.div>
-                                      ) : topic === 'equations' ? (
-                                        (denTerms.length > 0 && !isDenOne(denTerms)) ? (
-                                          <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
-                                        ) : (
-                                          <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
-                                        )
-                                      ) : (
+                                  {isRightEmpty ? (
+                                    dragHintState?.side === 'rightNum' ? (
+                                      <motion.div
+                                        key="hint-slot-num-right-empty"
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.12 }}
+                                        className="term-group-wrapper"
+                                        style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                      >
+                                        {dragHintState.signHint === '-' && (
+                                          <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>-</span>
+                                        )}
+                                        <div className="term-card drop-slot-placeholder" />
+                                      </motion.div>
+                                    ) : topic === 'equations' ? (
+                                      (denTerms.length > 0 && !isDenOne(denTerms)) ? (
                                         <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                      ) : (
+                                        <div className="term-card is-zero" style={{ cursor: 'default', padding: '0 12px' }}>0</div>
                                       )
                                     ) : (
-                                      <>
-                                        {splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).map((group, groupIdx) => {
-                                          const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
-                                  return (
-                                    <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
-                                      {showHintHere && (
-                                        <motion.div
-                                          key="hint-slot-num-right"
-                                          initial={{ opacity: 0, scale: 0.8 }}
-                                          animate={{ opacity: 1, scale: 1 }}
-                                          exit={{ opacity: 0, scale: 0.8 }}
-                                          transition={{ duration: 0.12 }}
-                                          className="term-group-wrapper"
-                                          style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-                                        >
-                                          {(groupIdx > 0 || dragHintState.signHint === '-') && (
-                                            <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
-                                              {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
-                                            </span>
-                                          )}
-                                          <div className="term-card drop-slot-placeholder" />
-                                        </motion.div>
-                                      )}
-                                      {groupIdx > 0 && (
-                                        <button
-                                          className="operator-btn"
-                                          style={{
-                                            pointerEvents: 'auto',
-                                            margin: '0 4px',
-                                            visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
-                                          }}
-                                          onMouseDown={(e) => e.stopPropagation()}
-                                          onTouchStart={(e) => e.stopPropagation()}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleCombineEquationGroup(groupIdx, 'rightNum');
-                                          }}
-                                        >
-                                          {group[0].coeff < 0 ? '-' : '+'}
-                                        </button>
-                                      )}
+                                      <div className="term-card" style={{ cursor: 'default', padding: '0 12px' }}>1</div>
+                                    )
+                                  ) : (
+                                    <>
+                                      {splitIntoAdditiveGroups(rightNumTerms.filter(t => t.coeff !== 0 || rightNumTerms.length === 1)).map((group, groupIdx) => {
+                                        const showHintHere = dragHintState?.side === 'rightNum' && dragHintState.insertIndex === groupIdx;
+                                return (
+                                  <React.Fragment key={`group-${group[0]?.groupId || group[0]?.id || groupIdx}`}>
+                                    {showHintHere && (
                                       <motion.div
+                                        key="hint-slot-num-right"
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.8 }}
+                                        transition={{ duration: 0.12 }}
                                         className="term-group-wrapper"
+                                        style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                      >
+                                        {(groupIdx > 0 || dragHintState.signHint === '-') && (
+                                          <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                            {groupIdx > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                          </span>
+                                        )}
+                                        <div className="term-card drop-slot-placeholder" />
+                                      </motion.div>
+                                    )}
+                                    {groupIdx > 0 && (
+                                      <button
+                                        className="operator-btn"
                                         style={{
-                                          display: 'flex',
-                                          flexDirection: 'row',
-                                          alignItems: 'center',
-                                          position: 'relative',
-                                          overflow: 'visible',
-                                          zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
+                                          pointerEvents: 'auto',
+                                          margin: '0 4px',
+                                          visibility: (group[0].coeff < 0 && draggingCardId === group[0].id) ? 'hidden' : 'visible'
+                                        }}
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                        onTouchStart={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleCombineEquationGroup(groupIdx, 'rightNum');
                                         }}
                                       >
-                                        {group.map((term, termIdx) => {
-                                          const index = rightNumTerms.findIndex(t => t.id === term.id);
-                                          const oneChar = isOneChar(term);
-                                          const isSliced = slicedRightNum.includes(term.id);
-                                          const isCrossed = crossedOutRightNum.includes(term.id);
-                                          return (
-                                            <div
-                                              key={term.id}
-                                              className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                              style={{
-                                                zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
-                                                position: 'relative',
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                              }}
-                                            >
-                                              {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
-                                                <span
-                                                  className="operator-static"
-                                                  style={{
-                                                    marginRight: '4px',
-                                                    fontWeight: 800,
-                                                    visibility: draggingCardId === term.id ? 'hidden' : 'visible'
-                                                  }}
-                                                >
-                                                  -
-                                                </span>
-                                              )}
-                                              {termIdx > 0 && (
-                                                <button
-                                                  className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                                  style={{
-                                                    pointerEvents: 'auto',
-                                                    visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
-                                                  }}
-                                                  onMouseDown={e => e.stopPropagation()}
-                                                  onTouchStart={e => e.stopPropagation()}
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleMultiplyAdjacent(index, 'rightNum');
-                                                  }}
-                                                >
-                                                  {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
-                                                </button>
-                                              )}
-                                              <motion.div
-                                                className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
-                                                data-id={term.id}
-                                                data-type="rightNum"
-                                                data-index={index}
-                                                drag={!isValidating && term.coeff !== 0}
-                                                dragConstraints={bannerRef}
-                                                dragSnapToOrigin={true}
-                                                dragElastic={0}
-                                                whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
-                                                transition={isValidating ? { duration: 0 } : undefined}
-                                                onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
-                                                onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
-                                                onDragEnd={(e, info) => {
-                                                  setIsDraggingTerm(false);
-                                                  setDraggingCardId(null);
-                                                  handleDragEndCross(term, 'rightNum', e, info);
-                                                }}
-                                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
-                                                onTap={() => handleCardTap(term, 'rightNum')}
-                                              >
-                                                {draggingCardId === term.id && term.coeff < 0 && (
-                                                  <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
-                                                )}
-                                                {renderTermValue(term)}
-                                                {(isSliced || isCrossed) && (
-                                                  <div
-                                                    className="strike-line"
-                                                    style={{
-                                                      transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
-                                                    }}
-                                                  />
-                                                )}
-                                              </motion.div>
-                                            </div>
-                                          );
-                                        })}
-                                        {showRightDenMirrors && renderDenMirror(rightDenTerms)}
-                                      </motion.div>
-                                    </React.Fragment>
-                                  );
-                                })}
-                                {dragHintState?.side === 'rightNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(rightNumTerms).length && (
-                                  <motion.div
-                                    key="hint-slot-num-right-end"
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
-                                    transition={{ duration: 0.12 }}
-                                    className="term-group-wrapper"
-                                    style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-                                  >
-                                    {(splitIntoAdditiveGroups(rightNumTerms).length > 0 || dragHintState.signHint === '-') && (
-                                      <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
-                                        {splitIntoAdditiveGroups(rightNumTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
-                                      </span>
+                                        {group[0].coeff < 0 ? '-' : '+'}
+                                      </button>
                                     )}
-                                    <div className="term-card drop-slot-placeholder" />
-                                  </motion.div>
-                                )}
-                              </>
-                            )}
-                          </AnimatePresence>
+                                    <div
+                                      className="term-group-wrapper"
+                                      style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        position: 'relative',
+                                        overflow: 'visible',
+                                        zIndex: group.some(t => t.id === draggingCardId) ? 99999 : 1
+                                      }}
+                                    >
+                                      {group.map((term, termIdx) => {
+                                        const index = rightNumTerms.findIndex(t => t.id === term.id);
+                                        const oneChar = isOneChar(term);
+                                        const isSliced = slicedRightNum.includes(term.id);
+                                        const isCrossed = crossedOutRightNum.includes(term.id);
+                                        return (
+                                          <div
+                                            key={term.id}
+                                            className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                                            style={{
+                                              zIndex: term.id === draggingCardId ? 999999 : (activeFactorMenu?.cardId === term.id ? 1002 : 1),
+                                              position: 'relative',
+                                              display: 'flex',
+                                              flexDirection: 'row',
+                                              alignItems: 'center'
+                                            }}
+                                          >
+                                            {termIdx === 0 && groupIdx === 0 && topic === 'equations' && term.coeff < 0 && (
+                                              <span
+                                                className="operator-static"
+                                                style={{
+                                                  marginRight: '4px',
+                                                  fontWeight: 800,
+                                                  visibility: draggingCardId === term.id ? 'hidden' : 'visible'
+                                                }}
+                                              >
+                                                -
+                                              </span>
+                                            )}
+                                            {termIdx > 0 && (
+                                              <button
+                                                className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                                style={{
+                                                  pointerEvents: 'auto',
+                                                  visibility: (topic === 'equations' && term.coeff < 0 && draggingCardId === term.id) ? 'hidden' : 'visible'
+                                                }}
+                                                onMouseDown={e => e.stopPropagation()}
+                                                onTouchStart={e => e.stopPropagation()}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleMultiplyAdjacent(index, 'rightNum');
+                                                }}
+                                              >
+                                                {topic === 'equations' && term.coeff < 0 ? '-' : '·'}
+                                              </button>
+                                            )}
+                                            <motion.div
+                                              className={`term-card ${term.coeff === 0 ? 'is-zero' : ''} ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                              data-id={term.id}
+                                              data-type="rightNum"
+                                              data-index={index}
+                                              drag={!isValidating && term.coeff !== 0}
+                                              dragConstraints={bannerRef}
+                                              dragSnapToOrigin={true}
+                                              dragElastic={0}
+                                              whileDrag={isValidating ? undefined : { scale: 1.15, zIndex: 10000 }}
+                                              transition={{ duration: 0 }}
+                                              onDragStart={(e, info) => handleDragStartInit(term, 'rightNum', e, info)}
+                                              onDrag={(e, info) => handleDragCross(term, 'rightNum', e, info)}
+                                              onDragEnd={(e, info) => {
+                                                setIsDraggingTerm(false);
+                                                setDraggingCardId(null);
+                                                handleDragEndCross(term, 'rightNum', e, info);
+                                              }}
+                                              style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none', zIndex: draggingCardId === term.id ? 999999 : 1, opacity: draggingCardId === term.id ? 0.001 : 1 }}
+                                              onTap={() => handleCardTap(term, 'rightNum')}
+                                            >
+                                              {draggingCardId === term.id && term.coeff < 0 && (
+                                                <span className="drag-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
+                                              )}
+                                              {renderTermValue(term)}
+                                              {(isSliced || isCrossed) && (
+                                                <div
+                                                  className="strike-line"
+                                                  style={{
+                                                    transform: `translateY(-50%) rotate(${isCrossed ? -12 : (cardAngles[term.id] ?? -12)}deg)`
+                                                  }}
+                                                />
+                                              )}
+                                            </motion.div>
+                                          </div>
+                                        );
+                                      })}
+                                      {showRightDenMirrors && renderDenMirror(rightDenTerms)}
+                                    </div>
+                                  </React.Fragment>
+                                );
+                              })}
+                              {dragHintState?.side === 'rightNum' && dragHintState.insertIndex >= splitIntoAdditiveGroups(rightNumTerms).length && (
+                                <motion.div
+                                  key="hint-slot-num-right-end"
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.8 }}
+                                  transition={{ duration: 0.12 }}
+                                  className="term-group-wrapper"
+                                  style={{ pointerEvents: 'none', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                                >
+                                  {(splitIntoAdditiveGroups(rightNumTerms).length > 0 || dragHintState.signHint === '-') && (
+                                    <span className="operator-static" style={{ marginRight: '4px', fontWeight: 800, color: 'var(--accent-purple)' }}>
+                                      {splitIntoAdditiveGroups(rightNumTerms).length > 0 && dragHintState.signHint === '+' ? '+' : dragHintState.signHint}
+                                    </span>
+                                  )}
+                                  <div className="term-card drop-slot-placeholder" />
+                                </motion.div>
+                              )}
+                            </>
+                          )}
                         </div>
                         {/* Division Line */}
                         <div
@@ -2954,17 +2947,14 @@ export default function AlgeBrosCartridge({
                               position: 'relative'
                             }}
                           >
-                            <AnimatePresence>
                               {rightDenTerms.map((term, index) => {
                                 const oneChar = isOneChar(term);
                                 const isSliced = slicedRightDen.includes(term.id);
                                 const isCrossed = crossedOutRightDen.includes(term.id);
                                 return (
-                                  <motion.div
+                                  <div
                                     key={term.id}
                                     className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                    
-                                    transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 30 }}
                                     style={{
                                       pointerEvents: 'none',
                                       zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -2995,6 +2985,7 @@ export default function AlgeBrosCartridge({
                                       dragSnapToOrigin={true}
                                       dragElastic={0}
                                       whileDrag={{ scale: 1.15, zIndex: 10000 }}
+                                      transition={{ duration: 0 }}
                                       onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
                                       onDrag={(e, info) => handleDragCross(term, 'rightDen', e, info)}
                                       onDragEnd={(e, info) => {
@@ -3014,7 +3005,7 @@ export default function AlgeBrosCartridge({
                                         />
                                       )}
                                     </motion.div>
-                                  </motion.div>
+                                  </div>
                                 );
                               })}
                               {dragHintState?.side === 'rightDen' && (
@@ -3025,7 +3016,6 @@ export default function AlgeBrosCartridge({
                                   <div className="term-card drop-slot-placeholder" />
                                 </div>
                               )}
-                            </AnimatePresence>
                           </div>
                         )}
                       </div>
@@ -3037,152 +3027,126 @@ export default function AlgeBrosCartridge({
                   numTerms.length === 0 && denTerms.length === 0 ? (
                     <div className="term-card" style={{ cursor: 'default', fontSize: '1.2rem', padding: '0 16px' }}>1</div>
                   ) : (denTerms.length === 0) ? (
-                    <ScaledReorderGroup
-                      axis="x"
-                      values={numTerms}
-                      onReorder={setNumTerms}
+                    <div
                       className="expression-list"
                       style={{
-                        scale: stableScale,
+                        transform: `scale(${stableScale})`,
                         transformOrigin: 'center',
                         zIndex: activeFactorMenu?.type === 'num' ? 1001 : 1,
                         position: 'relative'
                       }}
-                      isValidating={isValidating}
                     >
-                      <AnimatePresence initial={false}>
-                        {numTerms.map((term, index) => {
-                          const oneChar = isOneChar(term);
-                          const isSliced = slicedNum.includes(term.id);
-                          const isCrossed = crossedOutNum.includes(term.id);
-                          return (
-                            <Reorder.Item
-                              key={term.id}
-                              value={term}
-                              initial={false}
-                              layout={!isValidating}
-                              dragListener={false}
-                              className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                              dragElastic={0}
-                              transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                              style={{
-                                zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                position: 'relative',
-                                pointerEvents: 'none'
-                              }}
-                            >
-                              {index > 0 && (
-                                <button
-                                  className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                  style={{ pointerEvents: 'auto' }}
-                                  onMouseDown={e => e.stopPropagation()}
-                                  onTouchStart={e => e.stopPropagation()}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleMultiplyAdjacent(index, 'num');
-                                  }}
-                                >
-                                  ·
-                                </button>
-                              )}
-                              <motion.div
-                                className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
-                                data-id={term.id}
-                                data-type="num"
-                                data-index={index}
-                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
-                                transition={isValidating ? { duration: 0 } : undefined}
-                                onTap={() => handleCardTap(term, 'num')}
+                      {numTerms.map((term, index) => {
+                        const oneChar = isOneChar(term);
+                        const isSliced = slicedNum.includes(term.id);
+                        const isCrossed = crossedOutNum.includes(term.id);
+                        return (
+                          <div
+                            key={term.id}
+                            className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
+                            style={{
+                              zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
+                              position: 'relative',
+                              pointerEvents: 'none'
+                            }}
+                          >
+                            {index > 0 && (
+                              <button
+                                className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                style={{ pointerEvents: 'auto' }}
+                                onMouseDown={e => e.stopPropagation()}
+                                onTouchStart={e => e.stopPropagation()}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMultiplyAdjacent(index, 'num');
+                                }}
                               >
-                                {renderTermValue(term)}
-                                {(isSliced || isCrossed) && (
-                                  <div
-                                    className="strike-line"
-                                    style={{
-                                      transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
-                                    }}
-                                  />
-                                )}
-
-                              </motion.div>
-                            </Reorder.Item>
-                          );
-                        })}
-                      </AnimatePresence>
-                    </ScaledReorderGroup>
+                                ·
+                              </button>
+                            )}
+                            <motion.div
+                              className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                              data-id={term.id}
+                              data-type="num"
+                              data-index={index}
+                              style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                              transition={{ duration: 0 }}
+                              onTap={() => handleCardTap(term, 'num')}
+                            >
+                              {renderTermValue(term)}
+                              {(isSliced || isCrossed) && (
+                                <div
+                                  className="strike-line"
+                                  style={{
+                                    transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                  }}
+                                />
+                              )}
+                            </motion.div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <div className="division-container">
                       {/* Numerator */}
-                      <ScaledReorderGroup
-                        axis="x"
-                        values={numTerms}
-                        onReorder={setNumTerms}
+                      <div
                         className="expression-list"
                         style={{
-                          scale: stableScale,
+                          transform: `scale(${stableScale})`,
                           transformOrigin: 'center'
                         }}
-                        isValidating={isValidating}
                       >
-                        <AnimatePresence initial={false}>
-                          {numTerms.length === 0 ? (
-                            <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
-                          ) : (
-                            numTerms.map((term, index) => {
-                              const oneChar = isOneChar(term);
-                              const isSliced = slicedNum.includes(term.id);
-                              const isCrossed = crossedOutNum.includes(term.id);
-                              return (
-                                <Reorder.Item
-                                  key={term.id}
-                                  value={term}
-                                  initial={false}
-                                  layout={!isValidating}
-                                  dragListener={false}
-                                  className="term-item-wrapper"
-                                  dragElastic={0}
-                                  transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                                  style={{ pointerEvents: 'none' }}
-                                >
-                                  {index > 0 && (
-                                    <button
-                                      className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
-                                      onMouseDown={e => e.stopPropagation()}
-                                      onTouchStart={e => e.stopPropagation()}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleMultiplyAdjacent(index, 'num');
-                                      }}
-                                    >
-                                      ·
-                                    </button>
-                                  )}
-                                  <motion.div
-                                    className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
-                                    data-id={term.id}
-                                    data-type="num"
-                                    data-index={index}
-                                    style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
-                                    transition={isValidating ? { duration: 0 } : undefined}
-                                    onTap={() => handleCardTap(term, 'num')}
+                        {numTerms.length === 0 ? (
+                          <div className="term-card" style={{ cursor: 'default', padding: '0 16px' }}>1</div>
+                        ) : (
+                          numTerms.map((term, index) => {
+                            const oneChar = isOneChar(term);
+                            const isSliced = slicedNum.includes(term.id);
+                            const isCrossed = crossedOutNum.includes(term.id);
+                            return (
+                              <div
+                                key={term.id}
+                                className="term-item-wrapper"
+                                style={{ pointerEvents: 'none' }}
+                              >
+                                {index > 0 && (
+                                  <button
+                                    className={`dot-separator-btn ${shakeDotButtons ? 'shake-dot-active' : ''}`}
+                                    onMouseDown={e => e.stopPropagation()}
+                                    onTouchStart={e => e.stopPropagation()}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleMultiplyAdjacent(index, 'num');
+                                    }}
                                   >
-                                    {renderTermValue(term)}
-                                    {(isSliced || isCrossed) && (
-                                      <div
-                                        className="strike-line"
-                                        style={{
-                                          transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
-                                        }}
-                                      />
-                                    )}
-
-                                  </motion.div>
-                                </Reorder.Item>
-                              );
-                            })
-                          )}
-                        </AnimatePresence>
-                      </ScaledReorderGroup>
+                                    ·
+                                  </button>
+                                )}
+                                <motion.div
+                                  className={`term-card ${oneChar ? 'one-char-card' : ''} ${isSliced ? 'is-sliced' : ''} ${isCrossed ? 'is-crossed-out' : ''} ${activeFactorMenu?.cardId === term.id ? 'is-decomposing' : ''}`}
+                                  data-id={term.id}
+                                  data-type="num"
+                                  data-index={index}
+                                  style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
+                                  transition={{ duration: 0 }}
+                                  onTap={() => handleCardTap(term, 'num')}
+                                >
+                                  {renderTermValue(term)}
+                                  {(isSliced || isCrossed) && (
+                                    <div
+                                      className="strike-line"
+                                      style={{
+                                        transform: `translateY(-50%) rotate(${cardAngles[term.id] ?? -12}deg)`
+                                      }}
+                                    />
+                                  )}
+                                </motion.div>
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
 
                       {/* Division Line */}
                       <div
@@ -3195,34 +3159,23 @@ export default function AlgeBrosCartridge({
 
                       {/* Denominator */}
                       {denTerms.length > 0 && !isDenOne(denTerms) && (
-                      <ScaledReorderGroup
-                        axis="x"
-                        values={denTerms}
-                        onReorder={setDenTerms}
-                        className="expression-list"
-                        style={{
-                          scale: stableScale,
-                          transformOrigin: 'center',
-                          zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
-                          position: 'relative'
-                        }}
-                        isValidating={isValidating}
-                      >
-                        <AnimatePresence initial={false}>
+                        <div
+                          className="expression-list"
+                          style={{
+                            transform: `scale(${stableScale})`,
+                            transformOrigin: 'center',
+                            zIndex: activeFactorMenu?.type === 'den' ? 1001 : 1,
+                            position: 'relative'
+                          }}
+                        >
                           {denTerms.map((term, index) => {
                             const oneChar = isOneChar(term);
                             const isSliced = slicedDen.includes(term.id);
                             const isCrossed = crossedOutDen.includes(term.id);
                             return (
-                              <Reorder.Item
+                              <div
                                 key={term.id}
-                                value={term}
-                                initial={false}
-                                layout={!isValidating}
-                                dragListener={false}
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
-                                dragElastic={0}
-                                transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
                                 style={{
                                   pointerEvents: 'none',
                                   zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -3249,7 +3202,7 @@ export default function AlgeBrosCartridge({
                                   data-type="den"
                                   data-index={index}
                                   style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
-                                  transition={isValidating ? { duration: 0 } : undefined}
+                                  transition={{ duration: 0 }}
                                   onTap={() => handleCardTap(term, 'den')}
                                 >
                                   {renderTermValue(term)}
@@ -3261,13 +3214,11 @@ export default function AlgeBrosCartridge({
                                       }}
                                     />
                                   )}
-
                                 </motion.div>
-                              </Reorder.Item>
+                              </div>
                             );
                           })}
-                        </AnimatePresence>
-                      </ScaledReorderGroup>
+                        </div>
                       )}
                     </div>
                   )
@@ -3283,65 +3234,50 @@ export default function AlgeBrosCartridge({
                     }}
                     isValidating={isValidating}
                   >
-                    <AnimatePresence initial={false}>
-                      {terms.map((term, index) => {
-                        const isFirst = index === 0;
-                        const formatted = formatTerm(term, isFirst);
-                        const hasVar = !!term.variable;
-                        const oneChar = isOneChar(term);
+                    {terms.map((term, index) => {
+                      const isFirst = index === 0;
+                      const formatted = formatTerm(term, isFirst);
+                      const hasVar = !!term.variable;
+                      const oneChar = isOneChar(term);
 
-                        return (
-                          <Reorder.Item
-                            key={term.id}
-                            value={term}
-                            initial={false}
-                            layout={!isValidating}
-                            dragListener={!isValidating}
-                            className="term-item-wrapper"
-                            dragElastic={0}
-                            whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                            
-                            // Reordering makes every card between the old and new slot hop into
-                            // place live as the drag crosses each one — a close-to-critically-
-                            // damped spring (vs. the more elastic default) keeps each of those
-                            // hops a quick, contained settle instead of a springy overshoot.
-                            transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                            onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
-                            onDragEnd={() => { setIsDraggingTerm(false); setDraggingCardId(null); }}
-                          >
-                            {/* Sign button (outside the card box!). It belongs to this term's
-                                position in the ROW, not to the term itself, so it's hidden (not
-                                dragged along) while the term is being picked up — it reappears in
-                                the right place once the term settles into its dropped position.
-                                The FIRST term has no "previous term" to sit between, so its own
-                                leading minus (when negative) lives inside the card instead, same
-                                as any other term's minus does while it's being dragged. */}
-                            {!isFirst && (
-                              <button
-                                className="operator-btn"
-                                style={{ visibility: draggingCardId === term.id ? 'hidden' : 'visible' }}
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onTouchStart={(e) => e.stopPropagation()}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCombine(index);
-                                }}
-                              >
-                                {formatted.sign}
-                              </button>
+                      return (
+                        <Reorder.Item
+                          key={term.id}
+                          value={term}
+                          initial={false}
+                          layout={!isValidating}
+                          dragListener={!isValidating}
+                          className="term-item-wrapper"
+                          dragElastic={0}
+                          whileDrag={isValidating ? undefined : { scale: 1.06 }}
+                          transition={{ duration: 0 }}
+                          onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); setDraggingCardId(term.id); }}
+                          onDragEnd={() => { setIsDraggingTerm(false); setDraggingCardId(null); }}
+                        >
+                          {!isFirst && (
+                            <button
+                              className="operator-btn"
+                              style={{ visibility: draggingCardId === term.id ? 'hidden' : 'visible' }}
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onTouchStart={(e) => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCombine(index);
+                              }}
+                            >
+                              {formatted.sign}
+                            </button>
+                          )}
+
+                          <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`} data-id={term.id}>
+                            {formatted.sign === '-' && (isFirst || draggingCardId === term.id) && (
+                              <span className="term-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
                             )}
-
-                            {/* Term card box (only wraps the value!) */}
-                            <div className={`term-card ${hasVar ? 'variable-term' : 'constant-term'} ${oneChar ? 'one-char-card' : ''}`} data-id={term.id}>
-                              {formatted.sign === '-' && (isFirst || draggingCardId === term.id) && (
-                                <span className="term-negative-prefix" style={{ marginRight: '2px', fontWeight: 800 }}>-</span>
-                              )}
-                              {renderTermValue(term)}
-                            </div>
-                          </Reorder.Item>
-                        );
-                      })}
-                    </AnimatePresence>
+                            {renderTermValue(term)}
+                          </div>
+                        </Reorder.Item>
+                      );
+                    })}
                   </ScaledReorderGroup>
                 )}
                 </div>
