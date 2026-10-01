@@ -70,56 +70,6 @@ function ParticlesBG() {
   );
 }
 
-function GameOverScreen({ stats, onRestart, totalLevels = 10 }) {
-  const isPerfectGame = stats.perfectLevels === totalLevels;
-  
-  return (
-    <motion.div
-      className="summary-screen"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <h1 className="summary-title">MISSION COMPLETE</h1>
-      
-      <div className="summary-stats">
-        <div className="stat-row">
-          <span className="stat-label">Total Levels Solved</span>
-          <span className="stat-value success">{totalLevels} / {totalLevels}</span>
-        </div>
-        <div className="stat-row">
-          <span className="stat-label">Perfect Levels (No Mistakes & Ideal Moves)</span>
-          <span className={`stat-value ${stats.perfectLevels > Math.floor(totalLevels / 2) ? 'perfect' : ''}`}>
-            {stats.perfectLevels} / {totalLevels}
-          </span>
-        </div>
-        <div className="stat-row">
-          <span className="stat-label">Total Sign Presses</span>
-          <span className="stat-value">{stats.totalUserPresses}</span>
-        </div>
-        <div className="stat-row">
-          <span className="stat-label">Perfect Target Presses</span>
-          <span className="stat-value perfect">{stats.totalMinPresses}</span>
-        </div>
-        <div className="stat-row">
-          <span className="stat-label font-bold">Mistakes Made</span>
-          <span className="stat-value mistakes">{stats.totalMistakes}</span>
-        </div>
-      </div>
-
-      <button
-        className="primary-btn"
-        onClick={() => {
-          unlockAudio();
-          playSelect();
-          onRestart();
-        }}
-      >
-        PLAY AGAIN
-      </button>
-    </motion.div>
-  );
-}
 
 const isOneChar = (term) => {
   const absCoeff = Math.abs(term.coeff);
@@ -308,6 +258,7 @@ export default function AlgeBrosCartridge({
   const [minPresses, setMinPresses] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [isLevelPerfect, setIsLevelPerfect] = useState(true);
+  const [isGameFinished, setIsGameFinished] = useState(false);
   
   // Visual/Feedback State
   const [feedback, setFeedback] = useState({ text: 'Reorder and combine like terms!', type: 'info' });
@@ -521,6 +472,7 @@ export default function AlgeBrosCartridge({
     setUserPresses(0);
     setMistakes(0);
     setIsLevelPerfect(true);
+    setIsGameFinished(false);
     setFeedback({
       text: topic === 'equations'
         ? 'Isolate the variable on one side of the equals sign!'
@@ -735,6 +687,7 @@ export default function AlgeBrosCartridge({
   // replays the level set from the top.
   const handleRestartGame = useCallback(() => {
     playPopFX();
+    setIsGameFinished(false);
     setCurrentLevelIndex(0);
     setStats({ totalUserPresses: 0, totalMinPresses: 0, totalMistakes: 0, perfectLevels: 0 });
     if (levels[0]) loadLevel(levels[0]);
@@ -744,6 +697,7 @@ export default function AlgeBrosCartridge({
   const handleRestartLevel = () => {
     threeTermScaleRef.current = null;
     setActiveFactorMenu(null);
+    setIsGameFinished(false);
     playPopFX();
     if (levels[currentLevelIndex]) {
       loadLevel(levels[currentLevelIndex]);
@@ -1874,11 +1828,12 @@ export default function AlgeBrosCartridge({
         const nextIndex = currentLevelIndex + 1;
         if (nextIndex >= (levels.length || 10)) {
           playVictory();
-          setScreen('gameOver');
+          setIsGameFinished(true);
+          showFeedback('Mission Complete!', 'success');
+          setIsValidating(false);
           if (onComplete) {
             onComplete();
           }
-          setIsValidating(false);
         } else {
           setCurrentLevelIndex(nextIndex);
           loadLevel(levels[nextIndex]);
@@ -2171,11 +2126,11 @@ export default function AlgeBrosCartridge({
   }
 
   const totalLevels = Math.max(1, levels.length || (config.levels ? config.levels.length : 10));
-  const completedLevels = isValidating
+  const completedLevels = (isGameFinished || isValidating)
     ? Math.min(totalLevels, currentLevelIndex + 1)
     : Math.min(totalLevels, currentLevelIndex);
   const progressPercent = Math.min(100, Math.max(0, (completedLevels / totalLevels) * 100));
-  const isGameComplete = completedLevels >= totalLevels;
+  const isGameComplete = isGameFinished || completedLevels >= totalLevels;
 
   return (
     <div
@@ -2236,7 +2191,7 @@ export default function AlgeBrosCartridge({
               <div className="hud-top-wrapper">
                 <div className="hud-header">
                   <div className="hud-badge">
-                    LVL <span className="font-mono">{currentLevelIndex + 1} / {levels.length || 10}</span>
+                    LVL <span className="font-mono">{Math.min(totalLevels, isGameFinished ? totalLevels : currentLevelIndex + 1)} / {totalLevels}</span>
                   </div>
                   <div 
                     className="hud-badge"
@@ -2285,7 +2240,7 @@ export default function AlgeBrosCartridge({
                 </div>
               </div>
 
-              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading) ? 'none' : 'auto' }}>
+              <div className={`expression-wrapper ${shake ? 'shake-container' : ''} ${isValidating ? 'is-success-transition' : ''} ${isDraggingTerm ? 'is-dragging-active' : ''} ${topic === 'divisions' || topic === 'equations' ? 'topic-divisions' : ''}`} style={{ pointerEvents: (isValidating || isMatchingFading || isGameFinished) ? 'none' : 'auto' }}>
                 <div className="algebros-banner-container">
                   <button
                     className="banner-reset-btn"
@@ -3278,21 +3233,13 @@ export default function AlgeBrosCartridge({
                 <button
                   className="ready-btn"
                   onClick={handleValidate}
-                  disabled={isValidating}
+                  disabled={isValidating || isGameFinished}
+                  style={isGameFinished ? { background: 'linear-gradient(135deg, #10b981, #059669)', cursor: 'default', opacity: 0.9 } : undefined}
                 >
-                  READY
+                  {isGameFinished ? 'COMPLETED! ✓' : 'READY'}
                 </button>
               </div>
             </motion.div>
-          )}
-
-          {screen === 'gameOver' && (
-            <GameOverScreen
-              key="gameover"
-              stats={stats}
-              totalLevels={levels.length || 10}
-              onRestart={handleRestartGame}
-            />
           )}
         </AnimatePresence>
       </div>

@@ -731,7 +731,7 @@ const Player = () => {
             'button, input, select, textarea, a, label, summary, ' +
             '[role="button"], [role="slider"], [role="checkbox"], [role="radio"], [role="tab"], [role="switch"], [role="link"], ' +
             '.balanza-tile, .balanza-menu-tile, .balanza-restart-btn, ' +
-            '.algebros-cartridge, .algebros-equation-banner, .algebros-card, .algebros-slot, .algebros-op-btn, .term-card, .term-item-wrapper, .term-group-wrapper, .drop-slot-placeholder, .dot-separator-btn, .operator-btn, .factor-option-btn, .floating-reset-btn, .ready-submit-btn, ' +
+            '.algebros-card, .algebros-slot, .algebros-op-btn, .term-card, .term-item-wrapper, .term-group-wrapper, .drop-slot-placeholder, .dot-separator-btn, .operator-btn, .factor-option-btn, .floating-reset-btn, .ready-submit-btn, ' +
             '.fraction-slice, .swipe-card, ' +
             '.quiz-option, .quiz-option-match, .quiz-options-container-match, .match-mode, .conecta-item, .conecta-card, .conecta-column, .conecta-columns-container, .conecta-mode, .chatquiz-option-btn, .match-card, .nl-knob-player, .quiz-ready-btn, ' +
             '.explorenl-pointer, .explorenl-equation-card, ' +
@@ -1160,7 +1160,7 @@ const Player = () => {
                                 <div className="cartridge-container" style={{
                                     position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
                                     zIndex: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 80 : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 101 : (slide.cartridge.type === 'Balanza' ? 20 : 1)), 
-                                    pointerEvents: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 'none' : (slide.cartridge.type === 'Potiondas' && solvedSlides.has(index) ? 'none' : 'auto')
+                                    pointerEvents: (slide.cartridge.type === 'ExploreNL' || slide.cartridge.type === 'ExloreNL') ? 'none' : ((slide.cartridge.type === 'Potiondas' || slide.cartridge.type === 'AlgeBros') && solvedSlides.has(index) ? 'none' : 'auto')
                                 }}>
                                     {slide.cartridge.type === 'FractionAlpha' && (
                                         <FractionAlpha
