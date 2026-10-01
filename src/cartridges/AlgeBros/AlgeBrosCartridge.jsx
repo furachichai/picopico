@@ -349,12 +349,14 @@ export default function AlgeBrosCartridge({
   const isGlobalSlicing = React.useRef(false);
   const canvasRef = React.useRef(null);
   const swipePoints = React.useRef([]);
+  const allSwipePoints = React.useRef([]);
   const tempSlicedNum = React.useRef(null);
   const tempSlicedDen = React.useRef(null);
   const sliceAnimFrameRef = React.useRef(null);
 
   const clearSliceCanvas = useCallback(() => {
     swipePoints.current = [];
+    allSwipePoints.current = [];
     isGlobalSlicing.current = false;
     tempSlicedNum.current = null;
     tempSlicedDen.current = null;
@@ -407,6 +409,19 @@ export default function AlgeBrosCartridge({
     crossedOutRightNumRef.current = crossedOutRightNum;
     crossedOutRightDenRef.current = crossedOutRightDen;
   }, [numTerms, denTerms, slicedNum, slicedDen, rightNumTerms, rightDenTerms, slicedRightNum, slicedRightDen, topic, isValidating, isMatchingFading, crossedOutNum, crossedOutDen, crossedOutRightNum, crossedOutRightDen]);
+
+  // Auto-clear orphaned single slice marks if not paired within 6 seconds
+  useEffect(() => {
+    if (slicedNum.length > 0 || slicedDen.length > 0 || slicedRightNum.length > 0 || slicedRightDen.length > 0) {
+      const timer = setTimeout(() => {
+        setSlicedNum([]);
+        setSlicedDen([]);
+        setSlicedRightNum([]);
+        setSlicedRightDen([]);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [slicedNum, slicedDen, slicedRightNum, slicedRightDen]);
 
   // Game-wide statistics
   const [stats, setStats] = useState({
@@ -1491,6 +1506,62 @@ export default function AlgeBrosCartridge({
       sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
     };
 
+    const getCardAtPoint = (clientX, clientY) => {
+      const elem = document.elementFromPoint(clientX, clientY);
+      const directCard = elem?.closest('.term-card:not(.is-zero)');
+      if (directCard) return directCard;
+
+      const cards = document.querySelectorAll('.algebros-cartridge .term-card:not(.is-zero)');
+      let bestCard = null;
+      let bestDistSq = Infinity;
+      const pad = 12; // 12px generous hit-target padding
+
+      for (let i = 0; i < cards.length; i++) {
+        const c = cards[i];
+        const r = c.getBoundingClientRect();
+        if (
+          clientX >= r.left - pad &&
+          clientX <= r.right + pad &&
+          clientY >= r.top - pad &&
+          clientY <= r.bottom + pad
+        ) {
+          const centerX = r.left + r.width / 2;
+          const centerY = r.top + r.height / 2;
+          const distSq = (clientX - centerX) ** 2 + (clientY - centerY) ** 2;
+          if (distSq < bestDistSq) {
+            bestDistSq = distSq;
+            bestCard = c;
+          }
+        }
+      }
+      return bestCard;
+    };
+
+    const recordCardHit = (card) => {
+      if (!card) return;
+      const id = card.getAttribute('data-id');
+      const type = card.getAttribute('data-type');
+      if (!id || !type) return;
+
+      if (type === 'num') {
+        if (!crossedOutNumRef.current.includes(id)) {
+          tempSlicedNum.current = { id, side: 'left' };
+        }
+      } else if (type === 'den') {
+        if (!crossedOutDenRef.current.includes(id)) {
+          tempSlicedDen.current = { id, side: 'left' };
+        }
+      } else if (type === 'rightNum') {
+        if (!crossedOutRightNumRef.current.includes(id)) {
+          tempSlicedNum.current = { id, side: 'right' };
+        }
+      } else if (type === 'rightDen') {
+        if (!crossedOutRightDenRef.current.includes(id)) {
+          tempSlicedDen.current = { id, side: 'right' };
+        }
+      }
+    };
+
     const handleGlobalDown = (e) => {
       if (isValidatingRef.current || isMatchingFadingRef.current) return;
       const curTopic = topicRef.current;
@@ -1521,31 +1592,20 @@ export default function AlgeBrosCartridge({
       tempSlicedNum.current = null;
       tempSlicedDen.current = null;
       
-      // If pointerdown is directly on a term card, record it immediately
-      const card = e.target.closest('.term-card');
-      if (card) {
-        const id = card.getAttribute('data-id');
-        const type = card.getAttribute('data-type');
-        if (id && type) {
-          if (type === 'num' && !crossedOutNumRef.current.includes(id)) {
-            tempSlicedNum.current = { id, side: 'left' };
-          } else if (type === 'den' && !crossedOutDenRef.current.includes(id)) {
-            tempSlicedDen.current = { id, side: 'left' };
-          } else if (type === 'rightNum' && !crossedOutRightNumRef.current.includes(id)) {
-            tempSlicedNum.current = { id, side: 'right' };
-          } else if (type === 'rightDen' && !crossedOutRightDenRef.current.includes(id)) {
-            tempSlicedDen.current = { id, side: 'right' };
-          }
-        }
+      const initialCard = getCardAtPoint(e.clientX, e.clientY);
+      if (initialCard) {
+        recordCardHit(initialCard);
       }
       
-      swipePoints.current = [{
+      const pt = {
         x,
         y,
         clientX: e.clientX,
         clientY: e.clientY,
         time: Date.now()
-      }];
+      };
+      swipePoints.current = [pt];
+      allSwipePoints.current = [{ clientX: e.clientX, clientY: e.clientY }];
       if (sliceAnimFrameRef.current) cancelAnimationFrame(sliceAnimFrameRef.current);
       sliceAnimFrameRef.current = requestAnimationFrame(animateCanvas);
     };
@@ -1569,6 +1629,7 @@ export default function AlgeBrosCartridge({
       };
       
       swipePoints.current.push(newPoint);
+      allSwipePoints.current.push({ clientX: e.clientX, clientY: e.clientY });
       
       // Collision segment interpolation
       if (lastPoint) {
@@ -1582,31 +1643,9 @@ export default function AlgeBrosCartridge({
           const interpClientX = lastPoint.clientX + dx * t;
           const interpClientY = lastPoint.clientY + dy * t;
           
-          const elem = document.elementFromPoint(interpClientX, interpClientY);
-          const card = elem?.closest('.term-card');
+          const card = getCardAtPoint(interpClientX, interpClientY);
           if (card) {
-            const id = card.getAttribute('data-id');
-            const type = card.getAttribute('data-type');
-            
-            if (id && type) {
-              if (type === 'num') {
-                if (!crossedOutNumRef.current.includes(id)) {
-                  tempSlicedNum.current = { id, side: 'left' };
-                }
-              } else if (type === 'den') {
-                if (!crossedOutDenRef.current.includes(id)) {
-                  tempSlicedDen.current = { id, side: 'left' };
-                }
-              } else if (type === 'rightNum') {
-                if (!crossedOutRightNumRef.current.includes(id)) {
-                  tempSlicedNum.current = { id, side: 'right' };
-                }
-              } else if (type === 'rightDen') {
-                if (!crossedOutRightDenRef.current.includes(id)) {
-                  tempSlicedDen.current = { id, side: 'right' };
-                }
-              }
-            }
+            recordCardHit(card);
           }
         }
       }
@@ -1618,46 +1657,138 @@ export default function AlgeBrosCartridge({
       
       const numSlice = tempSlicedNum.current;
       const denSlice = tempSlicedDen.current;
+      const pts = allSwipePoints.current.length > 1 ? allSwipePoints.current : swipePoints.current;
       
       let angle = -12;
-      const points = swipePoints.current;
-      if (points.length > 1) {
-        const first = points[0];
-        const last = points[points.length - 1];
+      let isSwipe = false;
+      if (pts.length > 1) {
+        const first = pts[0];
+        const last = pts[pts.length - 1];
         const dx = last.clientX - first.clientX;
         const dy = last.clientY - first.clientY;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist >= 10) {
+          isSwipe = true;
           let rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
           while (rawAngle > 90) rawAngle -= 180;
-          while (rawAngle < -90) rawAngle += 180;
+          while (rawAngle < -90) rawAngle -= 180;
           angle = rawAngle;
         }
       }
 
       // Immediately clear the slice canvas so no green line lingers on screen
       clearSliceCanvas();
+
+      // If not a deliberate swipe gesture (e.g. static tap for factor menu), do not slice
+      if (!isSwipe) {
+        return;
+      }
       
-      // Both numerator and denominator must be sliced on the same side
-      if (!numSlice || !denSlice || numSlice.side !== denSlice.side) {
+      // Case 1: Both numerator and denominator sliced in the same stroke
+      if (numSlice && denSlice && numSlice.side === denSlice.side) {
+        unlockAudio();
+        setCardAngles(prev => ({
+          ...prev,
+          [numSlice.id]: angle,
+          [denSlice.id]: angle
+        }));
         setSlicedNum([]);
         setSlicedDen([]);
         setSlicedRightNum([]);
         setSlicedRightDen([]);
+        if (compareAndCrossOutSliceRef.current) {
+          compareAndCrossOutSliceRef.current(numSlice.id, denSlice.id, numSlice.side, angle);
+        }
         return;
       }
-      
-      unlockAudio();
-      if (compareAndCrossOutSliceRef.current) {
-        compareAndCrossOutSliceRef.current(numSlice.id, denSlice.id, numSlice.side, angle);
-      }
-    };
 
-    const handleGlobalCancel = () => {
-      clearSliceCanvas();
+      // Case 2: Only numerator was sliced in this stroke
+      if (numSlice && !denSlice) {
+        const side = numSlice.side;
+        const isLeft = side === 'left';
+        const existingDenList = isLeft ? slicedDenRef.current : slicedRightDenRef.current;
+        const existingDenId = existingDenList && existingDenList[0];
+
+        if (existingDenId) {
+          // Denominator was already marked from a previous stroke! Pair and cross out!
+          unlockAudio();
+          setCardAngles(prev => ({ ...prev, [numSlice.id]: angle }));
+          setSlicedNum([]);
+          setSlicedDen([]);
+          setSlicedRightNum([]);
+          setSlicedRightDen([]);
+          if (compareAndCrossOutSliceRef.current) {
+            compareAndCrossOutSliceRef.current(numSlice.id, existingDenId, side, angle);
+          }
+        } else {
+          // Check if toggling off already-marked card
+          const existingNumList = isLeft ? slicedNumRef.current : slicedRightNumRef.current;
+          if (existingNumList.includes(numSlice.id)) {
+            if (isLeft) setSlicedNum([]);
+            else setSlicedRightNum([]);
+          } else {
+            // Mark this numerator card!
+            unlockAudio();
+            playPopFX();
+            setCardAngles(prev => ({ ...prev, [numSlice.id]: angle }));
+            if (isLeft) {
+              setSlicedNum([numSlice.id]);
+            } else {
+              setSlicedRightNum([numSlice.id]);
+            }
+          }
+        }
+        return;
+      }
+
+      // Case 3: Only denominator was sliced in this stroke
+      if (!numSlice && denSlice) {
+        const side = denSlice.side;
+        const isLeft = side === 'left';
+        const existingNumList = isLeft ? slicedNumRef.current : slicedRightNumRef.current;
+        const existingNumId = existingNumList && existingNumList[0];
+
+        if (existingNumId) {
+          // Numerator was already marked from a previous stroke! Pair and cross out!
+          unlockAudio();
+          setCardAngles(prev => ({ ...prev, [denSlice.id]: angle }));
+          setSlicedNum([]);
+          setSlicedDen([]);
+          setSlicedRightNum([]);
+          setSlicedRightDen([]);
+          if (compareAndCrossOutSliceRef.current) {
+            compareAndCrossOutSliceRef.current(existingNumId, denSlice.id, side, angle);
+          }
+        } else {
+          // Check if toggling off already-marked card
+          const existingDenList = isLeft ? slicedDenRef.current : slicedRightDenRef.current;
+          if (existingDenList.includes(denSlice.id)) {
+            if (isLeft) setSlicedDen([]);
+            else setSlicedRightDen([]);
+          } else {
+            // Mark this denominator card!
+            unlockAudio();
+            playPopFX();
+            setCardAngles(prev => ({ ...prev, [denSlice.id]: angle }));
+            if (isLeft) {
+              setSlicedDen([denSlice.id]);
+            } else {
+              setSlicedRightDen([denSlice.id]);
+            }
+          }
+        }
+        return;
+      }
+
+      // Case 4: Neither numerator nor denominator was sliced (empty space swipe)
       setSlicedNum([]);
       setSlicedDen([]);
       setSlicedRightNum([]);
       setSlicedRightDen([]);
+    };
+
+    const handleGlobalCancel = () => {
+      clearSliceCanvas();
     };
 
     window.addEventListener('pointerdown', handleGlobalDown, { passive: true });
@@ -2930,17 +3061,14 @@ export default function AlgeBrosCartridge({
                               value={term}
                               initial={false}
                               layout={!isValidating}
-                              dragListener={!isValidating}
+                              dragListener={false}
                               className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                               dragElastic={0}
-                              whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                              
                               transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                              onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
-                              onDragEnd={() => setIsDraggingTerm(false)}
                               style={{
                                 zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
-                                position: 'relative'
+                                position: 'relative',
+                                pointerEvents: 'none'
                               }}
                             >
                               {index > 0 && (
@@ -2962,7 +3090,7 @@ export default function AlgeBrosCartridge({
                                 data-id={term.id}
                                 data-type="num"
                                 data-index={index}
-                                style={{ position: 'relative' }}
+                                style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                 transition={isValidating ? { duration: 0 } : undefined}
                                 onTap={() => handleCardTap(term, 'num')}
                               >
@@ -3010,14 +3138,10 @@ export default function AlgeBrosCartridge({
                                   value={term}
                                   initial={false}
                                   layout={!isValidating}
-                                  dragListener={!isValidating}
+                                  dragListener={false}
                                   className="term-item-wrapper"
                                   dragElastic={0}
-                                  whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                                  
                                   transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                                  onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
-                                  onDragEnd={() => setIsDraggingTerm(false)}
                                   style={{ pointerEvents: 'none' }}
                                 >
                                   {index > 0 && (
@@ -3038,7 +3162,7 @@ export default function AlgeBrosCartridge({
                                     data-id={term.id}
                                     data-type="num"
                                     data-index={index}
-                                    style={{ position: 'relative', pointerEvents: 'auto' }}
+                                    style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                     transition={isValidating ? { duration: 0 } : undefined}
                                     onTap={() => handleCardTap(term, 'num')}
                                   >
@@ -3095,14 +3219,10 @@ export default function AlgeBrosCartridge({
                                 value={term}
                                 initial={false}
                                 layout={!isValidating}
-                                dragListener={!isValidating}
+                                dragListener={false}
                                 className={`term-item-wrapper ${activeFactorMenu?.cardId === term.id ? 'card-active' : ''}`}
                                 dragElastic={0}
-                                whileDrag={isValidating ? undefined : { scale: 1.06 }}
-                                
                                 transition={isValidating ? { duration: 0 } : { type: 'spring', stiffness: 700, damping: 50 }}
-                                onDragStart={() => { setActiveFactorMenu(null); setIsDraggingTerm(true); }}
-                                onDragEnd={() => setIsDraggingTerm(false)}
                                 style={{
                                   pointerEvents: 'none',
                                   zIndex: activeFactorMenu?.cardId === term.id ? 1002 : 1,
@@ -3128,7 +3248,7 @@ export default function AlgeBrosCartridge({
                                   data-id={term.id}
                                   data-type="den"
                                   data-index={index}
-                                  style={{ position: 'relative', pointerEvents: 'auto' }}
+                                  style={{ position: 'relative', pointerEvents: 'auto', touchAction: 'none' }}
                                   transition={isValidating ? { duration: 0 } : undefined}
                                   onTap={() => handleCardTap(term, 'den')}
                                 >
