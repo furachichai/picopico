@@ -346,7 +346,7 @@ const editorReducer = (state, action) => {
                 content: action.payload.content,
                 x: posX !== undefined ? posX : 50, // Center
                 y: posY !== undefined ? posY : (action.payload.type === 'quiz'
-                    ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'tf' ? 85 : 78.59375))
+                    ? (action.payload.metadata?.quizType === 'field' ? 30 : (action.payload.metadata?.quizType === 'balanza_field' ? 42 : (action.payload.metadata?.quizType === 'tf' ? 85 : 78.59375)))
                     : (action.payload.type === 'result_field' ? 35 : 50)),
                 width: action.payload.width !== undefined ? action.payload.width : (action.payload.metadata?.width || 20),
                 height: action.payload.height !== undefined ? action.payload.height : (action.payload.metadata?.height || 10),
@@ -692,6 +692,108 @@ const editorReducer = (state, action) => {
                             : slide
                     ),
                 },
+            };
+        }
+
+        case 'REPLACE_ASSET_INSTANCES': {
+            const { oldFilename, oldUrl, newUrl, timestamp = Date.now() } = action.payload || {};
+            if (!oldFilename && !oldUrl) return state;
+
+            const baseName = (oldFilename || (oldUrl ? oldUrl.split('/').pop() : '')).split('?')[0];
+            const cleanNewBase = (newUrl || oldUrl || '').split('?')[0];
+            const cacheBustedUrl = `${cleanNewBase}?t=${timestamp}`;
+
+            // Helper to check if an asset string references the target file
+            const isMatch = (str) => {
+                if (!str || typeof str !== 'string') return false;
+                let target = str;
+                const urlMatch = str.match(/url\((['"]?)([^'")]+)\1\)/);
+                if (urlMatch) {
+                    target = urlMatch[2];
+                }
+                const urlWithoutQuery = target.split('?')[0];
+                const fileInTarget = urlWithoutQuery.split('/').pop();
+
+                if (baseName && fileInTarget === baseName) return true;
+                if (oldUrl) {
+                    const cleanOld = oldUrl.split('?')[0];
+                    const cleanOldFile = cleanOld.split('/').pop();
+                    if (fileInTarget === cleanOldFile) return true;
+                }
+                return false;
+            };
+
+            // Helper to replace matching asset reference in a string (handling url("...") or plain URL)
+            const replaceInString = (str) => {
+                if (!isMatch(str)) return str;
+                if (str.includes('url(')) {
+                    return str.replace(/url\((['"]?)([^'")]+)\1\)/g, (full, quote, inner) => {
+                        if (isMatch(inner)) {
+                            const innerBase = inner.split('?')[0];
+                            return `url("${innerBase}?t=${timestamp}")`;
+                        }
+                        return full;
+                    });
+                }
+                const cleanBase = str.split('?')[0];
+                return `${cleanBase}?t=${timestamp}`;
+            };
+
+            let hasChanges = false;
+            const updatedSlides = state.lesson.slides.map(slide => {
+                let slideChanged = false;
+                let newBg = slide.background;
+                if (isMatch(slide.background)) {
+                    newBg = replaceInString(slide.background);
+                    slideChanged = true;
+                }
+
+                const newElements = slide.elements.map(el => {
+                    let elChanged = false;
+                    let newContent = el.content;
+                    let newMeta = el.metadata;
+
+                    if (isMatch(el.content)) {
+                        newContent = cacheBustedUrl;
+                        elChanged = true;
+                    }
+                    if (el.metadata?.src && isMatch(el.metadata.src)) {
+                        newMeta = { ...newMeta, src: cacheBustedUrl };
+                        elChanged = true;
+                    }
+
+                    if (elChanged) {
+                        slideChanged = true;
+                        return { ...el, content: newContent, metadata: newMeta };
+                    }
+                    return el;
+                });
+
+                if (slideChanged) {
+                    hasChanges = true;
+                    return { ...slide, background: newBg, elements: newElements };
+                }
+                return slide;
+            });
+
+            let newLastBg = state.lastAppliedBackground;
+            if (state.lastAppliedBackground?.background && isMatch(state.lastAppliedBackground.background)) {
+                newLastBg = {
+                    ...state.lastAppliedBackground,
+                    background: replaceInString(state.lastAppliedBackground.background)
+                };
+                saveLastBackground(newLastBg);
+            }
+
+            return {
+                ...state,
+                isDirty: true,
+                past: hasChanges ? pushToPast(state) : state.past,
+                lastAppliedBackground: newLastBg,
+                lesson: {
+                    ...state.lesson,
+                    slides: updatedSlides
+                }
             };
         }
 

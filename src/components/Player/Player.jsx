@@ -14,7 +14,7 @@ import ExloreNLCartridge from '../../cartridges/ExploreNL/ExloreNLCartridge';
 import SpotCartridge from '../../cartridges/Spot/SpotCartridge';
 import Potiondas from '../../cartridges/Potiondas/Potiondas';
 import IStickerPlayer from './IStickerPlayer';
-import { formatExponents } from '../../utils/textFormatters';
+import { formatExponents, formatExplanationHtml, parseExplanationBlocks } from '../../utils/textFormatters';
 import Balloon from '../Editor/Balloon';
 import Banner from '../Editor/Banner';
 import ResultField from '../ResultField/ResultField';
@@ -108,31 +108,66 @@ const getQuizExplanation = (quizElement, language) => {
     return null;
 };
 
-// Formatter for explanation content with support for step cards
+// Formatter for explanation content with support for step cards, rules, notes, equations, lists
 const formatExplanationContent = (rawText) => {
     if (!rawText) return null;
-    const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+    const blocks = parseExplanationBlocks(rawText);
     return (
         <div className="explanation-steps-container">
-            {lines.map((line, idx) => {
-                const stepMatch = line.match(/^(Paso \d+|Step \d+|Resultado|Result|Conclusión|Conclusion):?\s*(.*)$/i);
-                if (stepMatch) {
-                    const isResult = /^(Resultado|Result|Conclusión|Conclusion)/i.test(stepMatch[1]);
+            {blocks.map((block, idx) => {
+                if (block.type === 'step' || block.type === 'result' || block.type === 'rule' || block.type === 'note') {
+                    const cardClass = block.type === 'result'
+                        ? 'result-card'
+                        : block.type === 'rule'
+                            ? 'rule-card'
+                            : block.type === 'note'
+                                ? 'note-card'
+                                : '';
                     return (
-                        <div key={idx} className={`explanation-step-card ${isResult ? 'result-card' : ''}`}>
-                            <span className="explanation-step-label">{stepMatch[1]}</span>
-                            <span
-                                className="explanation-step-text"
-                                dangerouslySetInnerHTML={{ __html: formatExponents(stepMatch[2]) }}
-                            />
+                        <div key={idx} className={`explanation-step-card ${cardClass}`}>
+                            <span className="explanation-step-label">{block.label}</span>
+                            {block.text && (
+                                <span
+                                    className="explanation-step-text"
+                                    dangerouslySetInnerHTML={{ __html: formatExplanationHtml(block.text) }}
+                                />
+                            )}
+                            {block.subLines && block.subLines.length > 0 && (
+                                <div className="explanation-sub-lines">
+                                    {block.subLines.map((sub, sIdx) => (
+                                        <div
+                                            key={sIdx}
+                                            className="explanation-sub-line"
+                                            dangerouslySetInnerHTML={{ __html: formatExplanationHtml(sub) }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     );
                 }
+
+                if (block.type === 'def-list') {
+                    return (
+                        <div key={idx} className="explanation-def-list">
+                            {block.items.map((item, iIdx) => (
+                                <div key={iIdx} className="explanation-def-item">
+                                    <span className="explanation-def-badge">{item.key}</span>
+                                    <span
+                                        className="explanation-def-text"
+                                        dangerouslySetInnerHTML={{ __html: formatExplanationHtml(item.value) }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    );
+                }
+
                 return (
                     <div
                         key={idx}
                         className="explanation-paragraph"
-                        dangerouslySetInnerHTML={{ __html: formatExponents(line) }}
+                        dangerouslySetInnerHTML={{ __html: formatExplanationHtml(block.text) }}
                     />
                 );
             })}
@@ -793,6 +828,7 @@ const Player = () => {
             'button, input, select, textarea, a, label, summary, ' +
             '[role="button"], [role="slider"], [role="checkbox"], [role="radio"], [role="tab"], [role="switch"], [role="link"], ' +
             '.balanza-tile, .balanza-menu-tile, .balanza-restart-btn, ' +
+            '.balanza-field-scale-container, .balanza-field-scale-assembly, .balanza-field-plate-assembly, .balanza-field-left-plate-content, .balanza-field-right-plate-content, .balanza-field-slot, .balanza-field-placed-pill, .balanza-field-operator, .balanza-field-blank-indicator, .balanza-field-object-item, .balanza-field-letter-card, .balanza-field-emoji-badge, .balanza-field-crate-wrap, .balanza-field-sack-wrap, .balanza-field-player-mode, .balanza-field-beam-wrap, .balanza-field-base-img, .balanza-field-beam-img, .balanza-field-plate-img, ' +
             '.algebros-card, .algebros-slot, .algebros-op-btn, .term-card, .term-item-wrapper, .term-group-wrapper, .drop-slot-placeholder, .dot-separator-btn, .operator-btn, .factor-option-btn, .floating-reset-btn, .ready-submit-btn, ' +
             '.fraction-slice, .swipe-card, ' +
             '.quiz-option, .quiz-option-match, .quiz-options-container-match, .match-mode, .conecta-item, .conecta-card, .conecta-column, .conecta-columns-container, .conecta-mode, .chatquiz-option-btn, .match-card, .nl-knob-player, .quiz-ready-btn, ' +
@@ -823,6 +859,12 @@ const Player = () => {
     // Debounced Navigation Handler
     const handleHotzoneNav = (direction) => {
         if (isNavigating || isMatchDragActive) return;
+
+        const isBalanzaFieldPlaying = currentSlide?.elements?.some(
+            el => el.type === 'quiz' && el.metadata?.quizType === 'balanza_field'
+        ) && !solvedSlides.has(currentSlideIndex);
+
+        if (direction === 'next' && isBalanzaFieldPlaying) return;
 
         // Determine what kind of interactive is on the current slide (open manipulatives are not blocking games)
         const isGame = currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge);
@@ -911,6 +953,10 @@ const Player = () => {
         swipeRef.current = null;
         if (!gesture) return;
 
+        const isBalanzaFieldPlaying = currentSlide?.elements?.some(
+            el => el.type === 'quiz' && el.metadata?.quizType === 'balanza_field'
+        ) && !solvedSlides.has(currentSlideIndex);
+
         const isGamePlaying = (currentSlide?.cartridge && !isOpenManipulative(currentSlide.cartridge) && !solvedSlides.has(currentSlideIndex)) || isGameActive || (currentSlide?.cartridge?.type === 'Spot' && !solvedSlides.has(currentSlideIndex)) || isMatchDragActive;
         if (isGamePlaying) return;
 
@@ -941,7 +987,7 @@ const Player = () => {
 
             if (isLeftBorder) {
                 handleHotzoneNav('prev');
-            } else if (isRightBorder || isStripperStepping) {
+            } else if ((isRightBorder || isStripperStepping) && !isBalanzaFieldPlaying) {
                 handleHotzoneNav('next');
             }
         }
@@ -1396,15 +1442,14 @@ const Player = () => {
                                                 key={element.id}
                                                 className={`player-element ${isFullScreenQuiz ? 'player-element-chatquiz' : ''} ${stripperActive ? (isStripVisible ? (isStripRevealing ? 'stripper-strip-revealing' : 'stripper-strip-visible') : 'stripper-strip-hidden') : ''}`}
                                                 style={{
-                                                    left: isTypeQuiz ? '0' : (isFullScreenQuiz ? '50%' : `${element.x}%`),
+                                                    left: isTypeQuiz ? '0' : ((isFullScreenQuiz || element.metadata?.quizType === 'balanza_field') ? '50%' : `${element.x}%`),
                                                     top: isTypeQuiz ? 'auto' : (isMatchQuiz ? '50%' : (isFullScreenQuiz ? '55%' : `${(element.type === 'quiz' && effectiveY === 75) ? 78.59375 : effectiveY}%`)),
                                                     bottom: isTypeQuiz ? '0' : undefined,
                                                     width: (isFullScreenQuiz || isTypeQuiz) ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !effectiveWidth ? 'auto' : `${effectiveWidth}%`)),
-                                                    height: isTypeQuiz ? '30%' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' || element.type === 'banner' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
-                                                    minHeight: element.type === 'banner' ? `${element.height}%` : undefined,
+                                                    height: isTypeQuiz ? '30%' : (isMatchQuiz ? '100%' : (isFullScreenQuiz ? '85%' : (element.type === 'text' || element.type === 'collectible' || element.type === 'quiz' || element.type === 'result_field' ? 'auto' : `${element.type === 'popup' ? (element.width * 360 * 206) / (640 * 200) : element.height}%`))),
                                                     transform: isTypeQuiz ? 'none' : (isFullScreenQuiz ? 'translate(-50%, -50%)' : `translate(-50%, -50%) rotate(${element.rotation}deg) scale(${effectiveScale})`),
                                                     zIndex: (element.metadata?.quizType === 'chatquiz' ? 0 : (element.type === 'result_field' ? (idx + 1000) : (isTypeQuiz ? 1000 : (element.type === 'quiz' || element.type === 'cartridge' ? (idx + 50) : (idx + 1))))),
-                                                    pointerEvents: (isFullScreenQuiz || isTypeQuiz || element.type === 'result_field' || element.type === 'isticker' || element.type === 'popup') ? 'auto' : undefined,
+                                                    pointerEvents: (isFullScreenQuiz || isTypeQuiz || element.type === 'result_field' || element.type === 'isticker' || element.type === 'popup' || element.metadata?.quizType === 'balanza_field' || element.metadata?.quizType === 'field') ? 'auto' : undefined,
                                                 }}
                                             >
                                             {(element.type === 'text' || element.type === 'collectible') && (
@@ -1707,7 +1752,7 @@ const Player = () => {
                                                   <Banner
                                                       element={{
                                                           ...element,
-                                                          content: getTranslatedContent(element, language)
+                                                          content: formatExponents(getTranslatedContent(element, language))
                                                       }}
                                                       readOnly={true}
                                                   />
@@ -1716,7 +1761,7 @@ const Player = () => {
                                                  <Balloon
                                                      element={{
                                                          ...element,
-                                                         content: getTranslatedContent(element, language)
+                                                         content: formatExponents(getTranslatedContent(element, language))
                                                      }}
                                                      readOnly={true}
                                                  />

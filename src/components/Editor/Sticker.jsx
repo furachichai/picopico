@@ -8,6 +8,7 @@ import ResultField from '../ResultField/ResultField';
 import NumberLine from '../NumberLine/NumberLine';
 import CharacterShadow from './CharacterShadow';
 import { useEditor } from '../../context/EditorContext';
+import { formatExponents } from '../../utils/textFormatters';
 
 /**
  * Sticker Component
@@ -597,7 +598,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
             data-element-id={element.id}
             className={`sticker ${isSelected ? 'selected' : ''} ${element.metadata?.groupId ? 'is-grouped' : ''} ${element.type === 'line' ? 'is-line' : ''} ${element.metadata?.hidden ? 'is-hidden' : ''} ${element.metadata?.locked ? 'is-locked' : ''}`}
             style={{
-                left: (element.metadata?.quizType === 'chatquiz') ? '50%' : (element.metadata?.quizType === 'type' ? '0' : `${element.x}%`),
+                left: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'balanza_field') ? '50%' : (element.metadata?.quizType === 'type' ? '0' : `${element.x}%`),
                 top: (element.metadata?.quizType === 'chatquiz') ? '55%' : (element.metadata?.quizType === 'type' ? 'auto' : `${(element.type === 'quiz' && element.y === 75) ? 78.59375 : element.y}%`),
                 bottom: (element.metadata?.quizType === 'type') ? '0' : undefined,
                 width: (element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'type') ? '100%' : (element.type === 'quiz' || element.type === 'result_field' ? 'auto' : ((element.type === 'text' || element.type === 'collectible') && !element.width ? 'auto' : `${element.width}%`)),
@@ -658,8 +659,11 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                             document.execCommand('insertText', false, text);
                         }}
                         ref={(el) => {
-                            if (el && el.innerHTML !== element.content && document.activeElement !== el) {
-                                el.innerHTML = element.content;
+                            if (el && document.activeElement !== el) {
+                                const formatted = formatExponents(element.content || '');
+                                if (el.innerHTML !== formatted && el.innerHTML !== element.content) {
+                                    el.innerHTML = formatted;
+                                }
                             }
                         }}
                         style={{
@@ -1017,7 +1021,7 @@ const Sticker = React.memo(({ element, elementIndex = 0, isSelected, onSelect, o
                     />
                 )}
                 {element.type === 'quiz' && (
-                    <div className={`sticker-quiz-wysiwyg ${element.metadata?.quizType === 'field' ? 'field-wysiwyg' : ''}`}
+                    <div className={`sticker-quiz-wysiwyg ${element.metadata?.quizType === 'field' ? 'field-wysiwyg' : ''} ${element.metadata?.quizType === 'balanza_field' ? 'balanza-field-wysiwyg' : ''}`}
                         onClick={(e) => {
                             const isLockedQuiz = element.metadata?.quizType === 'chatquiz' || element.metadata?.quizType === 'pem' || element.metadata?.quizType === 'type';
                             if (isLockedQuiz && !isSelected) {

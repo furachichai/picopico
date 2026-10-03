@@ -7,6 +7,13 @@ import { useEditor } from '../../context/EditorContext';
 import { ELEMENT_TYPES } from '../../types';
 import { getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import { evaluateMathExpression, parseFieldExpression, generateFieldChoices } from '../../utils/fieldQuizUtils';
+import BalanzaFieldScale from '../Quiz/BalanzaField/BalanzaFieldScale';
+import {
+    computeBalanzaFieldTilt,
+    parseBalanzaFieldWeights,
+    parseLeftPlateObjects,
+    getBalanzaFieldSegments
+} from '../../utils/balanzaFieldUtils';
 
 /**
  * QuizEditor Component
@@ -308,6 +315,38 @@ const QuizEditor = ({ element, onChange, onSelect, translationMode, isSelected =
                         );
                     }
                 })}
+            </div>
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // BALANZA FIELD RENDER LOGIC
+    // -------------------------------------------------------------------------
+    if (quizType === 'balanza_field') {
+        const leftPlateText = element.metadata?.leftPlateText || '☕, ☕, 🌮';
+        const weightsText = element.metadata?.weightsText || 'c=3, t=5, ☕=3, 🌮=5';
+        const targetExpression = element.metadata?.targetExpression !== undefined
+            ? element.metadata.targetExpression
+            : (element.metadata?.fieldExpression ? element.metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+
+        const weights = parseBalanzaFieldWeights(weightsText);
+        const { items: leftObjects, totalWeight: leftTotal } = parseLeftPlateObjects(leftPlateText, weights);
+        const segments = getBalanzaFieldSegments(targetExpression, element.metadata?.fieldCount);
+        const tiltAngle = computeBalanzaFieldTilt(leftTotal, 0);
+
+        return (
+            <div className="quiz-editor-2 balanza-field-editor-preview" style={{ width: '100%', maxWidth: '580px', pointerEvents: 'none' }}>
+                <BalanzaFieldScale
+                    leftObjects={leftObjects}
+                    leftTotalWeight={leftTotal}
+                    rightTotalWeight={0}
+                    segments={segments}
+                    fieldSelections={{}}
+                    tiltAngle={tiltAngle}
+                    isEditor={true}
+                    onSlotTap={null}
+                    statusMessage={null}
+                />
             </div>
         );
     }

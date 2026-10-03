@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { sanitizeFontFamily } from '../../utils/fontSanitizer';
+import { formatExponents } from '../../utils/textFormatters';
 
 function catmullRomToBezier(points) {
     if (!points || points.length === 0) return '';
@@ -810,7 +811,7 @@ const Balloon = ({ element, onChange, isSelected, readOnly = false }) => {
     // Sync content when element changes or from external updates, but never while actively typing
     useEffect(() => {
         if (textRef.current && (readOnly || element.id !== lastElementId.current || document.activeElement !== textRef.current)) {
-            textRef.current.innerHTML = element.content || '';
+            textRef.current.innerHTML = formatExponents(element.content || '');
             lastElementId.current = element.id;
         }
     }, [element.id, element.content, readOnly]);

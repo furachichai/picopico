@@ -158,13 +158,14 @@ export const processEquation = (template, n) => {
     let lhsFormatted = lhs.replace(/\b[nN]\b/g, nValStr);
 
     // Format power operations for display
-    // Handles forms like 2!(-1), 2!-1, 2!n, 10!0, etc.
-    lhsFormatted = lhsFormatted.replace(/([0-9a-zA-Z.]+)[!^]\(?([+-]?[0-9.]+)\)?/g, (_, base, exp) => {
+    // Handles forms like 2!(-1), 2!(−4), 2!-1, 2!n, 10!0, etc.
+    const signs = '\\-+−–—';
+    lhsFormatted = lhsFormatted.replace(new RegExp('([0-9a-zA-Z.]+)[!^]\\(?([' + signs + ']?[0-9.]+)\\)?', 'g'), (_, base, exp) => {
         return `${base}${toSuperscript(exp)}`;
     });
 
     // Also replace standalone ! or ^ remaining with superscript if possible
-    lhsFormatted = lhsFormatted.replace(/[!^]([0-9nN+-]+)/g, (_, exp) => toSuperscript(exp));
+    lhsFormatted = lhsFormatted.replace(new RegExp('[!^]([0-9nN' + signs + ']+)', 'g'), (_, exp) => toSuperscript(exp));
 
     // Beautify multiplication and division signs for display with clean single spacing
     lhsFormatted = lhsFormatted

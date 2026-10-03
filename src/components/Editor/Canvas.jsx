@@ -1189,7 +1189,7 @@ const Canvas = (props) => {
           {/* Field Quiz Bottom Controls Preview in Editor */}
           {(() => {
             const fieldQuizElement = currentSlide?.elements?.find(
-              el => el.type === 'quiz' && el.metadata?.quizType === 'field'
+              el => el.type === 'quiz' && (el.metadata?.quizType === 'field' || el.metadata?.quizType === 'balanza_field')
             );
             if (!fieldQuizElement) return null;
             return (

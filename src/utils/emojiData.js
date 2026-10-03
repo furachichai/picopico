@@ -2476,3 +2476,113 @@ export const EMOJI_DATA = {
     "w25": "weight 25 balanza pesa 25 kilos balance scale mass masa",
     "w50": "weight 50 balanza pesa 50 kilos balance scale mass masa"
 };
+
+export const COMMON_EMOJI_SHORTCODES = {
+  coffee: '☕',
+  cafe: '☕',
+  taco: '🌮',
+  apple: '🍎',
+  manzana: '🍎',
+  banana: '🍌',
+  platano: '🍌',
+  pizza: '🍕',
+  star: '⭐',
+  estrella: '⭐',
+  heart: '❤️',
+  corazon: '❤️',
+  fire: '🔥',
+  fuego: '🔥',
+  cake: '🍰',
+  pastel: '🍰',
+  torta: '🍰',
+  cat: '🐱',
+  gato: '🐱',
+  dog: '🐶',
+  perro: '🐶',
+  box: '📦',
+  crate: '📦',
+  caja: '📦',
+  rocket: '🚀',
+  cohete: '🚀',
+  gem: '💎',
+  diamond: '💎',
+  diamante: '💎',
+  coin: '🪙',
+  moneda: '🪙',
+  money: '💰',
+  dinero: '💰',
+  trophy: '🏆',
+  trofeo: '🏆',
+  crown: '👑',
+  corona: '👑',
+  key: '🔑',
+  llave: '🔑',
+  bulb: '💡',
+  bombilla: '💡',
+  idea: '💡',
+  book: '📖',
+  libro: '📖',
+  pencil: '✏️',
+  lapiz: '✏️',
+  weight: '⚖️',
+  balanza: '⚖️',
+  scale: '⚖️',
+  check: '✅',
+  cross: '❌',
+  x: '❌',
+  sparkles: '✨',
+  brillo: '✨',
+  cookie: '🍪',
+  galleta: '🍪',
+  candy: '🍬',
+  caramelo: '🍬',
+  icecream: '🍦',
+  helado: '🍦',
+  burger: '🍔',
+  hamburguesa: '🍔',
+  fries: '🍟',
+  papas: '🍟',
+  cheese: '🧀',
+  queso: '🧀',
+  bread: '🍞',
+  pan: '🍞',
+  milk: '🥛',
+  leche: '🥛',
+  tea: '🍵',
+  water: '💧',
+  agua: '💧',
+};
+
+const SHORTCODE_CACHE = new Map(Object.entries(COMMON_EMOJI_SHORTCODES));
+
+/**
+ * Resolves an emoji shortcode (e.g. "coffee", "taco", "apple") to an emoji character.
+ */
+export function getEmojiByShortcode(code) {
+  if (!code) return null;
+  const lower = String(code).toLowerCase().trim();
+  if (SHORTCODE_CACHE.has(lower)) {
+    return SHORTCODE_CACHE.get(lower);
+  }
+  for (const [emoji, kw] of Object.entries(EMOJI_DATA)) {
+    const words = kw.toLowerCase().split(/\s+/);
+    if (words.includes(lower)) {
+      SHORTCODE_CACHE.set(lower, emoji);
+      return emoji;
+    }
+  }
+  return null;
+}
+
+/**
+ * Replaces all :shortcode: occurrences with their corresponding emoji.
+ * e.g. "c=3, :coffee:=5, :taco:=4" -> "c=3, ☕=5, 🌮=4"
+ */
+export function replaceEmojiShortcodes(text) {
+  if (!text || typeof text !== 'string') return text;
+  return text.replace(/:([a-zA-Z0-9_+-]+):/g, (match, code) => {
+    const emoji = getEmojiByShortcode(code);
+    return emoji || match;
+  });
+}
+

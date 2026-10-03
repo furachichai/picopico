@@ -20,6 +20,8 @@ import {
 import { unlockAudio, playSelect, playMerge, playWrong, playVanish } from '../AlgeBros/game/AlgeBrosSoundManager';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { WeightRingGlyph, parseWeightSymbol, renderBalanzaRichText } from './game/WeightGlyph';
+import { CrateWithLetter, parseCrateLetter } from '../../utils/crateUtils.jsx';
+import { SackWithNumber, parseSackNumber } from '../../utils/sackUtils.jsx';
 import './BalanzaCartridge.css';
 
 const HIT_PADDING = 26;
@@ -57,7 +59,9 @@ function TileGlyph({ term, isOverlay = false }) {
   const isNeg = term.coeff < 0;
   const isZero = term.coeff === 0;
   const absCoeff = Math.abs(term.coeff);
-  const crateSrc = term.variable ? CRATE_MAP[term.variable] : null;
+  const crateLetter = parseCrateLetter(term.variable);
+  const sackNumber = parseSackNumber(term.variable);
+  const crateSrc = crateLetter === null && term.variable ? CRATE_MAP[term.variable] : null;
   const weightVal = parseWeightSymbol(term.variable);
 
   // 0 card created by opposite cancellation (e.g. x & -x or 2 & -2)
@@ -70,7 +74,7 @@ function TileGlyph({ term, isOverlay = false }) {
   }
 
   // Standalone or merged letter variable card (e.g. x, 2x, y, z, a, b)
-  const isLetterVar = term.variable && weightVal === null && !crateSrc && !term.variable.includes('*') && /^[a-zA-Z]/i.test(term.variable);
+  const isLetterVar = term.variable && weightVal === null && sackNumber === null && !crateSrc && crateLetter === null && !term.variable.includes('*') && /^[a-zA-Z]/i.test(term.variable);
   if (isLetterVar) {
     return (
       <div className={`balanza-letter-card ${isNeg ? 'is-negative' : ''} ${isZero ? 'is-zero' : ''} ${isOverlay ? 'is-overlay' : ''}`}>
@@ -83,7 +87,7 @@ function TileGlyph({ term, isOverlay = false }) {
   }
 
   // When 2 or more like icons merge, render as a white card displaying the count
-  // followed by a 25% smaller version of the icon (crate image, weight ring, or emoji)
+  // followed by a 25% smaller version of the icon (crate image, sack, weight ring, or emoji)
   if (absCoeff > 1) {
     return (
       <div className={`balanza-merged-card ${isNeg ? 'is-negative' : ''} ${isOverlay ? 'is-overlay' : ''}`}>
@@ -91,13 +95,40 @@ function TileGlyph({ term, isOverlay = false }) {
           {isNeg ? `-${absCoeff}` : absCoeff}
         </span>
         <span className="balanza-card-icon">
-          {crateSrc ? (
+          {crateLetter !== null ? (
+            <CrateWithLetter letter={crateLetter} size={22.5} />
+          ) : sackNumber !== null ? (
+            <SackWithNumber value={sackNumber} size={22.5} isNegative={isNeg} />
+          ) : crateSrc ? (
             <img src={crateSrc} alt={term.variable} className="balanza-card-icon-img" draggable={false} />
           ) : weightVal !== null ? (
             <WeightRingGlyph value={weightVal} size={22.5} isNegative={isNeg} />
           ) : term.variable ? (
             <span className="balanza-card-icon-emoji">{term.variable}</span>
           ) : null}
+        </span>
+      </div>
+    );
+  }
+
+  // Standalone crate with letter (absCoeff === 1)
+  if (crateLetter !== null) {
+    return (
+      <div className={`balanza-tile-glyph-container ${isOverlay ? 'is-overlay' : ''}`}>
+        <span className="balanza-glyph-wrapper">
+          {isNeg && <span className="balanza-tile-sign">−</span>}
+          <CrateWithLetter letter={crateLetter} size={35} />
+        </span>
+      </div>
+    );
+  }
+
+  // Standalone sack with number (absCoeff === 1)
+  if (sackNumber !== null) {
+    return (
+      <div className={`balanza-tile-glyph-container ${isOverlay ? 'is-overlay' : ''}`}>
+        <span className="balanza-glyph-wrapper">
+          <SackWithNumber value={sackNumber} size={35} isNegative={isNeg} />
         </span>
       </div>
     );
@@ -241,11 +272,17 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped, al
   const isEmpty = effectiveAvailable <= 0;
   const disabled = item.available <= 0 || isLevelComplete;
   const previewTerm = makeTerm(item.unitCoeff, item.variable);
-  const crateSrc = item.variable ? CRATE_MAP[item.variable] : null;
+  const crateLetter = parseCrateLetter(item.variable);
+  const sackNumber = parseSackNumber(item.variable);
+  const crateSrc = crateLetter === null && item.variable ? CRATE_MAP[item.variable] : null;
   const weightVal = parseWeightSymbol(item.variable);
 
   const renderGlyph = (isBack) => (
-    crateSrc ? (
+    crateLetter !== null ? (
+      <CrateWithLetter letter={crateLetter} size={36} />
+    ) : sackNumber !== null ? (
+      <SackWithNumber value={sackNumber} size={36} isNegative={isBack} />
+    ) : crateSrc ? (
       <img src={crateSrc} alt={item.variable} className="balanza-menu-crate-img" draggable={false} />
     ) : weightVal !== null ? (
       <WeightRingGlyph value={weightVal} size={36} isNegative={isBack} />
@@ -262,7 +299,7 @@ function MenuTile({ item, isLevelComplete, isDragging, onDragStart, isBumped, al
 
   const backGlyph = (
     <span className="balanza-menu-tile-glyph is-inverted">
-      {weightVal === null && <span className="balanza-menu-tile-sign">−</span>}
+      {weightVal === null && sackNumber === null && <span className="balanza-menu-tile-sign">−</span>}
       {renderGlyph(true)}
     </span>
   );

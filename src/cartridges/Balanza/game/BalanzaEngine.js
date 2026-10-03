@@ -9,6 +9,7 @@
 // Explicit .js extension so this module also loads under plain Node (used by
 // scripts/test-equation-invariants.mjs); Vite resolves it identically.
 import { makeTerm, combineTerms, areLikeTerms, formatTerm } from '../../AlgeBros/game/AlgeBrosEngine.js';
+import { parseSackNumber } from '../../../utils/sackUtils.jsx';
 
 export { makeTerm, combineTerms, areLikeTerms, formatTerm };
 
@@ -144,6 +145,10 @@ export function weightOf(variable, weights) {
   if (wMatch) {
     return parseInt(wMatch[1], 10);
   }
+  const sVal = parseSackNumber(variable);
+  if (sVal !== null) {
+    return parseFloat(sVal);
+  }
   return 5;
 }
 
@@ -196,6 +201,12 @@ export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTot
 
   const formatBalanzaEqVariable = (v) => {
     if (!v) return v;
+    // Check bracket notation: e.g. [c] -> c, [x] -> x
+    const bracketMatch = typeof v === 'string' && v.match(/^\[([a-zA-Z0-9?*!#$_~]{1,3})\]$/);
+    if (bracketMatch) return bracketMatch[1];
+    // Check box emoji notation: e.g. 📦c -> c
+    const boxMatch = typeof v === 'string' && v.match(/^📦([a-zA-Z0-9?*!#$_~]{1,3})$/);
+    if (boxMatch) return boxMatch[1];
     // When rendering the x crate in the equation, just display the x
     if (v === '📦x' || v === 'x📦' || v === 'crate_x' || v === '[x]' || v === 'x' || v === 'x*' || v === '*x') {
       return 'x';
@@ -216,14 +227,15 @@ export function buildEquationLineText(leftTerms, rightTerms, leftTotal, rightTot
     return terms.map((t, idx) => {
       const isFirst = idx === 0;
       const wMatch = typeof t.variable === 'string' && t.variable.trim().match(/^w(\d{1,2})$/i);
-      if (wMatch) {
-        const wVal = wMatch[1];
+      const sVal = parseSackNumber(t.variable);
+      if (wMatch || sVal !== null) {
+        const numVal = wMatch ? wMatch[1] : sVal;
         const absCoeff = Math.abs(t.coeff);
         if (absCoeff === 0) {
           return isFirst ? '0' : ' + 0';
         }
         const sign = isFirst ? (t.coeff < 0 ? '-' : '') : (t.coeff < 0 ? '-' : '+');
-        const valStr = absCoeff === 1 ? wVal : `${absCoeff}x${wVal}`;
+        const valStr = absCoeff === 1 ? numVal : `${absCoeff}x${numVal}`;
         return isFirst ? `${sign}${valStr}` : ` ${sign} ${valStr}`;
       }
 
@@ -256,7 +268,7 @@ export function isExplicitX(variable) {
   if (['x', 'x*', '*x', '📦x', 'x📦', 'crate_x', '[x]', '📦', 'crate', 'box'].includes(v)) {
     return true;
   }
-  const cleaned = v.replace(/📦/g, '').replace(/^crate_/g, '').replace(/\*/g, '').trim();
+  const cleaned = v.replace(/[\*📦\[\]]/g, '').replace(/^crate_/g, '').trim();
   return cleaned === 'x';
 }
 
@@ -271,7 +283,7 @@ export function detectUnknownVariable(plates = []) {
   const letterTerm = allTerms.find(t => {
     if (!t.variable || typeof t.variable !== 'string') return false;
     const v = t.variable.trim();
-    return /^[a-zA-Z]/i.test(v) && !/^w\d{1,2}$/i.test(v);
+    return /^[a-zA-Z]/i.test(v) && !/^w\d{1,2}$/i.test(v) && parseSackNumber(v) === null;
   });
   if (letterTerm) {
     return letterTerm.variable.trim().toLowerCase();

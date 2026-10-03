@@ -1,0 +1,1998 @@
+{
+  "id": "lessons/03-Combining Like Terms/lesson.json",
+  "title": "Combining Like Terms",
+  "slides": [
+    {
+      "id": "slide-1790783838451",
+      "background": "url(\"/src/assets/backgrounds/titlecard_mixing002.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790783822160",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-ie20tyuw7",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790784135322-pcjb7dqf8",
+          "type": "image",
+          "content": "/src/assets/characters/yara_kranky_holding_vials.png",
+          "x": 50,
+          "y": 94.375,
+          "width": 40,
+          "height": 46.43617021276595,
+          "rotation": 0,
+          "scale": 3.478348568891947,
+          "metadata": {
+            "width": 40,
+            "height": 46.43617021276595,
+            "category": "characters",
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790783822161",
+          "type": "balloon",
+          "content": "Pesto: pour these all in.&nbsp;<div><br><div>Then label the beaker.</div></div>",
+          "x": 25.69444444444444,
+          "y": 26.25,
+          "width": 50.83333333333333,
+          "height": 25.624999999999996,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 60,
+              "y": 109
+            },
+            "skin": "octo"
+          }
+        },
+        {
+          "id": "el-1790785131823-0-9muz3q",
+          "type": "text",
+          "content": "x",
+          "x": 88.22222222222216,
+          "y": 84.4375,
+          "width": 10,
+          "height": 5,
+          "rotation": 19.044528662424177,
+          "scale": 1.4786516463243256,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790785150855-0-2j8mmy",
+          "type": "text",
+          "content": "x",
+          "x": 58.722222222222214,
+          "y": 30.71875,
+          "width": 10,
+          "height": 5,
+          "rotation": -14.00648272424106,
+          "scale": 1.4786516463243256,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822161",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-3hxtfz0ta",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790784955207-0",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_mixing_vials.png",
+          "x": 50,
+          "y": 61.21918252595155,
+          "width": 40,
+          "height": 27.249134948096888,
+          "rotation": 0,
+          "scale": 1.6841512885886607,
+          "metadata": {
+            "width": 40,
+            "height": 27.249134948096888
+          }
+        },
+        {
+          "id": "el-1790784980668-6",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_water.png",
+          "x": 79.44444444444444,
+          "y": 75.09032534246575,
+          "width": 40,
+          "height": 49.00684931506849,
+          "rotation": 0,
+          "scale": 0.3363641853972943,
+          "metadata": {
+            "width": 40,
+            "height": 49.00684931506849
+          }
+        },
+        {
+          "id": "el-1790784980668-8",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_green.png",
+          "x": 11.944444444444443,
+          "y": 76.95089285714286,
+          "width": 40,
+          "height": 46.28571428571429,
+          "rotation": 0,
+          "scale": 0.30565430239417746,
+          "metadata": {
+            "width": 40,
+            "height": 46.28571428571429
+          }
+        },
+        {
+          "id": "el-1790785019130-0-b1j35c",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_water.png",
+          "x": 89.94444444444444,
+          "y": 74.96532534246575,
+          "width": 40,
+          "height": 49.00684931506849,
+          "rotation": 0,
+          "scale": 0.3363641853972943,
+          "metadata": {
+            "width": 40,
+            "height": 49.00684931506849
+          }
+        },
+        {
+          "id": "el-1790785021226-0-ubxehq",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_water.png",
+          "x": 84.33333333333333,
+          "y": 79.05907534246575,
+          "width": 40,
+          "height": 49.00684931506849,
+          "rotation": 0,
+          "scale": 0.3363641853972943,
+          "metadata": {
+            "width": 40,
+            "height": 49.00684931506849
+          }
+        },
+        {
+          "id": "el-1790785024581-0-l3xrps",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_water.png",
+          "x": 92.6111111111111,
+          "y": 82.37157534246575,
+          "width": 40,
+          "height": 49.00684931506849,
+          "rotation": 0,
+          "scale": 0.3363641853972943,
+          "metadata": {
+            "width": 40,
+            "height": 49.00684931506849
+          }
+        },
+        {
+          "id": "el-1790783822261",
+          "type": "balloon",
+          "content": "1, 2, 3, 4, 5, 6, 7 vials...",
+          "x": 41.666666666666664,
+          "y": 25,
+          "width": 65,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790785112159-sfak0kx71",
+          "type": "text",
+          "content": "x",
+          "x": 12.222222222222221,
+          "y": 78.4375,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790785120466-0-oohwcu",
+          "type": "text",
+          "content": "x",
+          "x": 35.5,
+          "y": 63.46875,
+          "width": 10,
+          "height": 5,
+          "rotation": 67.67157297964738,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822162",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-w6rwxkv4g",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790785267718-g6pdyphpa",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_hands_on_waist.png",
+          "x": 20.833333333333332,
+          "y": 43.125,
+          "width": 40,
+          "height": 27.890625000000004,
+          "rotation": 0,
+          "scale": 2.3630422134072377,
+          "metadata": {
+            "width": 40,
+            "height": 27.890625000000004,
+            "category": "characters",
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790785176435-m6eq8g5q1",
+          "type": "image",
+          "content": "/src/assets/objects/prop_beaker_purple_unstable.png",
+          "x": 50,
+          "y": 77.65625,
+          "width": 40,
+          "height": 35.84558823529412,
+          "rotation": 0,
+          "scale": 1.2078668407563686,
+          "metadata": {
+            "width": 40,
+            "height": 35.84558823529412,
+            "category": "characters",
+            "hasShadow": false,
+            "opacity": 1,
+            "brightness": 103
+          }
+        },
+        {
+          "id": "el-1790785185684-0-e3c5e3",
+          "type": "text",
+          "content": "<font style=\"background-color: rgb(246, 239, 221);\"> 7x </font>",
+          "x": 53.1666666666666,
+          "y": 79,
+          "width": 10,
+          "height": 5,
+          "rotation": 0.8795008026279447,
+          "scale": 2.165671366464433,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\""
+          }
+        },
+        {
+          "id": "el-1790785285253-su2uyxaxn",
+          "type": "balloon",
+          "content": "Ready!",
+          "x": 79.72222222222223,
+          "y": 26.875,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -95,
+              "y": 30
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.6739004629629629,
+              "angle": 2.881238578800156
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {
+        "opacity": 0.47,
+        "brightness": 111
+      }
+    },
+    {
+      "id": "slide-1790783822163",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-2uda5lj1o",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790785395646-kay90b1hs",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_jumping_scared.png",
+          "x": 72.77777777777779,
+          "y": 42.8125,
+          "width": 40,
+          "height": 26.180297397769515,
+          "rotation": 0,
+          "scale": 2.2927789147599205,
+          "metadata": {
+            "width": 40,
+            "height": 26.180297397769515,
+            "category": "characters",
+            "hasShadow": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790785305294-k9d3n0to4",
+          "type": "image",
+          "content": "/src/assets/objects/prop_beaker_explosion.png",
+          "x": 45,
+          "y": 81.09375,
+          "width": 40,
+          "height": 36.46551724137931,
+          "rotation": 0,
+          "scale": 2.054525066112364,
+          "metadata": {
+            "width": 40,
+            "height": 36.46551724137931,
+            "category": "characters",
+            "hasShadow": false
+          }
+        }
+      ],
+      "order": 4,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822164",
+      "background": "url(\"/src/assets/backgrounds/bkg_abandoned_lab_microscope.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-s41n05h12",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790785525521-4mlfmz1t7",
+          "type": "image",
+          "content": "/src/assets/characters/yara_facepalm_01.png",
+          "x": 11.666666666666664,
+          "y": 58.90625,
+          "width": 40,
+          "height": 39.42419825072886,
+          "rotation": 0,
+          "scale": 2.0766070481748016,
+          "metadata": {
+            "width": 40,
+            "height": 39.42419825072886,
+            "category": "characters",
+            "hasShadow": true
+          }
+        },
+        {
+          "id": "el-1790785576445-4q75r4mry",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_looking_down_worried_scared.png",
+          "x": 83.6111111111111,
+          "y": 82.8125,
+          "width": 40,
+          "height": 27.44505494505495,
+          "rotation": 0,
+          "scale": 1.2830238804717975,
+          "metadata": {
+            "width": 40,
+            "height": 27.44505494505495,
+            "category": "characters",
+            "hasShadow": false,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790783822561",
+          "type": "balloon",
+          "content": "Five of those were water.<div><br></div><div>You <b>can't</b> <b>mix</b> water with unstable serum!</div>",
+          "x": 68.05555555555556,
+          "y": 23.59375,
+          "width": 65,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -65,
+              "y": 95
+            },
+            "tailOrigin": {
+              "edge": "bottom",
+              "offset": 0.34345794392523366,
+              "angle": 2.0676589342050367
+            }
+          }
+        },
+        {
+          "id": "el-1790783822562",
+          "type": "balloon",
+          "content": "But they're all vials!",
+          "x": 75.41666666666667,
+          "y": 50,
+          "width": 44.72222222222222,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Pesto",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 34,
+              "y": 81
+            },
+            "tailOrigin": {
+              "edge": "bottom",
+              "offset": 0.8060747663551402,
+              "angle": 0.6801574110931122
+            }
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {
+        "opacity": 0.27,
+        "grayscale": true,
+        "tintColor": "rgba(249, 115, 22, 0.4)"
+      }
+    },
+    {
+      "id": "slide-1790783822165",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_004.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-0stpfg4uv",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790785646868-36frdqaph",
+          "type": "image",
+          "content": "/src/assets/characters/yara_interrupts_makes_a_point.png",
+          "x": 72.7777777777778,
+          "y": 98.90625,
+          "width": 40,
+          "height": 52.090336134453786,
+          "rotation": 0,
+          "scale": 2.35027614929851,
+          "metadata": {
+            "width": 40,
+            "height": 52.090336134453786,
+            "category": "characters",
+            "flipX": false
+          }
+        },
+        {
+          "id": "el-1790783822661",
+          "type": "balloon",
+          "content": "Sort <b>first</b>.<div><br></div><div><b>Then</b> count.</div>",
+          "x": 24.58333333333333,
+          "y": 57.03125,
+          "width": 50.83333333333333,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 132,
+              "y": -4
+            },
+            "skin": "octo",
+            "tailOrigin": {
+              "edge": "right",
+              "offset": 0.3918585526315789,
+              "angle": -0.09988558859535925
+            }
+          }
+        },
+        {
+          "id": "el-1790785853310-naulqeb0c",
+          "type": "banner",
+          "content": "xx<div>1 1 1 1 1</div>",
+          "x": 50,
+          "y": 27.03125,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1.364911681121191,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822166",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-u403g5qnc",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790788409378-fgf3ipw1q",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_confused.png",
+          "x": 33.611111111111114,
+          "y": 71.25,
+          "width": 40,
+          "height": 25.995145631067963,
+          "rotation": 0,
+          "scale": 2.096543169914278,
+          "metadata": {
+            "width": 40,
+            "height": 25.995145631067963,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790783822762",
+          "type": "text",
+          "content": "**x + x = 2x**\n**1 + 1 + 1 + 1 + 1 = 5**",
+          "x": 50,
+          "y": 10,
+          "width": 80,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14
+          }
+        },
+        {
+          "id": "el-1790785898751-0-sljxbq",
+          "type": "banner",
+          "content": "x+x = <font color=\"#4caf50\">2x</font><div>1+1+1+1+1 = <font color=\"#2196f3\">5</font></div>",
+          "x": 50,
+          "y": 28.78125,
+          "width": 58.93702148144443,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1.364911681121191,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783822761",
+          "type": "balloon",
+          "content": "<b>Two serums.</b><div><br></div><div><font color=\"#2196f3\"><b>Five waters.</b></font></div>",
+          "x": 69.58333333333333,
+          "y": 48.59375,
+          "width": 49.72222222222222,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#00BFA5",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -35,
+              "y": 77
+            }
+          }
+        }
+      ],
+      "order": 7,
+      "backgroundSettings": {
+        "opacity": 0.57
+      }
+    },
+    {
+      "id": "slide-1790783822167",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-a96kosiqa",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783822861",
+          "type": "banner",
+          "content": "x <font color=\"#000000\">+</font> x <font color=\"#000000\">=</font> ?",
+          "x": 50,
+          "y": 24.8125,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783822862",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "x²",
+              "2x",
+              "2",
+              "xx"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Agrupa los términos semejantes con *x*: **3x + 2x = 5x**.\nPaso 2: Agrupa las constantes numéricas: **7 + 1 = 8**.\nPaso 3: Une ambos resultados: **5x + 8**.\nResultado: **5x + 8**.",
+              "en": "Step 1: Group like terms with *x*: **3x + 2x = 5x**.\nStep 2: Group constant numbers: **7 + 1 = 8**.\nStep 3: Combine both: **5x + 8**.\nResult: **5x + 8**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Each x has an implied coefficient of 1: 1x + 1x.\nStep 2: Add the numeric coefficients: 1 + 1 = 2.\nStep 3: Keep the variable part: 2x.\nResult: 2x."
+              }
+            }
+          }
+        }
+      ],
+      "order": 8,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822168",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-l7ydouhv6",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790786052652-mhpy96qlv",
+          "type": "image",
+          "content": "/src/assets/characters/yara_explains_down.png",
+          "x": 28.333333333333332,
+          "y": 65.3125,
+          "width": 40,
+          "height": 37.78103044496487,
+          "rotation": 0,
+          "scale": 1.8081327793969448,
+          "metadata": {
+            "width": 40,
+            "height": 37.78103044496487,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790786102306-ubs38syz1",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holding_paper.png",
+          "x": 81.94444444444444,
+          "y": 79.375,
+          "width": 40,
+          "height": 22.203947368421048,
+          "rotation": 0,
+          "scale": 1.6793794853108026,
+          "metadata": {
+            "width": 40,
+            "height": 22.203947368421048,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1790783822961",
+          "type": "balloon",
+          "content": "Same kind? Count them together.<div><br></div><div>Different kind? Keep them apart.</div>",
+          "x": 61.94444444444444,
+          "y": 23.515625,
+          "width": 65,
+          "height": 24.21875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -113,
+              "y": 68
+            },
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.8246384297520661,
+              "angle": 2.614555101015796
+            },
+            "skin": "octo"
+          }
+        },
+        {
+          "id": "el-1790783822962",
+          "type": "balloon",
+          "content": "Serum with serum.&nbsp;<div><br></div><div>Water with water.</div>",
+          "x": 76.25,
+          "y": 50,
+          "width": 45.83333333333333,
+          "height": 22.03125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Kranky",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -114,
+              "y": 2
+            },
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.42084703947368424,
+              "angle": -3.0862058115673294
+            }
+          }
+        }
+      ],
+      "order": 9,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822169",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-ivzfzaxah",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823061",
+          "type": "banner",
+          "content": "Pesto has <font color=\"#000000\">2</font> serum vials (x) and <font color=\"#000000\">5</font> water vials <font color=\"#000000\">(1)</font>.<div><br></div><div>What goes on the label?</div>",
+          "x": 50,
+          "y": 30.90625,
+          "width": 78,
+          "height": 34.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823062",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "7x",
+              "7",
+              "10x",
+              "2x + 5"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: 2 viales de suero valen *x* cada uno: **2x**.\nPaso 2: 5 viales de agua valen 1 cada uno: **5**.\nPaso 3: Como **2x** y **5** no son términos semejantes, no pueden fusionarse en 7x.\nResultado: **2x + 5**.",
+              "en": "Step 1: 2 serum vials each worth *x* give **2x**.\nStep 2: 5 water vials each worth 1 give **5**.\nStep 3: Because **2x** and **5** are unlike terms, they cannot merge into 7x.\nResult: **2x + 5**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: 2 serum vials each worth x give 2x.\nStep 2: 5 water vials each worth 1 give 5.\nStep 3: Because 2x and 5 are unlike terms, they cannot merge into 7x.\nResult: 2x + 5."
+              }
+            }
+          }
+        }
+      ],
+      "order": 10,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790790973495",
+      "background": "url(\"/src/assets/backgrounds/titlecard_img_4622.png\")",
+      "elements": [],
+      "order": 11,
+      "cartridge": {
+        "type": "AlgeBros",
+        "config": {
+          "startLevel": 1,
+          "targetLevel": 10,
+          "topic": "liketerms"
+        }
+      }
+    },
+    {
+      "id": "slide-1790783822170",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-vv6ohbkf8",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790786160946-hrmzlehoz",
+          "type": "image",
+          "content": "/src/assets/characters/yara_excited_explains.png",
+          "x": 50,
+          "y": 68.125,
+          "width": 40,
+          "height": 33.04945054945055,
+          "rotation": 0,
+          "scale": 2.2873032325741636,
+          "metadata": {
+            "width": 40,
+            "height": 33.04945054945055,
+            "category": "characters",
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790786179452-un6aho9gt",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_pink.png",
+          "x": 82.22222222222223,
+          "y": 59.0625,
+          "width": 40,
+          "height": 41.886160714285715,
+          "rotation": 0,
+          "scale": 0.3225801282211834,
+          "metadata": {
+            "width": 40,
+            "height": 41.886160714285715,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790786187698-nnaxpdxom",
+          "type": "image",
+          "content": "/src/assets/objects/prop_vial_green.png",
+          "x": 21.388888888888893,
+          "y": 60.46875,
+          "width": 40,
+          "height": 46.28571428571429,
+          "rotation": 0,
+          "scale": 0.29410037174721404,
+          "metadata": {
+            "width": 40,
+            "height": 46.28571428571429,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790783823161",
+          "type": "balloon",
+          "content": "Different serum, different letter.&nbsp;<div><br></div><div>It doesn't mix with x either.</div>",
+          "x": 50,
+          "y": 22.96875,
+          "width": 65,
+          "height": 19.0625,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 15,
+              "y": 83
+            }
+          }
+        },
+        {
+          "id": "el-1790786208598-iqfcldalo",
+          "type": "text",
+          "content": "x",
+          "x": 21.38888888888888,
+          "y": 61.875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 23
+          }
+        },
+        {
+          "id": "el-1790786231293-0-oh0fo4",
+          "type": "text",
+          "content": "y",
+          "x": 82.44444444444441,
+          "y": 60.1875,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 23
+          }
+        }
+      ],
+      "order": 12,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822171",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-hm6e601x7",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823261",
+          "type": "banner",
+          "content": "2x + x <font color=\"#000000\">+ </font>y + y <font color=\"#000000\">=</font> ?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823262",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "5xy",
+              "3x + 2y",
+              "5x",
+              "6xy"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Agrupa los términos semejantes con *x*: **2x + 1x = 3x**.\nPaso 2: Agrupa los términos semejantes con *y*: **1y + 1y = 2y**.\nPaso 3: Combina ambos grupos: **3x + 2y**.\nResultado: **3x + 2y**.",
+              "en": "Step 1: Group like terms with *x*: **2x + 1x = 3x**.\nStep 2: Group like terms with *y*: **1y + 1y = 2y**.\nStep 3: Combine both groups: **3x + 2y**.\nResult: **3x + 2y**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Group like terms with x: 2x + 1x = 3x.\nStep 2: Group like terms with y: 1y + 1y = 2y.\nStep 3: Combine both groups: 3x + 2y.\nResult: 3x + 2y."
+              }
+            }
+          }
+        }
+      ],
+      "order": 13,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822172",
+      "background": "url(\"/src/assets/backgrounds/titlecard_img_4622.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-kk0xhfxwd",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790788533056-n8nrxp32c",
+          "type": "image",
+          "content": "/src/assets/characters/yara_thinking_on_one_knee.png",
+          "x": 43.33333333333333,
+          "y": 69.375,
+          "width": 40,
+          "height": 32.30478589420655,
+          "rotation": 0,
+          "scale": 1.8886471433781884,
+          "metadata": {
+            "width": 40,
+            "height": 32.30478589420655,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1790783823361",
+          "type": "balloon",
+          "content": "Terms with the same letter are called <b>like terms</b>.&nbsp;<div><br></div><div><b>Only</b> like terms <b>combine</b>.</div>",
+          "x": 61.111111111111114,
+          "y": 26.953125,
+          "width": 65,
+          "height": 24.53125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "speaker": "Yara",
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 3,
+              "y": 119
+            },
+            "tailOrigin": {
+              "edge": "bottom",
+              "offset": 0.6285046728971962,
+              "angle": 1.1879249560626632
+            }
+          }
+        }
+      ],
+      "order": 14,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822173",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-xiujq250o",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823461",
+          "type": "banner",
+          "content": "Which pair are like terms?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823462",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "4x and 4",
+              "4x and 4y",
+              "4x and 7x",
+              "x and 7"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Los **términos semejantes** deben compartir exactamente la misma variable y exponente: tanto **4x** como **7x** tienen la variable *x* con exponente 1.",
+              "en": "**Like terms** must share the exact same variable with the same exponent: both **4x** and **7x** have the variable *x* to the first power."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Like terms must share the exact same variable with the same exponent. Both 4x and 7x have variable x to the first power."
+              }
+            }
+          }
+        }
+      ],
+      "order": 15,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822174",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-ih8nqfprl",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823561",
+          "type": "banner",
+          "content": "<font color=\"#000000\">3</font>x <font color=\"#000000\">+ 4</font>x <font color=\"#000000\">=</font> ?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823562",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "7x",
+              "12x",
+              "7x²",
+              "7"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Suma los términos con *x*: **1x + 1x = 2x**.\nPaso 2: La constante **1** no tiene variable, por lo que no se combina con 2x.\nResultado: **2x + 1**.",
+              "en": "Step 1: Add the terms with *x*: **1x + 1x = 2x**.\nStep 2: The constant **1** has no variable and cannot combine with 2x.\nResult: **2x + 1**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Verify both terms share the same variable: both have x.\nStep 2: Add their coefficients: 3 + 4 = 7.\nStep 3: Keep the variable: 7x.\nResult: 7x."
+              }
+            }
+          }
+        }
+      ],
+      "order": 16,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822175",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-eodllswpt",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823661",
+          "type": "banner",
+          "content": "<font color=\"#000000\">3</font>x <font color=\"#000000\">+ 4 =</font> ?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823662",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "7x",
+              "7",
+              "12x",
+              "3x + 4"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Suma los términos semejantes con *x*: **1x + 1x + 1x = 3x**.\nPaso 2: La constante **2** no se puede combinar con 3x.\nResultado: **3x + 2**.",
+              "en": "Step 1: Add the like terms with *x*: **1x + 1x + 1x = 3x**.\nStep 2: The constant **2** cannot combine with 3x.\nResult: **3x + 2**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: The term 3x contains a variable, while 4 is a constant number.\nStep 2: Because they are unlike terms, they cannot combine into a single term like 7x.\nResult: The expression stays as 3x + 4."
+              }
+            }
+          }
+        }
+      ],
+      "order": 17,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822176",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-j4ww9cryb",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823761",
+          "type": "banner",
+          "content": "x <font color=\"#000000\">+</font> x <font color=\"#000000\">+</font> x <font color=\"#000000\">+ 2 =</font> ?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823762",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "5x",
+              "3x + 2",
+              "x³ + 2",
+              "5"
+            ],
+            "correctIndex": 1,
+            "correctIndices": [
+              1
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Suma los términos semejantes con *x*: **1x + 1x + 1x = 3x**.\nPaso 2: El número constante **2** no se puede sumar con 3x.\nResultado: **3x + 2**.",
+              "en": "Step 1: Add the like terms with *x*: **1x + 1x + 1x = 3x**.\nStep 2: The constant number **2** cannot combine with 3x.\nResult: **3x + 2**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Add the like terms with x: 1x + 1x + 1x = 3x.\nStep 2: The constant 2 cannot combine with 3x.\nResult: 3x + 2."
+              }
+            }
+          }
+        }
+      ],
+      "order": 18,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822177",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-vwgmj2oq4",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823861",
+          "type": "banner",
+          "content": "<font color=\"#000000\">5 + 2</font>x <font color=\"#000000\">+ 3 =</font> ?",
+          "x": 50,
+          "y": 22,
+          "width": 78,
+          "height": 17,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823862",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "10x",
+              "7x + 3",
+              "2x + 8",
+              "10"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              2
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: Identifica las constantes numéricas semejantes: **5** y **3**.\nPaso 2: Suma las constantes: **5 + 3 = 8**.\nPaso 3: Junta con el término variable: **2x + 8**.\nResultado: **2x + 8**.",
+              "en": "Step 1: Identify the constant like terms: **5** and **3**.\nStep 2: Add the constants: **5 + 3 = 8**.\nStep 3: Join with the variable term: **2x + 8**.\nResult: **2x + 8**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: Identify the constant like terms: 5 and 3.\nStep 2: Add the constants: 5 + 3 = 8.\nStep 3: Join with the variable term: 2x + 8.\nResult: 2x + 8."
+              }
+            }
+          }
+        }
+      ],
+      "order": 19,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790783822178",
+      "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+      "elements": [
+        {
+          "id": "el-1790788205095-mbrbxltc4",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_img_4636.png\")",
+          "metadata": {
+            "opacity": 0.27
+          }
+        },
+        {
+          "id": "el-1790783823961",
+          "type": "banner",
+          "content": "Pesto has <font color=\"#000000\">4</font> serum vials (x) and <font color=\"#000000\">3</font> water vials <font color=\"#000000\">(1)</font>. What goes on the label?",
+          "x": 50,
+          "y": 30.75,
+          "width": 78,
+          "height": 34.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 78,
+            "height": 17,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 28,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790783823962",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "7x",
+              "4 + 3x",
+              "7",
+              "4x + 3"
+            ],
+            "correctIndex": 3,
+            "correctIndices": [
+              3
+            ],
+            "quizType": "classic",
+            "visualMode": false,
+            "explanation": {
+              "es": "Paso 1: 4 viales de suero valen *x* cada uno: **4x**.\nPaso 2: 3 viales de agua valen 1 cada uno: **3**.\nPaso 3: Uniendo ambos ingredientes obtenemos **4x + 3**.\nResultado: **4x + 3**.",
+              "en": "Step 1: 4 serum vials worth *x* each: **4x**.\nStep 2: 3 water vials worth 1 each: **3**.\nStep 3: Combining both ingredients yields **4x + 3**.\nResult: **4x + 3**."
+            },
+            "translations": {
+              "en": {
+                "explanation": "Step 1: 4 serum vials worth x each = 4x.\nStep 2: 3 water vials worth 1 each = 3.\nStep 3: Combining both ingredients yields 4x + 3.\nResult: 4x + 3."
+              }
+            }
+          }
+        }
+      ],
+      "order": 20,
+      "backgroundSettings": {
+        "opacity": 0.27
+      }
+    },
+    {
+      "id": "slide-1790787450095-0-2w3ehm",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1790787450095-ktvz6rwbe",
+          "type": "banner",
+          "content": "<br> ",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1790787450095-9sz6ene8m",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50.07174173990885,
+          "y": 23.28125,
+          "width": 51,
+          "height": 6.847259325219687,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 14,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790787450095-qfbx04ap3",
+          "type": "banner",
+          "content": "<br>",
+          "x": 49.98424953884548,
+          "y": 67.890625,
+          "width": 51,
+          "height": 41.62390304180292,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1790787450095-picvwc6ck",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">x </font>+<font color=\"#2196f3\"> x </font>+ <font color=\"#2196f3\">x </font>=<font color=\"#2196f3\"> </font>3<font color=\"#2196f3\">x</font></span>",
+          "x": 50,
+          "y": 23.125,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 14,
+            "color": "#000000",
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "id": "el-1790787450095-1pa8xckw0",
+          "type": "text",
+          "content": "<b>Like terms</b> have the <b>same</b> <b>letter</b>.<div><br></div><div><b>Combine</b> them by counting z + z = 2z</div><div><br></div><div><b>Plain</b> numbers <b>combine</b> with <b>plain</b> numbers 2 + 2 = 4</div><div><br></div><div><b>Different</b> kinds <b>stay</b> <b>apart</b></div><div><br></div><div>2x + 5 stays 2x + 5</div><div><br></div><div><br><div><br></div><div><br></div></div>",
+          "x": 50,
+          "y": 73.90625,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790787450095-rqkhs30nw",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> LIKE TERMS </span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        },
+        {
+          "id": "el-1790787550533-0-xy7eo7",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 34.5625,
+          "width": 51,
+          "height": 6.847259325219687,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 14,
+            "fontStyle": "italic",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1790787573174-0-ii1yp5",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">x + y </font><font color=\"#e65100\">≠</font><font color=\"#2196f3\"> 2x</font></span>",
+          "x": 50,
+          "y": 33.78125,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 14,
+            "color": "#000000",
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        }
+      ],
+      "order": 21,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-30T15:56:54.440Z",
+  "updatedAt": "2026-09-30T18:04:49.360Z",
+  "path": "lessons/03-Combining Like Terms/lesson.json",
+  "textPreset": null,
+  "_snapshots": [
+    {
+      "timestamp": "2026-09-30T15:57:02.160Z",
+      "reason": "Before script import",
+      "slides": [
+        {
+          "id": "slide-1",
+          "background": "#E1F5FE",
+          "elements": [],
+          "order": 0
+        }
+      ]
+    }
+  ],
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "Combining Like Terms",
+      "description": ""
+    }
+  },
+  "name": "03-Combining Like Terms",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 3,
+  "titlecardFrame": null,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 20,
+    "completed": false,
+    "lastPlayed": 1790789213589
+  }
+}

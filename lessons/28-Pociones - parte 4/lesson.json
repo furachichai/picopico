@@ -1,0 +1,696 @@
+{
+  "id": "lessons/04-Pociones - parte 4/lesson.json",
+  "title": "Pociones - parte 4",
+  "slides": [
+    {
+      "id": "slide-1780589515275",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1780940662107",
+          "type": "image",
+          "content": "/src/assets/characters/wizard_parenthesis.png",
+          "x": 50.83333333333333,
+          "y": 73.90625,
+          "width": 40,
+          "height": 33.57733175914994,
+          "rotation": 0,
+          "scale": 2.9967237859662044,
+          "metadata": {
+            "width": 40,
+            "height": 33.57733175914994,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780589515275-tmbyxhsfa",
+          "type": "balloon",
+          "content": "<div>¡Al fin tenemos</div><div><b>todas las reglas!</b></div>",
+          "x": 38.055555555555564,
+          "y": 24.53125,
+          "width": 76.66666666666667,
+          "height": 15,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "monospace",
+            "fontSize": 19,
+            "tailPos": {
+              "x": 19,
+              "y": 79
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "<div>Finally, we now have <b>all the rules</b>.</div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780594583688-ayjpebdoe",
+          "type": "text",
+          "content": "<font color=\"#c62828\">+-</font><div><font color=\"#c62828\">÷×e</font></div>",
+          "x": 51.084069379789966,
+          "y": 77,
+          "width": 13.88888888888889,
+          "height": 10,
+          "rotation": 0,
+          "scale": 2.955436982375981,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 14,
+            "textAlign": "center",
+            "color": "#880E4F",
+            "lineHeight": 0.7
+          },
+          "translations": {
+            "en": {
+              "content": "<font color=\"#c62828\">+-</font><div><font color=\"#c62828\">÷×e</font></div>"
+            }
+          }
+        }
+      ],
+      "order": 0,
+      "backgroundSettings": {
+        "opacity": 0.58
+      },
+      "cartridge": null
+    },
+    {
+      "id": "slide-1780589799164",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1780589799164-72f16g6w6",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780589799164-lv8qdh087",
+          "type": "line",
+          "x": 47.500000000000014,
+          "y": 44.296875,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780589799164-q8mhvclq4",
+          "type": "text",
+          "content": "<b>+ </b>or<b> - </b><br><div>from left to right</div>",
+          "x": 48.05555555555555,
+          "y": 78.90625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#F44336"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>+ </b>or<b> - </b><br><div>from left to right</div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589799164-xulk9bu9t",
+          "type": "text",
+          "content": "<b>× </b>or<b> ÷ </b><div>from left to right</div>",
+          "x": 47.77777777777777,
+          "y": 64.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#F57C00"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>× </b>or<b> ÷ </b><div>from left to right</div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589799164-w7czx72z0",
+          "type": "text",
+          "content": "<b>RULES</b>",
+          "x": 48.61111111111111,
+          "y": 31.40625,
+          "width": 10,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>RULES</b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589799164-sxk5pd7cf",
+          "type": "line",
+          "x": 47.500000000000014,
+          "y": 55.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780589799164-mf58u8b1r",
+          "type": "line",
+          "x": 47.50000000000001,
+          "y": 70.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780589799164-xfze22o55",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20tells%20you%20a%20secret.png",
+          "x": 93.61111111111111,
+          "y": 70.28125,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.390290817294682,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1780589799164-tczr0j7zh",
+          "type": "text",
+          "content": "<b>( )</b>",
+          "x": 47.49999999999999,
+          "y": 39.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FDE74C"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>P</b>arenthesis"
+            }
+          }
+        },
+        {
+          "id": "el-1780589799164-y52czvolv",
+          "type": "text",
+          "content": "<b>e</b>",
+          "x": 47.77777777777777,
+          "y": 50.9375,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FFC107"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>E</b>xponents"
+            }
+          }
+        },
+        {
+          "id": "el-1780589799164-dncivgrcs",
+          "type": "balloon",
+          "content": "<b>Primero</b> hacemos lo que está dentro de <b>( )</b><br>",
+          "x": 71.66666666666667,
+          "y": 26.71875,
+          "width": 58.88888888888889,
+          "height": 22.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 41,
+              "y": 95
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "<b>First</b> we solve what's inside <b>( )</b><br>"
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      }
+    },
+    {
+      "id": "slide-1778775982680",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 2,
+      "cartridge": {
+        "type": "Potiondas",
+        "config": {
+          "levelsText": "(x-)\n(-/)\n(-e*)\nx(+-)\n(--)/\n(/+)+(x-)\n(-/)/(x+)\n+ex(+/-)\n/-(+e/)"
+        }
+      }
+    },
+    {
+      "id": "slide-1780590864638",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001c.png\")",
+      "elements": [
+        {
+          "id": "el-1780590864638-zj7deblvv",
+          "type": "image",
+          "content": "/src/assets/characters/wizard%20sipping.png",
+          "x": 49.72222222222222,
+          "y": 54.84375,
+          "width": 40,
+          "height": 33.5377358490566,
+          "rotation": 0,
+          "scale": 2.7299160518417924,
+          "metadata": {
+            "width": 40,
+            "height": 33.5377358490566
+          }
+        },
+        {
+          "id": "el-1780590864638-lqka7vmdn",
+          "type": "balloon",
+          "content": "<div>¿Qué <b>orden</b> debes seguir?</div>",
+          "x": 25.694444444444446,
+          "y": 18.90625,
+          "width": 43.05555555555556,
+          "height": 14.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 16,
+            "tailPos": {
+              "x": 39,
+              "y": 67
+            }
+          },
+          "translations": {
+            "en": {
+              "content": "<div>Which order must I follow?</div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780590864638-tfh7b7ve9",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 67.34375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "Verdana, Arial, sans-serif",
+            "options": [
+              "Analiza toda la serie",
+              "( )",
+              "e²",
+              "× ó <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+              "+ ó -"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "reorder",
+            "visualMode": false,
+            "translations": {
+              "en": {
+                "options": [
+                  "Analyze whole expression",
+                  "( )",
+                  "e²",
+                  "x or <font style=\"font-size: 17px; font-weight: normal;\">÷</font>",
+                  "+ or -"
+                ],
+                "matchAnswers": [],
+                "chatNodes": [],
+                "explanation": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside parentheses ( ) first.\nStep 3: Calculate exponents (e²).\nStep 4: Solve multiplications (×) and divisions (÷) from left to right.\nStep 5: Solve additions (+) and subtractions (-) from left to right.\nConclusion: This is the complete PEMDAS order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
+              },
+              "es": {
+                "explanation": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los paréntesis ( ).\nPaso 3: Calcula los exponentes (e²).\nPaso 4: Resuelve multiplicaciones (×) y divisiones (÷) de izquierda a derecha.\nPaso 5: Resuelve sumas (+) y restas (-) de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (PEMDAS): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta."
+              }
+            },
+            "explanation": {
+              "es": "Paso 1: Analiza toda la serie para planificar el orden correcto.\nPaso 2: Resuelve primero todo lo que esté dentro de los **paréntesis ( )**.\nPaso 3: Calcula los **exponentes (e²)**.\nPaso 4: Resuelve **multiplicaciones (×)** y **divisiones (÷)** de izquierda a derecha.\nPaso 5: Resuelve **sumas (+)** y **restas (-)** de izquierda a derecha.\nConclusión: Este es el orden completo de operaciones (**PEMDAS**): Paréntesis, Exponentes, Multiplicación/División, Suma/Resta.",
+              "en": "Step 1: Analyze the whole expression first to plan the correct sequence.\nStep 2: Solve everything inside **parentheses ( )** first.\nStep 3: Calculate **exponents (e²)**.\nStep 4: Solve **multiplications (×)** and **divisions (÷)** from left to right.\nStep 5: Solve **additions (+)** and **subtractions (-)** from left to right.\nConclusion: This is the complete **PEMDAS** order of operations: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction."
+            }
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {},
+      "cartridge": null
+    },
+    {
+      "id": "slide-1780589369404",
+      "background": "url(\"/src/assets/backgrounds/bkg_abstrat_001.png\")",
+      "elements": [
+        {
+          "id": "el-1780589369404-vzwewa07h",
+          "type": "image",
+          "content": "/src/assets/characters/scroll.png",
+          "x": 49.166666666666664,
+          "y": 53.59375,
+          "width": 40,
+          "height": 33.53711790393013,
+          "rotation": 0,
+          "scale": 2.965326382502965,
+          "metadata": {
+            "width": 40,
+            "height": 33.53711790393013,
+            "locked": true,
+            "hidden": false
+          }
+        },
+        {
+          "id": "el-1780589369404-z643q9pht",
+          "type": "text",
+          "content": "<b> ×</b><b> ÷ </b><div>           </div>",
+          "x": 47.77777777777777,
+          "y": 64.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 38,
+            "backgroundColor": "#F57C00",
+            "lineHeight": 0.5,
+            "locked": true
+          },
+          "translations": {
+            "en": {
+              "content": "<b>× </b>or<b> ÷ </b><div><br></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589369404-nl89u8u0p",
+          "type": "line",
+          "x": 47.500000000000014,
+          "y": 55.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780589369404-x8jg0wgao",
+          "type": "text",
+          "content": "<b>+ -</b><div><b>             </b></div>",
+          "x": 48.05555555555555,
+          "y": 78.90625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 38,
+            "backgroundColor": "#F44336",
+            "lineHeight": 0.5,
+            "hidden": false,
+            "locked": true
+          },
+          "translations": {
+            "en": {
+              "content": "<b>+ </b>or<b> - </b><br><div><br></div>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589369404-07uwklc0g",
+          "type": "text",
+          "content": "<b>REGLAS</b>",
+          "x": 49.14553977065698,
+          "y": 31.40625,
+          "width": 18.27406147584132,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 2.153722403662122,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "locked": true
+          },
+          "translations": {
+            "en": {
+              "content": "<b>RULES</b>"
+            }
+          }
+        },
+        {
+          "id": "el-1780589369404-5fr12mars",
+          "type": "line",
+          "x": 47.500000000000014,
+          "y": 44.296875,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow",
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1780589369404-mrfbwfqu8",
+          "type": "text",
+          "content": "<b>( )</b>",
+          "x": 47.77777777777777,
+          "y": 39.0625,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FDE74C"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>P</b>arenthesis"
+            }
+          }
+        },
+        {
+          "id": "el-1780589369404-nsu6r958j",
+          "type": "line",
+          "x": 47.50000000000001,
+          "y": 70.703125,
+          "width": 6.408704915343446,
+          "height": 10,
+          "rotation": 90,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 10,
+            "isSymbol": true,
+            "symbolColor": "#8B5CF6",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780589369404-yf7kskcmr",
+          "type": "text",
+          "content": "<b>e²</b>",
+          "x": 47.77777777777777,
+          "y": 50.9375,
+          "width": 68.33333333333333,
+          "height": 7.8125,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "Outfit",
+            "fontSize": 22,
+            "backgroundColor": "#FFC107"
+          },
+          "translations": {
+            "en": {
+              "content": "<b>E</b>xponents"
+            }
+          }
+        },
+        {
+          "id": "el-1780688191781",
+          "type": "line",
+          "x": 47.916666666666664,
+          "y": 80.625,
+          "width": 16.68648269312122,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 4,
+            "isSymbol": true,
+            "symbolColor": "#2E7D32",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        },
+        {
+          "id": "el-1780688166503",
+          "type": "line",
+          "x": 47.36111111111111,
+          "y": 66.09375,
+          "width": 16.68648269312122,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 50,
+            "height": 4,
+            "isSymbol": true,
+            "symbolColor": "#2E7D32",
+            "startCap": "none",
+            "endCap": "arrow"
+          }
+        }
+      ],
+      "order": 4,
+      "cartridge": null,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "transparent"
+      },
+      "stripper": {
+        "enabled": false,
+        "dividers": [
+          50
+        ]
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-05-12T21:25:39.254Z",
+  "updatedAt": "2026-06-22T22:22:27.526Z",
+  "path": "lessons/04-Pociones - parte 4/lesson.json",
+  "textPreset": null,
+  "subject": "Math",
+  "topic": "PEMDAS",
+  "chapterId": "01",
+  "chapterName": "Magic",
+  "lessonId": "01",
+  "visible": true,
+  "name": "04-Pociones - parte 4",
+  "type": "file",
+  "description": "Todo comienza aquí dentro ( )",
+  "order": 4,
+  "status": "active",
+  "icon": "icon_potion.png",
+  "progress": null,
+  "translations": {
+    "en": {
+      "title": "Potions",
+      "description": "Everything begins inside ( )"
+    }
+  },
+  "hashtag": "#OrderOfOperations",
+  "cardColor": "#8B5CF6",
+  "visibleInFeed": false,
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0,
+    "y": -37.6
+  }
+}

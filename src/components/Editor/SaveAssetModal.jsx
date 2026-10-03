@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import './SaveAssetModal.css';
+import { useEditor } from '../../context/EditorContext';
+import ReplaceAssetModal from './ReplaceAssetModal';
 import {
     DEFAULT_CHARACTER_TAGS,
     getCustomCharacterTags,
@@ -137,6 +139,8 @@ const SaveAssetModal = ({
     onSave,
     onCancel
 }) => {
+    const { dispatch } = useEditor();
+    const [conflict, setConflict] = useState(null);
     const [category, setCategory] = useState('characters');
     const [characterTag, setCharacterTag] = useState('chef');
     const [objectTag, setObjectTag] = useState('whole');
@@ -341,14 +345,15 @@ const SaveAssetModal = ({
         });
     };
 
-    // Execute save for all items in batch
-    const handleSave = async () => {
-        if (!items || items.length === 0) return;
+    // Execute save for all items in batch (with duplicate collision detection)
+    const executeUpload = async (itemsToSave) => {
+        if (!itemsToSave || itemsToSave.length === 0) return;
 
         // Check for empty filenames
-        const hasEmpty = items.some(item => !item.filename || !item.filename.trim());
+        const hasEmpty = itemsToSave.some(item => !item.filename || !item.filename.trim());
         if (hasEmpty) {
             setError('All files must have a valid filename');
+            setIsSaving(false);
             return;
         }
 
@@ -356,14 +361,64 @@ const SaveAssetModal = ({
         setError(null);
 
         try {
+            // Fetch asset list to check for collisions
+            let assetMeta = {};
+            try {
+                const listRes = await fetch('/api/assets/list');
+                if (listRes.ok) {
+                    const listData = await listRes.json();
+                    assetMeta = listData.assetMeta || {};
+                }
+            } catch {}
+
+            const collidingIndex = itemsToSave.findIndex(item => {
+                if (item.overwrite) return false;
+                let fn = item.filename.trim();
+                if (!fn.endsWith('.png') && !fn.endsWith('.jpg') && !fn.endsWith('.jpeg') && !fn.endsWith('.webp') && !fn.endsWith('.svg')) {
+                    fn += '.png';
+                }
+                const clean = fn.replace(/[^a-zA-Z0-9._-]/g, '_');
+                return Boolean(assetMeta[fn] || assetMeta[clean]);
+            });
+
+            if (collidingIndex !== -1) {
+                const item = itemsToSave[collidingIndex];
+                let fn = item.filename.trim();
+                if (!fn.endsWith('.png') && !fn.endsWith('.jpg') && !fn.endsWith('.jpeg') && !fn.endsWith('.webp') && !fn.endsWith('.svg')) {
+                    fn += '.png';
+                }
+                const clean = fn.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const existing = assetMeta[fn] || assetMeta[clean];
+
+                setConflict({
+                    itemIndex: collidingIndex,
+                    filename: existing.filename || fn,
+                    category: category,
+                    existing: {
+                        url: existing.url,
+                        filename: existing.filename || fn,
+                        category: existing.category || category,
+                        size: existing.size || 0
+                    },
+                    incoming: {
+                        dataUrl: item.dataUrl,
+                        filename: fn,
+                        size: item.size || 0,
+                        category: category
+                    }
+                });
+                setIsSaving(false);
+                return;
+            }
+
             try {
                 localStorage.setItem('picopico_last_save_category', category);
             } catch {}
 
             const savedResults = [];
 
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
+            for (let i = 0; i < itemsToSave.length; i++) {
+                const item = itemsToSave[i];
                 let finalName = item.filename.trim();
                 if (!finalName.endsWith('.png') && !finalName.endsWith('.jpg') && !finalName.endsWith('.jpeg') && !finalName.endsWith('.webp') && !finalName.endsWith('.svg')) {
                     finalName += '.png';
@@ -371,7 +426,7 @@ const SaveAssetModal = ({
 
                 setSaveProgress({
                     current: i + 1,
-                    total: items.length,
+                    total: itemsToSave.length,
                     name: finalName
                 });
 
@@ -382,7 +437,7 @@ const SaveAssetModal = ({
                         dataUrl: item.dataUrl,
                         filename: finalName,
                         category: category,
-                        overwrite: false
+                        overwrite: Boolean(item.overwrite)
                     })
                 });
 
@@ -392,6 +447,21 @@ const SaveAssetModal = ({
                 }
 
                 const result = await response.json();
+
+                if (item.overwrite) {
+                    // Dispatch REPLACE_ASSET_INSTANCES to editor context
+                    dispatch({
+                        type: 'REPLACE_ASSET_INSTANCES',
+                        payload: {
+                            oldFilename: finalName,
+                            oldUrl: item.existingUrl,
+                            newUrl: result.url || item.existingUrl,
+                            timestamp: Date.now()
+                        }
+                    });
+                    window.dispatchEvent(new CustomEvent('picopico-asset-saved'));
+                }
+
                 savedResults.push({
                     ...result,
                     dimensions: item.dimensions,
@@ -409,6 +479,49 @@ const SaveAssetModal = ({
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleSave = () => {
+        executeUpload(items);
+    };
+
+    const handleConflictReplace = (conf) => {
+        const idx = conf.itemIndex;
+        const updated = [...items];
+        updated[idx] = {
+            ...updated[idx],
+            overwrite: true,
+            existingUrl: conf.existing?.url
+        };
+        setItems(updated);
+        setConflict(null);
+        executeUpload(updated);
+    };
+
+    const handleConflictKeepBoth = (conf) => {
+        const idx = conf.itemIndex;
+        const fullFilename = conf.incoming?.filename || conf.filename;
+        const lastDot = fullFilename.lastIndexOf('.');
+        const ext = lastDot !== -1 ? fullFilename.slice(lastDot) : '.png';
+        const base = lastDot !== -1 ? fullFilename.slice(0, lastDot) : fullFilename;
+
+        let counter = 1;
+        let nextName = `${base}_${counter}${ext}`;
+
+        const updated = [...items];
+        updated[idx] = {
+            ...updated[idx],
+            filename: nextName,
+            overwrite: false
+        };
+        setItems(updated);
+        setConflict(null);
+        executeUpload(updated);
+    };
+
+    const handleConflictCancel = () => {
+        setConflict(null);
+        setIsSaving(false);
     };
 
     if (!isOpen || items.length === 0) return null;
@@ -725,7 +838,18 @@ const SaveAssetModal = ({
         </div>
     );
 
-    return createPortal(modalContent, document.body);
+    return (
+        <>
+            {createPortal(modalContent, document.body)}
+            <ReplaceAssetModal
+                isOpen={!!conflict}
+                conflict={conflict}
+                onReplace={handleConflictReplace}
+                onKeepBoth={handleConflictKeepBoth}
+                onCancel={handleConflictCancel}
+            />
+        </>
+    );
 };
 
 export default SaveAssetModal;

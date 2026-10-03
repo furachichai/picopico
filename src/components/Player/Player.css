@@ -769,6 +769,35 @@
     box-sizing: border-box;
 }
 
+.explanation-modal-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.explanation-modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.explanation-modal-content::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 10px;
+}
+
+.explanation-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+.explanation-modal-content strong,
+.explanation-modal-content b {
+    font-weight: 800;
+    color: #0F172A;
+}
+
+.explanation-modal-content em,
+.explanation-modal-content i {
+    font-style: italic;
+    color: #334155;
+}
+
 .explanation-steps-container {
     display: flex;
     flex-direction: column;
@@ -778,17 +807,27 @@
 .explanation-step-card {
     background: #F8FAFC;
     border: 1.5px solid #CBD5E1;
-    border-radius: 10px;
-    padding: 7px 10px;
+    border-radius: 11px;
+    padding: 8px 11px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
 }
 
 .explanation-step-card.result-card {
-    background: #ECFDF5;
+    background: #F0FDF4;
     border-color: #10B981;
+}
+
+.explanation-step-card.rule-card {
+    background: #F5F3FF;
+    border-color: #8B5CF6;
+}
+
+.explanation-step-card.note-card {
+    background: #FFFBEB;
+    border-color: #F59E0B;
 }
 
 .explanation-step-label {
@@ -800,21 +839,138 @@
 }
 
 .explanation-step-card.result-card .explanation-step-label {
-    color: #059669;
+    color: #047857;
+}
+
+.explanation-step-card.rule-card .explanation-step-label {
+    color: #6D28D9;
+}
+
+.explanation-step-card.note-card .explanation-step-label {
+    color: #B45309;
 }
 
 .explanation-step-text {
-    font-weight: 600;
+    font-weight: 500;
     color: #1E293B;
     font-size: 0.88rem;
-    line-height: 1.45;
+    line-height: 1.48;
+}
+
+.explanation-sub-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 5px;
+}
+
+.explanation-sub-line {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0F172A;
+    line-height: 1.4;
+}
+
+.explanation-def-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+.explanation-def-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 5px 8px;
+}
+
+.explanation-def-badge {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4F46E5;
+    color: #FFFFFF;
+    font-weight: 900;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.explanation-def-text {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #1E293B;
 }
 
 .explanation-paragraph {
-    font-weight: 600;
+    font-weight: 500;
     color: #1E293B;
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 0.90rem;
+    line-height: 1.52;
     margin: 0;
     padding: 4px 2px;
+}
+
+/* Color Clarity Classes (Curated pedagogical palette for reading clarity) */
+.exp-color-blue {
+    color: #1D4ED8;
+    font-weight: 700;
+}
+
+.exp-color-green {
+    color: #047857;
+    font-weight: 700;
+}
+
+.exp-color-purple {
+    color: #6D28D9;
+    font-weight: 700;
+}
+
+.exp-color-amber {
+    color: #B45309;
+    font-weight: 700;
+}
+
+.exp-color-red {
+    color: #B91C1C;
+    font-weight: 700;
+}
+
+.exp-color-muted {
+    color: #64748B;
+    font-size: 0.88em;
+    font-weight: normal;
+}
+
+.exp-mark {
+    background-color: #FEF08A;
+    color: #713F12;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.exp-code {
+    display: inline-block;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    font-family: 'Outfit', 'Nunito', system-ui, sans-serif;
+    font-size: 0.88em;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 5px;
+    margin: 0 1px;
+    line-height: 1.25;
 }

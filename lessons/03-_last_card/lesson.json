@@ -1,0 +1,85 @@
+{
+  "id": "draft-1790691723222",
+  "title": "_last_card",
+  "slides": [
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/bkg_geom_007.png\")",
+      "elements": [
+        {
+          "id": "el-1790946511361-0-l3fo8f",
+          "type": "image",
+          "content": "/src/assets/objects/item_lesson_complete.png",
+          "x": 50,
+          "y": 22.21875,
+          "width": 40,
+          "height": 10.503318584070797,
+          "rotation": 0,
+          "scale": 1.606216470221872,
+          "metadata": {
+            "width": 40,
+            "height": 10.503318584070797,
+            "category": "characters",
+            "hasShadow": false,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1790691742222-0ahudzxda",
+          "type": "image",
+          "content": "/src/assets/characters/yara_jumping_celebration.png",
+          "x": 42.77777777777778,
+          "y": 54.375,
+          "width": 40,
+          "height": 29.31428571428571,
+          "rotation": 0,
+          "scale": 2.064956090406779,
+          "metadata": {
+            "width": 40,
+            "height": 29.31428571428571,
+            "category": "characters",
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1790691773805-trfqarz7g",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_blows_kiss.png",
+          "x": 81.66666666666667,
+          "y": 76.09375,
+          "width": 40,
+          "height": 28.483146067415728,
+          "rotation": 0,
+          "scale": 1.1599244053694049,
+          "metadata": {
+            "width": 40,
+            "height": 28.483146067415728,
+            "category": "characters",
+            "flipX": true
+          }
+        }
+      ],
+      "order": 0,
+      "backgroundSettings": {
+        "grayscale": true,
+        "tintColor": "rgba(103, 232, 249, 0.4)"
+      }
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-09-29T14:22:03.222Z",
+  "updatedAt": "2026-10-02T13:08:52.176Z",
+  "path": "lessons/02-_last_card/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "_last_card",
+      "description": ""
+    }
+  },
+  "visible": false,
+  "visibleInFeed": false
+}

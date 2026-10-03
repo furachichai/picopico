@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { formatExponents } from '../../utils/textFormatters';
 import ReactDOM from 'react-dom';
@@ -10,6 +10,17 @@ import { parseExpression, astToTokens, validateOperation, evaluateNode, replaceN
 import { getExpression, editorToEngine, DEFAULT_PEM_LEVELS_TEXT, deserializePemLevels } from './PEMExpressionPool';
 import TypeQuizKeyboard from './TypeQuizKeyboard';
 import { evaluateMathExpression, parseFieldExpression, generateFieldChoices, shuffleArray } from '../../utils/fieldQuizUtils';
+import BalanzaFieldScale from '../Quiz/BalanzaField/BalanzaFieldScale';
+import {
+    computeBalanzaFieldTilt,
+    parseBalanzaFieldWeights,
+    parseLeftPlateObjects,
+    evaluateRightPlateWeight,
+    checkBalanzaFieldSolution,
+    getBalanzaFieldSegments
+} from '../../utils/balanzaFieldUtils';
+import { renderCrateOrText } from '../../utils/crateUtils.jsx';
+import { renderScaleTokenOrText } from '../../utils/sackUtils.jsx';
 import { getSharedAudioContext, unlockSharedAudio } from '../../utils/audioContext';
 
 const generateFieldFlyId = () => Date.now() + Math.random();
@@ -402,7 +413,7 @@ const QuizPlayer = ({
 
 
     // Generate a fixed set of subtle rising bubbles for the Match Drag background
-    const matchBubbles = React.useMemo(() => {
+    const matchBubbles = useMemo(() => {
         const list = [];
         for (let i = 0; i < 20; i++) {
             const size = Math.random() * 15 + 8; // 8px to 23px
@@ -639,10 +650,42 @@ const QuizPlayer = ({
     }, [quizType, pemAst, pemSolved, pemFailed, data, pemGameLevel]);
 
     useEffect(() => {
-        if (quizType === 'field') {
-            const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-            const segments = parseFieldExpression(expr);
-            const rawChoices = generateFieldChoices(segments);
+        if (quizType === 'field' || quizType === 'balanza_field') {
+            const isBalanzaField = quizType === 'balanza_field';
+            const targetExpr = data.metadata?.targetExpression !== undefined
+                ? data.metadata.targetExpression
+                : (data.metadata?.fieldExpression ? data.metadata.fieldExpression.split(';')[0].trim() : (isBalanzaField ? '*2c* + *t*' : '3 + *8 x 2* = 19'));
+            const cardsText = data.metadata?.cardsText !== undefined
+                ? data.metadata.cardsText
+                : (data.metadata?.fieldExpression && data.metadata.fieldExpression.includes(';')
+                    ? data.metadata.fieldExpression.split(';').slice(1).join(';').trim()
+                    : (isBalanzaField ? '2c, t, 2t, 3t, c+c' : ''));
+
+            const expr = cardsText.trim() ? `${targetExpr}; ${cardsText.trim()}` : targetExpr;
+            const fieldCount = isBalanzaField ? data.metadata?.fieldCount : undefined;
+            const segments = isBalanzaField
+                ? getBalanzaFieldSegments(targetExpr, fieldCount)
+                : parseFieldExpression(expr);
+
+            let rawChoices;
+            if (isBalanzaField && cardsText.trim()) {
+                const parsedCards = cardsText.split(',').map(c => c.trim()).filter(Boolean);
+                rawChoices = [...parsedCards];
+            } else if (isBalanzaField && segments.hasSemicolon && segments.manualDetractors?.length > 0) {
+                const correctAnswers = segments
+                    .filter(s => s.type === 'field' && s.evaluated !== null)
+                    .map(s => String(s.evaluated).trim().toLowerCase());
+                const detractors = segments.manualDetractors.map(d => String(d).trim().toLowerCase());
+                const containsAll = correctAnswers.length > 0 && correctAnswers.every(ans => detractors.includes(ans));
+                if (containsAll) {
+                    rawChoices = [...segments.manualDetractors];
+                } else {
+                    rawChoices = generateFieldChoices(segments);
+                }
+            } else {
+                rawChoices = generateFieldChoices(segments);
+            }
+
             const mapped = rawChoices.map((val, idx) => ({
                 id: `choice-${idx}`,
                 value: val
@@ -661,7 +704,7 @@ const QuizPlayer = ({
     }, [quizType, data]);
 
     useEffect(() => {
-        if (quizType === 'field') {
+        if (quizType === 'field' || quizType === 'balanza_field') {
             const findNode = () => {
                 return fieldContainerRef.current?.closest('.player-slide') || document.querySelector('.player-slide.slide-active');
             };
@@ -1707,7 +1750,70 @@ const QuizPlayer = ({
     const handleFieldOkSubmit = () => {
         ensureAudioAuthorized();
         if (isSolved || isFailed || disabled) return;
-        
+
+        if (quizType === 'balanza_field') {
+            const leftPlateText = data.metadata?.leftPlateText || '☕, ☕, 🌮';
+            const weightsText = data.metadata?.weightsText || 'c=3, t=5, ☕=3, 🌮=5';
+            const targetExpr = data.metadata?.targetExpression !== undefined
+                ? data.metadata.targetExpression
+                : (data.metadata?.fieldExpression ? data.metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+            const commutative = data.metadata?.commutative !== false;
+
+            const weights = parseBalanzaFieldWeights(weightsText);
+            const { totalWeight: leftTotal } = parseLeftPlateObjects(leftPlateText, weights);
+            const fieldCount = data.metadata?.fieldCount;
+            const segments = getBalanzaFieldSegments(targetExpr, fieldCount);
+            const rightTotal = evaluateRightPlateWeight(segments, fieldSelections, weights);
+
+            const result = checkBalanzaFieldSolution(
+                segments,
+                fieldSelections,
+                leftTotal,
+                rightTotal,
+                commutative,
+                targetExpr
+            );
+
+            if (!result.isAllFilled) {
+                const unfilledIndices = segments
+                    .map((s, idx) => (s.type === 'field' && !fieldSelections[idx] ? idx : null))
+                    .filter(val => val !== null);
+                setFieldShakeSlots(new Set(unfilledIndices));
+                setTimeout(() => setFieldShakeSlots(new Set()), 500);
+                playSound('wrong');
+                return;
+            }
+
+            if (result.isComplete) {
+                handleSuccess();
+                return;
+            } else {
+                const nextAttempts = fieldAttempts + 1;
+                setFieldAttempts(nextAttempts);
+
+                const fieldSlotIndices = segments
+                    .map((s, idx) => (s.type === 'field' ? idx : null))
+                    .filter(val => val !== null);
+                setFieldShakeSlots(new Set(fieldSlotIndices));
+                setTimeout(() => setFieldShakeSlots(new Set()), 500);
+
+                if (nextAttempts >= 3) {
+                    setIsFailed(true);
+                    playSound('fail');
+                    if (onBanner) onBanner('fail', 'Moco!');
+                    if (onNext) onNext(false);
+                } else {
+                    playSound('wrong');
+                    if (result.errorType === 'imbalanced') {
+                        if (onBanner) onBanner('wrong', 'The scale is not balanced!');
+                    } else if (result.errorType === 'expression_mismatch') {
+                        if (onBanner) onBanner('wrong', 'Expression must match the objects on the left!');
+                    }
+                }
+                return;
+            }
+        }
+
         const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
         const segments = parseFieldExpression(expr);
         
@@ -3699,89 +3805,129 @@ const QuizPlayer = ({
         );
     }
 
-    if (quizType === 'field') {
-        const fieldExpression = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-        const segments = parseFieldExpression(fieldExpression);
+    if (quizType === 'field' || quizType === 'balanza_field') {
+        const isBalanzaField = quizType === 'balanza_field';
+        const targetExpr = data.metadata?.targetExpression !== undefined
+            ? data.metadata.targetExpression
+            : (data.metadata?.fieldExpression ? data.metadata.fieldExpression.split(';')[0].trim() : (isBalanzaField ? '*2c* + *t*' : '3 + *8 x 2* = 19'));
+        const fieldCount = isBalanzaField ? data.metadata?.fieldCount : undefined;
+        const segments = isBalanzaField
+            ? getBalanzaFieldSegments(targetExpr, fieldCount)
+            : parseFieldExpression(targetExpr);
         const allSlotsFilled = segments.every((seg, idx) => {
             if (seg.type !== 'field') return true;
             return !!fieldSelections[idx];
         });
+
+        let leftTotal = 0;
+        let rightTotal = 0;
+        let tiltAngle = 0;
+        let leftObjects = [];
+
+        if (isBalanzaField) {
+            const leftPlateText = data.metadata?.leftPlateText || '☕, ☕, 🌮';
+            const weightsText = data.metadata?.weightsText || 'c=3, t=5, ☕=3, 🌮=5';
+            const weights = parseBalanzaFieldWeights(weightsText);
+            const parsedLeft = parseLeftPlateObjects(leftPlateText, weights);
+            leftObjects = parsedLeft.items;
+            leftTotal = parsedLeft.totalWeight;
+            rightTotal = evaluateRightPlateWeight(segments, fieldSelections, weights);
+            tiltAngle = computeBalanzaFieldTilt(leftTotal, rightTotal);
+        }
         
         return (
             <>
-                <div ref={fieldContainerRef} className="quiz-player-2 field-mode-expression" style={{ pointerEvents: 'auto' }}>
-                    <div className="field-player-expression-card" style={{ pointerEvents: 'auto' }}>
-                        {segments.map((seg, idx) => {
-                            if (seg.type === 'text') {
-                                return (
-                                    <span key={idx} className="field-player-text">
-                                        {seg.content}
-                                    </span>
-                                );
-                            } else {
-                                const placed = draggedSlotIdx === idx ? null : fieldSelections[idx];
-                                const isSlotActive = activeSlotIndex === idx;
-                                const isSlotWrong = fieldShakeSlots.has(idx);
-                                const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
-                                const maxLen = Math.max(1, evaluatedStr.length, (seg.isDouble ? (seg.placeholder || '').length : 0));
-                                const slotWidth = Math.max(48, 44 + (maxLen - 1) * 14);
-                                
-                                return (
-                                    <div
-                                        key={idx}
-                                        ref={el => slotRefs.current[idx] = el}
-                                        className={`field-player-slot ${seg.isDouble ? 'double-star' : ''} ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''} ${placed ? 'has-placed' : ''}`}
-                                        style={{
-                                            width: `${slotWidth}px`,
-                                            minWidth: `${slotWidth}px`,
-                                            maxWidth: `${slotWidth}px`,
-                                            height: '42px',
-                                            pointerEvents: 'auto',
-                                            flexShrink: 0
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleFieldSlotTap(idx);
-                                        }}
-                                    >
-                                        {placed ? (
-                                            <button
-                                                className="field-placed-choice-btn"
-                                                onMouseDown={(e) => {
-                                                    e.stopPropagation();
-                                                    handleFieldDragStart(placed, e, idx);
-                                                }}
-                                                onTouchStart={(e) => {
-                                                    e.stopPropagation();
-                                                    handleFieldDragStart(placed, e, idx);
-                                                }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                }}
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    pointerEvents: 'auto'
-                                                }}
-                                            >
-                                                {placed.value}
-                                            </button>
-                                        ) : (
-                                            <>
-                                                {seg.isDouble ? (
-                                                    <span className="field-slot-placeholder-text">
-                                                        {seg.placeholder}
-                                                    </span>
-                                                ) : (
-                                                    <span className="field-slot-empty-indicator"></span>
-                                                )}
-                                            </>
-                                        )}
-                                    </div>
-                                );
-                            }
-                        })}
-                    </div>
+                <div ref={fieldContainerRef} className={`quiz-player-2 ${isBalanzaField ? 'balanza-field-player-mode' : 'field-mode-expression'}`} style={{ pointerEvents: 'auto', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {isBalanzaField ? (
+                        <BalanzaFieldScale
+                            leftObjects={leftObjects}
+                            leftTotalWeight={leftTotal}
+                            rightTotalWeight={rightTotal}
+                            segments={segments}
+                            fieldSelections={fieldSelections}
+                            activeSlotIndex={activeSlotIndex}
+                            fieldShakeSlots={fieldShakeSlots}
+                            tiltAngle={tiltAngle}
+                            isSolved={isSolved}
+                            onSlotTap={handleFieldSlotTap}
+                            onDragStart={handleFieldDragStart}
+                            slotRefs={slotRefs}
+                            isEditor={false}
+                        />
+                    ) : (
+                        <div className="field-player-expression-card" style={{ pointerEvents: 'auto' }}>
+                            {segments.map((seg, idx) => {
+                                if (seg.type === 'text') {
+                                    return (
+                                        <span key={idx} className="field-player-text">
+                                            {seg.content}
+                                        </span>
+                                    );
+                                } else {
+                                    const placed = draggedSlotIdx === idx ? null : fieldSelections[idx];
+                                    const isSlotActive = activeSlotIndex === idx;
+                                    const isSlotWrong = fieldShakeSlots.has(idx);
+                                    const evaluatedStr = seg.evaluated !== null ? seg.evaluated.toString() : '';
+                                    const maxLen = Math.max(1, evaluatedStr.length, (seg.isDouble ? (seg.placeholder || '').length : 0));
+                                    const slotWidth = Math.max(48, 44 + (maxLen - 1) * 14);
+                                    
+                                    return (
+                                        <div
+                                            key={idx}
+                                            ref={el => slotRefs.current[idx] = el}
+                                            className={`field-player-slot ${seg.isDouble ? 'double-star' : ''} ${isSlotActive && !placed ? 'active' : ''} ${isSlotWrong ? 'shake' : ''}`}
+                                            style={{
+                                                width: `${slotWidth}px`,
+                                                minWidth: `${slotWidth}px`,
+                                                maxWidth: `${slotWidth}px`,
+                                                height: '42px',
+                                                pointerEvents: 'auto',
+                                                flexShrink: 0
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleFieldSlotTap(idx);
+                                            }}
+                                        >
+                                            {placed ? (
+                                                <button
+                                                    className="field-placed-choice-btn"
+                                                    onMouseDown={(e) => {
+                                                        e.stopPropagation();
+                                                        handleFieldDragStart(placed, e, idx);
+                                                    }}
+                                                    onTouchStart={(e) => {
+                                                        e.stopPropagation();
+                                                        handleFieldDragStart(placed, e, idx);
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        pointerEvents: 'auto'
+                                                    }}
+                                                >
+                                                    {isBalanzaField ? renderScaleTokenOrText(placed.value, 24) : placed.value}
+                                                </button>
+                                            ) : (
+                                                <>
+                                                    {seg.isDouble ? (
+                                                        <span className="field-slot-placeholder-text">
+                                                            {seg.placeholder}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="field-slot-empty-indicator"></span>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    )}
 
                     {/* Flying Pieces Overlay */}
                     {slideNode && ReactDOM.createPortal(
@@ -3819,7 +3965,7 @@ const QuizPlayer = ({
                                         textTransform: 'none'
                                     }}
                                 >
-                                    {piece.choice.value}
+                                    {isBalanzaField ? renderScaleTokenOrText(piece.choice.value, 24) : piece.choice.value}
                                 </motion.div>
                             ))}
                             {draggedChoice && (
@@ -3847,7 +3993,7 @@ const QuizPlayer = ({
                                         textTransform: 'none'
                                     }}
                                 >
-                                    {draggedChoice.choice.value}
+                                    {isBalanzaField ? renderScaleTokenOrText(draggedChoice.choice.value, 24) : draggedChoice.choice.value}
                                 </div>
                             )}
                         </div>,
@@ -3885,7 +4031,7 @@ const QuizPlayer = ({
                                                             pointerEvents: 'auto'
                                                         }}
                                                     >
-                                                        {choice.value}
+                                                        {isBalanzaField ? renderScaleTokenOrText(choice.value, 24) : choice.value}
                                                     </button>
                                                 )}
                                             </div>

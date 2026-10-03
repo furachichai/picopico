@@ -1,4 +1,6 @@
 import React from 'react';
+import { CrateWithLetter, parseCrateLetter } from '../../../utils/crateUtils.jsx';
+import { SackWithNumber, parseSackNumber } from '../../../utils/sackUtils.jsx';
 
 /**
  * Parses a weight token such as 'w12', 'w5', 'W3', 'w0'
@@ -87,17 +89,17 @@ export function WeightRingGlyph({ value, size = 32, isNegative = false, classNam
  */
 export function hasSpecialBalanzaTokens(text) {
   if (!text || typeof text !== 'string') return false;
-  return /\bw\d{1,2}\b/i.test(text) || /📦/.test(text) || /x\*/i.test(text);
+  return /\bw\d{1,2}\b/i.test(text) || /\bs\d{1,3}\b/i.test(text) || /\b(?:sack|flour|bag)\d{1,3}\b/i.test(text) || /📦/.test(text) || /x\*/i.test(text) || /\[[a-zA-Z0-9?*!#$_~]{1,3}\]/.test(text);
 }
 
 /**
- * Renders a string with w12, w5, crates, and emojis converted to inline visual glyphs.
+ * Renders a string with w12, w5, crates, sacks, and emojis converted to inline visual glyphs.
  */
 export function renderBalanzaRichText(text, size = 20, crateMap = {}) {
   if (!text || typeof text !== 'string') return null;
 
-  // Regex matching: (optional coeff)(optional x/times)(w12 | crate tokens | x*)
-  const regex = /(?:(\d+)\s*x?\s*)?(\bw\d{1,2}\b|📦[x\?]?|\[x\]|\[\?\]|x\*|\*x)/gi;
+  // Regex matching: (optional coeff)(optional x/times)(w12 | s5 | sack5 | crate tokens with letters | x*)
+  const regex = /(?:(\d+)\s*x?\s*)?(\bw\d{1,2}\b|\bs\d{1,3}\b|\b(?:sack|flour|bag)[_\-]?(?:\(\d{1,3}\)|\d{1,3})\b|\[[a-zA-Z0-9?*!#$_~]{1,3}\]|📦[a-zA-Z0-9?*!#$_~]?|x\*|\*x|(?:crate|box)[_(][a-zA-Z0-9?*!#$_~]{1,3}\)?|📦|crate|box)/gi;
   const parts = [];
   let lastIdx = 0;
   let match;
@@ -109,11 +111,17 @@ export function renderBalanzaRichText(text, size = 20, crateMap = {}) {
     const coeff = match[1] ? match[1] : null;
     const token = match[2];
     const weightVal = parseWeightSymbol(token);
+    const sackVal = parseSackNumber(token);
+    const crateLetter = parseCrateLetter(token);
 
     if (weightVal !== null) {
       parts.push({ type: 'weight', coeff, val: weightVal });
-    } else if (crateMap[token] || token.startsWith('📦')) {
-      parts.push({ type: 'crate', coeff, token, src: crateMap[token] || '/assets/balanza/crate.png' });
+    } else if (sackVal !== null) {
+      parts.push({ type: 'sack', coeff, val: sackVal });
+    } else if (crateLetter !== null) {
+      parts.push({ type: 'crate', coeff, letter: crateLetter });
+    } else if (crateMap[token]) {
+      parts.push({ type: 'legacy_crate', coeff, token, src: crateMap[token] });
     } else {
       parts.push({ type: 'text', val: match[0] });
     }
@@ -135,7 +143,23 @@ export function renderBalanzaRichText(text, size = 20, crateMap = {}) {
             </span>
           );
         }
+        if (part.type === 'sack') {
+          return (
+            <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', verticalAlign: 'middle' }}>
+              {part.coeff && <span style={{ fontWeight: 700, fontSize: '0.85em' }}>{part.coeff}</span>}
+              <SackWithNumber value={part.val} size={size} />
+            </span>
+          );
+        }
         if (part.type === 'crate') {
+          return (
+            <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', verticalAlign: 'middle' }}>
+              {part.coeff && <span style={{ fontWeight: 700, fontSize: '0.85em' }}>{part.coeff}</span>}
+              <CrateWithLetter letter={part.letter} size={size} />
+            </span>
+          );
+        }
+        if (part.type === 'legacy_crate') {
           return (
             <span key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', verticalAlign: 'middle' }}>
               {part.coeff && <span style={{ fontWeight: 700, fontSize: '0.85em' }}>{part.coeff}</span>}

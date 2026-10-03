@@ -268,7 +268,8 @@
     border-radius: 8px;
 }
 
-.sticker-quiz-wysiwyg.field-wysiwyg {
+.sticker-quiz-wysiwyg.field-wysiwyg,
+.sticker-quiz-wysiwyg.balanza-field-wysiwyg {
     background: transparent;
     padding: 0;
     min-width: 0;

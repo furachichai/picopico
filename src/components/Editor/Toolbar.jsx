@@ -112,6 +112,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         const isMatch = type === 'match';
         const isConecta = type === 'conecta';
         const isField = type === 'field';
+        const isBalanzaField = type === 'balanza_field';
         const isType = type === 'type';
 
         let defaultOptions;
@@ -120,7 +121,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
         else if (isChatQuiz) defaultOptions = [];
         else if (isPEM) defaultOptions = [];
         else if (isMatch || isConecta) defaultOptions = ['2 + 3', '4 + 2', '7 + 2', '1 + 6'];
-        else if (isField || isType) defaultOptions = [];
+        else if (isField || isBalanzaField || isType) defaultOptions = [];
         else defaultOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
         const preset = state.lesson.textPreset;
@@ -130,14 +131,14 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
             payload: {
                 id: quizId,
                 type: ELEMENT_TYPES.QUIZ,
-                content: isType ? 'Type Answer' : 'Quiz',
+                content: isType ? 'Type Answer' : (isBalanzaField ? 'Balanza Field' : 'Quiz'),
                 metadata: {
                     fontFamily: isConecta ? '"Fredoka", sans-serif' : (isMatch ? "'Bangers', cursive, sans-serif" : '"Fira Sans"'),
                     ...(isConecta && { fontWeight: '600' }),
                     options: defaultOptions,
                     correctIndex: 0,
                     correctIndices: [0], // For 4sq multi-select
-                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta', 'field', 'type'
+                    quizType: type, // 'classic', 'tf', '4sq', 'nl', 'reorder', 'match', 'conecta', 'field', 'balanza_field', 'type'
                     visualMode: false,
                     ...((isMatch || isConecta) && { matchAnswers: ['5', '6', '9', '7'] }),
                     ...(preset?.quizAnswers?.fontFamily && { answerFontFamily: preset.quizAnswers.fontFamily }),
@@ -159,6 +160,15 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                     // Field Defaults
                     ...(isField && {
                         fieldExpression: '3 + *8 x 2* = 19',
+                        commutative: true
+                    }),
+                    // Balanza Field Defaults
+                    ...(isBalanzaField && {
+                        leftPlateText: '☕, ☕, 🌮',
+                        weightsText: 'c=3, t=5, ☕=3, 🌮=5',
+                        targetExpression: '*2c* + *t*',
+                        cardsText: '2c, t, 2t, 3t, c+c',
+                        fieldExpression: '*2c* + *t*; 2c, t, 2t, 3t, c+c',
                         commutative: true
                     }),
                     // NL Defaults
@@ -281,6 +291,7 @@ const Toolbar = ({ onOpenLibrary, onDeleteSlide }) => {
                                 <button onClick={() => handleAddQuiz('match')}>Match Drag</button>
                                 <button onClick={() => handleAddQuiz('conecta')}>Conecta</button>
                                 <button onClick={() => handleAddQuiz('field')}>Field</button>
+                                <button onClick={() => handleAddQuiz('balanza_field')}>⚖️ Balanza Field</button>
                                 <button onClick={() => handleAddQuiz('type')}>{t('editor.quizTypeAnswer') || 'Type Answer'}</button>
                             </div>
                         )}

@@ -1,0 +1,296 @@
+/* Balanza Field Quiz Scale Styles */
+.balanza-field-scale-container {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-family: 'Outfit', 'Fredoka', sans-serif;
+  pointer-events: auto;
+}
+
+.balanza-field-scale-assembly {
+  position: relative;
+  width: 290px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-field-base-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+}
+
+.balanza-field-beam-wrap {
+  position: absolute;
+  left: 50%;
+  top: 28.75%;
+  width: 81.54%;
+  transform-origin: 49.5% 61.5%;
+  transition: transform 0.4s cubic-bezier(0.34, 1.25, 0.64, 1);
+  z-index: 2;
+}
+
+.balanza-field-beam-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Plates attached to beam ends */
+.balanza-field-plate-assembly {
+  position: absolute;
+  width: 48%;
+  transform-origin: 49.5% 70%;
+  transition: transform 0.4s cubic-bezier(0.34, 1.25, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 3;
+}
+
+.balanza-field-plate-assembly-left {
+  left: calc(4.25% + 14px);
+  top: 55.0%;
+}
+
+.balanza-field-plate-assembly-right {
+  left: calc(95.65% - 14px);
+  top: 55.0%;
+}
+
+.balanza-field-plate-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Left Plate Locked Content */
+.balanza-field-left-plate-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  align-items: flex-end;
+  justify-content: center;
+  align-content: flex-end;
+  gap: 3px 5px;
+  width: 90%;
+  max-width: 115px;
+  min-height: 42px;
+  padding: 3px 5px;
+  margin-bottom: -4%;
+  z-index: 3;
+  position: relative;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+/* Left Objects */
+.balanza-field-object-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.balanza-field-emoji-badge {
+  font-size: 1.75rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+}
+
+.balanza-field-letter-card {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #000000;
+  padding: 3px 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanza-field-crate-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Right Plate Expression Card */
+.balanza-field-right-plate-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: auto;
+  max-width: 135px;
+  min-height: 40px;
+  padding: 3px 6px;
+  margin-bottom: -4%;
+  z-index: 3;
+  position: relative;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), 2px 2px 0px #000000;
+  transition: all 0.25s ease;
+}
+
+.balanza-field-right-plate-content.is-balanced {
+  border-color: #10b981;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.45), 2px 2px 0px #10b981;
+}
+
+.balanza-field-operator {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  padding: 0 1px;
+  user-select: none;
+}
+
+/* Slot on Right Plate */
+.balanza-field-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 32px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.balanza-field-slot.is-empty {
+  border: 2px dashed #94a3b8;
+  background: #f8fafc;
+}
+
+.balanza-field-slot.is-empty:hover {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.balanza-field-slot.is-active {
+  border: 2px solid #6366f1;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.35);
+  background: #f5f3ff;
+}
+
+.balanza-field-blank-indicator {
+  color: #94a3b8;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.balanza-field-slot.has-placed {
+  border: none;
+  background: transparent;
+}
+
+/* Placed card inside slot */
+.balanza-field-placed-pill {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 7px;
+  box-shadow: 1.5px 1.5px 0px #000000;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #1e1b4b;
+  padding: 2px 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.balanza-field-placed-pill:hover {
+  background: #f1f5f9;
+  transform: scale(0.96);
+}
+
+/* Balance Glow / State Indicator below scale */
+.balanza-field-status-banner {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.balanza-field-status-banner.is-equilibrated {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1.5px solid #34d399;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  animation: pulseScale 1.5s infinite;
+}
+
+.balanza-field-status-banner.is-imbalanced {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1.5px solid #cbd5e1;
+}
+
+.balanza-field-status-banner.is-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #fcd34d;
+}
+
+/* Shaking animation for wrong slot */
+@keyframes slotShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.balanza-field-slot.shake {
+  animation: slotShake 0.4s ease-in-out;
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+}
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}

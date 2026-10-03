@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { parseFieldExpression, generateFieldChoices } from '../../utils/fieldQuizUtils';
+import { renderScaleTokenOrText } from '../../utils/sackUtils.jsx';
 import './FieldQuizBottomControls.css';
 
 const FieldQuizBottomControls = ({ element, onSelect, isEditor = true }) => {
     if (!element) return null;
 
-    const expr = element.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-    const choices = React.useMemo(() => {
+    const isBalanzaField = element.metadata?.quizType === 'balanza_field';
+    const targetExpr = element.metadata?.targetExpression !== undefined
+        ? element.metadata.targetExpression
+        : (element.metadata?.fieldExpression ? element.metadata.fieldExpression.split(';')[0].trim() : (isBalanzaField ? '*2c* + *t*' : '3 + *8 x 2* = 19'));
+    const cardsText = element.metadata?.cardsText !== undefined
+        ? element.metadata.cardsText
+        : (element.metadata?.fieldExpression && element.metadata.fieldExpression.includes(';')
+            ? element.metadata.fieldExpression.split(';').slice(1).join(';').trim()
+            : (isBalanzaField ? '2c, t, 2t, 3t, c+c' : ''));
+
+    const choices = useMemo(() => {
+        if (isBalanzaField && cardsText.trim()) {
+            const parsed = cardsText.split(',').map(s => s.trim()).filter(Boolean);
+            if (parsed.length > 0) return parsed;
+        }
+        const expr = cardsText.trim() ? `${targetExpr}; ${cardsText.trim()}` : targetExpr;
         const segments = parseFieldExpression(expr);
         const rawChoices = generateFieldChoices(segments);
         return rawChoices.length > 0 ? rawChoices : ['?', '?', '?', '?', '?'];
-    }, [expr]);
+    }, [isBalanzaField, targetExpr, cardsText]);
     const isHidden = !!(element.hidden || element.metadata?.hidden);
 
     return (
@@ -45,7 +60,7 @@ const FieldQuizBottomControls = ({ element, onSelect, isEditor = true }) => {
                                     cursor: isEditor ? 'pointer' : undefined
                                 }}
                             >
-                                {choiceVal}
+                                {isBalanzaField ? renderScaleTokenOrText(choiceVal, 22) : choiceVal}
                             </button>
                         </div>
                     ))}

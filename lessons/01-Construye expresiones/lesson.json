@@ -1,0 +1,147 @@
+{
+  "id": "lessons/01-Construye expresiones/lesson.json",
+  "title": "Construye expresiones",
+  "slides": [
+    {
+      "id": "slide-1790984920705",
+      "background": "#E1F5FE",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790984159619-c8e2f883i",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],s2, s4",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "x + 6; 1, 2, 4, 6,x",
+            "commutative": true,
+            "targetExpression": "x + 6",
+            "cardsText": "1, 2, 4, 6,x",
+            "fieldCount": 2
+          }
+        }
+      ],
+      "order": 1
+    },
+    {
+      "id": "slide-1790985078131",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790985078131-d2181fkzr",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],s5",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "*x* + *2* + *3*; x, 1, 2, 3, 7",
+            "commutative": true,
+            "targetExpression": "*x* + *2* + *3*",
+            "cardsText": "x, 1, 2, 3, 7"
+          }
+        }
+      ],
+      "order": 2,
+      "cartridge": null
+    },
+    {
+      "id": "slide-1790984924050",
+      "background": "#E1F5FE",
+      "elements": [
+        {
+          "id": "el-1790984924050-6k36lw7zw",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],[y]",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "*x* + *y*; 2y, x+x, y, 3, x",
+            "commutative": true,
+            "cardsText": "2y, x+x, y, 3, x"
+          }
+        }
+      ],
+      "order": 3,
+      "cartridge": null
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-10-02T23:35:54.982Z",
+  "updatedAt": "2026-10-03T00:03:50.297Z",
+  "path": "lessons/01-Construye expresiones/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "Build Expressions",
+      "description": ""
+    }
+  },
+  "name": "01-Construye expresiones",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 1,
+  "titlecardFrame": null,
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": null
+}

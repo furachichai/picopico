@@ -8,6 +8,7 @@ import SaveAssetModal from './SaveAssetModal';
 import AssetInfoModal from './AssetInfoModal';
 import ConfirmationModal from './ConfirmationModal';
 import RecycleBinModal from './RecycleBinModal';
+import ReplaceAssetModal from './ReplaceAssetModal';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { getCustomCharacterTags, EVENT_CUSTOM_TAGS_CHANGED } from '../../utils/characterTags';
 import { EMOJI_DATA, EMOJI_CATEGORIES } from '../../utils/emojiData';
@@ -204,6 +205,25 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [recycleModalOpen, setRecycleModalOpen] = useState(false);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
+
+    // Conflict detection and replace modal states
+    const [conflictQueue, setConflictQueue] = useState([]);
+    const [cleanFilesQueue, setCleanFilesQueue] = useState([]);
+    const [totalConflictsCount, setTotalConflictsCount] = useState(0);
+    const [activeCategoryForQueue, setActiveCategoryForQueue] = useState('characters');
+    const [assetVersions, setAssetVersions] = useState({});
+
+    // Cache buster helper for asset URLs
+    const getAssetDisplayUrl = useCallback((src) => {
+        if (!src || typeof src !== 'string') return src;
+        const clean = src.split('?')[0];
+        const filename = clean.split('/').pop();
+        const version = assetVersions[filename] || assetVersions[clean];
+        if (version) {
+            return `${clean}?t=${version}`;
+        }
+        return src;
+    }, [assetVersions]);
 
     // Custom character tags state and sync
     const [customTags, setCustomTags] = useState(() => getCustomCharacterTags());
@@ -486,53 +506,201 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
     };
 
-    // Open file upload / save modal (supports batch files with duplicate checking)
+    // Helper to find if an asset already exists in the library
+    const findExistingAsset = useCallback((filename, preferredCategory = null) => {
+        if (!filename) return null;
+        const rawName = filename.trim();
+        const cleanName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const metaMap = serverAssets?.assetMeta || {};
+
+        // 1. Exact match in assetMeta
+        if (metaMap[rawName]) return metaMap[rawName];
+        if (metaMap[cleanName]) return metaMap[cleanName];
+
+        // 2. Case-insensitive match in assetMeta
+        const lowerRaw = rawName.toLowerCase();
+        const lowerClean = cleanName.toLowerCase();
+        for (const [key, val] of Object.entries(metaMap)) {
+            const lowerKey = key.toLowerCase();
+            if (lowerKey === lowerRaw || lowerKey === lowerClean) {
+                return val;
+            }
+        }
+
+        // 3. Check Vite-loaded asset lists as fallback
+        const checkList = (list, defaultCat) => {
+            for (const item of list) {
+                const itemUrl = typeof item === 'object' ? item.default || '' : item;
+                const itemBase = itemUrl.split('/').pop().split('?')[0];
+                if (itemBase === rawName || itemBase === cleanName || itemBase.toLowerCase() === lowerClean) {
+                    return {
+                        filename: itemBase,
+                        url: itemUrl,
+                        category: defaultCat,
+                        size: 0
+                    };
+                }
+            }
+            return null;
+        };
+
+        const bgMatch = checkList(customBackgroundList, 'backgrounds');
+        if (bgMatch) return bgMatch;
+        const objMatch = checkList(customObjectsList, 'objects');
+        if (objMatch) return objMatch;
+        const charMatch = checkList(customCharacterList, 'characters');
+        if (charMatch) return charMatch;
+        const imgMatch = checkList(customImageList, 'images');
+        if (imgMatch) return imgMatch;
+
+        return null;
+    }, [serverAssets, customBackgroundList, customObjectsList, customCharacterList, customImageList]);
+
+    const advanceConflictQueue = useCallback(() => {
+        setConflictQueue(prev => {
+            const nextQueue = prev.slice(1);
+            if (nextQueue.length === 0) {
+                setTotalConflictsCount(0);
+                // Check if there are non-conflicting files waiting to be saved
+                setCleanFilesQueue(cleanQueue => {
+                    if (cleanQueue.length > 0) {
+                        setSaveModalData({
+                            items: cleanQueue,
+                            initialCategory: activeCategoryForQueue || 'characters'
+                        });
+                        setSaveModalOpen(true);
+                    }
+                    return [];
+                });
+            }
+            return nextQueue;
+        });
+    }, [activeCategoryForQueue]);
+
+    const handleReplaceConflict = async (conflict) => {
+        if (!conflict) return;
+        try {
+            const targetFilename = conflict.filename;
+            const targetCategory = conflict.existing?.category || conflict.category || activeCategoryForQueue || 'images';
+
+            const response = await fetch('/api/assets/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    dataUrl: conflict.incoming.dataUrl,
+                    filename: targetFilename,
+                    category: targetCategory,
+                    overwrite: true
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `Failed replacing ${targetFilename}`);
+            }
+
+            const result = await response.json();
+            const timestamp = Date.now();
+
+            // 1. Dispatch REPLACE_ASSET_INSTANCES to editor context to update all slides
+            dispatch({
+                type: 'REPLACE_ASSET_INSTANCES',
+                payload: {
+                    oldFilename: targetFilename,
+                    oldUrl: conflict.existing?.url,
+                    newUrl: result.url || conflict.existing?.url,
+                    timestamp
+                }
+            });
+
+            // 2. Cache busting for AssetLibrary thumbnails
+            const cleanName = targetFilename.replace(/[^a-zA-Z0-9._-]/g, '_');
+            setAssetVersions(prev => ({
+                ...prev,
+                [targetFilename]: timestamp,
+                [cleanName]: timestamp,
+                [result.filename]: timestamp,
+                ...(conflict.rawFilename ? { [conflict.rawFilename]: timestamp } : {})
+            }));
+
+            // 3. Refresh server asset listing
+            await fetchServerAssets();
+            window.dispatchEvent(new CustomEvent('picopico-asset-saved'));
+
+        } catch (err) {
+            console.error('Failed replacing asset:', err);
+            alert(`Error replacing asset: ${err.message}`);
+        }
+
+        advanceConflictQueue();
+    };
+
+    const handleKeepBothConflict = (conflict) => {
+        if (!conflict) return;
+        const fullFilename = conflict.incoming?.filename || conflict.filename;
+        const lastDot = fullFilename.lastIndexOf('.');
+        const ext = lastDot !== -1 ? fullFilename.slice(lastDot) : '.png';
+        const base = lastDot !== -1 ? fullFilename.slice(0, lastDot) : fullFilename;
+
+        let counter = 1;
+        let nextName = `${base}_${counter}${ext}`;
+        const metaMap = serverAssets?.assetMeta || {};
+
+        while (metaMap[nextName] || cleanFilesQueue.some(item => item.filename === nextName)) {
+            counter++;
+            nextName = `${base}_${counter}${ext}`;
+        }
+
+        setCleanFilesQueue(prev => [
+            ...prev,
+            {
+                dataUrl: conflict.incoming.dataUrl,
+                filename: nextName,
+                size: conflict.incoming.size
+            }
+        ]);
+
+        advanceConflictQueue();
+    };
+
+    const handleCancelConflict = (cancelAll = false) => {
+        if (cancelAll) {
+            setConflictQueue([]);
+            setTotalConflictsCount(0);
+            setCleanFilesQueue([]);
+        } else {
+            advanceConflictQueue();
+        }
+    };
+
+    // Open file upload / save modal (supports batch files with duplicate checking & replace modal)
     const handleFilesChosen = async (fileList) => {
         if (!fileList || fileList.length === 0) return;
         const validFiles = Array.from(fileList).filter(f => f && f.type && f.type.startsWith('image/'));
         if (validFiles.length === 0) return;
 
-        // Check for duplicates against existing library assets (by matching filename and filesize)
-        const duplicateFiles = [];
-        const nonDuplicateFiles = [];
-
-        validFiles.forEach(file => {
-            const rawName = file.name;
-            const cleanName = rawName.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const meta = serverAssets?.assetMeta?.[rawName] || serverAssets?.assetMeta?.[cleanName];
-            if (meta && meta.size === file.size) {
-                duplicateFiles.push(file);
-            } else {
-                nonDuplicateFiles.push(file);
-            }
-        });
-
-        if (duplicateFiles.length > 0) {
-            if (nonDuplicateFiles.length === 0) {
-                // All files are duplicates
-                alert(
-                    duplicateFiles.length === 1
-                        ? `"${duplicateFiles[0].name}" already exists in the library with the exact same file size (${duplicateFiles[0].size} bytes). Import skipped.`
-                        : `All ${duplicateFiles.length} files already exist in the library with matching filenames and file sizes. Import skipped.`
-                );
-                return;
-            } else {
-                // In a batch import, only duplicates are not imported, the rest are imported as expected
-                alert(
-                    `Skipped ${duplicateFiles.length} duplicate file(s) already in the library (${duplicateFiles.map(f => f.name).join(', ')}).\nImporting remaining ${nonDuplicateFiles.length} new file(s).`
-                );
-            }
+        // Ensure we have freshest server assets
+        let metaMap = serverAssets?.assetMeta;
+        if (!metaMap || Object.keys(metaMap).length === 0) {
+            try {
+                const res = await fetch('/api/assets/list');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.assets) {
+                        setServerAssets({
+                            ...data.assets,
+                            assetMeta: data.assetMeta || {}
+                        });
+                        metaMap = data.assetMeta;
+                    }
+                }
+            } catch {}
         }
-
-        const filesToProcess = nonDuplicateFiles;
-        if (filesToProcess.length === 0) return;
 
         let savedCat = null;
         try {
             savedCat = localStorage.getItem('picopico_last_save_category');
-        } catch {
-            // ignore
-        }
+        } catch {}
 
         let defCategory = savedCat || 'characters';
         if (activeTab === 'custom-objects') {
@@ -550,13 +718,15 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         }
 
         // Read all images to data URLs
-        const readPromises = filesToProcess.map(file => {
+        const readPromises = validFiles.map(file => {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     resolve({
                         dataUrl: e.target.result,
-                        filename: file.name
+                        filename: file.name,
+                        size: file.size,
+                        file
                     });
                 };
                 reader.onerror = () => resolve(null);
@@ -567,11 +737,50 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
         const items = (await Promise.all(readPromises)).filter(Boolean);
         if (items.length === 0) return;
 
-        setSaveModalData({
-            items,
-            initialCategory: defCategory
+        const conflicts = [];
+        const nonConflicts = [];
+
+        items.forEach(item => {
+            const existing = findExistingAsset(item.filename, defCategory);
+            if (existing) {
+                conflicts.push({
+                    filename: existing.filename || item.filename,
+                    rawFilename: item.filename,
+                    category: defCategory,
+                    existing: {
+                        url: existing.url,
+                        filename: existing.filename || item.filename,
+                        category: existing.category || defCategory,
+                        size: existing.size || 0
+                    },
+                    incoming: {
+                        dataUrl: item.dataUrl,
+                        filename: item.filename,
+                        size: item.size,
+                        category: defCategory
+                    }
+                });
+            } else {
+                nonConflicts.push({
+                    dataUrl: item.dataUrl,
+                    filename: item.filename,
+                    size: item.size
+                });
+            }
         });
-        setSaveModalOpen(true);
+
+        if (conflicts.length > 0) {
+            setTotalConflictsCount(conflicts.length);
+            setConflictQueue(conflicts);
+            setCleanFilesQueue(nonConflicts);
+            setActiveCategoryForQueue(defCategory);
+        } else if (nonConflicts.length > 0) {
+            setSaveModalData({
+                items: nonConflicts,
+                initialCategory: defCategory
+            });
+            setSaveModalOpen(true);
+        }
     };
 
     const handleSaveSuccess = (savedResult) => {
@@ -943,7 +1152,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                         }}
                                         onClick={() => handleSelect(src)}
                                     >
-                                        <img src={src} alt="character" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <img src={getAssetDisplayUrl(src)} alt="character" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
                                             <button
                                                 type="button"
@@ -991,7 +1200,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                         }}
                                         onClick={() => handleSelect(src)}
                                     >
-                                        <img src={src} alt="object" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <img src={getAssetDisplayUrl(src)} alt="object" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         <div className="asset-item-actions" onClick={e => e.stopPropagation()}>
                                             <button
                                                 type="button"
@@ -1046,7 +1255,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                                     title={filename}
                                 >
                                     <img
-                                        src={src}
+                                        src={getAssetDisplayUrl(src)}
                                         alt={isTc ? "titlecard" : "background"}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
                                     />
@@ -1208,6 +1417,20 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
                 onCancel={() => setSaveModalOpen(false)}
             />
 
+            {/* Replace Asset Modal */}
+            <ReplaceAssetModal
+                isOpen={conflictQueue.length > 0}
+                conflict={conflictQueue[0] ? {
+                    ...conflictQueue[0],
+                    currentIndex: totalConflictsCount - conflictQueue.length,
+                    totalCount: totalConflictsCount
+                } : null}
+                onReplace={handleReplaceConflict}
+                onKeepBoth={handleKeepBothConflict}
+                onCancel={() => handleCancelConflict(false)}
+                onCancelAll={() => handleCancelConflict(true)}
+            />
+
             {/* Info Modal */}
             <AssetInfoModal
                 isOpen={!!infoModalAsset}
@@ -1270,7 +1493,7 @@ const AssetLibrary = ({ onClose, initialTab = 'custom', allowedTabs = null, onSe
             >
                 <div className="preview-image-container">
                     <img
-                        src={hoveredAsset.url}
+                        src={getAssetDisplayUrl(hoveredAsset.url)}
                         alt={hoveredAsset.filename || "asset preview"}
                         onLoad={(e) => {
                             setPreviewDimensions({

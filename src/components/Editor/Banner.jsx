@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { resolveAssetUrl } from '../../utils/assetUrl';
 import { sanitizeFontFamily } from '../../utils/fontSanitizer';
+import { formatExponents } from '../../utils/textFormatters';
 
 // Scotch tape asset (served from /src/assets/banners/scotch_tape.png in dev, /assets/banners/scotch_tape.png in prod)
 const SCOTCH_TAPE_SRC = resolveAssetUrl('/src/assets/banners/scotch_tape.png');
@@ -40,7 +41,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     // Sync body text when element changes or on mount, but never while actively typing
     useEffect(() => {
         if (textRef.current && (element.id !== lastElementId.current || document.activeElement !== textRef.current)) {
-            textRef.current.innerHTML = element.content || '';
+            textRef.current.innerHTML = formatExponents(element.content || '');
             lastElementId.current = element.id;
         }
     }, [element.id, element.content]);
@@ -123,7 +124,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
     // Card styling based on active skin
     let containerStyle = {
         width: '100%',
-        height: readOnly ? 'auto' : '100%',
+        height: '100%',
         minHeight: '100%',
         position: 'relative',
         boxSizing: 'border-box',
@@ -805,7 +806,7 @@ const Banner = ({ element, onChange, isSelected, readOnly = false }) => {
                     wordBreak: 'break-word',
                     whiteSpace: 'pre-wrap',
                 }}
-                dangerouslySetInnerHTML={readOnly ? { __html: element.content || '' } : undefined}
+                dangerouslySetInnerHTML={readOnly ? { __html: formatExponents(element.content || '') } : undefined}
             />
         </div>
     );

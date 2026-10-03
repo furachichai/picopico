@@ -10,8 +10,12 @@ import { ELEMENT_TYPES } from '../../types';
 import { SUPPORTED_QUIZ_TYPES, getNonOverlappingResultFieldPosition } from '../../utils/ResultFieldUtils';
 import { isCharacterElement, setImageShadowPreference } from '../../utils/characterShadow';
 import { evaluateMathExpression, parseFieldExpression } from '../../utils/fieldQuizUtils';
+import { parseBalanzaFieldWeights, parseLeftPlateObjects, getBalanzaFieldSegments } from '../../utils/balanzaFieldUtils';
 import { parseBatchCards, optimizeImage } from '../../cartridges/SwipeSorter/swipeSorterUtils';
-import { EMOJI_DATA, EMOJI_CATEGORIES } from '../../utils/emojiData';
+import { EMOJI_DATA, EMOJI_CATEGORIES, replaceEmojiShortcodes } from '../../utils/emojiData';
+import { CrateWithLetter, parseCrateLetter } from '../../utils/crateUtils.jsx';
+import { SackWithNumber, parseSackNumber } from '../../utils/sackUtils.jsx';
+import ShortcutsReminderModal from './ShortcutsReminderModal';
 
 const CRATE_MAP = {
     '📦x': '/assets/balanza/crate_x.png',
@@ -34,6 +38,14 @@ const renderEmojiOrCrate = (emoji, size = 26) => {
     const weightVal = parseWeightSymbol(emoji);
     if (weightVal !== null) {
         return <WeightRingGlyph value={weightVal} size={size} />;
+    }
+    const sackVal = parseSackNumber(emoji);
+    if (sackVal !== null) {
+        return <SackWithNumber value={sackVal} size={size} />;
+    }
+    const crateLetter = parseCrateLetter(emoji);
+    if (crateLetter !== null) {
+        return <CrateWithLetter letter={crateLetter} size={size} />;
     }
     const crateSrc = CRATE_MAP[emoji];
     if (crateSrc) {
@@ -457,6 +469,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
     const [balanzaMenuText, setBalanzaMenuText] = useState('');
     const [balanzaMenuOriginalText, setBalanzaMenuOriginalText] = useState('');
 
+    const [showShortcutsModal, setShowShortcutsModal] = useState(false);
     const [emojiPickerTarget, setEmojiPickerTarget] = useState(null); // 'left' | 'right' | 'menu' | 'text' | null
     const [emojiSearch, setEmojiSearch] = useState('');
     const [recentEmojis, setRecentEmojis] = useState(() => {
@@ -519,6 +532,94 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
             return;
         }
 
+        if (emojiPickerTarget === 'balanza_field_weights') {
+            const currentVal = element.metadata?.weightsText || '';
+            const sel = lastInputSelectionRef.current;
+            let nextVal = '';
+            if (sel && sel.target === 'balanza_field_weights' && typeof sel.start === 'number') {
+                nextVal = currentVal.substring(0, sel.start) + emoji + currentVal.substring(sel.end);
+            } else if (!currentVal.trim()) {
+                nextVal = `${emoji}=1`;
+            } else if (currentVal.trim().endsWith(',')) {
+                nextVal = `${currentVal} ${emoji}=1`;
+            } else {
+                nextVal = `${currentVal}, ${emoji}=1`;
+            }
+            updateMetadata({ weightsText: nextVal });
+            return;
+        }
+
+        if (emojiPickerTarget === 'balanza_field_left') {
+            const currentVal = element.metadata?.leftPlateText || '';
+            const sel = lastInputSelectionRef.current;
+            let nextVal = '';
+            if (sel && sel.target === 'balanza_field_left' && typeof sel.start === 'number') {
+                nextVal = currentVal.substring(0, sel.start) + emoji + currentVal.substring(sel.end);
+            } else if (!currentVal.trim()) {
+                nextVal = emoji;
+            } else if (currentVal.trim().endsWith(',')) {
+                nextVal = `${currentVal} ${emoji}`;
+            } else {
+                nextVal = `${currentVal}, ${emoji}`;
+            }
+            updateMetadata({ leftPlateText: nextVal });
+            return;
+        }
+
+        if (emojiPickerTarget === 'balanza_field_target' || emojiPickerTarget === 'balanza_field_expression') {
+            const currentTarget = element.metadata?.targetExpression !== undefined
+                ? element.metadata.targetExpression
+                : (element.metadata?.fieldExpression ? element.metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+            const currentCards = element.metadata?.cardsText !== undefined
+                ? element.metadata.cardsText
+                : (element.metadata?.fieldExpression && element.metadata.fieldExpression.includes(';')
+                    ? element.metadata.fieldExpression.split(';').slice(1).join(';').trim()
+                    : '2c, t, 2t, 3t, c+c');
+
+            const sel = lastInputSelectionRef.current;
+            let nextVal = '';
+            if (sel && (sel.target === 'balanza_field_target' || sel.target === 'balanza_field_expression') && typeof sel.start === 'number') {
+                nextVal = currentTarget.substring(0, sel.start) + emoji + currentTarget.substring(sel.end);
+            } else if (!currentTarget.trim()) {
+                nextVal = emoji;
+            } else {
+                nextVal = `${currentTarget} ${emoji}`;
+            }
+            updateMetadata({
+                targetExpression: nextVal,
+                fieldExpression: currentCards.trim() ? `${nextVal.trim()}; ${currentCards.trim()}` : nextVal.trim()
+            });
+            return;
+        }
+
+        if (emojiPickerTarget === 'balanza_field_cards') {
+            const currentCards = element.metadata?.cardsText !== undefined
+                ? element.metadata.cardsText
+                : (element.metadata?.fieldExpression && element.metadata.fieldExpression.includes(';')
+                    ? element.metadata.fieldExpression.split(';').slice(1).join(';').trim()
+                    : '2c, t, 2t, 3t, c+c');
+            const currentTarget = element.metadata?.targetExpression !== undefined
+                ? element.metadata.targetExpression
+                : (element.metadata?.fieldExpression ? element.metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+
+            const sel = lastInputSelectionRef.current;
+            let nextVal = '';
+            if (sel && sel.target === 'balanza_field_cards' && typeof sel.start === 'number') {
+                nextVal = currentCards.substring(0, sel.start) + emoji + currentCards.substring(sel.end);
+            } else if (!currentCards.trim()) {
+                nextVal = emoji;
+            } else if (currentCards.trim().endsWith(',')) {
+                nextVal = `${currentCards} ${emoji}`;
+            } else {
+                nextVal = `${currentCards}, ${emoji}`;
+            }
+            updateMetadata({
+                cardsText: nextVal,
+                fieldExpression: nextVal.trim() ? `${currentTarget.trim()}; ${nextVal.trim()}` : currentTarget.trim()
+            });
+            return;
+        }
+
         const configKey = emojiPickerTarget === 'left'
             ? 'leftPlateText'
             : emojiPickerTarget === 'right'
@@ -530,6 +631,9 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
 
         onChange('cartridge', { config: { ...element.config, [configKey]: nextVal } });
     };
+
+    // Track last focused input in contextual menu for targeted emoji insertion
+    const lastInputSelectionRef = useRef(null);
 
     // Saved selection for per-letter quiz formatting
     const savedSelectionRef = useRef(null);
@@ -860,6 +964,12 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     title="Emoji Library"
                                     style={{ fontSize: '1.1rem' }}
                                 >😀</button>
+                                <button
+                                    className="btn-icon"
+                                    onClick={() => setShowShortcutsModal(true)}
+                                    title="Shortcuts Reminder (Math, Crates, Weights, Emojis)"
+                                    style={{ fontSize: '1.05rem' }}
+                                >⌨️</button>
                             </div>
                         </div>
                     )}
@@ -2990,6 +3100,16 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                         background: '#f8fafc', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
                                     }}
                                 >😊</button>
+                                <button
+                                    type="button"
+                                    title="Shortcuts Guide (Crates [x], Weights w5, Math, Emojis)"
+                                    onClick={() => setShowShortcutsModal(true)}
+                                    style={{
+                                        height: '28px', padding: '0 8px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                                        background: '#f8fafc', cursor: 'pointer', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px',
+                                        fontWeight: 600, color: '#334155'
+                                    }}
+                                >⌨️ Shortcuts</button>
                             </div>
 
                             <div className="menu-group">
@@ -3245,7 +3365,8 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                     {collectUsedSymbols(element.config?.leftPlateText || '', element.config?.rightPlateText || '', element.config?.menuText || '').map(symbol => {
                                         const weights = parseWeights(element.config?.weightsText || '');
                                         const weightVal = parseWeightSymbol(symbol);
-                                        const defaultW = weightVal !== null ? parseInt(weightVal, 10) : 5;
+                                        const sackVal = parseSackNumber(symbol);
+                                        const defaultW = weightVal !== null ? parseInt(weightVal, 10) : (sackVal !== null ? parseFloat(sackVal) : 5);
                                         const current = weights[symbol] ?? defaultW;
                                         return (
                                             <div key={symbol} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '2px 4px' }}>
@@ -3259,7 +3380,7 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                                                         const nextWeights = { ...weights, [symbol]: parseFloat(e.target.value) || 0 };
                                                         const nextText = Object.entries(nextWeights)
                                                             .filter(([s, w]) => {
-                                                                const def = parseWeightSymbol(s) !== null ? parseInt(parseWeightSymbol(s), 10) : 5;
+                                                                const def = parseWeightSymbol(s) !== null ? parseInt(parseWeightSymbol(s), 10) : (parseSackNumber(s) !== null ? parseFloat(parseSackNumber(s)) : 5);
                                                                 return w !== def;
                                                             })
                                                             .map(([s, w]) => `${s}=${w}`)
@@ -4805,6 +4926,328 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 </>
             )}
 
+            {/* Balanza Field Quiz Settings */}
+            {element.type === 'quiz' && metadata.quizType === 'balanza_field' && (
+                <>
+                    <div className="menu-group" style={{ flex: 1, minWidth: '220px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                            <label style={{ margin: 0 }}>Left Plate Objects</label>
+                            <button
+                                type="button"
+                                title="Open Emoji Library for Left Plate"
+                                onClick={() => setEmojiPickerTarget(prev => prev === 'balanza_field_left' ? null : 'balanza_field_left')}
+                                style={{
+                                    height: '24px',
+                                    padding: '0 6px',
+                                    borderRadius: '5px',
+                                    border: emojiPickerTarget === 'balanza_field_left' ? '1.5px solid #6366f1' : '1px solid #cbd5e1',
+                                    background: emojiPickerTarget === 'balanza_field_left' ? '#e0e7ff' : '#f8fafc',
+                                    cursor: 'pointer',
+                                    fontSize: '0.82rem',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '3px'
+                                }}
+                            >
+                                😊 <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#334155' }}>Emoji</span>
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            value={metadata.leftPlateText || '☕, ☕, 🌮'}
+                            onChange={(e) => updateMetadata({ leftPlateText: replaceEmojiShortcodes(e.target.value) })}
+                            onFocus={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_left', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            onSelect={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_left', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            onKeyUp={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_left', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            placeholder="e.g. ☕, ☕, 🌮 or :coffee:, :taco: or w5, w10"
+                            style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
+                        />
+                        <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                            Comma-separated: emojis (or :coffee:), terms, weights (w5).
+                        </span>
+                    </div>
+
+                    <div className="menu-group" style={{ flex: 1, minWidth: '220px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                            <label style={{ margin: 0, fontWeight: 700, color: '#1e1b4b' }}>Weights Definition</label>
+                            <button
+                                type="button"
+                                title="Open Emoji Library to add item to weights"
+                                onClick={() => setEmojiPickerTarget(prev => prev === 'balanza_field_weights' ? null : 'balanza_field_weights')}
+                                style={{
+                                    height: '24px',
+                                    padding: '0 6px',
+                                    borderRadius: '5px',
+                                    border: emojiPickerTarget === 'balanza_field_weights' ? '1.5px solid #6366f1' : '1px solid #cbd5e1',
+                                    background: emojiPickerTarget === 'balanza_field_weights' ? '#e0e7ff' : '#f8fafc',
+                                    cursor: 'pointer',
+                                    fontSize: '0.82rem',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '3px'
+                                }}
+                            >
+                                😊 <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#334155' }}>Emoji</span>
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            value={metadata.weightsText || 'c=3, t=5, ☕=3, 🌮=5'}
+                            onChange={(e) => updateMetadata({ weightsText: replaceEmojiShortcodes(e.target.value) })}
+                            onFocus={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_weights', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            onSelect={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_weights', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            onKeyUp={(e) => {
+                                lastInputSelectionRef.current = { target: 'balanza_field_weights', start: e.target.selectionStart, end: e.target.selectionEnd };
+                            }}
+                            placeholder="e.g. c=3, t=5, ☕=3, 🌮=5 or :coffee:=3"
+                            style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
+                        />
+                        <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                            Assigned weights: c=3, ☕=3 (or type :coffee:=3).
+                        </span>
+                    </div>
+
+                    {(() => {
+                        const currentTargetExpr = metadata.targetExpression !== undefined
+                            ? metadata.targetExpression
+                            : (metadata.fieldExpression ? metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+
+                        const currentCardsText = metadata.cardsText !== undefined
+                            ? metadata.cardsText
+                            : (metadata.fieldExpression && metadata.fieldExpression.includes(';')
+                                ? metadata.fieldExpression.split(';').slice(1).join(';').trim()
+                                : '2c, t, 2t, 3t, c+c');
+
+                        const weights = parseBalanzaFieldWeights(metadata.weightsText || 'c=3, t=5, ☕=3, 🌮=5');
+                        const { totalWeight: leftTotal } = parseLeftPlateObjects(metadata.leftPlateText || '☕, ☕, 🌮', weights);
+                        const fieldCount = metadata.fieldCount;
+                        const segments = getBalanzaFieldSegments(currentTargetExpr, fieldCount);
+                        const fieldSlots = segments.filter(s => s.type === 'field');
+                        const autoCount = getBalanzaFieldSegments(currentTargetExpr, null).filter(s => s.type === 'field').length;
+
+                        return (
+                            <>
+                                {/* Target Expression Field */}
+                                <div className="menu-group" style={{ flex: 1, minWidth: '200px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                        <label style={{ margin: 0, fontWeight: 700, color: '#1e1b4b' }}>Target Expression</label>
+                                        <button
+                                            type="button"
+                                            title="Open Emoji Library for Target Expression"
+                                            onClick={() => setEmojiPickerTarget(prev => (prev === 'balanza_field_target' || prev === 'balanza_field_expression') ? null : 'balanza_field_target')}
+                                            style={{
+                                                height: '24px',
+                                                padding: '0 6px',
+                                                borderRadius: '5px',
+                                                border: (emojiPickerTarget === 'balanza_field_target' || emojiPickerTarget === 'balanza_field_expression') ? '1.5px solid #6366f1' : '1px solid #cbd5e1',
+                                                background: (emojiPickerTarget === 'balanza_field_target' || emojiPickerTarget === 'balanza_field_expression') ? '#e0e7ff' : '#f8fafc',
+                                                cursor: 'pointer',
+                                                fontSize: '0.82rem',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '3px'
+                                            }}
+                                        >
+                                            😊 <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#334155' }}>Emoji</span>
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={currentTargetExpr}
+                                        onChange={(e) => {
+                                            const nextTarget = replaceEmojiShortcodes(e.target.value);
+                                            updateMetadata({
+                                                targetExpression: nextTarget,
+                                                fieldExpression: currentCardsText.trim() ? `${nextTarget.trim()}; ${currentCardsText.trim()}` : nextTarget.trim()
+                                            });
+                                        }}
+                                        onFocus={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_target', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        onSelect={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_target', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        onKeyUp={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_target', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        placeholder="e.g. *x* + *6* or 2c + t"
+                                        style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
+                                    />
+                                    <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                                        Total target expression (e.g. *x* + *6*).
+                                    </span>
+                                </div>
+
+                                {/* Number of Answer Fields */}
+                                <div className="menu-group" style={{ minWidth: '85px', maxWidth: '100px' }}>
+                                    <label style={{ margin: 0, fontWeight: 700, color: '#1e1b4b' }}># Fields</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="8"
+                                        value={metadata.fieldCount !== undefined && metadata.fieldCount !== null ? metadata.fieldCount : ''}
+                                        placeholder={autoCount ? `${autoCount}` : 'Auto'}
+                                        title="Number of blank slots on the right scale plate"
+                                        onChange={(e) => {
+                                            const raw = e.target.value.trim();
+                                            const val = raw === '' ? undefined : parseInt(raw, 10);
+                                            updateMetadata({ fieldCount: (isNaN(val) || val <= 0) ? undefined : Math.min(8, val) });
+                                        }}
+                                        style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)', marginTop: '4px' }}
+                                    />
+                                    <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                                        Plate slots
+                                    </span>
+                                </div>
+
+                                {/* Cards Field */}
+                                <div className="menu-group" style={{ flex: 1, minWidth: '200px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                        <label style={{ margin: 0, fontWeight: 700, color: '#1e1b4b' }}>Cards</label>
+                                        <button
+                                            type="button"
+                                            title="Open Emoji Library for Cards"
+                                            onClick={() => setEmojiPickerTarget(prev => prev === 'balanza_field_cards' ? null : 'balanza_field_cards')}
+                                            style={{
+                                                height: '24px',
+                                                padding: '0 6px',
+                                                borderRadius: '5px',
+                                                border: emojiPickerTarget === 'balanza_field_cards' ? '1.5px solid #6366f1' : '1px solid #cbd5e1',
+                                                background: emojiPickerTarget === 'balanza_field_cards' ? '#e0e7ff' : '#f8fafc',
+                                                cursor: 'pointer',
+                                                fontSize: '0.82rem',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '3px'
+                                            }}
+                                        >
+                                            😊 <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#334155' }}>Emoji</span>
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={currentCardsText}
+                                        onChange={(e) => {
+                                            const nextCards = replaceEmojiShortcodes(e.target.value);
+                                            updateMetadata({
+                                                cardsText: nextCards,
+                                                fieldExpression: nextCards.trim() ? `${currentTargetExpr.trim()}; ${nextCards.trim()}` : currentTargetExpr.trim()
+                                            });
+                                        }}
+                                        onFocus={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_cards', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        onSelect={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_cards', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        onKeyUp={(e) => {
+                                            lastInputSelectionRef.current = { target: 'balanza_field_cards', start: e.target.selectionStart, end: e.target.selectionEnd };
+                                        }}
+                                        placeholder="e.g. 1, 2, 4, 5, x"
+                                        style={{ fontSize: '0.8rem', padding: '6px', width: '100%', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.15)' }}
+                                    />
+                                    <span style={{ fontSize: '0.65rem', opacity: 0.6, marginTop: '2px' }}>
+                                        Choices cards displayed at bottom (comma-separated).
+                                    </span>
+                                </div>
+
+                                {/* Weight & Correct Values Badges */}
+                                <div className="menu-group" style={{ minWidth: '150px' }}>
+                                    <label>Status Preview</label>
+                                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                        <span style={{
+                                            fontSize: '0.75rem',
+                                            background: '#fef3c7',
+                                            border: '1px solid #d97706',
+                                            color: '#b45309',
+                                            padding: '2px 6px',
+                                            borderRadius: '4px',
+                                            fontWeight: 700
+                                        }}>
+                                            ⚖️ Left: {leftTotal}
+                                        </span>
+                                        <span style={{
+                                            fontSize: '0.75rem',
+                                            background: 'rgba(99, 102, 241, 0.15)',
+                                            border: '1px solid #6366f1',
+                                            color: '#4338ca',
+                                            padding: '2px 6px',
+                                            borderRadius: '4px',
+                                            fontWeight: 700
+                                        }}>
+                                            {fieldSlots.length} {fieldSlots.length === 1 ? 'Slot' : 'Slots'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </>
+                        );
+                    })()}
+
+                    {/* Commutative Setting */}
+                    <div className="menu-group" style={{ minWidth: '130px', alignItems: 'flex-start' }}>
+                        <label>Commutative</label>
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', margin: '4px 0' }}>
+                            <input
+                                type="checkbox"
+                                id="balanza-field-commutative-checkbox"
+                                checked={metadata.commutative !== false}
+                                onChange={(e) => updateMetadata({ commutative: e.target.checked })}
+                                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                            />
+                            <label
+                                htmlFor="balanza-field-commutative-checkbox"
+                                style={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600,
+                                    color: '#333',
+                                    cursor: 'pointer',
+                                    textTransform: 'none',
+                                    margin: 0
+                                }}
+                            >
+                                Any order
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="menu-group" style={{ alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+                        <button
+                            type="button"
+                            onClick={() => setShowShortcutsModal(true)}
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '5px 10px',
+                                borderRadius: '6px',
+                                border: '1px solid #c7d2fe',
+                                background: '#e0e7ff',
+                                color: '#3730a3',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                height: '28px'
+                            }}
+                            title="Shortcuts Reminder (Math, Crates, Weights, Emojis)"
+                        >
+                            <span>⌨️</span> Shortcuts Guide
+                        </button>
+                    </div>
+
+                    <div className="menu-divider"></div>
+                </>
+            )}
+
             {/* NL Quiz Settings */}
             {element.type === 'quiz' && metadata.quizType === 'nl' && metadata.quizType !== 'chatquiz' && (
                 <>
@@ -5164,6 +5607,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
                     {!translationMode && (
                         <button 
+                            className="btn-icon" 
+                            onClick={() => setShowShortcutsModal(true)} 
+                            title="Shortcuts Reminder (Math, Crates, Weights, Emojis)"
+                        >
+                            ⌨️
+                        </button>
+                    )}
+                    {!translationMode && (
+                        <button 
                             className="btn-delete" 
                             onClick={() => {
                                 if (element.type === 'result_field') {
@@ -5209,7 +5661,15 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                 >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
                         <span style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span>😀</span> {emojiPickerTarget === 'text' ? 'EMOJI LIBRARY' : `SELECT EMOJI (${emojiPickerTarget.toUpperCase()})`}
+                            <span>😀</span> {emojiPickerTarget === 'text' ? 'EMOJI LIBRARY' : (
+                                emojiPickerTarget === 'balanza_field_weights' ? 'ADD EMOJI TO WEIGHTS' : (
+                                    emojiPickerTarget === 'balanza_field_left' ? 'ADD EMOJI TO LEFT PLATE' : (
+                                        (emojiPickerTarget === 'balanza_field_target' || emojiPickerTarget === 'balanza_field_expression') ? 'ADD EMOJI TO TARGET EXPRESSION' : (
+                                            emojiPickerTarget === 'balanza_field_cards' ? 'ADD EMOJI TO CARDS' : `SELECT EMOJI (${emojiPickerTarget.toUpperCase()})`
+                                        )
+                                    )
+                                )
+                            )}
                         </span>
                         <button
                             onClick={() => {
@@ -5348,6 +5808,12 @@ const ContextualMenu = ({ element, onChange, onDelete, onDuplicate, onOpenLibrar
                     )}
                 </div>
             )}
+
+            {/* Shortcuts Reminder Modal */}
+            <ShortcutsReminderModal
+                isOpen={showShortcutsModal}
+                onClose={() => setShowShortcutsModal(false)}
+            />
 
         </div >
     );

@@ -133,6 +133,23 @@
   line-height: 1.15;
 }
 
+/* High-visibility Negative Exponent Sign across all fonts */
+.pico-super-minus {
+  display: inline-block;
+  font-weight: 900;
+  -webkit-text-stroke: 0.055em currentColor;
+  transform: scale(1.25, 1.2);
+  margin-right: 0.04em;
+  line-height: 1;
+  vertical-align: 0.02em;
+  white-space: nowrap;
+}
+
+sup .pico-super-minus {
+  transform: scale(1.2, 1.15);
+  vertical-align: 0.04em;
+}
+
 /* Bullet & Numbered lists inside speech balloons, banners, stickers, and cards */
 .pico-balloon-text ul,
 .comic-banner-text ul,
