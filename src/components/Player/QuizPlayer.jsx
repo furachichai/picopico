@@ -649,6 +649,19 @@ const QuizPlayer = ({
         }
     }, [quizType, pemAst, pemSolved, pemFailed, data, pemGameLevel]);
 
+    const getQuizSegments = () => {
+        const isBalanzaField = quizType === 'balanza_field';
+        if (isBalanzaField) {
+            const targetExpr = data.metadata?.targetExpression !== undefined
+                ? data.metadata.targetExpression
+                : (data.metadata?.fieldExpression ? data.metadata.fieldExpression.split(';')[0].trim() : '*2c* + *t*');
+            const fieldCount = data.metadata?.fieldCount;
+            return getBalanzaFieldSegments(targetExpr, fieldCount);
+        }
+        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
+        return parseFieldExpression(expr);
+    };
+
     useEffect(() => {
         if (quizType === 'field' || quizType === 'balanza_field') {
             const isBalanzaField = quizType === 'balanza_field';
@@ -661,11 +674,7 @@ const QuizPlayer = ({
                     ? data.metadata.fieldExpression.split(';').slice(1).join(';').trim()
                     : (isBalanzaField ? '2c, t, 2t, 3t, c+c' : ''));
 
-            const expr = cardsText.trim() ? `${targetExpr}; ${cardsText.trim()}` : targetExpr;
-            const fieldCount = isBalanzaField ? data.metadata?.fieldCount : undefined;
-            const segments = isBalanzaField
-                ? getBalanzaFieldSegments(targetExpr, fieldCount)
-                : parseFieldExpression(expr);
+            const segments = getQuizSegments();
 
             let rawChoices;
             if (isBalanzaField && cardsText.trim()) {
@@ -865,8 +874,31 @@ const QuizPlayer = ({
             return;
         }
 
-        const targetSlotIdx = activeSlotIndex;
+        const segments = getQuizSegments();
+        const fieldSlotIndices = segments
+            .map((s, idx) => s.type === 'field' ? idx : null)
+            .filter(idx => idx !== null);
+
+        let targetSlotIdx = activeSlotIndex;
+
+        // If the active slot is already filled (or pending), or invalid,
+        // and there are still empty slots available, automatically target the first empty slot!
+        const isCurrentSlotOccupied = !!(fieldSelections[targetSlotIdx] || pendingSelections[targetSlotIdx]);
+        if (targetSlotIdx === -1 || !fieldSlotIndices.includes(targetSlotIdx) || isCurrentSlotOccupied) {
+            const firstEmpty = fieldSlotIndices.find(idx => !fieldSelections[idx] && !pendingSelections[idx]);
+            if (firstEmpty !== undefined) {
+                targetSlotIdx = firstEmpty;
+            } else if (targetSlotIdx === -1 || !fieldSlotIndices.includes(targetSlotIdx)) {
+                targetSlotIdx = fieldSlotIndices[0] ?? -1;
+            }
+        }
         if (targetSlotIdx === -1) return;
+
+        // Advance activeSlotIndex immediately to the next remaining empty slot
+        const nextEmptyImmediate = fieldSlotIndices.find(idx => idx !== targetSlotIdx && !fieldSelections[idx] && !pendingSelections[idx]);
+        if (nextEmptyImmediate !== undefined) {
+            setActiveSlotIndex(nextEmptyImmediate);
+        }
 
         const existingChoice = fieldSelections[targetSlotIdx] || pendingSelections[targetSlotIdx];
         const isSwapping = !!existingChoice && typeof existingChoice === 'object' && existingChoice.id;
@@ -965,10 +997,9 @@ const QuizPlayer = ({
                         
                         setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
 
-                        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-                        const segments = parseFieldExpression(expr);
+                        const curSegments = getQuizSegments();
                         setFieldSelections(currentSelections => {
-                            const nextEmptyIdx = segments.findIndex(
+                            const nextEmptyIdx = curSegments.findIndex(
                                 (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
                             );
                             if (nextEmptyIdx !== -1) {
@@ -1006,11 +1037,10 @@ const QuizPlayer = ({
                 
                 setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
                 
-                const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-                const segments = parseFieldExpression(expr);
+                const curSegments = getQuizSegments();
                 
                 setFieldSelections(currentSelections => {
-                    const nextEmptyIdx = segments.findIndex(
+                    const nextEmptyIdx = curSegments.findIndex(
                         (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
                     );
                     if (nextEmptyIdx !== -1) {
@@ -1031,9 +1061,8 @@ const QuizPlayer = ({
             setFieldSelections(newSelections);
             playSound('attach');
             
-            const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-            const segments = parseFieldExpression(expr);
-            const nextEmptyIdx = segments.findIndex(
+            const curSegments = getQuizSegments();
+            const nextEmptyIdx = curSegments.findIndex(
                 (s, idx) => s.type === 'field' && !newSelections[idx]
             );
             if (nextEmptyIdx !== -1) {
@@ -1156,8 +1185,7 @@ const QuizPlayer = ({
         }
 
         // Cache Slots boundaries
-        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-        const segments = parseFieldExpression(expr);
+        const segments = getQuizSegments();
         const slotsData = segments.map((seg, idx) => {
             if (seg.type !== 'field') return null;
             const slotEl = slotRefs.current[idx];
@@ -1519,8 +1547,7 @@ const QuizPlayer = ({
 
                                 setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
 
-                                const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-                                const segments = parseFieldExpression(expr);
+                                const segments = getQuizSegments();
                                 setFieldSelections(currentSelections => {
                                     const nextEmptyIdx = segments.findIndex(
                                         (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
@@ -1559,9 +1586,7 @@ const QuizPlayer = ({
 
                         setFieldSelections(prev => ({ ...prev, [targetSlotIdx]: choice }));
 
-                        const expr = data.metadata?.fieldExpression || '3 + *8 x 2* = 19';
-                        const segments = parseFieldExpression(expr);
-
+                        const segments = getQuizSegments();
                         setFieldSelections(currentSelections => {
                             const nextEmptyIdx = segments.findIndex(
                                 (s, idx) => s.type === 'field' && !currentSelections[idx] && idx !== targetSlotIdx
@@ -3807,13 +3832,7 @@ const QuizPlayer = ({
 
     if (quizType === 'field' || quizType === 'balanza_field') {
         const isBalanzaField = quizType === 'balanza_field';
-        const targetExpr = data.metadata?.targetExpression !== undefined
-            ? data.metadata.targetExpression
-            : (data.metadata?.fieldExpression ? data.metadata.fieldExpression.split(';')[0].trim() : (isBalanzaField ? '*2c* + *t*' : '3 + *8 x 2* = 19'));
-        const fieldCount = isBalanzaField ? data.metadata?.fieldCount : undefined;
-        const segments = isBalanzaField
-            ? getBalanzaFieldSegments(targetExpr, fieldCount)
-            : parseFieldExpression(targetExpr);
+        const segments = getQuizSegments();
         const allSlotsFilled = segments.every((seg, idx) => {
             if (seg.type !== 'field') return true;
             return !!fieldSelections[idx];

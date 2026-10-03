@@ -1,0 +1,1116 @@
+{
+  "id": "lessons/09-Construye expresiones/lesson.json",
+  "title": "Construye expresiones",
+  "slides": [
+    {
+      "id": "slide-1791030618248",
+      "background": "url(\"/src/assets/backgrounds/titlecard_radioactive_chili.png\")",
+      "elements": [],
+      "order": 0
+    },
+    {
+      "id": "slide-1790984920705",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-2ebo5viqc",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029371182-0-j73x45",
+          "type": "image",
+          "content": "/src/assets/objects/item_sack.png",
+          "x": 72.7426503499349,
+          "y": 32.96875,
+          "width": 40,
+          "height": 26.509900990099013,
+          "rotation": 0,
+          "scale": 0.3085642212700658,
+          "metadata": {
+            "width": 40,
+            "height": 26.509900990099013,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1791030573735-el66d0fp6",
+          "type": "image",
+          "content": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22%23969696%22%20%2F%3E%0A%3C%2Fsvg%3E",
+          "x": 75.01571753022293,
+          "y": 39.84150807093583,
+          "width": 17.222628666444955,
+          "height": 40,
+          "rotation": 91.1436705576179,
+          "scale": 0.4460889136028192,
+          "metadata": {
+            "width": 40,
+            "height": 40,
+            "isSymbol": true,
+            "symbolType": "shape-circle",
+            "symbolColor": "#969696",
+            "opacity": 0.75,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1791028809711-r4juojyrv",
+          "type": "image",
+          "content": "/src/assets/objects/item_crates_group.png",
+          "x": 35.40931701660156,
+          "y": 30.9375,
+          "width": 40,
+          "height": 17.00205338809035,
+          "rotation": 0,
+          "scale": 1.2049647844091225,
+          "metadata": {
+            "width": 40,
+            "height": 17.00205338809035,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1791029375709-0-3f7ni0",
+          "type": "image",
+          "content": "/src/assets/objects/item_sack.png",
+          "x": 79.96487257215713,
+          "y": 31.96875,
+          "width": 40,
+          "height": 26.509900990099013,
+          "rotation": 0,
+          "scale": 0.3085642212700658,
+          "metadata": {
+            "width": 40,
+            "height": 26.509900990099013,
+            "manualZ": true
+          }
+        },
+        {
+          "id": "el-1791029343449-0",
+          "type": "image",
+          "content": "/src/assets/objects/item_sack.png",
+          "x": 68.18709479437933,
+          "y": 35.9375,
+          "width": 40,
+          "height": 26.509900990099013,
+          "rotation": 0,
+          "scale": 0.3085642212700658,
+          "metadata": {
+            "width": 40,
+            "height": 26.509900990099013
+          }
+        },
+        {
+          "id": "el-1791029365579-0-rziv5d",
+          "type": "image",
+          "content": "/src/assets/objects/item_sack.png",
+          "x": 75.63153923882379,
+          "y": 36.125,
+          "width": 40,
+          "height": 26.509900990099013,
+          "rotation": 0,
+          "scale": 0.3085642212700658,
+          "metadata": {
+            "width": 40,
+            "height": 26.509900990099013
+          }
+        },
+        {
+          "id": "el-1791029367842-0-23lk86",
+          "type": "image",
+          "content": "/src/assets/objects/item_sack.png",
+          "x": 82.52042812771268,
+          "y": 36.78125,
+          "width": 40,
+          "height": 26.509900990099013,
+          "rotation": 0,
+          "scale": 0.3085642212700658,
+          "metadata": {
+            "width": 40,
+            "height": 26.509900990099013
+          }
+        },
+        {
+          "id": "el-1791029403605-upgg3eixu",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_standing_writing_on_desk.png",
+          "x": 86.11111111111111,
+          "y": 84.375,
+          "width": 40,
+          "height": 21.726190476190478,
+          "rotation": 0,
+          "scale": 1.487899959372237,
+          "metadata": {
+            "width": 40,
+            "height": 21.726190476190478,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1791029463042-a9dpn6a5w",
+          "type": "image",
+          "content": "/src/assets/characters/yara_signals_forward.png",
+          "x": 26.666666666666664,
+          "y": 70.9375,
+          "width": 40,
+          "height": 29.477351916376303,
+          "rotation": 0,
+          "scale": 2.2143003007963604,
+          "metadata": {
+            "width": 40,
+            "height": 29.477351916376303,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1791029488417-bp41evzph",
+          "type": "balloon",
+          "content": "We need to log all the deliveries.",
+          "x": 79.44444444444444,
+          "y": 65.3125,
+          "width": 40,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -91,
+              "y": 20
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.6600115740740741,
+              "angle": 2.9670477944509788
+            }
+          }
+        }
+      ],
+      "order": 1,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791029503193",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-2kyxg1b2u",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029519700-rkoqbu4q3",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_holding_paper.png",
+          "x": 50,
+          "y": 72.8125,
+          "width": 40,
+          "height": 22.203947368421048,
+          "rotation": 0,
+          "scale": 1.824178477896131,
+          "metadata": {
+            "width": 40,
+            "height": 22.203947368421048,
+            "category": "characters",
+            "hasShadow": true,
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1791029535518-d20bk9nrp",
+          "type": "banner",
+          "content": "<ul><li><span style=\"text-align: center;\">two<span style=\"font-weight: normal;\"> crates of </span>unknown<span style=\"font-weight: normal;\"> weight marked </span>x</span></li><li>one<span style=\"font-weight: normal;\"> sack of flour of weight </span>3kg</li></ul>",
+          "x": 50,
+          "y": 33.515625,
+          "width": 51,
+          "height": 18.906414052355387,
+          "rotation": 0,
+          "scale": 1.4389875404026735,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 12,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1791029641850-pmt8gjf4r",
+          "type": "balloon",
+          "content": "Got it!",
+          "x": 77.50000000000001,
+          "y": 78.28125,
+          "width": 40,
+          "height": 12.1875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -85,
+              "y": -17
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "tailOrigin": {
+              "edge": "left",
+              "offset": 0.5,
+              "angle": 3.097280463536861
+            }
+          }
+        }
+      ],
+      "order": 2,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791029669157",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-ck4uyzuxf",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029693960-lstodybpt",
+          "type": "image",
+          "content": "/src/assets/characters/pesto_writing_on_table.png",
+          "x": 85,
+          "y": 73.59375,
+          "width": 40,
+          "height": 20.411832946635734,
+          "rotation": 0,
+          "scale": 2.18610122219046,
+          "metadata": {
+            "width": 40,
+            "height": 20.411832946635734,
+            "category": "characters",
+            "flipX": true
+          }
+        },
+        {
+          "id": "el-1791029737644-u1hrwlvh4",
+          "type": "image",
+          "content": "/src/assets/characters/yara_smiles_talksdown.png",
+          "x": 18.88888888888889,
+          "y": 61.25,
+          "width": 40,
+          "height": 39.052863436123346,
+          "rotation": 0,
+          "scale": 2.2921571506405547,
+          "metadata": {
+            "width": 40,
+            "height": 39.052863436123346,
+            "category": "characters",
+            "flipX": true,
+            "hasShadow": false
+          }
+        },
+        {
+          "id": "el-1791029750039-37163ozxb",
+          "type": "balloon",
+          "content": "Writing all down in English is going to take forever.<div><br></div><div>We need a <b>better system</b>.</div><div><br></div>",
+          "x": 71.80555555555556,
+          "y": 30.781250000000004,
+          "width": 54.166666666666664,
+          "height": 29.6875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -55,
+              "y": 112
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000"
+          }
+        }
+      ],
+      "order": 3,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791029810598",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-1e45rczyo",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029810598-asd32rnwp",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],s2, s4",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "x + 6; 1, 2, 4, 6,x",
+            "commutative": true,
+            "targetExpression": "x + 6",
+            "cardsText": "1, 2, 4, 6,x",
+            "fieldCount": 2
+          }
+        }
+      ],
+      "order": 4,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791030007863",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-bl4f182fg",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791030012945-ajo7pme3u",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "x+x+x+x+x",
+              "5x",
+              "x + 5",
+              "2 + 3"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1791030039804-0-1n4vw9",
+          "type": "banner",
+          "content": "<ul><li><span style=\"text-align: center;\">one<span style=\"font-weight: normal;\"> crate of </span>unknown<span style=\"font-weight: normal;\"> weight marked </span>x</span></li><li>one<span style=\"font-weight: normal;\"> sack of flour of weight </span>3kg</li><li>one<span style=\"font-weight: normal;\"> sack of flour of weight </span>2kg</li></ul>",
+          "x": 50,
+          "y": 44.015625,
+          "width": 51,
+          "height": 18.906414052355387,
+          "rotation": -3.071958622492346,
+          "scale": 1.4389875404026735,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 12,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "notebook",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1791030072722-n10h2gvps",
+          "type": "text",
+          "content": "<span style=\"background-color: rgb(255, 255, 255);\">Which corresponds to this description?</span>",
+          "x": 50,
+          "y": 19.53125,
+          "width": 67.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "textTransform": "none",
+            "fontWeight": "600",
+            "fontStyle": "italic",
+            "fontSize": 25,
+            "lineHeight": 1.6
+          }
+        }
+      ],
+      "order": 5,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791029937722",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-qjw0jyi0x",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029946108-bhq135k3b",
+          "type": "image",
+          "content": "/src/assets/characters/yara_front_holding_card.png",
+          "x": 50,
+          "y": 73.90625,
+          "width": 40,
+          "height": 30.13392857142857,
+          "rotation": 0,
+          "scale": 3.064159877064282,
+          "metadata": {
+            "width": 40,
+            "height": 30.13392857142857,
+            "category": "characters"
+          }
+        },
+        {
+          "id": "el-1791029956973-v3pa5z8f0",
+          "type": "text",
+          "content": "x + 5",
+          "x": 47.638888888888886,
+          "y": 75.3125,
+          "width": 35.833333333333336,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 37,
+            "textTransform": "none",
+            "fontWeight": "600",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "id": "el-1791030198810-tjk2fnsa2",
+          "type": "balloon",
+          "content": "We call this an <b>expression</b>.",
+          "x": 71.11111111111111,
+          "y": 22.96875,
+          "width": 52.77777777777778,
+          "height": 20,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "backgroundColor": "#ffffff",
+            "color": "#000000",
+            "fontFamily": "\"Noto Sans\"",
+            "fontSize": 19,
+            "tailPos": {
+              "x": -27,
+              "y": 92
+            },
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderColor": "#000000",
+            "skin": "octo"
+          }
+        }
+      ],
+      "order": 6,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-uvbj6ijae",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790984159619-c8e2f883i",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],s3, s2",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "*x* + *5*; 4, z, 2, x, 5",
+            "commutative": true,
+            "targetExpression": "*x* + *5*",
+            "cardsText": "4, z, 2, x, 5",
+            "fieldCount": 2
+          }
+        }
+      ],
+      "order": 7,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791030256142",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-mnk0cn9we",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791030259867-ouhdeqkoz",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 78.59375,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "an equation",
+              "a former pression",
+              "a mathematical phrase",
+              "computer code"
+            ],
+            "correctIndex": 2,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "classic",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1791030263560-dvtt506bw",
+          "type": "banner",
+          "content": "<span style=\"font-weight: normal;\">What is an </span>expression?",
+          "x": 50,
+          "y": 23.593750000000004,
+          "width": 51,
+          "height": 12.5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        }
+      ],
+      "order": 8,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791029855120",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-d00b98j7i",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791029855120-zlanry5wl",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],[y]",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "x + 6; 3, y, 2, x, a",
+            "commutative": true,
+            "targetExpression": "x + 6",
+            "cardsText": "3, y, 2, x, a",
+            "fieldCount": 2
+          }
+        }
+      ],
+      "order": 9,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791030337395",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-e7hd5rnsw",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1791030342678-nwteyekyj",
+          "type": "quiz",
+          "content": "Quiz",
+          "x": 50,
+          "y": 85,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [
+              "True",
+              "False"
+            ],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "tf",
+            "visualMode": false
+          }
+        },
+        {
+          "id": "el-1791030348057-7ldwv6l9x",
+          "type": "banner",
+          "content": "Expressions<span style=\"font-weight: normal;\"> allow us to </span>describe<span style=\"font-weight: normal;\"> the </span>world<span style=\"font-weight: normal;\"> in a much </span>shorter<span style=\"font-weight: normal;\">, </span>specific<span style=\"font-weight: normal;\"> way </span>than<span style=\"font-weight: normal;\"> </span>everyday language<span style=\"font-weight: normal;\">.</span>",
+          "x": 50,
+          "y": 34.6875,
+          "width": 87.38888888888889,
+          "height": 36.875,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Fredoka\", sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "600",
+            "color": "#000000",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1791030542767-4f28jv3g9",
+          "type": "image",
+          "content": "/src/assets/characters/yara_avatar_smirk.png",
+          "x": 50,
+          "y": 62.5,
+          "width": 40,
+          "height": 24.11944869831547,
+          "rotation": 0,
+          "scale": 1.1202899371602704,
+          "metadata": {
+            "width": 40,
+            "height": 24.11944869831547,
+            "category": "characters",
+            "hasShadow": false
+          }
+        }
+      ],
+      "order": 10,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790985078131",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-9559k8ptv",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790985078131-d2181fkzr",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],s5",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "*x* + *2* + *3*; x, 1, 2, 3, 7",
+            "commutative": true,
+            "targetExpression": "*x* + *2* + *3*",
+            "cardsText": "x, 1, 2, 3, 7"
+          }
+        }
+      ],
+      "order": 11,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1790984924050",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030563827-ay0v2b3di",
+          "type": "background",
+          "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+          "metadata": {}
+        },
+        {
+          "id": "el-1790984924050-6k36lw7zw",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[x],[y]",
+            "weightsText": "x=2, y=3",
+            "fieldExpression": "*x* + *y*; 2y, x+x, y, 3, x",
+            "commutative": true,
+            "cardsText": "2y, x+x, y, 3, x"
+          }
+        }
+      ],
+      "order": 12,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791028411208",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791028411208-q027qalu7",
+          "type": "quiz",
+          "content": "Balanza Field",
+          "x": 50,
+          "y": 42,
+          "width": 20,
+          "height": 10,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "fontFamily": "\"Fira Sans\"",
+            "options": [],
+            "correctIndex": 0,
+            "correctIndices": [
+              0
+            ],
+            "quizType": "balanza_field",
+            "visualMode": false,
+            "leftPlateText": "[z],[z], s3, s3",
+            "weightsText": "z=2, 2×3=6",
+            "fieldExpression": "*2z* + *3+3*; 2, z-z, 2z, z, 3+3",
+            "commutative": true,
+            "cardsText": "2, z-z, 2z, z, 3+3",
+            "targetExpression": "*2z* + *3+3*"
+          }
+        }
+      ],
+      "order": 13,
+      "cartridge": null,
+      "backgroundSettings": {}
+    },
+    {
+      "id": "slide-1791030765277-0-m0z173",
+      "background": "url(\"/src/assets/backgrounds/bkg_fluid_005.png\")",
+      "elements": [
+        {
+          "id": "el-1791030765277-4vowrhurm",
+          "type": "banner",
+          "content": "<br> 😅",
+          "x": 49.72222222222223,
+          "y": 55.546875,
+          "width": 53.46758575754757,
+          "height": 52.07324382096494,
+          "rotation": 0,
+          "scale": 1.5981549469140102,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#f6efdd",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "locked": true
+          }
+        },
+        {
+          "id": "el-1791030765277-p9a8pkqsp",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 25.703125,
+          "width": 51,
+          "height": 10.165172329982045,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#ffffff",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false,
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1791030765277-b98fwahzc",
+          "type": "banner",
+          "content": "<br>",
+          "x": 50,
+          "y": 57.34375,
+          "width": 51,
+          "height": 33.88210603069076,
+          "rotation": 0,
+          "scale": 1.2715071172585377,
+          "metadata": {
+            "width": 51,
+            "height": 12.5,
+            "fontFamily": "Georgia, serif",
+            "fontSize": 26,
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+            "color": "#00b0ff",
+            "textAlign": "center",
+            "backgroundColor": "#FCE4EC",
+            "borderColor": "#000000",
+            "shadow": "grey",
+            "hasShadow": true,
+            "borderRadius": 20,
+            "skin": "comic",
+            "showTape": false
+          }
+        },
+        {
+          "id": "el-1791030765277-oufxqno1n",
+          "type": "text",
+          "content": "<span style=\"caret-color: rgb(33, 150, 243);\"><font color=\"#2196f3\">2c</font>+<font color=\"#2196f3\">5</font><b>×</b><font color=\"#2196f3\">3</font></span>",
+          "x": 50,
+          "y": 25.625,
+          "width": 26.764489040083262,
+          "height": 5,
+          "rotation": 0,
+          "scale": 2.2037322077703445,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"HVD Comic Serif Pro\", sans-serif",
+            "textTransform": "none",
+            "fontSize": 20,
+            "color": "#000000",
+            "groupId": "group-1789689818834-nbba7m"
+          }
+        },
+        {
+          "id": "el-1791030765277-lxzpo24x4",
+          "type": "text",
+          "content": "a mathematical phrase that uses<div> <b>numbers</b>,</div><div><b>symbols </b>or<br></div><div><b>operators</b> </div><div>(+-×÷)</div><div>to describe a quantity or relationship.</div><div><br></div><div><br></div><div>⛔ It <b>doesn't</b> have a <b>=</b></div>",
+          "x": 50,
+          "y": 57.34375,
+          "width": 44.72222222222222,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1.2138676431373434,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Fira Sans\"",
+            "fontSize": 16,
+            "textTransform": "none"
+          }
+        },
+        {
+          "id": "el-1791030765277-mwqn81t8e",
+          "type": "text",
+          "content": "<font color=\"#ffffff\"><span style=\"caret-color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);\"> expression </span></font>",
+          "x": 50,
+          "y": 14.6875,
+          "width": 82.5,
+          "height": 5,
+          "rotation": 0,
+          "scale": 1,
+          "metadata": {
+            "textAlign": "center",
+            "fontFamily": "\"Bangers\", cursive, sans-serif",
+            "textTransform": "uppercase",
+            "fontSize": 27
+          }
+        }
+      ],
+      "order": 14,
+      "guides": {
+        "horizontal": [],
+        "vertical": [
+          0
+        ]
+      },
+      "cartridge": null,
+      "backgroundSettings": {}
+    }
+  ],
+  "author": "User",
+  "createdAt": "2026-10-02T23:35:54.982Z",
+  "updatedAt": "2026-10-03T12:34:51.916Z",
+  "path": "lessons/09-Construye expresiones/lesson.json",
+  "textPreset": null,
+  "description": "",
+  "icon": "icon_textbook.png",
+  "cardColor": "#8B5CF6",
+  "translations": {
+    "en": {
+      "title": "Build Expressions",
+      "description": ""
+    }
+  },
+  "name": "09-Construye expresiones",
+  "type": "file",
+  "visible": true,
+  "visibleInFeed": true,
+  "order": 9,
+  "titlecardFrame": {
+    "zoom": 1,
+    "x": 0,
+    "y": -11.7
+  },
+  "status": "active",
+  "statusIcon": {
+    "type": {},
+    "key": null,
+    "props": {
+      "size": 24
+    },
+    "_owner": null,
+    "_store": {}
+  },
+  "progress": {
+    "lastSlideIndex": 0,
+    "completed": false,
+    "lastPlayed": 1791030678075
+  }
+}

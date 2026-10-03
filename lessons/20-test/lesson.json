@@ -171,7 +171,7 @@
   "author": "User",
   "createdAt": "2026-08-17T16:02:09.210Z",
   "updatedAt": "2026-09-19T03:20:17.122Z",
-  "path": "lessons/04-test/lesson.json",
+  "path": "lessons/20-test/lesson.json",
   "textPreset": null,
   "description": "",
   "icon": "icon_textbook.png",
@@ -185,7 +185,7 @@
   "visibleInFeed": false,
   "name": "04-Untitled Lesson",
   "type": "file",
-  "visible": true,
+  "visible": false,
   "order": 4,
   "status": "completed",
   "statusIcon": {
