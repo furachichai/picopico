@@ -13,7 +13,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Acme&family=Bangers&family=Nunito:wght@400;700;900&family=Nunito+Sans:wght@400;700&family=Noto+Sans:wght@400;700&family=Source+Sans+3:wght@400;700&family=Fira+Sans:wght@400;700&family=Atkinson+Hyperlegible+Next:wght@400;700&family=Comic+Neue:wght@400;700&family=Outfit:wght@300;400;600;700;800;900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fredoka:wght@300..700&display=swap" crossorigin="anonymous">
-  
+
+    <script>
+      // Break out of legacy framesets or cloaked/masked domain iframes that lack mobile viewport tags
+      try {
+        if (window.top !== window.self) {
+          window.top.location.replace(window.self.location.href);
+        }
+      } catch (e) {
+        console.warn('Frame navigation restricted:', e);
+      }
+    </script>
 <script>
   window.addEventListener('error', function(e) {
     const errorDiv = document.createElement('div');

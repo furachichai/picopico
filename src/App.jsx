@@ -175,7 +175,7 @@ const AppContent = () => {
   // Check for Read-Only Mode based on access level
   React.useEffect(() => {
     const hostname = window.location.hostname;
-    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.local') || /^192\.168\./.test(hostname) || /^10\./.test(hostname) || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
     const accessLevel = localStorage.getItem('pico_access_level'); // 'editor' or 'player'
     // Legacy support: check old keys too
     const legacyEditorUnlocked = localStorage.getItem('pico_editor_unlocked') === 'true';
@@ -673,7 +673,14 @@ const AppContent = () => {
 
 // PIN Gate Component
 const PinGate = ({ children }) => {
-  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const isLocal = typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.endsWith('.local') ||
+    /^192\.168\./.test(window.location.hostname) ||
+    /^10\./.test(window.location.hostname) ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(window.location.hostname)
+  );
   const forceGate = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('pin');
   const [isUnlocked, setIsUnlocked] = React.useState(isLocal && !forceGate);
   const [pinValue, setPinValue] = React.useState('');
